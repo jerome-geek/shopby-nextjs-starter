@@ -3,47 +3,31 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 import { PrimaryButton, SocialButton } from '@/components/ui';
 import oauth2Service from '@/api/auth/oauth2';
 import { cookieTokenManager } from '@/api/core/utils';
 
 export default function LoginPage() {
     const router = useRouter();
+
     const [formData, setFormData] = useState({
         id: '',
         password: '',
         rememberMe: false,
     });
-    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value,
-        }));
-        // 에러 메시지 초기화
-        if (error) setError(null);
-    };
-
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-        setIsLoading(true);
-
-        try {
-            // 로그인 데이터 준비
-            const loginData = {
-                memberId: formData.id,
-                password: formData.password,
-                keepLogin: formData.rememberMe,
-            };
-
-            // issueAccessToken API 호출
-            const response = await oauth2Service.issueAccessToken(loginData);
-
-            // 응답에서 토큰 추출 (실제 응답 구조에 맞게 조정 필요)
+    const loginMutation = useMutation({
+        mutationFn: async (loginData: {
+            memberId: string;
+            password: string;
+            keepLogin: boolean;
+        }) => {
+            return await oauth2Service.issueAccessToken(loginData);
+        },
+        onSuccess: (response) => {
+            // 응답에서 토큰 추출
             const { accessToken, refreshToken } = response as {
                 accessToken?: string;
                 refreshToken?: string;
@@ -62,7 +46,8 @@ export default function LoginPage() {
             } else {
                 throw new Error('토큰을 받지 못했습니다.');
             }
-        } catch (err: unknown) {
+        },
+        onError: (err: unknown) => {
             console.error('Login error:', err);
 
             // 에러 메시지 설정
@@ -89,9 +74,32 @@ export default function LoginPage() {
             } else {
                 setError('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
             }
-        } finally {
-            setIsLoading(false);
-        }
+        },
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
+        // 에러 메시지 초기화
+        if (error) setError(null);
+    };
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+
+        // 로그인 데이터 준비
+        const loginData = {
+            memberId: formData.id,
+            password: formData.password,
+            keepLogin: formData.rememberMe,
+        };
+
+        // useMutation으로 로그인 실행
+        loginMutation.mutate(loginData);
     };
 
     const handleSocialLogin = (provider: string) => {
@@ -128,7 +136,7 @@ export default function LoginPage() {
                                 name="id"
                                 type="text"
                                 required
-                                disabled={isLoading}
+                                disabled={loginMutation.isPending}
                                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                                 placeholder="아이디"
                                 value={formData.id}
@@ -143,7 +151,7 @@ export default function LoginPage() {
                                 name="password"
                                 type="password"
                                 required
-                                disabled={isLoading}
+                                disabled={loginMutation.isPending}
                                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                                 placeholder="비밀번호"
                                 value={formData.password}
@@ -157,7 +165,7 @@ export default function LoginPage() {
                                 id="rememberMe"
                                 name="rememberMe"
                                 type="checkbox"
-                                disabled={isLoading}
+                                disabled={loginMutation.isPending}
                                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                                 checked={formData.rememberMe}
                                 onChange={handleInputChange}
@@ -176,9 +184,11 @@ export default function LoginPage() {
                                 type="submit"
                                 fullWidth
                                 size="lg"
-                                disabled={isLoading}
+                                disabled={loginMutation.isPending}
                             >
-                                {isLoading ? '로그인 중...' : '로그인'}
+                                {loginMutation.isPending
+                                    ? '로그인 중...'
+                                    : '로그인'}
                             </PrimaryButton>
                         </div>
                     </form>

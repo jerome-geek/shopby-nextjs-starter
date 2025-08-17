@@ -1,61 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { cookieTokenManager } from '@/api/core/utils';
+import { useMutation } from '@tanstack/react-query';
+
 import oauth2Service from '@/api/auth/oauth2';
+import { PATHS } from '@/const/path';
 
 export default function Header() {
     const router = useRouter();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    // TODO: React Query 기반 인증 훅으로 교체 필요
+    const isLoggedIn = false; // 임시로 false로 설정
 
-    useEffect(() => {
-        // 컴포넌트 마운트 시 로그인 상태 체크
-        checkLoginStatus();
-    }, []);
-
-    const checkLoginStatus = () => {
-        const token = cookieTokenManager.getToken();
-        const isValid = cookieTokenManager.isTokenValid();
-        const isExpired = cookieTokenManager.isTokenExpired();
-
-        console.log('Header - Login Status Check:', {
-            token: token ? `${token.substring(0, 10)}...` : null,
-            isValid,
-            isExpired,
-            allCookies: document.cookie,
-        });
-
-        setIsLoggedIn(isValid);
-        setIsLoading(false);
-    };
-
-    const handleLogout = async () => {
-        try {
-            setIsLoading(true);
-
-            // 로그아웃 API 호출
-            await oauth2Service.deleteAccessToken();
-
-            // 쿠키에서 토큰 제거
-            cookieTokenManager.clearTokens();
-
-            // 로그인 상태 업데이트
-            setIsLoggedIn(false);
-
+    const logoutMutation = useMutation({
+        mutationFn: async () => {
+            return await oauth2Service.deleteAccessToken();
+        },
+        onSuccess: () => {
+            // TODO: React Query 캐시 무효화로 로그아웃 처리
             // 홈페이지로 이동
-            router.push('/');
-        } catch (error) {
+            router.push(PATHS.MAIN);
+        },
+        onError: (error) => {
             console.error('Logout error:', error);
-            // 에러가 발생해도 로컬 토큰은 제거
-            cookieTokenManager.clearTokens();
-            setIsLoggedIn(false);
-            router.push('/');
-        } finally {
-            setIsLoading(false);
-        }
+            // TODO: 에러 시에도 캐시 무효화
+            router.push(PATHS.MAIN);
+        },
+    });
+
+    const handleLogout = () => {
+        logoutMutation.mutate();
     };
 
     return (
@@ -106,28 +80,27 @@ export default function Header() {
                                 </Link>
                             )}
 
-                            {!isLoading &&
-                                (isLoggedIn ? (
-                                    <button
-                                        onClick={handleLogout}
-                                        disabled={isLoading}
-                                        className="text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {isLoading
-                                            ? '로그아웃 중...'
-                                            : '로그아웃'}
-                                    </button>
-                                ) : (
-                                    <Link
-                                        href="/login"
-                                        className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200"
-                                    >
-                                        로그인
-                                    </Link>
-                                ))}
+                            {isLoggedIn ? (
+                                <button
+                                    onClick={handleLogout}
+                                    disabled={logoutMutation.isPending}
+                                    className="text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {logoutMutation.isPending
+                                        ? '로그아웃 중...'
+                                        : '로그아웃'}
+                                </button>
+                            ) : (
+                                <Link
+                                    href={PATHS.AUTH.LOGIN}
+                                    className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200"
+                                >
+                                    로그인
+                                </Link>
+                            )}
 
                             <Link
-                                href="/cart"
+                                href={PATHS.ORDER.CART}
                                 className="relative text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200"
                             >
                                 <svg
