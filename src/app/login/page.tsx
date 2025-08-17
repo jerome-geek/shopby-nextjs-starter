@@ -2,13 +2,20 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { PrimaryButton, SocialButton } from '@/components/ui';
+import oauth2Service from '@/api/auth/oauth2';
+import { cookieTokenManager } from '@/api/core/utils';
 
 export default function LoginPage() {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         id: '',
         password: '',
         rememberMe: false,
     });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -16,12 +23,75 @@ export default function LoginPage() {
             ...prev,
             [name]: type === 'checkbox' ? checked : value,
         }));
+        // 에러 메시지 초기화
+        if (error) setError(null);
     };
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        // 로그인 로직은 나중에 구현
-        console.log('Login attempt:', formData);
+        setError(null);
+        setIsLoading(true);
+
+        try {
+            // 로그인 데이터 준비
+            const loginData = {
+                memberId: formData.id,
+                password: formData.password,
+                keepLogin: formData.rememberMe,
+            };
+
+            // issueAccessToken API 호출
+            const response = await oauth2Service.issueAccessToken(loginData);
+
+            // 응답에서 토큰 추출 (실제 응답 구조에 맞게 조정 필요)
+            const { accessToken, refreshToken } = response as {
+                accessToken?: string;
+                refreshToken?: string;
+            };
+
+            if (accessToken && refreshToken) {
+                // 토큰을 쿠키에 저장
+                cookieTokenManager.setToken(accessToken, 1800); // 30분
+                cookieTokenManager.setRefreshToken(
+                    refreshToken,
+                    formData.rememberMe ? 7776000 : 86400
+                ); // 90일 또는 1일
+
+                // 로그인 성공 후 메인 페이지로 이동
+                router.push('/');
+            } else {
+                throw new Error('토큰을 받지 못했습니다.');
+            }
+        } catch (err: unknown) {
+            console.error('Login error:', err);
+
+            // 에러 메시지 설정
+            if (
+                err &&
+                typeof err === 'object' &&
+                'response' in err &&
+                err.response &&
+                typeof err.response === 'object' &&
+                'status' in err.response
+            ) {
+                const status = (err.response as { status: number }).status;
+                if (status === 401) {
+                    setError('아이디 또는 비밀번호가 올바르지 않습니다.');
+                } else if (status === 400) {
+                    setError('입력 정보를 확인해주세요.');
+                } else {
+                    setError(
+                        '로그인 중 오류가 발생했습니다. 다시 시도해주세요.'
+                    );
+                }
+            } else if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleSocialLogin = (provider: string) => {
@@ -42,6 +112,15 @@ export default function LoginPage() {
                 {/* 로그인 폼 */}
                 <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
                     <form className="space-y-6" onSubmit={handleLogin}>
+                        {/* 에러 메시지 */}
+                        {error && (
+                            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-3">
+                                <p className="text-sm text-red-600 dark:text-red-400 text-center">
+                                    {error}
+                                </p>
+                            </div>
+                        )}
+
                         {/* 아이디 입력 */}
                         <div>
                             <input
@@ -49,7 +128,8 @@ export default function LoginPage() {
                                 name="id"
                                 type="text"
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                disabled={isLoading}
+                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                                 placeholder="아이디"
                                 value={formData.id}
                                 onChange={handleInputChange}
@@ -63,7 +143,8 @@ export default function LoginPage() {
                                 name="password"
                                 type="password"
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                disabled={isLoading}
+                                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                                 placeholder="비밀번호"
                                 value={formData.password}
                                 onChange={handleInputChange}
@@ -76,7 +157,8 @@ export default function LoginPage() {
                                 id="rememberMe"
                                 name="rememberMe"
                                 type="checkbox"
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                disabled={isLoading}
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                                 checked={formData.rememberMe}
                                 onChange={handleInputChange}
                             />
@@ -84,18 +166,20 @@ export default function LoginPage() {
                                 htmlFor="rememberMe"
                                 className="ml-2 text-sm text-gray-700 dark:text-gray-300"
                             >
-                                아이디 저장
+                                로그인 상태 유지
                             </label>
                         </div>
 
                         {/* 로그인 버튼 */}
                         <div>
-                            <button
+                            <PrimaryButton
                                 type="submit"
-                                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                                fullWidth
+                                size="lg"
+                                disabled={isLoading}
                             >
-                                로그인
-                            </button>
+                                {isLoading ? '로그인 중...' : '로그인'}
+                            </PrimaryButton>
                         </div>
                     </form>
 
@@ -149,12 +233,9 @@ export default function LoginPage() {
                                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
-                        <button
-                            type="submit"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
-                        >
+                        <PrimaryButton type="submit" fullWidth size="lg">
                             주문조회
-                        </button>
+                        </PrimaryButton>
                     </form>
                 </div>
 
@@ -166,31 +247,39 @@ export default function LoginPage() {
 
                     <div className="space-y-3">
                         {/* 카카오 로그인 */}
-                        <button
+                        <SocialButton
+                            variant="kakao"
+                            fullWidth
+                            size="lg"
                             onClick={() => handleSocialLogin('kakao')}
-                            className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200"
+                            leftIcon={<span className="text-lg">💬</span>}
                         >
-                            <span className="mr-2 text-lg">💬</span>
                             카카오아이디로 로그인
-                        </button>
+                        </SocialButton>
 
                         {/* 네이버 로그인 */}
-                        <button
+                        <SocialButton
+                            variant="naver"
+                            fullWidth
+                            size="lg"
                             onClick={() => handleSocialLogin('naver')}
-                            className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+                            leftIcon={
+                                <span className="text-lg font-bold">N</span>
+                            }
                         >
-                            <span className="mr-2 text-lg">N</span>
                             네이버 아이디로 로그인
-                        </button>
+                        </SocialButton>
 
                         {/* 애플 로그인 */}
-                        <button
+                        <SocialButton
+                            variant="apple"
+                            fullWidth
+                            size="lg"
                             onClick={() => handleSocialLogin('apple')}
-                            className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+                            leftIcon={<span className="text-lg">🍎</span>}
                         >
-                            <span className="mr-2 text-lg">🍎</span>
                             Apple로 로그인
-                        </button>
+                        </SocialButton>
                     </div>
                 </div>
             </div>

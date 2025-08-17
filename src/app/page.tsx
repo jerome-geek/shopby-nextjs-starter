@@ -51,7 +51,7 @@ export default function Home() {
                 </div>
 
                 {/* Suspense와 ErrorBoundary로 감싸진 팝업 */}
-                <PopupWrapper
+                {/* <PopupWrapper
                     title="알림"
                     checkCondition="notification"
                     triggerCondition={true}
@@ -69,7 +69,7 @@ export default function Home() {
                             확인
                         </button>
                     </div>
-                </PopupWrapper>
+                </PopupWrapper> */}
             </div>
         </div>
     );
