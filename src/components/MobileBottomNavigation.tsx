@@ -1,0 +1,182 @@
+'use client';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { motion } from 'motion/react';
+import { css } from '@/styled-system/css';
+import { SearchIcon } from '@/components/icons/SearchIcon';
+import { MenuIcon } from '@/components/icons/MenuIcon';
+import { HomeIcon } from '@/components/icons/HomeIcon';
+import { HeartIcon } from '@/components/icons/HeartIcon';
+import { UserIcon } from '@/components/icons/UserIcon';
+import { PATHS } from '@/const/paths';
+
+interface NavItem {
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    href: string;
+}
+
+export default function MobileBottomNavigation() {
+    const pathname = usePathname();
+    const [isVisible, setIsVisible] = useState(true);
+
+    // navItems 메모이제이션 (불필요한 재생성 방지)
+    const navItems = useMemo<NavItem[]>(
+        () => [
+            {
+                label: '검색',
+                icon: SearchIcon,
+                href: '/search',
+            },
+            {
+                label: '카테고리',
+                icon: MenuIcon,
+                href: '/categories',
+            },
+            {
+                label: '홈',
+                icon: HomeIcon,
+                href: PATHS.MAIN,
+            },
+            {
+                label: '찜',
+                icon: HeartIcon,
+                href: PATHS.MYPAGE.WISH,
+            },
+            {
+                label: '마이페이지',
+                icon: UserIcon,
+                href: PATHS.MYPAGE.MAIN,
+            },
+        ],
+        []
+    );
+
+    // 스크롤 핸들러 메모이제이션 (성능 최적화)
+    const handleScroll = useCallback(() => {
+        // requestAnimationFrame으로 스크롤 이벤트 최적화
+        requestAnimationFrame(() => {
+            setIsVisible(false);
+        });
+    }, []);
+
+    // 스크롤 멈춤 감지 핸들러
+    const handleScrollEnd = useCallback(() => {
+        requestAnimationFrame(() => {
+            setIsVisible(true);
+        });
+    }, []);
+
+    useEffect(() => {
+        let scrollTimer: NodeJS.Timeout;
+
+        const handleScrollWithDebounce = () => {
+            // 스크롤 중일 때는 숨김
+            handleScroll();
+
+            // 기존 타이머 클리어
+            clearTimeout(scrollTimer);
+
+            // 스크롤이 멈춘 후 150ms 후에 나타남
+            scrollTimer = setTimeout(() => {
+                handleScrollEnd();
+            }, 150);
+        };
+
+        // passive 옵션으로 스크롤 성능 최적화
+        window.addEventListener('scroll', handleScrollWithDebounce, {
+            passive: true,
+        });
+
+        return () => {
+            window.removeEventListener('scroll', handleScrollWithDebounce);
+            clearTimeout(scrollTimer);
+        };
+    }, [handleScroll, handleScrollEnd]);
+
+    return (
+        <motion.nav
+            initial={false}
+            animate={{
+                y: isVisible ? 0 : '100%',
+            }}
+            transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 30,
+                mass: 0.8,
+            }}
+            style={{
+                willChange: 'transform', // GPU 가속 힌트
+            }}
+            className={css({
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 100,
+                backgroundColor: 'white',
+                borderTop: '1px solid {colors.border}',
+                display: { base: 'flex', md: 'none' },
+                gap: '16px',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                paddingY: '10px 4px',
+                paddingX: '18px',
+                boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
+            })}
+        >
+            {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+
+                return (
+                    <motion.div
+                        key={item.href}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.1 }}
+                        className={css({
+                            flex: 1,
+                        })}
+                    >
+                        <Link
+                            href={item.href}
+                            className={css({
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '4px',
+                                textDecoration: 'none',
+                                color: isActive
+                                    ? '{colors.primary}'
+                                    : '#666666',
+                            })}
+                        >
+                            <Icon
+                                className={css({
+                                    width: '24px',
+                                    height: '24px',
+                                })}
+                            />
+                            <motion.span
+                                animate={{
+                                    fontWeight: isActive ? 'bold' : 'normal',
+                                }}
+                                transition={{ duration: 0.2 }}
+                                className={css({
+                                    fontSize: '10px',
+                                })}
+                            >
+                                {item.label}
+                            </motion.span>
+                        </Link>
+                    </motion.div>
+                );
+            })}
+        </motion.nav>
+    );
+}

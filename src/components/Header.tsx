@@ -5,7 +5,7 @@ import { css } from '@/styled-system/css';
 import { SearchIcon } from '@/components/icons/SearchIcon';
 import { BellIcon } from '@/components/icons/BellIcon';
 import { CartIcon } from '@/components/icons/CartIcon';
-import { PATHS } from '@/const/path';
+import { PATHS } from '@/const/paths';
 import { mall } from '@/api/admin';
 
 // Server Component에서 사용하기 위해 cache() 적용

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import { css } from '@/styled-system/css';
-import './globals.css';
-import Header from '@/components/Header';
+
+import '@/app/globals.css';
 import Footer from '@/components/Footer';
-import MobileBottomNav from '@/components/MobileBottomNav';
-import QueryProvider from '@/providers/QueryProvider';
 import GlobalErrorBoundary from '@/components/GlobalErrorBoundary';
+import Header from '@/components/Header';
+import MobileBottomNavigation from '@/components/MobileBottomNavigation';
+import QueryProvider from '@/providers/QueryProvider';
+import { css } from '@/styled-system/css';
 
 export const metadata: Metadata = {
     title: '제니지니앤로이드',
@@ -32,12 +33,13 @@ export default async function RootLayout({
                                 width: '100%',
                                 maxWidth: { base: '100%', lg: '1200px' },
                                 marginX: 'auto',
+                                height: '100vh',
                             })}
                         >
                             {children}
                         </main>
                         <Footer />
-                        <MobileBottomNav />
+                        <MobileBottomNavigation />
                     </GlobalErrorBoundary>
                 </QueryProvider>
             </body>

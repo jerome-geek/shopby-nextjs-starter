@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { cookieTokenManager } from '@/api/core/utils';
-import { PATHS } from '@/const/path';
+import { PATHS } from '@/const/paths';
 
 /**
  * 보호된 라우트 목록
