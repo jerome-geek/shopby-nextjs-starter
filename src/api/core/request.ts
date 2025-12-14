@@ -6,7 +6,7 @@ const baseRequest = ky.create({
     headers: {
         'Content-Type': 'application/json',
         version: '1.0',
-        clientId: 'VceMoKitTKnvV8E6gQ9C/g==',
+        clientId: process.env.NEXT_PUBLIC_CLIENT_ID || '',
         platform: 'PC',
         language: 'ko',
         currency: 'KRW',

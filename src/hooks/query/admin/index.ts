@@ -1,0 +1,2 @@
+export { useMall } from './useMall';
+

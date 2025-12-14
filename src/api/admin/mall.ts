@@ -1,4 +1,6 @@
+import type { Options } from 'ky';
 import request from '@/api/core/request';
+import { GetMallResponse } from '@/models/admin/mall';
 // import {
 //     GetMallInternationalizationSettingsResponse,
 //     GetMallPartnersResponse,
@@ -14,9 +16,14 @@ const mall = {
      *   - expire time은 익일 0시로 설정을 권장합니다.
      *   - 카테고리는 변경 가능하므로 상품상세 API의 카테고리 번호가 로컬 저장소에는 없을 수 있습니다.
      *   - 그런 경우에는 카테고리 조회 API를 이용하여 로컬 저장소를 갱신해 주십시오.
+     *   - Server Component에서 사용 시: cache()로 감싸서 사용
+     *   - Client Component에서 사용 시: useQuery로 감싼 커스텀 훅 사용
+     *
+     * @param options - ky 옵션 (헤더, 쿼리 파라미터, 타임아웃 등)
      */
-    // getMall: () => request.({ method: 'GET', url: '/malls' }),
-    getMall: () => request.get('malls', {}),
+    getMall: async (options?: Options): Promise<GetMallResponse> => {
+        return request.get('malls', options).json<GetMallResponse>();
+    },
 
     /**
      *  현재 몰의 다국어, 환율 설정 조회

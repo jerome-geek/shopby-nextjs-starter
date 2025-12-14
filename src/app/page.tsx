@@ -1,12 +1,21 @@
 import Image from 'next/image';
+import { css } from '@/styled-system/css';
 import PopupWrapper from '@/components/PopupWrapper';
 import HeroBanner from '@/components/HeroBanner';
 
 export default function Home() {
     return (
         <div>
-            {/* Hero Banner Section */}
-            <HeroBanner />
+            {/* Hero Banner Section - 전체 너비 */}
+            <div
+                className={css({
+                    width: '100vw',
+                    marginLeft: 'calc(50% - 50vw)',
+                    marginRight: 'calc(50% - 50vw)',
+                })}
+            >
+                <HeroBanner />
+            </div>
 
             {/* Main Content */}
             <div className="container mx-auto px-4 py-8">

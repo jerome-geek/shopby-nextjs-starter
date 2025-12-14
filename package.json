@@ -3,10 +3,11 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev --turbopack",
-        "build": "next build",
+        "dev": "panda codegen && next dev --turbopack",
+        "build": "panda codegen && next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "panda": "panda codegen"
     },
     "dependencies": {
         "@suspensive/react": "^3.5.0",
@@ -15,23 +16,23 @@
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "ky": "^1.8.2",
-        "next": "15.4.5",
+        "next": "^16.0.10",
         "next-cookies": "^2.0.3",
-        "react": "19.1.0",
-        "react-dom": "19.1.0",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
         "swiper": "^11.2.10",
         "ua-parser-js": "^2.0.4"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
-        "@tailwindcss/postcss": "^4",
+        "@pandacss/dev": "^0.48.0",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "@types/ua-parser-js": "^0.7.39",
         "eslint": "^9",
-        "eslint-config-next": "15.4.5",
-        "tailwindcss": "^4",
+        "eslint-config-next": "^16.0.10",
         "typescript": "^5"
-    }
+    },
+    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
