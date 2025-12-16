@@ -18,5 +18,3 @@ export async function getAccessToken(): Promise<string | null> {
     const cookieString = cookieStore.toString();
     return cookieTokenManager.getTokenFromServer(cookieString);
 }
-
-

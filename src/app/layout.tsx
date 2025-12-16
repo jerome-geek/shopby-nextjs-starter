@@ -1,3 +1,5 @@
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import type { Metadata } from 'next';
 
 import '@/app/globals.css';
@@ -21,27 +23,32 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const locale = process.env.NEXT_PUBLIC_LOCALE || 'ko';
+    const messages = await getMessages();
+
     return (
-        <html lang="en">
+        <html lang={locale}>
             <body>
-                <QueryProvider>
-                    <GlobalErrorBoundary>
-                        <Header />
-                        <main
-                            className={css({
-                                flex: 1,
-                                width: '100%',
-                                maxWidth: { base: '100%', lg: '1200px' },
-                                marginX: 'auto',
-                                height: '100vh',
-                            })}
-                        >
-                            {children}
-                        </main>
-                        <Footer />
-                        <MobileBottomNavigation />
-                    </GlobalErrorBoundary>
-                </QueryProvider>
+                <NextIntlClientProvider messages={messages}>
+                    <QueryProvider>
+                        <GlobalErrorBoundary>
+                            <Header />
+                            <main
+                                className={css({
+                                    flex: 1,
+                                    width: '100%',
+                                    maxWidth: { base: '100%', lg: '1200px' },
+                                    marginX: 'auto',
+                                    height: '100vh',
+                                })}
+                            >
+                                {children}
+                            </main>
+                            <Footer />
+                            <MobileBottomNavigation />
+                        </GlobalErrorBoundary>
+                    </QueryProvider>
+                </NextIntlClientProvider>
             </body>
         </html>
     );

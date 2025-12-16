@@ -1,0 +1,12 @@
+{
+    "환영합니다": "Welcome",
+    "로그인": "Login",
+    "로그아웃": "Logout",
+    "마이페이지": "My Page",
+    "검색": "Search",
+    "장바구니": "Cart",
+    "제목": "Welcome to Next.js!",
+    "설명": "Get started by editing src/app/page.tsx",
+    "배포하기": "Deploy now",
+    "문서읽기": "Read our docs"
+}

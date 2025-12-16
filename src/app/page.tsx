@@ -1,9 +1,12 @@
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { css } from '@/styled-system/css';
 import PopupWrapper from '@/components/PopupWrapper';
 import HeroBanner from '@/components/HeroBanner';
 
-export default function Home() {
+export default async function Home() {
+    const t = await getTranslations();
+
     return (
         <div>
             {/* Hero Banner Section - 전체 너비 */}
@@ -30,11 +33,9 @@ export default function Home() {
                     />
 
                     <div className="text-center">
-                        <h1 className="text-4xl font-bold mb-4">
-                            Welcome to Next.js!
-                        </h1>
+                        <h1 className="text-4xl font-bold mb-4">{t('제목')}</h1>
                         <p className="text-gray-600 dark:text-gray-400 mb-8">
-                            Get started by editing src/app/page.tsx
+                            {t('설명')}
                         </p>
                     </div>
 
@@ -45,7 +46,7 @@ export default function Home() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Deploy now
+                            {t('배포하기')}
                         </a>
 
                         <a
@@ -54,7 +55,7 @@ export default function Home() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Read our docs
+                            {t('문서읽기')}
                         </a>
                     </div>
                 </div>
