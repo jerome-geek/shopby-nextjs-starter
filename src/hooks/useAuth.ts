@@ -1,0 +1,29 @@
+'use client';
+
+import { useMemo } from 'react';
+import { cookieTokenManager } from '@/api/core/utils';
+
+/**
+ * Client Component에서 로그인 여부 확인하는 훅
+ */
+export function useAuth() {
+    const isAuthenticated = useMemo(() => {
+        return cookieTokenManager.isTokenValid();
+    }, []);
+
+    const accessToken = useMemo(() => {
+        return cookieTokenManager.getToken();
+    }, []);
+
+    const refreshToken = useMemo(() => {
+        return cookieTokenManager.getRefreshToken();
+    }, []);
+
+    return {
+        isAuthenticated,
+        accessToken,
+        refreshToken,
+    };
+}
+
+

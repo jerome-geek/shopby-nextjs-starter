@@ -1,5 +1,6 @@
 import request from '@/api/core/request';
 import { cookieTokenManager } from '@/api/core/utils';
+import { IssueAccessTokenResponse } from '@/models/auth/oauth2';
 
 // 기본 헤더 함수
 const defaultHeaders = () => ({
@@ -8,7 +9,7 @@ const defaultHeaders = () => ({
 
 // 타입 정의 (임시)
 type UpdateAccessTokenResponse = Record<string, unknown>;
-type IssueAccessTokenResponse = Record<string, unknown>;
+
 type IssueAccessTokenData = Record<string, unknown>;
 type IssueOpenIdAccessTokenData = Record<string, unknown>;
 type RefreshOpenIdAccessTokenResponse = Record<string, unknown>;
@@ -34,7 +35,7 @@ class OAuth2Service {
      *  - ex) Shop-By-Authorization : Bearer test-access-token
      */
     updateAccessToken() {
-        return request.put('oauth2').json();
+        return request.put('oauth2').json<UpdateAccessTokenResponse>();
     }
 
     /**
@@ -45,7 +46,9 @@ class OAuth2Service {
      *  - keepLogin을 true로 요청하면 리프레시 토큰 유효 기간을 90 일인 토큰이 생성됩니다.
      */
     issueAccessToken(data: IssueAccessTokenData) {
-        return request.post('oauth2', { json: data }).json();
+        return request
+            .post('oauth2', { json: data })
+            .json<IssueAccessTokenResponse>();
     }
 
     /**
