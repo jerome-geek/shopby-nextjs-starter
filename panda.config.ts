@@ -29,7 +29,8 @@ export default defineConfig({
         body: {
             margin: 0,
             padding: 0,
-            fontFamily: 'Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
+            fontFamily:
+                'Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
             fontSize: '16px',
             lineHeight: '1.5',
             color: '{colors.foreground}',
@@ -72,6 +73,28 @@ export default defineConfig({
                     accent: { value: '#f5f5f5' },
                     border: { value: '#e5e5e5' },
                     muted: { value: '#f9f9f9' },
+                    red: { value: '#FB5047' },
+                    black: {
+                        value: '#000000',
+                    },
+                    gray90: { value: '#433F3D' },
+                    gray80: { value: '#5A5552' },
+                    gray70: { value: '#777472' },
+                    gray60: { value: '#8A8684' },
+                    gray50: { value: '#A7A6A5' },
+                    gray20: { value: '#F4F3F3' },
+                    gray10: { value: '#F9F9F9' },
+                    white: { value: '#FFFFFF' },
+                    pink: { value: '#FFDBE2' },
+                    skyblue: { value: '#BDE0F5' },
+                    salmon: { value: 'FFE2CC' },
+                    kakao: {
+                        value: '#fee500',
+                    },
+                    naver: { value: '#03c75a' },
+                    apple: { value: '#fff' },
+                    facebook: { value: '#0766FF' },
+                    line: { value: '#03C75A' },
                 },
                 fonts: {
                     sans: {
@@ -153,4 +176,3 @@ export default defineConfig({
         },
     },
 });
-
