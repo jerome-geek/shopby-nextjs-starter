@@ -8,7 +8,7 @@ import product from '@/api/product/product';
 export default async function BestProductList() {
     const t = await getTranslations();
 
-    const data = await product.getProductDisplayCategories(131868801);
+    const data = await product.getBestSellerProducts();
     console.log('🚀 ~ BestProductList ~ data:', data);
 
     return (

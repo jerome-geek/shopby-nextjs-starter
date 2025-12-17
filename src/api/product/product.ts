@@ -1,29 +1,41 @@
-// import qs from 'qs';
+import qs from 'qs';
 import type { Options } from 'ky';
 
-// import request from '@/api/core/request';
-// import {
-//     GetStandardCategoryResponse,
-//     ProductDetailResponse,
-//     ProductOptionResponse,
-//     ProductsParams,
-//     ProductsSearchResponse,
-//     RelatedProductResponse,
-// } from '@/models/product';
+import {
+    ProductDetailResponse,
+    //     GetStandardCategoryResponse,
+    //     ProductDetailResponse,
+    //     ProductOptionResponse,
+    ProductsParams,
+    //     RelatedProductResponse,
+} from '@/models/product';
 import { request } from '@/api/core';
 import {
+    GetBestReviewProductsParams,
+    GetBestReviewProductsResponse,
     //     ExtraInfo,
     //     GetBestReviewProductsParams,
     //     GetBestReviewProductsResponse,
     GetBestSellerProductsParams,
     GetBestSellerProductsResponse,
+    GetFavoriteKeywordsParams,
+    GetFavoriteKeywordsResponse,
+    GetGroupManagementCodesData,
     //     GetGroupManagementCodesData,
-    //     GetKeywordsByProductNoParams,
-    //     GetKeywordsByProductNoResponse,
+    GetKeywordsByProductNoParams,
+    GetKeywordsByProductNoResponse,
+    GetProductDetailParams,
     //     GetOptionImagesResponse,
     //     GetPriorityPurchasableRightResponse,
     //     GetProductDetailParams,
     GetProductDisplayCategoriesResponse,
+    GetProductExtraInfoParams,
+    GetProductExtraInfoResponse,
+    GetProductsInfoByProductNosData,
+    GetProductsInfoByProductNosResponse,
+    GetProductsShippingInfoParams,
+    GetProductsShippingInfoResponse,
+    GroupManagementCodeResponse,
     //     GetProductOptionImagesResponse,
     //     GetProductOptionParams,
     //     GetProductOptionsResponse,
@@ -39,68 +51,90 @@ import {
     //     ProductSearchParams,
     //     RequestRestockNotificationData,
 } from '@/models/product/product';
+import { GetProductOptionsResponse } from '@/models/product/productOption';
 
 const product = {
-    //     /**
-    //      * 묶음 배송 상품 목록 조회하기
-    //      *  - 묶음 배송 상품 목록 조회하는 API입니다
-    //      */
-    //     getBundleProducts: (params: ProductsParams) => {
-    //         return request({ method: ''})
-    //     }
-    //         // request<ProductsSearchResponse>({
-    //         //     method: 'GET',
-    //         //     url: '/products/bundle-shipping',
-    //         //     params,
-    //         // }),
-    //     /**
-    //      *  상품 번호 리스트로 추가 정보 조회
-    //      *  상품번호를 통해 extraInfo(추가정보)를 조회하는 API입니다.
-    //      */
-    //     getProductExtraInfo: (params: { productNos: number[] }) =>
-    //         request<ExtraInfo[]>({
-    //             method: 'GET',
-    //             url: '/products/extraInfo',
-    //             params,
-    //             paramsSerializer: {
-    //                 serialize: (params) =>
-    //                     qs.stringify(params, { arrayFormat: 'comma' }),
-    //             },
+    /**
+     * 묶음 배송 상품 목록 조회하기
+     *  - 묶음 배송 상품 목록 조회하는 API입니다
+     */
+    getBundleProducts: (params: ProductsParams, options?: Options) => {
+        return request.get('products/bundle-shipping', {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
+    },
+
+    /**
+     *  상품 번호 리스트로 추가 정보 조회
+     *  상품번호를 통해 extraInfo(추가정보)를 조회하는 API입니다.
+     */
+    getProductExtraInfo: (
+        params: GetProductExtraInfoParams,
+        options?: Options
+    ) => {
+        return request.get<GetProductExtraInfoResponse>('products/extraInfo', {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
+    },
+
+    /**
+     * 인기 검색어 조회하기
+     *  - 인기 검색어 조회하는 API입니다
+     */
+    getFavoriteKeywords: (
+        params: GetFavoriteKeywordsParams,
+        options?: Options
+    ) => {
+        return request.get<GetFavoriteKeywordsResponse>(
+            'products/favoriteKeywords',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
+
+    /**
+     * 그룹관리코드 조회하기
+     *  - 그룹관리코드 조회하는 API입니다
+     */
+    getGroupManagementCodes: (
+        data: GetGroupManagementCodesData,
+        options?: Options
+    ) => {
+        return request.post<GroupManagementCodeResponse>(
+            'products/group-management-code',
+            {
+                json: data,
+                ...options,
+            }
+        );
+    },
+
+    /**
+     * 옵션 목록 조회하기
+     *  - 옵션 목록을 조회하는 API입니다
+     */
+    // getProductOptions: (productNos: number[], options?: Options) => {
+    //     return request.get<GetProductOptionsResponse>('products/options', {
+    //         searchParams: qs.stringify(params, {
+    //             arrayFormat: 'comma',
+    //             allowDots: true,
     //         }),
-    //     /**
-    //      * 인기 검색어 조회하기
-    //      *  - 인기 검색어 조회하는 API입니다
-    //      */
-    //     getFavoriteKeywords: (params: { size?: number }) =>
-    //         request<string[]>({
-    //             method: 'GET',
-    //             url: '/products/favoriteKeywords',
-    //             params,
-    //         }),
-    //     /**
-    //      * 그룹관리코드 조회하기
-    //      *  - 그룹관리코드 조회하는 API입니다
-    //      */
-    //     getGroupManagementCodes: (data: GetGroupManagementCodesData) =>
-    //         request<GroupManagementCodeResponse>({
-    //             method: 'POST',
-    //             url: '/products/group-management-code',
-    //             data,
-    //         }),
-    //     /**
-    //      * 옵션 목록 조회하기
-    //      *  - 옵션 목록을 조회하는 API입니다
-    //      */
-    //     getProductOptions: (productNos: number[]) =>
-    //         request<GetProductOptionsResponse>({
-    //             method: 'GET',
-    //             url: '/products/options',
-    //             params: { productNos },
-    //             paramsSerializer: (params) =>
-    //                 qs.stringify(params, {
-    //                     arrayFormat: 'comma',
-    //                 }),
-    //         }),
+    //         ...options,
+    //     });
+
     //     /** 변경 가능한 정기 결제 상품 조회하기 */
     //     getRegularDeliveryProducts: (params?: { page: number; size: number }) =>
     //         request<GetRegularDeliveryProductsResponse>({
@@ -180,57 +214,83 @@ const product = {
     //                 });
     //             },
     //         }),
-    //     /**
-    //      * 상품번호 리스트로 상품 조회
-    //      *  - 상품번호 리스트로 상품을 조회하는 API입니다. (hasOptionValues: 옵션값 포함여부, default: false)
-    //      */
-    //     getProductsInfoByProductNos: (data: GetProductsInfoByProductNosData) =>
-    //         request<GetProductsInfoByProductNosResponse>({
-    //             method: 'POST',
-    //             url: '/products/search-by-nos',
-    //             data,
-    //         }),
-    //     /**
-    //      * 상품번호를 통한 배송 정보 및 배송 불가 국가 조회 API
-    //      *  - 상품번호를 통해 배송 정보 및 배송 불가 국가를 조회하는 API 입니다.
-    //      */
-    //     getProductsShippingInfo: (params: GetProductsShippingInfoParams) =>
-    //         request<GetProductsShippingInfoResponse>({
-    //             method: 'GET',
-    //             url: '/products/shipping-info',
-    //             params,
-    //             paramsSerializer: (params) => {
-    //                 return qs.stringify(params, {
-    //                     arrayFormat: 'comma',
-    //                 });
-    //             },
-    //         }),
-    //     /**
-    //      * 상품 상세 조회하기
-    //      *  - 해당 상품 번호에 대한 상세, 이미지, 옵션 정보를 조회하는 API입니다
-    //      */
-    //     getProductDetail: (productNo: number, params?: GetProductDetailParams) =>
-    //         request<ProductDetailResponse>({
-    //             method: 'GET',
-    //             url: `/products/${productNo}`,
-    //             params,
-    //         }),
-    //     /**
-    //      * 베스트 리뷰 상품 검색(search engine)하기
-    //      *  - 베스트 리뷰 상품 검색하는 API입니다.
-    //      *  - 전일 ~ 7일 전까지의 평점과 전체기간 평점을 합산한 최종 점수로 정렬된 상품을 조회합니다.
-    //      *  - 동일한 점수의 경우 베스트 리뷰 점수 -> 총 리뷰 개수 -> 최근 등록 순으로 정렬합니다.
-    //      */
-    //     getBestReviewProducts: (params: GetBestReviewProductsParams) =>
-    //         request<GetBestReviewProductsResponse>({
-    //             method: 'GET',
-    //             url: '/products/best-review/search',
-    //             params,
-    //             paramsSerializer: (params) =>
-    //                 qs.stringify(params, {
-    //                     arrayFormat: 'comma',
-    //                 }),
-    //         }),
+
+    /**
+     * 상품번호 리스트로 상품 조회
+     *  - 상품번호 리스트로 상품을 조회하는 API입니다. (hasOptionValues: 옵션값 포함여부, default: false)
+     */
+    getProductsInfoByProductNos: (
+        data: GetProductsInfoByProductNosData,
+        options?: Options
+    ) => {
+        return request.post<GetProductsInfoByProductNosResponse>(
+            'products/search-by-nos',
+            {
+                json: data,
+                ...options,
+            }
+        );
+    },
+
+    /**
+     * 상품번호를 통한 배송 정보 및 배송 불가 국가 조회 API
+     *  - 상품번호를 통해 배송 정보 및 배송 불가 국가를 조회하는 API 입니다.
+     */
+    getProductsShippingInfo: (
+        params: GetProductsShippingInfoParams,
+        options?: Options
+    ) => {
+        return request.get<GetProductsShippingInfoResponse>(
+            'products/shipping-info',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
+
+    /**
+     * 상품 상세 조회하기
+     *  - 해당 상품 번호에 대한 상세, 이미지, 옵션 정보를 조회하는 API입니다
+     */
+    getProductDetail: (
+        productNo: number,
+        params?: GetProductDetailParams,
+        options?: Options
+    ) => {
+        return request.get<ProductDetailResponse>(`products/${productNo}`, {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
+    },
+
+    /**
+     * 베스트 리뷰 상품 검색(search engine)하기
+     *  - 베스트 리뷰 상품 검색하는 API입니다.
+     *  - 전일 ~ 7일 전까지의 평점과 전체기간 평점을 합산한 최종 점수로 정렬된 상품을 조회합니다.
+     *  - 동일한 점수의 경우 베스트 리뷰 점수 -> 총 리뷰 개수 -> 최근 등록 순으로 정렬합니다.
+     */
+    getBestReviewProducts: (
+        params: GetBestReviewProductsParams,
+        options?: Options
+    ) => {
+        return request.get<GetBestReviewProductsResponse>(
+            'products/best-review/search',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
 
     /**
      * 베스트 셀러 상품(search engine) 검색하기
@@ -239,41 +299,41 @@ const product = {
      *  - 예시: 2023-07-25 13:00:00 기준, 2023-07-18 13:00:00 ~ 2023-07-25 13:00:00 사이에 판매된 수를 기준으로 조회합니다
      */
     getBestSellerProducts: (
-        searchParams: GetBestSellerProductsParams,
+        searchParams?: GetBestSellerProductsParams,
         options?: Options
     ) => {
-        return request.get('products/best-seller/search', {
-            searchParams: { test: 111, test2: 3333 },
-            ...options,
-        });
-
-        // .json<GetBestSellerProductsResponse>();
+        return request.get<GetBestSellerProductsResponse>(
+            'products/best-seller/search',
+            {
+                searchParams: qs.stringify(searchParams, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
     },
-    //     getBestSellerProducts: (params: GetBestSellerProductsParams) =>
-    //         request<GetBestSellerProductsResponse>({
-    //             method: 'GET',
-    //             url: '/products/best-seller/search',
-    //             params,
-    //             paramsSerializer: (params) =>
-    //                 qs.stringify(params, {
-    //                     arrayFormat: 'comma',
-    //                 }),
-    //         }),
 
-    //     /**
-    //      * 상품 번호 리스트로 검색어 조회
-    //      *   - 상품번호를 통해 어드민에 등록된 검색어를 조회하는 API 입니다
-    //      */
-    //     getKeywordsByProductNo: (params: GetKeywordsByProductNoParams) =>
-    //         request<GetKeywordsByProductNoResponse>({
-    //             method: 'GET',
-    //             url: '/products/search/keywords',
-    //             params,
-    //             paramsSerializer: (params) =>
-    //                 qs.stringify(params, {
-    //                     arrayFormat: 'comma',
-    //                 }),
-    //         }),
+    /**
+     * 상품 번호 리스트로 검색어 조회
+     *   - 상품번호를 통해 어드민에 등록된 검색어를 조회하는 API 입니다
+     */
+    getKeywordsByProductNo: (
+        params: GetKeywordsByProductNoParams,
+        options?: Options
+    ) => {
+        return request.get<GetKeywordsByProductNoResponse>(
+            'products/search/keywords',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
+
     //     /**
     //      *  상품 검색 결과 Summary 정보 조회(search engine)하기
     //      *  - 상품 검색 결과의 Summary 정보만 응답하는 API입니다
