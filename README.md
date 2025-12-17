@@ -2,17 +2,26 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+이 프로젝트는 **pnpm**을 사용합니다.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# pnpm 설치 (아직 설치하지 않은 경우)
+npm install -g pnpm
 ```
+
+### 설치 및 실행
+
+```bash
+# 의존성 설치
+pnpm install
+
+# 개발 서버 실행
+pnpm dev
+```
+
+다른 패키지 매니저도 사용 가능하지만, pnpm 사용을 권장합니다.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

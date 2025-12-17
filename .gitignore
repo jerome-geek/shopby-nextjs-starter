@@ -10,6 +10,11 @@
 !.yarn/releases
 !.yarn/versions
 
+# package manager lock files (pnpm 사용)
+package-lock.json
+yarn.lock
+# pnpm-lock.yaml은 커밋합니다
+
 # testing
 /coverage
 
