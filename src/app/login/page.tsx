@@ -10,8 +10,9 @@ import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import { oauth2 } from '@/api/auth';
 import { cookieTokenManager } from '@/api/core/utils';
 import { PATHS } from '@/const/paths';
+import { Suspense } from '@suspensive/react';
 
-export default function LoginPage() {
+function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const returnUrl = searchParams.get('returnUrl');
@@ -31,15 +32,15 @@ export default function LoginPage() {
         },
     });
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit(async ({ memberId, password, isSaved }) => {
         try {
-            const { accessToken, refreshToken } = await oauth2.issueAccessToken(
-                {
-                    memberId: data.memberId,
-                    password: data.password,
-                    keepLogin: data.isSaved,
-                }
-            );
+            const { accessToken, refreshToken } = await oauth2
+                .issueAccessToken({
+                    memberId,
+                    password,
+                    keepLogin: true,
+                })
+                .json();
 
             // 쿠키에 토큰 저장
             // accessToken: 30분 (1800초)
@@ -47,7 +48,7 @@ export default function LoginPage() {
             // refreshToken: keepLogin이 true면 90일, false면 1일
             cookieTokenManager.setRefreshToken(
                 refreshToken,
-                data.isSaved ? 7776000 : 86400
+                isSaved ? 7776000 : 86400
             );
 
             router.push(returnUrl || PATHS.MAIN);
@@ -449,5 +450,13 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <LoginForm />
+        </Suspense>
     );
 }

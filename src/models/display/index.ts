@@ -9,19 +9,20 @@ import {
     EventSaleStatusType,
     EventTopImageUrlType,
     EventUrlType,
+    ImageUrlType,
     KeywordInfoType,
-    KeywordType,
+    NextActionType,
     OptionType,
     OrderStatusType,
     PlatformType,
     PopupPageType,
     ProductInquiryType,
+    ProductSectionSaleStatusType,
     ProviderType,
-    ReportReasonCdType,
-    SearchType,
     StickerInfoType,
 } from '@/models';
-import { HasCoupons, ReservationData } from '@/models/product';
+
+import { HasCoupons, Price, ReservationData } from '@/models/product';
 import {
     CouponStatus,
     DateInfo,
@@ -30,46 +31,11 @@ import {
     UseConstraint,
 } from '@/models/promotion';
 
-export interface ProductReviewData {
-    /** 옵션 번호 */
-    optionNo: number;
-    /** 주문 옵션 번호 */
-    orderOptionNo: number;
-    /** 상품평 내용 */
-    content: string;
-    /** 상품평 평점 */
-    rate: number;
-    /** 첨부파일 url 리스트 */
-    urls: string[];
-    /** 상품평 선택 옵션 */
-    extraJson?: string;
-    /** 태그값 번호 */
-    tagValueNos: (number | string)[];
-}
-
-export interface UpdateProductReviewData {
-    content: string;
-    rate: number;
-    urls: string[];
-    tagValueNos: (number | string)[];
-}
-
-export interface ReportProductReviewData {
-    reportReasonCd: ReportReasonCdType;
-    content: string;
-}
-
-export interface MyProductReviewsParams {
-    /** 조회 시작일(yyyy-MM-dd), 미입력시 30일 전 */
-    startYmd: string;
-    /** 조회 종료일(yyyy-MM-dd), 미입력시 오늘 날짜 */
-    endYmd?: string;
-    /** 베스트 상품평 여부 ( 우수상품평:Y , 일반상품평:N , 전체: NULL ) */
-    bestReviewYn?: 'Y' | 'N';
-    /** 검색어 기준 (Content: CONTENT, Product Name: PRODUCT_NAME, All: ALL) */
-    searchType?: SearchType;
-    /** 검색어 */
-    searchKeyword?: string;
+export interface TagValue {
+    /** 상품문의 태그값명 */
+    tagValueName: string;
+    /** 상품문의 태그값번호 */
+    tagValueNo: number;
 }
 
 export interface MyReviewableProductsParams {
@@ -120,30 +86,12 @@ export interface GetEventInfoParams {
     preview?: boolean;
 }
 
-export interface GetEventByIdParams {
-    /** 비로그인 고객의 상품 내 발급가능 쿠폰노출(default: false) */
-    includeNonMemberCoupon?: boolean;
-    /** 기획전 미리보기 여부(default: false) */
-    preview: boolean;
-}
-
 export interface Events {
     keyword?: string;
     eventTitle: string;
     categoryNos?: number;
     productNos: number;
     onlyIngStatus: boolean;
-}
-
-export interface EventsByProgressParams {
-    /** 검색어 (키워드 타입에 따라 태그 or 기획전명) */
-    keyword: string;
-    /** 검색어 타입 (TAG, NAME / default: 모두 포함) */
-    keywordType?: KeywordType;
-    /** 전시 카테고리 번호로 검색 */
-    categoryNos?: string[];
-    /** 진행상태 (ING - 진행중, READY - 진행예정, END - 진행종료, ALL / default: ING) (공백없이 입력) */
-    progressStatus?: EventProgressStatusType;
 }
 
 export interface KeywordInfo {
@@ -167,27 +115,9 @@ export interface Order {
     direction?: 'DESC' | 'ASC';
 }
 
-export interface GetEventsParams {
-    keywordInfo?: KeywordInfo;
-    page: PageParam;
-    /** 전시 카테고리 번호로 검색 */
-    categoryNos?: number;
-    /** 이벤트 여부 - Y or N (default : null) */
-    eventYn?: 'Y' | 'N';
-    /** 진행상태 */
-    progressStatus?: EventProgressStatusType;
-    order?: Order;
-}
+export type EventOrder = 'TOP' | 'COUPONS' | 'SECTIONS';
 
-export interface GetEventsResponse {
-    /** 총 이벤트 수 */
-    totalCount: number;
-    /** 총 페이지 수 */
-    totalPage: number;
-    contents: EventContents[];
-}
-
-export interface EventContents {
+export interface EventContent {
     /** 전시 종료일 */
     endYmdt: string;
     /** 기획전 명 */
@@ -218,22 +148,12 @@ export interface EventContents {
     id: string;
 }
 
-export type GetClosedEventsResponse = ItemList<
-    Omit<EventContents, 'progressStatus'>
->;
-
 export interface skinBanners {
     skinNo: number;
     bannerGroupCodes: string;
 }
 
-export interface GetEventParams extends Preview {
-    /** 비로그인 고객의 상품 내 발급가능 쿠폰노출(default: false) */
-    includeNonMemberCoupon?: boolean;
-    preview?: boolean;
-}
-
-export interface Top {
+export interface EventTopInfo {
     pc: {
         type: EventTopImageUrlType;
         url: string;
@@ -434,70 +354,118 @@ export interface RecommendedProduct {
     enableCoupons: boolean;
 }
 
-export interface GetReviewResponse {
-    items: ReviewItem[];
-    totalCount: number;
-}
-
 export interface ReviewItem {
-    reviewNo: number;
-    productNo: number;
-    productName: string;
-    brandName: string;
-    imageUrl: string;
-    rate: number;
-    orderedOption: OrderedOption;
-    registerYmdt: string;
-    updateYmdt: string;
-    recommendCnt: number;
-    reportCnt: number;
-    blindReportCnt: number;
-    orderNo: string;
-    brandNameEn: string;
+    /** 판매자 관리 코드 */
     productManagementCd: string;
+    /** 작성 플랫폼 */
     platformType: string;
-    isDeletedProductReview: boolean;
-    extraJson: string;
-    bestReviewYn: string;
-    fileUrls: string[];
-    externalReview: boolean;
+    /** 내용 */
     content: string;
+    /** 상품 명 */
+    productName: string;
+    /** 태그값번호 */
+    tagValueNos: number[];
+    /** 수록일 */
+    updateYmdt: string;
+    /** 평점 */
+    rate: number;
+    /** 상품평 구분 ( 일반: N , 우수: Y ) */
+    bestReviewYn: string;
+    /** 상품 대표 이미지 URL */
+    imageUrl: string;
+    /** 상품 평 번호 */
+    reviewNo: number;
+    /** 상품 번호 */
+    productNo: number;
+    /** 등록일 */
+    registerYmdt: string;
+    /** 블라인드 신고 수 */
+    blindReportCnt: number;
+    /** 브랜드 명 */
+    brandName: string;
+    /** 주문 번호 */
+    orderNo: string;
+    /** 신고 수 */
+    reportCnt: number;
+    /** 첨부 파일 url 리스트 (5개까지 가능) */
+    fileUrls: string[];
+    /** 상품 대표 이미지 URL 타입 */
+    imageUrlType: ImageUrlType;
+    orderedOption: OrderedOption;
+    /** 외부 리뷰 작성 여부 */
+    externalReview: boolean;
+    /** 상품 삭제 여부 */
+    isDeletedProductReview: boolean;
+    /** 브랜드 영문명 */
+    brandNameEn: string;
+    /** 영문상품명 */
+    productNameEn: string;
+    /** 상품평 작성 리뷰 */
+    extraJson: string;
 }
 
 export interface OrderedOption {
-    orderOptionNo: number;
-    optionName: string;
-    optionValue: string;
-    addPrice: number;
-    optionUsed: boolean;
-    orderCnt: number;
+    /** 옵션 종류 */
+    optionType: 'NORMAL_OPTION' | 'ADDITIONAL_PRODUCT';
+    /** 옵션 권장 출력값 */
     optionTitle: string;
-    optionType: string;
-    inputs: Input[];
+    inputs: {
+        /** 구매자 작성형 옵션 (value) */
+        inputLabel: string;
+        /** 구매자 작성형 옵션 (label) */
+        inputValue: string;
+    }[];
+    /** 주문 상태 */
+    orderStatusType: OrderStatusType;
+    /** 옵션값 */
+    optionValue: string;
+    /** 주문수량 */
+    orderCnt: number;
+    /** 옵션 추가 금액 */
+    addPrice: number;
+    /** 옵션명 */
+    optionName: string;
+    /** 옵션사용여부 */
+    optionUsed: boolean;
+    /** 주문 옵션 번호 */
+    orderOptionNo: number;
 }
 
-export interface Input {
-    inputLabel: string;
-    inputValue: string;
-}
+export type ReviewBoardSortCriterion =
+    | 'REVIEW_COUNT'
+    | 'REGISTER_YMDT'
+    | 'REVIEW_RATE';
 
-export interface GetProductReviewsItem {
+export type ReviewBoardType = 'ALL' | 'PHOTO';
+
+export type PhotoReviewDisplayType = 'FIRST_TYPE' | 'SECOND_TYPE';
+
+export type BoardConfigType = 'CARD' | 'LIST';
+
+export type BoardImageType = 'NONE' | 'ATTACH_IMAGE' | 'PRODUCT_IMAGE';
+
+export interface ProductReviewInfo {
     /** 상품평 총 개수 */
     productTotalCount: number;
     /** 본인 여부 */
     myReview: boolean;
     /** 작성 플랫폼 */
-    platformType: PlatformType;
+    platformType: PlatformType | 'COMMON' | 'ALL';
+    /** 외부 사이트 명 */
+    siteName: string;
     /** 작성자 이름 */
     memberName: string;
     /** 상품평 내용 */
     content: string;
+    /** 공급자 유형 */
     providerType: ProviderType;
     /** 상품명 */
     productName: string;
+    /** 태그값번호 */
+    tagValueNos: number[];
     /** 수정일 */
     updateYmdt: string;
-    /** 상품평 구분 (일반: N, 우수: Y) */
+    /** 베스트 상품평 여부 ( 우수상품평:Y , 일반상품평:N , 전체: NULL ) */
     bestReviewYn: 'Y' | 'N';
     /** 평점 */
     rate: number;
@@ -507,6 +475,14 @@ export interface GetProductReviewsItem {
     reviewNo: number;
     /** 작성자 닉네임 */
     nickname: string;
+    /** 회원등급 노출 설정 (null 인경우 비회원 포함 노출) */
+    memberGradeDisplayInfo: Nullable<{
+        /** 노출 가능한 회원 등급 정보 (isAll 이 false 일 경우에만 유효한 값) */
+        nos: number[];
+        /** 모든 회원 노출 여부 (true : 모든 회원 노출, false: nos 에 해당하는 회원만 노출 */
+        isAll: boolean;
+    }>;
+    tagValues: TagValue[];
     /** 상품 번호 */
     productNo: number;
     /** 등록일 */
@@ -519,41 +495,36 @@ export interface GetProductReviewsItem {
     recommendable: boolean;
     /** 블라인드 수 */
     blindReportCnt: number;
+    /** 신고 취소 여부 */
+    cancelReportable: string;
+    /** 외부 사이트에서 작성된 리뷰 날짜 (nullable) */
+    originRegisterYmdt: Nullable<string>;
     /** 휴면 회원 여부 */
     expelled: boolean;
     /** 신고 수 */
     reportCnt: number;
     /** 첨부파일 url 리스트 */
     fileUrls: string[];
+    /** 상품 이미지 URL 타입 */
+    imageUrlType: ImageUrlType;
     /** 신고가능여부 */
     reportable: boolean;
+    /** 회원그룹 노출 설정 (null 인경우 비회원 포함 노출) */
+    memberGroupDisplayInfo: Nullable<{
+        /** 노출 가능한 회원 그룹 정보 (isAll 이 false 일 경우에만 유효한 값) */
+        nos: number[];
+        /** 모든 회원 노출 여부 (true : 모든 회원 노출, false: nos 에 해당하는 회원만 노출) */
+        isAll: boolean;
+    }>;
     /** 외부 작성 여부 */
     externalReview: boolean;
-    orderedOption: {
-        /** 옵션 종류 */
-        optionType: Exclude<OptionType, 'PRODUCT_ONLY'>;
-        /** 옵션 권장 출력값 */
-        optionTitle: string;
-        inputs: Input[];
-        /** 주문 상태 */
-        orderStatusType: OrderStatusType;
-        /** 옵션값 */
-        optionValue: string;
-        /** 주문수량 */
-        orderCnt: number;
-        /** 옵션 추가 금액 */
-        addPrice: number;
-        /** 옵션명 */
-        optionName: string;
-        /** 옵션사용여부 */
-        optionUsed: boolean;
-        /** 주문 옵션 번호 */
-        orderOptionNo: number;
-    };
+    orderedOption: OrderedOption;
     /** 추천 수 */
     recommendCnt: number;
     /** 상품평의 댓글 개수 */
     commentCount: number;
+    /** 외부 상품 상세 url */
+    productDetailUrl: string;
     /** 상품 삭제 여부 */
     isDeletedProductReview: boolean;
     /** 상품 할인 가격 */
@@ -562,22 +533,126 @@ export interface GetProductReviewsItem {
     brandNameEn: string;
     /** 상품 평점 */
     productRate: number;
-    /** 적립금 지급 여부 */
-    givenAccumulationYn: 'Y' | 'N';
+    /** 영문상품명 */
+    productNameEn: string;
     /** 상품평 작성 리뷰 */
     extraJson: string;
     /** 작성자 명 */
     registerName: string;
+    /** 판매상태 */
+    saleStatusType: ProductSectionSaleStatusType;
 }
 
-export interface GetProductReviewsResponse
-    extends ItemList<GetProductReviewsItem> {
-    /** 리뷰 평점 */
-    rate: number;
-    reviewRatingResponses: {
-        /** 평점 별 개수 */
-        countOfRating: number;
-        /** 평점 */
-        rating: number;
+export interface ProductReviewContent {
+    /** 태그값번호  */
+    tagValueNos: number[];
+    /** 첨부파일 갯수 */
+    attachedFileCount: number;
+    /** 내용 */
+    urls: string[];
+    /** 상품평 번호 */
+    reviewNo: number;
+    /**추천수 */
+    recommendCnt: number;
+    /** 작성자 번호 */
+    registerNo: number;
+}
+
+export interface ReviewRange {
+    /** 리뷰점수 시작 평점 (double) */
+    from: number;
+    /** 리뷰점수 끝 평점 (double) */
+    to: number;
+}
+
+export interface ReviewableProduct {
+    /** 클레임 번호 */
+    claimNo: number;
+    /** 예약 배송 시작일 */
+    reservationDeliveryYmdt: string;
+    inputs: {
+        /** 구매자 작성형 입력 이름 */
+        inputLabel: string;
+        /** 구매자 작성형 입력 값 */
+        inputValue: string;
     }[];
+    /** 배송상품여부 */
+    deliverable: boolean;
+    /** 옵션사용여부 */
+    optionUsed: boolean;
+    /** 상품 명 */
+    productName: string;
+    /** 추가 상품 번호 */
+    additionalProductNo: number;
+    /** 클레임 상태 */
+    claimStatusType: string;
+    /** 옵션형태 */
+    optionType: Omit<OptionType, 'PRODUCT_ONLY'>;
+    /** 해외 배송가능 여부 */
+    deliveryInternationalYn: boolean;
+    price: Price;
+    /** 상품 이미지 URL */
+    imageUrl: string;
+    /** 다음에 할 수 있는 작업 */
+    nextActions: {
+        /** 작업 타입 */
+        nextActionType: NextActionType;
+        /** uri */
+        uri: string;
+    }[];
+    /** 예약 주문 여부 (true: 예약 상품, false: 비예약 상품) */
+    reservation: boolean;
+    /** 환불 가능 여부 */
+    refundable: boolean;
+    /** 옵션 번호 */
+    optionNo: number;
+    /** 주문 상품 옵션 번호 */
+    orderOptionNo: number;
+    /** 포토 리뷰 적립금 */
+    photoReviewAccumulationAmt: number;
+    /** 상품 번호 */
+    productNo: number;
+    delivery: {
+        deliveryCompanyTypeLabel: string;
+        /** 택배사 타입 */
+        deliveryCompanyType: string;
+        /** 송장추적 URL */
+        retrieveInvoiceUrl: string;
+        /** 송장 번호 */
+        invoiceNo: string;
+    };
+    /** 옵션 권장 출력값 */
+    optionTitle: string;
+    /** 브랜드 명 */
+    brandName: string;
+    /** 주문 번호 */
+    orderNo: string;
+    /** 주문상태 */
+    orderStatusType: OrderStatusType;
+    /** 옵션 값 */
+    optionValue: string;
+    /** 상품 이미지 URL 타입 */
+    imageUrlType: ImageUrlType;
+    /** 주문수량 */
+    orderCnt: number;
+    /** 교환 가능 여부 */
+    exchangeYn: string;
+    /** 적립금 */
+    accumulationAmt: number;
+    orderStatusDate: {
+        /** 상품평작성기한(조회 시작일/종료일 미 입력 시 구매확정일로부터 90일) */
+        reviewableYmdt: string;
+        /** 구매확정일자 */
+        buyConfirmYmdt: string;
+        /** 등록일자 */
+        registerYmdt: string;
+    };
+    /** 브랜드영문명 */
+    brandNameEn: string;
+    /** 상품 영문명 */
+    productNameEn: string;
+    /** 옵션 관리 코드 */
+    optionManagementCd: string;
+    /** 옵션 명 */
+    optionName: string;
 }

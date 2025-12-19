@@ -39,26 +39,9 @@ export interface SendCertificatedNumberResponse {
     remainTime: number;
 }
 
-export interface CheckBizmallData {
-    /** 회사 번호 */
-    companyNo: number;
-    /** 임직원 이름 */
-    name: string;
-    /** 임직원 사번 */
-    idNo: string;
-}
-
-export interface CheckBizmallResponse {
-    /** 가입 가능 여부 */
-    success: boolean;
-}
-
 export interface CheckCertificatedNumberViaEmailParams {
     /** 사용 용도 */
-    usage: Exclude<
-        CertificationUsage,
-        'JOIN' | 'CHANGE_ID' | 'CHANGE_EMAIL' | 'CHANGE_MOBILE_NO'
-    >;
+    usage: 'FIND_ID' | 'FIND_PASSWORD' | 'RELEASE_DORMANT' | 'JOIN_URI';
     /** 이메일 주소 */
     email: string;
     /** 인증 번호 */
@@ -72,10 +55,12 @@ export interface CheckCertificatedNumberViaEmailResponse {
 
 export interface SendCertificatedNumberViaEmailData {
     /** 사용 용도 */
-    usage: Exclude<
-        CertificationUsage,
-        'CHANGE_ID' | 'CHANGE_EMAIL' | 'JOIN_URI'
-    >;
+    usage:
+        | 'FIND_ID'
+        | 'FIND_PASSWORD'
+        | 'RELEASE_DORMANT'
+        | 'JOIN'
+        | 'CHANGE_MOBILE_NO';
     /** 회원 이름(JOIN_URI: 가입인증이 아닌 경우 필수)(nullable) */
     memberName: string;
     /** 인증번호를 전달할 쇼핑몰 URI(nullable) */
@@ -91,10 +76,12 @@ export interface SendCertificatedNumberViaEmailResponse {
 
 export interface CheckCertificatedNumberViaSMSParams {
     /** 사용 용도 */
-    usage: Exclude<
-        CertificationUsage,
-        'CHANGE_ID' | 'CHANGE_EMAIL' | 'JOIN_URI'
-    >;
+    usage:
+        | 'FIND_ID'
+        | 'FIND_PASSWORD'
+        | 'RELEASE_DORMANT'
+        | 'JOIN'
+        | 'CHANGE_MOBILE_NO';
     /** 휴대전화 번호 */
     mobileNo: string;
     /** 인증 번호 */
@@ -108,10 +95,12 @@ export interface CheckCertificatedNumberViaSMSResponse {
 
 export interface SendCertificatedNumberViaSMSData {
     /** 사용 용도 */
-    usage: Exclude<
-        CertificationUsage,
-        'CHANGE_ID' | 'CHANGE_EMAIL' | 'JOIN_URI'
-    >;
+    usage:
+        | 'FIND_ID'
+        | 'FIND_PASSWORD'
+        | 'RELEASE_DORMANT'
+        | 'JOIN'
+        | 'CHANGE_MOBILE_NO';
     /** 회원 이름 */
     memberName: string;
     /** 휴대전화 번호 */
@@ -240,6 +229,33 @@ export interface LinkSNSParams {
     keepLogin?: boolean;
     /** 클라이언트 플랫폼 */
     platformType?: ClientPlatformType;
+}
+
+export interface LinkSNSResponse {
+    /** 외부 IDP 코드. 리퀘스트와 동일 */
+    provider: NcpOpenIdProviderType;
+    /** 휴면 회원일 경우 포함되는 정보로, 주로 휴면 확인 용도로 사용됨. (nullable) */
+    dormantMemberResponse: Nullable<{
+        /** 회원 이름 (nullable) */
+        memberName: Nullable<string>;
+        /** 회원 휴대전화번호 (nullable) */
+        mobileNo: Nullable<string>;
+        /** 회원 이메일 주소 (nullable) */
+        email: Nullable<string>;
+    }>;
+    /** 같은 정보를 가진 기존 회원이 존재할 경우 추가적으로 포함되는 정보. (없을 경우 null) (nullable) */
+    ordinaryMemberResponse: {
+        /** 기존 회원 마스킹된 이메일 주소나 휴대폰 번호 (nullable) */
+        duplicateKey: string;
+        /** 기존 회원 가입일 (nullable) */
+        signUpDateTime: string;
+    };
+    /** 엑세스 토큰의 유효 기간(초) */
+    expireIn: number;
+    /** 회원 엑세스 토큰 */
+    accessToken: string;
+    /** 최초 연동 여부 - 해당 오픈 아이디가 샵바이에 최초로 연동되었는지 확인하는 용도로 사용됨. */
+    isInitialSync: boolean;
 }
 
 export interface GenerateAppCardQrParams {

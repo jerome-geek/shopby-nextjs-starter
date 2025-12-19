@@ -12,9 +12,9 @@ export interface GetBrandsParams extends Paging {
         fromDB?: boolean;
         sort?: {
             /** 정렬 필드 (null 또는 값 없음(default) - 브랜드명 가나다순 / PRODUCT_COUNT - 브랜드 상품 매핑 수로 정렬 후, 브랜드 가나다순 / REGISTER_DATE - 등록일순) */
-            criterion?: string;
+            criterion?: 'PRODUCT_COUNT' | 'REGISTER_DATE';
             /** 정렬 방식 (ASC - 오름차순, DESC - 내림차순 / 정렬 필드가 있는 경우에만 적용됩니다.) */
-            direction?: string;
+            direction?: 'ASC' | 'DESC';
         };
     };
 }
@@ -54,17 +54,13 @@ export interface BrandExtraInfo {
 
 export type GetBrandsExtraInfoResponse = BrandExtraInfo[];
 
-export interface SearchBrandParams {
+export interface SearchBrandsParams extends Omit<Paging, 'hasTotalCount'> {
     /** 검색할 브랜드명(없는 경우, 전체 브랜드 조회) */
     brandName?: string;
-    /** 페이지 번호(default: 1) */
-    pageNumber?: number;
-    /** 한 페이지당 노출 수 */
-    pageSize?: number;
     /** 정렬 필드(default: BRAND_NAME), (BRAND_NAME:브랜드명, LIKE_COUNT:브랜드 좋아요 수) */
-    sortCriterion?: string;
+    sortCriterion?: 'BRAND_NAME' | 'LIKE_COUNT';
     /** 정렬 방식(default: DESC), (ASC:오름차순, DESC:내림차순) */
-    sortDirection?: string;
+    sortDirection?: 'ASC' | 'DESC';
 }
 
 export interface SearchBrand {

@@ -5,6 +5,10 @@ import {
     SaleType,
 } from '@/models';
 
+export interface GetProductOptionsParams {
+    productNos: number[];
+}
+
 export interface GetProductOptionsResponse {
     optionInfos: OptionInfo[];
 }
@@ -29,13 +33,13 @@ export interface ProductOption {
     /** 필수 옵션 여부 */
     isRequiredOption: boolean;
     images: {
-        /** main: 메인이미지 여부 (true: 메인이미지, false: 메인이미지 아님) */
+        /** 메인이미지 여부 (true: 메인이미지, false: 메인이미지 아님) */
         main: boolean;
-        /** url: 이미지 URL */
+        /** 이미지 URL */
         url: string;
     }[];
     /** 판매 상태 유형 */
-    saleType: 'AVAILABLE' | 'SOLD_OUT';
+    saleType: 'AVAILABLE' | 'SOLD_OUT' | 'UNAVAILABLE';
     /** 추가 관리 코드 */
     extraManagementCd: string;
     /** 대표옵션 여부, true: 대표옵션, false: 대표옵션 아님 */
@@ -49,7 +53,7 @@ export interface ProductOption {
     /** 예약재고수량 */
     reservationStockCnt: number;
     /** 자식 옵션 목록 */
-    children: any[];
+    children: ProductOption[];
     /** 재고수량 */
     stockCnt: number;
     /** 옵션 관리 코드 */
@@ -181,7 +185,7 @@ export interface RentalInfo {
     creditRating?: number;
 }
 
-export type GetProductOptionImagesResponse = {
+export interface OptionImageInfo {
     /** 옵션이미지 URL */
     imageUrl: string;
     /** 메인이미지 여부 (true: 메인이미지, false: 일반이미지) */
@@ -190,15 +194,8 @@ export type GetProductOptionImagesResponse = {
     optionNo: number;
     /** 매진 여부 (true: 매진, false:재고 있음) */
     soldout: boolean;
-}[];
+}
 
-export type GetOptionImagesResponse = {
-    /** 옵션이미지 URL */
-    imageUrl: string;
-    /** 메인이미지 여부 (true: 메인이미지, false: 일반이미지) */
-    main: boolean;
-    /** 옵션 번호 */
-    optionNo: number;
-    /** 매진 여부 (true: 매진, false:재고 있음) */
-    soldout: boolean;
-}[];
+export type GetProductOptionImagesResponse = OptionImageInfo[];
+
+export type GetOptionImagesResponse = OptionImageInfo[];

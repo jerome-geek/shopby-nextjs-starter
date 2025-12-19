@@ -1,12 +1,12 @@
 import type { Options } from 'ky';
+
 import request from '@/api/core/request';
-import { GetMallResponse } from '@/models/admin/mall';
-// import {
-//     GetMallInternationalizationSettingsResponse,
-//     GetMallPartnersResponse,
-//     GetMallResponse,
-//     GetSslInfoResponse,
-// } from '@/models/admin/mall';
+import {
+    GetMallInternationalizationSettingsResponse,
+    GetMallPartnersResponse,
+    GetMallResponse,
+    GetSslInfoResponse,
+} from '@/models/admin/mall';
 
 const mall = {
     /**
@@ -18,39 +18,49 @@ const mall = {
      *   - 그런 경우에는 카테고리 조회 API를 이용하여 로컬 저장소를 갱신해 주십시오.
      *   - Server Component에서 사용 시: cache()로 감싸서 사용
      *   - Client Component에서 사용 시: useQuery로 감싼 커스텀 훅 사용
-     *
-     * @param options - ky 옵션 (헤더, 쿼리 파라미터, 타임아웃 등)
      */
-    getMall: async (options?: Options): Promise<GetMallResponse> => {
-        return request.get('malls', options).json<GetMallResponse>();
+    getMall: (options?: Options) => {
+        return request.get<GetMallResponse>('malls', {
+            cache: 'force-cache',
+            ...options,
+        });
     },
 
     /**
      *  현재 몰의 다국어, 환율 설정 조회
      *   - 현재 몰의 다국어, 환율 설정 조회를 조회하는 API입니다.
      */
-    // getMallInternationalizationSettings: () =>
-    //     request<GetMallInternationalizationSettingsResponse>({
-    //         method: 'GET',
-    //         url: '/malls/internationalization',
-    //     }),
+    getMallInternationalizationSettings: (options?: Options) => {
+        return request.get<GetMallInternationalizationSettingsResponse>(
+            'malls/internationalization',
+            {
+                cache: 'force-cache',
+                ...options,
+            }
+        );
+    },
 
     /**
      *  몰과 계약한 파트너 목록 조회하기
      *   - 몰과 계약한 파트너 목록을 조회하는 API입니다.
      */
-    // getMallPartners: () =>
-    //     request<GetMallPartnersResponse>({
-    //         method: 'GET',
-    //         url: '/malls/partners',
-    //     }),
+    getMallPartners: (options?: Options) => {
+        return request.get<GetMallPartnersResponse>('malls/partners', {
+            cache: 'force-cache',
+            ...options,
+        });
+    },
 
     /**
      *  현재 도메인의 보안서버정보 조회하기
      *   - 현재 도메인의 보안서버정보를 조회하는 API입니다.
      */
-    // getSslInfo: () =>
-    //     request<GetSslInfoResponse>({ method: 'GET', url: '/malls/ssl' }),
+    getSslInfo: (options?: Options) => {
+        return request.get<GetSslInfoResponse>('malls/ssl', {
+            cache: 'force-cache',
+            ...options,
+        });
+    },
 };
 
 export default mall;

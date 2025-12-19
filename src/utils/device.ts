@@ -1,11 +1,11 @@
 import { headers } from 'next/headers';
-import UAParser from 'ua-parser-js';
+import { UAParser } from 'ua-parser-js';
 
 export type Platform = 'PC' | 'IOS' | 'AOS' | 'MOBILE_WEB';
 
-export function getPlatform(): Platform {
-    const headersList = headers();
-    const userAgent = headersList.get('user-agent') || '';
+export async function getPlatform(): Promise<Platform> {
+    const headersList = await headers();
+    const userAgent = headersList.get?.('user-agent') || '';
     const parser = new UAParser(userAgent);
 
     const device = parser.getDevice();

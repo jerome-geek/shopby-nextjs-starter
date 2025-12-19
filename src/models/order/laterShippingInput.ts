@@ -1,5 +1,5 @@
 import { CountryCdType, OrderRequestType } from '@/models';
-import { RawAxiosRequestHeaders } from 'axios';
+// import { RawAxiosRequestHeaders } from 'axios';
 
 export interface GetAreaFeesParams {
     /** 배송비 템플릿 번호 */
@@ -17,9 +17,9 @@ export interface GetAreaFee {
 
 export type GetAreaFeesResponse = GetAreaFee[];
 
-export interface GetLaterOrderDetailHeaders extends RawAxiosRequestHeaders {
-    encryptedShippingNo: string;
-}
+// export interface GetLaterOrderDetailHeaders extends RawAxiosRequestHeaders {
+//     encryptedShippingNo: string;
+// }
 
 export interface GetLaterOrderDetailParams {
     /** 주문옵션타입 (ALL: 전체, CLAIM: 클레임진행, NORMAL: 클레임미진행) */

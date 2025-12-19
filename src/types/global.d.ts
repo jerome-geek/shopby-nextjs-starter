@@ -32,6 +32,11 @@ declare global {
         endYmd: string;
     }
 
+    interface SearchDateTime {
+        startYmdt: string;
+        endYmdt: string;
+    }
+
     interface ItemList<T> {
         totalCount: number;
         items: T[];

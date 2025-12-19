@@ -8,14 +8,12 @@ import { CartIcon } from '@/components/icons/CartIcon';
 import { PATHS } from '@/const/paths';
 import { mall } from '@/api/admin';
 
-// Server Component에서 사용하기 위해 cache() 적용
-// options를 받을 수 있도록 래핑
-const getMallCached = cache(() => mall.getMall());
-
 export default async function Header() {
     const cartCount = 13; // TODO: 실제 장바구니 아이템 수로 교체
+    
     try {
-        const data = await getMallCached();
+        const data = await mall.getMall().json();
+
         return (
             <header
                 className={css({

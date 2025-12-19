@@ -3,6 +3,8 @@ import { getTranslations } from 'next-intl/server';
 import { css } from '@/styled-system/css';
 import PopupWrapper from '@/components/PopupWrapper';
 import HeroBanner from '@/components/HeroBanner';
+import BestProductList from '@/components/Product/Best';
+import { additionalDiscount } from '@/api/product';
 
 export default async function Home() {
     const t = await getTranslations();
@@ -59,6 +61,8 @@ export default async function Home() {
                         </a>
                     </div>
                 </div>
+
+                {/* <BestProductList /> */}
 
                 {/* Suspense와 ErrorBoundary로 감싸진 팝업 */}
                 {/* <PopupWrapper

@@ -3,9 +3,7 @@ import {
     BrandNameType,
     CertificationType,
     CountryCdType,
-    CriterionType,
     CustomPropertiesPropType,
-    DaysOfWeekType,
     DeliveryCompanyType,
     DeliveryConditionType,
     DeliveryType,
@@ -13,37 +11,16 @@ import {
     MappingType,
     OptionYnType,
     PayType,
-    ProductDirectionType,
     ProductGroupType,
     ProductSalePeriodType,
     ProductSaleStatusType,
     ProductSectionSaleStatusType,
     ProductType,
-    SaleMethodType,
     SalePeriodType,
     ShippingAreaType,
     WarehouseAddressType,
 } from '@/models';
 import { StickerInfo } from '@/models/display';
-
-export interface ProductsParams {
-    /** 배송 템플릿 번호 */
-    deliveryTemplateNo: number;
-    /** 옵션값 출력 여부 (default : false) (nullable) */
-    hasOptionValues?: Nullable<boolean>;
-    /** 브랜드/카테고리 출력 여부 (default : false) (nullable) */
-    hasBrandAndCategoryValues?: Nullable<boolean>;
-    /** 한 페이지당 노출 수 (default : 30) (nullable) */
-    pageSize?: Nullable<number>;
-    /** 페이지 번호 (default : 1) (nullable) */
-    pageNumber?: Nullable<number>;
-    productSort?: {
-        /** 정렬 기준 (default : RECENT_PRODUCT) (nullable) */
-        criterion?: Nullable<CriterionType>;
-        /** 정렬 방법 (default : DESCDeliveryFeignClient) (nullable) */
-        direction?: Nullable<ProductDirectionType>;
-    };
-}
 
 export interface GroupCodeParams {
     groupManagementCodes: string[];
@@ -458,74 +435,6 @@ export interface HasCoupons {
     brand: boolean;
 }
 
-export interface ProductDetailResponse {
-    /** 렌탈 정보 (옵션이 없는 상품의 경우 조회, 옵션이 있는 상품의 경우 옵션 조회 API(/products/{productNo}/options) 에서 렌탈 정보 조회 가능) */
-    rentalInfos: RentalInfo[];
-    /** 예약판매정보 */
-    reservationData: ReservationData;
-    /** 상품 기본 정보 */
-    baseInfo: BaseInfo;
-    /** 그룹관리코드 노출명 */
-    groupManagementCodeName: Nullable<string>;
-    /** 배송 관련 정보 */
-    shippingInfo: ShippingInfo;
-    /** 배송 안내 */
-    deliveryGuide: Nullable<string>;
-    /** 그룹관리코드 */
-    groupManagementCode: Nullable<string>;
-    /** 관련 상품 번호 */
-    relatedProductNos: number[];
-    /** 좋아요 여부(accessToken 없을 시 false) */
-    liked: boolean;
-    /** 사입 위탁 구분 값 (PURCHASE: purchase, CONSIGNMENT: Consignment) */
-    saleMethodType: SaleMethodType;
-    /** 교환 안내 */
-    exchangeGuide: Nullable<string>;
-    /** 환불 안내 */
-    refundGuide: Nullable<string>;
-    /** 가격정보 */
-    price: Price;
-    /** 리뷰 작성 가능 여부 */
-    reviewAvailable: boolean;
-    /** 카테고리 목록 */
-    categories: Category[];
-    /** 재고정보 */
-    stock: Stock;
-    /** 기간 */
-    deliveryDate: DeliveryDate;
-    /** 브랜드 정보 */
-    brand: Brand;
-    /** 구매제한 */
-    limitations: Limitations;
-    /** 상품평 평균점 */
-    reviewRate: number;
-    /** 메인 베스트 상품 여부 */
-    mainBestProductYn: boolean;
-    /** 정기 결제 정보 (해당 값이 null로 오느냐에 따라서 정기결제상품인지 아닌지 여부를 판단) */
-    regularDelivery: Nullable<RegularDelivery>;
-    /** 상품 카운트 정보 */
-    counter: Counter;
-    /** 파트너사 공지 */
-    partnerNotice: {
-        /** 제목 */
-        title: string;
-        /** 내용 */
-        content: string;
-    };
-    /** AS 안내 */
-    afterServiceGuide: Nullable<string>;
-    /** 배송정보 */
-    deliveryFee: DeliveryFee;
-    /** 판매자 정보 */
-    partner: Partner;
-    /** 주류 통신판매 명령 위임고시 */
-    liquorDelegationGuide: Nullable<string>;
-    /** 재고 노출 여부 (false:재고 미노출 / true:재고 노출) */
-    displayableStock: boolean;
-    /** 상품 상태 */
-    status: Status;
-}
-
 export interface RegularDelivery {
     /** 정기 결제 즉시 할인 정보 (nullable) */
     discount: Nullable<{
@@ -534,20 +443,6 @@ export interface RegularDelivery {
         /** 즉시 할인 금액/율 */
         value: number;
     }>;
-}
-
-export interface Brand {
-    /** 브랜드명 유형 */
-    nameType: 'NAME_KO' | 'NAME_EN' | 'NONE';
-    /** 브랜드명 */
-    name: string;
-    nameKo: string;
-    /** 영문 브랜드명 */
-    nameEn: string;
-    /** 브랜드번호 */
-    brandNo: number;
-    /** 브랜드 로고 이미지 URL */
-    logoImageUrl: string;
 }
 
 /** 상품 이미지URL 타입(ImageUrlKeys) */
@@ -671,28 +566,6 @@ export interface Certification {
     type: string;
     /** 인증상호 */
     target: string;
-}
-
-export interface DeliveryDate {
-    period: {
-        /** 시작일 */
-        startYmdt: string;
-        /** 종료일 */
-        endYmdt: string;
-    };
-    /** 요일 */
-    daysOfWeek: DaysOfWeekType;
-    /** 주문일 기준 */
-    daysAfterPurchase: Nullable<number>;
-}
-
-export interface Stock {
-    /** 구매 수량 (재고 미노출의 경우 -999 재고 미노출 설정일때 실재고가 없는 경우, 0으로 표기) */
-    saleCnt: number;
-    /** 대표 남은 수량(옵션의 추가금이 0인 재고의 합/재고 미노출의 경우 -999 재고 미노출 설정일때 실재고가 없는 경우, 0으로 표기) */
-    mainStockCnt: number;
-    /** 남은 수량 (재고 미노출의 경우 -999 재고 미노출 설정일때 실재고가 없는 경우, 0으로 표기) */
-    stockCnt: number;
 }
 
 /** 가격 정보 */
@@ -820,41 +693,6 @@ export interface ReturnWarehouse {
     warehouseNo: number;
 }
 
-export interface Limitations {
-    /** 주문환불불가 목록 */
-    nonRefundTypes: Nullable<(boolean | string | number)[]>;
-    /** 최소구매수량 */
-    minBuyCnt: number;
-    /** 1회최대구매수량 */
-    maxBuyTimeCnt: number;
-    /** 최대구매기간(일) */
-    maxBuyDays: number;
-    /** 최대구매기간(수량) */
-    maxBuyPeriodCnt: number;
-    /** 1인최대구매수량 */
-    maxBuyPersonCnt: number;
-    /** 환불가능여부 */
-    refundable: boolean;
-    /** 네이버페이 결제 가능여부 */
-    naverPayHandling: boolean;
-    /** 비회원구매여부(true : 가입한 회원만 구매 가능) */
-    memberOnly: boolean;
-    /** 장바구니 가능 여부 */
-    canAddToCart: boolean;
-}
-
-/** 상품 카운트 정보 */
-export interface Counter {
-    /** 내 상품문의 카운트(accessToken 없을 시, 0) */
-    myInquiryCnt?: number;
-    /** 상품문의 카운트 */
-    inquiryCnt?: number;
-    /** 좋아요 수 */
-    likeCnt?: number;
-    /** 상품평 카운트 */
-    reviewCnt?: number;
-}
-
 export interface Category {
     /** 세부 카테고리 정보 */
     categories: {
@@ -869,29 +707,6 @@ export interface Category {
     fullCategoryLabel: string;
 }
 
-export interface Partner {
-    /** 파트너번호 */
-    partnerNo: number;
-    /** 대표자명 */
-    ownerName: string;
-    /** FAX번호 */
-    faxNo: string;
-    /** 판매자명 */
-    partnerName: string;
-    /** 사업장 주소 */
-    officeAddressLabel: string;
-    /** 상호명 */
-    companyName: string;
-    /** 사업자번호 */
-    businessRegistrationNo: string;
-    /** 통신판매신고번호 */
-    onlineMarketingBusinessDeclarationNo: string;
-    /** 대표 이메일 */
-    email: string;
-    /** 대표번호 */
-    phoneNo: string;
-}
-
 export interface Status {
     /** 상품 타입 (DEFAULT: General product, EVENT: Event Product, OFFLINE: Offline product, RENTAL: Rental Product) */
     productClassType: ProductType;
@@ -903,26 +718,6 @@ export interface Status {
     saleStatusType: ProductSectionSaleStatusType;
 }
 
-export interface ShippingInfo {
-    /** 배송 설정 */
-    shippingConfig: ShippingConfig;
-    /** 배송 가능 여부 */
-    shippingAvailable: boolean;
-}
-
-export interface ShippingConfig {
-    /** 배송 템플릿 번호 */
-    templateNo: number;
-    /** 배송지 파트너 번호 */
-    shippingAreaPartnerNo: number;
-    /** 출고 유형(배송 구분) */
-    shippingAreaType: ShippingAreaType;
-    /** 해외 배송 여부 (true: 해외 배송, false:국내 배송) */
-    internationalShippingAvailable: boolean;
-    /** 묶음배송 가능여부 (true: 묶음 배송 가능, false: 묶음 배송 불가능) */
-    combinable: boolean;
-}
-
 /** 렌탈 정보 (옵션이 없는 상품의 경우 조회, 옵션이 있는 상품의 경우 옵션 조회 API(/products/{productNo}/options) 에서 렌탈 정보 조회 가능) */
 export interface RentalInfo {
     /**  월 렌탈 금액 */
@@ -931,54 +726,6 @@ export interface RentalInfo {
     rentalPeriod: number;
     /** 서비스 가능 최저 신용 등급 */
     creditRating: number;
-}
-
-export interface RelatedProductInfo {
-    /** 성인인증 필요 여부 */
-    requiresAgeVerification: boolean;
-    /** 즉시할인액 */
-    immediateDiscountAmt: number;
-    /** 추가할인 타입 */
-    additionalDiscountUnitType: DiscountUnitType;
-    /** 판매가 */
-    salePrice: number;
-    /** 즉시할인 시작일자 */
-    immediateDiscountStartYmdt: string;
-    /** 즉시할인 타입 */
-    immediateDiscountUnitType: string;
-    /** 이미지 URL 타입 */
-    imageUrlType: string;
-    /** 장바구니 사용 여부 */
-    canAddToCart: boolean;
-    /** 상품명 */
-    productName: string;
-    /** 추가할인액 */
-    additionalDiscountAmt: number;
-    /** 즉시할인 종료일자 */
-    immediateDiscountEndYmdt: string;
-    /** 이미지 URL */
-    imageUrl: string;
-    /** 영문상품명 */
-    productNameEn: string;
-    /** 스티커 */
-    stickers: StickerInfo[];
-    /** 상품 번호 */
-    productNo: number;
-}
-
-export type RelatedProductResponse = RelatedProductInfo[];
-
-export interface GetStandardCategoryResponse {
-    /** 첫번쩨 표준카테고리 번호 */
-    depth1No: number;
-    /** 표준카테고리 전체 이름 */
-    fullCategoryName: string;
-    /** 두번째 표준카테고리 번호 */
-    depth2No: number;
-    /** 세번째 표준카테고리 번호 */
-    depth3No: number;
-    /** 마지막 표준카테고리 번호 (최하위 뎁스로 만약 뎁스가 4개가 아니더라도 마지막의 뎁스 번호로 인식 */
-    depth4No: number;
 }
 
 export interface OptionValue {

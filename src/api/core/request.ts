@@ -1,3 +1,4 @@
+import { logRequest, logResponse } from '@/api/core/utils';
 import ky from 'ky';
 
 const baseRequest = ky.create({
@@ -12,9 +13,9 @@ const baseRequest = ky.create({
         currency: 'KRW',
     },
     hooks: {
-        beforeRequest: [], // 요청 전 헤더에 인증 토큰 추가 (setTokenHeader)
+        beforeRequest: [logRequest], // 요청 전 헤더에 인증 토큰 추가 (setTokenHeader)
         beforeRetry: [], // 재시도 전 토큰 갱신 (handleRefreshToken)
-        afterResponse: [], // 응답 후 에러 처리 (handleError)
+        afterResponse: [logResponse], // 응답 후 에러 처리 (handleError)
     },
 });
 

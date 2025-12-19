@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import Link from 'next/link';
 
 import { css } from '@/styled-system/css';
@@ -6,15 +5,9 @@ import { InstagramIcon } from '@/components/icons/InstagramIcon';
 import { YouTubeIcon } from '@/components/icons/YouTubeIcon';
 import { mall } from '@/api/admin';
 
-// Server Component에서 사용하기 위해 cache() 적용
-// options를 받을 수 있도록 래핑
-const getMallCached = cache((options?: Parameters<typeof mall.getMall>[0]) =>
-    mall.getMall(options)
-);
-
 export default async function Footer() {
     try {
-        const data11 = await getMallCached();
+        const data11 = await mall.getMall().json();
 
         const navigation = {
             links: [

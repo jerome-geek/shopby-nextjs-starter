@@ -7,14 +7,17 @@ import {
     ProductInquiryType,
     ProviderType,
 } from '@/models';
-import { TagValue } from '@/models/display/review';
+import { TagValue } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 
 export type BoardImageType = 'NONE' | 'PRODUCT_MAIN_IMAGE';
 
 export interface GetAllProductInquiriesParams extends Paging {
-    searchType?: Exclude<InquirySearchType, 'ALL'>;
+    /** 검색어 기준 (내용: CONTENT, 상품명: PRODUCT_NAME) */
+    searchType?: 'CONTENT' | 'PRODUCT_NAME';
+    /** 검색어 */
     searchKeyword?: string;
+    /** 태그값번호 */
     tagValuesNos?: number[];
 }
 
@@ -65,19 +68,6 @@ export interface SummarizedInquiryItem {
     inquiryNo: number;
 }
 
-export interface GetProductInquiriesParams extends Paging {
-    /** 조회일 시작일(입력 안 할 경우 3개월, yyyy-MM-dd) */
-    startYmd?: string;
-    /** 조회일 종료일(입력 안 할 경우 오늘, yyyy-MM-dd) */
-    endYmd?: string;
-    /** 답변 유무 조건(답변이 달린 문의 목록: true, 답변이 달리지 않은 목록이거나 없을 경우 전체(default): false) */
-    answered?: boolean;
-    /** 내 문의만 조회 여부 (default: true) */
-    isMyInquiries?: boolean;
-    /** 태그값 번호 */
-    tagValueNos?: number[];
-}
-
 export interface GetProductInquiryConfigResponse {
     /** 답글 사용 가능 여부 (true: 답글 가능, false:답글 불가) */
     canReply: boolean;
@@ -113,26 +103,18 @@ export interface GetProductInquiryTagsResponse {
     }[];
 }
 
-export type GetProductInquiriesResponse = ItemList<InquiryItem>;
-
-export interface GetMyProductInquiriesParams extends Paging {
-    /** 조회일 시작일(입력 안 할 경우 3개월, yyyy-MM-dd) */
-    startYmd?: string;
-    /** 조회일 종료일(입력 안 할 경우 오늘, yyyy-MM-dd) */
-    endYmd?: string;
-    /** 답변 유무 조건(답변이 달린 문의 목록: true, 답변이 달리지 않은 목록이거나 없을 경우 전체(default): false) */
-    answered?: boolean;
-    /** 내 문의만 조회 여부 */
-    isMyInquiries?: boolean;
-    /** 검색어 기준 (Content: CONTENT, Product Name: PRODUCT_NAME, All: ALL) */
-    searchType?: ProductInquirySearchType;
-    /** 검색어 */
-    searchKeyword?: string;
-    /** 태그값번호 */
+export interface UpdateProductInquiryData {
+    /** 상품문의 태그값번호 */
     tagValueNos?: number[];
+    /** 상품문의 유형 */
+    type: ProductInquiryType;
+    /** 상품문의 제목(선택) */
+    title: string;
+    /** 비밀글 여부 */
+    secreted: boolean;
+    /** 상품문의 내용(필수) */
+    content: string;
 }
-
-export type GetMyProductInquiriesResponse = ItemList<InquiryItem>;
 
 export interface WriteProductInquiryData {
     /** 상품문의 태그값 번호 */
@@ -153,17 +135,23 @@ export interface WriteProductInquiryData {
     productNo: number;
 }
 
-export interface UpdateProductInquiryData {
-    /** 상품문의 태그값번호 */
+export interface GetProductInquiriesParams extends Paging {
+    /** 조회일 시작일(입력 안 할 경우 3개월, yyyy-MM-dd) */
+    startYmd?: string;
+    /** 조회일 종료일(입력 안 할 경우 오늘, yyyy-MM-dd) */
+    endYmd?: string;
+    /** 답변 유무 조건(답변이 달린 문의 목록: true, 답변이 달리지 않은 목록이거나 없을 경우 전체(default): false) */
+    answered?: boolean;
+    /** 내 문의만 조회 여부 (default: true) */
+    isMyInquiries?: boolean;
+    /** 태그값 번호 */
     tagValueNos?: number[];
-    /** 상품문의 유형 */
-    type: ProductInquiryType;
-    /** 상품문의 제목(선택) */
-    title: string;
-    /** 비밀글 여부 */
-    secreted: boolean;
-    /** 상품문의 내용(필수) */
-    content: string;
+}
+export type GetProductInquiriesResponse = ItemList<InquiryItem>;
+
+export interface WriteProductInquiryResponse {
+    /** 상품문의 번호 */
+    inquiryNo: number;
 }
 
 export interface ReportProductInquiryData {
@@ -176,6 +164,23 @@ export interface ReportProductInquiryData {
 }
 
 export type GetProductInquiryResponse = InquiryItem;
+
+export interface GetMyProductInquiriesParams extends Paging {
+    /** 조회일 시작일(입력 안 할 경우 3개월, yyyy-MM-dd) */
+    startYmd?: string;
+    /** 조회일 종료일(입력 안 할 경우 오늘, yyyy-MM-dd) */
+    endYmd?: string;
+    /** 답변 유무 조건(답변이 달린 문의 목록: true, 답변이 달리지 않은 목록이거나 없을 경우 전체(default): false) */
+    answered?: boolean;
+    /** 검색어 기준 (Content: CONTENT, Product Name: PRODUCT_NAME, All: ALL) */
+    searchType?: ProductInquirySearchType;
+    /** 검색어 */
+    searchKeyword?: string;
+    /** 태그값번호 */
+    tagValueNos?: number[];
+}
+
+export type GetMyProductInquiriesResponse = ItemList<InquiryItem>;
 
 export interface InquiryItem {
     /** 상품관리코드 */

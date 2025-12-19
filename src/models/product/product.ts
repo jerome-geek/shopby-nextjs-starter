@@ -1,25 +1,34 @@
 import {
+    AccumulationUnitType,
     BrandNameType,
     CategoryOperatorType,
+    CertificationType,
     ChannelType,
     CountryCdType,
+    CriterionType,
     CustomPropertiesPropType,
     CycleType,
     DayOfWeekCycleType,
+    DaysOfWeekType,
     DeliveryConditionType,
     DiscountedComparisonType,
     DiscountUnitType,
     InputMatchingType,
+    MappingType,
     OptionSelectType,
     optionType,
     OptionYnType,
     OrderByType,
     OrderDirectionType,
     PayType,
+    ProductDirectionType,
+    ProductGroupType,
     ProductSalePeriodType,
     ProductSaleStatusType,
     ProductSectionSaleStatusType,
     ProductType,
+    SaleMethodType,
+    SalePeriodType,
     SaleStatusType,
     SearchShippingAreaType,
     ShippingAreaType,
@@ -38,7 +47,332 @@ import {
     Status,
 } from '@/models/product';
 
-export interface GetBestReviewProductsParams {
+export interface GetBundleProductsParams extends Omit<Paging, 'hasTotalCount'> {
+    /** 배송 템플릿 번호 */
+    deliveryTemplateNo: number;
+    /** 옵션값 출력 여부 (default : false) (nullable) */
+    hasOptionValues?: Nullable<boolean>;
+    /** 브랜드/카테고리 출력 여부 (default : false) (nullable) */
+    hasBrandAndCategoryValues?: Nullable<boolean>;
+    productSort?: {
+        /** 정렬 기준 (default : RECENT_PRODUCT) (nullable) */
+        criterion?: Nullable<CriterionType>;
+        /** 정렬 방법 (default : DESCDeliveryFeignClient) (nullable) */
+        direction?: Nullable<ProductDirectionType>;
+    };
+}
+
+export interface GetBundleProductsResponse {
+    /** 페이지 수 */
+    pageCount: number;
+    brands: {
+        /** 브랜드 명 */
+        brandName: string;
+        /** 브랜드 상품 개수 */
+        count: number;
+        /** 브랜드 번호 */
+        brandNo: number;
+    }[];
+    depth5Categories: FlatCategory[];
+    depth4Categories: FlatCategory[];
+    depth3Categories: FlatCategory[];
+    depth2Categories: FlatCategory[];
+    depth1Categories: FlatCategory[];
+    /** 검색된 상품 총 개수 */
+    totalCount: number;
+    multiLevelCategories: MultiLevelCategory[];
+    /** 가장 낮은 가격 */
+    minPrice: number;
+    /** 재고 노출 여부 (false:재고 미노출 / true:재고 노출) */
+    displayableStock: boolean;
+    /** 가장 높은 가격 */
+    maxPrice: number;
+    items: ProductItem[];
+}
+
+export interface ProductBaseInfo {
+    /** 판매자관리코드 */
+    productManagementCd: string;
+    /** 원산지(기타 직접입력, 수입사등 표기) */
+    placeOriginEtcLabel: string;
+    /** 상품유형 */
+    productClassType: ProductType;
+    /** 상품정보고시 (JSON.stringify) */
+    dutyInfo: string;
+    /** 쿠폰 적용 가능 여부 (Y : 쿠폰 적용 가능, N : 쿠폰 적용 불가) */
+    couponUseYn: OptionYnType;
+    /** 상품설명HTML 상단 */
+    contentHeader: string;
+    /** 옵션이미지상세보기여부 */
+    optionImageViewable: boolean;
+    /** 상품설명HTML 본문 */
+    content: string;
+    /** 상품명 */
+    productName: string;
+    /** 미성년자 구매 가능 여부 (Y : 미성년자 구매 가능, N : 미성년자 구매 불가) */
+    minorPurchaseYn: OptionYnType;
+    /** 판매자 특이사항/고객안내사항 */
+    deliveryCustomerInfo: string;
+    /** 상품 이미지URL 타입 */
+    imageUrlInfo: ImageUrlType[];
+    /** 적립금 사용 한도율 (nullable) */
+    accumulationUseLimitInfo: Nullable<{
+        /** 적립금 사용 금액 단위, (AMOUNT: One, PERCENT: %) */
+        unitType: string;
+        /** 적립금 사용 양 */
+        limitValue: number;
+    }>;
+    /** 상품번호 */
+    productNo: number;
+    /** 상품항목추가 관리 정보 */
+    customPropertise: {
+        /** 상품 항목 값 번호 */
+        propValueNo?: number;
+        /** 항목 복수선택여부 (Y: 복수개 선택가능, N: 1개만 선택가능) */
+        multipleSelectionYn?: OptionYnType;
+        /** 추가 항목 타입, Enum: [ STRING: 문자열, COLOR: 컬러 ] */
+        propType?: CustomPropertiesPropType;
+        /** 상품 항목 값 */
+        propValue?: string;
+        /** 상품 항목명 */
+        propName?: string;
+        /** 상품 항목명 번호 */
+        propNo?: number;
+    }[];
+    /** 재입고 알림 사용 가능 여부 - true(사용가능), false(불가능) */
+    usableRestockNoti: boolean;
+    /** 유효일자 */
+    expirationYmdt: string;
+    /** 상품 등록일 */
+    registerYmdt: string;
+    /** 상품설명HTML 하단 */
+    contentFooter: string;
+    /** 인증 타입 (TARGET: 인증대상, NOT_TARGET: 인증대상아님, DETAIL_PAGE: 상세페이지 별도표기) */
+    certificationType: CertificationType;
+    /** 제조일자 */
+    manufactureYmdt: string;
+    /** 적립금 사용 여부 (Y:사용가능 , N:사용불가능) */
+    accumulationUseYn: OptionYnType;
+    /** 스티커 라벨(배열) */
+    stickerLabels: string[];
+    certifications: CertificationType[];
+    /** 판매종료일시 */
+    saleEndYmdt: string;
+    /** 홍보문구 */
+    promotionText: string;
+    /** 판매기간 타입 */
+    salePeriodType: SalePeriodType;
+    /** 스티커 정보 */
+    stickerInfos: StickerInfo[];
+    /** 결제수단 설정 정보 */
+    paymentMeans: PayType;
+    /** HS CODE */
+    hsCode: string;
+    /** 상품군 (DELIVERY: Delivery Group, SERVICE: Service Product Group) */
+    productGroup: ProductGroupType;
+    /** 판매시작일시 */
+    saleStartYmdt: string;
+    /** 상품 이미지URL */
+    imageUrls: string[];
+    /** 상품등록유형 */
+    mappingType: MappingType;
+    /** 원산지 */
+    placeOriginLabel: string;
+    /** 영문 상품명 */
+    productNameEn: string;
+    /** 구매 안내 */
+    purchaseGuide: string;
+}
+
+export interface ProductShippingInfo {
+    /** 배송 설정 */
+    shippingConfig: {
+        /** 배송 템플릿 번호 */
+        templateNo: number;
+        /** 배송지 파트너 번호 */
+        shippingAreaPartnerNo: number;
+        /** 출고 유형(배송 구분) */
+        shippingAreaType: ShippingAreaType;
+        /** 해외 배송 여부 (true: 해외 배송, false:국내 배송) */
+        internationalShippingAvailable: boolean;
+        /** 묶음배송 가능여부 (true: 묶음 배송 가능, false: 묶음 배송 불가능) */
+        combinable: boolean;
+    };
+    /** 배송 가능 여부 */
+    shippingAvailable: boolean;
+}
+
+export interface ProductStock {
+    /** 구매 수량 (재고 미노출의 경우 -999 재고 미노출 설정일때 실재고가 없는 경우, 0으로 표기) */
+    saleCnt: number;
+    /** 대표 남은 수량(옵션의 추가금이 0인 재고의 합/재고 미노출의 경우 -999 재고 미노출 설정일때 실재고가 없는 경우, 0으로 표기) */
+    mainStockCnt: number;
+    /** 남은 수량 (재고 미노출의 경우 -999 재고 미노출 설정일때 실재고가 없는 경우, 0으로 표기) */
+    stockCnt: number;
+}
+
+export interface ProductDeliveryDate {
+    period: {
+        /** 시작일 */
+        startYmdt: string;
+        /** 종료일 */
+        endYmdt: string;
+    };
+    /** 요일 */
+    daysOfWeek: DaysOfWeekType;
+    /** 주문일 기준 */
+    daysAfterPurchase: Nullable<number>;
+}
+
+export interface Brand {
+    /** 브랜드명 유형 */
+    nameType: 'NAME_KO' | 'NAME_EN' | 'NONE';
+    /** 브랜드명 */
+    name: string;
+    nameKo: string;
+    /** 영문 브랜드명 */
+    nameEn: string;
+    /** 브랜드번호 */
+    brandNo: number;
+    /** 브랜드 로고 이미지 URL */
+    logoImageUrl: string;
+}
+
+export interface ProductLimitations {
+    /** 주문환불불가 목록 */
+    nonRefundTypes: Nullable<(boolean | string | number)[]>;
+    /** 최소구매수량 */
+    minBuyCnt: number;
+    /** 1회최대구매수량 */
+    maxBuyTimeCnt: number;
+    /** 최대구매기간(일) */
+    maxBuyDays: number;
+    /** 최대구매기간(수량) */
+    maxBuyPeriodCnt: number;
+    /** 1인최대구매수량 */
+    maxBuyPersonCnt: number;
+    /** 환불가능여부 */
+    refundable: boolean;
+    /** 네이버페이 결제 가능여부 */
+    naverPayHandling: boolean;
+    /** 비회원구매여부(true : 가입한 회원만 구매 가능) */
+    memberOnly: boolean;
+    /** 장바구니 가능 여부 */
+    canAddToCart: boolean;
+}
+
+/** 상품 카운트 정보 */
+export interface ProductCounter {
+    /** 내 상품문의 카운트(accessToken 없을 시, 0) */
+    myInquiryCnt?: number;
+    /** 상품문의 카운트 */
+    inquiryCnt?: number;
+    /** 좋아요 수 */
+    likeCnt?: number;
+    /** 상품평 카운트 */
+    reviewCnt?: number;
+}
+
+export interface Partner {
+    /** 파트너번호 */
+    partnerNo: number;
+    /** 대표자명 */
+    ownerName: string;
+    /** FAX번호 */
+    faxNo: string;
+    /** 판매자명 */
+    partnerName: string;
+    /** 사업장 주소 */
+    officeAddressLabel: string;
+    /** 상호명 */
+    companyName: string;
+    /** 사업자번호 */
+    businessRegistrationNo: string;
+    /** 통신판매신고번호 */
+    onlineMarketingBusinessDeclarationNo: string;
+    /** 대표 이메일 */
+    email: string;
+    /** 대표번호 */
+    phoneNo: string;
+}
+
+export interface ProductDetailResponse {
+    /** 렌탈 정보 (옵션이 없는 상품의 경우 조회, 옵션이 있는 상품의 경우 옵션 조회 API(/products/{productNo}/options) 에서 렌탈 정보 조회 가능) */
+    rentalInfos: RentalInfo[];
+    /** 예약판매정보 */
+    reservationData: ReservationData;
+    /** 상품 기본 정보 */
+    baseInfo: ProductBaseInfo;
+    /** 그룹관리코드 노출명 */
+    groupManagementCodeName: Nullable<string>;
+    /** 배송 관련 정보 */
+    shippingInfo: ProductShippingInfo;
+    /** 배송 안내 */
+    deliveryGuide: Nullable<string>;
+    /** 그룹관리코드 */
+    groupManagementCode: Nullable<string>;
+    /** 관련 상품 번호 */
+    relatedProductNos: number[];
+    /** 좋아요 여부(accessToken 없을 시 false) */
+    liked: boolean;
+    /** 사입 위탁 구분 값 (PURCHASE: purchase, CONSIGNMENT: Consignment) */
+    saleMethodType: SaleMethodType;
+    /** 교환 안내 */
+    exchangeGuide: Nullable<string>;
+    /** 환불 안내 */
+    refundGuide: Nullable<string>;
+    /** 가격정보 */
+    price: Price;
+    /** 리뷰 작성 가능 여부 */
+    reviewAvailable: boolean;
+    /** 카테고리 목록 */
+    categories: Category[];
+    /** 재고정보 */
+    stock: ProductStock;
+    /** 기간 */
+    deliveryDate: ProductDeliveryDate;
+    /** 브랜드 정보 */
+    brand: Brand;
+    /** 구매제한 */
+    limitations: ProductLimitations;
+    /** 상품평 평균점 */
+    reviewRate: number;
+    /** 메인 베스트 상품 여부 */
+    mainBestProductYn: boolean;
+    /** 정기 결제 정보 (해당 값이 null로 오느냐에 따라서 정기결제상품인지 아닌지 여부를 판단) */
+    regularDelivery: Nullable<{
+        /** 정기 결제 즉시 할인 정보 (nullable) */
+        discount: Nullable<{
+            /** 즉시 할인 단위 (AMOUNT: One, PERCENT: %) */
+            type: AccumulationUnitType;
+            /** 즉시 할인 금액/율 */
+            value: number;
+        }>;
+    }>;
+    /** 상품 카운트 정보 */
+    counter: ProductCounter;
+    /** 파트너사 공지 */
+    partnerNotice: {
+        /** 제목 */
+        title: string;
+        /** 내용 */
+        content: string;
+    };
+    /** AS 안내 */
+    afterServiceGuide: Nullable<string>;
+    /** 배송정보 */
+    deliveryFee: DeliveryFee;
+    /** 판매자 정보 */
+    partner: Partner;
+    /** 주류 통신판매 명령 위임고시 */
+    liquorDelegationGuide: Nullable<string>;
+    /** 재고 노출 여부 (false:재고 미노출 / true:재고 노출) */
+    displayableStock: boolean;
+    /** 상품 상태 */
+    status: Status;
+}
+
+export interface GetBestReviewProductsParams extends Paging {
     filter?: {
         /** 서비스에 계약된 모든 쇼핑몰 조회 여부 (default: false) */
         familyMalls?: boolean;
@@ -47,12 +381,6 @@ export interface GetBestReviewProductsParams {
     categoryNos?: number[];
     /** 클라이언트 키 */
     clientKey?: number;
-    /** 페이지 번호 */
-    pageNumber: number;
-    /** 한 페이지당 노출 수 */
-    pageSize: number;
-    /** 목록 카운트 포함 여부(default: false) */
-    hasTotalCount: boolean;
     /** 목록에 옵션 value 포함 여부(default: false) */
     hasOptionValues?: boolean;
 }
@@ -269,9 +597,9 @@ export interface GetGroupManagementCodesData {
     /** 그룹관리코드 */
     groupManagementCodes: string[];
     /** 품절상품 포함 여부(true: 품절상품 포함, false: 품절상품 비포함 - default) (nullable) */
-    isSoldOut: Nullable<string>;
-    /** 판매 상태 ( 전체 판매 상태 조회: ALL_CONDITIONS, 판매대기와 판매중 상품 조회: READY_ONSALE, 판매중 상품만 조회: ONSALE - default, 예약판매중인 상품과 판매중인 상품만 조회: RESERVATION_AND_ONSALE) (nullable) */
-    saleStatus: Nullable<SaleStatusType>;
+    isSoldOut?: Nullable<string>;
+    /** 판매 상태 (전체 판매 상태 조회: ALL_CONDITIONS, 판매대기와 판매중 상품 조회: READY_ONSALE, 판매중 상품만 조회: ONSALE - default, 예약판매중인 상품과 판매중인 상품만 조회: RESERVATION_AND_ONSALE) (nullable) */
+    saleStatus?: Nullable<SaleStatusType>;
 }
 
 export type GroupManagementCodeResponse = GroupManagementCode[];
@@ -316,9 +644,26 @@ export interface GroupManagementMappingProduct {
     productNo: number;
 }
 
-export interface GetProductsInfoByProductNosData {
+export interface GetProductPublicInfoParams {
+    /** 상품 번호 */
     productNos: number[];
+}
+
+export type GetProductPublicInfoResponse = {
+    /** 공개용 기본정보 */
+    publicInfo: {
+        /** 제조일자 (없을 경우 null) (nullable) */
+        manufactureYmdt: string;
+    };
+    /** 상품번호 */
+    productNo: number;
+}[];
+
+export interface GetProductsInfoByProductNosData {
+    /** 옵션값 포함여부(default: false) */
     hasOptionValues?: boolean;
+    /** 상품 번호 목록 */
+    productNos: number[];
 }
 
 export interface GetProductsInfoByProductNosResponse {
@@ -470,8 +815,50 @@ export interface ExtraInfo {
     extraInfo: string;
 }
 
-export interface GetRegularDeliveryProductsResponse {
-    recurringDeliveryProductViews: RecurringDeliveryProductView[];
+export interface GetChangeableRegularDeliveryProductsParams {
+    /** 페이지 번호 (default : 1) (nullable) */
+    page?: number;
+    /** 한 페이지당 노출 수 (default : 10) (nullable) */
+    size?: number;
+    /** 상품 번호 */
+    productNos: number[];
+}
+
+export interface GetChangeableRegularDeliveryProductsResponse {
+    recurringDeliveryProductViews: {
+        /** 옵션 여부 */
+        optionYn: 'Y' | 'N';
+        /** 즉시 할인 정보 단위 */
+        immediateDiscountType: 'AMOUNT';
+        /** 요일 단위 배송 주기 */
+        dayOfWeekCycles: ('MONDAY' | 'TUESDAY' | 'FRIDAY')[];
+        /** 월/주 단위 배송 주기 */
+        deliveryCycleTypes: ('WEEK' | 'MONTH')[];
+        /** 상품 판매가(할인 적용 전) */
+        salePrice: number;
+        /** 판매 상태 Enum: [ READY: 판매대기, ONSALE: 판매중, FINISHED: 판매종료, STOP: 판매중지, PROHIBITION: 판매금지 ] */
+        saleStatus: 'READY' | 'ONSALE' | 'FINISHED' | 'STOP' | 'PROHIBITION';
+        /** 즉시 할인 양 */
+        immediateDiscountAmount: number;
+        /** 전시 카테고리 번호 */
+        displayCategoryNo: number;
+        /** 상품명 */
+        productName: string;
+        /** 상품 판매가(할인 적용) */
+        discountedPrice: number;
+        /** 상품 이미지 URL */
+        imageUrl: string;
+        /** 품절 여부 */
+        isSoldOut: boolean;
+        /** 주 단위 배송 주기 */
+        weekDeliveryCycles: number[];
+        /** 즉시 할인가 */
+        appliedImmediateDiscountPrice: number;
+        /** 상품 번호 */
+        productNo: number;
+        /** 월 단위 배송 주기 */
+        monthDeliveryCycles: number[];
+    }[];
     /** 검색한 페이지 */
     totalPage: number;
     /** 총 개수 */
@@ -517,20 +904,12 @@ export interface ProductSearchParams extends Paging {
         includeMallProductNo?: number;
         /** 전시안함 카테고리 포함여부 - 전시카테고리 하위뎁스중 하나라도 전시안함인 경우 결과값에 포함되지 않습니다.(default : false) */
         includeNonDisplayableCategory?: boolean;
-        // 상품항목추가정보 검색
-        // 하나의 항목에서 여러개의 다중 항목 값을 검색할 경우 (SPACE 구분으로 검색) (아래 예시 참고)
-        // filter.customProperties.propNos : 100
-        // filter.customProperties.propValueNos : 1 2 3
-        // 다중 항목에서 여러개의 다중 항목 값을 검색할 경우 (콤마(,) 구분으로 검색) (아래 예시 참고)
-        // ※ 다중 항목으로 검색 시 콤마(,) 갯수를 맞춰줘야 합니다.
-        // filter.customProperties.propNos : 100,101,102
-        // filter.customProperties.propValueNos : 1 2 3,4 5 6,7 8 9
         customProperties?: {
             /** 조회할 상품항목추가정보 번호 */
             propNos: string;
             /** 조회할 상품항목추가정보 값 */
             propValueNos: string;
-            /** 상품항목추가정보 조회 조건 (AND : 모두 만족하는 상품만 조회, OR : 하나라도 포함되는 상품 조회) */
+            /** 상품항목추가정보 조회 조건 (AND: 모두 만족하는 상품만 조회, OR: 하나라도 포함되는 상품 조회) */
             propOperator: CategoryOperatorType;
         };
         /** 조회할 스티커번호 */
@@ -558,8 +937,8 @@ export interface ProductSearchParams extends Paging {
     categoryOperator?: CategoryOperatorType;
     /** 브랜드 번호(여러개 일 경우 항목 추가) */
     brandNos?: string[];
-    /** 파트너 번호(상품 공급업체 번호) */
-    partnerNo?: number;
+    /** 파트너 번호(상품 공급업체 번호, 여러개 일 경우 항목 추가) */
+    partnerNos?: number;
     /** 클라이언트 키 */
     clientKey?: string;
     /** 세일 상품만 조회 여부(default: false) */
@@ -670,8 +1049,6 @@ export interface BestSellerProductItem {
         /** 단위유형 */
         type: string;
     };
-    /** 메인 베스트 상품 여부 - deprecated */
-    mainBestProductYn: boolean;
     /** 브랜드 명 */
     brandName: string;
     /** 리스트 이미지 URL */
@@ -696,13 +1073,11 @@ export interface BestSellerProductItem {
     saleStartYmdt: string;
     /** 브랜드 한글 명 */
     brandNameKo: string;
-    /** 상품섹션 종료일 - deprecated */
-    sectionProductEndYmdt: string;
     /** 품절여부 */
     isSoldOut: boolean;
     /** 성인 상품 여부 */
     adult: boolean;
-    /** 상품 조합형 옵션정보 */
+    /** 상품 조합형 옵션정보 ( 옵션명은 | 라인으로 구분 ) */
     optionValues: {
         /** 옵션명 */
         optionValue: string;
@@ -729,7 +1104,7 @@ export interface BestSellerProductItem {
     brandNameType: BrandNameType;
     /** 파트너번호 */
     partnerNo: number;
-    /** 최대 쿠폰 적용 금액 */
+    /** 해당 상품의 옵션을 여러개 구매할 경우 받을 수 있는 최대한의 쿠폰할인 금액 */
     maxCouponAmt: number;
     /** 상품의 상품 노출 타입 */
     productSalePeriodType: string;
@@ -741,11 +1116,11 @@ export interface BestSellerProductItem {
     productType: ProductType;
     /** 상품번호 */
     productNo: number;
-    /** 상품 유효기간 */
-    expirationDate: string;
+    /** 상품 유효기간 (nullable) */
+    expirationDate: Nullable<string>;
     /** 상품 등록일 */
     registerYmdt: string;
-    /** 쿠폰 할인 타입 */
+    /** 쿠폰 할인 타입 (nullable) */
     couponDiscountUnitType: Nullable<DiscountUnitType>;
     /** 상품판매가 */
     salePrice: number;
@@ -794,10 +1169,31 @@ export type GetProductSearchSummaryParams = Pick<
     | 'excludeCategoryNos'
     | 'categoryOperator'
     | 'brandNos'
-    | 'partnerNo'
+    | 'partnerNos'
     | 'onlySaleProduct'
     | 'shippingAreaType'
 >;
+
+export interface GetRegularDeliveryProductsByProductNos {
+    /** 상품 번호 */
+    productNos: number[];
+}
+
+export type GetRegularDeliveryProductsResponse = {
+    /** 즉시 할인된 금액 */
+    discountedPrice: number;
+    /** 즉시 할인 정보 */
+    discount: {
+        /** 즉시 할인 정보 단위 */
+        type: string;
+        /** 즉시 할인 양 */
+        value: number;
+    };
+    /** 몰번호 */
+    mallNo: number;
+    /** 상품 번호 */
+    productNo: number;
+}[];
 
 export interface GetKeywordsByProductNoParams {
     /** 상품 번호 */
@@ -931,51 +1327,59 @@ export type GetPriorityPurchasableRightResponse = {
     purchasedCnt: number;
 }[];
 
+export interface RelatedProductInfo {
+    /** 성인인증 필요 여부 */
+    requiresAgeVerification: boolean;
+    /** 즉시할인액 */
+    immediateDiscountAmt: number;
+    /** 추가할인 타입 */
+    additionalDiscountUnitType: DiscountUnitType;
+    /** 판매가 */
+    salePrice: number;
+    /** 즉시할인 시작일자 (nullable) */
+    immediateDiscountStartYmdt: Nullable<string>;
+    /** 즉시할인 타입 */
+    immediateDiscountUnitType: string;
+    /** 이미지 URL 타입 */
+    imageUrlType: string;
+    /** 가격대체문구 (nullable) */
+    contentsIfPausing: Nullable<string>;
+    /** 장바구니 사용 여부 */
+    canAddToCart: boolean;
+    /** 상품명 */
+    productName: string;
+    /** 추가할인액 */
+    additionalDiscountAmt: number;
+    /** 즉시할인 종료일자 (nullable) */
+    immediateDiscountEndYmdt: Nullable<string>;
+    /** 이미지 URL */
+    imageUrl: string;
+    /** 영문상품명 (nullable) */
+    productNameEn: Nullable<string>;
+    /** 스티커 */
+    stickers: StickerInfo[];
+    /** 상품 번호 */
+    productNo: number;
+}
+
+export type GetRelatedProductsResponse = RelatedProductInfo[];
+
+export interface GetStandardCategoryResponse {
+    /** 첫번쩨 표준카테고리 번호 */
+    depth1No: number;
+    /** 표준카테고리 전체 이름 */
+    fullCategoryName: string;
+    /** 두번째 표준카테고리 번호 */
+    depth2No: number;
+    /** 세번째 표준카테고리 번호 */
+    depth3No: number;
+    /** 마지막 표준카테고리 번호 (최하위 뎁스로 만약 뎁스가 4개가 아니더라도 마지막의 뎁스 번호로 인식 */
+    depth4No: number;
+}
+
 export interface GetShortUrlResponse {
     /** 단축URL */
     url: string;
-}
-
-export interface GetBundleProductsResponse {
-    /** 페이지 수 */
-    pageCount: number;
-    /** 재고 노출 여부 (false:재고 미노출 / true:재고 노출)
-        false로 재고를 숨김처리 한 경우,
-        재고 관련 필드는(실제 재고가 있더라도) -999로 고정으로 리턴하며 실재고 값은 따로 내려주지 않아 조회 불가합니다.
-        실재고가 0인 경우에만 0으로 응답합니다.
-        만약 재고 숨김처리 시, front에서 [-999]로 표시되도록 처리되고 있는게 있다면 재고노출여부(displayableStock)를 기준으로 수정 작업이 필요합니다.
-        만약 재고 숨김처리 시, front에서 [품절]로 표시되도록 처리되고 있는게 있다면 재고/예약재고값을 기준이 아닌, 품절상태(isSoldOut)값을 기준으로 처리되도록 수정 작업이 필요합니다.
-     */
-    displayableStock: boolean;
-    /** 총 개수 */
-    totalCount: number;
-    clickUrlPrefix: {
-        /** 인자 값 */
-        param: string;
-        /** url */
-        url: string;
-    };
-    /** 상품 목록 */
-    items: ProductItem[];
-    /** 최소 가격 */
-    minPrice: number;
-    /** 최대 가격 */
-    maxPrice: number;
-    /** 브랜드 */
-    brands: {
-        /** 브랜드 명 */
-        brandName: string;
-        /** 브랜드 상품 개수 */
-        count: number;
-        /** 브랜드 번호 */
-        brandNo: number;
-    }[];
-    depth1Categories: FlatCategory[];
-    depth2Categories: FlatCategory[];
-    depth3Categories: FlatCategory[];
-    depth4Categories: FlatCategory[];
-    depth5Categories: FlatCategory[];
-    multiLevelCategories: MultiLevelCategory[];
 }
 
 export interface ProductsSearchResponse {
@@ -1010,7 +1414,6 @@ export interface FlatCategory {
     count: number;
     /** 카테고리번호 */
     categoryNo: number;
-    /** 하위 카테고리 */
     /** 카테고리 명 */
     label: string;
 }
@@ -1209,7 +1612,6 @@ export interface GetFavoriteKeywordsParams {
     size?: number;
 }
 
-/** 인기검색어 */
 export type GetFavoriteKeywordsResponse = string[];
 
 export interface GetPublicInfoParams {
@@ -1393,6 +1795,8 @@ export interface ExtraProduct {
         /** 추가상품의 선택옵션타입 */
         optionSelectType: OptionSelectType;
     };
+    /** 재고노출여부 */
+    displayableStock: boolean;
     /** 추가상품의 상품명 */
     productName: string;
     /** 추가상품의 상품번호 */

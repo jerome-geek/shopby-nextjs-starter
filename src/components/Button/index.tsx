@@ -8,9 +8,10 @@ export const Button = (props: ButtonProps) => {
         return <OutlinedButton {...props} />;
     }
 
-    // if (props.frame === 'text') {
-    //     return <TextButton {...props} />;
-    // }
+    if (props.frame === 'text') {
+        // return <TextButton {...props} />;
+        return <></>;
+    }
 
     return <SolidButton {...props} />;
 };
