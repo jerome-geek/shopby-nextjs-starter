@@ -4,7 +4,7 @@ import {
     ImageDisplayType,
     BoardDisplayType,
 } from '@/models';
-import { File } from '@/models/manage';
+import { InquiryAnswer, File, InquiryInfo } from '@/models/manage';
 
 export type InquiryDirection = 'ADMIN' | 'CREATED_ASC' | 'CREATED_DESC';
 
@@ -26,6 +26,12 @@ export interface GetInquiriesParams extends Paging {
     /** 검색 타입 (ALL: 전체, TITLE: 제목, CONTENT: 내용) */
     searchType?: InquirySearchType;
 }
+
+export interface GetInquiriesItem extends Omit<GetInquiryResponse, 'answer'> {
+    answer: Nullable<Omit<InquiryAnswer, 'files'>>;
+}
+
+export type GetInquiriesResponse = ItemList<GetInquiriesItem>;
 
 export interface WriteInquiryData {
     /** 원본 파일명 (nullable) */
@@ -58,6 +64,11 @@ export interface WriteInquiryData {
     email?: string;
     /** 상품번호 (nullable) */
     productNo?: number;
+}
+
+export interface WriteInquiryResponse {
+    /** 1:1문의 일련번호 */
+    inquiryNo: number;
 }
 
 export interface GetInquiryConfigResponse {
@@ -107,51 +118,7 @@ export type GetInquiryTypesResponse = {
     inquiryTypeName: string;
 }[];
 
-export interface GetInquiryResponse {
-    /** 답변 등록시 SMS 수신 여부 (false: 수신 안함, true: 수신함) */
-    answerSmsSend: boolean;
-    /** 1:1문의 유형 */
-    inquiryType: {
-        /** 1:1문의 유형 번호 */
-        inquiryTypeNo: number;
-        /** 1:1문의 유형 이름 */
-        inquiryTypeName: string;
-        /** 1:1문의 유형 설명 */
-        inquiryTypeDescription: string;
-    };
-    /** 주문번호(nullable) */
-    orderNo: Nullable<string>;
-    /** 답변 등록시 메일 수신 여부(false: 수신 안함, true: 수신함) */
-    answerEmailSend: boolean;
-    /** 1:1 문의자 이름 */
-    issuerName: string;
-    /** 원본 이미지 url */
-    originalImageUrls: string[];
-    /** 답변 상태 (ISSUED(ASKED-이전버전 호환용): 답변대기, IN_PROGRESS: 답변 진행중, ANSWERED: 답변완료) */
-    inquiryStatus: InquiryStatusType;
-    /** 상품명 (nullable) */
-    productName?: Nullable<string>;
-    /** 등록인 번호 (nullable) */
-    registerNo?: Nullable<number>;
-    /** 문의 제목 */
-    inquiryTitle: string;
-    /** 1:1문의 답변 (nullable) */
-    answer?: Nullable<Answer>;
-    /** 이미지 url */
-    imageUrls: string[];
-    /** 문의 내용 */
-    inquiryContent: string;
-    /** 영문 상품명 (nullable) */
-    productNameEn?: Nullable<string>;
-    /** 주문옵션번호 (nullable) */
-    orderOptionNo?: Nullable<number>;
-    /** 상품번호 (nullable) */
-    productNo?: Nullable<number>;
-    /** 등록일 (example: YYYY-MM-DD HH:mm:ss) */
-    registerYmdt: string;
-    /** 1:1문의 번호 */
-    inquiryNo: number;
-}
+export type GetInquiryResponse = InquiryInfo;
 
 export interface UpdateInquiryData {
     /** 원본 파일명 */
@@ -167,23 +134,6 @@ export interface UpdateInquiryData {
     /** 1:1 문의 내용 (최대길이 : 16,700,000) */
     inquiryContent: string;
 }
-
-export interface Answer {
-    /** 답변 일자 (nullable) */
-    answerRegisterYmdt?: string;
-    /** 답변 내용 (nullable) */
-    answerContent?: string;
-    /** 답변 번호 (nullable) */
-    answerNo?: number;
-    /** 파일 목록 */
-    files: File[];
-}
-
-export interface GetInquiriesItem extends Omit<GetInquiryResponse, 'answer'> {
-    answer: Nullable<Omit<Answer, 'files'>>;
-}
-
-export type GetInquiriesResponse = ItemList<GetInquiriesItem>;
 
 export interface DownloadInquiryFileParams {
     /** 업로드한 파일이름 */

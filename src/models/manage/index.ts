@@ -1,14 +1,13 @@
 import {
-    AccumulationStatusGroupType,
-    ArticleRegisterType,
-    InquiryStatusType,
-    OrderDirectionType,
     AccumulationReasonType,
     AccumulationReserveReasonType,
+    AccumulationStatusGroupType,
     AccumulationStatusType,
-    ImageDisplayType,
+    ArticleRegisterType,
     DisplayStatusType,
-    ProductInquiryReportType,
+    ImageDisplayType,
+    InquiryStatusType,
+    OrderDirectionType,
 } from '@/models';
 
 type PAGE_TYPE =
@@ -33,114 +32,11 @@ export type PAGE_TYPES =
 
 export type SearchType = 'ALL' | 'TITLE' | 'CONTENT' | 'WRITER';
 
-export interface GetArticleDetailParams {
-    boardNo: string;
-    articleNo: string;
-    query?: {
-        password?: string;
-        withReplied?: boolean;
-    };
-}
-
-export interface GroupByState {
-    state: string;
-    count: number;
-}
-
-export interface Item {
-    address: string;
-    detailAddress: string;
-    roadAddress: string;
-    roadAddressExtra: string;
-    jibunAddress: string;
-    relatedJibun: string;
-    zipCode: string;
-    oldZipCode: string;
-}
-
-export interface AddressResponse extends ItemList<Item> {
-    groupByStates: GroupByState[];
-}
-
-export interface ArticleParams extends Paging {
-    /** 검색어 */
-    keyword?: string;
-    /** 검색 유형 */
-    searchType?: SearchType;
-    /** 게시판 카테고리  */
-    categoryNo?: number;
-    /** 조회일 시작일(yyyy-MM-dd, default: 3개월) */
-    startYmd?: string;
-    /** 조회일 종료일(yyyy-MM-dd, default: 오늘) */
-    endYmd?: string;
-    /** 답글도 리스트에 같이 조회할지 여부 (false: 답글 미포함(default), true: 답글 포함) */
-    withReplied?: boolean;
-    /** 최신 순 정렬 여부 */
-    direction?: OrderDirectionType;
-    /** 본인이 작성한 글만 조회 여부(false: 전체 조회(default), true: 본인 글만 조회) */
-    isMine?: boolean;
-}
-
 export interface ImagesType {
     /** 원본 파일명 (최대 길이 100자, 업로드 파일 최대 개수: 10) */
     originalFileName: string;
     /** 업로드 된 파일명 (최대 길이 500자, 업로드 파일 최대 개수: 10) */
     uploadedFileName: string;
-}
-
-export interface PostArticleParams {
-    images?: ImagesType[];
-    /** 비회원 글쓰기용 비밀번호 */
-    password?: string;
-    /** 게시글 제목 */
-    articleTitle: string;
-    /** 상위 게시글 번호 */
-    parentBoardArticleNo?: number;
-    /** 게시글 내용 */
-    articleContent?: string;
-    /** 카테고리 번호 */
-    boardCategoryNo?: number;
-    /** 비밀글 여부 (false: 공개글, true: 비밀글)  */
-    secreted: boolean;
-    /** 검색용 게시글 태그 (nullable) */
-    postSearchTags: string[];
-    /** 대표 이미지 (최대 길이 500자) */
-    thumbnailUrl?: string;
-    /** 태그목록 */
-    tags?: string[];
-    /** 비회원 작성자. 생략하면 '비회원'으로 노출. */
-    guestName?: string;
-}
-
-export interface WriteInquiry {
-    originalFileName?: string[];
-    inquiryTitle?: string;
-    answerEmailSendYn?: boolean;
-    uploadedFileName?: string[];
-    orderNo?: string;
-    captcha?: string;
-    inquiryTypeNo?: number;
-    answerSmsSendYn?: boolean;
-    inquiryContent?: string;
-    email?: string;
-    productNo?: number | string;
-}
-
-export interface InquiryConfigResponses {
-    displayType: DisplayType;
-    imageDisplayType: ImageDisplayType;
-    used: boolean;
-    name: string;
-    description: string;
-    memberPostingUsed: boolean;
-    guestPostingUsed: boolean;
-    secretPostingUsed: boolean;
-    replyUsed: boolean;
-    attachmentUsed: boolean;
-    smsUsed: boolean;
-    emailUsed: boolean;
-    answerSmsTemplateUsed: boolean;
-    answerMailTemplateUsed: boolean;
 }
 
 export type DisplayType = 'LIST' | 'CARD' | 'REPLY' | 'INQUIRY';
@@ -149,36 +45,10 @@ export type PostDirection = 'DESC' | 'ASC' | 'RECOMMEND_COUNT' | 'READ_COUNT';
 
 export type ModifierType = 'MEMBER' | 'ADMIN' | 'GUEST' | 'DEVELOPER';
 
-export interface DetailInquiryResponses {
-    inquiryNo: number;
-    orderNo: string;
-    productNo: number;
-    productName: string;
-    inquiryTitle: string;
-    inquiryContent: string;
-    answerSmsSend: boolean;
-    answerEmailSend: boolean;
-    registerNo: number;
-    registerYmdt: string;
-    inquiryStatus: InquiryStatusType;
-    inquiryType: InquiryType;
-    answer: Answer;
-    imageUrls: string[];
-    originalImageUrls: string[];
-    issuerName: string;
-}
-
 export interface InquiryType {
     inquiryTypeNo: number;
     inquiryTypeName: string;
     inquiryTypeDescription: string;
-}
-
-export interface Answer {
-    answerNo: number;
-    answerContent: string;
-    files: File[];
-    answerRegisterYmdt: string;
 }
 
 export interface File {
@@ -186,55 +56,11 @@ export interface File {
     uploadedFileName: string;
 }
 
-export interface UpdateInquiry
-    extends Omit<
-        WriteInquiry,
-        'uploadedFileName' | 'originalFileName' | 'inquiryTypeNo'
-    > {
-    uploadedFileNames?: string[];
-    originalFileNames?: string[];
-}
-
 export interface BoardCategory {
+    /** 게시판 카테고리 번호 */
     categoryNo: number;
+    /** 카테고리 명칭1  ` */
     label: string;
-}
-
-export interface BoardList {
-    totalCount: number;
-    items: BoardListItem[];
-}
-
-export interface BoardListItem {
-    articleNo: number;
-    attached: Attachment[];
-    categoryLabel: string;
-    categoryNo: number;
-    imageUrl: string;
-    modifierName: string;
-    modifierNo: null;
-    modifierType: null;
-    modifyYmdt: null;
-    notice: boolean;
-    recommendCount: number;
-    recommendable: boolean;
-    registerName: string;
-    registerNo: number;
-    registerType: string;
-    registerYmdt: Date;
-    replied: boolean;
-    repliedCnt: number;
-    secreted: boolean;
-    tags: string[];
-    title: string;
-    viewCnt: number;
-}
-
-export interface ReplyParams extends Paging {
-    /** 페이지 번호 (default:1) */
-    page: number;
-    /** 본인이 해당 게시글을 추천했는지 여부(false: 본인 추천 포함x(default), true: 본인 추천 포함) */
-    includeRecommended?: boolean;
 }
 
 export interface ReplyList extends ArticleDetail {
@@ -294,11 +120,6 @@ export interface ArticleDetail {
     notice: boolean;
     /** 최초 등록일  */
     registerYmdt: string;
-}
-
-export interface BoardDetailState {
-    boardNo: string;
-    articleNo: string;
 }
 
 export interface BoardDetail {
@@ -362,30 +183,6 @@ export interface Attachment {
     downloadFileUrl: string;
 }
 
-export interface InquiriesResponse {
-    totalCount: number;
-    items: InquiryItem[];
-}
-
-export interface InquiryItem {
-    inquiryNo: number;
-    orderNo: string;
-    productNo: number;
-    productName: string;
-    inquiryTitle: string;
-    inquiryContent: string;
-    answerSmsSend: boolean;
-    answerEmailSend: boolean;
-    registerNo: number;
-    registerYmdt: string;
-    inquiryStatus: InquiryStatusType;
-    inquiryType: InquiryType;
-    answer: Answer;
-    imageUrls: any[];
-    originalImageUrls: any[];
-    issuerName: string;
-}
-
 // 1:1 문의 유형 목록
 export interface InquiryType {
     /** 1:1문의 유형 번호 */
@@ -396,66 +193,59 @@ export interface InquiryType {
     inquiryTypeDescription: string;
 }
 
-export interface Answer {
-    answerNo: number;
-    answerContent: string;
-    answerRegisterYmdt: string;
-}
-
-export interface GetAccumulationListParams extends Paging, SearchDate {
-    accumulationReason?: AccumulationReasonType;
-    direction?: OrderDirectionType;
-}
-
-export interface GetAccumulationListResponse {
-    /** 회원 번호 */
-    memberNo: number;
-    /** 적립 총액 */
-    totalAmt: number;
-    /** 전체 카운트 */
-    totalCount: number;
-    items: AccumulationHistory[];
-}
-
-export interface AccumulationHistory {
-    /** 만료일 */
-    expireYmdt: string;
-    /** 주문번호 */
-    orderNo: string;
-    /** 적립금 번호 */
-    accumulationNo: number;
-    /** 맵핑 키(외부 적립금 사용 시에만 사용함) */
-    mappingKey: string;
-    /** 잔여 적립금 */
-    accumulationRestAmt: number;
-    /** 적립사유 코드 */
-    accumulationReserveReason: AccumulationReserveReasonType;
-    /** 적립사유 코드 표시명 */
-    accumulationReserveReasonDisplay: string;
-    /** 시작일 */
-    startYmdt: string;
-    /** 적립사유 상세 */
-    reasonDetail: string;
-    /** 적립금 총액 */
-    totalAvailableAmt: number;
-    /** 적립 지급/차감 구분 코드 */
-    accumulationStatusGroupType: AccumulationStatusGroupType;
-    /** 적립금액 */
-    accumulationAmt: number;
-    /** 적립상태 코드 */
-    accumulationStatus: AccumulationStatusType;
-    /** 등록일 */
+export interface InquiryInfo {
+    /** 답변 등록시 SMS 수신 여부 (false: 수신 안함, true: 수신함) */
+    answerSmsSend: boolean;
+    /** 1:1문의 유형 */
+    inquiryType: {
+        /** 1:1문의 유형 번호 */
+        inquiryTypeNo: number;
+        /** 1:1문의 유형 이름 */
+        inquiryTypeName: string;
+        /** 1:1문의 유형 설명 */
+        inquiryTypeDescription: string;
+    };
+    /** 주문번호(nullable) */
+    orderNo: Nullable<string>;
+    /** 답변 등록시 메일 수신 여부(false: 수신 안함, true: 수신함) */
+    answerEmailSend: boolean;
+    /** 1:1 문의자 이름 */
+    issuerName: string;
+    /** 원본 이미지 url */
+    originalImageUrls: string[];
+    /** 답변 상태 (ISSUED(ASKED-이전버전 호환용): 답변대기, IN_PROGRESS: 답변 진행중, ANSWERED: 답변완료) */
+    inquiryStatus: InquiryStatusType;
+    /** 상품명 (nullable) */
+    productName?: Nullable<string>;
+    /** 등록인 번호 (nullable) */
+    registerNo?: Nullable<number>;
+    /** 문의 제목 */
+    inquiryTitle: string;
+    /** 1:1문의 답변 (nullable) */
+    answer?: Nullable<InquiryAnswer>;
+    /** 이미지 url */
+    imageUrls: string[];
+    /** 문의 내용 */
+    inquiryContent: string;
+    /** 영문 상품명 (nullable) */
+    productNameEn?: Nullable<string>;
+    /** 주문옵션번호 (nullable) */
+    orderOptionNo?: Nullable<number>;
+    /** 상품번호 (nullable) */
+    productNo?: Nullable<number>;
+    /** 등록일 (example: YYYY-MM-DD HH:mm:ss) */
     registerYmdt: string;
+    /** 1:1문의 번호 */
+    inquiryNo: number;
 }
 
-export interface GetAccumulationSummaryResponse {
-    /** 사용가능한 총 적립금액 */
-    totalAvailableAmt: number;
-    /** 만료조회 총 적립금액 */
-    totalExpireAmt: number;
-}
-
-export interface ReportArticleData {
-    reportReasonType: ProductInquiryReportType;
-    content: string;
+export interface InquiryAnswer {
+    /** 답변 일자 (nullable) */
+    answerRegisterYmdt?: string;
+    /** 답변 내용 (nullable) */
+    answerContent?: string;
+    /** 답변 번호 (nullable) */
+    answerNo?: number;
+    /** 파일 목록 */
+    files: File[];
 }

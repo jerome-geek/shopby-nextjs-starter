@@ -1439,6 +1439,7 @@ type PageType =
     | 'ORDER_COMPLETE' // 주문완료 페이지
     | 'DISPLAY_SECTION' // 메인 싱품 분류지
     | 'MEMBER_JOIN_COMPLETE' // 회원가입완료 페이지
+    | 'LOGIN' // 로그인 페이지
     | 'MYPAGE'; // 마이 페이지
 
 /** 배너 전시 기간 타입 (REGULAR: 상시, PERIOD: 기간설정) */

@@ -1,4 +1,5 @@
 export interface SearchAddressParams extends Omit<Paging, 'hasTotalCount'> {
+    /** 검색 키워드 */
     keyword: string;
 }
 

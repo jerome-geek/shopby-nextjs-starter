@@ -6,12 +6,13 @@ import {
     DisplayStatusType,
     ImageDisplayType,
     OrderDirectionType,
+    ProductInquiryReportType,
 } from '@/models';
 import {
     BoardCategory,
     DisplayType,
+    ImagesType,
     ModifierType,
-    PostArticleParams,
     PostDirection,
     SearchType,
 } from '@/models/manage';
@@ -149,7 +150,7 @@ export interface GetPostListParams {
 }
 
 export interface GetPostListData {
-    /** (개발중) 비밀글 조회 여부(null: 공개+비밀 게시글 전체 조회(default), false: 공개 게시글만 조회, true: 비밀 게시글만 조회) (nullable) */
+    /** 비밀글 조회 여부(null: 공개+비밀 게시글 전체 조회(default), false: 공개 게시글만 조회, true: 비밀 게시글만 조회) (nullable) */
     isSecreted?: boolean;
     /** 본인이 스크랩한 게시글만 조회 여부(false: 전체 조회(default), true: 스크랩한 게시글만 조회) (nullable) */
     myScrapedOnly?: boolean;
@@ -275,9 +276,9 @@ export interface GetArticleListParams extends Paging {
     isSecreted?: boolean;
 }
 
-export type GetArticleListResponse = ItemList<ArticleDetail>;
+export type GetArticleListResponse = ItemList<ArticleInfo>;
 
-export interface ArticleDetail {
+export interface ArticleInfo {
     /** 답글 여부 (false: 답글 미존재, true: 답글 존재) */
     replied: boolean;
     /** 최종 수정일 (nullable) */
@@ -342,11 +343,37 @@ export interface ArticleDetail {
     displayStatusType: DisplayStatusType;
 }
 
+export interface PostArticleParams {
+    images?: ImagesType[];
+    /** 비회원 글쓰기용 비밀번호 */
+    password?: string;
+    /** 게시글 제목 */
+    articleTitle: string;
+    /** 상위 게시글 번호 */
+    parentBoardArticleNo?: number;
+    /** 게시글 내용 */
+    articleContent: string;
+    /** 카테고리 번호 */
+    boardCategoryNo?: number;
+    /** 비밀글 여부 (false: 공개글, true: 비밀글)  */
+    secreted: boolean;
+    /** 검색용 게시글 태그 (nullable) */
+    postSearchTags: string[];
+    /** 대표 이미지 (최대 길이 500자) */
+    thumbnailUrl?: string;
+    /** 태그목록 */
+    tags?: string[];
+    /** 비회원 작성자. 생략하면 '비회원'으로 노출. */
+    guestName?: string;
+}
+
 export type GetCategoriesResponse = BoardCategory[];
 
 export interface GetArticleParams {
     /** 비회원 글 확인용 비밀번호 */
     password?: string;
+    /** 답글도 리스트에 같이 조회할지 여부 (false: 답글 미포함, true: 답글 포함(default)) */
+    withReplied?: boolean;
 }
 
 export interface GetArticleResponse {
@@ -419,6 +446,13 @@ export interface GetArticleResponse {
     displayStatusType: DisplayStatusType;
 }
 
+export type UpdateArticleData = Omit<PostArticleParams, 'parentBoardArticleNo'>;
+
+export interface GetArticleV2Params {
+    /** 비회원 글 확인용 비밀번호 */
+    password?: string;
+}
+
 export interface GetArticleV2Response
     extends Omit<
         GetArticleResponse,
@@ -428,14 +462,17 @@ export interface GetArticleV2Response
         | 'memberId'
         | 'memberNickname'
     > {
+    /** 게시글 신고 누적 횟수 */
     reportedCnt: GetArticleResponse['reportCount'];
+    /** 추천 수 */
     recommendedCnt: GetArticleResponse['recommendCount'];
+    /** 답글 작성 가능 여부 */
     replyEnabled: boolean;
+    /** 회원 그룹번호 (nullable) */
     memberGroupNo: Nullable<number>;
-    noticed: boolean;
+    /** 공지글 여부 */
+    noticed: GetArticleResponse['notice'];
 }
-
-export type UpdateArticleData = Omit<PostArticleParams, 'parentBoardArticleNo'>;
 
 export interface DeleteArticleData {
     /** 비회원용 게시글 작성 비밀번호 (nullable) */
@@ -451,7 +488,7 @@ export interface GetRepliesByBoardNoParams extends Pick<Paging, 'pageSize'> {
     direction?: PostDirection;
 }
 
-export interface ReplyList extends ArticleDetail {
+export interface ReplyList extends ArticleInfo {
     /** 회원 아이디 */
     memberId: string;
     /** 해당 게시글 본인 추천 여부 */
@@ -464,8 +501,15 @@ export interface ReplyList extends ArticleDetail {
 
 export type GetRepliesByBoardNoResponse = ItemList<ReplyList>;
 
+export interface ReportArticleData {
+    /** 신고사유(저작권 침해: COPYRIGHT, 비방: SLANDER, ETC: 기타사유) */
+    reportReasonType: ProductInquiryReportType;
+    /** 신고 내용 */
+    content: string;
+}
+
 export interface DownloadFileParams {
-    /** 첨부파일 이름 */
+    /** 업로드한 파일이름 */
     uploadedFileName: string;
 }
 

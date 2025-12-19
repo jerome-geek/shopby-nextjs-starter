@@ -1,5 +1,10 @@
 import { SnsShareImageType } from '@/models/marketing';
 
+export interface GetSnsShareConfigParams {
+    /** 상품 번호 */
+    productNo: number;
+}
+
 export interface GetSnsShareConfigResponse {
     /** 대표 설명 */
     representativeDescription: string;

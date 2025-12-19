@@ -6,22 +6,7 @@ import {
     OrderDirectionType,
 } from '@/models';
 
-export interface GetAccumulationsParams extends Paging, SearchDate {
-    /** 적립 유형(ADD: 지급, SUB: 차감) */
-    accumulationReason?: AccumulationReasonType;
-    /** 정렬방식(DESC:내림차순(default), ASC:오름차순) */
-    direction?: OrderDirectionType;
-}
-
-export interface GetAccumulationsResponse
-    extends ItemList<AccumulationHistory> {
-    /** 회원 번호 */
-    memberNo: number;
-    /** 적립 총액 */
-    totalAmt: number;
-}
-
-export interface AccumulationHistory {
+export interface AccumulationInfo {
     /** 만료일 */
     expireYmdt: string;
     /** 주문번호 */
@@ -50,6 +35,20 @@ export interface AccumulationHistory {
     accumulationStatus: AccumulationStatusType;
     /** 등록일 */
     registerYmdt: string;
+}
+
+export interface GetAccumulationsParams extends Paging, SearchDate {
+    /** 적립 유형(ADD: 지급, SUB: 차감) */
+    accumulationReason?: AccumulationReasonType;
+    /** 정렬방식(DESC:내림차순(default), ASC:오름차순) */
+    direction?: OrderDirectionType;
+}
+
+export interface GetAccumulationsResponse extends ItemList<AccumulationInfo> {
+    /** 회원 번호 */
+    memberNo: number;
+    /** 적립 총액 */
+    totalAmt: number;
 }
 
 export type GetExpirationAccumulationListParams = SearchDateTime;
