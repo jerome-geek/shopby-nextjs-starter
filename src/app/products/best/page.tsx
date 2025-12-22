@@ -1,17 +1,56 @@
 import { product } from '@/api/product';
+import NewProductList from '@/components/New/ProductList';
+import { GetBestSellerProductsParams } from '@/models/product/product';
+import { map, pipe, pipe1, range, toArray, toAsync } from '@fxts/core';
 
-export default async function BestPage() {
-    const data = await product.getBestSellerProducts().json();
+interface BestProductsPageParams {
+    pageNumber?: number;
+    pageSize?: number;
+    categoryNo?: number;
+}
+
+export default async function BestProductsPage(props: {
+    searchParams: Promise<BestProductsPageParams>;
+}) {
+    const searchParams = await props.searchParams;
+
+    const pageNumber = Number(searchParams.pageNumber) || 1;
+    const pageSize = Number(searchParams.pageSize) || 2;
+    const categoryNo = Number(searchParams.categoryNo) || 0;
+
+    const productSearchParams: GetBestSellerProductsParams = {
+        pageNumber,
+        pageSize,
+        categoryNos: categoryNo ? [categoryNo] : [],
+    };
+
+    const data = await product
+        .getBestSellerProducts(productSearchParams)
+        .json();
     console.log('🚀 ~ BestPage ~ data:', data);
+
+    const response = await pipe(
+        range(1, pageNumber + 1),
+        toAsync,
+        map((a) => {
+            return product
+                .getBestSellerProducts({
+                    ...productSearchParams,
+                    pageNumber: a,
+                })
+                .json();
+        }),
+        toArray
+    );
+
+    const initialData = response.map((data, index) => ({
+        data,
+        pageNumber: index + 1,
+    }));
 
     return (
         <section>
             <h1>Best Products</h1>
-            <ul>
-                {data.items.map((item) => (
-                    <li key={item.productNo}>{item.productName}</li>
-                ))}
-            </ul>
         </section>
     );
 }

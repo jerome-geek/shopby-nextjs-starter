@@ -996,7 +996,7 @@ export interface GetBestSellerProductsParams extends Paging {
         familyMalls?: boolean;
     };
     /** 카테고리 번호(여러개 일 경우 항목 추가) */
-    categoryNos?: string[];
+    categoryNos?: number[];
     /** 목록에 옵션 value 포함 여부(default: false) */
     hasOptionValues?: boolean;
 }
