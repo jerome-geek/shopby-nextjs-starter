@@ -22,7 +22,7 @@ export default defineConfig({
             boxSizing: 'border-box',
         },
         html: {
-            fontSize: '16px', // 기본 폰트 크기 (375px 기준)
+            fontSize: 'calc(10 / 16 * 100%)', // 기본 폰트 크기 (375px 기준)
             WebkitFontSmoothing: 'antialiased',
             MozOsxFontSmoothing: 'grayscale',
         },

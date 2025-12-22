@@ -1,10 +1,18 @@
+import { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    /* config options here */
+const nextConfig: NextConfig = {
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'shopby-images.cdn-nhncommerce.com',
+                port: '',
+                pathname: '/**',
+            },
+        ],
+    },
 };
 
+const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);

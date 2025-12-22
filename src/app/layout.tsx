@@ -1,6 +1,6 @@
+import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import type { Metadata } from 'next';
 
 import '@/app/globals.css';
 import Footer from '@/components/Footer';
@@ -39,7 +39,6 @@ export default async function RootLayout({
                                     width: '100%',
                                     maxWidth: { base: '100%', lg: '1200px' },
                                     marginX: 'auto',
-                                    height: '100vh',
                                 })}
                             >
                                 {children}
