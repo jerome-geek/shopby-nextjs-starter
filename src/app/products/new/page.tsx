@@ -1,18 +1,18 @@
 import { map, pipe, range, toArray, toAsync } from '@fxts/core';
 
-import { product } from '@/api/product';
-import NewProductList from '@/components/New/ProductList';
-import NewCategoryList from '@/components/New/CategoryList';
 import { category } from '@/api/display';
+import { product } from '@/api/product';
+import NewCategoryList from '@/components/New/CategoryList';
+import NewProductList from '@/components/New/ProductList';
+import { ProductSearchParams } from '@/models/product/product';
 
 interface BestPageParams {
     pageNumber?: number;
     pageSize?: number;
-    //1102157
     categoryNo?: number;
 }
 
-export default async function BestPage(props: {
+export default async function NewProductsPage(props: {
     searchParams: Promise<BestPageParams>;
 }) {
     const searchParams = await props.searchParams;
@@ -21,15 +21,24 @@ export default async function BestPage(props: {
     const pageSize = Number(searchParams.pageSize) || 2;
     const categoryNo = Number(searchParams.categoryNo) || 0;
 
+    const productSearchParams: ProductSearchParams = {
+        pageNumber,
+        pageSize,
+        categoryNos: categoryNo ? [categoryNo] : [],
+        order: {
+            by: 'SALE_YMD',
+            direction: 'DESC',
+        },
+    };
+
     const response = await pipe(
         range(1, pageNumber + 1),
         toAsync,
         map((a) => {
             return product
                 .searchProducts({
+                    ...productSearchParams,
                     pageNumber: a,
-                    pageSize,
-                    categoryNos: categoryNo ? [categoryNo] : [],
                 })
                 .json();
         }),
@@ -41,24 +50,14 @@ export default async function BestPage(props: {
         pageNumber: index + 1,
     }));
 
-    console.log('🚀 ~ BestPage ~ initialData:', initialData);
-
-    try {
-    } catch (error) {
-        console.error(error);
-    }
     const categoryData = await category.getCategory(1102158).json();
-    console.log('🚀 ~ BestPage ~ categoryData:', categoryData);
 
     return (
         <section>
             <NewCategoryList categoryData={categoryData} />
 
             <NewProductList
-                searchParams={{
-                    pageNumber,
-                    pageSize,
-                }}
+                searchParams={productSearchParams}
                 initialData={initialData}
             />
         </section>

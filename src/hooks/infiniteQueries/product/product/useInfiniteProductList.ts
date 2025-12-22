@@ -1,9 +1,10 @@
 import {
+    InfiniteData,
     UseInfiniteQueryOptions,
     keepPreviousData,
     useInfiniteQuery,
-    InfiniteData,
 } from '@tanstack/react-query';
+import { HTTPError } from 'ky';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -11,16 +12,15 @@ import {
     ProductSearchParams,
     ProductsSearchResponse,
 } from '@/models/product/product';
-import { HTTPError } from 'ky';
-
-// type ProductListPage = InfiniteResponse<ProductsSearchResponse>;
 
 type ProductInfiniteResponse = {
     data: ProductsSearchResponse;
     pageNumber: number;
 };
 
-interface UseInfiniteProductListParams {
+interface UseInfiniteProductListParams<
+    TData = InfiniteData<ProductInfiniteResponse>,
+> {
     searchParams: ProductSearchParams;
     memberNo?: number;
     initialPageParam?: number;
@@ -28,7 +28,7 @@ interface UseInfiniteProductListParams {
         UseInfiniteQueryOptions<
             ProductInfiniteResponse,
             HTTPError<ShopByErrorResponse>,
-            ProductsSearchResponse,
+            TData,
             ReturnType<(typeof productKeys)['infiniteList']>,
             number
         >,
@@ -36,12 +36,12 @@ interface UseInfiniteProductListParams {
     >;
 }
 
-const useInfiniteProductList = ({
+const useInfiniteProductList = <TData = InfiniteData<ProductInfiniteResponse>>({
     searchParams,
     memberNo = 0,
     initialPageParam,
     options,
-}: UseInfiniteProductListParams) => {
+}: UseInfiniteProductListParams<TData>) => {
     return useInfiniteQuery({
         queryKey: productKeys.infiniteList(memberNo, searchParams),
         queryFn: async ({ pageParam }) => {
@@ -57,9 +57,7 @@ const useInfiniteProductList = ({
                 pageNumber: pageParam,
             };
         },
-        // lastPage = TQueryFnData
         getNextPageParam: (lastPage) => {
-            console.log('🚀 ~ useInfiniteProductList ~ lastPage:', lastPage);
             const {
                 data: { pageCount },
                 pageNumber,

@@ -1,5 +1,6 @@
 'use client';
-import { useMemo } from 'react';
+
+import { useEffect, useMemo, useRef } from 'react';
 
 import ProductCard from '@/components/Product/Card';
 import { useInfiniteProductList } from '@/hooks/infiniteQueries/product/product';
@@ -22,24 +23,26 @@ export default function NewProductList({
     searchParams,
     initialData,
 }: NewProductListProps) {
-    console.log('🚀 ~ NewProductList ~ initialData:', initialData);
-    // const {
-    //     data: infiniteProductListData,
-    //     hasNextPage,
-    //     fetchNextPage,
-    //     isFetchingNextPage,
-    // } = useInfiniteProductList({
-    //     searchParams,
-    //     initialPageParam: initialData[initialData.length - 1].pageNumber + 1,
-    //     // options: {
-    //     //     initialData: {
-    //     //         pages: initialData.data.map((a) => a.data),
-    //     //         pageParams: [initialData.pageNumber],
-    //     //     },
-    //     // },
-    // });
-    // console.log('🚀 ~ NewProductList ~ data:', infiniteProductListData);
+    const {
+        data: infiniteProductListData,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteProductList({
+        searchParams,
+        initialPageParam: searchParams.pageNumber || 1,
+        options: {
+            initialData: {
+                pages: initialData.map((item) => ({
+                    data: item.data,
+                    pageNumber: item.pageNumber,
+                })),
+                pageParams: initialData.map((item) => item.pageNumber),
+            },
+        },
+    });
 
+    // TODO: PC인 경우 별도 처리 필요
     const productList = useMemo(() => {
         // if (isMobile) {
         //     return (
@@ -49,12 +52,35 @@ export default function NewProductList({
         // }
 
         // return productListData?.items ?? [];
-        return initialData.flatMap((a) => a.data.items);
-    }, [initialData]);
+        return (
+            infiniteProductListData?.pages?.flatMap(
+                (page) => page.data.items
+            ) ?? []
+        );
+    }, [infiniteProductListData]);
 
-    const handleInfiniteScroll = () => {
-        // fetchNextPage();
-    };
+    const loadMoreRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (
+                    entries[0].isIntersecting &&
+                    hasNextPage &&
+                    !isFetchingNextPage
+                ) {
+                    fetchNextPage();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (loadMoreRef.current) {
+            observer.observe(loadMoreRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
     return (
         <>
@@ -91,7 +117,7 @@ export default function NewProductList({
                     );
                 })}
             </ul>
-            {/* {hasNextPage && (
+            {hasNextPage && (
                 <div
                     className={css({
                         display: 'flex',
@@ -122,7 +148,7 @@ export default function NewProductList({
                         {isFetchingNextPage ? '로딩 중...' : '더보기'}
                     </button>
                 </div>
-            )} */}
+            )}
         </>
     );
 }
