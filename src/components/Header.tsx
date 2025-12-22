@@ -1,19 +1,15 @@
-import { cache } from 'react';
 import Link from 'next/link';
 
-import { css } from '@/styled-system/css';
-import { SearchIcon } from '@/components/icons/SearchIcon';
 import { BellIcon } from '@/components/icons/BellIcon';
 import { CartIcon } from '@/components/icons/CartIcon';
+import { SearchIcon } from '@/components/icons/SearchIcon';
 import { PATHS } from '@/const/paths';
-import { mall } from '@/api/admin';
+import { css } from '@/styled-system/css';
 
 export default async function Header() {
     const cartCount = 13; // TODO: 실제 장바구니 아이템 수로 교체
-    
-    try {
-        const data = await mall.getMall().json();
 
+    try {
         return (
             <header
                 className={css({
