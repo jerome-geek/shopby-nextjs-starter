@@ -1,0 +1,2 @@
+export const NEW_CATEGORY_NO = 1102158;
+export const BEST_CATEGORY_NO = 1102157;

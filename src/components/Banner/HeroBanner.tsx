@@ -6,8 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import BannerTextOverlay from '@/components/Banner/BannerTextOverlay';
 import HeroBannerSkeleton from '@/components/Banner/HeroBannerSkeleton';
-import { CaretIcon } from '@/components/icons/CaretIcon';
-import { ControlIcon } from '@/components/icons/ControlIcon';
+import { BigCaretIcon, ControlIcon } from '@/components/icons';
 import { useHeroBannerSwiper } from '@/hooks/main/useHeroBannerSwiper';
 import { Banner } from '@/models/display/banner';
 
@@ -83,7 +82,7 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                                         banner.name || `메인 배너 ${index + 1}`
                                     }
                                     loading={index === 0 ? 'eager' : 'lazy'}
-                                    decoding='async'
+                                    decoding="async"
                                     className={css({
                                         width: '100%',
                                         height: '100%',
@@ -124,10 +123,10 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                             cursor: 'pointer',
                         })}`}
                         onClick={() => handleNavigationClick('prev')}
-                        aria-label='이전 배너'
-                        type='button'
+                        aria-label="이전 배너"
+                        type="button"
                     >
-                        <CaretIcon className='left-icon' direction='left' />
+                        <BigCaretIcon className="left-icon" direction="left" />
                     </button>
 
                     <span
@@ -154,10 +153,13 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                             cursor: 'pointer',
                         })}`}
                         onClick={() => handleNavigationClick('next')}
-                        aria-label='다음 배너'
-                        type='button'
+                        aria-label="다음 배너"
+                        type="button"
                     >
-                        <CaretIcon className='right-icon' direction='right' />
+                        <BigCaretIcon
+                            className="right-icon"
+                            direction="right"
+                        />
                     </button>
 
                     <button
@@ -167,7 +169,7 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                                 ? '자동재생 시작'
                                 : '자동재생 일시정지'
                         }
-                        type='button'
+                        type="button"
                         className={css({
                             width: '24px',
                             height: '24px',
@@ -178,7 +180,7 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                         })}
                     >
                         <ControlIcon
-                            className='control-icon'
+                            className="control-icon"
                             isPaused={!isAutoplayPaused}
                         />
                     </button>

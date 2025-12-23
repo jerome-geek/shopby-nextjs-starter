@@ -930,7 +930,7 @@ export interface ProductSearchParams extends Paging {
         soldoutPlaceEnd?: boolean;
     };
     /** 전시 카테고리 번호(여러개 일 경우 항목 추가) */
-    categoryNos?: string[];
+    categoryNos?: number[];
     /** 제외할 전시 카테고리 번호(여러개 일 경우 항목 추가, 번호에 속한 모든 하위 카테고리 제외) */
     excludeCategoryNos?: string;
     /** 전시카테고리 검색 조건 (AND : 모두다 포함, OR : 한개라도 포함), default: OR */
@@ -996,7 +996,7 @@ export interface GetBestSellerProductsParams extends Paging {
         familyMalls?: boolean;
     };
     /** 카테고리 번호(여러개 일 경우 항목 추가) */
-    categoryNos?: string[];
+    categoryNos?: number[];
     /** 목록에 옵션 value 포함 여부(default: false) */
     hasOptionValues?: boolean;
 }
