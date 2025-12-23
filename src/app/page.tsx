@@ -1,61 +1,70 @@
-import Image from 'next/image';
-import { getTranslations } from 'next-intl/server';
 import { css } from '@/styled-system/css';
-import PopupWrapper from '@/components/PopupWrapper';
-import HeroBanner from '@/components/HeroBanner';
-import BestProductList from '@/components/Product/Best';
-import { additionalDiscount } from '@/api/product';
+import { getTranslations } from 'next-intl/server';
+import Image from 'next/image';
+import { Suspense } from 'react';
+
+import HeroBannerSection from '@/components/Banner/HeroBannerSection';
+import HeroBannerSkeleton from '@/components/Banner/HeroBannerSkeleton';
+import { BANNER_STYLES } from '@/const/banner/bannerStyles';
+// import IconBannerSection from '@/components/Banner/IconBannerSection';
 
 export default async function Home() {
     const t = await getTranslations();
 
     return (
         <div>
-            {/* Hero Banner Section - 전체 너비 */}
-            <div
-                className={css({
-                    width: '100vw',
-                    marginLeft: 'calc(50% - 50vw)',
-                    marginRight: 'calc(50% - 50vw)',
-                })}
+            {/* Main Banner Section */}
+            <Suspense
+                fallback={
+                    <section
+                        className={css(BANNER_STYLES.MAIN.SECTION)}
+                        aria-label='메인 배너 섹션'
+                    >
+                        <HeroBannerSkeleton />
+                    </section>
+                }
             >
-                <HeroBanner />
-            </div>
+                <HeroBannerSection />
+            </Suspense>
+
+            {/* <Suspense fallback={<></>}>
+                <IconBannerSection />
+            </Suspense> */}
 
             {/* Main Content */}
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
+            <div className='container mx-auto px-4 py-8'>
+                <div className='flex flex-col items-center justify-center min-h-[60vh] gap-8'>
                     <Image
-                        className="dark:invert"
-                        src="/next.svg"
-                        alt="Next.js logo"
+                        className='dark:invert'
+                        src='/next.svg'
+                        alt='Next.js logo'
                         width={180}
                         height={38}
                         priority
                     />
 
-                    <div className="text-center">
-                        <h1 className="text-4xl font-bold mb-4">{t('제목')}</h1>
-                        <p className="text-gray-600 dark:text-gray-400 mb-8">
+                    <div className='text-center'>
+                        <h1 className='text-4xl font-bold mb-4'>{t('제목')}</h1>
+                        <p className='text-gray-600 dark:text-gray-400 mb-8'>
                             {t('설명')}
                         </p>
                     </div>
 
-                    <div className="flex gap-4 items-center flex-col sm:flex-row">
+                    <div className='flex gap-4 items-center flex-col sm:flex-row'>
                         <a
-                            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-                            href="https://vercel.com/new"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            className='rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5'
+                            href='https://vercel.com/new'
+                            target='_blank'
+                            rel='noopener noreferrer'
                         >
                             {t('배포하기')}
                         </a>
 
                         <a
-                            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-                            href="https://nextjs.org/docs"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            className='rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5'
+                            href='https://nextjs.org/docs'
+                            target='_blank'
+                            rel='noopener noreferrer'
                         >
                             {t('문서읽기')}
                         </a>
