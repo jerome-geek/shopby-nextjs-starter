@@ -1,6 +1,6 @@
-import OutlinedButton from '@/components/Button/Outlined';
-import SolidButton from '@/components/Button/Solid';
-import { ButtonProps } from '@/components/Button/types';
+import OutlinedButton from '@/components/ui/button/outlined';
+import SolidButton from '@/components/ui/button/solid';
+import { ButtonProps } from '@/components/ui/button/types';
 
 export const Button = (props: ButtonProps) => {
     // 🎯 Type Guard 패턴

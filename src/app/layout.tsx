@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { OverlayProvider } from 'overlay-kit';
 
 import '@/app/globals.css';
 import Footer from '@/components/Footer';
@@ -30,23 +31,28 @@ export default async function RootLayout({
         <html lang={locale}>
             <body>
                 <NextIntlClientProvider messages={messages}>
-                    <QueryProvider>
-                        <GlobalErrorBoundary>
-                            <Header />
-                            <main
-                                className={css({
-                                    flex: 1,
-                                    width: '100%',
-                                    maxWidth: { base: '100%', lg: '1200px' },
-                                    marginX: 'auto',
-                                })}
-                            >
-                                {children}
-                            </main>
-                            <Footer />
-                            <MobileBottomNavigation />
-                        </GlobalErrorBoundary>
-                    </QueryProvider>
+                    <OverlayProvider>
+                        <QueryProvider>
+                            <GlobalErrorBoundary>
+                                <Header />
+                                <main
+                                    className={css({
+                                        flex: 1,
+                                        width: '100%',
+                                        maxWidth: {
+                                            base: '100%',
+                                            lg: '1200px',
+                                        },
+                                        marginX: 'auto',
+                                    })}
+                                >
+                                    {children}
+                                </main>
+                                <Footer />
+                                <MobileBottomNavigation />
+                            </GlobalErrorBoundary>
+                        </QueryProvider>
+                    </OverlayProvider>
                 </NextIntlClientProvider>
             </body>
         </html>

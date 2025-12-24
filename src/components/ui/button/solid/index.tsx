@@ -1,5 +1,5 @@
-import { button } from '@/components/Button/style';
-import { SolidButtonProps } from '@/components/Button/types';
+import { button } from '@/components/ui/button/style';
+import { SolidButtonProps } from '@/components/ui/button/types';
 
 const SolidButton = ({ children, ...props }: SolidButtonProps) => {
     return (

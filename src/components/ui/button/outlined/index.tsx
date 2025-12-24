@@ -1,5 +1,5 @@
-import { outlinedButton } from '@/components/Button/style';
-import { OutlinedButtonProps } from '@/components/Button/types';
+import { outlinedButton } from '@/components/ui/button/style';
+import { OutlinedButtonProps } from '@/components/ui/button/types';
 import React from 'react';
 
 const OutlinedButton = ({ children, ...props }: OutlinedButtonProps) => {
