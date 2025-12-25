@@ -1,7 +1,7 @@
 // TODO 제거 예정
 
 import request from '@/api/core/request';
-import { cookieTokenManager } from '@/api/core/utils';
+import { cookieTokenManager } from '@/api/core/cookie';
 import { IssueAccessTokenResponse } from '@/models/auth/oauth2';
 
 // 기본 헤더 함수

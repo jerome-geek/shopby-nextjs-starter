@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { cookieTokenManager } from '@/api/core/utils';
+import { cookieTokenManager, parseCookies } from '@/api/core/cookie';
 import { PATHS } from '@/const/paths';
 
 /**
@@ -51,13 +51,14 @@ export function proxy(request: NextRequest) {
 
     if (isProtectedRoute) {
         // 쿠키에서 토큰 확인
-        const cookies = request.cookies.toString();
+        const cookieString = request.cookies.toString();
+        const cookies = parseCookies(cookieString);
         const isValid = cookieTokenManager.isTokenValidFromServer(cookies);
 
         // 미로그인 상태면 로그인 페이지로 리다이렉트
         if (!isValid) {
             const loginUrl = new URL(PATHS.AUTH.LOGIN, request.url);
-            loginUrl.searchParams.set('redirect', pathname);
+            loginUrl.searchParams.set('returnUrl', pathname);
 
             if (process.env.NODE_ENV === 'development') {
                 console.log(

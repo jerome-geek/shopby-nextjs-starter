@@ -1,10 +1,15 @@
 import Link from 'next/link';
 
-import { BellIcon } from '@/components/icons/BellIcon';
-import { CartIcon } from '@/components/icons/CartIcon';
-import { SearchIcon } from '@/components/icons/SearchIcon';
 import { PATHS } from '@/const/paths';
 import { css } from '@/styled-system/css';
+import {
+    BigHeartIcon,
+    UserIcon,
+    BigSearchIcon,
+    BigCartIcon,
+    BigBellIcon,
+} from '@/components/icons';
+import { token } from '@/styled-system/tokens';
 
 export default async function Header() {
     const cartCount = 13; // TODO: 실제 장바구니 아이템 수로 교체
@@ -35,7 +40,7 @@ export default async function Header() {
                 >
                     {/* 브랜드 로고 */}
                     <Link
-                        href="/"
+                        href={PATHS.MAIN}
                         className={css({
                             fontSize: '20px',
                             fontWeight: 'bold',
@@ -57,55 +62,8 @@ export default async function Header() {
                             gap: '16px',
                         })}
                     >
-                        {/* 검색 아이콘 */}
-                        <button
-                            className={css({
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '24px',
-                                height: '24px',
-                                color: '{colors.foreground}',
-                                cursor: 'pointer',
-                                _hover: {
-                                    opacity: 0.7,
-                                },
-                            })}
-                        >
-                            <SearchIcon
-                                className={css({
-                                    width: '24px',
-                                    height: '24px',
-                                })}
-                            />
-                        </button>
-
-                        {/* 알림 아이콘 */}
-                        <button
-                            className={css({
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '24px',
-                                height: '24px',
-                                color: '{colors.foreground}',
-                                cursor: 'pointer',
-                                _hover: {
-                                    opacity: 0.7,
-                                },
-                            })}
-                        >
-                            <BellIcon
-                                className={css({
-                                    width: '24px',
-                                    height: '24px',
-                                })}
-                            />
-                        </button>
-
-                        {/* 장바구니 아이콘 */}
                         <Link
-                            href={PATHS.ORDER.CART}
+                            href={PATHS.MYPAGE.MAIN}
                             className={css({
                                 position: 'relative',
                                 display: 'flex',
@@ -120,12 +78,47 @@ export default async function Header() {
                                 },
                             })}
                         >
-                            <CartIcon
-                                className={css({
-                                    width: '24px',
-                                    height: '24px',
-                                })}
-                            />
+                            <UserIcon currentColor={token('colors.black')} />
+                        </Link>
+
+                        <Link
+                            href={PATHS.MYPAGE.WISH}
+                            className={css({
+                                position: 'relative',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '24px',
+                                height: '24px',
+                                color: '{colors.foreground}',
+                                cursor: 'pointer',
+                                _hover: {
+                                    opacity: 0.7,
+                                },
+                            })}
+                        >
+                            <BigHeartIcon />
+                        </Link>
+
+                        {/* 장바구니 아이콘 */}
+                        <Link
+                            href={PATHS.ORDER.CART}
+                            className={css({
+                                position: 'relative',
+                                display: 'flex',
+                                order: { base: 3, md: 1 },
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '24px',
+                                height: '24px',
+                                color: '{colors.foreground}',
+                                cursor: 'pointer',
+                                _hover: {
+                                    opacity: 0.7,
+                                },
+                            })}
+                        >
+                            <BigCartIcon />
                             {cartCount > 0 && (
                                 <span
                                     className={css({
@@ -135,21 +128,59 @@ export default async function Header() {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        minWidth: '18px',
-                                        height: '18px',
-                                        paddingX: '4px',
-                                        backgroundColor: '#EF4444',
-                                        color: 'white',
-                                        fontSize: '10px',
-                                        fontWeight: 'bold',
-                                        borderRadius: 'full',
-                                        border: '2px solid {colors.background}',
+                                        width: '20px',
+                                        height: '20px',
+                                        fontSize: '1rem',
+                                        fontWeight: 'semibold',
+                                        lineHeight: '1.5',
+                                        letterSpacing: '-2%',
+                                        color: token('colors.white'),
+                                        backgroundColor: token('colors.red'),
+                                        borderRadius: '50%',
                                     })}
                                 >
                                     {cartCount > 99 ? '99+' : cartCount}
                                 </span>
                             )}
                         </Link>
+
+                        {/* 검색 아이콘 */}
+                        <button
+                            className={css({
+                                display: 'flex',
+                                order: { base: 1, md: 2 },
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '24px',
+                                height: '24px',
+                                color: '{colors.foreground}',
+                                cursor: 'pointer',
+                                _hover: {
+                                    opacity: 0.7,
+                                },
+                            })}
+                        >
+                            <BigSearchIcon />
+                        </button>
+
+                        {/* 알림 아이콘 */}
+                        <button
+                            className={css({
+                                display: { base: 'flex', md: 'none' },
+                                order: { base: 2, md: 3 },
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '24px',
+                                height: '24px',
+                                color: '{colors.foreground}',
+                                cursor: 'pointer',
+                                _hover: {
+                                    opacity: 0.7,
+                                },
+                            })}
+                        >
+                            <BigBellIcon />
+                        </button>
                     </div>
                 </div>
             </header>

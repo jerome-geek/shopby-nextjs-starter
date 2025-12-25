@@ -3,14 +3,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
 import { motion } from 'motion/react';
+
 import { css } from '@/styled-system/css';
-import { SearchIcon } from '@/components/icons/SearchIcon';
-import { MenuIcon } from '@/components/icons/MenuIcon';
-import { HomeIcon } from '@/components/icons/HomeIcon';
-import { HeartIcon } from '@/components/icons/HeartIcon';
-import { UserIcon } from '@/components/icons/UserIcon';
+import {
+    SearchIcon,
+    MenuIcon,
+    HomeIcon,
+    HeartIcon,
+    UserIcon,
+} from '@/components/icons';
 import { PATHS } from '@/const/paths';
 
 interface NavItem {

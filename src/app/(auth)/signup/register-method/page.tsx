@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button';
+import { Button } from '@/components/ui/button';
 import { css } from '@/styled-system/css';
 
 export default function SignupRegisterMethodPage() {

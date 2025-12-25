@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { css } from '@/styled-system/css';
 
-export default function SignupLayout({
+export default function AuthLayout({
     children,
 }: Readonly<{
     children: ReactNode;
@@ -13,8 +13,13 @@ export default function SignupLayout({
                 paddingX: { base: '20px', lg: '0' },
                 paddingY: { base: '20px', md: '80px' },
                 width: '100%',
-                maxWidth: { base: '100%', md: '500px' },
+                maxWidth: '500px',
                 marginX: 'auto',
+                minHeight: '80vh',
+                backgroundColor: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
             })}
         >
             {children}

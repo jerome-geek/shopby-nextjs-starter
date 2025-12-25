@@ -1,18 +1,18 @@
 import { token } from '@/styled-system/tokens';
 
-interface HeartIconProps {
+interface BigHeartIconProps {
     className?: string;
     width?: number;
     height?: number;
     currentColor?: string;
 }
 
-export function HeartIcon({
+export function BigHeartIcon({
     className,
     width = 24,
     height = 24,
-    currentColor = token('colors.gray70'),
-}: HeartIconProps) {
+    currentColor = token('colors.black'),
+}: BigHeartIconProps) {
     return (
         <svg
             className={className}

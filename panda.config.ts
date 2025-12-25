@@ -50,7 +50,54 @@ export default defineConfig({
         'input, button, textarea, select': {
             font: 'inherit',
         },
-        button: { cursor: 'pointer' },
+        'input, button': {
+            backgroundColor: 'transparent',
+            border: 'none',
+            outline: 'none',
+            fontFamily: 'inherit',
+        },
+        /** Input 기본 스타일 초기화 */
+        input: {
+            WebkitBorderRadius: '0',
+            borderRadius: '0',
+            WebkitAppearance: 'none',
+            MozAppearance: 'none',
+            appearance: 'none',
+        },
+        'input:focus': {
+            outline: 'non',
+        },
+        /* input[type=number]에서 화살표 제거 (Chrome, Safari, Edge, Opera) */
+        'input[type="number"]::-webkit-outer-spin-button': {
+            WebkitAppearance: 'none',
+            MozAppearance: 'none',
+            appearance: 'none',
+        },
+        /* Firefox */
+        'input[type="number"]': {
+            MozAppearance: 'textfield',
+        },
+        /* IE10 이상에서 input box 에 추가된 지우기 버튼 제거 */
+        'input::-ms-clear': {
+            display: 'none',
+        },
+        /** 크롬에서 자동완성 사용시 배경색 제거 */
+        'input:-webkit-autofill': {
+            WebkitBoxShadow: '0 0 0 1000px transparent inset',
+        },
+        'input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active':
+            {
+                transition: 'background-color 5000s ease-in-out 0s',
+            },
+
+        /** 버튼 기본 스타일 초기화 */
+        button: {
+            padding: '0',
+            color: 'inherit',
+            fontSize: 'inherit',
+            cursor: 'pointer',
+        },
+
         'p, h1, h2, h3, h4, h5, h6': {
             overflowWrap: 'break-word',
         },
@@ -111,30 +158,30 @@ export default defineConfig({
                     },
                 },
                 fontSizes: {
-                    xs: { value: '0.75rem' }, // 12px
-                    sm: { value: '0.875rem' }, // 14px
-                    base: { value: '1rem' }, // 16px
-                    lg: { value: '1.125rem' }, // 18px
-                    xl: { value: '1.25rem' }, // 20px
-                    '2xl': { value: '1.5rem' }, // 24px
-                    '3xl': { value: '1.875rem' }, // 30px
-                    '4xl': { value: '2.25rem' }, // 36px
-                    '5xl': { value: '3rem' }, // 48px
+                    xs: { value: '1.2rem' }, // 12px (10px 기준)
+                    sm: { value: '1.4rem' }, // 14px (10px 기준)
+                    base: { value: '1.6rem' }, // 16px (10px 기준)
+                    lg: { value: '1.8rem' }, // 18px (10px 기준)
+                    xl: { value: '2rem' }, // 20px (10px 기준)
+                    '2xl': { value: '2.4rem' }, // 24px (10px 기준)
+                    '3xl': { value: '3rem' }, // 30px (10px 기준)
+                    '4xl': { value: '3.6rem' }, // 36px (10px 기준)
+                    '5xl': { value: '4.8rem' }, // 48px (10px 기준)
                 },
                 spacing: {
                     0: { value: '0' },
-                    1: { value: '0.25rem' }, // 4px
-                    2: { value: '0.5rem' }, // 8px
-                    3: { value: '0.75rem' }, // 12px
-                    4: { value: '1rem' }, // 16px
-                    5: { value: '1.25rem' }, // 20px
-                    6: { value: '1.5rem' }, // 24px
-                    8: { value: '2rem' }, // 32px
-                    10: { value: '2.5rem' }, // 40px
-                    12: { value: '3rem' }, // 48px
-                    16: { value: '4rem' }, // 64px
-                    20: { value: '5rem' }, // 80px
-                    24: { value: '6rem' }, // 96px
+                    1: { value: '0.4rem' }, // 4px (10px 기준)
+                    2: { value: '0.8rem' }, // 8px (10px 기준)
+                    3: { value: '1.2rem' }, // 12px (10px 기준)
+                    4: { value: '1.6rem' }, // 16px (10px 기준)
+                    5: { value: '2rem' }, // 20px (10px 기준)
+                    6: { value: '2.4rem' }, // 24px (10px 기준)
+                    8: { value: '3.2rem' }, // 32px (10px 기준)
+                    10: { value: '4rem' }, // 40px (10px 기준)
+                    12: { value: '4.8rem' }, // 48px (10px 기준)
+                    16: { value: '6.4rem' }, // 64px (10px 기준)
+                    20: { value: '8rem' }, // 80px (10px 기준)
+                    24: { value: '9.6rem' }, // 96px (10px 기준)
                 },
                 sizes: {
                     container: {

@@ -1,7 +1,11 @@
 import { BellIcon } from '@/components/icons/BellIcon';
+import { BigBellIcon } from '@/components/icons/BigBellIcon';
 import { BigCaretIcon } from '@/components/icons/BigCaretIcon';
-import { CartIcon } from '@/components/icons/CartIcon';
+import { BigCartIcon } from '@/components/icons/BigCartIcon';
+import { BigHeartIcon } from '@/components/icons/BigHeartIcon';
+import { BigSearchIcon } from '@/components/icons/BigSearchIcon';
 import { ControlIcon } from '@/components/icons/ControlIcon';
+import { HeartIcon } from '@/components/icons/HeartIcon';
 import { HeartLikeFilledSmallIcon } from '@/components/icons/HeartLikeFilledSmallIcon';
 import { HeartLikeSmallIcon } from '@/components/icons/HeartLikeSmall';
 import { HeartMiniIcon } from '@/components/icons/HeartMiniIcon';
@@ -15,8 +19,13 @@ import { UserIcon } from '@/components/icons/UserIcon';
 
 export {
     BellIcon,
+    BigBellIcon,
     BigCaretIcon,
-    CartIcon,
+    BigCartIcon,
+    BigHeartIcon,
+    BigSearchIcon,
+    ControlIcon,
+    HeartIcon,
     HeartLikeFilledSmallIcon,
     HeartLikeSmallIcon,
     HeartMiniIcon,
@@ -27,5 +36,4 @@ export {
     SmallCaretIcon,
     StarMiniIcon,
     UserIcon,
-    ControlIcon,
 };
