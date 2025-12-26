@@ -1,59 +1,51 @@
+// In Next.js, this file would be called: app/providers.tsx
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useState } from 'react';
+// Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
+import {
+    isServer,
+    QueryClient,
+    QueryClientProvider,
+} from '@tanstack/react-query';
 
-interface QueryProviderProps {
-    children: React.ReactNode;
+function makeQueryClient() {
+    return new QueryClient({
+        defaultOptions: {
+            queries: {
+                // With SSR, we usually want to set some default staleTime
+                // above 0 to avoid refetching immediately on the client
+                staleTime: 60 * 1000,
+            },
+        },
+    });
 }
 
-export default function QueryProvider({ children }: QueryProviderProps) {
-    // React Query v5 공식 문서에 따른 QueryClient 설정
-    const [queryClient] = useState(
-        () =>
-            new QueryClient({
-                defaultOptions: {
-                    queries: {
-                        // 데이터가 stale되기까지의 시간 (5분)
-                        staleTime: 1000 * 60 * 5,
-                        // 캐시된 데이터가 메모리에 유지되는 시간 (10분)
-                        gcTime: 1000 * 60 * 10,
-                        // 재시도 횟수
-                        retry: (failureCount, error) => {
-                            // 4xx 에러는 재시도하지 않음
-                            if (
-                                error instanceof Error &&
-                                'status' in error &&
-                                typeof error.status === 'number' &&
-                                error.status >= 400 &&
-                                error.status < 500
-                            ) {
-                                return false;
-                            }
-                            // 최대 3번 재시도
-                            return failureCount < 3;
-                        },
-                        // 재시도 지연 시간 (지수 백오프)
-                        retryDelay: (attemptIndex) =>
-                            Math.min(1000 * 2 ** attemptIndex, 30000),
-                        // 브라우저 포커스 시 자동 refetch
-                        refetchOnWindowFocus: false,
-                        // 네트워크 재연결 시 자동 refetch
-                        refetchOnReconnect: true,
-                    },
-                    mutations: {
-                        // mutation 재시도 횟수
-                        retry: 1,
-                    },
-                },
-            })
-    );
+let browserQueryClient: QueryClient | undefined = undefined;
+
+function getQueryClient() {
+    if (isServer) {
+        // Server: always make a new query client
+        return makeQueryClient();
+    } else {
+        // Browser: make a new query client if we don't already have one
+        // This is very important, so we don't re-make a new client if React
+        // suspends during the initial render. This may not be needed if we
+        // have a suspense boundary BELOW the creation of the query client
+        if (!browserQueryClient) browserQueryClient = makeQueryClient();
+        return browserQueryClient;
+    }
+}
+
+export default function Providers({ children }: { children: React.ReactNode }) {
+    // NOTE: Avoid useState when initializing the query client if you don't
+    //       have a suspense boundary between this and the code that may
+    //       suspend because React will throw away the client on the initial
+    //       render if it suspends and there is no boundary
+    const queryClient = getQueryClient();
 
     return (
         <QueryClientProvider client={queryClient}>
             {children}
-            <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     );
 }
