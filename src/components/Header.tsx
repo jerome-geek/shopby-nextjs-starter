@@ -167,7 +167,7 @@ export default async function Header() {
                         <button
                             className={css({
                                 display: { base: 'flex', md: 'none' },
-                                order: { base: 2, md: 3 },
+                                order: { base: 2 },
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 width: '24px',
