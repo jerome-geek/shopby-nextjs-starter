@@ -18,30 +18,41 @@ export default defineConfig({
 
     // Global CSS
     globalCss: {
-        '*, *::before, *::after': {
+        '*': {
+            boxSizing: 'border-box',
+            lineHeight: '1.2',
+            workbreak: 'keep-all',
+            wordWrap: 'break-word',
+            WebkitTapHighlightColor: 'transparent', // 모바일에서 터치시 파란색 하이라이트 제거
+            touchAction: 'manipulation', // 터치 동작 최적화 (더블탭 줌 방지, 스크롤/핀치 성능 향상)
+        },
+        '*::before, *::after': {
             boxSizing: 'border-box',
         },
         html: {
-            fontSize: 'calc(10 / 16 * 100%)', // 기본 폰트 크기 (375px 기준)
+            fontSize: 'calc(10 / 16 * 100%)',
+            margin: 0,
+            padding: 0,
             WebkitFontSmoothing: 'antialiased',
             MozOsxFontSmoothing: 'grayscale',
         },
         body: {
-            margin: 0,
-            padding: 0,
             fontFamily:
                 'Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
-            fontSize: '16px',
-            lineHeight: '1.5',
-            color: '{colors.foreground}',
-            backgroundColor: '{colors.background}',
+            color: 'colors.black',
+            backgroundColor: 'colors.white',
             minHeight: '100vh',
-            WebkitTapHighlightColor: 'transparent',
+            letterSpacing: '-0.02em',
         },
         '#__next': {
             minHeight: '100vh',
             display: 'flex',
             flexDirection: 'column',
+        },
+        a: {
+            display: 'block',
+            color: 'inherit',
+            textDecoration: 'none',
         },
         'img, picture, video, canvas, svg': {
             display: 'block',
@@ -106,6 +117,8 @@ export default defineConfig({
             padding: 0,
             listStyle: 'none',
         },
+        b: { fontWeight: 'bold' },
+        label: { cursor: 'pointer' },
     },
 
     // Theme configuration
@@ -184,6 +197,7 @@ export default defineConfig({
                     24: { value: '9.6rem' }, // 96px (10px 기준)
                 },
                 sizes: {
+                    checkbox: { value: '1.8rem' }, // 18px (10px 기준)
                     container: {
                         mobile: { value: '100%' },
                         tablet: { value: '768px' },

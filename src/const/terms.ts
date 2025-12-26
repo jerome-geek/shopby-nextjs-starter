@@ -1,4 +1,72 @@
-const TERMS_TITLE = {
+import { CreateProfileData } from '@/models/member/profile';
+
+export const SIGN_UP_TERM_LIST: {
+    type: CreateProfileData['joinTermsAgreements'][number];
+    label: string;
+    isRequired: boolean;
+    isChecked: boolean;
+}[] = [
+    {
+        type: 'USE' as const,
+        label: '이용약관',
+        isRequired: true,
+        isChecked: false,
+    },
+    // TODO: 기본약관인지 추가약관인지 확인 필요
+    // {
+    //     type: 'E_COMMERCE' as const,
+    //     label: '전자금융 거래 이용 약관',
+    //     isRequired: true,
+    //     isChecked: false,
+    // },
+    {
+        type: 'PI_COLLECTION_AND_USE_REQUIRED' as const,
+        label: '개인정보 수집 및 이용동의',
+        isRequired: true,
+        isChecked: false,
+    },
+    {
+        type: 'PI_14_AGE' as const,
+        label: '만 14세 이상 가입 동의 약관',
+        isRequired: true,
+        isChecked: false,
+    },
+    {
+        type: 'PI_COLLECTION_AND_USE_OPTIONAL' as const,
+        label: '개인정보 수집 및 이용동의',
+        isRequired: false,
+        isChecked: false,
+    },
+    {
+        type: 'PI_PROCESS_CONSIGNMENT' as const,
+        label: '개인정보 처리/위탁에 대한 동의',
+        isRequired: false,
+        isChecked: false,
+    },
+    {
+        type: 'PI_THIRD_PARTY_PROVISION' as const,
+        label: '개인정보 제 3자 제공에 대한 동의',
+        isRequired: false,
+        isChecked: false,
+    },
+];
+
+export const OPT_IN_LIST = [
+    {
+        type: 'smsAgreed' as const,
+        label: 'SMS 수신동의',
+        isRequired: false,
+        isChecked: false,
+    },
+    {
+        type: 'directMailAgreed' as const,
+        label: '이메일 수신동의',
+        isRequired: false,
+        isChecked: false,
+    },
+];
+
+export const TERMS_TITLE = {
     mall_introduction: '쇼핑몰/회사 소개',
     use: '이용약관',
     e_commerce: '전자금융거래 이용약관',
@@ -27,7 +95,7 @@ const TERMS_TITLE = {
     personal_third_party_provision: '',
 };
 
-const orderTerms = {
+export const orderTerms = {
     USE: '이용약관',
     PI_COLLECTION_AND_USE_ON_ORDER: '개인정보 이용동의',
     PI_SELLER_PROVISION: '개인정보 판매자 제공 동의',
@@ -40,7 +108,7 @@ const orderTerms = {
     ORDER_DEFAULT: '주문 기본 동의',
 };
 
-const orderAgreementTerms = {
+export const orderAgreementTerms = {
     TERMS_OF_USE: '이용약관',
     PRIVACY_USAGE_AGREEMENT: '개인정보 이용동의',
     NONE_MEMBER_PRIVACY_USAGE_AGREEMENT: '비회원 개인정보 수집 · 이용 동의',
@@ -52,5 +120,3 @@ const orderAgreementTerms = {
     REGULAR_PAYMENT_USE: '정기결제(배송) 이용약관',
     AUTO_APPROVAL_USE: '자동 승인 이용약관',
 };
-
-export { TERMS_TITLE, orderTerms, orderAgreementTerms };

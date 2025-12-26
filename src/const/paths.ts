@@ -35,11 +35,10 @@ const PATHS = {
     },
 
     SIGNUP: {
-        MAIN: '/signup',
         /** 회원가입 방법 선택 페이지 */
         REGISTER_METHOD: '/signup/register-method',
         /** 약관동의 페이지 */
-        TERM: '/signup/terms',
+        TERMS: '/signup/terms',
         /** 회원가입 정보 입력 페이지 */
         FORM: '/signup/form',
         /** 회원가입 완료 페이지 */

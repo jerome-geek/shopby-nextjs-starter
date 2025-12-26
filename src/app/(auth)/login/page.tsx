@@ -216,6 +216,9 @@ function LoginForm() {
                                 type="button"
                                 frame="outlined"
                                 variant="primary"
+                                onClick={() =>
+                                    router.push(PATHS.SIGNUP.REGISTER_METHOD)
+                                }
                             >
                                 <span>{t('회원가입')}</span>
                             </Button>
