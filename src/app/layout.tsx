@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 import { OverlayProvider } from 'overlay-kit';
 
 import '@/app/globals.css';
@@ -9,6 +7,7 @@ import GlobalErrorBoundary from '@/components/GlobalErrorBoundary';
 import Header from '@/components/Header';
 import MobileBottomNavigation from '@/components/MobileBottomNavigation';
 import QueryProvider from '@/providers/QueryProvider';
+import I18nProvider from '@/providers/I18nProvider';
 import { css } from '@/styled-system/css';
 
 export const metadata: Metadata = {
@@ -25,12 +24,11 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     const locale = process.env.NEXT_PUBLIC_LOCALE || 'ko';
-    const messages = await getMessages();
 
     return (
         <html lang={locale}>
             <body>
-                <NextIntlClientProvider messages={messages}>
+                <I18nProvider>
                     <OverlayProvider>
                         <QueryProvider>
                             <GlobalErrorBoundary>
@@ -53,7 +51,7 @@ export default async function RootLayout({
                             </GlobalErrorBoundary>
                         </QueryProvider>
                     </OverlayProvider>
-                </NextIntlClientProvider>
+                </I18nProvider>
             </body>
         </html>
     );

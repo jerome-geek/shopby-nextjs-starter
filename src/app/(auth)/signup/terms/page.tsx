@@ -24,6 +24,7 @@ import TermDialog from '@/components/ui/dialog/term';
 import { CreateProfileData } from '@/models/member/profile';
 import { PATHS } from '@/const/paths';
 import useDialog from '@/hooks/useDialog';
+import { InputLabel } from '@/components/ui/input/label';
 
 export default function SignupTermsPage() {
     const [checkedTermList, setCheckedTermList] = useState<
@@ -206,7 +207,15 @@ export default function SignupTermsPage() {
                             onAllAgreeClick(checked);
                         }}
                     />
-                    <label htmlFor="isAllAgreed">
+                    <label
+                        htmlFor="isAllAgreed"
+                        className={css({
+                            color: token('colors.black'),
+                            fontSize: { base: '1.4rem', md: '1.5rem' },
+                            lineHeight: { base: '2rem', md: '2.2rem' },
+                            fontWeight: '700',
+                        })}
+                    >
                         전체 동의하기 (선택 포함)
                     </label>
                 </div>
@@ -236,17 +245,7 @@ export default function SignupTermsPage() {
                                 justifyContent: 'space-between',
                             })}
                         >
-                            <label
-                                className={css({
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    fontSize: { base: '1.4rem', md: '1.5rem' },
-                                    lineHeight: { base: '2rem', md: '2.2rem' },
-                                    fontWeight: '700',
-                                    color: token('colors.gray70'),
-                                })}
-                            >
+                            <InputLabel isCheckbox>
                                 <InputCheckbox
                                     id={type}
                                     checked={includes(type, checkedTermList)}
@@ -255,13 +254,14 @@ export default function SignupTermsPage() {
                                 <p>
                                     {`[${isRequired ? '필수' : '선택'}] ${label}`}
                                 </p>
-                            </label>
+                            </InputLabel>
 
                             <button
                                 type="button"
                                 className={css({
                                     textDecoration: 'underline',
                                     color: token('colors.gray70'),
+                                    fontSize: { base: '1.2rem', md: '1.4rem' },
                                 })}
                                 onClick={() => onDetailClick(type)}
                             >
@@ -280,13 +280,7 @@ export default function SignupTermsPage() {
                                 justifyContent: 'space-between',
                             })}
                         >
-                            <label
-                                className={css({
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                })}
-                            >
+                            <InputLabel isCheckbox>
                                 <InputCheckbox
                                     id={type}
                                     checked={includes(type, checkedOptInList)}
@@ -300,7 +294,7 @@ export default function SignupTermsPage() {
                                 >
                                     {`[${isRequired ? '필수' : '선택'}] ${label}`}
                                 </p>
-                            </label>
+                            </InputLabel>
                         </li>
                     );
                 })}

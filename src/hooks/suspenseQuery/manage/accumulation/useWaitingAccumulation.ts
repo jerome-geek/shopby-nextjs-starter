@@ -2,10 +2,10 @@ import {
     useSuspenseQuery,
     UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { HTTPError } from 'ky';
 
 import { accumulation } from '@/api/manage';
-import accumulationKeys from '@/hooks/queryKeys/accumulationKeys';
+import { accumulationKeys } from '@/hooks/queryKeys';
 import { GetExpectAccumulationResponse } from '@/models/manage/accumulation';
 
 interface UseWaitingAccumulationParams<T = GetExpectAccumulationResponse> {
@@ -13,7 +13,7 @@ interface UseWaitingAccumulationParams<T = GetExpectAccumulationResponse> {
     options?: Omit<
         UseSuspenseQueryOptions<
             GetExpectAccumulationResponse,
-            AxiosError<ShopByErrorResponse>,
+            HTTPError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof accumulationKeys)['waitingDetail']>
         >,
@@ -28,7 +28,7 @@ const useWaitingAccumulation = <T = GetExpectAccumulationResponse>({
     return useSuspenseQuery({
         queryKey: accumulationKeys.waitingDetail(memberNo),
         queryFn: async () => {
-            const { data } = await accumulation.getExpectAccumulation();
+            const data = await accumulation.getExpectAccumulation().json();
 
             return data;
         },

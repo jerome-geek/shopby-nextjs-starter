@@ -1,9 +1,9 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { overlay } from 'overlay-kit';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
@@ -27,7 +27,7 @@ interface UseAsyncConfirmDialogProps<T = boolean> extends UseDialogProps {
 }
 
 const useDialog = () => {
-    const t = useTranslations();
+    const { t } = useTranslation();
 
     const router = useRouter();
     const searchParams = useSearchParams();

@@ -1,16 +1,17 @@
-import { css } from '@/styled-system/css';
-import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { Suspense } from 'react';
 
 import HeroBannerSection from '@/components/Banner/HeroBannerSection';
 import HeroBannerSkeleton from '@/components/Banner/HeroBannerSkeleton';
 import { BANNER_STYLES } from '@/const/banner/bannerStyles';
+import { getTranslation } from '@/i18n/server';
+import { css } from '@/styled-system/css';
 import { isAuthenticated } from '@/utils/auth.server';
+
 // import IconBannerSection from '@/components/Banner/IconBannerSection';
 
 export default async function Home() {
-    const t = await getTranslations();
+    const { t } = await getTranslation();
 
     const authStatus = await isAuthenticated();
     console.log('🚀 ~ Home ~ isAuthenticated:', authStatus);

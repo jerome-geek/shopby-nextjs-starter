@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 import { GetCategoryResponse } from '@/models/display/category';
 import { css } from '@/styled-system/css';
@@ -17,7 +17,7 @@ export default function CategoryListTab({
     href,
     categoryData,
 }: CategoryListTabProps) {
-    const t = useTranslations();
+    const { t } = useTranslation();
 
     const searchParams = useSearchParams();
     const currentCategoryNo = searchParams.get('categoryNo');

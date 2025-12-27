@@ -1,5 +1,4 @@
-import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 
 // import DialogAuthIcon from '@/assets/icons/dialog/auth.svg';
 // import DialogCloseIcon from '@/assets/icons/dialog/close.svg';
@@ -24,7 +23,7 @@ export interface ConfirmDialogProps extends DefaultDialogProps {
 }
 
 const ConfirmDialog = (props: ConfirmDialogProps) => {
-    const t = useTranslations();
+    const { t } = useTranslation();
 
     const {
         type = 'modal',

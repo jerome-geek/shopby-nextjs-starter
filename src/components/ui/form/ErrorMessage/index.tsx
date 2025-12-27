@@ -1,6 +1,6 @@
 import { ErrorMessage as RHFErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 
 import { css } from '@/styled-system/css';
 import { token } from '@/styled-system/tokens';
@@ -10,7 +10,8 @@ interface Props {
 }
 
 const ErrorMessage = ({ name }: Props) => {
-    const t = useTranslations();
+    const { t } = useTranslation();
+
     const {
         formState: { errors },
     } = useFormContext();

@@ -1,12 +1,12 @@
-import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
-import { css } from '@/styled-system/css';
-import { PATHS } from '@/const/paths';
 import product from '@/api/product/product';
+import { PATHS } from '@/const/paths';
+import { getTranslation } from '@/i18n/server';
+import { css } from '@/styled-system/css';
 
 export default async function BestProductList() {
-    const t = await getTranslations();
+    const { t } = await getTranslation();
 
     const data = await product.getBestSellerProducts();
     console.log('🚀 ~ BestProductList ~ data:', data);

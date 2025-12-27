@@ -2,10 +2,10 @@ import {
     useSuspenseQuery,
     UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { HTTPError } from 'ky';
 
 import { accumulation } from '@/api/manage';
-import accumulationKeys from '@/hooks/queryKeys/accumulationKeys';
+import { accumulationKeys } from '@/hooks/queryKeys';
 import {
     GetAccumulationsParams,
     GetAccumulationsResponse,
@@ -17,7 +17,7 @@ interface UseAccumulationListParams<T = GetAccumulationsResponse> {
     options?: Omit<
         UseSuspenseQueryOptions<
             GetAccumulationsResponse,
-            AxiosError<ShopByErrorResponse>,
+            HTTPError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof accumulationKeys)['list']>
         >,
@@ -33,7 +33,9 @@ const useAccumulationList = <T = GetAccumulationsResponse>({
     return useSuspenseQuery({
         queryKey: accumulationKeys.list(memberNo, searchParams),
         queryFn: async () => {
-            const { data } = await accumulation.getAccumulations(searchParams);
+            const data = await accumulation
+                .getAccumulations(searchParams)
+                .json();
 
             return data;
         },

@@ -1,27 +1,27 @@
 'use client';
 
-import { HTTPError, TimeoutError } from 'ky';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Suspense } from '@suspensive/react';
-import { useTranslations } from 'next-intl';
+import { HTTPError, TimeoutError } from 'ky';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { oauth2 } from '@/api/auth';
 import { cookieTokenManager } from '@/api/core/cookie';
 import { Button } from '@/components/ui/button';
-import { PATHS } from '@/const/paths';
-import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
-import { css } from '@/styled-system/css';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
-import useDialog from '@/hooks/useDialog';
+import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import { PATHS } from '@/const/paths';
+import useDialog from '@/hooks/useDialog';
+import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
+import { css } from '@/styled-system/css';
 
 function LoginForm() {
-    const t = useTranslations();
+    const { t } = useTranslation();
     const router = useRouter();
     const searchParams = useSearchParams();
     const returnUrl = searchParams.get('returnUrl');
@@ -43,8 +43,6 @@ function LoginForm() {
         watch,
         formState: { isSubmitting },
     } = methods;
-    console.log('=====================');
-    console.log(watch());
 
     const onSubmit = handleSubmit(async ({ memberId, password, isSaved }) => {
         try {
@@ -191,7 +189,9 @@ function LoginForm() {
                                     );
                                 }}
                             />
-                            <label htmlFor="isSaved">{t('아이디 저장')}</label>
+                            <InputLabel isCheckbox htmlFor="isSaved">
+                                {t('아이디 저장')}
+                            </InputLabel>
                         </div>
 
                         <div

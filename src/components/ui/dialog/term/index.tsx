@@ -1,13 +1,12 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 // import { useTranslation } from 'react-i18next';
 
 // import { TermDialogStyle as S } from '@/components/Common/Dialog/Term/index.styled';
 // import Typography from '@/components/Common/Typography';
 import DialogLayout, { DefaultDialogProps } from '@/components/layout/dialog';
 
-import DialogCloseIcon from '@/assets/icons/dialog/close.svg';
 import { css } from '@/styled-system/css';
 
 interface TermDialogProps extends DefaultDialogProps {
@@ -16,7 +15,7 @@ interface TermDialogProps extends DefaultDialogProps {
 }
 
 const TermDialog = ({ title, contents, ...props }: TermDialogProps) => {
-    const t = useTranslations();
+    const { t } = useTranslation();
 
     return (
         <DialogLayout {...props}>
