@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    compiler: {
+        // 프로덕션 빌드에서 console.* 제거
+        removeConsole:
+            process.env.NODE_ENV === 'production'
+                ? {
+                      exclude: ['error', 'warn'],
+                  }
+                : false,
+    },
+    productionBrowserSourceMaps: process.env.NODE_ENV !== 'production',
+    compress: true,
+    reactStrictMode: true,
 };
 
 export default nextConfig;

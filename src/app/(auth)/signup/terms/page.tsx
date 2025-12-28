@@ -1,44 +1,45 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { overlay } from 'overlay-kit';
 import {
     entries,
+    filter,
+    head,
+    includes,
     map,
     pipe,
-    filter,
     toArray,
-    includes,
-    head,
 } from '@fxts/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { overlay } from 'overlay-kit';
+import { useMemo } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
-import { css } from '@/styled-system/css';
-import { token } from '@/styled-system/tokens';
+import TermDialog from '@/components/ui/dialog/term';
+import InputCheckbox from '@/components/ui/input/Checkbox';
+import { InputLabel } from '@/components/ui/input/label';
+import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
+import { PATHS } from '@/const/paths';
 import { OPT_IN_LIST, SIGN_UP_TERM_LIST } from '@/const/terms';
 import { useTermList } from '@/hooks/suspenseQuery/manage/terms';
-import InputCheckbox from '@/components/ui/input/Checkbox';
-import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
-import TermDialog from '@/components/ui/dialog/term';
-import { CreateProfileData } from '@/models/member/profile';
-import { PATHS } from '@/const/paths';
 import useDialog from '@/hooks/useDialog';
-import { InputLabel } from '@/components/ui/input/label';
+import { CreateProfileData } from '@/models/member/profile';
+import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
+import { ShopbyTermsTypes } from '@/models';
+import { SignupFormType } from '@/schema';
 
 export default function SignupTermsPage() {
-    const [checkedTermList, setCheckedTermList] = useState<
-        CreateProfileData['joinTermsAgreements'][number][]
-    >([]);
-    const [checkedOptInList, setCheckedOptInList] = useState<
-        ('smsAgreed' | 'directMailAgreed')[]
-    >([]);
-
     const { data: termListData } = useTermList({
         searchParams: {
             termsTypes: [...map((a) => a.type, SIGN_UP_TERM_LIST)],
         },
     });
+
+    const { setValue, getValues, watch } = useFormContext<SignupFormType>();
+    const joinTermsAgreementsWatch = watch('joinTermsAgreements') || [];
+    const smsAgreedWatch = watch('smsAgreed');
+    const directMailAgreedWatch = watch('directMailAgreed');
 
     const agreeTermList = useMemo(() => {
         return pipe(
@@ -57,7 +58,6 @@ export default function SignupTermsPage() {
             toArray
         );
     }, [agreeTermList]);
-    console.log('🚀 ~ SignupTermsPage ~ requiredTermList:', requiredTermList);
 
     const isRequiredTermsChecked = useMemo(() => {
         const requiredTermTypeList = requiredTermList.map((a) => a.type);
@@ -65,46 +65,55 @@ export default function SignupTermsPage() {
         return (
             requiredTermTypeList.length > 0 &&
             requiredTermTypeList.every((type) =>
-                includes(type, checkedTermList)
+                includes(type, joinTermsAgreementsWatch)
             )
         );
-    }, [requiredTermList, checkedTermList]);
+    }, [requiredTermList, joinTermsAgreementsWatch]);
 
-    const allTermTypes = useMemo(
+    const signupTermTypeList = useMemo(
         () => SIGN_UP_TERM_LIST.map((a) => a.type),
         []
     );
-    const allOptInTypes = useMemo(() => OPT_IN_LIST.map((a) => a.type), []);
 
     const isAllAgreed = useMemo(() => {
         const allTermsChecked =
-            allTermTypes.length > 0 &&
-            allTermTypes.every((type) => includes(type, checkedTermList));
-        const allOptInsChecked =
-            allOptInTypes.length > 0 &&
-            allOptInTypes.every((type) => includes(type, checkedOptInList));
+            signupTermTypeList.length > 0 &&
+            signupTermTypeList.every((type) =>
+                includes(type, joinTermsAgreementsWatch)
+            );
+
+        const allOptInsChecked = smsAgreedWatch && directMailAgreedWatch;
+
         return allTermsChecked && allOptInsChecked;
-    }, [checkedTermList, checkedOptInList, allTermTypes, allOptInTypes]);
+    }, [
+        joinTermsAgreementsWatch,
+        smsAgreedWatch,
+        directMailAgreedWatch,
+        signupTermTypeList,
+    ]);
 
     const onAllAgreeClick = (checked: boolean) => {
-        setCheckedTermList(checked ? allTermTypes : []);
-        setCheckedOptInList(checked ? allOptInTypes : []);
+        setValue('joinTermsAgreements', checked ? signupTermTypeList : [], {
+            shouldValidate: true,
+        });
+
+        setValue('smsAgreed', checked, { shouldValidate: true });
+        setValue('directMailAgreed', checked, { shouldValidate: true });
     };
 
-    const onAgreeClick = (type: any) => {
-        setCheckedTermList((prev) =>
-            includes(type, prev)
-                ? prev.filter((item) => item !== type)
-                : [...prev, type]
-        );
+    const onAgreeClick = (
+        type: CreateProfileData['joinTermsAgreements'][number]
+    ) => {
+        const nextAgreements = joinTermsAgreementsWatch.includes(type)
+            ? joinTermsAgreementsWatch.filter((item) => item !== type)
+            : [...joinTermsAgreementsWatch, type];
+
+        setValue('joinTermsAgreements', nextAgreements);
     };
 
     const onOptInClick = (type: 'smsAgreed' | 'directMailAgreed') => {
-        setCheckedOptInList((prev) =>
-            includes(type, prev)
-                ? prev.filter((item) => item !== type)
-                : [...prev, type]
-        );
+        const currentValue = getValues(type);
+        setValue(type, !currentValue, { shouldValidate: true });
     };
 
     const onDetailClick = (
@@ -146,28 +155,8 @@ export default function SignupTermsPage() {
             return;
         }
 
-        sessionStorage.setItem(
-            'signupTerms',
-            JSON.stringify({
-                checkedTermList,
-                checkedOptInList,
-            })
-        );
         router.push(PATHS.SIGNUP.FORM);
     };
-
-    // TODO: 다른페이지 다녀와도 무조건 동의가 되어 있는데 이게 맞는지?
-    useEffect(() => {
-        const stored = sessionStorage.getItem('signupTerms');
-        if (stored) {
-            try {
-                const { checkedTermList, checkedOptInList } =
-                    JSON.parse(stored);
-                setCheckedTermList(checkedTermList);
-                setCheckedOptInList(checkedOptInList);
-            } catch (error) {}
-        }
-    }, []);
 
     return (
         <div
@@ -248,7 +237,10 @@ export default function SignupTermsPage() {
                             <InputLabel isCheckbox>
                                 <InputCheckbox
                                     id={type}
-                                    checked={includes(type, checkedTermList)}
+                                    checked={includes(
+                                        type,
+                                        joinTermsAgreementsWatch
+                                    )}
                                     onCheckedChange={() => onAgreeClick(type)}
                                 />
                                 <p>
@@ -283,7 +275,12 @@ export default function SignupTermsPage() {
                             <InputLabel isCheckbox>
                                 <InputCheckbox
                                     id={type}
-                                    checked={includes(type, checkedOptInList)}
+                                    // checked={includes(type, checkedOptInList)}
+                                    checked={
+                                        type === 'smsAgreed'
+                                            ? smsAgreedWatch
+                                            : directMailAgreedWatch
+                                    }
                                     onCheckedChange={() => onOptInClick(type)}
                                 />
                                 <p

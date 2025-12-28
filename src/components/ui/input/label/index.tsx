@@ -16,13 +16,13 @@ const labelStyles = cva({
             true: {
                 _after: {
                     content: "''",
-                    backgroundColor: 'var(--color-main)',
+                    backgroundColor: token('colors.red'),
                     position: 'absolute',
                     width: '4px',
                     height: '4px',
                     borderRadius: '50%',
-                    right: '-8px',
-                    top: { base: '4px', sm: '2px' },
+                    right: '-6px',
+                    top: '0',
                 },
             },
             false: {

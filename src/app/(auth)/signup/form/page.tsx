@@ -2,10 +2,24 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import InputField from '@/components/ui/input/field';
+import { InputLabel } from '@/components/ui/input/label';
+import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { css } from '@/styled-system/css';
+import MemberJoinField from '@/components/auth/MemberJoinField';
+import { FormMobile } from '@/components/ui/form/Mobile';
+import { Button } from '@/components/ui/button';
+import InputFieldContainer from '@/components/ui/input/FieldContainer';
+import InputContainer from '@/components/ui/input/InputContainer';
+import EmailForm from '@/components/ui/form/Email';
+// import z from 'zod';
+import { SignupFormType } from '@/schema';
 
 export default function SignupFormPage() {
-    const methods = useForm();
+    const { t } = useTranslation();
 
     const searchParams = useSearchParams();
     const accessToken = searchParams.get('accessToken');
@@ -25,10 +39,7 @@ export default function SignupFormPage() {
         control,
         formState: { isSubmitting },
         handleSubmit,
-    } = methods;
-
-    console.log('watch');
-    console.log(watch());
+    } = useFormContext<SignupFormType>();
 
     useEffect(() => {
         const stored = sessionStorage.getItem('signupTerms');
@@ -40,30 +51,44 @@ export default function SignupFormPage() {
     const onSubmit = handleSubmit((data) => {});
 
     return (
-        <FormProvider {...methods}>
-            <form onSubmit={onSubmit}>
+        <div
+            className={css({
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: { base: '32px', md: '28px' },
+            })}
+        >
+            <form
+                id="signup"
+                onSubmit={onSubmit}
+                className={css({
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: { base: '24px', md: '32px' },
+                    width: '100%',
+                })}
+            >
                 {!isSocialLogin && (
                     <>
-                        {/* <div>
-                            <Input.Label isRequired>{t('아이디')}</Input.Label>
-                            <Input.FieldContainer>
-                                <Input.Field
+                        <InputContainer>
+                            <InputLabel isRequired>{t('아이디')}</InputLabel>
+                            <InputFieldContainer>
+                                <InputField
                                     {...register('memberId')}
                                     type="text"
                                     placeholder={t(
                                         '영어 소문자, 숫자 사용 4~16자리'
                                     )}
                                 />
-                                <ErrorMessageV2 name="memberId" />
-                            </Input.FieldContainer>
-                        </div>
+                                <ErrorMessage name="memberId" />
+                            </InputFieldContainer>
+                        </InputContainer>
 
-                        <div>
-                            <Input.Label isRequired>
-                                {t('비밀번호')}
-                            </Input.Label>
-                            <Input.FieldContainer>
-                                <Input.Field
+                        <InputContainer>
+                            <InputLabel isRequired>{t('비밀번호')}</InputLabel>
+                            <InputFieldContainer>
+                                <InputField
                                     {...register('password')}
                                     type="password"
                                     autoComplete="new-password"
@@ -71,16 +96,16 @@ export default function SignupFormPage() {
                                         '영문+숫자+특수문자 조합 8~16자리'
                                     )}
                                 />
-                                <ErrorMessageV2 name="password" />
-                            </Input.FieldContainer>
-                        </div>
+                                <ErrorMessage name="password" />
+                            </InputFieldContainer>
+                        </InputContainer>
 
-                        <div>
-                            <Input.Label isRequired>
+                        <InputContainer>
+                            <InputLabel isRequired>
                                 {t('비밀번호 확인')}
-                            </Input.Label>
-                            <Input.FieldContainer>
-                                <Input.Field
+                            </InputLabel>
+                            <InputFieldContainer>
+                                <InputField
                                     {...register('passwordConfirm')}
                                     type="password"
                                     autoComplete="new-password"
@@ -88,12 +113,54 @@ export default function SignupFormPage() {
                                         '비밀번호를 한 번 더 입력해 주세요.'
                                     )}
                                 />
-                                <ErrorMessageV2 name="passwordConfirm" />
-                            </Input.FieldContainer>
-                        </div> */}
+                                <ErrorMessage name="passwordConfirm" />
+                            </InputFieldContainer>
+                        </InputContainer>
                     </>
                 )}
+
+                <MemberJoinField name="memberId" label={t('이름')}>
+                    <InputFieldContainer>
+                        <InputField
+                            {...register('memberId')}
+                            type="text"
+                            placeholder={t('영어 소문자, 숫자 사용 4~16자리')}
+                        />
+                        <ErrorMessage name="memberId" />
+                    </InputFieldContainer>
+                </MemberJoinField>
+
+                {/* TODO: 휴대폰번호 */}
+                <MemberJoinField name="mobileNo" label={t('휴대폰번호')}>
+                    <InputFieldContainer>
+                        <FormMobile />
+                    </InputFieldContainer>
+                </MemberJoinField>
+
+                {/* TODO: 이메일 */}
+                <MemberJoinField name="email" label={t('이메일')}>
+                    <EmailForm />
+                </MemberJoinField>
+
+                {/* TODO: 성별 */}
+                <MemberJoinField name="sex" label={t('성별')}></MemberJoinField>
+
+                {/* TODO: 생년월일 */}
+                <MemberJoinField
+                    name="birthday"
+                    label={t('생년월일')}
+                ></MemberJoinField>
             </form>
-        </FormProvider>
+
+            <Button
+                frame="solid"
+                variant="primary"
+                form="signup"
+                disabled={isSubmitting}
+                onClick={onSubmit}
+            >
+                <span>{t('가입하기')}</span>
+            </Button>
+        </div>
     );
 }
