@@ -1,12 +1,15 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import {
     entries,
+    every,
     filter,
     head,
     includes,
     map,
     pipe,
+    size,
     toArray,
 } from '@fxts/core';
 import { useRouter } from 'next/navigation';
@@ -30,6 +33,8 @@ import { ShopbyTermsTypes } from '@/models';
 import { SignupFormType } from '@/schema';
 
 export default function SignupTermsPage() {
+    const { t } = useTranslation();
+
     const { data: termListData } = useTermList({
         searchParams: {
             termsTypes: [...map((a) => a.type, SIGN_UP_TERM_LIST)],
@@ -60,7 +65,11 @@ export default function SignupTermsPage() {
     }, [agreeTermList]);
 
     const isRequiredTermsChecked = useMemo(() => {
-        const requiredTermTypeList = requiredTermList.map((a) => a.type);
+        const requiredTermTypeList = pipe(
+            requiredTermList,
+            map((a) => a.type),
+            toArray
+        );
 
         return (
             requiredTermTypeList.length > 0 &&
@@ -113,6 +122,7 @@ export default function SignupTermsPage() {
 
     const onOptInClick = (type: 'smsAgreed' | 'directMailAgreed') => {
         const currentValue = getValues(type);
+
         setValue(type, !currentValue, { shouldValidate: true });
     };
 
@@ -177,11 +187,17 @@ export default function SignupTermsPage() {
                         color: token('colors.black'),
                     })}
                 >
-                    회원가입
+                    {t('회원가입')}
                 </h2>
             </div>
 
-            <div>
+            <div
+                className={css({
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                })}
+            >
                 <div
                     className={css({
                         display: 'flex',
@@ -205,16 +221,21 @@ export default function SignupTermsPage() {
                             fontWeight: '700',
                         })}
                     >
-                        전체 동의하기 (선택 포함)
+                        {t('전체 동의하기 (선택 포함)')}
                     </label>
                 </div>
                 <p
                     className={css({
                         marginLeft: 'calc(var(--checkbox-size, 18px) + 8px)',
+                        fontSize: '1.2rem',
+                        lineHeight: '1.4rem',
+                        color: token('colors.gray70'),
+                        fontWeight: '500',
                     })}
                 >
-                    선택항목에 대한 동의를 거부하여도 서비스는 이용이
-                    가능합니다.
+                    {t(
+                        '선택항목에 대한 동의를 거부하여도 서비스는 이용이 가능합니다.'
+                    )}
                 </p>
             </div>
 
@@ -244,7 +265,7 @@ export default function SignupTermsPage() {
                                     onCheckedChange={() => onAgreeClick(type)}
                                 />
                                 <p>
-                                    {`[${isRequired ? '필수' : '선택'}] ${label}`}
+                                    {`[${isRequired ? t('필수') : t('선택')}] ${label}`}
                                 </p>
                             </InputLabel>
 
@@ -257,7 +278,7 @@ export default function SignupTermsPage() {
                                 })}
                                 onClick={() => onDetailClick(type)}
                             >
-                                <span>자세히</span>
+                                <span>{t('자세히')}</span>
                             </button>
                         </li>
                     );
@@ -289,7 +310,7 @@ export default function SignupTermsPage() {
                                         color: 'var(--color-gray-700)',
                                     }}
                                 >
-                                    {`[${isRequired ? '필수' : '선택'}] ${label}`}
+                                    {`[${isRequired ? t('필수') : t('선택')}] ${label}`}
                                 </p>
                             </InputLabel>
                         </li>
@@ -298,7 +319,7 @@ export default function SignupTermsPage() {
             </ul>
 
             <Button frame="solid" variant="primary" onClick={onNexButtonClick}>
-                <span>동의하고 본인인증하기</span>
+                <span>{t('동의하고 본인인증하기')}</span>
             </Button>
         </div>
     );
