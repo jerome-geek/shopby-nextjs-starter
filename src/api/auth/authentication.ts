@@ -12,15 +12,19 @@ import {
     GenerateAppCardQrResponse,
     GetOpenIdAccessTokenResponse,
     GetOpenIdLoginUrlParams,
+    GetOpenIdLoginUrlResponse,
     IssueAccessTokenData,
+    IssueAccessTokenResponse,
     IssueAppCardTransNoResponse,
     IssueOpenIdAccessTokenData,
     IssueOpenIdAccessTokenParams,
+    IssueOpenIdAccessTokenResponse,
     LinkSNSParams,
     LinkSNSResponse,
     SendCertificatedNumberData,
     SendCertificatedNumberViaEmailData,
     SendCertificatedNumberViaSMSData,
+    SendCertificatedNumberViaSMSResponse,
 } from '@/models/auth/authentication';
 import { generateCSRFToken } from '@/utils/auth.client';
 
@@ -109,10 +113,13 @@ const authentication = {
         data: SendCertificatedNumberViaSMSData,
         options?: Options
     ) => {
-        return request.post('authentications/sms', {
-            json: data,
-            ...options,
-        });
+        return request.post<SendCertificatedNumberViaSMSResponse>(
+            'authentications/sms',
+            {
+                json: data,
+                ...options,
+            }
+        );
     },
 
     /**
@@ -120,7 +127,7 @@ const authentication = {
      *  - OpenId 로그인 url 조회하기 위한 API 입니다
      */
     getOpenIdLoginUrl: (params: GetOpenIdLoginUrlParams, options?: Options) => {
-        return request.get('oauth/login-url', {
+        return request.get<GetOpenIdLoginUrlResponse>('oauth/login-url', {
             searchParams: qs.stringify(
                 params.provider === 'ncp_line'
                     ? {
@@ -147,7 +154,7 @@ const authentication = {
         params?: IssueOpenIdAccessTokenParams,
         options?: Options
     ) => {
-        return request.post('oauth/openid', {
+        return request.post<IssueOpenIdAccessTokenResponse>('oauth/openid', {
             json: data,
             searchParams: qs.stringify(params),
             ...options,
@@ -172,14 +179,9 @@ const authentication = {
      *  - 자동 로그인을 위해 keepLogin을 true로 요청하면 유효 기간이 90일인 토큰이 생성됩니다
      *  - 유효 기간이 길기 때문에 토큰 탈취시 보안에 취약할 수 있습니다
      */
-    issueAccessToken: (
-        data: IssueAccessTokenData,
-        params?: Pick<IssueOpenIdAccessTokenParams, 'trackingKey'>,
-        options?: Options
-    ) => {
-        return request.post('oauth/token', {
+    issueAccessToken: (data: IssueAccessTokenData, options?: Options) => {
+        return request.post<IssueAccessTokenResponse>('oauth/token', {
             json: data,
-            searchParams: qs.stringify(params),
             ...options,
         });
     },

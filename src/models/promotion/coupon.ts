@@ -122,6 +122,30 @@ export interface IssueCouponResponse {
     useEndYmdt: string;
 }
 
+export type GetExcludeTargetsByCouponNumberParams = Pick<
+    Paging,
+    'pageNumber' | 'pageSize'
+>;
+
+export interface GetExcludeTargetsByCouponNumberResponse {
+    /** 총 대상 개수 */
+    totalCount: number;
+    /** 대상 내역 */
+    items: {
+        /** 대상 이름 */
+        targetName: string;
+        /** 대상 타입 */
+        targetType:
+            | 'ALL_PRODUCT' // 전상품
+            | 'PRODUCT' // 개별상품
+            | 'BRAND' // 브랜드
+            | 'CATEGORY' // 카테고리
+            | 'PARTNER'; //  파트너사
+        /** 대상 번호 */
+        targetNo: number;
+    }[];
+}
+
 export interface GetCouponTargetsParams
     extends Pick<Paging, 'pageNumber' | 'pageSize'> {}
 
@@ -137,6 +161,13 @@ export interface GetCouponTargetsResponse {
         /** 대상 번호 */
         targetNo: number;
     }[];
+}
+
+export interface IssueEventCouponsResponse {
+    /** 발급 실패 쿠폰 목록 */
+    issueFailCoupons: IssueFailCoupon[];
+    /** 발급된 쿠폰목록 */
+    issuedCoupons: IssuedCoupon[];
 }
 
 export interface IssueCouponsResponse {

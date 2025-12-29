@@ -351,205 +351,270 @@ const profile = {
         });
     },
 
-    // /**
-    //  * 회원 신고하기
-    //  * 회원을 신고합니다.
-    //  */
-    // reportMember: (data: ReportMemberData) =>
-    //     request({
-    //         method: 'POST',
-    //         url: '/profile/report',
-    //         data,
-    //     }),
+    /**
+     * 회원 신고하기
+     * 회원을 신고합니다.
+     */
+    reportMember: (data: ReportMemberData, options?: Options) => {
+        return request.post('profile/report', options);
+    },
 
-    // /**
-    //  *  기존 회원을 오픈 아이디 회원으로 전환하기(카카오싱크 전용)
-    //  *  기존 회원을 오픈 아이디 회원으로 전환합니다.
-    //  *  오픈 아이디 회원으로 가입시, 같은 이메일을 가진 기존 일반 회원을 합칠 때 사용합니다.
-    //  *  일반 회원에서 오픈 아이디 회원으로 전환이 완료되면 가입 완료 처리가 됩니다.
-    //  *  전환 완료시, 기존 토큰은 만료처리되고 새로운 토큰이 발급됩니다.
-    //  *  이후, ID/PW 로그인을 불가능하며 전환한 오픈 아이디 회원으로 로그인이 가능합니다.
-    //  *  현재는 카카오싱크 회원만 지원합니다.
-    //  */
-    // synchronizeProfile: (data: SynchronizeProfileData) =>
-    //     request<SynchronizeProfileResponse>({
-    //         method: 'POST',
-    //         url: '/profile/synchronize',
-    //         data,
-    //     }),
+    /**
+     * 기존 회원을 오픈 아이디 회원으로 전환하기(카카오싱크 전용)
+     *  - 기존 회원을 오픈 아이디 회원으로 전환합니다.
+     *  - 오픈 아이디 회원으로 가입시, 같은 이메일을 가진 기존 일반 회원을 합칠 때 사용합니다.
+     *  - 일반 회원에서 오픈 아이디 회원으로 전환이 완료되면 가입 완료 처리가 됩니다.
+     *  - 전환 완료시, 기존 토큰은 만료처리되고 새로운 토큰이 발급됩니다.
+     *  - 이후, ID/PW 로그인을 불가능하며 전환한 오픈 아이디 회원으로 로그인이 가능합니다.
+     *  - 현재는 카카오싱크 회원만 지원합니다.
+     */
+    synchronizeProfile: (data: SynchronizeProfileData, options?: Options) => {
+        return request.post<SynchronizeProfileResponse>('profile/synchronize', {
+            json: data,
+            ...options,
+        });
+    },
 
-    // /**
-    //  * CI 중복확인하기
-    //  *  - 쇼핑몰에 동일한 CI를 사용중인 회원이 있는지 확인합니다. 현재 회원이 로그인중인 경우, 엑세스 토큰을 함께 전달하면 본인을 제외하고 동일한 CI를 사용중인 회원이 있는지 확인합니다
-    //  *  - 휴대폰 본인인증을 사용하는 경우 여러 사용자가 동일한 CI로 회원가입할 수 없습니다. 회원가입 / 수정 전 CI를 반드시 확인해주세요
-    //  *  - ci는 특수문자를 포함하고 있기때문에, 인코딩을 한 뒤에 전달해야합니다
-    //  */
-    // checkDuplicateCI: (
-    //     params: CheckDuplicateCIParams,
-    //     headers?: RawAxiosRequestHeaders
-    // ) =>
-    //     request<CheckDuplicateCIResponse>({
-    //         method: 'GET',
-    //         url: '/profile/ci/exists',
-    //         params,
-    //         headers,
-    //     }),
+    /**
+     * CI 중복확인하기
+     *  - 쇼핑몰에 동일한 CI를 사용중인 회원이 있는지 확인합니다. 현재 회원이 로그인중인 경우, 엑세스 토큰을 함께 전달하면 본인을 제외하고 동일한 CI를 사용중인 회원이 있는지 확인합니다
+     *  - 휴대폰 본인인증을 사용하는 경우 여러 사용자가 동일한 CI로 회원가입할 수 없습니다. 회원가입 / 수정 전 CI를 반드시 확인해주세요
+     *  - ci는 특수문자를 포함하고 있기때문에, 인코딩을 한 뒤에 전달해야합니다
+     */
+    checkDuplicateCI: (params: CheckDuplicateCIParams, options?: Options) => {
+        return request.get<CheckDuplicateCIResponse>('profile/ci/exists', {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
+    },
 
-    // /**
-    //  * CI 일치 확인하기
-    //  *  - 쇼핑몰 회원의 CI와 요청 CI 값이 일치하는지 확인합니다. 엑세스 토큰을 함께 전달하여 본인의 CI 값과 요청 CI를 비교하여 일치하는지 확인합니다.
-    //  *  - 요청 CI 값은 KCP 본인인증 결과 조회하기 API Response 객체의 CI 값을 이용합니다.
-    //  *  - CI는 특수문자를 포함하고 있기때문에, URL 인코딩 을 한 뒤에 전달해야합니다.
-    //  */
-    // checkDuplicateCIMySelf: (params: { ci: string }) =>
-    //     request<CheckDuplicateMySelfResponse>({
-    //         method: 'GET',
-    //         url: '/profile/ci/myself',
-    //         params,
-    //     }),
+    /**
+     * CI 일치 확인하기
+     *  - 쇼핑몰 회원의 CI와 요청 CI 값이 일치하는지 확인합니다. 엑세스 토큰을 함께 전달하여 본인의 CI 값과 요청 CI를 비교하여 일치하는지 확인합니다.
+     *  - 요청 CI 값은 KCP 본인인증 결과 조회하기 API Response 객체의 CI 값을 이용합니다.
+     *  - CI는 특수문자를 포함하고 있기때문에, URL 인코딩 을 한 뒤에 전달해야합니다.
+     */
+    checkDuplicateCIMySelf: (params: { ci: string }, options?: Options) => {
+        return request.get<CheckDuplicateMySelfResponse>('profile/ci/myself', {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
+    },
 
-    // /**
-    //  * 해당 쇼핑몰에 이메일 중복여부 체크하기
-    //  *  - 해당 쇼핑몰에 입력한 이메일을 가진 회원이 있는지 확인합니다. true가 회신되는 경우 이미 해당 이메일로 가입한 회원이 존재합니다. (이메일 중복 입력)
-    //  */
-    // checkDuplicateEmail: (params: CheckDuplicateEmailParams) =>
-    //     request<CheckDuplicateEmailResponse>({
-    //         method: 'GET',
-    //         url: '/profile/email/exist',
-    //         params,
-    //     }),
+    /**
+     * 해당 쇼핑몰에 이메일 중복여부 체크하기
+     *  - 해당 쇼핑몰에 입력한 이메일을 가진 회원이 있는지 확인합니다. true가 회신되는 경우 이미 해당 이메일로 가입한 회원이 존재합니다. (이메일 중복 입력)
+     */
+    checkDuplicateEmail: (
+        params: CheckDuplicateEmailParams,
+        options?: Options
+    ) => {
+        return request.get<CheckDuplicateEmailResponse>('profile/email/exist', {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
+    },
 
-    // /**
-    //  * ID 변경 메일 발송하기
-    //  *  - ID를 변경할 수 있는 내용을 첨부한 email을 발송하는 API 입니다
-    //  */
-    // sendUpdateIdEmail: (data: SendUpdateIdEmailData) =>
-    //     request<SendUpdateIdEmailResponse>({
-    //         method: 'POST',
-    //         url: '/profile/id/email',
-    //         data,
-    //     }),
+    /**
+     * ID 변경 메일 발송하기
+     *  - ID를 변경할 수 있는 내용을 첨부한 email을 발송하는 API 입니다
+     */
+    sendUpdateIdEmail: (data: SendUpdateIdEmailData, options?: Options) => {
+        return request.post<SendUpdateIdEmailResponse>('profile/id/email', {
+            json: data,
+            ...options,
+        });
+    },
 
-    // /**
-    //  * 해당 쇼핑몰에 아이디 중복여부 체크하기
-    //  *  - 해당 쇼핑몰에 입력한 아이디로 가진 회원이 있는지 확인합니다. true가 회신되는 경우 이미 해당 아이디로 가입한 회원이 존재합니다 (아이디 중복 입력)
-    //  */
-    // checkDuplicateId: (params: CheckDuplicateIdParams) =>
-    //     request<CheckDuplicateIdResponse>({
-    //         method: 'GET',
-    //         url: '/profile/id/exist',
-    //         params,
-    //     }),
+    /**
+     * 해당 쇼핑몰에 아이디 중복여부 체크하기
+     *  - 해당 쇼핑몰에 입력한 아이디로 가진 회원이 있는지 확인합니다. true가 회신되는 경우 이미 해당 아이디로 가입한 회원이 존재합니다 (아이디 중복 입력)
+     */
+    checkDuplicateId: (params: CheckDuplicateIdParams, options?: Options) => {
+        return request.get<CheckDuplicateIdResponse>('profile/id/exist', {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
+    },
 
-    // /**
-    //  * 해당 쇼핑몰에 휴대폰 번호 중복여부 확인하기
-    //  *  - 해당 쇼핑몰에 입력한 휴대폰번호가 있는지 확인하는 API 입니다
-    //  */
-    // checkDuplicateMobileNo: (params: CheckDuplicateMobileNoParams) =>
-    //     request<CheckDuplicateMobileNoResponse>({
-    //         method: 'GET',
-    //         url: '/profile/mobile/exist',
-    //         params,
-    //     }),
+    /**
+     * 해당 쇼핑몰에 휴대폰 번호 중복여부 확인하기
+     *  - 해당 쇼핑몰에 입력한 휴대폰번호가 있는지 확인하는 API 입니다
+     */
+    checkDuplicateMobileNo: (
+        params: CheckDuplicateMobileNoParams,
+        options?: Options
+    ) => {
+        return request.get<CheckDuplicateMobileNoResponse>(
+            'profile/mobile/exist',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
 
-    // /**
-    //  * 해당 쇼핑몰에 닉네임 중복여부 체크하기
-    //  *  - 해당 쇼핑몰에 입력한 닉네임으로 가진 회원이 있는지 확인합니다. true가 회신되는 경우 이미 해당 닉네임으로 가입한 회원이 존재합니다.(닉네임 중복 입력)
-    //  */
-    // checkDuplicateNickname: (params: CheckDuplicateNicknameParams) =>
-    //     request<CheckDuplicateNicknameResponse>({
-    //         method: 'GET',
-    //         url: '/profile/nickname/exist',
-    //         params,
-    //     }),
+    /**
+     * 해당 쇼핑몰에 닉네임 중복여부 체크하기
+     *  - 해당 쇼핑몰에 입력한 닉네임으로 가진 회원이 있는지 확인합니다. true가 회신되는 경우 이미 해당 닉네임으로 가입한 회원이 존재합니다.(닉네임 중복 입력)
+     */
+    checkDuplicateNickname: (
+        params: CheckDuplicateNicknameParams,
+        options?: Options
+    ) => {
+        return request.get<CheckDuplicateNicknameResponse>(
+            'profile/nickname/exist',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
 
-    // /**
-    //  * 비밀번호 찾기를 위한 계정 조회하기
-    //  *  - 비밀번호 찾기를 위한 계정 정보를 조회합니다. 개인정보 항목인 이름, 휴대폰번호, 이메일은 마스킹된 값으로 조회됩니다
-    //  */
-    // getMaskingAccountInfo: (params: GetMaskingAccountInfoParams) =>
-    //     request<GetMaskingAccountInfoResponse>({
-    //         method: 'GET',
-    //         url: '/profile/password/search-account',
-    //         params,
-    //     }),
+    /**
+     * 비밀번호 찾기를 위한 계정 조회하기
+     *  - 비밀번호 찾기를 위한 계정 정보를 조회합니다. 개인정보 항목인 이름, 휴대폰번호, 이메일은 마스킹된 값으로 조회됩니다
+     */
+    getMaskingAccountInfo: (
+        params: GetMaskingAccountInfoParams,
+        options?: Options
+    ) => {
+        return request.get<GetMaskingAccountInfoResponse>(
+            'profile/password/search-account',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
 
-    // /**
-    //  * 비밀번호 변경/초기화 URL의 이메일 발송하기
-    //  *  - 비밀번호 변경 또는 초기화하는 URL을 해당 사용자의 이메일로 발송합니다
-    //  */
-    // sendUpdatePasswordEmail: (data: SendUpdatePasswordEmailData) =>
-    //     request({
-    //         method: 'PUT',
-    //         url: '/profile/password/sending-email-with-url',
-    //         data,
-    //     }),
+    /**
+     * 비밀번호 변경/초기화 URL의 이메일 발송하기
+     *  - 비밀번호 변경 또는 초기화하는 URL을 해당 사용자의 이메일로 발송합니다
+     */
+    sendUpdatePasswordEmail: (
+        data: SendUpdatePasswordEmailData,
+        options?: Options
+    ) => {
+        return request.put('profile/password/sending-email-with-url', {
+            json: data,
+            ...options,
+        });
+    },
 
-    // /**
-    //  * 해당 쇼핑몰 아이디, 이름, 이메일 검증하기
-    //  *  - 해당 쇼핑몰에 입력한 아이디, 이름, 이메일과 동일한 회원이 있는지 여부 확인합니다. true이면 회원이 존재합니다
-    //  */
-    // checkDuplicateMemberByEmail: (params: CheckDuplicateMemberByEmailParams) =>
-    //     request<CheckDuplicateMemberByEmailResponse>({
-    //         method: 'GET',
-    //         url: '/profile/member/equals/with-email',
-    //         params,
-    //     }),
+    /**
+     * 해당 쇼핑몰 아이디, 이름, 이메일 검증하기
+     *  - 해당 쇼핑몰에 입력한 아이디, 이름, 이메일과 동일한 회원이 있는지 여부 확인합니다. true이면 회원이 존재합니다
+     */
+    checkDuplicateMemberByEmail: (
+        params: CheckDuplicateMemberByEmailParams,
+        options?: Options
+    ) => {
+        return request.get<CheckDuplicateMemberByEmailResponse>(
+            'profile/member/equals/with-email',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
 
-    // /**
-    //  * 해당 쇼핑몰 아이디, 이름, 휴대폰 번호 검증하기
-    //  *  - 해당 쇼핑몰에 입력한 아이디, 이름, 휴대폰 번호와 동일한 사용자가 있는지 여부 확인합니다
-    //  *  - true이면 회원이 존재합니다
-    //  */
-    // checkDuplicateMemberByMobile: (
-    //     params: CheckDuplicateMemberByMobileParams
-    // ) =>
-    //     request<CheckDuplicateMemberByMobileResponse>({
-    //         method: 'GET',
-    //         url: '/profile/member/equals/with-mobile',
-    //         params,
-    //     }),
+    /**
+     * 해당 쇼핑몰 아이디, 이름, 휴대폰 번호 검증하기
+     *  - 해당 쇼핑몰에 입력한 아이디, 이름, 휴대폰 번호와 동일한 사용자가 있는지 여부 확인합니다
+     *  - true이면 회원이 존재합니다
+     */
+    checkDuplicateMemberByMobile: (
+        params: CheckDuplicateMemberByMobileParams,
+        options?: Options
+    ) => {
+        return request.get<CheckDuplicateMemberByMobileResponse>(
+            'profile/member/equals/with-mobile',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            }
+        );
+    },
 
-    // /**
-    //  * 본인인증 후 비밀번호 변경하기
-    //  *  - 로그인하지 않음 사용자의 비밀번호를 변경합니다
-    //  *  -  본인인증 후의 단계 이므로 이전단계인 본인인증 관련 API는 본인인증 API링크 참고 바랍니다
-    //  */
-    // updatePasswordByCertificationKey: (
-    //     data: UpdatePasswordByCertificationKeyData
-    // ) =>
-    //     request({
-    //         method: 'PUT',
-    //         url: '/profile/password/no-authentication/after-certification',
-    //         data,
-    //     }),
+    /**
+     * 본인인증 후 비밀번호 변경하기
+     *  - 로그인하지 않음 사용자의 비밀번호를 변경합니다
+     *  -  본인인증 후의 단계 이므로 이전단계인 본인인증 관련 API는 본인인증 API링크 참고 바랍니다
+     */
+    updatePasswordByCertificationKey: (
+        data: UpdatePasswordByCertificationKeyData,
+        options?: Options
+    ) => {
+        return request.put(
+            'profile/password/no-authentication/after-certification',
+            {
+                json: data,
+                ...options,
+            }
+        );
+    },
 
-    // /**
-    //  * 이메일 인증 후 패스워드 변경하기
-    //  *  - 로그인하지 않음 사용자의 비밀번호를 변경합니다
-    //  *  - 본인인증 후의 단계 이므로 이전단계인 본인인증 관련 API는 본인인증 API링크 참고 바랍니다
-    //  */
-    // updatePasswordByEmailCertification: (
-    //     data: UpdatePasswordByEmailCertificationData
-    // ) =>
-    //     request({
-    //         method: 'PUT',
-    //         url: '/profile/password/no-authentication/certificated-by-email',
-    //         data,
-    //     }),
-
-    // /**
-    //  * SMS 인증 후 패스워드 변경하기
-    //  *  - 로그인하지않은 사용자의 비밀번호를 변경합니다 (SMS 인증 사용)
-    //  */
-    // updatePasswordBySMSCertification: (
-    //     data: UpdatePasswordBySMSCertificationData
-    // ) =>
-    //     request({
-    //         method: 'PUT',
-    //         url: '/profile/password/no-authentication/certificated-by-sms',
-    //         data,
-    //     }),
+    /**
+     * 이메일 인증 후 패스워드 변경하기
+     *  - 로그인하지 않음 사용자의 비밀번호를 변경합니다
+     *  - 본인인증 후의 단계 이므로 이전단계인 본인인증 관련 API는 본인인증 API링크 참고 바랍니다
+     */
+    updatePasswordByEmailCertification: (
+        data: UpdatePasswordByEmailCertificationData,
+        options?: Options
+    ) => {
+        return request.put(
+            'profile/password/no-authentication/certificated-by-email',
+            {
+                json: data,
+                ...options,
+            }
+        );
+    },
+    /**
+     * SMS 인증 후 패스워드 변경하기
+     *  - 로그인하지않은 사용자의 비밀번호를 변경합니다 (SMS 인증 사용)
+     */
+    updatePasswordBySMSCertification: (
+        data: UpdatePasswordBySMSCertificationData,
+        options?: Options
+    ) => {
+        return request.put(
+            'profile/password/no-authentication/certificated-by-sms',
+            {
+                json: data,
+                ...options,
+            }
+        );
+    },
 };
 
 export default profile;
