@@ -19,6 +19,7 @@ export function SignupFormProvider({
             joinTermsAgreements: [],
             smsAgreed: false,
             directMailAgreed: false,
+            mobileNo: '01054413129',
         },
     });
 

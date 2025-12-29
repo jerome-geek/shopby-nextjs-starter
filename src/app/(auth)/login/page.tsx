@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Suspense } from '@suspensive/react';
 import { HTTPError, TimeoutError } from 'ky';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -17,9 +16,9 @@ import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { PATHS } from '@/const/paths';
 import useDialog from '@/hooks/useDialog';
+import useSnsLogin from '@/hooks/useSnsLogin';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import { css } from '@/styled-system/css';
-import useSnsLogin from '@/hooks/useSnsLogin';
 
 export default function LoginPage() {
     const { t } = useTranslation();
@@ -286,7 +285,7 @@ export default function LoginPage() {
                         className={css({
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 3,
+                            gap: '8px',
                         })}
                     >
                         {availableSocialLoginList.map(
@@ -299,7 +298,7 @@ export default function LoginPage() {
                                         onClick={() => onClick({ returnUrl })}
                                     >
                                         {Icon && <Icon />}
-                                        {label}
+                                        <span>{label}</span>
                                     </Button>
                                 );
                             }

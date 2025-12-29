@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import { OverlayProvider } from 'overlay-kit';
 
 import '@/app/globals.css';
-import Footer from '@/components/Footer';
+import Footer from '@/components/common/Footer';
 import GlobalErrorBoundary from '@/components/GlobalErrorBoundary';
-import Header from '@/components/Header';
-import MobileBottomNavigation from '@/components/MobileBottomNavigation';
+import Header from '@/components/common/Header';
+import MobileBottomNavigation from '@/components/common/MobileBottomNavigation';
 import QueryProvider from '@/providers/QueryProvider';
 import I18nProvider from '@/providers/I18nProvider';
 import { css } from '@/styled-system/css';

@@ -19,7 +19,7 @@ import {
     bottomSheetDimmedStyle,
     bottomSheetFooterStyle,
     bottomSheetHeaderStyle,
-} from '@/components/BottomSheetLayout.style';
+} from '@/components/layout/bottomSheet/index.style';
 
 export interface DefaultBottomSheetProps {
     overlayId?: string;

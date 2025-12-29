@@ -32,19 +32,19 @@ export default function Mobile() {
                 {isAuthenticationByPhone ? (
                     <>
                         <InputField
-                            readOnly
+                            // readOnly
                             inputMode="numeric"
                             value={mobileNo?.slice(0, 3) ?? ''}
                             tabIndex={-1}
                         />
                         <InputField
-                            readOnly
+                            // readOnly
                             inputMode="numeric"
                             value={mobileNo?.slice(3, 7) ?? ''}
                             tabIndex={-1}
                         />
                         <InputField
-                            readOnly
+                            // readOnly
                             inputMode="numeric"
                             value={mobileNo?.slice(7, 11) ?? ''}
                             tabIndex={-1}

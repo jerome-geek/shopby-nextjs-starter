@@ -1,6 +1,6 @@
 import BottomSheetLayout, {
     DefaultBottomSheetProps,
-} from '@/components/BottomSheetLayout';
+} from '@/components/layout/bottomSheet';
 
 export function ProductSearchBottomSheet(props: DefaultBottomSheetProps) {
     return (

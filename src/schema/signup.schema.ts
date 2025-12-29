@@ -71,7 +71,8 @@ const signupFormSchema = z
         state: z.string().optional(),
         groupNo: z.string().optional(),
         // TODO: 이메일 정규식 추가
-        email: z.email({ message: '이메일 형식이 올바르지 않습니다.' }),
+        // email: z.email({ message: '이메일 형식이 올바르지 않습니다.' }),
+        email: z.string().optional(),
         memberId: z.string().optional(),
         jibunDetailAddress: z.string().optional(),
         address: z.string().optional(),

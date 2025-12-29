@@ -11,9 +11,10 @@ import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import InputContainer from '@/components/ui/input/InputContainer';
 import { InputLabel } from '@/components/ui/input/label';
-import { SignupFormType } from '@/schema';
+import { SignupFormType, signupSubmitSchema } from '@/schema';
 import { css } from '@/styled-system/css';
 import { Email, ErrorMessage, Mobile } from '@/components/ui/form';
+import useProfile from '@/hooks/query/member/profile';
 
 export default function SignupFormPage() {
     const { t } = useTranslation();
@@ -26,6 +27,16 @@ export default function SignupFormPage() {
 
     const isSocialLogin = !!provider;
 
+    const { data: getSocialData } = useProfile({
+        headers: {
+            'Shop-By-Authorization': `Bearer ${accessToken}`,
+        },
+        options: {
+            enabled: !!accessToken,
+        },
+    });
+    console.log('🚀 ~ SignupFormPage ~ getSocialData:', getSocialData);
+
     const {
         register,
         reset,
@@ -34,11 +45,30 @@ export default function SignupFormPage() {
         watch,
         getValues,
         control,
-        formState: { isSubmitting },
+        formState: { errors, isSubmitting },
         handleSubmit,
     } = useFormContext<SignupFormType>();
+    console.log('🚀 ~ SignupFormPage ~ errors:', errors);
 
-    const onSubmit = handleSubmit((data) => {});
+    const onSubmit = handleSubmit(async (data) => {
+        console.log('🚀 ~ SignupFormPage ~ data:', data);
+        try {
+            const submitData = signupSubmitSchema.parse({
+                ...data,
+                // memberName: isKorean
+                //     ? data.memberName
+                //     : `${data.firstName}${data.lastName}`,
+                memberName: data.memberName,
+                // birthday: birthday || undefined,
+                // passwordConfirm: undefined,
+                // extraInfo: isEmpty(extraInfo) ? undefined : extraInfo,
+                // businessName: isBusiness ? data.businessName : undefined,
+            });
+            console.log('🚀 ~ SignupFormPage ~ submitData:', submitData);
+        } catch (error) {
+            console.log('🚀 ~ SignupFormPage ~ error:', error);
+        }
+    });
 
     return (
         <div
@@ -109,14 +139,14 @@ export default function SignupFormPage() {
                     </>
                 )}
 
-                <MemberJoinField name="memberId" label={t('이름')}>
+                <MemberJoinField name="memberName" label={t('이름')}>
                     <InputFieldContainer>
                         <InputField
-                            {...register('memberId')}
+                            {...register('memberName')}
                             type="text"
                             placeholder={t('영어 소문자, 숫자 사용 4~16자리')}
                         />
-                        <ErrorMessage name="memberId" />
+                        <ErrorMessage name="memberName" />
                     </InputFieldContainer>
                 </MemberJoinField>
 

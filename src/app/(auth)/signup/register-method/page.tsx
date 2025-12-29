@@ -1,23 +1,22 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
+import useSnsLogin from '@/hooks/useSnsLogin';
 import { css } from '@/styled-system/css';
 import { token } from '@/styled-system/tokens';
-import { useMall } from '@/hooks/suspenseQuery/admin/mall';
-import { NaverIcon } from '@/components/icons/login/Naver';
-import useSnsLogin from '@/hooks/useSnsLogin';
 
 export default function SignupRegisterMethodPage() {
     const { t } = useTranslation();
 
-    const { data } = useMall();
-    console.log('🚀 ~ SignupRegisterMethodPage ~ data:', data);
+    const { socialLoginList } = useSnsLogin();
+    const availableSocialLoginList = socialLoginList.filter(
+        ({ isAvailable }) => isAvailable
+    );
 
-    // data?.openIdJoinConfig에 따라서 SNS회원가입 노출할 것
     const router = useRouter();
     const onSignupButtonClick = () => {
         router.push(PATHS.SIGNUP.TERMS);
@@ -83,24 +82,23 @@ export default function SignupRegisterMethodPage() {
                         variant="primary"
                         onClick={onSignupButtonClick}
                     >
-                        <span>회원가입</span>
+                        <span>{t('회원가입')}</span>
                     </Button>
-                    <Button frame="solid" variant="kakao">
-                        카카오로 로그인
-                    </Button>
-                    <Button frame="solid" variant="naver">
-                        <NaverIcon />
-                        네이버로 로그인
-                    </Button>
-                    <Button frame="solid" variant="apple">
-                        애플로 로그인
-                    </Button>
-                    <Button frame="solid" variant="facebook">
-                        페이스북로 로그인
-                    </Button>
-                    <Button frame="solid" variant="line">
-                        라인로 로그인
-                    </Button>
+                    {availableSocialLoginList.map(
+                        ({ label, provider, onClick, Icon }) => {
+                            return (
+                                <Button
+                                    type="button"
+                                    frame="solid"
+                                    variant={provider}
+                                    onClick={() => onClick({ returnUrl: '' })}
+                                >
+                                    {Icon && <Icon />}
+                                    <span>{label}</span>
+                                </Button>
+                            );
+                        }
+                    )}
                 </div>
             </div>
         </div>
