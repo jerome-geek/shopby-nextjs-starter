@@ -1,24 +1,28 @@
 import { css } from '@/styled-system/css';
 
 import banner from '@/api/display/banner';
-import HeroBanner from '@/components/Banner/HeroBanner';
+import MainIconBanner from '@/components/Banner/IconBanner/Main';
+import SubIconBanner from '@/components/Banner/IconBanner/Sub';
 import { BANNER_CODES } from '@/const/banner/bannerCodes';
 import { getBannerContentList, sortAccounts } from '@/utils/banners';
 
-type HeroBannerSectionProps = {
+interface IconBannerSectionProps {
     /** 배너 섹션 코드 목록 */
     bannerCodes?: string[];
     /** 사용할 섹션 인덱스 */
     sectionIndex?: number;
     /** 사용할 Account 인덱스 */
     accountIndex?: number;
-};
+    /** 레이아웃 타입: 'main' | 'sub' */
+    type?: 'main' | 'sub';
+}
 
-const HeroBannerSection = async ({
-    bannerCodes = [BANNER_CODES.MAIN],
+const IconBannerSection = async ({
+    bannerCodes = [BANNER_CODES.MAIN_ICON],
     sectionIndex = 0,
     accountIndex = 0,
-}: HeroBannerSectionProps = {}) => {
+    type = 'main',
+}: IconBannerSectionProps = {}) => {
     try {
         const bannerResponse = await banner.getBanners(bannerCodes).json();
 
@@ -29,7 +33,7 @@ const HeroBannerSection = async ({
         }
 
         const sortedAccounts = sortAccounts(targetSection.accounts);
-        const targetAccount = sortedAccounts[accountIndex];
+        const targetAccount = sortedAccounts[accountIndex] || null;
 
         if (!targetAccount) {
             return null;
@@ -46,19 +50,24 @@ const HeroBannerSection = async ({
         return (
             <section
                 className={css({
-                    paddingY: { base: '12px', md: '24px' },
-                    overflow: 'hidden',
+                    margin: {
+                        base: type === 'main' ? '20px 0 0 0' : '0',
+                        md: type === 'main' ? '0 0 0 12px' : '0',
+                    },
                 })}
-                aria-label='메인 배너 섹션'
+                aria-label='메인 아이콘 배너 섹션'
             >
-                <HeroBanner banners={bannerItems} />
+                {type === 'main' ? (
+                    <MainIconBanner banners={bannerItems} />
+                ) : (
+                    <SubIconBanner banners={bannerItems} />
+                )}
             </section>
         );
     } catch (error) {
-        console.error('HeroBannerSection 오류 발생', error);
+        console.error('IconBannerSection 오류 발생', error);
         return null;
     }
 };
 
-export default HeroBannerSection;
-
+export default IconBannerSection;

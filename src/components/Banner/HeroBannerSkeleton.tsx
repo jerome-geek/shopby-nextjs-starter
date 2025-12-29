@@ -1,14 +1,10 @@
-'use client';
-
 import { css } from '@/styled-system/css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { BANNER_STYLES } from '@/const/banner/bannerStyles';
-
 const HeroBannerSkeleton = () => {
     return (
-        <>
+        <div>
             {/* 데스크탑 */}
             <div
                 className={css({
@@ -80,9 +76,7 @@ const HeroBannerSkeleton = () => {
                                         width: isCenter
                                             ? '84vw'
                                             : 'calc(84vw * 0.95)',
-                                        aspectRatio:
-                                            BANNER_STYLES.MAIN.COMMON
-                                                .aspectRatio,
+                                        aspectRatio: 4 / 5,
                                         overflow: 'hidden',
                                         flexShrink: 0,
                                         borderRadius: '12px',
@@ -105,7 +99,7 @@ const HeroBannerSkeleton = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

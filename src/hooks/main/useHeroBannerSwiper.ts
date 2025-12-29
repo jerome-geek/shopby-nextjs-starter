@@ -5,7 +5,6 @@ import type { Swiper as SwiperType } from 'swiper';
 import { Autoplay, EffectCoverflow, Navigation } from 'swiper/modules';
 import { SwiperOptions } from 'swiper/types';
 
-import { BANNER_STYLES } from '@/const/banner/bannerStyles';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { Banner } from '@/models/display/banner';
 
@@ -14,7 +13,7 @@ type UseHeroBannerSwiperProps = {
 };
 
 const AUTOPLAY_CONFIG = {
-    delay: BANNER_STYLES.MAIN.COMMON.autoplayDelay,
+    delay: 3000,
     disableOnInteraction: false,
     pauseOnMouseEnter: true,
 } as const;

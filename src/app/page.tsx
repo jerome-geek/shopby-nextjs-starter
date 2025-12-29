@@ -1,14 +1,13 @@
+import { getTranslation } from '@/i18n/server';
+import { css } from '@/styled-system/css';
 import Image from 'next/image';
 import { Suspense } from 'react';
 
 import HeroBannerSection from '@/components/Banner/HeroBannerSection';
 import HeroBannerSkeleton from '@/components/Banner/HeroBannerSkeleton';
-import { BANNER_STYLES } from '@/const/banner/bannerStyles';
-import { getTranslation } from '@/i18n/server';
-import { css } from '@/styled-system/css';
+import IconBannerSection from '@/components/Banner/IconBannerSection';
+import IconBannerSkeleton from '@/components/Banner/IconBannerSkeleton';
 import { isAuthenticated } from '@/utils/auth.server';
-
-// import IconBannerSection from '@/components/Banner/IconBannerSection';
 
 export default async function Home() {
     const { t } = await getTranslation();
@@ -17,66 +16,99 @@ export default async function Home() {
     console.log('🚀 ~ Home ~ isAuthenticated:', authStatus);
 
     return (
-        <div>
-            {/* Main Banner Section */}
-            <Suspense
-                fallback={
-                    <section
-                        className={css(BANNER_STYLES.MAIN.SECTION)}
-                        aria-label="메인 배너 섹션"
-                    >
-                        <HeroBannerSkeleton />
-                    </section>
+        <div
+            className={css({
+                display: 'flex',
+                flexDirection: 'column',
+                gap: { base: '48px' },
+            })}
+        >
+            {/* Banner Section */}
+            <div
+                className={
+                    css({
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: { base: '18px', md: '12px' },
+                        width: '100vw',
+                        marginX: 'calc(50% - 50vw)',
+                        overflow: 'hidden',
+                    }) + ' banner-container'
                 }
             >
-                <HeroBannerSection />
-            </Suspense>
-
-            {/* <Suspense fallback={<></>}>
-                <IconBannerSection />
-            </Suspense> */}
+                <Suspense
+                    fallback={
+                        <section
+                            className={css({
+                                paddingY: { base: '12px', md: '24px' },
+                                overflow: 'hidden',
+                            })}
+                            aria-label='메인 배너 섹션'
+                        >
+                            <HeroBannerSkeleton />
+                        </section>
+                    }
+                >
+                    <HeroBannerSection />
+                </Suspense>
+                <Suspense
+                    fallback={
+                        <section
+                            className={css({
+                                margin: {
+                                    base: '20px 0 0 0',
+                                    md: '0 0 0 12px',
+                                },
+                            })}
+                            aria-label='메인 아이콘 배너 섹션'
+                        >
+                            <IconBannerSkeleton />
+                        </section>
+                    }
+                >
+                    <IconBannerSection />
+                </Suspense>
+            </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex flex-col items-center justify-center min-h-[60vh] gap-8">
+            <div className='container mx-auto px-4 py-8'>
+                <div className='flex flex-col items-center justify-center min-h-[60vh] gap-8'>
                     <Image
-                        className="dark:invert"
-                        src="/next.svg"
-                        alt="Next.js logo"
+                        className='dark:invert'
+                        src='/next.svg'
+                        alt='Next.js logo'
                         width={180}
                         height={38}
                         priority
                     />
 
-                    <div className="text-center">
-                        <h1 className="text-4xl font-bold mb-4">{t('제목')}</h1>
-                        <p className="text-gray-600 dark:text-gray-400 mb-8">
+                    <div className='text-center'>
+                        <h1 className='text-4xl font-bold mb-4'>{t('제목')}</h1>
+                        <p className='text-gray-600 dark:text-gray-400 mb-8'>
                             {t('설명')}
                         </p>
                     </div>
 
-                    <div className="flex gap-4 items-center flex-col sm:flex-row">
+                    <div className='flex gap-4 items-center flex-col sm:flex-row'>
                         <a
-                            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-                            href="https://vercel.com/new"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            className='rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5'
+                            href='https://vercel.com/new'
+                            target='_blank'
+                            rel='noopener noreferrer'
                         >
                             {t('배포하기')}
                         </a>
 
                         <a
-                            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-                            href="https://nextjs.org/docs"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            className='rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5'
+                            href='https://nextjs.org/docs'
+                            target='_blank'
+                            rel='noopener noreferrer'
                         >
                             {t('문서읽기')}
                         </a>
                     </div>
                 </div>
-
-                {/* <BestProductList /> */}
 
                 {/* Suspense와 ErrorBoundary로 감싸진 팝업 */}
                 {/* <PopupWrapper
