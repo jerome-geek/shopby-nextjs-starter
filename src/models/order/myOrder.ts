@@ -15,7 +15,9 @@ import {
     FirstOrderAmount,
     LastOrderAmount,
     NextAction,
+    OrderDetailResponse,
     OrderOption,
+    OrderSummary,
     PayInfo,
 } from '@/models/order';
 
@@ -104,6 +106,8 @@ export interface GetOrderDetailParams {
     orderRequestType?: OrderRequestType;
 }
 
+export type GetOrderDetailResponse = OrderDetailResponse;
+
 export interface GetPreviousOrdersSummaryParams {
     /** 조회 시작일(yyyy-MM-dd), null인 경우 3개월 전 날짜로 조회 */
     startYmd?: Nullable<string>;
@@ -122,6 +126,8 @@ export interface GetOrderOptionStatusParams {
     /** 조회 종료일(yyyy-MM-dd), null인 경우 오늘 날짜로 조회 */
     endYmd?: Nullable<string>;
 }
+
+export type GetOrderOptionStatusResponse = OrderSummary;
 
 export interface GetOrderSummaryParams {
     /** 주문 상태 */
@@ -158,6 +164,42 @@ export interface GetOrderSummaryResponse {
 }
 
 export type GetOrderStatusSummaryParams = GetOrderOptionStatusParams;
+
+export interface GetOrderStatusSummaryResponse {
+    /**배송완료수 */
+    deliveryDoneCnt: number;
+    /**교환완료수 */
+    exchangeDoneCnt: number;
+    /**반품 진행중 수 */
+    returnProcessingCnt: number;
+    /**상품준비중수 */
+    productPrepareCnt: number;
+    /**배송중수 */
+    deliveryIngCnt: number;
+    /**취소 진행중 수 */
+    cancelProcessingCnt: number;
+    /**결제완료수 */
+    payDoneCnt: number;
+    /**배송준비중수 */
+    deliveryPrepareCnt: number;
+    /**
+     * 구매확정수
+     * - 구매확정수는 옵션단위로 카운트됩니다.
+     * - (ex) 한 번에 3개의 상품을 주문하는 경우: 1개의 상품을 구매확정하면 buyConfirmCnt는1, 모든 상품을 구매확정하면 buyConfirmCnt는 3.
+     * - (ex) 1개의 상품의 서로 다른 옵션을 각각 주문하는 경우: 주문한 옵션 개수에 따라 카운트.
+     * - 단, 동일 옵션 주문시 개수를 기준으로 카운트 되지 않습니다.
+     * - (ex) 특정 상품의 동일 옵션 1가지를 여러 개 주문하는 경우: buyConfirmCnt는 1
+     */
+    buyConfirmCnt: number;
+    /** 입금대기수 */
+    depositWaitCnt: number;
+    /** 취소완료수 */
+    cancelDoneCnt: number;
+    /** 반품완료수 */
+    returnDoneCnt: number;
+    /** 교환 진행중 수 */
+    exchangeProcessingCnt: number;
+}
 
 export interface ModifyCashReceiptData {
     /** 현금영수증 발급 키 타입 (nullable) */
@@ -198,6 +240,13 @@ export interface GetOrderDetailForClaimParams {
     orderRequestType?: OrderStatusType;
     /** 클레임타입 */
     claimType: ClaimType;
+}
+
+export type GetOrderDetailForClaimResponse = OrderDetailResponse;
+
+export interface UpdateDeliveryInformationParams {
+    /** 주소지 추가 여부 */
+    add?: boolean;
 }
 
 export interface UpdateDeliveryInformationData {

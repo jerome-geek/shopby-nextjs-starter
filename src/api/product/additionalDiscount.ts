@@ -15,12 +15,13 @@ const additionalDiscount = {
         searchParams: GetAdditionalDiscountParams,
         options?: Options
     ) => {
-        return request
-            .get('additional-discounts/by-product-no', {
+        return request.get<GetAdditionalDiscountResponse>(
+            'additional-discounts/by-product-no',
+            {
                 searchParams: { ...searchParams },
                 ...options,
-            })
-            .json<GetAdditionalDiscountResponse>();
+            }
+        );
     },
 };
 

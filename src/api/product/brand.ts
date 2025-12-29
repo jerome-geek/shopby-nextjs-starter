@@ -24,15 +24,13 @@ const brand = {
      *  - 상품에 매핑된 브랜드를 조회합니다.
      */
     getBrands: (params?: GetBrandsParams, options?: Options) => {
-        return request
-            .get<GetBrandsResponse>('brands', {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            })
-            .json();
+        return request.get<GetBrandsResponse>('brands', {
+            searchParams: qs.stringify(params, {
+                arrayFormat: 'comma',
+                allowDots: true,
+            }),
+            ...options,
+        });
     },
 
     /**

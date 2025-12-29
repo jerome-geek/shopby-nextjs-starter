@@ -1,4 +1,4 @@
-export interface NaverPayOrderSheetData {
+export interface WriteNaverPayOrderSheetData {
     /** 주문서 번호. items[].channelType 이 존재하는 경우 서버에서 주문서번호 생성함. (nullable) */
     orderSheetNo?: Nullable<string>;
     /** 쇼핑몰에서 사용 할 extraData (nullable) */
@@ -33,17 +33,17 @@ export interface NaverPayOrderSheetItem {
     additionalProductNo?: Nullable<number>;
 }
 
-export type ValidateNaverPayData = Omit<
+export type CheckNaverPayValidateData = Omit<
     NaverPayOrderSheetItem,
     'additionalProductNo'
 >;
 
-export interface ValidateNaverPayResponse {
+export interface CheckNaverPayValidateResponse {
     /** 검증 결과 */
     result: boolean;
 }
 
-export interface RequestNaverPayWishListData {
+export interface RegisterWishListData {
     /** 상품번호 */
     productNo: number;
 }

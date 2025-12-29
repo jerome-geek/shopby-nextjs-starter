@@ -107,7 +107,7 @@ export interface UpdateWishListData {
 }
 
 /** 위시 등록리스트 */
-export interface RegisterWishListData {
+export interface RegisterWishListDataItem {
     /** 구매개수 (nullable) */
     orderCnt?: Nullable<number>;
     /** 구매자 입력형 옵션 */
@@ -127,13 +127,24 @@ export interface RegisterWishListData {
     additionalProductNo?: Nullable<number>;
 }
 
+export type RegisterWishListData = RegisterWishListDataItem[];
+
 export interface RegisterWishListResponse {
     /** 회원의 총 Wish 상품수 (최대 100개 가능) */
     count: number;
 }
 
 export interface DeleteWishListParams {
-    /** TODO: API 문서상 number로 되어 있어 확인 필요 */
     /** 위 번호 */
     wishNos: string[];
+}
+
+export interface DeleteWishListResponse {
+    /** 회원의 총 Wish 상품수 (최대 100개 가능) */
+    count: number;
+}
+
+export interface GetWishListCountResponse {
+    /** 회원의 총 Wish 상품수 (최대 100개 가능) */
+    count: number;
 }
