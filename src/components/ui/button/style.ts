@@ -11,6 +11,7 @@ export const button = cva({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        gap: '8px',
         border: 'none',
         cursor: 'pointer',
         height: '52px',
@@ -35,13 +36,22 @@ export const button = cva({
                 color: '#000000',
                 backgroundColor: token('colors.kakao'),
             },
+            'kakao-sync': {
+                color: '#000000',
+                backgroundColor: token('colors.kakao'),
+            },
             naver: { color: '#ffffff', backgroundColor: token('colors.naver') },
-            apple: { color: '#000000', backgroundColor: token('colors.apple') },
+            apple: { color: '#ffffff', backgroundColor: token('colors.apple') },
             facebook: {
                 color: '#ffffff',
                 backgroundColor: token('colors.facebook'),
             },
             line: { color: '#ffffff', backgroundColor: token('colors.line') },
+            google: {
+                color: '#000000',
+                backgroundColor: token('colors.google'),
+                border: `1px solid ${token('colors.gray50')}`,
+            },
         },
     },
 });

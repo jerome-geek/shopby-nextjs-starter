@@ -6,7 +6,15 @@ export type BaseButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 // 각 버튼 타입별로 고유한 프롭스 정의
 export type SolidButtonProps = BaseButtonProps & {
     frame: 'solid'; // 🔑 타입 구분을 위한 discriminator!
-    variant: 'primary' | 'kakao' | 'naver' | 'apple' | 'facebook' | 'line';
+    variant:
+        | 'primary'
+        | 'kakao'
+        | 'kakao-sync'
+        | 'naver'
+        | 'apple'
+        | 'facebook'
+        | 'google'
+        | 'line';
     size?: 'large' | 'medium' | 'small';
     // solid 버튼만의 고유 프롭스들...
 };

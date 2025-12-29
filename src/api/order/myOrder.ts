@@ -6,6 +6,7 @@ import {
     GetOrderDetailForClaimParams,
     GetOrderDetailForClaimResponse,
     GetOrderDetailParams,
+    GetOrderDetailResponse,
     GetOrderListParams,
     GetOrderListResponse,
     GetOrderOptionStatusParams,

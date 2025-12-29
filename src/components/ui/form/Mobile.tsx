@@ -5,7 +5,7 @@ import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import InputField from '@/components/ui/input/field';
 import { css } from '@/styled-system/css';
 
-export function FormMobile() {
+export default function Mobile() {
     const { t } = useTranslation();
 
     const {

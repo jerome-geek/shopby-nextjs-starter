@@ -153,14 +153,15 @@ export default defineConfig({
                     white: { value: '#FFFFFF' },
                     pink: { value: '#FFDBE2' },
                     skyblue: { value: '#BDE0F5' },
-                    salmon: { value: 'FFE2CC' },
+                    salmon: { value: '#FFE2CC' },
                     kakao: {
                         value: '#fee500',
                     },
                     naver: { value: '#03c75a' },
-                    apple: { value: '#fff' },
+                    apple: { value: '#000000' },
                     facebook: { value: '#0766FF' },
                     line: { value: '#03C75A' },
+                    google: { value: '#ffffff' },
                 },
                 fonts: {
                     sans: {

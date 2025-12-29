@@ -1,13 +1,13 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/form';
+import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import InputField from '@/components/ui/input/field';
-import { css } from '@/styled-system/css';
 import Select from '@/components/ui/Select';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
+import { css } from '@/styled-system/css';
 
-const EmailForm = () => {
+export default function Email() {
     const { t } = useTranslation();
 
     const {
@@ -77,6 +77,4 @@ const EmailForm = () => {
             <ErrorMessage name="email" />
         </div>
     );
-};
-
-export default EmailForm;
+}

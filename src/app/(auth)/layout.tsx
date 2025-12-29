@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { Suspense } from '@suspensive/react';
+import { type ReactNode } from 'react';
 
 import { css } from '@/styled-system/css';
 
@@ -22,7 +23,7 @@ export default function AuthLayout({
                 justifyContent: 'center',
             })}
         >
-            {children}
+            <Suspense fallback={<div>로딩중...</div>}>{children}</Suspense>
         </div>
     );
 }

@@ -7,15 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import MemberJoinField from '@/components/auth/MemberJoinField';
 import { Button } from '@/components/ui/button';
-import EmailForm from '@/components/ui/form/Email';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
-import { FormMobile } from '@/components/ui/form/Mobile';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import InputContainer from '@/components/ui/input/InputContainer';
 import { InputLabel } from '@/components/ui/input/label';
 import { SignupFormType } from '@/schema';
 import { css } from '@/styled-system/css';
+import { Email, ErrorMessage, Mobile } from '@/components/ui/form';
 
 export default function SignupFormPage() {
     const { t } = useTranslation();
@@ -125,13 +123,13 @@ export default function SignupFormPage() {
                 {/* TODO: 휴대폰번호 */}
                 <MemberJoinField name="mobileNo" label={t('휴대폰번호')}>
                     <InputFieldContainer>
-                        <FormMobile />
+                        <Mobile />
                     </InputFieldContainer>
                 </MemberJoinField>
 
                 {/* TODO: 이메일 */}
                 <MemberJoinField name="email" label={t('이메일')}>
-                    <EmailForm />
+                    <Email />
                 </MemberJoinField>
 
                 {/* TODO: 성별 */}

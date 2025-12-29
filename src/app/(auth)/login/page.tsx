@@ -19,12 +19,13 @@ import { PATHS } from '@/const/paths';
 import useDialog from '@/hooks/useDialog';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import { css } from '@/styled-system/css';
+import useSnsLogin from '@/hooks/useSnsLogin';
 
-function LoginForm() {
+export default function LoginPage() {
     const { t } = useTranslation();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const returnUrl = searchParams.get('returnUrl');
+    const returnUrl = searchParams.get('returnUrl') || '';
 
     const { openDialog } = useDialog();
 
@@ -43,6 +44,11 @@ function LoginForm() {
         watch,
         formState: { isSubmitting },
     } = methods;
+
+    const { socialLoginList } = useSnsLogin();
+    const availableSocialLoginList = socialLoginList.filter(
+        ({ isAvailable }) => isAvailable
+    );
 
     const onSubmit = handleSubmit(async ({ memberId, password, isSaved }) => {
         try {
@@ -283,30 +289,24 @@ function LoginForm() {
                             gap: 3,
                         })}
                     >
-                        <Button type="button" frame="solid" variant="kakao">
-                            <span>{t('카카오로 로그인')}</span>
-                        </Button>
-                        <Button type="button" frame="solid" variant="naver">
-                            <span>{t('네이버로 로그인')}</span>
-                        </Button>
-                        <Button
-                            type="button"
-                            frame="outlined"
-                            variant="primary"
-                        >
-                            <span>{t('애플로 로그인')}</span>
-                        </Button>
+                        {availableSocialLoginList.map(
+                            ({ label, provider, onClick, Icon }) => {
+                                return (
+                                    <Button
+                                        type="button"
+                                        frame="solid"
+                                        variant={provider}
+                                        onClick={() => onClick({ returnUrl })}
+                                    >
+                                        {Icon && <Icon />}
+                                        {label}
+                                    </Button>
+                                );
+                            }
+                        )}
                     </div>
                 </div>
             </div>
         </FormProvider>
-    );
-}
-
-export default function LoginPage() {
-    return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <LoginForm />
-        </Suspense>
     );
 }

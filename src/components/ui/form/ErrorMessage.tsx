@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { css } from '@/styled-system/css';
 import { token } from '@/styled-system/tokens';
 
-interface Props {
+interface ErrorMessageProps {
     name: string;
 }
 
-const ErrorMessage = ({ name }: Props) => {
+export default function ErrorMessage({ name }: ErrorMessageProps) {
     const { t } = useTranslation();
 
     const {
@@ -33,6 +33,4 @@ const ErrorMessage = ({ name }: Props) => {
             )}
         />
     );
-};
-
-export default ErrorMessage;
+}

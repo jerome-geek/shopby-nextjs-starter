@@ -1,5 +1,5 @@
-export { default as ErrorMessage } from './ErrorMessage';
-export { default as FormField } from './FormField';
+import Email from '@/components/ui/form/Email';
+import Mobile from '@/components/ui/form/Mobile';
+import ErrorMessage from '@/components/ui/form/ErrorMessage';
 
-
-
+export { Email, Mobile, ErrorMessage };
