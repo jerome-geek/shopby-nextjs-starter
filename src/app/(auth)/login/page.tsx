@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { HTTPError, TimeoutError } from 'ky';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -15,8 +14,8 @@ import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { PATHS } from '@/const/paths';
-import useDialog from '@/hooks/useDialog';
 import useSnsLogin from '@/hooks/useSnsLogin';
+import useApiError from '@/hooks/useApiError';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import { css } from '@/styled-system/css';
 
@@ -26,7 +25,13 @@ export default function LoginPage() {
     const searchParams = useSearchParams();
     const returnUrl = searchParams.get('returnUrl') || '';
 
-    const { openDialog } = useDialog();
+    const links = [
+        { href: '/member/find-id', label: '아이디 찾기' },
+        { href: '/member/find-password', label: '비밀번호 찾기' },
+        { href: '/guest/login', label: '비회원 배송조회' },
+    ] as const;
+
+    const { handleError } = useApiError();
 
     const methods = useForm<LoginFormSchemaType>({
         resolver: zodResolver(loginFormSchema),
@@ -48,6 +53,7 @@ export default function LoginPage() {
     const availableSocialLoginList = socialLoginList.filter(
         ({ isAvailable }) => isAvailable
     );
+    const isSocialLoginVisible = availableSocialLoginList.length > 0;
 
     const onSubmit = handleSubmit(async ({ memberId, password, isSaved }) => {
         try {
@@ -68,35 +74,7 @@ export default function LoginPage() {
 
             router.push(returnUrl || PATHS.MAIN);
         } catch (error) {
-            if (error instanceof HTTPError) {
-                // Handle HTTP errors (e.g., 404 Not Found, 401 Unauthorized)
-                // const response = error.response;
-                // console.error(
-                //     `HTTP Error: ${response.status} - ${await response.text()}`
-                // );
-
-                const response = await error.response.json();
-                console.log('🚀 ~ LoginForm ~ response:', response);
-                openDialog({
-                    message: response.message,
-                });
-
-                // You can also check for specific status codes
-                if (response.status === 404) {
-                    console.error('User not found.');
-                }
-            } else if (error instanceof TimeoutError) {
-                // Handle request timeouts
-                console.error('Request timed out.');
-            } else if (error instanceof TypeError) {
-                // Handle network errors (e.g., no internet connection, unreachable URL)
-                console.error(
-                    'Network error or an issue with the request setup.'
-                );
-            } else {
-                // Handle other potential errors
-                console.error('An unknown error occurred:', error);
-            }
+            handleError(error);
         }
     });
 
@@ -104,35 +82,39 @@ export default function LoginPage() {
         <FormProvider {...methods}>
             <div
                 className={css({
-                    width: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 8,
+                    gap: '60px',
                 })}
             >
-                {/* 로그인 헤더 */}
-                <div className={css({ textAlign: 'center' })}>
-                    <h2
-                        className={css({
-                            fontSize: '3xl',
-                            fontWeight: 'bold',
-                            color: 'black',
-                        })}
-                    >
-                        {t('로그인')}
-                    </h2>
-                </div>
-
                 {/* 로그인 폼 */}
-                <div className={css({ backgroundColor: 'white' })}>
+                <div
+                    className={css({
+                        backgroundColor: 'white',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: { base: '24px', md: '32px' },
+                    })}
+                >
                     <form
                         className={css({
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 6,
+                            gap: { base: '16px', md: '20px' },
                         })}
                         onSubmit={onSubmit}
                     >
+                        {/* 로그인 헤더 */}
+                        <h1
+                            className={css({
+                                fontSize: '3xl',
+                                fontWeight: 'bold',
+                                color: 'black',
+                            })}
+                        >
+                            {t('로그인')}
+                        </h1>
+
                         {/* 아이디 입력 */}
                         <div
                             className={css({
@@ -199,6 +181,7 @@ export default function LoginPage() {
                             </InputLabel>
                         </div>
 
+                        {/* 버튼 컨테이너 */}
                         <div
                             className={css({
                                 display: 'flex',
@@ -230,58 +213,55 @@ export default function LoginPage() {
                         </div>
                     </form>
 
-                    {/* 하단 링크들 */}
-                    <div
+                    <ul
                         className={css({
-                            marginTop: 6,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            gap: 2,
+                            gap: '16px',
                             fontSize: 'sm',
+                            padding: 0,
+                            margin: 0,
+                            '& > li:not(:last-child)': {
+                                _after: {
+                                    content: '""',
+                                    position: 'absolute',
+                                    right: '-8.5px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    width: '1px',
+                                    height: { base: '10px', md: '12px' },
+                                    backgroundColor: 'gray.400',
+                                },
+                            },
                         })}
                     >
-                        <Link
-                            href="/find-id"
-                            className={css({
-                                color: 'gray.600',
-                                _hover: {
-                                    color: 'black',
-                                },
-                            })}
-                        >
-                            {t('아이디 찾기')}
-                        </Link>
-                        <span className={css({ color: 'gray.300' })}>|</span>
-                        <Link
-                            href="/find-password"
-                            className={css({
-                                color: 'gray.600',
-                                _hover: {
-                                    color: 'black',
-                                },
-                            })}
-                        >
-                            {t('비밀번호 찾기')}
-                        </Link>
-                        <span className={css({ color: 'gray.300' })}>|</span>
-                        <Link
-                            href="/non-member-delivery"
-                            className={css({
-                                color: 'gray.600',
-                                _hover: {
-                                    color: 'black',
-                                },
-                            })}
-                        >
-                            {t('비회원 배송조회')}
-                        </Link>
-                    </div>
+                        {links.map(({ href, label }) => (
+                            <li
+                                key={href}
+                                className={css({
+                                    position: 'relative',
+                                })}
+                            >
+                                <Link
+                                    href={href}
+                                    className={css({
+                                        color: 'gray.600',
+                                        _hover: {
+                                            color: 'black',
+                                        },
+                                    })}
+                                >
+                                    {t(label)}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
                 {/* 간편로그인 섹션 */}
-                <div className={css({ backgroundColor: 'white' })}>
-                    <div
+                {isSocialLoginVisible && (
+                    <ul
                         className={css({
                             display: 'flex',
                             flexDirection: 'column',
@@ -291,20 +271,24 @@ export default function LoginPage() {
                         {availableSocialLoginList.map(
                             ({ label, provider, onClick, Icon }) => {
                                 return (
-                                    <Button
-                                        type="button"
-                                        frame="solid"
-                                        variant={provider}
-                                        onClick={() => onClick({ returnUrl })}
-                                    >
-                                        {Icon && <Icon />}
-                                        <span>{label}</span>
-                                    </Button>
+                                    <li key={`social-login-button-${provider}`}>
+                                        <Button
+                                            type="button"
+                                            frame="solid"
+                                            variant={provider}
+                                            onClick={() =>
+                                                onClick({ returnUrl })
+                                            }
+                                        >
+                                            {Icon && <Icon />}
+                                            <span>{label}</span>
+                                        </Button>
+                                    </li>
                                 );
                             }
                         )}
-                    </div>
-                </div>
+                    </ul>
+                )}
             </div>
         </FormProvider>
     );

@@ -20,6 +20,7 @@ export function SignupFormProvider({
             smsAgreed: false,
             directMailAgreed: false,
             mobileNo: '01054413129',
+            birthday: '',
         },
     });
 

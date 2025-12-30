@@ -9,39 +9,37 @@ const isGlobalMall = env.NEXT_PUBLIC_LOCALE !== 'ko';
 
 const signupFormSchema = z
     .object({
-        birthYear: isGlobalMall
-            ? z.string().optional()
-            : z
-                  .string({
-                      error: '연도를 입력해주세요.',
-                  })
-                  .length(4, '연도는 4자리여야 합니다.')
-                  .refine((val) => {
-                      const year = parseInt(val);
-                      return year >= 1900 && year <= new Date().getFullYear();
-                  }, '유효한 연도를 입력해주세요.'),
-        birthMonth: isGlobalMall
-            ? z.string().optional()
-            : z
-                  .string({
-                      error: '월을 입력해주세요.',
-                  })
-                  .length(2, '월은 2자리여야 합니다.')
-                  .refine((val) => {
-                      const month = parseInt(val);
-                      return month >= 1 && month <= 12;
-                  }, '유효한 월을 입력해주세요.'),
-        birthDay: isGlobalMall
-            ? z.string().optional()
-            : z
-                  .string({
-                      error: '일을 입력해주세요.',
-                  })
-                  .length(2, '일은 2자리여야 합니다')
-                  .refine((val) => {
-                      const day = parseInt(val);
-                      return day >= 1 && day <= 31;
-                  }, '유효한 일을 입력해주세요'),
+        birthday: z
+            .string()
+            .optional()
+            .superRefine((val, ctx) => {
+                if (!val) return;
+
+                if (val.includes('_')) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: '생년월일을 모두 입력해주세요.',
+                    });
+                    return;
+                }
+
+                const y = parseInt(val.substring(0, 4), 10);
+                const m = parseInt(val.substring(4, 6), 10);
+                const d = parseInt(val.substring(6, 8), 10);
+
+                const date = new Date(y, m - 1, d);
+
+                if (
+                    date.getFullYear() !== y ||
+                    date.getMonth() !== m - 1 ||
+                    date.getDate() !== d
+                ) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: '존재하지 않는 날짜입니다.',
+                    });
+                }
+            }),
         lastName: isGlobalMall
             ? z.string().nonempty('성을 입력해주세요.')
             : z.string().optional(),

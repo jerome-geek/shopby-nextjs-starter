@@ -21,6 +21,9 @@ export default function AuthLayout({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                '& > *': {
+                    width: '100%',
+                },
             })}
         >
             <Suspense fallback={<div>로딩중...</div>}>{children}</Suspense>

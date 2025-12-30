@@ -49,13 +49,13 @@ export function GoogleIcon({ className }: { className?: string }) {
                     gradientUnits="userSpaceOnUse"
                     gradientTransform="translate(6.03944 13.8116) scale(6.46275 8.72374)"
                 >
-                    <stop offset="0.368" stop-color="#FFCF09" />
+                    <stop offset="0.368" stopColor="#FFCF09" />
                     <stop
                         offset="0.7176"
-                        stop-color="#FFCF09"
-                        stop-opacity="0.7"
+                        stopColor="#FFCF09"
+                        stopOpacity="0.7"
                     />
-                    <stop offset="1" stop-color="#FFCF09" stop-opacity="0" />
+                    <stop offset="1" stopColor="#FFCF09" stopOpacity="0" />
                 </radialGradient>
                 <radialGradient
                     id="paint1_radial_4570_25267"
@@ -65,13 +65,13 @@ export function GoogleIcon({ className }: { className?: string }) {
                     gradientUnits="userSpaceOnUse"
                     gradientTransform="translate(15.9493 21.4922) rotate(-7.12) scale(13.1375 9.97093)"
                 >
-                    <stop offset="0.3827" stop-color="#34A853" />
+                    <stop offset="0.3827" stopColor="#34A853" />
                     <stop
                         offset="0.7062"
-                        stop-color="#34A853"
-                        stop-opacity="0.7"
+                        stopColor="#34A853"
+                        stopOpacity="0.7"
                     />
-                    <stop offset="1" stop-color="#34A853" stop-opacity="0" />
+                    <stop offset="1" stopColor="#34A853" stopOpacity="0" />
                 </radialGradient>
                 <linearGradient
                     id="paint2_linear_4570_25267"
@@ -81,12 +81,8 @@ export function GoogleIcon({ className }: { className?: string }) {
                     y2="19.4184"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop offset="0.6711" stop-color="#4285F4" />
-                    <stop
-                        offset="0.8852"
-                        stop-color="#4285F4"
-                        stop-opacity="0"
-                    />
+                    <stop offset="0.6711" stopColor="#4285F4" />
+                    <stop offset="0.8852" stopColor="#4285F4" stopOpacity="0" />
                 </linearGradient>
             </defs>
         </svg>

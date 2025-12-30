@@ -15,9 +15,14 @@ import { SignupFormType, signupSubmitSchema } from '@/schema';
 import { css } from '@/styled-system/css';
 import { Email, ErrorMessage, Mobile } from '@/components/ui/form';
 import useProfile from '@/hooks/query/member/profile';
+import Birthday from '@/components/ui/form/Birthday';
+import useProfileMutation from '@/hooks/mutations';
+import useApiError from '@/hooks/useApiError';
 
 export default function SignupFormPage() {
     const { t } = useTranslation();
+
+    const { handleError } = useApiError();
 
     const searchParams = useSearchParams();
     const accessToken = searchParams.get('accessToken');
@@ -50,23 +55,45 @@ export default function SignupFormPage() {
     } = useFormContext<SignupFormType>();
     console.log('🚀 ~ SignupFormPage ~ errors:', errors);
 
+    const {
+        register: { mutateAsync: registerMutate },
+        openIdRegister: { mutateAsync: openIdRegisterMutate },
+    } = useProfileMutation();
+
     const onSubmit = handleSubmit(async (data) => {
-        console.log('🚀 ~ SignupFormPage ~ data:', data);
-        try {
-            const submitData = signupSubmitSchema.parse({
-                ...data,
-                // memberName: isKorean
-                //     ? data.memberName
-                //     : `${data.firstName}${data.lastName}`,
-                memberName: data.memberName,
-                // birthday: birthday || undefined,
-                // passwordConfirm: undefined,
-                // extraInfo: isEmpty(extraInfo) ? undefined : extraInfo,
-                // businessName: isBusiness ? data.businessName : undefined,
+        const submitData = signupSubmitSchema.safeParse({
+            ...data,
+            // memberName: isKorean
+            //     ? data.memberName
+            //     : `${data.firstName}${data.lastName}`,
+            memberName: data.memberName,
+            // birthday: birthday || undefined,
+            // passwordConfirm: undefined,
+            // extraInfo: isEmpty(extraInfo) ? undefined : extraInfo,
+            // businessName: isBusiness ? data.businessName : undefined,
+        });
+        console.log('🚀 ~ SignupFormPage ~ submitData:', submitData);
+
+        if (!submitData.success) {
+            // Iterate over the Zod issues and use setError to set individual field errors
+            submitData.error.issues.forEach((issue) => {
+                setError(issue.path[0] as keyof SignupFormType, {
+                    // Assuming path[0] is the field name
+                    type: 'manual',
+                    message: issue.message,
+                });
             });
-            console.log('🚀 ~ SignupFormPage ~ submitData:', submitData);
+            return;
+        } else {
+            // Success case: process data
+            console.log('Form submitted successfully:', submitData.data);
+        }
+
+        try {
+            const response = await registerMutate({ data: submitData.data });
+            console.log('성공:', response);
         } catch (error) {
-            console.log('🚀 ~ SignupFormPage ~ error:', error);
+            await handleError(error);
         }
     });
 
@@ -163,155 +190,154 @@ export default function SignupFormPage() {
                 </MemberJoinField>
 
                 {/* TODO: 성별 */}
-                {/* <MemberJoinField name="sex" label={t('성별')}> */}
-                <Controller
-                    name="sex"
-                    control={control}
-                    render={({ field: { onChange, value, ...rest } }) => {
-                        return (
-                            <RadioGroup.Root
-                                {...rest}
-                                value={value}
-                                onValueChange={onChange}
-                                disabled={!!watch('ci')}
-                                className={css({
-                                    display: 'flex',
-                                    gap: '16px',
-                                    fontSize: '1.4rem',
-                                })}
-                            >
-                                <label
+                <MemberJoinField name="sex" label={t('성별')}>
+                    <Controller
+                        name="sex"
+                        control={control}
+                        render={({ field: { onChange, value, ...rest } }) => {
+                            return (
+                                <RadioGroup.Root
+                                    {...rest}
+                                    value={value}
+                                    onValueChange={onChange}
+                                    disabled={!!watch('ci')}
                                     className={css({
                                         display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
+                                        gap: '16px',
+                                        fontSize: '1.4rem',
                                     })}
                                 >
-                                    <RadioGroup.Item
-                                        value="M"
-                                        id="M"
+                                    <label
                                         className={css({
-                                            width: '18px',
-                                            height: '18px',
-                                            borderRadius: '999',
-                                            border: `1px solid gray`,
-                                            // backgroundColor: 'white',
-                                            // width: '25px',
-                                            // height: '25px',
-                                            // borderRadius: '100%',
-                                            // boxShadow:
-                                            //     '0 2px 10px var(--black-a7)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px',
                                         })}
                                     >
-                                        <RadioGroup.Indicator
+                                        <RadioGroup.Item
+                                            value="M"
+                                            id="M"
                                             className={css({
-                                                // display: 'flex',
-                                                // alignItems: 'center',
-                                                // justifyContent: 'center',
-                                                // width: '100%',
-                                                // height: '100%',
-                                                // position: 'relative',
-                                                // _after: {
-                                                //     content: '""',
-                                                //     display: 'block',
-                                                //     width: '11px',
-                                                //     height: '11px',
-                                                //     borderRadius: '50%',
-                                                //     backgroundColor:
-                                                //         token('colors.black'),
-                                                // },
-                                                display: 'inline-block',
-                                                width: '100%',
-                                                height: '100%',
-                                                position: 'relative',
-                                                border: '6px solid black',
+                                                width: '18px',
+                                                height: '18px',
                                                 borderRadius: '999',
+                                                border: `1px solid gray`,
+                                                // backgroundColor: 'white',
+                                                // width: '25px',
+                                                // height: '25px',
+                                                // borderRadius: '100%',
+                                                // boxShadow:
+                                                //     '0 2px 10px var(--black-a7)',
                                             })}
-                                        />
-                                    </RadioGroup.Item>
+                                        >
+                                            <RadioGroup.Indicator
+                                                className={css({
+                                                    // display: 'flex',
+                                                    // alignItems: 'center',
+                                                    // justifyContent: 'center',
+                                                    // width: '100%',
+                                                    // height: '100%',
+                                                    // position: 'relative',
+                                                    // _after: {
+                                                    //     content: '""',
+                                                    //     display: 'block',
+                                                    //     width: '11px',
+                                                    //     height: '11px',
+                                                    //     borderRadius: '50%',
+                                                    //     backgroundColor:
+                                                    //         token('colors.black'),
+                                                    // },
+                                                    display: 'inline-block',
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    position: 'relative',
+                                                    border: '6px solid black',
+                                                    borderRadius: '999',
+                                                })}
+                                            />
+                                        </RadioGroup.Item>
 
-                                    <span
-                                    // type={
-                                    //     isMobile ? 't13' : 't15'
-                                    // }
-                                    // style={{
-                                    //     color: 'var(--color-gray-700)',
-                                    // }}
-                                    >
-                                        {t('남성')}
-                                    </span>
-                                </label>
-                                <label
-                                    className={css({
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                    })}
-                                >
-                                    <RadioGroup.Item
-                                        value="F"
-                                        id="F"
+                                        <span
+                                        // type={
+                                        //     isMobile ? 't13' : 't15'
+                                        // }
+                                        // style={{
+                                        //     color: 'var(--color-gray-700)',
+                                        // }}
+                                        >
+                                            {t('남성')}
+                                        </span>
+                                    </label>
+                                    <label
                                         className={css({
-                                            width: '18px',
-                                            height: '18px',
-                                            borderRadius: '999',
-                                            border: `1px solid gray`,
-                                            // backgroundColor: 'white',
-                                            // width: '25px',
-                                            // height: '25px',
-                                            // borderRadius: '100%',
-                                            // boxShadow:
-                                            //     '0 2px 10px var(--black-a7)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px',
                                         })}
                                     >
-                                        <RadioGroup.Indicator
+                                        <RadioGroup.Item
+                                            value="F"
+                                            id="F"
                                             className={css({
-                                                // display: 'flex',
-                                                // alignItems: 'center',
-                                                // justifyContent: 'center',
-                                                // width: '100%',
-                                                // height: '100%',
-                                                // position: 'relative',
-                                                // _after: {
-                                                //     content: '""',
-                                                //     display: 'block',
-                                                //     width: '11px',
-                                                //     height: '11px',
-                                                //     borderRadius: '50%',
-                                                //     backgroundColor:
-                                                //         token('colors.black'),
-                                                // },
-                                                display: 'inline-block',
-                                                width: '100%',
-                                                height: '100%',
-                                                position: 'relative',
-                                                border: '6px solid black',
+                                                width: '18px',
+                                                height: '18px',
                                                 borderRadius: '999',
+                                                border: `1px solid gray`,
+                                                // backgroundColor: 'white',
+                                                // width: '25px',
+                                                // height: '25px',
+                                                // borderRadius: '100%',
+                                                // boxShadow:
+                                                //     '0 2px 10px var(--black-a7)',
                                             })}
-                                        />
-                                    </RadioGroup.Item>
-                                    <span
-                                    // type={
-                                    //     isMobile ? 't13' : 't15'
-                                    // }
-                                    // style={{
-                                    //     color: 'var(--color-gray-700)',
-                                    // }}
-                                    >
-                                        {t('여성')}
-                                    </span>
-                                </label>
-                            </RadioGroup.Root>
-                        );
-                    }}
-                />
-                {/* </MemberJoinField> */}
+                                        >
+                                            <RadioGroup.Indicator
+                                                className={css({
+                                                    // display: 'flex',
+                                                    // alignItems: 'center',
+                                                    // justifyContent: 'center',
+                                                    // width: '100%',
+                                                    // height: '100%',
+                                                    // position: 'relative',
+                                                    // _after: {
+                                                    //     content: '""',
+                                                    //     display: 'block',
+                                                    //     width: '11px',
+                                                    //     height: '11px',
+                                                    //     borderRadius: '50%',
+                                                    //     backgroundColor:
+                                                    //         token('colors.black'),
+                                                    // },
+                                                    display: 'inline-block',
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    position: 'relative',
+                                                    border: '6px solid black',
+                                                    borderRadius: '999',
+                                                })}
+                                            />
+                                        </RadioGroup.Item>
+                                        <span
+                                        // type={
+                                        //     isMobile ? 't13' : 't15'
+                                        // }
+                                        // style={{
+                                        //     color: 'var(--color-gray-700)',
+                                        // }}
+                                        >
+                                            {t('여성')}
+                                        </span>
+                                    </label>
+                                </RadioGroup.Root>
+                            );
+                        }}
+                    />
+                </MemberJoinField>
 
                 {/* TODO: 생년월일 */}
-                <MemberJoinField
-                    name="birthday"
-                    label={t('생년월일')}
-                ></MemberJoinField>
+                <MemberJoinField name="birthday" label={t('생년월일')}>
+                    <Birthday />
+                </MemberJoinField>
             </form>
 
             <Button

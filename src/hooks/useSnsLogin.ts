@@ -1,4 +1,7 @@
+'use client';
+
 import { useMutation } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 // import { useLocalStorage } from 'usehooks-ts';
 
@@ -9,12 +12,14 @@ import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 import useDialog from '@/hooks/useDialog';
 import { NcpOpenIdProviderType } from '@/models';
 // import { shopbyTokenStorage } from '@/utils/storage';
-import { AppleIcon } from '@/components/icons/login/Apple';
-import { FacebookIcon } from '@/components/icons/login/Facebook';
-import { GoogleIcon } from '@/components/icons/login/Google';
-import { KakaoIcon } from '@/components/icons/login/Kakao';
-import { LineIcon } from '@/components/icons/login/Line';
-import { NaverIcon } from '@/components/icons/login/Naver';
+import {
+    AppleIcon,
+    FacebookIcon,
+    GoogleIcon,
+    KakaoIcon,
+    LineIcon,
+    NaverIcon,
+} from '@/components/icons/login';
 
 const useSnsLogin = () => {
     const { t } = useTranslation();
@@ -22,9 +27,8 @@ const useSnsLogin = () => {
     const { openDialog } = useDialog();
 
     // const { isInAppBrowser, isMyApp } = useMyApp();
-
-    const searchParams = new URLSearchParams(location.search);
-    const returnUrl = searchParams.get('returnUrl') as string;
+    const searchParams = useSearchParams();
+    const returnUrl = searchParams.get('returnUrl') || '';
 
     // const [, setOpenReturnUrl] = useLocalStorage(
     //     'openReturnUrl',
