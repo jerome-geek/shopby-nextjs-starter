@@ -1,21 +1,19 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
 import {
     entries,
-    every,
     filter,
     head,
     includes,
     map,
     pipe,
-    size,
     toArray,
 } from '@fxts/core';
 import { useRouter } from 'next/navigation';
 import { overlay } from 'overlay-kit';
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
@@ -27,10 +25,9 @@ import { OPT_IN_LIST, SIGN_UP_TERM_LIST } from '@/const/terms';
 import { useTermList } from '@/hooks/suspenseQuery/manage/terms';
 import useDialog from '@/hooks/useDialog';
 import { CreateProfileData } from '@/models/member/profile';
+import { SignupFormType } from '@/schema';
 import { css } from '@/styled-system/css';
 import { token } from '@/styled-system/tokens';
-import { ShopbyTermsTypes } from '@/models';
-import { SignupFormType } from '@/schema';
 
 export default function SignupTermsPage() {
     const { t } = useTranslation();
@@ -296,7 +293,6 @@ export default function SignupTermsPage() {
                             <InputLabel isCheckbox>
                                 <InputCheckbox
                                     id={type}
-                                    // checked={includes(type, checkedOptInList)}
                                     checked={
                                         type === 'smsAgreed'
                                             ? smsAgreedWatch
@@ -305,7 +301,6 @@ export default function SignupTermsPage() {
                                     onCheckedChange={() => onOptInClick(type)}
                                 />
                                 <p
-                                    // type={isMobile ? 't13' : 't15'}
                                     style={{
                                         color: 'var(--color-gray-700)',
                                     }}

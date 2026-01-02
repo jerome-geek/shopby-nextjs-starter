@@ -1,28 +1,44 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { RadioGroup } from 'radix-ui';
+import { useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { oauth2 } from '@/api/auth';
+import { cookieTokenManager } from '@/api/core';
 import MemberJoinField from '@/components/auth/MemberJoinField';
 import { Button } from '@/components/ui/button';
+import { Email, ErrorMessage, Mobile } from '@/components/ui/form';
+import Birthday from '@/components/ui/form/Birthday';
+import EmailAuthentication from '@/components/ui/form/EmailAuthentication';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import InputContainer from '@/components/ui/input/InputContainer';
 import { InputLabel } from '@/components/ui/input/label';
-import { SignupFormType, signupSubmitSchema } from '@/schema';
-import { css } from '@/styled-system/css';
-import { Email, ErrorMessage, Mobile } from '@/components/ui/form';
-import useProfile from '@/hooks/query/member/profile';
-import Birthday from '@/components/ui/form/Birthday';
-import useProfileMutation from '@/hooks/mutations';
+import { PATHS } from '@/const/paths';
+import { useProfileMutation } from '@/hooks/mutations';
+import { useMall } from '@/hooks/suspenseQuery/admin/mall';
+import { useProfile } from '@/hooks/query/member/profile';
 import useApiError from '@/hooks/useApiError';
+import { createSignupSubmitSchema, SignupFormType } from '@/schema';
+import { css } from '@/styled-system/css';
 
 export default function SignupFormPage() {
     const { t } = useTranslation();
 
     const { handleError } = useApiError();
+
+    const { data: mallData } = useMall();
+
+    const signupSubmitSchema = useMemo(() => {
+        return createSignupSubmitSchema({
+            requireEmailCertification:
+                mallData.mallJoinConfig.authenticationType ===
+                'AUTHENTICATION_BY_EMAIL',
+        });
+    }, [mallData]);
 
     const searchParams = useSearchParams();
     const accessToken = searchParams.get('accessToken');
@@ -37,7 +53,7 @@ export default function SignupFormPage() {
             'Shop-By-Authorization': `Bearer ${accessToken}`,
         },
         options: {
-            enabled: !!accessToken,
+            enabled: isSocialLogin,
         },
     });
     console.log('🚀 ~ SignupFormPage ~ getSocialData:', getSocialData);
@@ -60,7 +76,9 @@ export default function SignupFormPage() {
         openIdRegister: { mutateAsync: openIdRegisterMutate },
     } = useProfileMutation();
 
+    const router = useRouter();
     const onSubmit = handleSubmit(async (data) => {
+        console.log('🚀 ~ SignupFormPage ~ data:', data);
         const submitData = signupSubmitSchema.safeParse({
             ...data,
             // memberName: isKorean
@@ -76,7 +94,7 @@ export default function SignupFormPage() {
 
         if (!submitData.success) {
             // Iterate over the Zod issues and use setError to set individual field errors
-            submitData.error.issues.forEach((issue) => {
+            submitData.error.issues.forEach((issue: any) => {
                 setError(issue.path[0] as keyof SignupFormType, {
                     // Assuming path[0] is the field name
                     type: 'manual',
@@ -90,8 +108,24 @@ export default function SignupFormPage() {
         }
 
         try {
-            const response = await registerMutate({ data: submitData.data });
-            console.log('성공:', response);
+            await registerMutate({ data: submitData.data });
+
+            const data = await oauth2
+                .issueAccessToken({
+                    memberId: submitData.data.memberId,
+                    password: submitData.data.password,
+                    keepLogin: true,
+                })
+                .json();
+
+            cookieTokenManager.setToken({
+                accessToken: data.accessToken,
+                refreshToken: data.refreshToken,
+                expiresIn: data.expiresIn,
+                refreshTokenExpiresIn: data.refreshTokenExpiresIn,
+            });
+
+            router.push(PATHS.SIGNUP.COMPLETE);
         } catch (error) {
             await handleError(error);
         }
@@ -187,6 +221,7 @@ export default function SignupFormPage() {
                 {/* TODO: 이메일 */}
                 <MemberJoinField name="email" label={t('이메일')}>
                     <Email />
+                    <EmailAuthentication />
                 </MemberJoinField>
 
                 {/* TODO: 성별 */}
