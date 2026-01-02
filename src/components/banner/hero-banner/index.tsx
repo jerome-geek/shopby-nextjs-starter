@@ -1,10 +1,12 @@
 'use client';
 
 import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
+import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import HeroBannerItem from '@/components/Banner/HeroBanner/Item';
-import HeroBannerSkeleton from '@/components/Banner/HeroBannerSkeleton';
+import HeroBannerItem from '@/components/banner/hero-banner/Item';
+import HeroBannerSkeleton from '@/components/banner/hero-banner/Skeleton';
 import { BigCaretIcon, ControlIcon } from '@/components/icons';
 import { useHeroBannerSwiper } from '@/hooks/main/useHeroBannerSwiper';
 import { Banner } from '@/models/display/banner';
@@ -18,6 +20,8 @@ type HeroBannerProps = {
 };
 
 const HeroBanner = ({ banners }: HeroBannerProps) => {
+    const { t } = useTranslation();
+
     const {
         swiperKey,
         swiperOptions,
@@ -62,8 +66,8 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '12px',
-                        marginTop: '24px',
+                        gap: token('spacing.3'),
+                        marginTop: token('spacing.6'),
                     })}
                 >
                     <button
@@ -76,7 +80,7 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                             cursor: 'pointer',
                         })}`}
                         onClick={() => handleNavigationClick('prev')}
-                        aria-label='이전 배너'
+                        aria-label={t('이전 배너')}
                         type='button'
                     >
                         <BigCaretIcon className='left-icon' direction='left' />
@@ -88,8 +92,8 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                             fontWeight: '500',
                             lineHeight: '130%',
                             letterSpacing: '-0.013em',
-                            color: '#6b7280',
-                            minWidth: '48px',
+                            color: token('colors.gray80'),
+                            minWidth: token('spacing.12'),
                             textAlign: 'center',
                         })}
                     >
@@ -106,7 +110,7 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                             cursor: 'pointer',
                         })}`}
                         onClick={() => handleNavigationClick('next')}
-                        aria-label='다음 배너'
+                        aria-label={t('다음 배너')}
                         type='button'
                     >
                         <BigCaretIcon
@@ -119,8 +123,8 @@ const HeroBanner = ({ banners }: HeroBannerProps) => {
                         onClick={handleToggleAutoplay}
                         aria-label={
                             isAutoplayPaused
-                                ? '자동재생 시작'
-                                : '자동재생 일시정지'
+                                ? t('자동재생 시작')
+                                : t('자동재생 일시정지')
                         }
                         type='button'
                         className={css({

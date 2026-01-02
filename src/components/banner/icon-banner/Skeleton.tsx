@@ -1,4 +1,5 @@
 import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -15,15 +16,15 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                     className={css({
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '8px',
+                        gap: token('spacing.2'),
                     })}
                 >
                     {/* 모바일 */}
                     <div
                         className={css({
                             display: { base: 'flex', md: 'none' },
-                            gap: '8px',
-                            paddingX: '20px',
+                            gap: token('spacing.2'),
+                            paddingX: token('spacing.5'),
                             overflow: 'hidden',
                         })}
                     >
@@ -39,8 +40,8 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                     <div
                         className={css({
                             display: { base: 'flex', md: 'none' },
-                            gap: '8px',
-                            paddingX: '20px',
+                            gap: token('spacing.2'),
+                            paddingX: token('spacing.5'),
                             overflow: 'hidden',
                         })}
                     >
@@ -58,7 +59,7 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                         className={css({
                             display: { base: 'none', md: 'flex' },
                             justifyContent: 'center',
-                            gap: '8px',
+                            gap: token('spacing.2'),
                             flexWrap: 'nowrap',
                         })}
                     >
@@ -76,7 +77,7 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                         className={css({
                             display: { base: 'none', md: 'flex' },
                             justifyContent: 'center',
-                            gap: '8px',
+                            gap: token('spacing.2'),
                             flexWrap: 'nowrap',
                         })}
                     >
@@ -98,8 +99,8 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                         className={css({
                             display: { base: 'grid', md: 'none' },
                             gridTemplateColumns: 'repeat(4, 1fr)',
-                            gap: '12px 16px',
-                            paddingX: '20px',
+                            gap: `${token('spacing.3')} ${token('spacing.4')}`,
+                            paddingX: token('spacing.5'),
                         })}
                     >
                         {Array.from({ length: 8 }).map((_, index) => (
@@ -109,7 +110,7 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: { base: '2px', md: '4px' },
+                                    gap: { base: '2px', md: token('spacing.1') },
                                 })}
                             >
                                 <Skeleton
@@ -126,7 +127,7 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                         className={css({
                             display: { base: 'none', md: 'flex' },
                             justifyContent: 'center',
-                            gap: '12px 40px',
+                            gap: `${token('spacing.3')} ${token('spacing.10')}`,
                             flexWrap: 'wrap',
                         })}
                     >
@@ -138,7 +139,7 @@ const IconBannerSkeleton = ({ type = 'main' }: IconBannerSkeletonProps) => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: '4px',
+                                    gap: token('spacing.1'),
                                 })}
                             >
                                 <Skeleton

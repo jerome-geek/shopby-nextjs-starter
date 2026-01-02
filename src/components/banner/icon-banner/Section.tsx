@@ -1,8 +1,9 @@
+import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
 
 import banner from '@/api/display/banner';
-import MainIconBanner from '@/components/Banner/IconBanner/Main';
-import SubIconBanner from '@/components/Banner/IconBanner/Sub';
+import MainIconBanner from '@/components/banner/icon-banner/Main';
+import SubIconBanner from '@/components/banner/icon-banner/Sub';
 import { BANNER_CODES } from '@/const/banner/bannerCodes';
 import { getBannerContentList, sortAccounts } from '@/utils/banners';
 
@@ -23,6 +24,8 @@ const IconBannerSection = async ({
     accountIndex = 0,
     type = 'main',
 }: IconBannerSectionProps = {}) => {
+    const { t } = await getTranslation();
+    
     try {
         const bannerResponse = await banner.getBanners(bannerCodes).json();
 
@@ -55,7 +58,7 @@ const IconBannerSection = async ({
                         md: type === 'main' ? '0 0 0 12px' : '0',
                     },
                 })}
-                aria-label='메인 아이콘 배너 섹션'
+                aria-label={t('메인 아이콘 배너 섹션')}
             >
                 {type === 'main' ? (
                     <MainIconBanner banners={bannerItems} />
@@ -65,7 +68,7 @@ const IconBannerSection = async ({
             </section>
         );
     } catch (error) {
-        console.error('IconBannerSection 오류 발생', error);
+        console.error(t('메인 아이콘 배너 섹션 오류 발생'), error);
         return null;
     }
 };

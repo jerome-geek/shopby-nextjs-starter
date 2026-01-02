@@ -1,11 +1,12 @@
 'use client';
 
 import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import IconBannerItem from '@/components/Banner/IconBanner/Item';
-import IconBannerSkeleton from '@/components/Banner/IconBannerSkeleton';
+import IconBannerItem from '@/components/banner/icon-banner/Item';
+import IconBannerSkeleton from '@/components/banner/icon-banner/Skeleton';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { Banner } from '@/models/display/banner';
 import { splitBannersIntoTwoRows } from '@/utils/banners';
@@ -46,8 +47,8 @@ const SubIconBanner = ({ banners }: SubIconBannerProps) => {
                     className={css({
                         display: 'grid',
                         gridTemplateColumns: 'repeat(4, 1fr)',
-                        gap: '12px 16px',
-                        paddingX: '20px',
+                        gap: `${token('spacing.3')} ${token('spacing.4')}`,
+                        paddingX: token('spacing.5'),
                     })}
                 >
                     {banners.map((banner, index) => (
@@ -80,13 +81,13 @@ const SubIconBanner = ({ banners }: SubIconBannerProps) => {
                         className={css({
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: { base: '12px', md: '16px' },
+                            gap: { base: token('spacing.3'), md: token('spacing.4') },
                         })}
                     >
                         <ul
                             className={css({
                                 display: 'flex',
-                                gap: { base: '10px', md: '16px' },
+                                gap: { base: '10px', md: token('spacing.4') },
                             })}
                         >
                             {topRow.map((banner, index) => (
@@ -104,7 +105,7 @@ const SubIconBanner = ({ banners }: SubIconBannerProps) => {
                         <ul
                             className={css({
                                 display: 'flex',
-                                gap: { base: '10px', md: '16px' },
+                                gap: { base: '10px', md: token('spacing.4') },
                             })}
                         >
                             {bottomRow.map((banner, index) => (
@@ -131,7 +132,7 @@ const SubIconBanner = ({ banners }: SubIconBannerProps) => {
             className={css({
                 display: 'flex',
                 justifyContent: 'center',
-                gap: '12px 40px',
+                gap: `${token('spacing.3')} ${token('spacing.10')}`,
                 flexWrap: 'wrap',
             })}
         >

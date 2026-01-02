@@ -1,5 +1,7 @@
 import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import { Banner } from '@/models/display/banner';
 import { toBannerLinkAttributes } from '@/utils/banners';
@@ -11,6 +13,8 @@ type IconBannerItemProps = {
 };
 
 const IconBannerItem = ({ banner, type, index = 0 }: IconBannerItemProps) => {
+    const { t } = useTranslation();
+
     const linkProps = toBannerLinkAttributes(banner);
 
     if (type === 'main') {
@@ -18,7 +22,7 @@ const IconBannerItem = ({ banner, type, index = 0 }: IconBannerItemProps) => {
             <Link {...linkProps} className={css({ display: 'block' })}>
                 <img
                     src={banner.imageUrl}
-                    alt={banner.name || ''}
+                    alt={t(`${banner.name}`) || ''}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     className={css({
                         height: { base: '40px', md: '44px' },
@@ -37,7 +41,7 @@ const IconBannerItem = ({ banner, type, index = 0 }: IconBannerItemProps) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: { base: '2px', md: '4px' },
+                gap: { base: '2px', md: token('spacing.1') },
             })}
         >
             <div
@@ -50,7 +54,7 @@ const IconBannerItem = ({ banner, type, index = 0 }: IconBannerItemProps) => {
             >
                 <img
                     src={banner.imageUrl}
-                    alt={banner.name || ''}
+                    alt={t(`${banner.name}`) || ''}
                     className={css({
                         width: '100%',
                         height: '100%',
@@ -61,13 +65,13 @@ const IconBannerItem = ({ banner, type, index = 0 }: IconBannerItemProps) => {
             {banner.name && (
                 <span
                     className={css({
-                        fontSize: { base: '12px', md: '14px' },
+                        fontSize: { base: token('fontSizes.xs'), md: token('fontSizes.sm') },
                         fontWeight: '500',
                         textAlign: 'center',
                         whiteSpace: 'nowrap',
                     })}
                 >
-                    {banner.name}
+                    {t(`${banner.name}`)}
                 </span>
             )}
         </Link>

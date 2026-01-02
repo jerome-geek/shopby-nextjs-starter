@@ -1,12 +1,13 @@
 'use client';
 
 import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import { useMemo } from 'react';
 import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import IconBannerItem from '@/components/Banner/IconBanner/Item';
-import IconBannerSkeleton from '@/components/Banner/IconBannerSkeleton';
+import IconBannerItem from '@/components/banner/icon-banner/Item';
+import IconBannerSkeleton from '@/components/banner/icon-banner/Skeleton';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { Banner } from '@/models/display/banner';
 import { splitBannersIntoTwoRows } from '@/utils/banners';
@@ -50,7 +51,7 @@ const MainIconBanner = ({ banners }: MainIconBannerProps) => {
                 className={css({
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '8px',
+                    gap: token('spacing.2'),
                 })}
             >
                 {rows.map((row, rowIndex) => (
@@ -86,7 +87,7 @@ const MainIconBanner = ({ banners }: MainIconBannerProps) => {
             className={css({
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '8px',
+                gap: token('spacing.2'),
             })}
         >
             {rows.map((row, rowIndex) => (
@@ -95,7 +96,7 @@ const MainIconBanner = ({ banners }: MainIconBannerProps) => {
                     className={css({
                         display: 'flex',
                         justifyContent: 'center',
-                        gap: '8px',
+                        gap: token('spacing.2'),
                         flexWrap: 'nowrap',
                     })}
                 >

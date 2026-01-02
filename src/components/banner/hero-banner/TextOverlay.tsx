@@ -35,9 +35,9 @@ const BannerTextOverlay = ({
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-end',
-                paddingX: { base: '16px', md: '30px' },
-                paddingY: { base: '24px', md: '48px' },
-                gap: { base: '6px', md: '8px' },
+                paddingX: { base: token('spacing.4'), md: '30px' },
+                paddingY: { base: token('spacing.6'), md: token('spacing.12') },
+                gap: { base: '6px', md: token('spacing.2') },
             })}
         >
             {title && (

@@ -1,12 +1,12 @@
-import Image from 'next/image';
-import { Suspense } from '@suspensive/react';
-
 import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
-import HeroBannerSection from '@/components/Banner/HeroBannerSection';
-import HeroBannerSkeleton from '@/components/Banner/HeroBannerSkeleton';
-import IconBannerSection from '@/components/Banner/IconBannerSection';
-import IconBannerSkeleton from '@/components/Banner/IconBannerSkeleton';
+import { token } from '@/styled-system/tokens';
+import { Suspense } from '@suspensive/react';
+
+import HeroBannerSection from '@/components/banner/hero-banner/Section';
+import HeroBannerSkeleton from '@/components/banner/hero-banner/Skeleton';
+import IconBannerSection from '@/components/banner/icon-banner/Section';
+import IconBannerSkeleton from '@/components/banner/icon-banner/Skeleton';
 import { isAuthenticated } from '@/utils/auth.server';
 
 export default async function Home() {
@@ -20,7 +20,7 @@ export default async function Home() {
             className={css({
                 display: 'flex',
                 flexDirection: 'column',
-                gap: { base: '48px' },
+                gap: { base: token('spacing.12') },
             })}
         >
             {/* Banner Section */}
@@ -29,7 +29,7 @@ export default async function Home() {
                     css({
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: { base: '18px', md: '12px' },
+                        gap: { base: '18px', md: token('spacing.3') },
                         width: '100vw',
                         marginX: 'calc(50% - 50vw)',
                         overflow: 'hidden',
@@ -40,10 +40,10 @@ export default async function Home() {
                     fallback={
                         <section
                             className={css({
-                                paddingY: { base: '12px', md: '24px' },
+                                paddingY: { base: token('spacing.3'), md: token('spacing.6') },
                                 overflow: 'hidden',
                             })}
-                            aria-label="메인 배너 섹션"
+                            aria-label={t('메인 배너 섹션')}
                         >
                             <HeroBannerSkeleton />
                         </section>
@@ -60,7 +60,7 @@ export default async function Home() {
                                     md: '0 0 0 12px',
                                 },
                             })}
-                            aria-label="메인 아이콘 배너 섹션"
+                            aria-label={t('메인 아이콘 배너 섹션')}
                         >
                             <IconBannerSkeleton />
                         </section>

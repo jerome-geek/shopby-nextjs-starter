@@ -1,4 +1,5 @@
 import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -29,7 +30,7 @@ const HeroBannerSkeleton = () => {
                                     flexShrink: 0,
                                 })}
                             >
-                                <Skeleton height='100%' borderRadius={'24px'} />
+                                <Skeleton height='100%' borderRadius={token('spacing.6')} />
                             </div>
                         ))}
                     </div>
@@ -40,12 +41,12 @@ const HeroBannerSkeleton = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '12px',
-                        marginTop: '24px',
+                        gap: token('spacing.3'),
+                        marginTop: token('spacing.6'),
                     })}
                 >
                     <Skeleton width='24px' height='24px' borderRadius='50%' />
-                    <Skeleton width='48px' height='20px' borderRadius='4px' />
+                    <Skeleton width='48px' height='20px' borderRadius={token('spacing.1')} />
                     <Skeleton width='24px' height='24px' borderRadius='50%' />
                     <Skeleton width='24px' height='24px' borderRadius='50%' />
                 </div>
@@ -63,7 +64,7 @@ const HeroBannerSkeleton = () => {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            gap: '12px',
+                            gap: token('spacing.3'),
                         })}
                     >
                         {Array.from({ length: 3 }).map((_, index) => {
@@ -79,7 +80,7 @@ const HeroBannerSkeleton = () => {
                                         aspectRatio: 4 / 5,
                                         overflow: 'hidden',
                                         flexShrink: 0,
-                                        borderRadius: '12px',
+                                        borderRadius: token('spacing.3'),
                                         transform: isCenter
                                             ? 'scale(1)'
                                             : `scale(0.95)`,
@@ -89,7 +90,7 @@ const HeroBannerSkeleton = () => {
                                         width='100%'
                                         height='100%'
                                         style={{
-                                            borderRadius: '12px',
+                                            borderRadius: token('spacing.3'),
                                             display: 'block',
                                         }}
                                     />
