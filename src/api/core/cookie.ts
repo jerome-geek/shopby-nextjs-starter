@@ -72,7 +72,7 @@ export class CookieTokenManager {
         refreshTokenExpiresIn = 604800,
     }: {
         accessToken: string;
-        refreshToken: string;
+        refreshToken?: string;
         expiresIn?: number;
         refreshTokenExpiresIn?: number;
     }) {
@@ -81,10 +81,16 @@ export class CookieTokenManager {
         setCookie(this.ACCESS_TOKEN_KEY, accessToken, accessTokenOptions);
 
         // Refresh Token 저장
-        const refreshTokenOptions = this.getCookieOptions(
-            refreshTokenExpiresIn
-        );
-        setCookie(this.REFRESH_TOKEN_KEY, refreshToken, refreshTokenOptions);
+        if (refreshToken) {
+            const refreshTokenOptions = this.getCookieOptions(
+                refreshTokenExpiresIn
+            );
+            setCookie(
+                this.REFRESH_TOKEN_KEY,
+                refreshToken,
+                refreshTokenOptions
+            );
+        }
     }
 
     /**
@@ -279,6 +285,20 @@ export const getTokenFromAppRouter = async (): Promise<string | null> => {
         const cookieString = cookieStore.toString();
         const cookies = parseCookies(cookieString);
         return cookieTokenManager.getTokenFromServer(cookies);
+    } catch {
+        return null;
+    }
+};
+
+export const getRefreshTokenFromAppRouter = async (): Promise<
+    string | null
+> => {
+    try {
+        const { cookies: nextCookies } = await import('next/headers');
+        const cookieStore = await nextCookies();
+        const cookieString = cookieStore.toString();
+        const cookies = parseCookies(cookieString);
+        return cookieTokenManager.getRefreshTokenFromServer(cookies);
     } catch {
         return null;
     }

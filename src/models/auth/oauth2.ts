@@ -2,7 +2,11 @@ import { NcpOpenIdProviderType } from '@/models';
 
 export type UpdateAccessTokenResponse = Pick<
     IssueAccessTokenResponse,
-    'expiresIn' | 'accessToken' | 'tokenType'
+    | 'expiresIn'
+    | 'accessToken'
+    | 'tokenType'
+    | 'refreshToken'
+    | 'refreshTokenExpiresIn'
 >;
 
 export interface IssueAccessTokenData {
