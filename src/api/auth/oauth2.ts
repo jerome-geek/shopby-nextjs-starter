@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import request from '@/api/core/request';
+import { authRequest } from '@/api/core/request';
 import {
     IssueOpenIdAccessTokenData,
     IssueOpenIdAccessTokenResponse,
@@ -21,7 +21,7 @@ const oauth2 = {
      *  - ex) Shop-By-Authorization : Bearer test-access-token
      */
     updateAccessToken: (options?: Options) => {
-        return request.put<UpdateAccessTokenResponse>('oauth2', options);
+        return authRequest.put<UpdateAccessTokenResponse>('oauth2', options);
     },
 
     /**
@@ -32,7 +32,7 @@ const oauth2 = {
      *  - keepLogin을 true로 요청하면 리프레시 토큰 유효 기간을 90 일인 토큰이 생성됩니다.
      */
     issueAccessToken: (data: IssueAccessTokenData, options?: Options) => {
-        return request.post<IssueAccessTokenResponse>('oauth2', {
+        return authRequest.post<IssueAccessTokenResponse>('oauth2', {
             json: data,
             ...options,
         });
@@ -45,7 +45,7 @@ const oauth2 = {
      *  - ex) Shop-By-Authorization : Bearer test-access-token
      */
     deleteAccessToken: (options?: Options) => {
-        return request.delete('oauth2', options);
+        return authRequest.delete('oauth2', options);
     },
 
     /**
@@ -60,10 +60,13 @@ const oauth2 = {
         data: IssueOpenIdAccessTokenData,
         options?: Options
     ) => {
-        return request.put<RefreshOpenIdAccessTokenResponse>('oauth2/openid', {
-            json: data,
-            ...options,
-        });
+        return authRequest.put<RefreshOpenIdAccessTokenResponse>(
+            'oauth2/openid',
+            {
+                json: data,
+                ...options,
+            }
+        );
     },
 
     /**
@@ -76,10 +79,13 @@ const oauth2 = {
         data: IssueOpenIdAccessTokenData,
         options?: Options
     ) => {
-        return request.post<IssueOpenIdAccessTokenResponse>('oauth2/openid', {
-            json: data,
-            ...options,
-        });
+        return authRequest.post<IssueOpenIdAccessTokenResponse>(
+            'oauth2/openid',
+            {
+                json: data,
+                ...options,
+            }
+        );
     },
 };
 

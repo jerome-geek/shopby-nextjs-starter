@@ -1,8 +1,10 @@
-import { getCookie, setCookie, deleteCookie, OptionsType } from 'cookies-next';
-import { LocalStorageManager } from './localStorage';
-
-/**
-
+import {
+    getCookie,
+    setCookie,
+    deleteCookie,
+    hasCookie,
+    OptionsType,
+} from 'cookies-next';
 
 /**
  * 스토리지 키에 prefix를 추가하는 헬퍼 함수
@@ -12,17 +14,18 @@ function getStorageKey(key: string): string {
     return `${prefix}_${key}`;
 }
 
+/**
+ * 쿠키 기반 토큰 관리 클래스
+ * cookies-next 라이브러리를 사용하여 클라이언트/서버 환경을 통합 관리합니다.
+ */
 export class CookieTokenManager {
     private static instance: CookieTokenManager;
-    private readonly ACCESS_TOKEN_KEY: string;
-    private readonly REFRESH_TOKEN_KEY: string;
+    public readonly ACCESS_TOKEN_KEY: string;
+    public readonly REFRESH_TOKEN_KEY: string;
 
-    // 환경별 설정
-    private readonly isDevelopment = process.env.NODE_ENV === 'development';
     private readonly isProduction = process.env.NODE_ENV === 'production';
 
     private constructor() {
-        // prefix를 포함한 키 생성 (소문자 케밥 케이스로 통일)
         this.ACCESS_TOKEN_KEY = getStorageKey('access-token');
         this.REFRESH_TOKEN_KEY = getStorageKey('refresh-token');
     }
@@ -35,7 +38,7 @@ export class CookieTokenManager {
     }
 
     /**
-     * 쿠키 옵션 생성 (cookies-next 형식)
+     * 기본 쿠키 옵션 생성
      */
     private getCookieOptions(maxAge: number): OptionsType {
         return {
@@ -46,202 +49,155 @@ export class CookieTokenManager {
         };
     }
 
-    setAccessToken(token: string, expiresIn: number = 3600) {
-        const options = this.getCookieOptions(expiresIn);
-
-        setCookie(this.ACCESS_TOKEN_KEY, token, options);
-    }
-
     /**
-     * 리프레시 토큰을 쿠키에 저장 (cookies-next 사용)
+     * 토큰들을 쿠키에 저장
      */
-    setRefreshToken(refreshToken: string, expiresIn: number = 604800): void {
-        const options = this.getCookieOptions(expiresIn);
-
-        setCookie(this.REFRESH_TOKEN_KEY, refreshToken, options);
-    }
-
-    /**
-     * 토큰을 쿠키에 저장 (cookies-next 사용)
-     *  - accessToken, refreshToken, expiry를 모두 저장
-     */
-    setToken({
-        accessToken,
-        refreshToken,
-        expiresIn = 3600,
-        refreshTokenExpiresIn = 604800,
-    }: {
-        accessToken: string;
-        refreshToken: string;
-        expiresIn?: number;
-        refreshTokenExpiresIn?: number;
-    }) {
+    async setToken(
+        {
+            accessToken,
+            refreshToken,
+            expiresIn = 3600,
+            refreshTokenExpiresIn = 604800,
+        }: {
+            accessToken: string;
+            refreshToken?: string;
+            expiresIn?: number;
+            refreshTokenExpiresIn?: number;
+        },
+        options?: OptionsType
+    ) {
         // Access Token 저장
-        const accessTokenOptions = this.getCookieOptions(expiresIn);
-        setCookie(this.ACCESS_TOKEN_KEY, accessToken, accessTokenOptions);
+        await setCookie(this.ACCESS_TOKEN_KEY, accessToken, {
+            ...this.getCookieOptions(expiresIn),
+            ...options,
+        } as OptionsType);
 
         // Refresh Token 저장
-        const refreshTokenOptions = this.getCookieOptions(
-            refreshTokenExpiresIn
-        );
-        setCookie(this.REFRESH_TOKEN_KEY, refreshToken, refreshTokenOptions);
+        if (refreshToken) {
+            await setCookie(this.REFRESH_TOKEN_KEY, refreshToken, {
+                ...this.getCookieOptions(refreshTokenExpiresIn),
+                ...options,
+            } as OptionsType);
+        }
     }
 
     /**
-     * 저장된 토큰 가져오기 (클라이언트 사이드)
+     * 특정 키의 쿠키 값 가져오기 (클라이언트/서버 공용)
      */
-    getToken(): string | null {
-        if (typeof window === 'undefined') return null;
-        const value = getCookie(this.ACCESS_TOKEN_KEY);
+    async get(key: string, options?: OptionsType): Promise<string | null> {
+        const value = await getCookie(key, options);
         return value ? String(value) : null;
     }
 
     /**
-     * 저장된 리프레시 토큰 가져오기 (클라이언트 사이드)
+     * 액세스 토큰 가져오기
      */
-    getRefreshToken(): string | null {
-        if (typeof window === 'undefined') return null;
-        const value = getCookie(this.REFRESH_TOKEN_KEY);
-        return value ? String(value) : null;
+    async getToken(options?: OptionsType): Promise<string | null> {
+        return this.get(this.ACCESS_TOKEN_KEY, options);
     }
 
     /**
-     * 서버 사이드에서 토큰 가져오기
+     * 리프레시 토큰 가져오기
      */
-    getTokenFromServer(
-        cookies?: Record<string, string> | string | undefined
-    ): string | null {
-        if (!cookies) return null;
-
-        // cookies-next는 서버에서도 사용 가능하지만, 쿠키 객체를 직접 받을 수도 있음
-        if (typeof cookies === 'string') {
-            // 쿠키 문자열인 경우 파싱
-            const cookieObj = this.parseCookieString(cookies);
-            return cookieObj[this.ACCESS_TOKEN_KEY] || null;
-        }
-
-        if (typeof cookies === 'object') {
-            return cookies[this.ACCESS_TOKEN_KEY] || null;
-        }
-
-        return null;
+    async getRefreshToken(options?: OptionsType): Promise<string | null> {
+        return this.get(this.REFRESH_TOKEN_KEY, options);
     }
 
     /**
-     * 서버 사이드에서 리프레시 토큰 가져오기
+     * 토큰 존재 여부 확인
      */
-    getRefreshTokenFromServer(
-        cookies?: Record<string, string> | string | undefined
-    ): string | null {
-        if (!cookies) return null;
-
-        if (typeof cookies === 'string') {
-            const cookieObj = this.parseCookieString(cookies);
-            return cookieObj[this.REFRESH_TOKEN_KEY] || null;
-        }
-
-        if (typeof cookies === 'object') {
-            return cookies[this.REFRESH_TOKEN_KEY] || null;
-        }
-
-        return null;
-    }
-
-    /**
-     * 쿠키 문자열을 객체로 파싱
-     */
-    private parseCookieString(cookieString: string): Record<string, string> {
-        const cookies: Record<string, string> = {};
-        cookieString.split(';').forEach((cookie) => {
-            const [name, value] = cookie.trim().split('=');
-            if (name && value) {
-                cookies[name] = decodeURIComponent(value);
-            }
-        });
-        return cookies;
-    }
-
-    /**
-     * 토큰 만료 여부 확인 (클라이언트 사이드)
-     */
-    isTokenExpired() {
-        return this.getToken() === null;
-    }
-
-    /**
-     * 서버 사이드에서 토큰 만료 여부 확인
-     */
-    isTokenExpiredFromServer(
-        cookies?: Record<string, string> | string | undefined
-    ): boolean {
-        return this.getTokenFromServer(cookies) === null;
-    }
-
-    /**
-     * 토큰 유효성 검사 (클라이언트 사이드)
-     */
-    isTokenValid(): boolean {
-        const token = this.getToken();
-        return token !== null && !this.isTokenExpired();
-    }
-
-    /**
-     * 서버 사이드에서 토큰 유효성 검사
-     */
-    isTokenValidFromServer(
-        cookies?: Record<string, string> | string | undefined
-    ): boolean {
-        const token = this.getTokenFromServer(cookies);
-        return token !== null && !this.isTokenExpiredFromServer(cookies);
+    async hasToken(options?: OptionsType): Promise<boolean> {
+        return await hasCookie(this.ACCESS_TOKEN_KEY, options);
     }
 
     /**
      * 모든 토큰 제거
      */
-    clearTokens(): void {
-        deleteCookie(this.ACCESS_TOKEN_KEY);
-        deleteCookie(this.REFRESH_TOKEN_KEY);
+    async clearTokens(options?: OptionsType): Promise<void> {
+        const clearOptions = { ...options, path: '/' } as OptionsType;
+        await deleteCookie(this.ACCESS_TOKEN_KEY, clearOptions);
+        await deleteCookie(this.REFRESH_TOKEN_KEY, clearOptions);
     }
 
     /**
-     * 토큰 갱신
+     * [Legacy/Shim] 서버 사이드 수동 파싱 지원 (하위 호환성용)
      */
-    refreshToken(): void {
-        const refreshToken = this.getRefreshToken();
-        if (refreshToken) {
-            // 여기서 실제 토큰 갱신 API 호출 로직을 구현할 수 있습니다
-            // 예: this.apiClient.refreshToken(refreshToken)
+    getTokenFromServer(cookies?: any): string | null {
+        if (!cookies) return null;
+        if (typeof cookies === 'string') {
+            const parsed = parseCookies(cookies);
+            return parsed[this.ACCESS_TOKEN_KEY] || null;
         }
+        return cookies[this.ACCESS_TOKEN_KEY] || null;
+    }
+
+    getRefreshTokenFromServer(cookies?: any): string | null {
+        if (!cookies) return null;
+        if (typeof cookies === 'string') {
+            const parsed = parseCookies(cookies);
+            return parsed[this.REFRESH_TOKEN_KEY] || null;
+        }
+        return cookies[this.REFRESH_TOKEN_KEY] || null;
     }
 }
 
-// 싱글톤 인스턴스 exportsetToken
 export const cookieTokenManager = CookieTokenManager.getInstance();
 
-// Server Component에서 사용하기 위한 헬퍼 함수들
-export const getServerCookies = (
-    headers: Headers | Record<string, string> | string | undefined
-): string | undefined => {
-    if (typeof headers === 'string') {
-        return headers;
-    }
+/**
+ * Next.js App Router 전용 헬퍼 함수들
+ * cookies() API를 자동으로 주입하여 사용합니다.
+ */
 
-    if (headers instanceof Headers) {
-        return headers.get('cookie') || undefined;
-    }
+const getAppRouterContext = async () => {
+    if (typeof window !== 'undefined') return {};
+    const { cookies: nextCookies } = await import('next/headers');
+    // cookies-next 6.x expects the cookies function itself (unresolved) for Next.js 15
+    return { cookies: nextCookies as any };
+};
 
-    if (headers && typeof headers === 'object' && 'cookie' in headers) {
-        return headers.cookie;
+export const getTokenFromAppRouter = async (): Promise<string | null> => {
+    try {
+        const context = await getAppRouterContext();
+        return await cookieTokenManager.getToken(context);
+    } catch (error) {
+        console.error('❌ [Server] Failed to get token:', error);
+        return null;
     }
+};
 
-    return undefined;
+export const getRefreshTokenFromAppRouter = async (): Promise<
+    string | null
+> => {
+    try {
+        const context = await getAppRouterContext();
+        return await cookieTokenManager.getRefreshToken(context);
+    } catch {
+        return null;
+    }
+};
+
+export const isTokenValidFromAppRouter = async (): Promise<boolean> => {
+    try {
+        const token = await getTokenFromAppRouter();
+        return !!token;
+    } catch {
+        return false;
+    }
 };
 
 /**
- * 쿠키 문자열을 객체로 파싱
+ * [Optional] Header/Request 객체로부터 쿠키 추출 및 토큰 확인
+ */
+export const getTokenFromHeaders = (headers: Headers): string | null => {
+    const cookieString = headers.get('cookie');
+    return cookieTokenManager.getTokenFromServer(cookieString);
+};
+
+/**
+ * 쿠키 문자열을 객체로 파싱 (Legacy/Shim)
  */
 export const parseCookies = (
-    cookieString: string | undefined
+    cookieString: string | null | undefined
 ): Record<string, string> => {
     if (!cookieString) return {};
 
@@ -253,45 +209,4 @@ export const parseCookies = (
         }
     });
     return cookies;
-};
-
-export const getTokenFromHeaders = (
-    headers: Headers | Record<string, string> | string | undefined
-): string | null => {
-    const cookieString = getServerCookies(headers);
-    const cookies = parseCookies(cookieString);
-    return cookieTokenManager.getTokenFromServer(cookies);
-};
-
-export const isTokenValidFromHeaders = (
-    headers: Headers | Record<string, string> | string | undefined
-): boolean => {
-    const cookieString = getServerCookies(headers);
-    const cookies = parseCookies(cookieString);
-    return cookieTokenManager.isTokenValidFromServer(cookies);
-};
-
-// Next.js App Router용 헬퍼 함수
-export const getTokenFromAppRouter = async (): Promise<string | null> => {
-    try {
-        const { cookies: nextCookies } = await import('next/headers');
-        const cookieStore = await nextCookies();
-        const cookieString = cookieStore.toString();
-        const cookies = parseCookies(cookieString);
-        return cookieTokenManager.getTokenFromServer(cookies);
-    } catch {
-        return null;
-    }
-};
-
-export const isTokenValidFromAppRouter = async (): Promise<boolean> => {
-    try {
-        const { cookies: nextCookies } = await import('next/headers');
-        const cookieStore = await nextCookies();
-        const cookieString = cookieStore.toString();
-        const cookies = parseCookies(cookieString);
-        return cookieTokenManager.isTokenValidFromServer(cookies);
-    } catch {
-        return false;
-    }
 };

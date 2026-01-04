@@ -52,7 +52,7 @@ const coupon = {
      * 내 쿠폰 요약정보 가져오기
      *  - 로그인한 사용자가 보유한 쿠폰의 정보를 요약하여 조회합니다
      */
-    getCouponSummary: (params: GetCouponSummaryParams, options?: Options) => {
+    getCouponSummary: (params?: GetCouponSummaryParams, options?: Options) => {
         return request.get<GetCouponSummaryResponse>('coupons/summary', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',

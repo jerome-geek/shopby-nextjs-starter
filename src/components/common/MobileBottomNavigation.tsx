@@ -123,12 +123,13 @@ export default function MobileBottomNavigation() {
                 backgroundColor: 'white',
                 borderTop: '1px solid {colors.border}',
                 display: { base: 'flex', md: 'none' },
-                gap: '16px',
+                gap: '8px',
                 justifyContent: 'space-around',
                 alignItems: 'center',
-                paddingY: '10px 4px',
-                paddingX: '18px',
-                boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
+                paddingTop: '10px',
+                paddingBottom: 'calc(10px + env(safe-area-inset-bottom, 0px))',
+                paddingX: '8px',
+                boxShadow: '0 -2px 12px rgba(0, 0, 0, 0.08)',
             })}
         >
             {navItems.map((item) => {

@@ -1,55 +1,58 @@
-# next-intl 설정 가이드 (최종)
+# i18next 설정 가이드 (최종)
 
 ## 설치
 
 ```bash
-npm install next-intl
-# intlayer 제거 (선택사항)
-npm uninstall intlayer next-intlayer
+npm install i18next react-i18next i18next-resources-to-backend
 ```
 
 ## 설정 완료된 파일들
 
-1. ✅ `src/i18n.ts` - next-intl 설정 파일 (환경변수 기반)
-2. ✅ `next.config.ts` - next-intl 플러그인 추가
-3. ✅ `src/i18n/ko.json`, `src/i18n/en.json` - 번역 파일 (키는 한국어로 관리)
+1. ✅ `src/i18n/config.ts` - 클라이언트 사이드 i18next 설정 (react-i18next)
+2. ✅ `src/i18n/server.ts` - 서버 사이드용 `getTranslation` 유틸리티
+3. ✅ `src/providers/I18nProvider.tsx` - 클라이언트 컴포넌트용 Provider
+4. ✅ `src/i18n/ko.json`, `src/i18n/en.json` - 번역 리소스 파일
 
 ## 환경변수 설정
 
-도메인별로 배포할 때 환경변수로 locale 설정:
+도메인별/환경별로 `NEXT_PUBLIC_LOCALE`을 설정하여 언어를 결정합니다. (URL 라우팅 방식이 아님)
 
 ```bash
-# 한국어 도메인
+# 한국어 환경
 NEXT_PUBLIC_LOCALE=ko
 
-# 영어 도메인
+# 영어 환경
 NEXT_PUBLIC_LOCALE=en
 ```
 
 ## 사용 방법
 
-### 1. 클라이언트 컴포넌트에서 번역 사용
+### 1. 클라이언트 컴포넌트에서 사용
+
+`useTranslation` 훅을 사용합니다.
 
 ```tsx
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslation } from 'react-i18next';
 
-export default function MyComponent() {
-    const t = useTranslations();
-    
+export default function ClientComponent() {
+    const { t } = useTranslation();
+
     return <button>{t('로그인')}</button>;
 }
 ```
 
-### 2. 서버 컴포넌트에서 번역 사용 (권장)
+### 2. 서버 컴포넌트에서 사용 (권장)
+
+`getTranslation` 유틸리티 함수를 사용합니다 (async/await).
 
 ```tsx
-import { getTranslations } from 'next-intl/server';
+import { getTranslation } from '@/i18n/server';
 
 export default async function ServerComponent() {
-    const t = await getTranslations();
-    
+    const { t } = await getTranslation();
+
     return <h1>{t('환영합니다')}</h1>;
 }
 ```
@@ -57,69 +60,39 @@ export default async function ServerComponent() {
 ### 3. 현재 locale 가져오기
 
 ```tsx
-import { useLocale } from 'next-intl';
+// 클라이언트
+const { i18n } = useTranslation();
+console.log(i18n.language);
 
-export default function Component() {
-    const locale = useLocale(); // 'ko' or 'en'
-    return <div>Current locale: {locale}</div>;
-}
+// 서버
+const locale = process.env.NEXT_PUBLIC_LOCALE || 'ko';
 ```
 
-## Message 파일 구조
+## 번역 파일 구조
 
-키는 한국어로 관리하며, 값만 언어별로 다릅니다:
+키(Key)는 한국어로 관리하며, 값(Value)만 언어별로 다르게 작성합니다.
 
 ```json
 // src/i18n/ko.json
 {
     "로그인": "로그인",
-    "로그아웃": "로그아웃",
-    "제목": "제목",
-    "설명": "설명"
+    "로그아웃": "로그아웃"
 }
 
 // src/i18n/en.json
 {
     "로그인": "Login",
-    "로그아웃": "Logout",
-    "제목": "Welcome to Next.js!",
-    "설명": "Get started by editing src/app/page.tsx"
+    "로그아웃": "Logout"
 }
 ```
 
-## 특징
+## 특징 및 장점
 
-- ✅ **라우팅 없음**: URL에 locale이 포함되지 않음
-- ✅ **도메인별 배포**: 환경변수로 locale 결정
-- ✅ **한국어 키**: message 파일의 키는 한국어로 관리
-- ✅ **서버 컴포넌트 완벽 지원**: `getTranslations`로 서버 컴포넌트에서 사용 가능
-- ✅ **작은 번들 크기**: ~5KB (gzipped)
-- ✅ **타입 안전성**: TypeScript로 번역 키 타입 체크
-- ✅ **안정성**: 검증된 라이브러리, 큰 커뮤니티
-- ✅ **장기 유지보수**: 지속적인 업데이트와 지원
+-   ✅ **라우팅 독립적**: 정적 도메인 배포에 최적화 (URL에 /ko, /en이 붙지 않음)
+-   ✅ **서버 컴포넌트 지원**: `i18next` 인스턴스를 직접 생성하여 RSC에서도 안정적으로 동작
+-   ✅ **한국어 키 방식**: 개발 시 번역 키를 기억할 필요 없이 직관적으로 텍스트 작성 가능
+-   ✅ **유연한 확장성**: `Promise.all` 등을 활용한 병렬 데이터 페칭 중에도 안전하게 번역 수행
 
-## 구글 스프레드시트 연동 (추후 구현)
+## 스프레드시트 연동 가이드 (추후 계획)
 
-구글 스프레드시트에서 번역을 관리하려면:
-
-1. Google Sheets API 사용
-2. 스프레드시트 → JSON 변환 스크립트 작성
-3. CI/CD 파이프라인에 통합
-
-예시 스크립트:
-```typescript
-// scripts/sync-translations.ts
-// 구글 스프레드시트 → src/i18n/*.json 변환
-```
-
-## 문제 해결
-
-### 타입 에러 발생 시
-```bash
-npm install next-intl
-```
-
-### 번역이 적용되지 않을 때
-1. 환경변수 `NEXT_PUBLIC_LOCALE` 확인
-2. `src/i18n.ts` 파일 경로 확인
-3. JSON 파일 형식 확인
+현재는 JSON 파일을 직접 수정하지만, 추후 구글 스프레드시트 API를 연동하여 기획자/UI 디자이너가 직접 번역을 관리할 수 있도록 자동화 스크립트를 구축할 예정입니다.
