@@ -12,15 +12,10 @@ import { css } from '@/styled-system/css';
 // 약관 페이지는 자주 변경되지 않으므로 일주일 동안 캐싱합니다. (60초 * 60분 * 24시간 * 7일)
 export const revalidate = 60 * 60 * 24 * 7;
 
-interface TermsDetailPageProps {
-    params: Promise<{ termsType: string }>;
-    searchParams: Promise<{ termsNo?: string }>;
-}
-
 export default async function TermsDetailPage({
     params,
     searchParams,
-}: TermsDetailPageProps) {
+}: AppPageProps<'/terms/[termsType]'>) {
     const { termsType } = await params;
     const { termsNo } = await searchParams;
     const { t } = await getTranslation();

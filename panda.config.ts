@@ -241,6 +241,66 @@ export default defineConfig({
                     },
                 },
             },
+            recipes: {
+                text: {
+                    className: 'text',
+                    base: {
+                        fontFamily: 'sans',
+                        color: 'gray90',
+                        leadingTrim: 'none',
+                    },
+                    variants: {
+                        size: {
+                            title1: {
+                                fontSize: '2.2rem',
+                            },
+                            title2: {
+                                fontSize: '2rem',
+                                lineHeight: '1.4',
+                                letterSpacing: '-0.005em', // -0.5%
+                            },
+                            headline2: {
+                                fontSize: '1.5rem',
+                                lineHeight: '1.3',
+                                letterSpacing: '-0.013em', // -1.3%
+                            },
+                            heading: {
+                                fontSize: '1.7rem',
+                                lineHeight: '1.5',
+                                letterSpacing: '-0.013em', // -1.3%
+                            },
+                            caption: {
+                                fontSize: '1.2rem',
+                                lineHeight: '1.4',
+                                letterSpacing: '-0.002em', // -0.2%
+                            },
+                        },
+                        weight: {
+                            bold: { fontWeight: '700' },
+                            semibold: { fontWeight: '600' },
+                            medium: { fontWeight: '500' },
+                            regular: { fontWeight: '400' },
+                        },
+                        color: {
+                            primary: { color: 'primary' },
+                            secondary: { color: 'secondary' },
+                            red: { color: 'red' },
+                            black: { color: 'black' },
+                            gray90: { color: 'gray90' },
+                            gray80: { color: 'gray80' },
+                            gray70: { color: 'gray70' },
+                            gray60: { color: 'gray60' },
+                            gray50: { color: 'gray50' },
+                            gray20: { color: 'gray20' },
+                            gray10: { color: 'gray10' },
+                            white: { color: 'white' },
+                            pink: { color: 'pink' },
+                            skyblue: { color: 'skyblue' },
+                            salmon: { color: 'salmon' },
+                        },
+                    },
+                },
+            },
         },
     },
 });

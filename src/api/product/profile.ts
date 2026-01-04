@@ -16,7 +16,7 @@ import {
     GetMemberLikeBrandListResponse,
     GetRecentViewProductsParams,
     GetRecentViewProductsResponse,
-    RegisterRecentViewProductParams,
+    RegisterRecentViewProductData,
     ToggleLikeBrandsData,
     UpdateProductsLikeData,
     UpdateProductsLikeOldData,
@@ -110,7 +110,7 @@ const productProfile = {
      *  - 최근 본 50개 상품까지 서버에서 저장합니다
      */
     registerRecentViewProduct: (
-        data: RegisterRecentViewProductParams,
+        data: RegisterRecentViewProductData,
         options?: Options
     ) => {
         return request.post('profile/recent-products', {

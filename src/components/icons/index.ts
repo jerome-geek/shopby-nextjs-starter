@@ -14,6 +14,7 @@ import { InstagramIcon } from '@/components/icons/InstagramIcon';
 import { MenuIcon } from '@/components/icons/MenuIcon';
 import { SearchIcon } from '@/components/icons/SearchIcon';
 import { SmallCaretIcon } from '@/components/icons/SmallCaretIcon';
+import StarIcon from '@/components/icons/StarIcon';
 import { StarMiniIcon } from '@/components/icons/StarMiniIcon';
 import { UserIcon } from '@/components/icons/UserIcon';
 
@@ -36,4 +37,5 @@ export {
     SmallCaretIcon,
     StarMiniIcon,
     UserIcon,
+    StarIcon,
 };
