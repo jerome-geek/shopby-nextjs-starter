@@ -1,6 +1,9 @@
+import { map, pipe, range, toArray, toAsync } from '@fxts/core';
+
 import { myOrder } from '@/api/order';
 import { GetOrderListParams } from '@/models/order/myOrder';
-import { pipe, map, range, toArray, toAsync } from '@fxts/core';
+
+export const dynamic = 'force-dynamic';
 
 interface MypageOrdersPageProps {
     searchParams: Promise<GetOrderListParams>;

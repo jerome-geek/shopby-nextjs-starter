@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Price, ProductPrice } from '@/components/Product/Card/index.styled';
+import { Price, ProductPrice } from '@/components/product/Card/index.styled';
 import {
     HeartLikeFilledSmallIcon,
     HeartLikeSmallIcon,

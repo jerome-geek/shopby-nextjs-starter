@@ -1,14 +1,12 @@
 import { pipe, when } from '@fxts/core';
 
-import review from '@/api/display/review';
-import profile from '@/api/member/profile';
 import { orderConfiguration } from '@/api/order';
-import coupon from '@/api/promotion/coupon';
 import MyPageSidebar from '@/components/mypage/sidebar';
-import MyPageSummary from '@/components/mypage/summary';
 import { PATHS } from '@/const/paths';
 import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
+
+export const dynamic = 'force-dynamic';
 
 export default async function MyPageLayout({
     children,

@@ -9,6 +9,8 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 import { css } from '@/styled-system/css';
 
+export const dynamic = 'force-dynamic';
+
 export default function SignupCompletePage() {
     const { t } = useTranslation();
 

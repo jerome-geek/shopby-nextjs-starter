@@ -1,16 +1,18 @@
+import { map, pipe, range, toArray, toAsync } from '@fxts/core';
+
 import { category } from '@/api/display';
 import { product } from '@/api/product';
-import CategoryListTab from '@/components/Product/CategoryListTab';
-import NewProductList from '@/components/New/ProductList';
+import CategoryListTab from '@/components/product/CategoryListTab';
 import { PATHS } from '@/const/paths';
 import { GetBestSellerProductsParams } from '@/models/product/product';
-import { map, pipe, pipe1, range, toArray, toAsync } from '@fxts/core';
 
 interface BestProductsPageParams {
     pageNumber?: number;
     pageSize?: number;
     categoryNo?: number;
 }
+
+export const dynamic = 'force-dynamic';
 
 export default async function BestProductsPage(props: {
     searchParams: Promise<BestProductsPageParams>;

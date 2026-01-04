@@ -50,6 +50,20 @@ export class CookieTokenManager {
     }
 
     /**
+     * 서버 사이드 컨텍스트를 동적으로 가져옵니다 (Next.js 15 전용)
+     */
+    private async getServerContext(): Promise<OptionsType> {
+        if (typeof window !== 'undefined') return {};
+        try {
+            const { cookies } = await import('next/headers');
+            // cookies-next expects the cookies function itself as part of context in Next.js 15
+            return { cookies } as unknown as OptionsType;
+        } catch {
+            return {} as OptionsType;
+        }
+    }
+
+    /**
      * 토큰들을 쿠키에 저장
      */
     async setToken(
@@ -66,141 +80,119 @@ export class CookieTokenManager {
         },
         options?: OptionsType
     ) {
+        const context = await this.getServerContext();
+        const mergedOptions = { ...context, ...options } as OptionsType;
+
         // Access Token 저장
         await setCookie(this.ACCESS_TOKEN_KEY, accessToken, {
             ...this.getCookieOptions(expiresIn),
-            ...options,
+            ...mergedOptions,
         } as OptionsType);
 
         // Refresh Token 저장
         if (refreshToken) {
             await setCookie(this.REFRESH_TOKEN_KEY, refreshToken, {
                 ...this.getCookieOptions(refreshTokenExpiresIn),
-                ...options,
+                ...mergedOptions,
             } as OptionsType);
         }
-    }
-
-    /**
-     * 특정 키의 쿠키 값 가져오기 (클라이언트/서버 공용)
-     */
-    async get(key: string, options?: OptionsType): Promise<string | null> {
-        const value = await getCookie(key, options);
-        return value ? String(value) : null;
     }
 
     /**
      * 액세스 토큰 가져오기
      */
     async getToken(options?: OptionsType): Promise<string | null> {
-        return this.get(this.ACCESS_TOKEN_KEY, options);
+        const context = await this.getServerContext();
+        const value = await getCookie(this.ACCESS_TOKEN_KEY, {
+            ...context,
+            ...options,
+        } as OptionsType);
+        return value ? String(value) : null;
     }
 
     /**
      * 리프레시 토큰 가져오기
      */
     async getRefreshToken(options?: OptionsType): Promise<string | null> {
-        return this.get(this.REFRESH_TOKEN_KEY, options);
+        const context = await this.getServerContext();
+        const value = await getCookie(this.REFRESH_TOKEN_KEY, {
+            ...context,
+            ...options,
+        } as OptionsType);
+        return value ? String(value) : null;
     }
 
     /**
      * 토큰 존재 여부 확인
      */
     async hasToken(options?: OptionsType): Promise<boolean> {
-        return await hasCookie(this.ACCESS_TOKEN_KEY, options);
+        const context = await this.getServerContext();
+        return await hasCookie(this.ACCESS_TOKEN_KEY, {
+            ...context,
+            ...options,
+        } as OptionsType);
     }
 
     /**
      * 모든 토큰 제거
      */
     async clearTokens(options?: OptionsType): Promise<void> {
-        const clearOptions = { ...options, path: '/' } as OptionsType;
+        const context = await this.getServerContext();
+        const clearOptions = {
+            ...this.getCookieOptions(0),
+            ...context,
+            ...options,
+        } as OptionsType;
         await deleteCookie(this.ACCESS_TOKEN_KEY, clearOptions);
         await deleteCookie(this.REFRESH_TOKEN_KEY, clearOptions);
     }
 
     /**
-     * [Legacy/Shim] 서버 사이드 수동 파싱 지원 (하위 호환성용)
+     * 클라이언트 사이드 전용 동기 메서드 (UI 렌더링용)
      */
-    getTokenFromServer(cookies?: any): string | null {
-        if (!cookies) return null;
-        if (typeof cookies === 'string') {
-            const parsed = parseCookies(cookies);
-            return parsed[this.ACCESS_TOKEN_KEY] || null;
-        }
-        return cookies[this.ACCESS_TOKEN_KEY] || null;
+    getTokenSync(): string | null {
+        if (typeof window === 'undefined') return null;
+        const value = getCookie(this.ACCESS_TOKEN_KEY);
+        return value ? String(value) : null;
     }
 
-    getRefreshTokenFromServer(cookies?: any): string | null {
-        if (!cookies) return null;
-        if (typeof cookies === 'string') {
-            const parsed = parseCookies(cookies);
-            return parsed[this.REFRESH_TOKEN_KEY] || null;
-        }
-        return cookies[this.REFRESH_TOKEN_KEY] || null;
+    getRefreshTokenSync(): string | null {
+        if (typeof window === 'undefined') return null;
+        const value = getCookie(this.REFRESH_TOKEN_KEY);
+        return value ? String(value) : null;
+    }
+
+    isTokenValidSync(): boolean {
+        return !!this.getTokenSync();
     }
 }
 
 export const cookieTokenManager = CookieTokenManager.getInstance();
 
 /**
- * Next.js App Router 전용 헬퍼 함수들
- * cookies() API를 자동으로 주입하여 사용합니다.
+ * Next.js App Router용 헬퍼 함수들
  */
+export const getTokenFromAppRouter = () => cookieTokenManager.getToken();
+export const getRefreshTokenFromAppRouter = () =>
+    cookieTokenManager.getRefreshToken();
+export const isTokenValidFromAppRouter = async () =>
+    !!(await getTokenFromAppRouter());
 
-const getAppRouterContext = async () => {
-    if (typeof window !== 'undefined') return {};
-    const { cookies: nextCookies } = await import('next/headers');
-    // cookies-next 6.x expects the cookies function itself (unresolved) for Next.js 15
-    return { cookies: nextCookies as any };
+export const getServerCookies = async () => {
+    const { cookies } = await import('next/headers');
+    return cookies();
 };
 
-export const getTokenFromAppRouter = async (): Promise<string | null> => {
-    try {
-        const context = await getAppRouterContext();
-        return await cookieTokenManager.getToken(context);
-    } catch (error) {
-        console.error('❌ [Server] Failed to get token:', error);
-        return null;
-    }
-};
-
-export const getRefreshTokenFromAppRouter = async (): Promise<
-    string | null
-> => {
-    try {
-        const context = await getAppRouterContext();
-        return await cookieTokenManager.getRefreshToken(context);
-    } catch {
-        return null;
-    }
-};
-
-export const isTokenValidFromAppRouter = async (): Promise<boolean> => {
-    try {
-        const token = await getTokenFromAppRouter();
-        return !!token;
-    } catch {
-        return false;
-    }
-};
+export const getTokenFromHeaders = () => cookieTokenManager.getToken();
+export const isTokenValidFromHeaders = () => cookieTokenManager.hasToken();
 
 /**
- * [Optional] Header/Request 객체로부터 쿠키 추출 및 토큰 확인
- */
-export const getTokenFromHeaders = (headers: Headers): string | null => {
-    const cookieString = headers.get('cookie');
-    return cookieTokenManager.getTokenFromServer(cookieString);
-};
-
-/**
- * 쿠키 문자열을 객체로 파싱 (Legacy/Shim)
+ * 미들웨어 또는 옵션에서 직접 쿠키를 다룰 때 사용하는 헬퍼
  */
 export const parseCookies = (
     cookieString: string | null | undefined
 ): Record<string, string> => {
     if (!cookieString) return {};
-
     const cookies: Record<string, string> = {};
     cookieString.split(';').forEach((cookie) => {
         const [name, value] = cookie.trim().split('=');
