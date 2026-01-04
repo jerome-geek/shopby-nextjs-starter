@@ -11,8 +11,9 @@ export default async function Footer() {
 
         const navigation = {
             links: [
-                { label: '이용약관', href: '/terms' },
-                { label: '개인정보처리방침', href: '/privacy' },
+                { label: '이용약관', href: '/terms/USE' },
+                { label: '개인정보처리방침', href: '/terms/PI_PROCESS' },
+                // TODO: 이용안내의 경우 게시판 사용할 것
                 { label: '이용안내', href: '/guide' },
             ],
         };
