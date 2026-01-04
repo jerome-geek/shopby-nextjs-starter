@@ -137,20 +137,13 @@ const PATHS = {
         COUPONS: '/mypage/coupons',
 
         /** 마이페이지 > 적립금 */
-        ACCUMULATIONS: '/mypage/accumulation',
+        ACCUMULATIONS: '/mypage/accumulations',
 
         /** 마이페이지 > 위시리스트 */
         WISH: '/mypage/wish',
 
         /** 마이페이지 > 최근 본 상품 */
         RECENT_PRODUCTS: '/mypage/recent-products',
-
-        TESTER_APPLY: {
-            /** 마이페이지 > 체험단 활동 */
-            MAIN: '/mypage/tester-apply',
-            /** 마이페이지 > 체험단 활동 > 체험단 상세 */
-            DETAIL: '/mypage/tester-apply/:sno',
-        },
 
         /** 마이페이지 > 브랜드 */
         BRANDS: '/mypage/brands',

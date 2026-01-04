@@ -1,10 +1,13 @@
 'use client';
 
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
+import { cookieTokenManager } from '@/api/core/cookie';
 import { css, cx } from '@/styled-system/css';
+import { PATHS } from '@/const/paths';
 
 type MenuItem = {
     title: string;
@@ -23,17 +26,30 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
     const router = useRouter();
 
     const handleLogout = () => {
-        console.log('logout');
+        cookieTokenManager.clearTokens();
+        router.replace(PATHS.MAIN);
     };
 
     return (
         <aside
             className={css({
-                width: '180px',
                 flexShrink: 0,
                 position: 'sticky',
                 top: '100px',
                 height: 'fit-content',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap', // 텍스트 줄바꿈 원천 차단
+
+                // 1. 레이아웃 모션 (Panda CSS)
+                display: { base: 'none', md: 'block' },
+                width: { base: '0px', lg: '180px' },
+                opacity: { base: 0, lg: 1 },
+                transform: { base: 'translateX(-40px)', lg: 'translateX(0)' },
+                visibility: { base: 'hidden', lg: 'visible' },
+
+                transitionProperty: 'width, opacity, transform, visibility',
+                transitionDuration: '0.5s',
+                transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
             })}
         >
             <h2
@@ -54,6 +70,7 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                     border: 'none',
                     borderTop: '2px solid #000',
                     marginBottom: '30px',
+                    width: '180px', // 가로선 너비 고정
                 })}
             />
 
@@ -62,6 +79,7 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '40px',
+                    width: '180px', // 네비게이션 영역 너비 고정
                 })}
             >
                 {menuList.map((category, index) => (
@@ -92,6 +110,7 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                                                 href={item.url}
                                                 className={cx(
                                                     css({
+                                                        display: 'block',
                                                         fontSize: '14px',
                                                         color: '#999',
                                                         fontWeight: '500',
@@ -108,7 +127,19 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                                                         })
                                                 )}
                                             >
-                                                {item.title}
+                                                <motion.span
+                                                    whileHover={{ x: 5 }}
+                                                    transition={{
+                                                        type: 'spring',
+                                                        stiffness: 400,
+                                                        damping: 20,
+                                                    }}
+                                                    className={css({
+                                                        display: 'inline-block',
+                                                    })}
+                                                >
+                                                    {item.title}
+                                                </motion.span>
                                             </Link>
                                         ) : (
                                             <button
@@ -125,7 +156,19 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                                                     },
                                                 })}
                                             >
-                                                {item.title}
+                                                <motion.span
+                                                    whileHover={{ x: 5 }}
+                                                    transition={{
+                                                        type: 'spring',
+                                                        stiffness: 400,
+                                                        damping: 20,
+                                                    }}
+                                                    className={css({
+                                                        display: 'inline-block',
+                                                    })}
+                                                >
+                                                    {item.title}
+                                                </motion.span>
                                             </button>
                                         )}
                                     </li>
@@ -145,6 +188,7 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                     textDecoration: 'underline',
                     cursor: 'pointer',
                     textAlign: 'left',
+                    width: '180px', // 버튼 너비 고정
                     _hover: {
                         color: '#000',
                     },

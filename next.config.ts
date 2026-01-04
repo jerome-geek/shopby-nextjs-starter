@@ -22,7 +22,12 @@ const nextConfig: NextConfig = {
     },
     productionBrowserSourceMaps: process.env.NODE_ENV !== 'production',
     compress: true,
-    reactStrictMode: true,
+    reactStrictMode: false,
+    logging: {
+        fetches: {
+            fullUrl: true,
+        },
+    },
 };
 
 export default nextConfig;

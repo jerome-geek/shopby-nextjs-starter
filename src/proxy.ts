@@ -53,25 +53,31 @@ export function proxy(request: NextRequest) {
         // 쿠키에서 토큰 확인
         const cookieString = request.cookies.toString();
         const cookies = parseCookies(cookieString);
-        const isValid = cookieTokenManager.isTokenValidFromServer(cookies);
 
-        // 미로그인 상태면 로그인 페이지로 리다이렉트
-        if (!isValid) {
+        // Access Token뿐만 아니라 Refresh Token 존재 여부도 확인
+        const accessToken = cookieTokenManager.getTokenFromServer(cookies);
+        const refreshToken =
+            cookieTokenManager.getRefreshTokenFromServer(cookies);
+
+        // 두 토큰이 모두 없는 '완전한 미로그인' 상태일 때만 로그인 페이지로 리다이렉트
+        if (!accessToken && !refreshToken) {
             const loginUrl = new URL(PATHS.AUTH.LOGIN, request.url);
             loginUrl.searchParams.set('returnUrl', pathname);
 
             if (process.env.NODE_ENV === 'development') {
                 console.log(
-                    `[Middleware] Unauthorized access to ${pathname}, redirecting to login`
+                    `[Middleware] No tokens found for ${pathname}, redirecting to login`
                 );
             }
 
             return NextResponse.redirect(loginUrl);
         }
 
-        // 로그인된 사용자는 통과
+        // 토큰이 하나라도 있다면 통과 (만료된 Access Token인 경우 API 레이어의 refreshToken 훅에서 처리됨)
         if (process.env.NODE_ENV === 'development') {
-            console.log(`[Middleware] Authorized access to ${pathname}`);
+            console.log(
+                `[Middleware] Token exists for ${pathname}, allowing access for potential refresh`
+            );
         }
     }
 

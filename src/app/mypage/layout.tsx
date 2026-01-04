@@ -17,18 +17,8 @@ export default async function MyPageLayout({
 }) {
     const { t } = await getTranslation();
 
-    const [
-        orderConfigurationResult,
-        profileResult,
-        // couponsResult,
-        // reviewsResult,
-        // accumulationsResult
-    ] = await Promise.allSettled([
+    const [orderConfigurationResult] = await Promise.allSettled([
         orderConfiguration.getOrderConfigs().json(),
-        profile.getProfile().json(),
-        // coupon.getCouponSummary({}).json(), // 쿠폰 요약 정보 (장수 포함)
-        // review.getProductReviewListV2(0, { hasTotalCount: true }).json(), // 내 상품평 (작성한 수), productNo 0은 전체 조회(API 스펙 확인 필요하므로 임시) 혹은 my-product-reviews 사용
-        // profile.getAccumulations().json() // 적립금 (API 확인 필요)
     ]);
 
     const orderConfigurationData =
@@ -117,9 +107,9 @@ export default async function MyPageLayout({
             className={css({
                 maxWidth: '1280px',
                 margin: '0 auto',
-                padding: '40px 20px',
+                padding: { base: '24px 16px 80px', lg: '40px 20px' },
                 display: 'flex',
-                gap: '80px',
+                gap: { base: '0', lg: '80px' },
                 alignItems: 'flex-start',
             })}
         >

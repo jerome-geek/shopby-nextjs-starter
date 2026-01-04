@@ -10,7 +10,7 @@ interface OrderStatusProps {
     return?: number;
 }
 
-export default function OrderStatus({
+export default async function OrderStatus({
     depositPending = 0,
     shippingPending = 0,
     shipping = 0,
@@ -20,7 +20,9 @@ export default function OrderStatus({
     return: returnCount = 0,
 }: OrderStatusProps) {
     return (
-        <section className={css({ marginBottom: '60px' })}>
+        <section
+            className={css({ marginBottom: { base: '40px', md: '60px' } })}
+        >
             <div
                 className={css({
                     display: 'flex',
@@ -33,13 +35,13 @@ export default function OrderStatus({
             >
                 <h3
                     className={css({
-                        fontSize: '20px',
+                        fontSize: { base: '18px', md: '20px' },
                         fontWeight: 'bold',
                     })}
                 >
                     주문 현황
                 </h3>
-                <span className={css({ fontSize: '13px', color: '#888' })}>
+                <span className={css({ fontSize: '12px', color: '#888' })}>
                     최근 3개월 기준
                 </span>
             </div>
@@ -47,6 +49,7 @@ export default function OrderStatus({
             <div
                 className={css({
                     display: 'flex',
+                    flexDirection: { base: 'column', md: 'row' },
                     border: '1px solid #eee',
                     backgroundColor: '#fff',
                 })}
@@ -58,7 +61,8 @@ export default function OrderStatus({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-around',
-                        padding: '30px 0',
+                        padding: { base: '24px 0', md: '30px 0' },
+                        gap: { base: '2px', sm: '4px', md: '0' },
                     })}
                 >
                     <StatusStep
@@ -78,14 +82,15 @@ export default function OrderStatus({
                 {/* 취소/교환/반품 상태 */}
                 <div
                     className={css({
-                        width: '240px',
+                        width: { base: '100%', md: '240px' },
                         backgroundColor: '#f9f9f9',
                         display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        padding: '0 30px',
-                        gap: '12px',
-                        borderLeft: '1px solid #eee',
+                        flexDirection: { base: 'row', md: 'column' },
+                        justifyContent: { base: 'space-around', md: 'center' },
+                        padding: { base: '15px 10px', md: '0 30px' },
+                        gap: { base: '20px', md: '12px' },
+                        borderLeft: { base: 'none', md: '1px solid #eee' },
+                        borderTop: { base: '1px solid #eee', md: 'none' },
                     })}
                 >
                     <SubStatusItem label="취소" count={cancel} />
@@ -111,7 +116,8 @@ function StatusStep({
             className={css({
                 display: 'flex',
                 alignItems: 'center',
-                position: 'relative',
+                flex: 1,
+                justifyContent: 'center',
             })}
         >
             <div
@@ -119,19 +125,19 @@ function StatusStep({
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '12px',
+                    gap: { base: '8px', md: '12px' },
                 })}
             >
                 <div
                     className={css({
-                        width: '70px',
-                        height: '70px',
+                        width: { base: '60px', sm: '64px', md: '70px' },
+                        height: { base: '60px', sm: '64px', md: '70px' },
                         borderRadius: '50%',
                         backgroundColor: '#f5f5f5',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '24px',
+                        fontSize: { base: '18px', md: '24px' },
                         fontWeight: 'bold',
                         color: count > 0 ? '#000' : '#aaa', // 숫자가 있으면 검정, 0이면 회색
                     })}
@@ -140,9 +146,11 @@ function StatusStep({
                 </div>
                 <span
                     className={css({
-                        fontSize: '14px',
+                        fontSize: { base: '11px', sm: '12px', md: '14px' },
                         color: '#333',
                         fontWeight: '500',
+                        textAlign: 'center',
+                        wordBreak: 'keep-all',
                     })}
                 >
                     {label}
@@ -152,10 +160,15 @@ function StatusStep({
             {hasArrow && (
                 <div
                     className={css({
-                        fontSize: '18px',
+                        fontSize: { base: '12px', md: '18px' },
                         color: '#ddd',
-                        marginLeft: '40px', // 화살표 간격 조정
-                        marginBottom: '30px', // 텍스트 높이 고려하여 살짝 위로
+                        marginLeft: { base: '2px', sm: '8px', md: '20px' },
+                        marginRight: { base: '2px', sm: '8px', md: '0' },
+                        // 화살표를 동그라미 높이에 맞춰 정렬
+                        transform: {
+                            base: 'translateY(-10px)',
+                            md: 'translateY(-15px)',
+                        },
                     })}
                 >
                     {'>'}
@@ -170,10 +183,13 @@ function SubStatusItem({ label, count }: { label: string; count: number }) {
         <div
             className={css({
                 display: 'flex',
+                flexDirection: { base: 'column', md: 'row' },
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                fontSize: '13px',
+                fontSize: { base: '12px', md: '13px' },
                 color: '#666',
+                gap: { base: '4px', md: '0' },
+                flex: { base: 1, md: 'none' },
             })}
         >
             <span>{label}</span>
@@ -181,6 +197,7 @@ function SubStatusItem({ label, count }: { label: string; count: number }) {
                 className={css({
                     fontWeight: count > 0 ? 'bold' : 'normal',
                     color: count > 0 ? '#000' : '#888',
+                    fontSize: { base: '14px', md: '13px' },
                 })}
             >
                 {count}

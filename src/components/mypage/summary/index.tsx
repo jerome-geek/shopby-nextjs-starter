@@ -1,34 +1,52 @@
+import dayjs from 'dayjs';
 import Link from 'next/link';
 
+import { accumulation } from '@/api/manage';
+import { getCachedProfile } from '@/api/member/profile.server';
+import { coupon } from '@/api/promotion';
+import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
+import { KRW } from '@/utils/currency';
 
 interface MyPageSummaryProps {
-    memberName?: string;
     gradeLabel?: string;
-    accumulationAmt?: number;
-    couponCount?: number;
     reviewCount?: number;
 }
 
-export default function MyPageSummary({
-    memberName = '홍길동',
+export default async function MyPageSummary({
     gradeLabel = 'WELCOME',
-    accumulationAmt = 12500,
-    couponCount = 3,
     reviewCount = 5,
 }: MyPageSummaryProps) {
+    const { t } = await getTranslation();
+
+    const [profileData, accumulationData, couponData] = await Promise.all([
+        getCachedProfile(),
+        accumulation
+            .getAccumulationSummary({
+                expireStartYmdt: dayjs()
+                    .subtract(3, 'month')
+                    .format('YYYY-MM-DD HH:mm:ss'),
+                expireEndYmdt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+            })
+            .json(),
+        coupon.getCouponSummary().json(),
+    ]);
+    console.log('🚀 ~ MyPageSummary ~ profileData:', profileData);
+
     return (
         <section
             className={css({
                 width: '100%',
                 backgroundColor: '#111',
                 borderRadius: '8px',
-                padding: '30px 40px',
+                padding: { base: '20px', md: '30px 40px' },
                 color: '#fff',
                 display: 'flex',
-                alignItems: 'center',
+                flexDirection: { base: 'column', md: 'row' },
+                alignItems: { base: 'flex-start', md: 'center' },
                 justifyContent: 'space-between',
-                marginBottom: '40px',
+                marginBottom: { base: '30px', md: '40px' },
+                gap: { base: '20px', md: '0' },
             })}
         >
             {/* 왼쪽: 회원 정보 */}
@@ -37,9 +55,12 @@ export default function MyPageSummary({
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '4px',
-                    paddingRight: '40px',
-                    borderRight: '1px solid #333',
-                    minWidth: '200px',
+                    paddingRight: { base: '0', md: '40px' },
+                    paddingBottom: { base: '20px', md: '0' },
+                    borderRight: { base: 'none', md: '1px solid #333' },
+                    borderBottom: { base: '1px solid #333', md: 'none' },
+                    minWidth: { base: '100%', md: '200px' },
+                    width: { base: '100%', md: 'auto' },
                 })}
             >
                 <div
@@ -61,7 +82,9 @@ export default function MyPageSummary({
                         fontWeight: 'bold',
                     })}
                 >
-                    {memberName}님
+                    {t('{{memberName}}님', {
+                        memberName: profileData.memberName,
+                    })}
                 </div>
             </div>
 
@@ -70,15 +93,27 @@ export default function MyPageSummary({
                 className={css({
                     display: 'flex',
                     flex: 1,
+                    width: '100%',
                     justifyContent: 'space-around',
+                    paddingTop: { base: '10px', md: '0' },
                 })}
             >
                 <SummaryItem
-                    label="적립금"
-                    value={`${accumulationAmt.toLocaleString()}원`}
+                    label={t('적립금')}
+                    value={KRW(accumulationData.totalAvailableAmt).format()}
                 />
-                <SummaryItem label="보유쿠폰" value={`${couponCount}장`} />
-                <SummaryItem label="후기 작성" value={`${reviewCount}건`} />
+                <SummaryItem
+                    label={t('보유쿠폰')}
+                    value={t('{{couponCount}}장', {
+                        couponCount: couponData.usableCouponCnt,
+                    })}
+                />
+                <SummaryItem
+                    label={t('후기 작성')}
+                    value={t('{{reviewCount}}건', {
+                        reviewCount,
+                    })}
+                />
             </div>
         </section>
     );
@@ -95,15 +130,17 @@ function SummaryItem({ label, value }: { label: string; value: string }) {
                 gap: '8px',
                 position: 'relative',
                 padding: '0 20px',
+                whiteSpace: 'nowrap',
                 _after: {
                     content: '""',
                     position: 'absolute',
-                    right: '-40px', // 대략적인 구분선 위치 조정
+                    right: { base: '-10px', sm: '-20px', md: '-40px' },
                     top: '50%',
                     transform: 'translateY(-50%)',
                     width: '1px',
                     height: '40%',
                     backgroundColor: '#333',
+                    display: 'block',
                 },
                 _last: {
                     _after: {
@@ -122,7 +159,7 @@ function SummaryItem({ label, value }: { label: string; value: string }) {
             </span>
             <span
                 className={css({
-                    fontSize: '20px',
+                    fontSize: { base: '18px', md: '20px' },
                     fontWeight: 'bold',
                 })}
             >
