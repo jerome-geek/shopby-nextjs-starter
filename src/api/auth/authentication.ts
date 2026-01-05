@@ -22,6 +22,7 @@ import {
     LinkSNSParams,
     LinkSNSResponse,
     SendCertificatedNumberData,
+    SendCertificatedNumberResponse,
     SendCertificatedNumberViaEmailData,
     SendCertificatedNumberViaSMSData,
     SendCertificatedNumberViaSMSResponse,
@@ -54,7 +55,7 @@ const authentication = {
         data: SendCertificatedNumberData,
         options?: Options
     ) => {
-        return request.post('authentications', {
+        return request.post<SendCertificatedNumberResponse>('authentications', {
             json: data,
             ...options,
         });

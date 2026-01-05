@@ -21,11 +21,9 @@ export function SignupFormProvider({
             directMailAgreed: false,
             mobileNo: '01054413129',
             birthday: '',
+            certificated: false,
         },
     });
-
-    console.log('==============');
-    console.log(methods.watch());
 
     return <FormProvider {...methods}>{children}</FormProvider>;
 }

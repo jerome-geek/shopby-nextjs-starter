@@ -3,6 +3,8 @@ import { type ReactNode } from 'react';
 
 import { css } from '@/styled-system/css';
 
+export const dynamic = 'force-dynamic';
+
 export default function AuthLayout({
     children,
 }: Readonly<{

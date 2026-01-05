@@ -3,6 +3,8 @@ import { ReactNode } from 'react';
 
 import { SignupFormProvider } from '@/providers/SignupFormProvider';
 
+export const dynamic = 'force-dynamic';
+
 export default function SignupLayout({
     children,
 }: Readonly<{

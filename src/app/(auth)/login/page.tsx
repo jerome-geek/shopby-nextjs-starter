@@ -26,9 +26,9 @@ export default function LoginPage() {
     const returnUrl = searchParams.get('returnUrl') || '';
 
     const links = [
-        { href: '/member/find-id', label: '아이디 찾기' },
-        { href: '/member/find-password', label: '비밀번호 찾기' },
-        { href: '/guest/login', label: '비회원 배송조회' },
+        { href: PATHS.MEMBER.FIND_ID, label: '아이디 찾기' },
+        { href: PATHS.MEMBER.FIND_PASSWORD, label: '비밀번호 찾기' },
+        { href: PATHS.GUEST.LOGIN, label: '비회원 배송조회' },
     ] as const;
 
     const { handleError } = useApiError();
@@ -45,7 +45,6 @@ export default function LoginPage() {
         handleSubmit,
         register,
         control,
-        watch,
         formState: { isSubmitting },
     } = methods;
 
@@ -65,7 +64,7 @@ export default function LoginPage() {
                 })
                 .json();
 
-            cookieTokenManager.setToken({
+            await cookieTokenManager.setToken({
                 accessToken: data.accessToken,
                 refreshToken: data.refreshToken,
                 expiresIn: data.expiresIn,

@@ -197,68 +197,84 @@ const signupFormSchema = z
     });
 type SignupFormType = z.infer<typeof signupFormSchema>;
 
-const signupSubmitSchema = z.object({
-    birthday: z.string().optional(),
-    joinTermsAgreements: z.array(
-        z.enum([
-            'USE',
-            'PI_COLLECTION_AND_USE_REQUIRED',
-            'PI_COLLECTION_AND_USE_OPTIONAL',
-            'PI_PROCESS_CONSIGNMENT',
-            'PI_THIRD_PARTY_PROVISION',
-            'PI_14_AGE',
-        ])
-    ),
-    memberId: z.string().min(1, '아이디를 입력해 주세요.'),
-    password: z
-        .string()
-        .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
-        .max(20, '비밀번호는 최대 20자까지 가능합니다.')
-        .regex(
-            /^(?:(?=.*[a-zA-Z])(?=.*[0-9])|(?=.*[a-zA-Z])(?=.*[!@#$%^&*])|(?=.*[0-9])(?=.*[!@#$%^&*]))(?=.{10,})|(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,9}).*$/,
-            '10자리 이상은 2종류 조합, 8~9자리는 3종류 모두 조합이 필요합니다.'
-        ),
-    memberName: z.string({ error: '이름을 입력해 주세요.' }),
-    pushNotificationAgreed: z.boolean().optional(),
-    recommenderId: z.string().optional(),
-    companyNo: z.number().optional(),
-    directMailAgreed: z.boolean().optional(),
-    additionalInfo: z.string().optional(),
-    email: z.string().email(),
-    mobileNo: z.string(),
-    ci: z.string().optional(),
-    smsAgreed: z.boolean().optional(),
-    sex: z.enum(['M', 'F']).optional(),
-    jibunAddress: z.string().optional(),
-    openIdAccessToken: z.string().optional(),
-    telephoneNo: z.string().optional(),
-    businessName: z.string().optional(),
-    registrationNo: z.string().optional(),
-    extraInfo: z
-        .array(
-            z.object({
-                extraInfoNo: z.number(),
-                extraInfoOptionNos: z.array(
-                    z.boolean().or(z.number()).or(z.string())
+// TODO: API 응답값에 따라 certificated가 true인 경우 있음
+const createSignupSubmitSchema = (options?: {
+    requireEmailCertification: boolean;
+}) =>
+    z
+        .object({
+            certificated: z.boolean().optional(),
+            birthday: z.string().optional(),
+            joinTermsAgreements: z.array(
+                z.enum([
+                    'USE',
+                    'PI_COLLECTION_AND_USE_REQUIRED',
+                    'PI_COLLECTION_AND_USE_OPTIONAL',
+                    'PI_PROCESS_CONSIGNMENT',
+                    'PI_THIRD_PARTY_PROVISION',
+                    'PI_14_AGE',
+                ])
+            ),
+            memberId: z.string().min(1, '아이디를 입력해 주세요.'),
+            password: z
+                .string()
+                .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
+                .max(20, '비밀번호는 최대 20자까지 가능합니다.')
+                .regex(
+                    /^(?:(?=.*[a-zA-Z])(?=.*[0-9])|(?=.*[a-zA-Z])(?=.*[!@#$%^&*])|(?=.*[0-9])(?=.*[!@#$%^&*]))(?=.{10,})|(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,9}).*$/,
+                    '10자리 이상은 2종류 조합, 8~9자리는 3종류 모두 조합이 필요합니다.'
                 ),
-                extraInfoOptionTextContent: z.string(),
-            })
-        )
-        .optional(),
-    // NOTE: 해외 회원인 경우 필수값
-    firstName: z.string().optional(),
-    lastName: isGlobalMall
-        ? z.string().nonempty('성을 입력해주세요.')
-        : z.string().optional(),
-    mobileCountryCode: mobileCountryCodeType.optional(),
-    countryCd: countryCodeType.optional(),
-    address: z.string().optional(),
-    detailAddress: z.string().optional(),
-    state: z.string().optional(),
-    city: z.string().optional(),
-    zipCd: z.string().optional(),
-});
-type SignupSubmitType = z.infer<typeof signupSubmitSchema>;
+            memberName: z.string({ error: '이름을 입력해 주세요.' }),
+            pushNotificationAgreed: z.boolean().optional(),
+            recommenderId: z.string().optional(),
+            companyNo: z.number().optional(),
+            directMailAgreed: z.boolean().optional(),
+            additionalInfo: z.string().optional(),
+            email: z.string().email(),
+            mobileNo: z.string(),
+            ci: z.string().optional(),
+            smsAgreed: z.boolean().optional(),
+            sex: z.enum(['M', 'F']).optional(),
+            jibunAddress: z.string().optional(),
+            openIdAccessToken: z.string().optional(),
+            telephoneNo: z.string().optional(),
+            businessName: z.string().optional(),
+            registrationNo: z.string().optional(),
+            extraInfo: z
+                .array(
+                    z.object({
+                        extraInfoNo: z.number(),
+                        extraInfoOptionNos: z.array(
+                            z.boolean().or(z.number()).or(z.string())
+                        ),
+                        extraInfoOptionTextContent: z.string(),
+                    })
+                )
+                .optional(),
+            // NOTE: 해외 회원인 경우 필수값
+            firstName: z.string().optional(),
+            lastName: isGlobalMall
+                ? z.string().nonempty('성을 입력해주세요.')
+                : z.string().optional(),
+            mobileCountryCode: mobileCountryCodeType.optional(),
+            countryCd: countryCodeType.optional(),
+            address: z.string().optional(),
+            detailAddress: z.string().optional(),
+            state: z.string().optional(),
+            city: z.string().optional(),
+            zipCd: z.string().optional(),
+        })
+        .superRefine((data, ctx) => {
+            if (options?.requireEmailCertification && !data.certificated) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: '이메일 인증을 완료해주세요.',
+                    path: ['email'],
+                });
+            }
+        });
+
+type SignupSubmitType = z.infer<ReturnType<typeof createSignupSubmitSchema>>;
 
 const openIdSignupSubmitSchema = z.object({
     birthday: z.string().optional(),
@@ -315,7 +331,7 @@ type OpenIdSignupSubmitType = z.infer<typeof openIdSignupSubmitSchema>;
 export {
     openIdSignupSubmitSchema,
     signupFormSchema,
-    signupSubmitSchema,
+    createSignupSubmitSchema,
     type OpenIdSignupSubmitType,
     type SignupFormType,
     type SignupSubmitType,

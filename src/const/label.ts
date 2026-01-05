@@ -245,6 +245,8 @@ const SHOPBY_TERMS_TYPE_MAP = {
     PI_RESTOCK_NOTICE: '개인정보 수집 / 이용',
     PI_14_AGE: '만 14세 이상 가입 동의',
     PI_GIFT_ACCEPT_COLLECTION_AND_USE: '선물수락 개인정보 수집/이용',
+    MARKETING_RECEIVE: '광고성 수신 동의',
+    MARKETING_INFO_USAGE: '마케팅 목적의 개인정보 수집/ 이용 동의',
 } as const;
 
 const SHOPBY_TERM_HISTORY_MAP = {

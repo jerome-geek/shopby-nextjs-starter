@@ -274,7 +274,7 @@ export interface RecentViewProductsContents {
     saleStatusType: ProductSectionSaleStatusType;
 }
 
-export interface RegisterRecentViewProductParams {
+export interface RegisterRecentViewProductData {
     /** 상품 번호 */
     productNo: number;
 }

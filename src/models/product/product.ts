@@ -262,6 +262,7 @@ export interface ProductLimitations {
 }
 
 /** 상품 카운트 정보 */
+// TO CHECK: optional 타입인지 확인
 export interface ProductCounter {
     /** 내 상품문의 카운트(accessToken 없을 시, 0) */
     myInquiryCnt?: number;

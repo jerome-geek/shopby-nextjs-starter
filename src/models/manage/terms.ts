@@ -14,8 +14,11 @@ export interface GetTermListByPostData extends GetTermListParams {
 
 export type GetTermListResponse = {
     [K in ShopbyTermsTypes as Lowercase<K>]: {
+        /** 약관 내용 */
         contents: string;
+        /** 시행일 */
         enforcementDate: string;
+        /** 약관 사용 여부 */
         used: boolean;
     };
 };
@@ -67,14 +70,16 @@ export interface GetTermHistoryParams {
     futureDaysToShow?: string;
 }
 
-export type GetTermsHistoryResponse = {
+export type GetTermsHistoryResponse = TermHistory[];
+
+export interface TermHistory {
     /** 약관 시행일 상태 */
     termsEnforcementStatusLabel: string;
     /** 약관 시행일 */
     enforcementDate: string;
     /** 약관 번호 */
     termsNo: number;
-}[];
+}
 
 export interface GetUsedTermsParams {
     /** 조회할 약관 타입 리스트 */

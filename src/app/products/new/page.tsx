@@ -2,8 +2,8 @@ import { map, pipe, range, toArray, toAsync } from '@fxts/core';
 
 import { category } from '@/api/display';
 import { product } from '@/api/product';
-import NewProductList from '@/components/New/ProductList';
-import CategoryListTab from '@/components/Product/CategoryListTab';
+import NewProductList from '@/components/product/new/ProductList';
+import CategoryListTab from '@/components/product/CategoryListTab';
 import { NEW_CATEGORY_NO } from '@/const/category';
 import { PATHS } from '@/const/paths';
 import { ProductSearchParams } from '@/models/product/product';

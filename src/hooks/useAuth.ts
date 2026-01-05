@@ -8,15 +8,15 @@ import { cookieTokenManager } from '@/api/core/cookie';
  */
 export function useAuth() {
     const isAuthenticated = useMemo(() => {
-        return cookieTokenManager.isTokenValid();
+        return cookieTokenManager.isTokenValidSync();
     }, []);
 
     const accessToken = useMemo(() => {
-        return cookieTokenManager.getToken();
+        return cookieTokenManager.getTokenSync();
     }, []);
 
     const refreshToken = useMemo(() => {
-        return cookieTokenManager.getRefreshToken();
+        return cookieTokenManager.getRefreshTokenSync();
     }, []);
 
     return {
