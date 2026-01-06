@@ -10,6 +10,7 @@ import {
     BigBellIcon,
 } from '@/components/icons';
 import { token } from '@/styled-system/tokens';
+import Menu from '@/components/common/Menu';
 
 export default async function Header() {
     const cartCount = 13; // TODO: 실제 장바구니 아이템 수로 교체
@@ -24,7 +25,9 @@ export default async function Header() {
                     width: '100%',
                     backgroundColor: '{colors.background}',
                     borderBottom: '1px solid {colors.border}',
+                    padding: { base: '29px 0 64px', md: '0' },
                 })}
+                id='header'
             >
                 {/* 메인 헤더 */}
                 <div
@@ -32,27 +35,39 @@ export default async function Header() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        height: '56px',
-                        paddingX: '16px',
+                        paddingX: { base: '20px', md: '16px' },
                         maxWidth: { base: '100%', lg: '1200px' },
+                        gap: { base: '0', md: '32px' },
                         marginX: 'auto',
+                        position: 'relative',
                     })}
                 >
-                    {/* 브랜드 로고 */}
-                    <Link
-                        href={PATHS.MAIN}
+                    <div
                         className={css({
-                            fontSize: '20px',
-                            fontWeight: 'bold',
-                            color: '{colors.foreground}',
-                            textDecoration: 'none',
-                            _hover: {
-                                opacity: 0.7,
-                            },
+                            display: 'flex',
+                            flexDirection: { base: 'column', md: 'row' },
+                            alignItems: 'center',
+                            gap: '30px',
                         })}
                     >
-                        WannaMake
-                    </Link>
+                        {/* 브랜드 로고 */}
+                        <Link
+                            href={PATHS.MAIN}
+                            className={css({
+                                fontSize: '20px',
+                                fontWeight: 'bold',
+                                color: '{colors.foreground}',
+                                textDecoration: 'none',
+                                _hover: {
+                                    opacity: 0.7,
+                                },
+                            })}
+                        >
+                            WannaMake
+                        </Link>
+
+                        <Menu />
+                    </div>
 
                     {/* 유틸리티 아이콘들 */}
                     <div

@@ -11,10 +11,6 @@ import { BigCaretIcon, ControlIcon } from '@/components/icons';
 import { useHeroBannerSwiper } from '@/hooks/main/useHeroBannerSwiper';
 import { Banner } from '@/models/display/banner';
 
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/navigation';
-
 type HeroBannerProps = {
     banners: Banner[];
 };

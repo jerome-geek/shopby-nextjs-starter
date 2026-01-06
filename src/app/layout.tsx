@@ -1,14 +1,20 @@
+import { dehydrate } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 import { OverlayProvider } from 'overlay-kit';
 
-import '@/app/globals.css';
 import Footer from '@/components/common/Footer';
-import GlobalErrorBoundary from '@/components/GlobalErrorBoundary';
 import Header from '@/components/common/Header';
 import MobileBottomNavigation from '@/components/common/MobileBottomNavigation';
-import QueryProvider from '@/providers/QueryProvider';
+import GlobalErrorBoundary from '@/components/GlobalErrorBoundary';
 import I18nProvider from '@/providers/I18nProvider';
+import QueryProvider from '@/providers/QueryProvider';
 import { css } from '@/styled-system/css';
+import { makeQueryClient } from '@/utils/queryClient';
+
+import '@/app/globals.css';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/navigation';
 
 export const metadata: Metadata = {
     title: 'WannaMake',
@@ -25,12 +31,16 @@ export default async function RootLayout({
 }>) {
     const locale = process.env.NEXT_PUBLIC_LOCALE || 'ko';
 
+    const queryClient = makeQueryClient();
+
+    const dehydratedState = dehydrate(queryClient);
+
     return (
         <html lang={locale}>
             <body>
                 <I18nProvider>
-                    <OverlayProvider>
-                        <QueryProvider>
+                    <QueryProvider dehydratedState={dehydratedState}>
+                        <OverlayProvider>
                             <GlobalErrorBoundary>
                                 <Header />
                                 <main
@@ -49,8 +59,8 @@ export default async function RootLayout({
                                 <Footer />
                                 <MobileBottomNavigation />
                             </GlobalErrorBoundary>
-                        </QueryProvider>
-                    </OverlayProvider>
+                        </OverlayProvider>
+                    </QueryProvider>
                 </I18nProvider>
             </body>
         </html>
