@@ -1,7 +1,7 @@
 'use client';
 
-import { css } from '@/styled-system/css';
-import { token } from '@/styled-system/tokens';
+import { css, cx } from '@/styled-system/css';
+import { badge, text } from '@/styled-system/recipes';
 import { isEmpty } from '@fxts/core';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -128,15 +128,9 @@ const EventSectionItem = ({ eventData, products }: EventSectionItemProps) => {
                         })}
                     >
                         <span
-                            className={css({
-                                paddingX: '10px',
-                                paddingY: '4px',
-                                backgroundColor: token('colors.black'),
-                                borderRadius: { base: '24px', md: '16px' },
-                                color: token('colors.white'),
-                                textAlign: 'center',
-                                fontSize: '1.3rem',
-                                fontWeight: '600',
+                            className={badge({
+                                size: 'md',
+                                variant: 'black',
                             })}
                         >
                             {t('기획전')}
@@ -144,12 +138,9 @@ const EventSectionItem = ({ eventData, products }: EventSectionItemProps) => {
                         {t(`${eventData.label}`)}
                     </h2>
                     <p
-                        className={css({
-                            width: '100%',
-                            fontSize: '1.5rem',
-                            color: token('colors.gray90'),
-                            textAlign: 'left',
-                        })}
+                        className={cx(
+                            text({ size: 'headline1', color: 'gray90' }),
+                        )}
                     >
                         {eventData.promotionText}
                     </p>

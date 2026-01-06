@@ -1,7 +1,7 @@
 'use client';
 
 import { css, cx } from '@/styled-system/css';
-import { token } from '@/styled-system/tokens';
+import { badge, text } from '@/styled-system/recipes';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,7 +10,6 @@ import { HeartFilledIcon } from '@/components/icons/HeartFilledIcon';
 import { PATHS } from '@/const/paths';
 import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
-import { badge, text } from '@/styled-system/recipes';
 import { CURRENCY, discountRate } from '@/utils/currency';
 
 interface ProductListProps {
@@ -132,12 +131,10 @@ const ProductList = ({
                 >
                     {brandName && (
                         <span
-                            className={css({
-                                fontSize: '1.3rem',
-                                lineHeight: '1.3',
-                                letterSpacing: '-1.3%',
-                                fontWeight: '600',
-                                color: token('colors.black'),
+                            className={text({
+                                size: 'body2',
+                                weight: 'semibold',
+                                color: 'black',
                             })}
                         >
                             {brandName}
@@ -145,39 +142,22 @@ const ProductList = ({
                     )}
 
                     <h3
-                        className={css({
-                            fontSize: '1.3rem',
-                            lineHeight: '1.3',
-                            letterSpacing: '-1.3%',
-                            color: token('colors.gray90'),
-                            display: '-webkit-box',
-                            lineClamp: 1,
-                            boxOrient: 'vertical',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                        })}
-                    >
-                        {productName}
-                    </h3>
-
-                    {productDescription && (
-                        <p
-                            className={css({
+                        className={cx(
+                            text({
+                                size: 'body2',
+                                color: 'gray90',
+                            }),
+                            css({
                                 display: '-webkit-box',
-                                lineClamp: 2,
+                                lineClamp: 1,
                                 boxOrient: 'vertical',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                fontSize: '1.4rem',
-                                lineHeight: '1.4',
-                                letterSpacing: '-2%',
-                                color: token('colors.gray70'),
-                                fontWeight: '400',
-                            })}
-                        >
-                            {productDescription}
-                        </p>
-                    )}
+                            }),
+                        )}
+                    >
+                        {productName}
+                    </h3>
                 </div>
 
                 <div
@@ -200,7 +180,6 @@ const ProductList = ({
                             additionDiscountAmt,
                         ).intValue !== 0 && (
                             <span
-                                // font-weight 700이 자동으로 포함됨
                                 className={text({
                                     size: 'body1',
                                     weight: 'bold',

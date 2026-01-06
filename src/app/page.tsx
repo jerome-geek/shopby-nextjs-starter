@@ -1,12 +1,13 @@
+import { getTranslation } from '@/i18n/server';
+import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import { Suspense } from '@suspensive/react';
 
 import HeroBannerSection from '@/components/banner/hero-banner/Section';
 import HeroBannerSkeleton from '@/components/banner/hero-banner/Skeleton';
 import IconBannerSection from '@/components/banner/icon-banner/Section';
 import IconBannerSkeleton from '@/components/banner/icon-banner/Skeleton';
-import { getTranslation } from '@/i18n/server';
-import { css } from '@/styled-system/css';
-import { token } from '@/styled-system/tokens';
+import EventSection from '@/components/event/Section';
 
 export const dynamic = 'force-dynamic';
 
@@ -69,6 +70,9 @@ export default async function Home() {
                 >
                     <IconBannerSection />
                 </Suspense>
+            </div>
+            <div>
+                <EventSection eventId='MAIN_EVENT_01' />
             </div>
         </div>
     );

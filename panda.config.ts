@@ -251,6 +251,10 @@ export default defineConfig({
                     },
                     variants: {
                         size: {
+                            display1: {
+                                fontSize: '3rem',
+                                lineHeight: '1.32',
+                            },
                             title1: {
                                 fontSize: '2.2rem',
                             },
@@ -258,6 +262,10 @@ export default defineConfig({
                                 fontSize: '2rem',
                                 lineHeight: '1.4',
                                 letterSpacing: '-0.005em', // -0.5%
+                            },
+                            headline1: {
+                                fontSize: '1.5rem',
+                                lineHeight: '1.4',
                             },
                             headline2: {
                                 fontSize: '1.5rem',
@@ -326,28 +334,40 @@ export default defineConfig({
                     variants: {
                         size: {
                             sm: {
+                                paddingX: '0.6rem',
+                                paddingY: '0.2rem',
+                                borderRadius: '24px',
                                 fontSize: '1rem', // 10px
+                                fontWeight: '600',
                                 lineHeight: '1.5', // 150%
                                 letterSpacing: '-0.02em', // -2%
                             },
                             md: {
+                                paddingX: '1rem',
+                                paddingY: '0.4rem',
+                                borderRadius: '24px',
                                 fontSize: '1.3rem', // 13px
+                                fontWeight: '600',
                                 lineHeight: '1.4', // 140%
                                 letterSpacing: '-0.03em', // -3%
                             },
                         },
                         variant: {
                             default: {
-                                backgroundColor: 'colors.gray90',
-                                color: 'colors.white',
+                                backgroundColor: 'gray90',
+                                color: 'white',
                             },
                             light: {
-                                backgroundColor: 'colors.gray20',
-                                color: 'colors.black',
+                                backgroundColor: 'gray20',
+                                color: 'black',
                             },
                             pink: {
-                                backgroundColor: 'colors.pink',
-                                color: 'colors.white',
+                                backgroundColor: 'pink',
+                                color: 'white',
+                            },
+                            black: {
+                                backgroundColor: 'black',
+                                color: 'white',
                             },
                         },
                     },

@@ -4,15 +4,15 @@ import {
     getCachedEventById,
     getCachedEventProductDisplaySection,
 } from '@/api/display/event.server';
-import EventSectionItem from '@/components/main/product-display/event/EventItem';
+import EventSectionItem from '@/components/event/SectionItem';
 
 interface EventSectionProps {
-    sectionId: string;
+    eventId: string;
 }
 
-const EventSection = async ({ sectionId }: EventSectionProps) => {
+const EventSection = async ({ eventId }: EventSectionProps) => {
     try {
-        const eventData = await getCachedEventById(sectionId);
+        const eventData = await getCachedEventById(eventId);
 
         const firstSection = eventData.section?.[0];
 
