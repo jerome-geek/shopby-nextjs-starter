@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 
+import { getDiscountRate, KRW } from '@/utils/currency';
 import { HeartIcon, StarIcon } from '@/components/icons';
 import { Brand } from '@/models/product/product';
-import { css } from '@/styled-system/css';
+import { css, cx } from '@/styled-system/css';
 import { flex } from '@/styled-system/patterns';
 import { text } from '@/styled-system/recipes';
 import { token } from '@/styled-system/tokens';
+import { Price } from '@/models/product';
 
 interface ProductInfoProps {
     productName: string;
@@ -15,6 +17,7 @@ interface ProductInfoProps {
     likeCnt: number;
     reviewCnt: number;
     reviewRate: number;
+    price: Price;
 }
 
 export default function ProductInfo({
@@ -23,7 +26,25 @@ export default function ProductInfo({
     likeCnt,
     reviewCnt,
     reviewRate,
+    price,
 }: ProductInfoProps) {
+    const { salePrice, immediateDiscountAmt, additionDiscountAmt } = price;
+
+    const discountRate = getDiscountRate(salePrice, immediateDiscountAmt);
+    const discountPrice = KRW(salePrice)
+        .subtract(immediateDiscountAmt)
+        .format();
+
+    const maxDiscountRate = getDiscountRate(
+        salePrice,
+        immediateDiscountAmt,
+        additionDiscountAmt // 없으면 undefined가 넘어가도 0으로 처리됨
+    );
+    const maxDiscountPrice = KRW(salePrice)
+        .subtract(immediateDiscountAmt)
+        .subtract(additionDiscountAmt)
+        .format();
+
     const onLikeButtonClick = () => {
         console.log('like button clicked');
     };
@@ -70,7 +91,10 @@ export default function ProductInfo({
                             </Link>
                         )}
 
-                        <button onClick={onLikeButtonClick}>
+                        <button
+                            className={css({ marginLeft: 'auto' })}
+                            onClick={onLikeButtonClick}
+                        >
                             <HeartIcon />
                             <span
                                 className={css({
@@ -128,9 +152,67 @@ export default function ProductInfo({
             </div>
 
             <div>
-                <div>가격</div>
-                <div>쿠폰받기 </div>
+                <div>
+                    <p
+                        className={cx(
+                            text({
+                                size: { base: 'heading', md: 'title1' },
+                                weight: 'bold',
+                            }),
+                            css({
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                            })
+                        )}
+                    >
+                        <b className={css({ color: token('colors.red') })}>
+                            {discountRate}
+                        </b>
+                        {discountPrice}
+                    </p>
+                    <p
+                        className={cx(
+                            text({
+                                size: { base: 'heading', md: 'title1' },
+                                weight: 'bold',
+                            }),
+                            css({
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                            })
+                        )}
+                    >
+                        <b className={css({ color: token('colors.red') })}>
+                            {maxDiscountRate}
+                        </b>
+                        {maxDiscountPrice}
+                    </p>
+                </div>
             </div>
+
+            <hr
+                className={css({
+                    border: `1px solid ${token('colors.gray20')}`,
+                })}
+            />
+
+            <div>11</div>
+
+            <div>{/* TODO: 브랜드영역 */}</div>
+
+            <hr
+                className={css({
+                    border: `1px solid ${token('colors.gray20')}`,
+                })}
+            />
+
+            <div>옵션영역</div>
+
+            <div>예상결제금액</div>
+
+            <div>버튼영역</div>
         </div>
     );
 }

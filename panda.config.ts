@@ -254,6 +254,8 @@ export default defineConfig({
                         size: {
                             title1: {
                                 fontSize: '2.2rem',
+                                lineHeight: '1.32',
+                                letterSpacing: '-0.002em', // -0.2%
                             },
                             title2: {
                                 fontSize: '2rem',

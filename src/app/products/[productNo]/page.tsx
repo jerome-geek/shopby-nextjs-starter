@@ -1,4 +1,7 @@
-import { product } from '@/api/product';
+import { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
+
+import { getCachedProductDetail } from '@/api/product/product.server';
 import productProfile from '@/api/product/profile';
 import GuestRecentViewProductLogger from '@/components/product/GuestRecentViewProductLogger';
 import ProductMainImage from '@/components/product/MainImage';
@@ -8,20 +11,48 @@ import { isAuthenticated } from '@/utils/auth.server';
 
 type ProductDetailPageProps = AppPageProps<'/products/[productNo]'>;
 
-export default async function ProductDetailPage(props: ProductDetailPageProps) {
+export async function generateMetadata(
+    props: ProductDetailPageProps,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
     const params = await props.params;
-    const productNo = Number(params.productNo) || 0;
+    const productNo = Number(params.productNo);
+
+    if (isNaN(productNo) || productNo <= 0) {
+        return {};
+    }
 
     const searchParams = await props.searchParams;
     const channelType = searchParams.channelType;
     const preview = searchParams.preview || false;
 
-    const productDetailData = await product
-        .getProductDetail(productNo, {
-            preview,
-            channelType,
-        })
-        .json();
+    const productDetailData = await getCachedProductDetail(productNo, {
+        preview,
+        channelType,
+    });
+
+    return {
+        title: productDetailData.baseInfo.productName,
+        description: productDetailData.baseInfo.promotionText,
+    };
+}
+
+export default async function ProductDetailPage(props: ProductDetailPageProps) {
+    const params = await props.params;
+    const productNo = Number(params.productNo);
+
+    if (isNaN(productNo) || productNo <= 0) {
+        return notFound();
+    }
+
+    const searchParams = await props.searchParams;
+    const channelType = searchParams.channelType;
+    const preview = searchParams.preview || false;
+
+    const productDetailData = await getCachedProductDetail(productNo, {
+        preview,
+        channelType,
+    });
     console.log(
         '🚀 ~ ProductDetailPage ~ productDetailData:',
         productDetailData
@@ -43,45 +74,47 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
         >
             {!isLogin && <GuestRecentViewProductLogger productNo={productNo} />}
 
-            {/* 상품 상단 영역: 이미지 + 기본 정보 */}
+            {/* CSS Grid 레이아웃: 소스 순서는 모바일 기준(이미지->정보->상세), 데스크탑은 Grid로 재배치 */}
             <section
                 className={css({
-                    display: 'flex',
-                    flexDirection: { base: 'column', md: 'row' },
-                    gap: '30px',
-                    alignItems: 'flex-start',
+                    display: 'grid',
+                    // 모바일: 1열, 데스크탑: 2열 (좌측 1fr, 우측 486px 고정)
+                    gridTemplateColumns: { base: '1fr', md: '1fr 486px' },
+                    gap: { base: '40px', md: '24px' },
+                    alignItems: 'start',
+                    justifyContent: 'center',
                 })}
             >
-                {/* 좌측: 상품 이미지 영역 */}
+                {/* 1. 상품 이미지 영역 */}
+                {/* 데스크탑: 1열 1행 */}
                 <div
                     className={css({
-                        flex: 1,
+                        gridColumn: { md: '1' },
+                        gridRow: { md: '1' },
                         width: '100%',
-                        minWidth: 0,
+                        maxWidth: { md: '690px' },
+                        margin: { md: '0 auto' }, // 좌측 컬럼 내 중앙 정렬 느낌
+                        display: 'flex',
+                        justifyContent: 'center',
                     })}
                 >
-                    <div
-                        className={css({
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        })}
-                    >
-                        <ProductMainImage
-                            imageUrls={productDetailData.baseInfo.imageUrls}
-                        />
-                    </div>
+                    <ProductMainImage
+                        imageUrls={productDetailData.baseInfo.imageUrls}
+                    />
                 </div>
 
-                {/* 우측: 상품 구매 정보 영역 */}
-                <div
+                {/* 2. 상품 구매 정보 영역 (Sticky) */}
+                {/* 모바일: 2번째 순서 (자연스럽게 이미지 아래 위치) */}
+                {/* 데스크탑: 2열 전체(1~2행 병합)에 위치하며 Sticky 동작 */}
+                <aside
                     className={css({
-                        flex: '1',
+                        gridColumn: { md: '2' },
+                        gridRow: { md: '1 / span 2' },
                         width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '24px',
+                        position: { md: 'sticky' },
+                        top: { md: '100px' },
+                        height: 'fit-content',
+                        zIndex: 1,
                     })}
                 >
                     <div
@@ -98,15 +131,36 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
                             likeCnt={productDetailData.counter.likeCnt || 0}
                             reviewRate={productDetailData.reviewRate}
                             reviewCnt={productDetailData.counter.reviewCnt || 0}
+                            price={productDetailData.price}
                         />
+                    </div>
+                </aside>
+
+                {/* 3. 상품 상세 설명, 리뷰 등 긴 콘텐츠 */}
+                {/* 모바일: 3번째 순서 */}
+                {/* 데스크탑: 1열 2행 (이미지 바로 아래) */}
+                <div
+                    className={css({
+                        gridColumn: { md: '1' },
+                        gridRow: { md: '2' },
+                        width: '100%',
+                        maxWidth: { md: '690px' },
+                        margin: { md: '0 auto' },
+                        minHeight: '1000px',
+                    })}
+                >
+                    <div
+                        className={css({
+                            borderTop: '1px solid #eee',
+                            paddingTop: '40px',
+                            marginTop: { md: '60px' }, // 이미지와 상세설명 사이 간격
+                        })}
+                    >
+                        <h3>상품 상세 정보</h3>
+                        <p>여기에 긴 상품 상세 설명이 들어갑니다...</p>
                     </div>
                 </div>
             </section>
-
-            {/* 상품 하단 영역: 상세 설명, 리뷰 등 (작업 예정) */}
-            <div className={css({ marginTop: '80px' })}>
-                {/* 하단 탭 영역 들어갈 자리 */}
-            </div>
         </article>
     );
 }
