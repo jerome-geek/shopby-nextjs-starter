@@ -1,6 +1,9 @@
 import { map, pipe, take, toArray } from '@fxts/core';
 
-import { event } from '@/api/display';
+import {
+    getCachedEventById,
+    getCachedEventProductDisplaySection,
+} from '@/api/display/event.server';
 import EventSectionItem from '@/components/main/product-display/event/EventItem';
 
 interface EventSectionProps {
@@ -9,23 +12,21 @@ interface EventSectionProps {
 
 const EventSection = async ({ sectionId }: EventSectionProps) => {
     try {
-        const eventData = await event.getEventById(sectionId).json();
+        const eventData = await getCachedEventById(sectionId);
 
         const firstSection = eventData.section?.[0];
 
-        const eventProductData = await event
-            .getEventProductDisplaySection(
-                eventData.eventNo,
-                firstSection.sectionNo,
-                {
-                    pageNumber: 1,
-                    pageSize: 4,
-                    order: 'ADMIN_SETTING',
-                    saleStatus: 'RESERVATION_AND_ONSALE' as const,
-                    includeStopProduct: true,
-                },
-            )
-            .json();
+        const eventProductData = await getCachedEventProductDisplaySection(
+            eventData.eventNo,
+            firstSection.sectionNo,
+            {
+                pageNumber: 1,
+                pageSize: 4,
+                order: 'ADMIN_SETTING',
+                saleStatus: 'RESERVATION_AND_ONSALE' as const,
+                includeStopProduct: true,
+            },
+        );
 
         const eventProducts = pipe(
             eventProductData.products,
