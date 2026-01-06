@@ -3,15 +3,17 @@
 import { isEmpty } from '@fxts/core';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { Portal } from 'radix-ui';
-import { useTranslation } from 'react-i18next';
-import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import { useParams } from 'next/navigation';
+import { Portal } from 'radix-ui';
+import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Swiper, SwiperProps, SwiperSlide, SwiperClass } from 'swiper/react';
 
 import { CategoriesProps } from '@/components/drawer/categories';
 import { SmallCaretIcon } from '@/components/icons';
 import { css } from '@/styled-system/css';
 import { text } from '@/styled-system/recipes';
+import { token } from '@/styled-system/tokens';
 
 const DeskTopCategories = ({
     oneDepthCategoryList,
@@ -36,10 +38,41 @@ const DeskTopCategories = ({
         },
     );
 
+    const swiperRef = useRef<SwiperClass | null>(null);
+    const [isSlideNext, setIsSlideNext] = useState(false);
+    const [isSlidePrev, setIsSlidePrev] = useState(false);
+
     const swiperOptions: SwiperProps = {
         slidesPerView: 'auto',
         spaceBetween: 48,
         initialSlide: findTwoDepthCategoryIndex,
+        onSwiper: (swiper) => {
+            swiperRef.current = swiper;
+            updateSlideState(swiper);
+        },
+        onSlideChange: (swiper) => {
+            updateSlideState(swiper);
+        },
+        onResize: (swiper) => {
+            updateSlideState(swiper);
+        },
+    };
+
+    const updateSlideState = (swiper: SwiperClass) => {
+        setIsSlideNext(!swiper.isEnd);
+        setIsSlidePrev(!swiper.isBeginning);
+    };
+
+    const handleSlidePrev = () => {
+        if (swiperRef.current && isSlidePrev) {
+            swiperRef.current.slidePrev();
+        }
+    };
+
+    const handleSlideNext = () => {
+        if (swiperRef.current && isSlideNext) {
+            swiperRef.current.slideNext();
+        }
     };
 
     return (
@@ -132,8 +165,98 @@ const DeskTopCategories = ({
                             className={css({
                                 width: 'calc(100% - 140px)',
                                 padding: '32px 0 48px',
+                                position: 'relative',
                             })}
                         >
+                            {isSlidePrev && (
+                                <button
+                                    onClick={handleSlidePrev}
+                                    className={css({
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '8px',
+                                        transform: 'translateY(-50%)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: '32px',
+                                        height: '32px',
+                                        borderRadius: '50%',
+                                        backgroundColor: token('colors.white'),
+                                        boxShadow:
+                                            '0 2px 8px rgba(0, 0, 0, 0.15)',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        zIndex: 10,
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            backgroundColor:
+                                                token('colors.gray20'),
+                                            transform:
+                                                'translateY(-50%) scale(1.1)',
+                                        },
+                                        '&:active': {
+                                            transform:
+                                                'translateY(-50%) scale(0.95)',
+                                        },
+                                    })}
+                                    aria-label={t('이전 카테고리로 이동')}
+                                >
+                                    <SmallCaretIcon
+                                        direction='left'
+                                        className={css({
+                                            width: '16px',
+                                            height: '16px',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    />
+                                </button>
+                            )}
+
+                            {isSlideNext && (
+                                <button
+                                    onClick={handleSlideNext}
+                                    className={css({
+                                        position: 'absolute',
+                                        top: '50%',
+                                        right: '8px',
+                                        transform: 'translateY(-50%)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: '32px',
+                                        height: '32px',
+                                        borderRadius: '50%',
+                                        backgroundColor: token('colors.white'),
+                                        boxShadow:
+                                            '0 2px 8px rgba(0, 0, 0, 0.15)',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        zIndex: 10,
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            backgroundColor:
+                                                token('colors.gray20'),
+                                            transform:
+                                                'translateY(-50%) scale(1.1)',
+                                        },
+                                        '&:active': {
+                                            transform:
+                                                'translateY(-50%) scale(0.95)',
+                                        },
+                                    })}
+                                    aria-label={t('다음 카테고리로 이동')}
+                                >
+                                    <SmallCaretIcon
+                                        direction='right'
+                                        className={css({
+                                            width: '16px',
+                                            height: '16px',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    />
+                                </button>
+                            )}
                             <Swiper
                                 {...swiperOptions}
                                 style={{

@@ -4,7 +4,7 @@ import { isUndefined } from '@fxts/core';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CategoriesProps } from '@/components/drawer/categories';
@@ -35,6 +35,7 @@ const MobileCategories = ({
     const categoryNo = (params.categoryNo ?? '') as string;
 
     const twoDepthCategoryListRef = useRef<HTMLUListElement>(null);
+    const threeDepthCategoryListRef = useRef<HTMLUListElement>(null);
     const categorySectionRefs = useRef<Map<number, HTMLLIElement>>(new Map());
 
     const findTwoDepthCategoryIndex = twoDepthCategoryList.findIndex(
@@ -75,40 +76,15 @@ const MobileCategories = ({
     );
 
     const findTwoDepthCategoryElement = (index: number) => {
-        if (!twoDepthCategoryListRef.current) {
+        if (!threeDepthCategoryListRef.current) {
             return null;
         }
 
-        return twoDepthCategoryListRef.current?.children?.[index] ?? null;
+        return threeDepthCategoryListRef.current?.children?.[index] ?? null;
     };
 
-    useEffect(() => {
-        if (twoDepthCategoryListRef.current) {
-            const element = findTwoDepthCategoryElement(
-                findTwoDepthCategoryIndex || 0,
-            );
-
-            if (element) {
-                element.scrollIntoView({
-                    behavior: 'instant',
-                    block: 'center',
-                });
-            }
-        }
-    }, []);
-
-    useEffect(() => {
-        if (!twoDepthCategoryListRef.current) {
-            return;
-        }
-
-        const observerOptions = {
-            root: twoDepthCategoryListRef.current,
-            rootMargin: '-40% 0px -40% 0px',
-            threshold: [0],
-        };
-
-        const updateButtonSelection = (categoryNo: number) => {
+    const updateButtonSelection = useCallback(
+        (categoryNo: number) => {
             twoDepthCategoryList.forEach((category) => {
                 const button = document.getElementById(
                     `${category.categoryNo}-button`,
@@ -124,54 +100,109 @@ const MobileCategories = ({
 
             if (selectedButton) {
                 selectedButton.setAttribute('aria-selected', 'true');
+
+                if (twoDepthCategoryListRef.current) {
+                    const container = twoDepthCategoryListRef.current;
+                    const containerRect = container.getBoundingClientRect();
+                    const buttonRect = selectedButton.getBoundingClientRect();
+
+                    const MARGIN = -60;
+
+                    const isAboveViewport =
+                        buttonRect.bottom < containerRect.top - MARGIN;
+                    const isBelowViewport =
+                        buttonRect.top > containerRect.bottom + MARGIN;
+
+                    if (isAboveViewport || isBelowViewport) {
+                        selectedButton.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest',
+                        });
+                    }
+                }
             }
+        },
+        [twoDepthCategoryList],
+    );
+
+    useEffect(() => {
+        if (!threeDepthCategoryListRef.current) {
+            return;
+        }
+
+        const element = findTwoDepthCategoryElement(
+            findTwoDepthCategoryIndex || 0,
+        );
+
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'instant',
+                block: 'center',
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!threeDepthCategoryListRef.current) {
+            return;
+        }
+
+        const observerOptions = {
+            root: threeDepthCategoryListRef.current,
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: [0],
         };
 
         const observerCallback = (entries: IntersectionObserverEntry[]) => {
+            let categoryNos: number[] = [];
+
             entries.forEach((entry) => {
                 const categoryNo = Number(
                     entry.target.getAttribute('data-category-no'),
                 );
 
                 if (entry.isIntersecting) {
-                    updateButtonSelection(categoryNo);
-                } else {
-                    if (!twoDepthCategoryListRef.current) {
-                        return;
-                    }
-
-                    const container = twoDepthCategoryListRef.current;
-                    const containerRect = container.getBoundingClientRect();
-                    const containerHeight = containerRect.height;
-                    const centerY = containerRect.top + containerHeight * 0.5;
-
-                    let closestCategoryNo: number | null = null;
-                    let minDistance = Infinity;
-
-                    categorySectionRefs.current.forEach(
-                        (sectionElement, categoryNo) => {
-                            if (sectionElement) {
-                                const rect =
-                                    sectionElement.getBoundingClientRect();
-                                const sectionCenterY =
-                                    rect.top + rect.height / 2;
-                                const distance = Math.abs(
-                                    sectionCenterY - centerY,
-                                );
-
-                                if (distance < minDistance) {
-                                    minDistance = distance;
-                                    closestCategoryNo = categoryNo;
-                                }
-                            }
-                        },
-                    );
-
-                    if (closestCategoryNo !== null) {
-                        updateButtonSelection(closestCategoryNo);
-                    }
+                    categoryNos.push(categoryNo);
                 }
             });
+
+            if (categoryNos.length > 0) {
+                updateButtonSelection(categoryNos[categoryNos.length - 1] ?? 0);
+            } else {
+                if (!threeDepthCategoryListRef.current) {
+                    return;
+                }
+
+                const container = threeDepthCategoryListRef.current;
+                const containerRect = container.getBoundingClientRect();
+                const containerHeight = containerRect.height;
+                const centerY = containerRect.top + containerHeight * 0.5;
+
+                let closestCategoryNo: number | null = null;
+                let minDistance: number | null = null;
+
+                categorySectionRefs.current.forEach(
+                    (sectionElement, categoryNo) => {
+                        if (sectionElement) {
+                            const rect = sectionElement.getBoundingClientRect();
+                            const sectionCenterY = rect.top + rect.height / 2;
+                            const distance = Math.abs(sectionCenterY - centerY);
+
+                            if (
+                                minDistance === null ||
+                                distance < minDistance
+                            ) {
+                                minDistance = distance;
+                                closestCategoryNo = categoryNo;
+                            }
+                        }
+                    },
+                );
+
+                if (closestCategoryNo !== null) {
+                    updateButtonSelection(closestCategoryNo);
+                }
+            }
         };
 
         const observer = new IntersectionObserver(
@@ -188,7 +219,7 @@ const MobileCategories = ({
         return () => {
             observer.disconnect();
         };
-    }, [twoDepthCategoryList]);
+    }, [updateButtonSelection]);
 
     return (
         <motion.div
@@ -298,14 +329,14 @@ const MobileCategories = ({
                     }))}
                     defaultValue={selectCategoryNo.toString()}
                     onValueChange={(value) => {
-                        const element = twoDepthCategoryListRef?.current;
-
-                        if (element) {
-                            element.scrollTo({
-                                top: 0,
-                                behavior: 'instant',
-                            });
+                        if (!threeDepthCategoryListRef.current) {
+                            return;
                         }
+
+                        threeDepthCategoryListRef.current.scrollTo({
+                            top: 0,
+                            behavior: 'instant',
+                        });
 
                         setSelectCategoryNo(Number(value));
                     }}
@@ -327,8 +358,10 @@ const MobileCategories = ({
                         minWidth: '110px',
                         height: '100%',
                         backgroundColor: '{colors.gray20}',
+                        overflow: 'auto',
                     })}
                     aria-label={t('2차 카테고리 목록')}
+                    ref={twoDepthCategoryListRef}
                 >
                     {twoDepthCategoryList.map((category, index) => (
                         <li key={category.categoryNo}>
@@ -358,6 +391,12 @@ const MobileCategories = ({
                                             block: 'center',
                                         });
                                     }
+
+                                    setTimeout(() => {
+                                        updateButtonSelection(
+                                            category.categoryNo,
+                                        );
+                                    }, 1);
                                 }}
                                 aria-selected={index === 0}
                             >
@@ -367,6 +406,13 @@ const MobileCategories = ({
                                         weight: 'medium',
                                         color: 'gray90',
                                     })}
+                                    style={{
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        maxWidth: '100%',
+                                        display: 'block',
+                                    }}
                                 >
                                     {category.label}
                                 </span>
@@ -383,7 +429,7 @@ const MobileCategories = ({
                         gap: '16px',
                         overflow: 'auto',
                     })}
-                    ref={twoDepthCategoryListRef}
+                    ref={threeDepthCategoryListRef}
                 >
                     {twoDepthCategoryList.map((category) => (
                         <li
@@ -409,6 +455,10 @@ const MobileCategories = ({
                                 width: '100%',
                                 borderBottom: '1px solid {colors.gray20}',
                                 paddingBottom: '16px',
+                                '&:last-of-type': {
+                                    borderBottom: 'none',
+                                    paddingBottom: '40px',
+                                },
                             })}
                         >
                             <Link

@@ -31,10 +31,11 @@ export default function MobileBottomNavigation() {
 
     const overlayData = useOverlayData();
 
-    const isOpen = overlayData?.[OVERLAY_ID.CATEGORIES_DRAWER]?.isOpen ?? false;
+    const isCategoriesDrawerOpen =
+        overlayData?.[OVERLAY_ID.CATEGORIES_DRAWER]?.isOpen ?? false;
 
     const handleCategoriesClick = useCallback(() => {
-        if (isOpen) {
+        if (isCategoriesDrawerOpen) {
             overlay.close(OVERLAY_ID.CATEGORIES_DRAWER);
             return;
         }
@@ -47,7 +48,7 @@ export default function MobileBottomNavigation() {
                 overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
             },
         );
-    }, [isOpen]);
+    }, [isCategoriesDrawerOpen]);
 
     // navItems 메모이제이션 (불필요한 재생성 방지)
     const navItems = useMemo<NavItem[]>(
@@ -55,7 +56,7 @@ export default function MobileBottomNavigation() {
             {
                 label: '검색',
                 icon: SearchIcon,
-                href: '/search',
+                href: PATHS.SEARCH,
             },
             {
                 label: '카테고리',
@@ -159,7 +160,9 @@ export default function MobileBottomNavigation() {
         >
             {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname === item.href;
+                const isActive = isCategoriesDrawerOpen
+                    ? item.label === '카테고리'
+                    : pathname === item.href;
 
                 return (
                     <motion.div
@@ -170,44 +173,85 @@ export default function MobileBottomNavigation() {
                             flex: 1,
                         })}
                     >
-                        <Link
-                            href={item.href}
-                            onClick={(e) => {
-                                if (item?.onClick) {
-                                    e.preventDefault();
-                                    item.onClick();
-                                }
-                            }}
-                            className={css({
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '4px',
-                                textDecoration: 'none',
-                                color: isActive
-                                    ? '{colors.primary}'
-                                    : '#666666',
-                            })}
-                        >
-                            <Icon
+                        {item.onClick ? (
+                            <button
+                                onClick={item.onClick}
                                 className={css({
-                                    width: '24px',
-                                    height: '24px',
-                                })}
-                            />
-                            <motion.span
-                                animate={{
-                                    fontWeight: isActive ? 'bold' : 'normal',
-                                }}
-                                transition={{ duration: 0.2 }}
-                                className={css({
-                                    fontSize: '10px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '4px',
+                                    textDecoration: 'none',
+                                    color: isActive
+                                        ? '{colors.primary}'
+                                        : '#666666',
                                 })}
                             >
-                                {item.label}
-                            </motion.span>
-                        </Link>
+                                <Icon
+                                    className={css({
+                                        width: '24px',
+                                        height: '24px',
+                                    })}
+                                />
+                                <motion.span
+                                    animate={{
+                                        fontWeight: isActive
+                                            ? 'bold'
+                                            : 'normal',
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                    className={css({
+                                        fontSize: '10px',
+                                    })}
+                                >
+                                    {item.label}
+                                </motion.span>
+                            </button>
+                        ) : (
+                            <Link
+                                href={item.href}
+                                onClick={() => {
+                                    if (isCategoriesDrawerOpen) {
+                                        overlay.close(
+                                            OVERLAY_ID.CATEGORIES_DRAWER,
+                                        );
+                                        return;
+                                    }
+                                }}
+                                className={css({
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '4px',
+                                    textDecoration: 'none',
+                                    color: isActive
+                                        ? '{colors.primary}'
+                                        : '#666666',
+                                })}
+                            >
+                                <Icon
+                                    className={css({
+                                        width: '24px',
+                                        height: '24px',
+                                    })}
+                                />
+                                <motion.span
+                                    animate={{
+                                        fontWeight: isActive
+                                            ? 'bold'
+                                            : 'normal',
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                    className={css({
+                                        fontSize: '10px',
+                                    })}
+                                >
+                                    {item.label}
+                                </motion.span>
+                            </Link>
+                        )}
                     </motion.div>
                 );
             })}
