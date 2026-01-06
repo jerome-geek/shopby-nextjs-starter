@@ -8,7 +8,8 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ProductCard from '@/components/Product/Card';
+import ProductCard from '@/components/product/Card';
+import ProductList from '@/components/product/list';
 import { PATHS } from '@/const/paths';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { EventProduct, GetEventResponse } from '@/models/display/event';
@@ -22,6 +23,7 @@ const EventSectionItem = ({ eventData, products }: EventSectionItemProps) => {
     const { t } = useTranslation();
     const mediaQueryResult = useMediaQuery('(max-width: 767px)');
     const isMobile = mediaQueryResult === true;
+    const isMediaQueryReady = mediaQueryResult !== null;
 
     const displayedProducts = useMemo(() => {
         return isMobile ? products.slice(0, 2) : products.slice(0, 4);
@@ -154,56 +156,103 @@ const EventSectionItem = ({ eventData, products }: EventSectionItemProps) => {
                 </Link>
 
                 {/* 상품 레이아웃 */}
-                <ul
-                    className={css({
-                        display: { base: 'flex', md: 'grid' },
-                        flexDirection: { base: 'column', md: 'row' },
-                        gridTemplateColumns: {
-                            md: 'repeat(4, 1fr)',
-                        },
-                        gap: { base: '12px', md: '24px' },
-                        width: '100%',
-                    })}
-                >
-                    {/* TODO: 모바일의 경우 상품 레이아웃이 카드형이 아님 - 모바일 상품 컴포넌트 변경 필요 */}
-                    {displayedProducts.map((product) => (
-                        <li key={product.productNo}>
-                            <ProductCard
-                                productNo={product.productNo}
-                                productName={product.productName}
-                                imageUrlInfo={product.imageUrlInfo.map(
-                                    (img) => ({
-                                        imageUrlType:
-                                            img.imageUrlType || 'IMAGE_URL',
-                                        type: img.imageUrlType || 'IMAGE_URL',
-                                        url: img.url,
-                                    }),
+                {isMediaQueryReady && (
+                    <ul
+                        className={css({
+                            display: { base: 'flex', md: 'grid' },
+                            flexDirection: { base: 'column', md: 'row' },
+                            gridTemplateColumns: {
+                                md: 'repeat(4, 1fr)',
+                            },
+                            gap: { base: '8px', md: '24px' },
+                            width: '100%',
+                        })}
+                    >
+                        {displayedProducts.map((product) => (
+                            <li key={product.productNo}>
+                                {isMobile ? (
+                                    <ProductList
+                                        productNo={product.productNo}
+                                        productName={product.productName}
+                                        imageUrlInfo={product.imageUrlInfo.map(
+                                            (img) => ({
+                                                imageUrlType:
+                                                    img.imageUrlType ||
+                                                    'IMAGE_URL',
+                                                type:
+                                                    img.imageUrlType ||
+                                                    'IMAGE_URL',
+                                                url: img.url,
+                                            }),
+                                        )}
+                                        brandNo={product.brandNo}
+                                        brandName={product.brandName}
+                                        stickerInfos={product.stickerInfos.map(
+                                            (sticker, stickerIndex) => ({
+                                                no: stickerIndex + 1,
+                                                name: sticker.label,
+                                                label: sticker.label,
+                                                type: sticker.type,
+                                            }),
+                                        )}
+                                        likeCount={product.likeCount}
+                                        liked={product.liked}
+                                        reviewRating={product.reviewRating}
+                                        totalReviewCount={
+                                            product.totalReviewCount
+                                        }
+                                        salePrice={product.salePrice}
+                                        immediateDiscountAmt={
+                                            product.immediateDiscountAmt
+                                        }
+                                        additionDiscountAmt={
+                                            product.additionDiscountAmt
+                                        }
+                                    />
+                                ) : (
+                                    <ProductCard
+                                        productNo={product.productNo}
+                                        productName={product.productName}
+                                        imageUrlInfo={product.imageUrlInfo.map(
+                                            (img) => ({
+                                                imageUrlType:
+                                                    img.imageUrlType ||
+                                                    'IMAGE_URL',
+                                                type:
+                                                    img.imageUrlType ||
+                                                    'IMAGE_URL',
+                                                url: img.url,
+                                            }),
+                                        )}
+                                        brandNo={product.brandNo}
+                                        brandName={product.brandName}
+                                        stickerInfos={product.stickerInfos.map(
+                                            (sticker, stickerIndex) => ({
+                                                no: stickerIndex + 1,
+                                                name: sticker.label,
+                                                label: sticker.label,
+                                                type: sticker.type,
+                                            }),
+                                        )}
+                                        likeCount={product.likeCount}
+                                        liked={product.liked}
+                                        reviewRating={product.reviewRating}
+                                        totalReviewCount={
+                                            product.totalReviewCount
+                                        }
+                                        salePrice={product.salePrice}
+                                        immediateDiscountAmt={
+                                            product.immediateDiscountAmt
+                                        }
+                                        additionDiscountAmt={
+                                            product.additionDiscountAmt
+                                        }
+                                    />
                                 )}
-                                brandNo={product.brandNo}
-                                brandName={product.brandName}
-                                stickerInfos={product.stickerInfos.map(
-                                    (sticker, stickerIndex) => ({
-                                        no: stickerIndex + 1,
-                                        name: sticker.label,
-                                        label: sticker.label,
-                                        type: sticker.type,
-                                    }),
-                                )}
-                                likeCount={product.likeCount}
-                                liked={product.liked}
-                                reviewRating={product.reviewRating}
-                                totalReviewCount={product.totalReviewCount}
-                                salePrice={product.salePrice}
-                                immediateDiscountAmt={
-                                    product.immediateDiscountAmt
-                                }
-                                additionDiscountAmt={
-                                    product.additionDiscountAmt
-                                }
-                            />
-                        </li>
-                    ))}
-                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </section>
     );

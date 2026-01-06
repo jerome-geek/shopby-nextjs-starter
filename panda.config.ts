@@ -274,6 +274,16 @@ export default defineConfig({
                                 lineHeight: '1.4',
                                 letterSpacing: '-0.002em', // -0.2%
                             },
+                            body1: {
+                                fontSize: '1.4rem', // 14px
+                                lineHeight: '1.4', // 140%
+                                letterSpacing: '-0.013em', // -1.3%
+                            },
+                            body2: {
+                                fontSize: '1.3rem', // 13px
+                                lineHeight: '1.3', // 130%
+                                letterSpacing: '-0.013em', // -1.3%
+                            },
                         },
                         weight: {
                             bold: { fontWeight: '700' },
@@ -297,6 +307,48 @@ export default defineConfig({
                             pink: { color: 'pink' },
                             skyblue: { color: 'skyblue' },
                             salmon: { color: 'salmon' },
+                        },
+                    },
+                },
+                badge: {
+                    className: 'badge',
+                    base: {
+                        fontFamily: 'sans',
+                        fontWeight: '600',
+                        leadingTrim: 'none',
+                        textAlign: 'center',
+                        paddingX: '0.6rem',
+                        paddingY: '0.2rem',
+                        borderRadius: '9999px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                    },
+                    variants: {
+                        size: {
+                            sm: {
+                                fontSize: '1rem', // 10px
+                                lineHeight: '1.5', // 150%
+                                letterSpacing: '-0.02em', // -2%
+                            },
+                            md: {
+                                fontSize: '1.3rem', // 13px
+                                lineHeight: '1.4', // 140%
+                                letterSpacing: '-0.03em', // -3%
+                            },
+                        },
+                        variant: {
+                            default: {
+                                backgroundColor: 'colors.gray90',
+                                color: 'colors.white',
+                            },
+                            light: {
+                                backgroundColor: 'colors.gray20',
+                                color: 'colors.black',
+                            },
+                            pink: {
+                                backgroundColor: 'colors.pink',
+                                color: 'colors.white',
+                            },
                         },
                     },
                 },

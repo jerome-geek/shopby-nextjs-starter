@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 
-import { HeartIcon, StarIcon } from '@/components/icons';
+import { StarIcon } from '@/components/icons';
+import { HeartBigIcon } from '@/components/icons/HeartBigIcon';
 import { Brand } from '@/models/product/product';
 import { css } from '@/styled-system/css';
 import { flex } from '@/styled-system/patterns';
@@ -71,7 +72,7 @@ export default function ProductInfo({
                         )}
 
                         <button onClick={onLikeButtonClick}>
-                            <HeartIcon />
+                            <HeartBigIcon />
                             <span
                                 className={css({
                                     fontSize: '1rem',
@@ -96,7 +97,7 @@ export default function ProductInfo({
 
                 <div
                     className={flex({ alignItems: 'center', gap: '4px' })}
-                    role="img"
+                    role='img'
                     aria-label={`평점 ${reviewRate}점`}
                 >
                     <div
@@ -104,7 +105,7 @@ export default function ProductInfo({
                             gap: '1px',
                             transform: 'translateY(1px)', // 시각적 중앙을 맞추기 위한 미세 조정
                         })}
-                        aria-hidden="true"
+                        aria-hidden='true'
                     >
                         {[1, 2, 3, 4, 5].map((num) => {
                             const displayRate = 4.5;
