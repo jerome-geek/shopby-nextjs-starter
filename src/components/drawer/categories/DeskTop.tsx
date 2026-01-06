@@ -1,0 +1,247 @@
+'use client';
+
+import { isEmpty } from '@fxts/core';
+import { motion } from 'motion/react';
+import Link from 'next/link';
+import { Portal } from 'radix-ui';
+import { useTranslation } from 'react-i18next';
+import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
+import { useParams } from 'next/navigation';
+
+import { CategoriesProps } from '@/components/drawer/categories';
+import { SmallCaretIcon } from '@/components/icons';
+import { css } from '@/styled-system/css';
+import { text } from '@/styled-system/recipes';
+
+const DeskTopCategories = ({
+    oneDepthCategoryList,
+    twoDepthCategoryList,
+    selectCategoryNo,
+    setSelectCategoryNo,
+}: CategoriesProps) => {
+    const { t } = useTranslation();
+
+    const params = useParams();
+    const categoryNo = (params.categoryNo ?? '') as string;
+
+    const findTwoDepthCategoryIndex = twoDepthCategoryList.findIndex(
+        (category) => {
+            if (category.categoryNo === Number(categoryNo)) {
+                return true;
+            }
+
+            return category.children.some(
+                (child) => child.categoryNo === Number(categoryNo),
+            );
+        },
+    );
+
+    const swiperOptions: SwiperProps = {
+        slidesPerView: 'auto',
+        spaceBetween: 48,
+        initialSlide: findTwoDepthCategoryIndex,
+    };
+
+    return (
+        <Portal.Root container={document.getElementById('header')}>
+            <div
+                className={css({
+                    position: 'absolute',
+                    top: 'calc(100% + 1px)',
+                    left: 0,
+                    width: '100%',
+                    backgroundColor: '{colors.gray10}',
+                    zIndex: 21,
+                    display: 'flex',
+                    justifyContent: 'center',
+                })}
+            >
+                <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: 'auto' }}
+                    exit={{ height: 0 }}
+                    transition={{
+                        type: 'spring',
+                        stiffness: 500,
+                        damping: 50,
+                    }}
+                    className={css({
+                        width: '100%',
+                        display: 'flex',
+                        gap: '20px',
+                        justifyContent: 'start',
+                        maxWidth: '1200px',
+                        padding: '0 16px',
+                        overflow: 'hidden',
+                    })}
+                >
+                    <ul
+                        aria-label={t('1차 카테고리 목록')}
+                        className={css({
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '24px',
+                            width: '120px',
+                            minWidth: '120px',
+                            padding: '32px 0 48px',
+                        })}
+                    >
+                        {oneDepthCategoryList.map((category) => (
+                            <li
+                                key={category.categoryNo}
+                                className={css({
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '2px',
+                                })}
+                                onMouseOver={() => {
+                                    setSelectCategoryNo(category.categoryNo);
+                                }}
+                            >
+                                <span
+                                    className={text({
+                                        size: { base: 'headline1' },
+                                        weight: 'medium',
+                                        color:
+                                            selectCategoryNo ===
+                                            category.categoryNo
+                                                ? 'black'
+                                                : 'gray60',
+                                    })}
+                                    style={{
+                                        lineHeight: '20px',
+                                    }}
+                                >
+                                    {category.label}
+                                </span>
+
+                                {selectCategoryNo === category.categoryNo && (
+                                    <SmallCaretIcon direction='right' />
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                    {isEmpty(twoDepthCategoryList) ? null : (
+                        <motion.div
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            transition={{ duration: 0.2 }}
+                            key={selectCategoryNo}
+                            className={css({
+                                width: 'calc(100% - 140px)',
+                                padding: '32px 0 48px',
+                            })}
+                        >
+                            <Swiper
+                                {...swiperOptions}
+                                style={{
+                                    margin: 0,
+                                }}
+                                aria-label={t('2차 카테고리 목록')}
+                            >
+                                {twoDepthCategoryList.map((category) => (
+                                    <SwiperSlide
+                                        key={category.categoryNo}
+                                        className={css({
+                                            display: 'flex !important',
+                                            flexDirection: 'column',
+                                            gap: '12px',
+                                        })}
+                                        style={{
+                                            width: '100px',
+                                        }}
+                                    >
+                                        <Link
+                                            href={`/categories/${category.categoryNo}/products`}
+                                            aria-selected={
+                                                categoryNo ===
+                                                category.categoryNo.toString()
+                                            }
+                                            className={css({
+                                                '&[aria-selected="true"]': {
+                                                    textDecoration: 'underline',
+                                                },
+                                                '&:hover': {
+                                                    textDecoration: 'underline',
+                                                },
+                                            })}
+                                        >
+                                            <span
+                                                className={text({
+                                                    size: {
+                                                        base: 'headline1',
+                                                    },
+                                                    weight: 'medium',
+                                                    color: 'black',
+                                                })}
+                                                style={{
+                                                    whiteSpace: 'nowrap',
+                                                }}
+                                            >
+                                                {category.label}
+                                            </span>
+                                        </Link>
+
+                                        <ul
+                                            className={css({
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '8px',
+                                            })}
+                                        >
+                                            {category.children.map((child) => (
+                                                <li
+                                                    key={child.categoryNo}
+                                                    className={css({
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '2px',
+                                                    })}
+                                                >
+                                                    <Link
+                                                        href={`/categories/${child.categoryNo}/products`}
+                                                        aria-selected={
+                                                            categoryNo ===
+                                                            child.categoryNo.toString()
+                                                        }
+                                                        className={css({
+                                                            '&[aria-selected="true"]':
+                                                                {
+                                                                    textDecoration:
+                                                                        'underline',
+                                                                },
+                                                            '&:hover': {
+                                                                textDecoration:
+                                                                    'underline',
+                                                            },
+                                                        })}
+                                                    >
+                                                        <span
+                                                            className={text({
+                                                                size: {
+                                                                    base: 'body1',
+                                                                },
+                                                                weight: 'regular',
+                                                                color: 'gray90',
+                                                            })}
+                                                        >
+                                                            {child.label}
+                                                        </span>
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </motion.div>
+                    )}
+                </motion.div>
+            </div>
+        </Portal.Root>
+    );
+};
+
+export default DeskTopCategories;

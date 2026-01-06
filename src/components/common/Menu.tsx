@@ -16,6 +16,7 @@ import useCategory from '@/hooks/query/display/category/useCategory';
 import { css, cva } from '@/styled-system/css';
 import { text } from '@/styled-system/recipes';
 import { token } from '@/styled-system/tokens';
+import Categories from '@/components/drawer/categories';
 
 const Menu = () => {
     const { t } = useTranslation();
@@ -68,15 +69,14 @@ const Menu = () => {
             return;
         }
 
-        // overlay.open(
-        //     (props) => {
-        //         // TODO : 카테고리 drawer 구현
-        //         return <></>;
-        //     },
-        //     {
-        //         overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
-        //     },
-        // );
+        overlay.open(
+            (props) => {
+                return <Categories {...props} />;
+            },
+            {
+                overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
+            },
+        );
     };
 
     const swiperOptions: SwiperProps = {

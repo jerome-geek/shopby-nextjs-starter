@@ -1,6 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 import { OverlayProvider } from 'overlay-kit';
+import { isEmpty } from '@fxts/core';
 
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
@@ -10,6 +11,9 @@ import I18nProvider from '@/providers/I18nProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import { css } from '@/styled-system/css';
 import { makeQueryClient } from '@/utils/queryClient';
+import GlobalEffects from '@/components/common/GlobalEffects';
+import { category } from '@/api/display';
+import { categoryKeys } from '@/hooks/queryKeys';
 
 import '@/app/globals.css';
 import 'swiper/css';
@@ -32,6 +36,34 @@ export default async function RootLayout({
     const locale = process.env.NEXT_PUBLIC_LOCALE || 'ko';
 
     const queryClient = makeQueryClient();
+
+    try {
+        const response = await category
+            .getCategoriesByManagementCode({ codes: ['MAIN'] })
+            .json();
+
+        const categoryNo = response?.[0]?.displayCategoryNo ?? 0;
+
+        if (categoryNo) {
+            queryClient.setQueryData(
+                categoryKeys.byCode({ codes: ['MAIN'] }),
+                response,
+            );
+
+            const categoryResponse = await category
+                .getCategory(categoryNo.toString())
+                .json();
+
+            if (!isEmpty(categoryResponse?.multiLevelCategories)) {
+                queryClient.setQueryData(
+                    categoryKeys.detail(categoryNo.toString()),
+                    categoryResponse,
+                );
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
 
     const dehydratedState = dehydrate(queryClient);
 
@@ -58,6 +90,7 @@ export default async function RootLayout({
                                 </main>
                                 <Footer />
                                 <MobileBottomNavigation />
+                                <GlobalEffects />
                             </GlobalErrorBoundary>
                         </OverlayProvider>
                     </QueryProvider>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'motion/react';
+import { overlay, useOverlayData } from 'overlay-kit';
 
 import { css } from '@/styled-system/css';
 import {
@@ -14,16 +15,39 @@ import {
     UserIcon,
 } from '@/components/icons';
 import { PATHS } from '@/const/paths';
+import Categories from '@/components/drawer/categories';
+import { OVERLAY_ID } from '@/const/overlay';
 
 interface NavItem {
     label: string;
     icon: React.ComponentType<{ className?: string }>;
     href: string;
+    onClick?: () => void;
 }
 
 export default function MobileBottomNavigation() {
     const pathname = usePathname();
     const [isVisible, setIsVisible] = useState(true);
+
+    const overlayData = useOverlayData();
+
+    const isOpen = overlayData?.[OVERLAY_ID.CATEGORIES_DRAWER]?.isOpen ?? false;
+
+    const handleCategoriesClick = useCallback(() => {
+        if (isOpen) {
+            overlay.close(OVERLAY_ID.CATEGORIES_DRAWER);
+            return;
+        }
+
+        overlay.open(
+            (props) => {
+                return <Categories {...props} />;
+            },
+            {
+                overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
+            },
+        );
+    }, [isOpen]);
 
     // navItems 메모이제이션 (불필요한 재생성 방지)
     const navItems = useMemo<NavItem[]>(
@@ -36,7 +60,8 @@ export default function MobileBottomNavigation() {
             {
                 label: '카테고리',
                 icon: MenuIcon,
-                href: '/categories',
+                href: '',
+                onClick: handleCategoriesClick,
             },
             {
                 label: '홈',
@@ -54,7 +79,7 @@ export default function MobileBottomNavigation() {
                 href: PATHS.MYPAGE.MAIN,
             },
         ],
-        []
+        [handleCategoriesClick],
     );
 
     // 스크롤 핸들러 메모이제이션 (성능 최적화)
@@ -147,6 +172,12 @@ export default function MobileBottomNavigation() {
                     >
                         <Link
                             href={item.href}
+                            onClick={(e) => {
+                                if (item?.onClick) {
+                                    e.preventDefault();
+                                    item.onClick();
+                                }
+                            }}
                             className={css({
                                 display: 'flex',
                                 flexDirection: 'column',
