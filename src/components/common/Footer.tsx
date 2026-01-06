@@ -1,32 +1,36 @@
 import Link from 'next/link';
 
-import { css } from '@/styled-system/css';
+import { mall } from '@/api/admin';
 import { InstagramIcon } from '@/components/icons/InstagramIcon';
 import { YouTubeIcon } from '@/components/icons/YouTubeIcon';
-import { mall } from '@/api/admin';
+import { PATHS } from '@/const/paths';
+import { css } from '@/styled-system/css';
 
 export default async function Footer() {
     try {
-        const data11 = await mall.getMall().json();
+        const mallData = await mall.getMall().json();
 
         const navigation = {
             links: [
-                { label: '이용약관', href: '/terms/USE' },
-                { label: '개인정보처리방침', href: '/terms/PI_PROCESS' },
+                { label: '이용약관', href: `${PATHS.AUTH.TERMS.MAIN}/USE` },
+                {
+                    label: '개인정보처리방침',
+                    href: `${PATHS.AUTH.TERMS.MAIN}/PI_PROCESS`,
+                },
                 // TODO: 이용안내의 경우 게시판 사용할 것
                 { label: '이용안내', href: '/guide' },
             ],
         };
 
         // const socialMedia = {
-        //     instagram: data11.serviceBasicInfo.instagramUrl,
-        //     youtube: data11.serviceBasicInfo.youtubeUrl,
+        //     instagram: mallData.serviceBasicInfo.instagramUrl,
+        //     youtube: mallData.serviceBasicInfo.youtubeUrl,
         // };
 
         const copyright = {
             disclaimer:
                 '본 쇼핑몰은 판매자가 등록한 상품정보에 대해 책임을 지지 않습니다.',
-            copyrightText: `© ${new Date().getFullYear()} ${data11.serviceBasicInfo.companyName}. All rights reserved.`,
+            copyrightText: `© ${new Date().getFullYear()} ${mallData.serviceBasicInfo.companyName}. All rights reserved.`,
         };
 
         return (
@@ -63,7 +67,7 @@ export default async function Footer() {
                                 marginBottom: { base: '12px', lg: '16px' },
                             })}
                         >
-                            {data11.serviceBasicInfo.companyName} 사업자 정보
+                            {mallData.serviceBasicInfo.companyName} 사업자 정보
                         </h2>
                         {/* 웹: 회사 상세 정보 */}
                         <div
@@ -77,20 +81,20 @@ export default async function Footer() {
                             })}
                         >
                             <p>
-                                {`대표자명: ${data11.serviceBasicInfo.representativeName}`}
+                                {`대표자명: ${mallData.serviceBasicInfo.representativeName}`}
                             </p>
-                            <p>{`주소 : ${data11.serviceBasicInfo.address}`}</p>
+                            <p>{`주소 : ${mallData.serviceBasicInfo.address}`}</p>
                             <p>
-                                {`대표전화 : ${data11.serviceBasicInfo.representPhoneNo}`}
-                            </p>
-                            <p>
-                                {`사업자등록번호 : ${data11.serviceBasicInfo.businessRegistrationNo}`}
+                                {`대표전화 : ${mallData.serviceBasicInfo.representPhoneNo}`}
                             </p>
                             <p>
-                                {`통신판매업신고번호: ${data11.serviceBasicInfo.onlineMarketingBusinessDeclarationNo}`}
+                                {`사업자등록번호 : ${mallData.serviceBasicInfo.businessRegistrationNo}`}
+                            </p>
+                            <p>
+                                {`통신판매업신고번호: ${mallData.serviceBasicInfo.onlineMarketingBusinessDeclarationNo}`}
                                 <Link
                                     // href={companyInfo.businessInfoUrl}
-                                    href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${data11.serviceBasicInfo.businessRegistrationNo?.replace(/-/g, '') || ''}`}
+                                    href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${mallData.serviceBasicInfo.businessRegistrationNo?.replace(/-/g, '') || ''}`}
                                     className={css({
                                         color: '{colors.foreground}',
                                         textDecoration: 'underline',
@@ -100,7 +104,7 @@ export default async function Footer() {
                                 </Link>
                             </p>
                             <p>
-                                {`개인정보보호책임자: ${data11.serviceBasicInfo.privacyManagerName}`}
+                                {`개인정보보호책임자: ${mallData.serviceBasicInfo.privacyManagerName}`}
                             </p>
                             <p>호스팅 서비스 : 엔에이치엔커머스(주)</p>
                         </div>
@@ -176,8 +180,8 @@ export default async function Footer() {
                         >
                             <a
                                 href={'/'}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                target='_blank'
+                                rel='noopener noreferrer'
                                 className={css({
                                     display: 'flex',
                                     alignItems: 'center',
@@ -202,8 +206,8 @@ export default async function Footer() {
                             </a>
                             <a
                                 href={'/'}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                target='_blank'
+                                rel='noopener noreferrer'
                                 className={css({
                                     display: 'flex',
                                     alignItems: 'center',
@@ -240,7 +244,7 @@ export default async function Footer() {
                             })}
                         >
                             <p>{copyright.disclaimer}</p>
-                            <p>{`COPYRIGHT ⓒ ${data11.serviceBasicInfo.companyName} ALL RIGHTS RESERVED.`}</p>
+                            <p>{`COPYRIGHT ⓒ ${mallData.serviceBasicInfo.companyName} ALL RIGHTS RESERVED.`}</p>
                         </div>
                     </div>
                 </div>

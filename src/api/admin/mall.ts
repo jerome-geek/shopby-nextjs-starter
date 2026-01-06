@@ -8,6 +8,8 @@ import {
     GetSslInfoResponse,
 } from '@/models/admin/mall';
 
+export const MALL_REVALIDATE_MS = 60 * 60 * 24; // 24시간으로 통일
+
 const mall = {
     /**
      *  몰 정보 조회하기
@@ -22,6 +24,7 @@ const mall = {
     getMall: (options?: Options) => {
         return request.get<GetMallResponse>('malls', {
             cache: 'force-cache',
+            next: { revalidate: MALL_REVALIDATE_MS },
             ...options,
         });
     },
@@ -35,8 +38,9 @@ const mall = {
             'malls/internationalization',
             {
                 cache: 'force-cache',
+                next: { revalidate: MALL_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 
@@ -47,6 +51,7 @@ const mall = {
     getMallPartners: (options?: Options) => {
         return request.get<GetMallPartnersResponse>('malls/partners', {
             cache: 'force-cache',
+            next: { revalidate: MALL_REVALIDATE_MS },
             ...options,
         });
     },
@@ -58,6 +63,7 @@ const mall = {
     getSslInfo: (options?: Options) => {
         return request.get<GetSslInfoResponse>('malls/ssl', {
             cache: 'force-cache',
+            next: { revalidate: MALL_REVALIDATE_MS },
             ...options,
         });
     },
