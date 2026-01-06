@@ -231,8 +231,6 @@ export interface ProductSectionProduct {
     };
     /** 추가할인 정률 최대 할인 금액 */
     maxDiscountAmount: number;
-    /** 사용가능쿠폰 존재 여부 */
-    enableCoupons: boolean;
     /** 상품번호 */
     productNo: number;
     /** 상품 등록일 */

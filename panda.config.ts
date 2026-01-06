@@ -191,6 +191,7 @@ export default defineConfig({
                     5: { value: '2rem' }, // 20px (10px 기준)
                     6: { value: '2.4rem' }, // 24px (10px 기준)
                     8: { value: '3.2rem' }, // 32px (10px 기준)
+                    9: { value: '3.6rem' }, // 36px (10px 기준)
                     10: { value: '4rem' }, // 40px (10px 기준)
                     12: { value: '4.8rem' }, // 48px (10px 기준)
                     16: { value: '6.4rem' }, // 64px (10px 기준)
