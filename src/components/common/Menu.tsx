@@ -68,15 +68,15 @@ const Menu = () => {
             return;
         }
 
-        overlay.open(
-            (props) => {
-                // TODO : 카테고리 drawer 구현
-                return <></>;
-            },
-            {
-                overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
-            },
-        );
+        // overlay.open(
+        //     (props) => {
+        //         // TODO : 카테고리 drawer 구현
+        //         return <></>;
+        //     },
+        //     {
+        //         overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
+        //     },
+        // );
     };
 
     const swiperOptions: SwiperProps = {
@@ -115,8 +115,9 @@ const Menu = () => {
                 <button
                     className={menuItemStyle({
                         isCategoryButton: true,
-                        isActive: isOpen,
                     })}
+                    aria-selected={isOpen}
+                    aria-label={t('카테고리')}
                     onClick={handleCategoriesClick}
                 >
                     <MenuIcon
@@ -154,9 +155,9 @@ const Menu = () => {
                 >
                     <Link
                         href={menu.href}
-                        className={menuItemStyle({
-                            isActive: isOpen ? false : pathname === menu.href,
-                        })}
+                        className={menuItemStyle()}
+                        aria-selected={isOpen ? false : pathname === menu.href}
+                        aria-label={menu.label}
                     >
                         <span
                             className={text({
@@ -189,6 +190,10 @@ const menuItemStyle = cva({
         '&:hover': {
             opacity: 0.8,
         },
+        '&[aria-selected="true"]': {
+            backgroundColor: token('colors.black'),
+            color: token('colors.white'),
+        },
     },
     variants: {
         isCategoryButton: {
@@ -201,19 +206,9 @@ const menuItemStyle = cva({
                 border: `1px solid ${token('colors.gray50')}`,
             },
         },
-        isActive: {
-            true: {
-                backgroundColor: token('colors.black'),
-                color: token('colors.white'),
-            },
-            false: {
-                color: token('colors.black'),
-            },
-        },
     },
     defaultVariants: {
         isCategoryButton: false,
-        isActive: false,
     },
 });
 
