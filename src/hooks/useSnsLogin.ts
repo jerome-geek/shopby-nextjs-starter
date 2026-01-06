@@ -41,7 +41,7 @@ const useSnsLogin = () => {
         window.location.replace(loginUrl);
     };
 
-    const { data: mallData } = useMall();
+    // const { data: mallData } = useMall();
     const { mutateAsync } = useMutation({
         mutationFn: async ({
             provider,
@@ -98,7 +98,7 @@ const useSnsLogin = () => {
         if (!data.loginUrl && data.loginUrl.length === 0) {
             openDialog({
                 message: t(
-                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.'
+                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
                 ),
             });
             return;
@@ -117,7 +117,7 @@ const useSnsLogin = () => {
         if (!data.loginUrl && data.loginUrl.length === 0) {
             openDialog({
                 message: t(
-                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.'
+                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
                 ),
             });
             return;
@@ -141,7 +141,7 @@ const useSnsLogin = () => {
         if (!data.loginUrl && data.loginUrl.length === 0) {
             openDialog({
                 message: t(
-                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.'
+                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
                 ),
             });
             return;
@@ -154,7 +154,7 @@ const useSnsLogin = () => {
         window.open(
             PATHS.CALLBACK.KCP_AUTH,
             'auth_popup',
-            'width=500,height=500,location=no,status=no,scrollbars=yes'
+            'width=500,height=500,location=no,status=no,scrollbars=yes',
         );
     };
 
@@ -166,7 +166,7 @@ const useSnsLogin = () => {
         if (!data.loginUrl && data.loginUrl.length === 0) {
             openDialog({
                 message: t(
-                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.'
+                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
                 ),
             });
             return;
@@ -183,7 +183,7 @@ const useSnsLogin = () => {
         if (!data.loginUrl && data.loginUrl.length === 0) {
             openDialog({
                 message: t(
-                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.'
+                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
                 ),
             });
             return;
@@ -205,7 +205,7 @@ const useSnsLogin = () => {
         if (!data.loginUrl && data.loginUrl.length === 0) {
             openDialog({
                 message: t(
-                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.'
+                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
                 ),
             });
             return;
@@ -227,7 +227,7 @@ const useSnsLogin = () => {
         if (!data.loginUrl && data.loginUrl.length === 0) {
             openDialog({
                 message: t(
-                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.'
+                    '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
                 ),
             });
             return;

@@ -70,16 +70,13 @@ const useInfiniteAccumulationList = ({
         //     return undefined;
         // },
         getNextPageParam: (lastPage, allPages) => {
-            if (!searchParams.pageSize) {
-                return;
-            }
+            const pageSize = searchParams.pageSize || 10;
 
-            return searchParams.pageSize * allPages.length <
-                lastPage.data.totalCount
+            return pageSize * allPages.length < lastPage.data.totalCount
                 ? lastPage.pageNumber + 1
                 : undefined;
         },
-        placeholderData: keepPreviousData,
+        // placeholderData: keepPreviousData,
         ...options,
     });
 };

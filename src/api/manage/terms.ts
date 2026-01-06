@@ -102,7 +102,7 @@ const terms = {
     getTermDetailByPost: (
         termsNo: number,
         data: GetTermDetailByPostData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetTermDetailByPostResponse>(`terms/${termsNo}`, {
             json: data,
