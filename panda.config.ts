@@ -264,6 +264,11 @@ export default defineConfig({
                                 lineHeight: '1.3',
                                 letterSpacing: '-0.013em', // -1.3%
                             },
+                            headline1: {
+                                fontSize: '1.5rem',
+                                lineHeight: '1.4',
+                                letterSpacing: '-0.002em', // -0.2%
+                            },
                             heading: {
                                 fontSize: '1.7rem',
                                 lineHeight: '1.5',
