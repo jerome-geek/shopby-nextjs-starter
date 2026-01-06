@@ -1,4 +1,5 @@
 import { ChannelType } from '@/models';
+import { GetAccumulationsParams } from '@/models/manage/accumulation';
 
 declare global {
     /**
@@ -11,6 +12,12 @@ declare global {
             preview?: boolean;
         };
         '/terms/[termsType]': { termsNo?: string };
+        '/products/new': {
+            pageNumber?: number;
+            pageSize?: number;
+            categoryNo?: number;
+        };
+        '/mypage/accumulations': GetAccumulationsParams;
     }
     /**
      * Next.js가 생성한 글로벌 PageProps를 활용하여

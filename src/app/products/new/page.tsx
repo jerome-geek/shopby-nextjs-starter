@@ -8,15 +8,9 @@ import { NEW_CATEGORY_NO } from '@/const/category';
 import { PATHS } from '@/const/paths';
 import { ProductSearchParams } from '@/models/product/product';
 
-interface BestPageParams {
-    pageNumber?: number;
-    pageSize?: number;
-    categoryNo?: number;
-}
+type NewProductsPageProps = AppPageProps<'/products/new'>;
 
-export default async function NewProductsPage(props: {
-    searchParams: Promise<BestPageParams>;
-}) {
+export default async function NewProductsPage(props: NewProductsPageProps) {
     const searchParams = await props.searchParams;
 
     const pageNumber = Number(searchParams.pageNumber) || 1;
