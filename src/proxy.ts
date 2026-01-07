@@ -168,13 +168,8 @@ export const config = {
     matcher: [
         /*
          * 다음 경로를 제외한 모든 요청 경로에 매칭:
-         * - api (API routes)
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         * - public 폴더의 파일들
+         * - .map 파일 및 정적 리소스 파일들
          */
-        // '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-        '/((?!api|_next|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        '/((?!api|_next|favicon.ico|installHook|.*\\.(?:svg|png|jpg|jpeg|gif|webp|map)$).*)',
     ],
 };

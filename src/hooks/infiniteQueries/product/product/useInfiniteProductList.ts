@@ -57,17 +57,15 @@ const useInfiniteProductList = <TData = InfiniteData<ProductInfiniteResponse>>({
                 pageNumber: pageParam,
             };
         },
-        getNextPageParam: (lastPage) => {
-            const {
-                data: { pageCount },
-                pageNumber,
-            } = lastPage;
-
-            if (pageNumber < pageCount) {
-                return pageNumber + 1;
+        getNextPageParam: (lastPage, allPages) => {
+            if (!searchParams.pageSize) {
+                return;
             }
 
-            return undefined;
+            return searchParams.pageSize * allPages.length <
+                lastPage.data.totalCount
+                ? lastPage.pageNumber + 1
+                : undefined;
         },
         initialPageParam: initialPageParam ?? searchParams.pageNumber ?? 1,
         placeholderData: keepPreviousData,

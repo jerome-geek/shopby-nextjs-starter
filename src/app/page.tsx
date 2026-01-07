@@ -7,12 +7,16 @@ import HeroBannerSection from '@/components/banner/hero-banner/Section';
 import HeroBannerSkeleton from '@/components/banner/hero-banner/Skeleton';
 import IconBannerSection from '@/components/banner/icon-banner/Section';
 import IconBannerSkeleton from '@/components/banner/icon-banner/Skeleton';
+import ProductDisplaySection from '@/components/main/product-display';
+// import { getMainPageLayout } from '@/config/mainPageLayouts'
 import EventSection from '@/components/event/Section';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
     const { t } = await getTranslation();
+
+    // const homeLayout = getMainPageLayout('home');
 
     return (
         <div
@@ -23,7 +27,7 @@ export default async function Home() {
             })}
         >
             {/* Banner Section */}
-            <div
+            <section
                 className={
                     css({
                         display: 'flex',
@@ -70,10 +74,26 @@ export default async function Home() {
                 >
                     <IconBannerSection />
                 </Suspense>
-            </div>
-            <div>
-                <EventSection eventId='MAIN_EVENT_01' />
-            </div>
+            </section>
+
+            {/* Main Content */}
+            <section
+                className={
+                    'container ' +
+                    css({
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: {
+                            base: token('spacing.9'),
+                            md: token('spacing.24'),
+                        },
+                    })
+                }
+            >
+                {/* Main Page Layout */}
+                {/* <ProductDisplaySection layout={homeLayout} /> */}
+                <ProductDisplaySection />
+            </section>
         </div>
     );
 }

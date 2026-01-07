@@ -191,6 +191,7 @@ export default defineConfig({
                     5: { value: '2rem' }, // 20px (10px 기준)
                     6: { value: '2.4rem' }, // 24px (10px 기준)
                     8: { value: '3.2rem' }, // 32px (10px 기준)
+                    9: { value: '3.6rem' }, // 36px (10px 기준)
                     10: { value: '4rem' }, // 40px (10px 기준)
                     12: { value: '4.8rem' }, // 48px (10px 기준)
                     16: { value: '6.4rem' }, // 64px (10px 기준)
@@ -257,6 +258,8 @@ export default defineConfig({
                             },
                             title1: {
                                 fontSize: '2.2rem',
+                                lineHeight: '1.32',
+                                letterSpacing: '-0.002em', // -0.2%
                             },
                             title2: {
                                 fontSize: '2rem',
@@ -271,6 +274,11 @@ export default defineConfig({
                                 fontSize: '1.5rem',
                                 lineHeight: '1.3',
                                 letterSpacing: '-0.013em', // -1.3%
+                            },
+                            headline1: {
+                                fontSize: '1.5rem',
+                                lineHeight: '1.4',
+                                letterSpacing: '-0.002em', // -0.2%
                             },
                             heading: {
                                 fontSize: '1.7rem',

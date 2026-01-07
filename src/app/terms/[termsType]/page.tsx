@@ -9,8 +9,7 @@ import { ShopbyTermHistoryTypes, ShopbyTermsTypes } from '@/models';
 import { TermHistory } from '@/models/manage/terms';
 import { css } from '@/styled-system/css';
 
-// 약관 페이지는 자주 변경되지 않으므로 일주일 동안 캐싱합니다. (60초 * 60분 * 24시간 * 7일)
-export const revalidate = 60 * 60 * 24 * 7;
+export const revalidate = 604800; // 일주일 (60초 * 60분 * 24시간 * 7일)
 
 export default async function TermsDetailPage({
     params,
@@ -18,6 +17,7 @@ export default async function TermsDetailPage({
 }: AppPageProps<'/terms/[termsType]'>) {
     const { termsType } = await params;
     const { termsNo } = await searchParams;
+
     const { t } = await getTranslation();
 
     const upperType = termsType.toUpperCase();
@@ -29,7 +29,7 @@ export default async function TermsDetailPage({
         filter(([k]) => k === upperType),
         map(([, v]) => v),
         head,
-        (a) => (isUndefined(a) ? '이용약관' : a)
+        (a) => (isUndefined(a) ? '이용약관' : a),
     );
 
     try {
@@ -110,7 +110,9 @@ export default async function TermsDetailPage({
                             color: '#666',
                         })}
                     >
-                        시행일: {termData.enforcementDate}
+                        {t('시행일: {{enforcementDate}}', {
+                            enforcementDate: termData.enforcementDate,
+                        })}
                     </div>
                 </header>
 

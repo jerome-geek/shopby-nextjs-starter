@@ -55,6 +55,9 @@ const PATHS = {
         /** 베스트 상품 리스트 */
         BEST: '/products/best',
 
+        /** 세일 상품 리스트 */
+        SALE: '/products/sale',
+
         /** 특정 카테고리 상품 리스트 */
         LIST: '/categories/:categoryNo/products',
 

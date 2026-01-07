@@ -103,9 +103,8 @@ export default async function MyPageLayout({
     return (
         <div
             className={css({
-                maxWidth: '1280px',
                 margin: '0 auto',
-                padding: { base: '24px 16px 80px', lg: '40px 20px' },
+                padding: { base: '24px 16px 80px', lg: '40px 0' },
                 display: 'flex',
                 gap: { base: '0', lg: '80px' },
                 alignItems: 'flex-start',

@@ -9,8 +9,6 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 import { css } from '@/styled-system/css';
 
-export const dynamic = 'force-dynamic';
-
 export default function SignupCompletePage() {
     const { t } = useTranslation();
 
@@ -89,16 +87,16 @@ export default function SignupCompletePage() {
                             '{{mallName}}에 로그인 후 다양한 회원 혜택과 몰생활의 모든 것을 만나보세요.',
                             {
                                 mallName: mallData.mall.mallName,
-                            }
+                            },
                         )}
                     </p>
                 </div>
 
                 <Link href={PATHS.MAIN} className={css({ width: '100%' })}>
                     <Button
-                        type="button"
-                        frame="outlined"
-                        size="large"
+                        type='button'
+                        frame='outlined'
+                        size='large'
                         className={css({ width: '100%' })}
                     >
                         {t('홈으로')}

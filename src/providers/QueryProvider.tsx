@@ -3,23 +3,14 @@
 
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
 import {
+    DehydratedState,
+    HydrationBoundary,
     isServer,
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
-function makeQueryClient() {
-    return new QueryClient({
-        defaultOptions: {
-            queries: {
-                // With SSR, we usually want to set some default staleTime
-                // above 0 to avoid refetching immediately on the client
-                staleTime: 60 * 1000,
-            },
-        },
-    });
-}
+import { makeQueryClient } from '@/utils/queryClient';
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
@@ -37,7 +28,13 @@ function getQueryClient() {
     }
 }
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+    children,
+    dehydratedState,
+}: {
+    children: React.ReactNode;
+    dehydratedState: DehydratedState;
+}) {
     // NOTE: Avoid useState when initializing the query client if you don't
     //       have a suspense boundary between this and the code that may
     //       suspend because React will throw away the client on the initial
@@ -46,7 +43,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            {children}
+            <HydrationBoundary state={dehydratedState}>
+                {children}
+            </HydrationBoundary>
+
             <div style={{ fontSize: '16px' }}>
                 <ReactQueryDevtools initialIsOpen={false} />
             </div>
