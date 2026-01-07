@@ -9,7 +9,6 @@ import IconBannerSection from '@/components/banner/icon-banner/Section';
 import IconBannerSkeleton from '@/components/banner/icon-banner/Skeleton';
 import ProductDisplaySection from '@/components/main/product-display';
 // import { getMainPageLayout } from '@/config/mainPageLayouts'
-import EventSection from '@/components/event/Section';
 
 export const dynamic = 'force-dynamic';
 

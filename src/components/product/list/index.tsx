@@ -10,7 +10,7 @@ import { HeartFilledIcon } from '@/components/icons/HeartFilledIcon';
 import { PATHS } from '@/const/paths';
 import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
-import { CURRENCY, discountRate } from '@/utils/currency';
+import { CURRENCY, getDiscountRate } from '@/utils/currency';
 
 interface ProductListProps {
     productNo: number;
@@ -174,11 +174,11 @@ const ProductList = ({
                             gap: '4px',
                         })}
                     >
-                        {discountRate(
+                        {getDiscountRate(
                             salePrice,
                             immediateDiscountAmt,
                             additionDiscountAmt,
-                        ).intValue !== 0 && (
+                        ) !== '' && (
                             <span
                                 className={text({
                                     size: 'body1',
@@ -186,11 +186,11 @@ const ProductList = ({
                                     color: 'red',
                                 })}
                             >
-                                {discountRate(
+                                {getDiscountRate(
                                     salePrice,
                                     immediateDiscountAmt,
                                     additionDiscountAmt,
-                                ).format()}
+                                )}
                             </span>
                         )}
 

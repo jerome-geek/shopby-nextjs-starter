@@ -5,6 +5,9 @@ import { BigCartIcon } from '@/components/icons/BigCartIcon';
 import { BigHeartIcon } from '@/components/icons/BigHeartIcon';
 import { BigSearchIcon } from '@/components/icons/BigSearchIcon';
 import { ControlIcon } from '@/components/icons/ControlIcon';
+import { HeartBigIcon } from '@/components/icons/HeartBigIcon';
+import { HeartFilledBigIcon } from '@/components/icons/HeartFilledBigIcon';
+import { HeartFilledIcon } from '@/components/icons/HeartFilledIcon';
 import { HeartIcon } from '@/components/icons/HeartIcon';
 import { HeartLikeFilledSmallIcon } from '@/components/icons/HeartLikeFilledSmallIcon';
 import { HeartLikeSmallIcon } from '@/components/icons/HeartLikeSmall';
@@ -26,6 +29,9 @@ export {
     BigHeartIcon,
     BigSearchIcon,
     ControlIcon,
+    HeartBigIcon,
+    HeartFilledBigIcon,
+    HeartFilledIcon,
     HeartIcon,
     HeartLikeFilledSmallIcon,
     HeartLikeSmallIcon,
@@ -35,7 +41,7 @@ export {
     MenuIcon,
     SearchIcon,
     SmallCaretIcon,
+    StarIcon,
     StarMiniIcon,
     UserIcon,
-    StarIcon,
 };
