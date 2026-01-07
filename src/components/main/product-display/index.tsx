@@ -36,16 +36,17 @@
 
 // export default ProductDisplaySection;
 
+import { css } from '@/styled-system/css';
 import { ErrorBoundary } from '@suspensive/react';
 import { Suspense } from 'react';
 
+import ArticleSection from '@/components/article/Section';
 import SectionList from '@/components/main/product-display/SectionList';
 import BestSection from '@/components/product/Best/Section';
 import Section from '@/components/product/display-section/Section';
 import NewSection from '@/components/product/new/Section';
 
 const ProductDisplaySection = async () => {
-
     const desktopSections = () => {
         return (
             <ErrorBoundary fallback={<div>Error</div>}>
@@ -57,10 +58,19 @@ const ProductDisplaySection = async () => {
                         <div>브랜드2</div>
                         <div>브랜드3</div>
                     </div>
-                    <div>
-                        <div>아티클1</div>
-                        <div>아티클2</div>
-                    </div>
+                    <section
+                        className={css({
+                            display: 'flex',
+                            width: '100vw',
+                            marginX: 'calc(50% - 50vw)',
+                            overflow: 'hidden',
+                            padding: '48px',
+                            backgroundColor: 'gray10',
+                        })}
+                    >
+                        <ArticleSection articleId='MAIN_ARTICLE_01' />
+                        <ArticleSection articleId='MAIN_ARTICLE_01' />
+                    </section>
                     <div>기획전</div>
                     <NewSection />
                     <Section index={1} />
@@ -85,8 +95,8 @@ const ProductDisplaySection = async () => {
                     </div>
                 </Suspense>
             </ErrorBoundary>
-        )
-    }
+        );
+    };
 
     const mobileSections = () => {
         return (
@@ -95,7 +105,7 @@ const ProductDisplaySection = async () => {
                     <Section index={0} />
                     <BestSection />
                     <div>브랜드1</div>
-                    <div>아티클1</div>
+                    <ArticleSection articleId='MAIN_ARTICLE_01' />
                     <div>기획전</div>
                     <NewSection />
                     <div>브랜드2</div>
@@ -116,7 +126,7 @@ const ProductDisplaySection = async () => {
                     <div>아티클6</div>
                 </Suspense>
             </ErrorBoundary>
-        )
+        );
     };
 
     return (
