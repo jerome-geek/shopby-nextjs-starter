@@ -14,6 +14,7 @@ import { token } from '@/styled-system/tokens';
 import { POINT } from '@/utils/currency';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { Button } from '@/components/ui/button';
+import { text } from '@/styled-system/recipes';
 
 interface AccumulationListProps {
     searchParams: GetAccumulationsParams;
@@ -27,14 +28,14 @@ interface AccumulationListProps {
 export default function AccumulationList({
     searchParams,
     initialData,
-    isMobile: isMobileUA,
+    isMobile,
 }: AccumulationListProps) {
     const { t } = useTranslation();
 
     // [Client] 실시간 화면 크기 감지
     const isMobileView = useMediaQuery('(max-width: 1023px)');
     // 서버에서 받은 UA 정보와 클라이언트 뷰포트 정보를 조합 (Hydration 전에는 UA 정보 사용)
-    const activeIsMobile = isMobileView ?? isMobileUA;
+    const activeIsMobile = isMobileView ?? isMobile;
 
     const {
         data: infiniteAccumulationListData,
@@ -96,11 +97,37 @@ export default function AccumulationList({
         }
     }, [infiniteAccumulationListData, activeIsMobile, isFetchingNextPage]);
 
+    const getExpireYmdt = ({
+        registerYmdt,
+        expireYmdt,
+    }: {
+        registerYmdt: string;
+        expireYmdt: string;
+    }) => {
+        if (expireYmdt === null) {
+            return '-';
+        }
+
+        if (dayjs(expireYmdt).format('YYYY') === '9999') {
+            return t('제한없음');
+        }
+
+        return isMobile
+            ? `${dayjs(registerYmdt).format('YYYY-MM-DD HH:mm:ss')} ~ ${dayjs(
+                  expireYmdt,
+              ).format('YYYY-MM-DD HH:mm:ss')}`
+            : `${dayjs(registerYmdt).format('YYYY-MM-DD HH:mm:ss')}
+        <br/>
+        ~
+        <br/>
+        ${dayjs(expireYmdt).format('YYYY-MM-DD HH:mm:ss')}`;
+    };
+
     // 컬럼 비율 설정 (PC용)
     const gridTemplate = '1.5fr 3fr 1fr 1fr 3fr';
 
     return (
-        <div className={css({ width: '100%', mt: '40px' })}>
+        <div className={css({ width: '100%' })}>
             {/* Header (PC 전용 - activeIsMobile이 false일 때만 노출) */}
             {!activeIsMobile && (
                 <div
@@ -118,7 +145,9 @@ export default function AccumulationList({
                     })}
                 >
                     <div>{t('일자')}</div>
-                    <div>{t('적립내역')}</div>
+                    <div className={css({ textAlign: 'left', pl: '20px' })}>
+                        {t('적립내역')}
+                    </div>
                     <div>{t('적립')}</div>
                     <div>{t('차감')}</div>
                     <div>{t('유효기간')}</div>
@@ -159,7 +188,16 @@ export default function AccumulationList({
                                 color: '#999',
                             })}
                         >
-                            {dayjs(item.registerYmdt).format('YYYY-MM-DD')}
+                            <span
+                                className={text({
+                                    size: 'body1',
+                                    weight: 'regular',
+                                })}
+                            >
+                                {dayjs(item.registerYmdt).format('YYYY-MM-DD')}
+                                <br />
+                                {dayjs(item.registerYmdt).format('HH:mm:ss')}
+                            </span>
                         </div>
 
                         {/* 적립내역 */}
@@ -169,11 +207,16 @@ export default function AccumulationList({
                                 gridRow: activeIsMobile ? '2 / 3' : 'auto',
                                 color: token('colors.black'),
                                 fontWeight: '500',
-                                textAlign: activeIsMobile ? 'left' : 'center',
+                                textAlign: 'left',
                                 pr: '10px',
+                                pl: !activeIsMobile ? '20px' : '0',
                             })}
                         >
-                            {item.accumulationReserveReasonDisplay}
+                            <span>{item.accumulationReserveReasonDisplay}</span>
+                            <br />
+                            {item.reasonDetail && (
+                                <span>({item.reasonDetail})</span>
+                            )}
                         </div>
 
                         {/* 적립/차감 금액 */}
@@ -181,7 +224,7 @@ export default function AccumulationList({
                             className={css({
                                 gridColumn: activeIsMobile ? '2 / 3' : '3 / 4',
                                 gridRow: activeIsMobile ? '1 / 2' : 'auto',
-                                textAlign: 'right',
+                                textAlign: activeIsMobile ? 'right' : 'center',
                                 fontWeight: 'bold',
                                 color:
                                     item.accumulationStatusGroupType ===
@@ -192,7 +235,7 @@ export default function AccumulationList({
                         >
                             {item.accumulationStatusGroupType === 'PAYMENT' ? (
                                 <span className={css({ color: '#ff4d4f' })}>
-                                    +{POINT(item.accumulationAmt).format()}
+                                    {POINT(item.accumulationAmt).format()}
                                 </span>
                             ) : (
                                 '-'
@@ -203,8 +246,8 @@ export default function AccumulationList({
                             className={css({
                                 gridColumn: activeIsMobile ? '2 / 3' : '4 / 5',
                                 gridRow: activeIsMobile ? '2 / 3' : 'auto',
-                                textAlign: 'right',
-                                color: '#222',
+                                textAlign: activeIsMobile ? 'right' : 'center',
+                                color: token('colors.black'),
                                 display: {
                                     base:
                                         item.accumulationStatusGroupType ===
@@ -214,9 +257,14 @@ export default function AccumulationList({
                                 },
                             })}
                         >
-                            {item.accumulationStatusGroupType === 'DEDUCTION'
-                                ? POINT(item.accumulationAmt).format()
-                                : '-'}
+                            <span>
+                                {item.accumulationStatusGroupType ===
+                                'DEDUCTION'
+                                    ? POINT(item.accumulationAmt)
+                                          .multiply(-1)
+                                          .format()
+                                    : '-'}
+                            </span>
                         </div>
 
                         {/* 유효기간 */}
@@ -237,9 +285,14 @@ export default function AccumulationList({
                                           : 'block',
                             })}
                         >
-                            {item.accumulationStatusGroupType === 'PAYMENT'
-                                ? `${t('유효기간')}: ${dayjs(item.expireYmdt).format('YYYY-MM-DD')}`
-                                : '-'}
+                            <span
+                                dangerouslySetInnerHTML={{
+                                    __html: getExpireYmdt({
+                                        registerYmdt: item.registerYmdt,
+                                        expireYmdt: item.expireYmdt,
+                                    }),
+                                }}
+                            />
                         </div>
                     </div>
                 ))}

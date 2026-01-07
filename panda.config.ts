@@ -255,12 +255,17 @@ export default defineConfig({
                             title1: {
                                 fontSize: '2.2rem',
                                 lineHeight: '1.32',
-                                letterSpacing: '-0.002em', // -0.2%
+                                letterSpacing: '-0.02em', // -2%
                             },
                             title2: {
                                 fontSize: '2rem',
                                 lineHeight: '1.4',
                                 letterSpacing: '-0.005em', // -0.5%
+                            },
+                            body1: {
+                                fontSize: '1.4rem',
+                                lineHeight: '1.4',
+                                letterSpacing: '-0.02em', // -2%
                             },
                             headline2: {
                                 fontSize: '1.5rem',
@@ -280,7 +285,7 @@ export default defineConfig({
                             caption: {
                                 fontSize: '1.2rem',
                                 lineHeight: '1.4',
-                                letterSpacing: '-0.002em', // -0.2%
+                                letterSpacing: '-0.02em', // -2%
                             },
                         },
                         weight: {

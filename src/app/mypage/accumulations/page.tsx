@@ -1,15 +1,17 @@
 import { map, pipe, range, toArray, toAsync } from '@fxts/core';
 import dayjs from 'dayjs';
-import { headers } from 'next/headers';
-import { UAParser } from 'ua-parser-js';
 
 import { accumulation } from '@/api/manage';
-import SearchPaging from '@/components/common/Paging/SearchPaging';
+import SearchPaging from '@/components/common/SearchPaging';
 import AccumulationList from '@/components/mypage/accumulation/List';
 import AccumulationSummary from '@/components/mypage/accumulation/Summary';
 import { getTranslation } from '@/i18n/server';
 import { GetAccumulationsParams } from '@/models/manage/accumulation';
 import { css } from '@/styled-system/css';
+import { getIsMobile } from '@/utils/device.server';
+import { vstack } from '@/styled-system/patterns';
+import { mall } from '@/api/admin';
+import { text } from '@/styled-system/recipes';
 
 type MypageAccumulationsPageProps = AppPageProps<'/mypage/accumulations'>;
 
@@ -19,16 +21,9 @@ export default async function MypageAccumulationsPage(
     const { t } = await getTranslation();
 
     const searchParams = await props.searchParams;
-    // TODO: headers를 사용할 경우 캐시 체크
-    const headerList = await headers();
-    const ua = headerList.get('user-agent') || '';
-    const parser = new UAParser(ua);
-    const isMobile =
-        parser.getDevice().type === 'mobile' ||
-        parser.getDevice().type === 'tablet';
+    const isMobile = await getIsMobile();
 
     const pageNumber = Number(searchParams.pageNumber) || 1;
-    console.log('🚀 ~ MypageAccumulationsPage ~ pageNumber:', pageNumber);
     const pageSize = Number(searchParams.pageSize) || 10;
 
     const accumulationsSearchParams: GetAccumulationsParams = {
@@ -63,22 +58,32 @@ export default async function MypageAccumulationsPage(
         initialData[initialData.length - 1]?.data.totalCount ?? 0;
 
     return (
-        <div>
+        <div className={vstack({ gap: '10', alignItems: 'stretch' })}>
             <AccumulationSummary />
 
-            <AccumulationList
-                searchParams={accumulationsSearchParams}
-                initialData={initialData}
-                isMobile={isMobile}
-            />
+            <div className={vstack({ gap: '4', alignItems: 'flex-start' })}>
+                <p
+                    className={text({ size: 'caption', weight: 'semibold' })}
+                    dangerouslySetInnerHTML={{
+                        __html: t('총 <b>{{totalCount}}</b>건', { totalCount }),
+                    }}
+                />
 
-            <div
-                className={css({
-                    mt: '40px',
-                    display: { base: 'none', lg: 'block' },
-                })}
-            >
-                <SearchPaging totalCount={totalCount} pageSize={pageSize} />
+                <AccumulationList
+                    searchParams={accumulationsSearchParams}
+                    initialData={initialData}
+                    isMobile={isMobile}
+                />
+
+                <div
+                    className={css({
+                        width: '100%',
+                        mt: '10',
+                        display: { base: 'none', lg: 'block' },
+                    })}
+                >
+                    <SearchPaging totalCount={totalCount} pageSize={pageSize} />
+                </div>
             </div>
         </div>
     );
