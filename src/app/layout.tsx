@@ -44,7 +44,7 @@ export default async function RootLayout({
                                         width: '100%',
                                         maxWidth: {
                                             base: '100%',
-                                            lg: '1440px',
+                                            lg: '1200px',
                                         },
                                         marginX: 'auto',
                                     })}

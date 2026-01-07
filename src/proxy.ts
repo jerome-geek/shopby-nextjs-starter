@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 
 import { cookieTokenManager } from '@/api/core/cookie';
 import { PATHS } from '@/const/paths';
+import { UpdateAccessTokenResponse } from '@/models/auth/oauth2';
 
 /**
  * 보호된 라우트 목록
@@ -94,12 +95,7 @@ export async function proxy(request: NextRequest) {
                         },
                         timeout: 5000,
                     })
-                    .json<{
-                        accessToken: string;
-                        expiresIn: number;
-                        refreshToken?: string;
-                        refreshTokenExpiresIn: number;
-                    }>();
+                    .json<UpdateAccessTokenResponse>();
 
                 if (data.accessToken) {
                     const response = NextResponse.next();
@@ -120,16 +116,16 @@ export async function proxy(request: NextRequest) {
                         { ...cookieOptions, maxAge: data.expiresIn },
                     );
 
-                    if (data.refreshToken) {
-                        response.cookies.set(
-                            cookieTokenManager.REFRESH_TOKEN_KEY,
-                            data.refreshToken,
-                            {
-                                ...cookieOptions,
-                                maxAge: data.refreshTokenExpiresIn,
-                            },
-                        );
-                    }
+                    // if (data.refreshToken) {
+                    //     response.cookies.set(
+                    //         cookieTokenManager.REFRESH_TOKEN_KEY,
+                    //         data.refreshToken,
+                    //         {
+                    //             ...cookieOptions,
+                    //             maxAge: data.refreshTokenExpiresIn,
+                    //         },
+                    //     );
+                    // }
 
                     if (process.env.NODE_ENV === 'development') {
                         console.log(

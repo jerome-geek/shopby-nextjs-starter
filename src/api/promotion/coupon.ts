@@ -71,7 +71,7 @@ const coupon = {
             `coupons/register-code/${promotionCode}`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -82,14 +82,14 @@ const coupon = {
     issueCoupon: (
         couponNo: number,
         data?: IssueCouponData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<IssueCouponResponse>(
             `coupons/${couponNo}/download`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
     /**
@@ -99,7 +99,7 @@ const coupon = {
     getExcludeTargetsByCouponNumber: (
         couponNo: number,
         params: GetExcludeTargetsByCouponNumberParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetExcludeTargetsByCouponNumberResponse>(
             `coupons/${couponNo}/exclude-targets`,
@@ -109,7 +109,7 @@ const coupon = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -120,7 +120,7 @@ const coupon = {
     getCouponTargets: (
         couponNo: number,
         params: GetCouponTargetsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetCouponTargetsResponse>(
             `coupons/${couponNo}/targets`,
@@ -130,7 +130,7 @@ const coupon = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -143,7 +143,7 @@ const coupon = {
             `coupons/events/${eventNo}/download`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -154,14 +154,14 @@ const coupon = {
     issueProductCoupons: (
         productNo: number,
         data?: IssueProductCouponsData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<IssueProductCouponsResponse>(
             `coupons/products/${productNo}/download`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -172,7 +172,7 @@ const coupon = {
     getIssuableCouponsByProductNo: (
         productNo: number,
         params?: GetIssuableCouponsByProductNoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetIssuableCouponsByProductNoResponse>(
             `coupons/products/${productNo}/issuable/coupons`,
@@ -182,7 +182,7 @@ const coupon = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 };

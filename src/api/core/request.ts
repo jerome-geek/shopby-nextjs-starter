@@ -21,25 +21,7 @@ const baseRequest = ky.create({
         currency: 'KRW',
     },
     hooks: {
-        beforeRequest: [
-            logRequest,
-            setTokenHeader,
-            // 🧪 [TEST] 프로필 조회 시 강제로 토큰 훼손하여 401 유발 (테스트 후 삭제 필)
-            // (request, options: any) => {
-            //     if (
-            //         request.url.includes('/profile') &&
-            //         options.retryCount === 0
-            //     ) {
-            //         console.log(
-            //             '🧪 [TEST] Injecting Invalid Token to trigger 401...'
-            //         );
-            //         request.headers.set(
-            //             'Shop-By-Authorization',
-            //             'Bearer INVALID_TEST_TOKEN'
-            //         );
-            //     }
-            // },
-        ], // 요청 전 헤더에 인증 토큰 추가 (setTokenHeader)
+        beforeRequest: [logRequest, setTokenHeader], // 요청 전 헤더에 인증 토큰 추가 (setTokenHeader)
         beforeRetry: [refreshToken], // 재시도 전 토큰 갱신 (handleRefreshToken)
         afterResponse: [
             // logResponse

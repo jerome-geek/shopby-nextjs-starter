@@ -5,12 +5,12 @@ import { accumulation } from '@/api/manage';
 import SearchPaging from '@/components/common/SearchPaging';
 import AccumulationList from '@/components/mypage/accumulation/List';
 import AccumulationSummary from '@/components/mypage/accumulation/Summary';
+import MypageSearchPeriod from '@/components/mypage/search-period';
 import { getTranslation } from '@/i18n/server';
 import { GetAccumulationsParams } from '@/models/manage/accumulation';
 import { css } from '@/styled-system/css';
 import { getIsMobile } from '@/utils/device.server';
 import { vstack } from '@/styled-system/patterns';
-import { mall } from '@/api/admin';
 import { text } from '@/styled-system/recipes';
 
 type MypageAccumulationsPageProps = AppPageProps<'/mypage/accumulations'>;
@@ -29,8 +29,10 @@ export default async function MypageAccumulationsPage(
     const accumulationsSearchParams: GetAccumulationsParams = {
         pageNumber,
         pageSize,
-        startYmd: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
-        endYmd: dayjs().format('YYYY-MM-DD'),
+        startYmd:
+            (searchParams.startYmd as string) ||
+            dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+        endYmd: (searchParams.endYmd as string) || dayjs().format('YYYY-MM-DD'),
     };
 
     // [Hybrid Support] PC/Mobile 환경에 상관없이 항상 1페이지부터 현재 요청된 pageNumber까지 데이터를 가져옵니다.
@@ -61,29 +63,38 @@ export default async function MypageAccumulationsPage(
         <div className={vstack({ gap: '10', alignItems: 'stretch' })}>
             <AccumulationSummary />
 
-            <div className={vstack({ gap: '4', alignItems: 'flex-start' })}>
-                <p
-                    className={text({ size: 'caption', weight: 'semibold' })}
-                    dangerouslySetInnerHTML={{
-                        __html: t('총 <b>{{totalCount}}</b>건', { totalCount }),
-                    }}
-                />
+            <div className={vstack({ gap: '6', alignItems: 'stretch' })}>
+                <MypageSearchPeriod />
 
-                <AccumulationList
-                    searchParams={accumulationsSearchParams}
-                    initialData={initialData}
-                    isMobile={isMobile}
-                />
+                <div className={vstack({ gap: '4', alignItems: 'flex-start' })}>
+                    <p
+                        className={text({
+                            size: 'headline1',
+                            weight: 'semibold',
+                        })}
+                        dangerouslySetInnerHTML={{
+                            __html: t('총 <b>{{totalCount}}</b>건', {
+                                totalCount,
+                            }),
+                        }}
+                    />
 
-                <div
-                    className={css({
-                        width: '100%',
-                        mt: '10',
-                        display: { base: 'none', lg: 'block' },
-                    })}
-                >
-                    <SearchPaging totalCount={totalCount} pageSize={pageSize} />
+                    <AccumulationList
+                        searchParams={accumulationsSearchParams}
+                        initialData={initialData}
+                        isMobile={isMobile}
+                    />
                 </div>
+            </div>
+
+            <div
+                className={css({
+                    width: '100%',
+                    mt: '2',
+                    display: { base: 'none', lg: 'block' },
+                })}
+            >
+                <SearchPaging totalCount={totalCount} pageSize={pageSize} />
             </div>
         </div>
     );
