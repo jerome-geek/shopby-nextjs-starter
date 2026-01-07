@@ -1,15 +1,17 @@
-import { dehydrate } from '@tanstack/react-query';
+import { isEmpty } from '@fxts/core';
 import type { Metadata } from 'next';
 import { OverlayProvider } from 'overlay-kit';
 
+import { category } from '@/api/display';
 import Footer from '@/components/common/Footer';
+import GlobalEffects from '@/components/common/GlobalEffects';
 import Header from '@/components/common/Header';
 import MobileBottomNavigation from '@/components/common/MobileBottomNavigation';
 import GlobalErrorBoundary from '@/components/GlobalErrorBoundary';
 import I18nProvider from '@/providers/I18nProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import { css } from '@/styled-system/css';
-import { makeQueryClient } from '@/utils/queryClient';
+import { GetCategoryResponse } from '@/models/display/category';
 
 import '@/app/globals.css';
 import 'swiper/css';
@@ -28,15 +30,11 @@ export default async function RootLayout({
 }>) {
     const locale = process.env.NEXT_PUBLIC_LOCALE || 'ko';
 
-    const queryClient = makeQueryClient();
-
-    const dehydratedState = dehydrate(queryClient);
-
     return (
         <html lang={locale}>
             <body>
                 <I18nProvider>
-                    <QueryProvider dehydratedState={dehydratedState}>
+                    <QueryProvider>
                         <OverlayProvider>
                             <GlobalErrorBoundary>
                                 <Header />
@@ -54,7 +52,7 @@ export default async function RootLayout({
                                     {children}
                                 </main>
                                 <Footer />
-                                <MobileBottomNavigation />
+                                <GlobalEffects />
                             </GlobalErrorBoundary>
                         </OverlayProvider>
                     </QueryProvider>

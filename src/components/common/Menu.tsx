@@ -8,33 +8,21 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
+import Categories from '@/components/drawer/categories';
 import { MenuIcon } from '@/components/icons';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
-import useCategoriesByCode from '@/hooks/query/display/category/useCategoriesByCode';
-import useCategory from '@/hooks/query/display/category/useCategory';
+import { GetCategoryResponse } from '@/models/display/category';
 import { css, cva } from '@/styled-system/css';
 import { text } from '@/styled-system/recipes';
 import { token } from '@/styled-system/tokens';
 
-const Menu = () => {
+const Menu = ({ categoryData }: { categoryData?: GetCategoryResponse }) => {
     const { t } = useTranslation();
 
     const pathname = usePathname();
 
     const overlayData = useOverlayData();
-
-    const { data: categoriesByCodeData } = useCategoriesByCode({
-        data: {
-            codes: ['MAIN'],
-        },
-    });
-
-    const mainCategoryNo = categoriesByCodeData?.[0]?.displayCategoryNo ?? '';
-
-    const { data: categoryData } = useCategory({
-        categoryNo: mainCategoryNo.toString(),
-    });
 
     const menuList = useMemo(() => {
         const categoryLinkList = pipe(
@@ -68,15 +56,14 @@ const Menu = () => {
             return;
         }
 
-        // overlay.open(
-        //     (props) => {
-        //         // TODO : 카테고리 drawer 구현
-        //         return <></>;
-        //     },
-        //     {
-        //         overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
-        //     },
-        // );
+        overlay.open(
+            (props) => {
+                return <Categories {...props} categoryData={categoryData} />;
+            },
+            {
+                overlayId: OVERLAY_ID.CATEGORIES_DRAWER,
+            },
+        );
     };
 
     const swiperOptions: SwiperProps = {
