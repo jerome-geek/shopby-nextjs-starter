@@ -1,7 +1,6 @@
 'use client';
 
 import { css } from '@/styled-system/css';
-import { text } from '@/styled-system/recipes';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -97,10 +96,9 @@ const ArticleSectionItem = ({ events }: ArticleSectionItemProps) => {
                     </h2>
                     {events.promotionText && (
                         <p
-                            className={text({
-                                size: 'headline1',
+                            className={css({
+                                textStyle: 'headline1.regular',
                                 color: 'gray90',
-                                weight: 'regular',
                             })}
                         >
                             {events.promotionText}
