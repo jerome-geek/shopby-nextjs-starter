@@ -9,6 +9,7 @@ import { css } from '@/styled-system/css';
 import { getIsMobile } from '@/utils/device.server';
 import NewProductList from '@/components/product/new/ProductList';
 import { vstack } from '@/styled-system/patterns';
+import { SORT_OPTIONS } from '@/const/product';
 
 export type ProductsPageProps =
     AppPageProps<'/categories/[categoryNo]/products'>;
@@ -33,8 +34,8 @@ export default async function ProductsPage(props: ProductsPageProps) {
         pageSize,
         categoryNos: [mainSearchCategoryNo],
         order: {
-            by,
-            direction: direction,
+            by: by || SORT_OPTIONS[0].by,
+            direction: direction || SORT_OPTIONS[0].direction,
         },
     };
 

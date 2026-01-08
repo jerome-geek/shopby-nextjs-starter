@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef } from 'react';
+import { isEmpty } from '@fxts/core';
 
 import ProductCard from '@/components/product/Card';
 import { useInfiniteProductList } from '@/hooks/infiniteQueries/product/product';
@@ -54,7 +55,7 @@ export default function NewProductList({
         // return productListData?.items ?? [];
         return (
             infiniteProductListData?.pages?.flatMap(
-                (page) => page.data.items
+                (page) => page.data.items,
             ) ?? []
         );
     }, [infiniteProductListData]);
@@ -72,7 +73,7 @@ export default function NewProductList({
                     fetchNextPage();
                 }
             },
-            { threshold: 0.1 }
+            { threshold: 0.1 },
         );
 
         if (loadMoreRef.current) {
@@ -82,7 +83,26 @@ export default function NewProductList({
         return () => observer.disconnect();
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    return (
+    return isEmpty(productList) ? (
+        <div
+            className={css({
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '300px',
+            })}
+        >
+            <p
+                className={css({
+                    textStyle: 'headline1.medium',
+                    color: 'gray60',
+                })}
+            >
+                상품이 없습니다.
+            </p>
+        </div>
+    ) : (
         <>
             <ul
                 className={css({
@@ -92,7 +112,7 @@ export default function NewProductList({
                         lg: 'repeat(4, 1fr)', // 웹: 4열 (원하는 열 수로 변경 가능)
                     },
                     gap: { base: '12px', lg: '16px' },
-                    padding: { base: '16px', lg: '24px' },
+                    padding: { base: '20px', md: '0' },
                 })}
             >
                 {productList.map((item) => {
