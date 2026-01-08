@@ -28,13 +28,7 @@ function getQueryClient() {
     }
 }
 
-export default function Providers({
-    children,
-    dehydratedState,
-}: {
-    children: React.ReactNode;
-    dehydratedState: DehydratedState;
-}) {
+export default function Providers({ children }: { children: React.ReactNode }) {
     // NOTE: Avoid useState when initializing the query client if you don't
     //       have a suspense boundary between this and the code that may
     //       suspend because React will throw away the client on the initial
@@ -43,9 +37,7 @@ export default function Providers({
 
     return (
         <QueryClientProvider client={queryClient}>
-            <HydrationBoundary state={dehydratedState}>
-                {children}
-            </HydrationBoundary>
+            {children}
 
             <div style={{ fontSize: '16px' }}>
                 <ReactQueryDevtools initialIsOpen={false} />

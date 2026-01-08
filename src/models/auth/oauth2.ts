@@ -1,13 +1,13 @@
 import { NcpOpenIdProviderType } from '@/models';
 
-export type UpdateAccessTokenResponse = Pick<
-    IssueAccessTokenResponse,
-    | 'expiresIn'
-    | 'accessToken'
-    | 'tokenType'
-    | 'refreshToken'
-    | 'refreshTokenExpiresIn'
->;
+export interface UpdateAccessTokenResponse {
+    /** 액세스 토큰 만료까지 남은 시간(초) */
+    expiresIn: number;
+    /** 엑세스 토큰 */
+    accessToken: string;
+    /** 토큰 타입 Bearer 로 고정 */
+    tokenType: 'Bearer';
+}
 
 export interface IssueAccessTokenData {
     /** 비밀번호 */

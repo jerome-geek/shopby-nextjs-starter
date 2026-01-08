@@ -242,7 +242,173 @@ export default defineConfig({
                     },
                 },
             },
+            textStyles: {
+                // Display
+                'display1.semibold': {
+                    value: {
+                        fontSize: '4rem', // 40px
+                        lineHeight: 1.32,
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                'display2.bold': {
+                    value: {
+                        fontSize: '3rem', // 30px
+                        lineHeight: 1.32,
+                        fontWeight: 700, // Bold
+                    },
+                },
+                // Title
+                'title1.bold': {
+                    value: {
+                        fontSize: '2.2rem', // 22px
+                        lineHeight: 1.32,
+                        fontWeight: 700, // Bold
+                    },
+                },
+                'title1.semibold': {
+                    value: {
+                        fontSize: '2.2rem', // 22px
+                        lineHeight: 1.32,
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                'title2.semibold': {
+                    value: {
+                        fontSize: '2rem', // 20px
+                        lineHeight: 1.4,
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                // Heading
+                'heading.bold': {
+                    value: {
+                        fontSize: '1.7rem', // 17px
+                        lineHeight: 1.5,
+                        fontWeight: 700, // Bold
+                    },
+                },
+                'heading.semibold': {
+                    value: {
+                        fontSize: '1.7rem', // 17px
+                        lineHeight: 1.5,
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                // Headline
+                'headline1.medium': {
+                    value: {
+                        fontSize: '1.5rem', // 15px
+                        lineHeight: 1.4,
+                        fontWeight: 500, // Medium
+                    },
+                },
+                'headline1.regular': {
+                    value: {
+                        fontSize: '1.5rem', // 15px
+                        lineHeight: 1.4,
+                        fontWeight: 400, // Regular
+                    },
+                },
+                'headline2.bold': {
+                    value: {
+                        fontSize: '1.5rem', // 15px
+                        lineHeight: 1.3,
+                        fontWeight: 700, // Bold
+                    },
+                },
+                'headline2.semibold': {
+                    value: {
+                        fontSize: '1.5rem', // 15px
+                        lineHeight: 1.3,
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                'headline2.medium': {
+                    value: {
+                        fontSize: '1.5rem', // 15px
+                        lineHeight: 1.3,
+                        fontWeight: 500, // Medium
+                    },
+                },
+                // Body
+                'body1.bold': {
+                    value: {
+                        fontSize: '1.4rem', // 14px
+                        lineHeight: 1.4,
+                        fontWeight: 700, // Bold
+                    },
+                },
+                'body1.medium': {
+                    value: {
+                        fontSize: '1.4rem', // 14px
+                        lineHeight: 1.4,
+                        fontWeight: 500, // Medium
+                    },
+                },
+                'body1.regular': {
+                    value: {
+                        fontSize: '1.4rem', // 14px
+                        lineHeight: 1.4,
+                        fontWeight: 400, // Regular
+                    },
+                },
+                'body2.semibold': {
+                    value: {
+                        fontSize: '1.3rem', // 13px
+                        lineHeight: 1.3,
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                'body2.medium': {
+                    value: {
+                        fontSize: '1.3rem', // 13px
+                        lineHeight: 1.3,
+                        fontWeight: 500, // Medium
+                    },
+                },
+                'body2.regular': {
+                    value: {
+                        fontSize: '1.3rem', // 13px
+                        lineHeight: 1.3,
+                        fontWeight: 400, // Regular
+                    },
+                },
+                // Caption
+                'caption.semibold': {
+                    value: {
+                        fontSize: '1.2rem', // 12px
+                        lineHeight: 1.4,
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                'caption.regular': {
+                    value: {
+                        fontSize: '1.2rem', // 12px
+                        lineHeight: 1.4,
+                        fontWeight: 400, // Regular
+                    },
+                },
+                // Label
+                'label-sm': {
+                    value: {
+                        fontSize: '1rem', // 10px
+                        lineHeight: 1.5,
+                        letterSpacing: '-0.02em',
+                        fontWeight: 600, // Semibold
+                    },
+                },
+                'label-lg': {
+                    value: {
+                        fontSize: '1.3rem', // 13px
+                        lineHeight: 1.4,
+                        letterSpacing: '-0.03em',
+                        fontWeight: 600, // Semibold
+                    },
+                },
+            },
             recipes: {
+                // TODO: 브랜치 머지 시 충돌 방지를 위해 추후 삭제 처리 할 예정 - @joy
                 text: {
                     className: 'text',
                     base: {
@@ -255,12 +421,17 @@ export default defineConfig({
                             title1: {
                                 fontSize: '2.2rem',
                                 lineHeight: '1.32',
-                                letterSpacing: '-0.002em', // -0.2%
+                                letterSpacing: '-0.02em', // -2%
                             },
                             title2: {
                                 fontSize: '2rem',
                                 lineHeight: '1.4',
                                 letterSpacing: '-0.005em', // -0.5%
+                            },
+                            body1: {
+                                fontSize: '1.4rem',
+                                lineHeight: '1.4',
+                                letterSpacing: '-0.02em', // -2%
                             },
                             headline2: {
                                 fontSize: '1.5rem',
@@ -280,7 +451,7 @@ export default defineConfig({
                             caption: {
                                 fontSize: '1.2rem',
                                 lineHeight: '1.4',
-                                letterSpacing: '-0.002em', // -0.2%
+                                letterSpacing: '-0.02em', // -2%
                             },
                         },
                         weight: {
@@ -305,6 +476,48 @@ export default defineConfig({
                             pink: { color: 'pink' },
                             skyblue: { color: 'skyblue' },
                             salmon: { color: 'salmon' },
+                        },
+                    },
+                },
+                badge: {
+                    className: 'badge',
+                    base: {
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '2.4rem',
+                        whiteSpace: 'nowrap',
+                        fontFamily: 'sans',
+                        fontWeight: 600,
+                    },
+                    variants: {
+                        size: {
+                            sm: {
+                                textStyle: 'label-sm',
+                                padding: '0.2rem 0.6rem',
+                            },
+                            lg: {
+                                textStyle: 'label-lg',
+                                padding: '0.4rem 1rem',
+                            },
+                        },
+                        tone: {
+                            default: {
+                                backgroundColor: 'gray20',
+                                color: 'gray80',
+                            },
+                            dark: {
+                                backgroundColor: 'gray90',
+                                color: 'white',
+                            },
+                            pink: {
+                                backgroundColor: 'pink',
+                                color: 'red',
+                            },
+                            black: {
+                                backgroundColor: 'black',
+                                color: 'white',
+                            },
                         },
                     },
                 },

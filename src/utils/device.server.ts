@@ -31,27 +31,11 @@ export async function getPlatform(): Promise<Platform> {
     }
 }
 
-// 클라이언트 컴포넌트용 (useEffect에서 사용)
-export function getPlatformClient(): Platform {
-    if (typeof window === 'undefined') return 'PC';
-
-    const parser = new UAParser(window.navigator.userAgent);
+export async function getIsMobile() {
+    const headersList = await headers();
+    const userAgent = headersList.get?.('user-agent') || '';
+    const parser = new UAParser(userAgent);
     const device = parser.getDevice();
-    const os = parser.getOS();
 
-    const isMobile = device.type === 'mobile' || device.type === 'tablet';
-
-    if (!isMobile) {
-        return 'PC';
-    }
-
-    const osName = os.name?.toLowerCase();
-
-    if (osName === 'ios') {
-        return 'IOS';
-    } else if (osName === 'android') {
-        return 'AOS';
-    } else {
-        return 'MOBILE_WEB';
-    }
+    return device.type === 'mobile' || device.type === 'tablet';
 }

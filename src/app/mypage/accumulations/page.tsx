@@ -1,15 +1,16 @@
+import { getTranslation } from '@/i18n/server';
+import { css } from '@/styled-system/css';
+import { vstack } from '@/styled-system/patterns';
 import { map, pipe, range, toArray, toAsync } from '@fxts/core';
 import dayjs from 'dayjs';
-import { headers } from 'next/headers';
-import { UAParser } from 'ua-parser-js';
 
 import { accumulation } from '@/api/manage';
-import SearchPaging from '@/components/common/Paging/SearchPaging';
+import SearchPaging from '@/components/common/SearchPaging';
 import AccumulationList from '@/components/mypage/accumulation/List';
 import AccumulationSummary from '@/components/mypage/accumulation/Summary';
-import { getTranslation } from '@/i18n/server';
+import MypageSearchPeriod from '@/components/mypage/search-period';
 import { GetAccumulationsParams } from '@/models/manage/accumulation';
-import { css } from '@/styled-system/css';
+import { getIsMobile } from '@/utils/device.server';
 
 type MypageAccumulationsPageProps = AppPageProps<'/mypage/accumulations'>;
 
@@ -19,23 +20,18 @@ export default async function MypageAccumulationsPage(
     const { t } = await getTranslation();
 
     const searchParams = await props.searchParams;
-    // TODO: headers를 사용할 경우 캐시 체크
-    const headerList = await headers();
-    const ua = headerList.get('user-agent') || '';
-    const parser = new UAParser(ua);
-    const isMobile =
-        parser.getDevice().type === 'mobile' ||
-        parser.getDevice().type === 'tablet';
+    const isMobile = await getIsMobile();
 
     const pageNumber = Number(searchParams.pageNumber) || 1;
-    console.log('🚀 ~ MypageAccumulationsPage ~ pageNumber:', pageNumber);
     const pageSize = Number(searchParams.pageSize) || 10;
 
     const accumulationsSearchParams: GetAccumulationsParams = {
         pageNumber,
         pageSize,
-        startYmd: dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
-        endYmd: dayjs().format('YYYY-MM-DD'),
+        startYmd:
+            (searchParams.startYmd as string) ||
+            dayjs().subtract(3, 'month').format('YYYY-MM-DD'),
+        endYmd: (searchParams.endYmd as string) || dayjs().format('YYYY-MM-DD'),
     };
 
     // [Hybrid Support] PC/Mobile 환경에 상관없이 항상 1페이지부터 현재 요청된 pageNumber까지 데이터를 가져옵니다.
@@ -63,18 +59,36 @@ export default async function MypageAccumulationsPage(
         initialData[initialData.length - 1]?.data.totalCount ?? 0;
 
     return (
-        <div>
+        <div className={vstack({ gap: '10', alignItems: 'stretch' })}>
             <AccumulationSummary />
 
-            <AccumulationList
-                searchParams={accumulationsSearchParams}
-                initialData={initialData}
-                isMobile={isMobile}
-            />
+            <div className={vstack({ gap: '6', alignItems: 'stretch' })}>
+                <MypageSearchPeriod />
+
+                <div className={vstack({ gap: '4', alignItems: 'flex-start' })}>
+                    <p
+                        className={css({
+                            textStyle: 'headline2.semibold',
+                        })}
+                        dangerouslySetInnerHTML={{
+                            __html: t('총 <b>{{totalCount}}</b>건', {
+                                totalCount,
+                            }),
+                        }}
+                    />
+
+                    <AccumulationList
+                        searchParams={accumulationsSearchParams}
+                        initialData={initialData}
+                        isMobile={isMobile}
+                    />
+                </div>
+            </div>
 
             <div
                 className={css({
-                    mt: '40px',
+                    width: '100%',
+                    mt: '2',
                     display: { base: 'none', lg: 'block' },
                 })}
             >

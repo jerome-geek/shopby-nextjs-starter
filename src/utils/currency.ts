@@ -35,7 +35,7 @@ const KRW = (
         precision: 0,
         pattern: `#!`,
         negativePattern: `- # !`,
-    }
+    },
 ) => currency(value, { ...options });
 
 const USD = (value: currency.Any) => currency(value);
@@ -50,7 +50,8 @@ const POINT = (value: currency.Any) =>
     currency(value, {
         symbol: 'P',
         precision: 0,
-        pattern: `# !`,
+        pattern: `#!`,
+        negativePattern: '-#!',
     });
 
 /**
@@ -76,7 +77,7 @@ const RATE = (value: currency.Any) => {
 const getDiscountRate = (
     salePrice: number = 0,
     immediateDiscountAmt: number = 0,
-    additionDiscountAmt: number = 0
+    additionDiscountAmt: number = 0,
 ) => {
     if (salePrice <= 0) return '';
 

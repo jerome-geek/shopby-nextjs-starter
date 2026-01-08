@@ -1,19 +1,22 @@
 import Link from 'next/link';
 
+import Menu from '@/components/common/Menu';
+import {
+    BigBellIcon,
+    BigCartIcon,
+    BigHeartIcon,
+    BigSearchIcon,
+    UserIcon,
+} from '@/components/icons';
 import { PATHS } from '@/const/paths';
 import { css } from '@/styled-system/css';
-import {
-    BigHeartIcon,
-    UserIcon,
-    BigSearchIcon,
-    BigCartIcon,
-    BigBellIcon,
-} from '@/components/icons';
 import { token } from '@/styled-system/tokens';
-import Menu from '@/components/common/Menu';
+import { getCachedCategoryData } from '@/api/display/category.server';
 
 export default async function Header() {
     const cartCount = 13; // TODO: 실제 장바구니 아이템 수로 교체
+
+    const categoryData = await getCachedCategoryData();
 
     try {
         return (
@@ -66,7 +69,7 @@ export default async function Header() {
                             WannaMake
                         </Link>
 
-                        <Menu />
+                        <Menu categoryData={categoryData} />
                     </div>
 
                     {/* 유틸리티 아이콘들 */}

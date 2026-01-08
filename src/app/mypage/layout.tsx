@@ -52,8 +52,8 @@ export default async function MyPageLayout({
                                 url: PATHS.MYPAGE.PREVIOUS_ORDERS.MAIN,
                             },
                         ];
-                    }
-                )
+                    },
+                ),
             ),
         },
         {
@@ -104,10 +104,13 @@ export default async function MyPageLayout({
         <div
             className={css({
                 margin: '0 auto',
-                padding: { base: '24px 16px 80px', lg: '40px 0' },
+                // padding: { base: '24px 16px 80px', lg: '40px 0' },
+                padding: { base: '40px 0', md: '100px 0' },
                 display: 'flex',
-                gap: { base: '0', lg: '80px' },
+                gap: { base: '0', lg: '60px' },
                 alignItems: 'flex-start',
+                maxWidth:
+                    'min(1200px + clamp(20px, 8vw, 120px), -46px + 100vw)',
             })}
         >
             <MyPageSidebar menuList={menuList} />
