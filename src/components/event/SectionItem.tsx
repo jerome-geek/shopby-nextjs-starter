@@ -1,7 +1,7 @@
 'use client';
 
-import { css, cx } from '@/styled-system/css';
-import { badge, text } from '@/styled-system/recipes';
+import { css } from '@/styled-system/css';
+import { badge } from '@/styled-system/recipes';
 import { isEmpty } from '@fxts/core';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -138,9 +138,10 @@ const EventSectionItem = ({ eventData, products }: EventSectionItemProps) => {
                         {t(`${eventData.label}`)}
                     </h2>
                     <p
-                        className={cx(
-                            text({ size: 'headline1', color: 'gray90' }),
-                        )}
+                        className={css({
+                            textStyle: 'headline1.regular',
+                            color: 'gray90',
+                        })}
                     >
                         {eventData.promotionText}
                     </p>

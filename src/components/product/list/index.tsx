@@ -1,7 +1,7 @@
 'use client';
 
-import { css, cx } from '@/styled-system/css';
-import { badge, text } from '@/styled-system/recipes';
+import { css } from '@/styled-system/css';
+import { badge } from '@/styled-system/recipes';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -111,9 +111,8 @@ const ProductList = ({
                 >
                     {liked ? <HeartFilledIcon /> : <HeartIcon />}
                     <span
-                        className={text({
-                            size: 'caption',
-                            weight: 'medium',
+                        className={css({
+                            textStyle: 'caption.regular',
                             color: liked ? 'black' : 'gray70',
                         })}
                     >
@@ -131,9 +130,8 @@ const ProductList = ({
                 >
                     {brandName && (
                         <span
-                            className={text({
-                                size: 'body2',
-                                weight: 'semibold',
+                            className={css({
+                                textStyle: 'body2.semibold',
                                 color: 'black',
                             })}
                         >
@@ -142,19 +140,15 @@ const ProductList = ({
                     )}
 
                     <h3
-                        className={cx(
-                            text({
-                                size: 'body2',
-                                color: 'gray90',
-                            }),
-                            css({
-                                display: '-webkit-box',
-                                lineClamp: 1,
-                                boxOrient: 'vertical',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }),
-                        )}
+                        className={css({
+                            display: '-webkit-box',
+                            lineClamp: 1,
+                            boxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            textStyle: 'body2.regular',
+                            color: 'gray90',
+                        })}
                     >
                         {productName}
                     </h3>
@@ -180,9 +174,8 @@ const ProductList = ({
                             additionDiscountAmt,
                         ) !== '' && (
                             <span
-                                className={text({
-                                    size: 'body1',
-                                    weight: 'bold',
+                                className={css({
+                                    textStyle: 'body1.bold',
                                     color: 'red',
                                 })}
                             >
@@ -195,9 +188,8 @@ const ProductList = ({
                         )}
 
                         <span
-                            className={text({
-                                size: 'body1',
-                                weight: 'bold',
+                            className={css({
+                                textStyle: 'body1.bold',
                                 color: 'black',
                             })}
                         >
