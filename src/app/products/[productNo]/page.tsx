@@ -13,7 +13,7 @@ type ProductDetailPageProps = AppPageProps<'/products/[productNo]'>;
 
 export async function generateMetadata(
     props: ProductDetailPageProps,
-    parent: ResolvingMetadata
+    parent: ResolvingMetadata,
 ): Promise<Metadata> {
     const params = await props.params;
     const productNo = Number(params.productNo);
@@ -55,13 +55,17 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
     });
     console.log(
         '🚀 ~ ProductDetailPage ~ productDetailData:',
-        productDetailData
+        productDetailData,
     );
 
     const isLogin = await isAuthenticated();
+    console.log('🚀 ~ ProductDetailPage ~ isLogin:', isLogin);
 
     if (isLogin) {
-        productProfile.registerRecentViewProduct({ productNo });
+        const respont1 = await productProfile.registerRecentViewProduct({
+            productNo,
+        });
+        console.log('🚀 ~ ProductDetailPage ~ respont1:', respont1);
     }
 
     return (

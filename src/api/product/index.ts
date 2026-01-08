@@ -4,6 +4,7 @@ import customProperty from '@/api/product/customProperty';
 import freeGift from '@/api/product/freeGift';
 import product from '@/api/product/product';
 import productOption from '@/api/product/productOption';
+import productProfile from '@/api/product/profile';
 
 export {
     additionalDiscount,
@@ -12,4 +13,5 @@ export {
     freeGift,
     product,
     productOption,
+    productProfile,
 };

@@ -32,14 +32,14 @@ const productProfile = {
      */
     getGuestRecentViewProducts: (
         params: GetGuestRecentViewProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetRecentViewProductsResponse>(
             'guest/recent-products',
             {
                 searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -74,14 +74,14 @@ const productProfile = {
      */
     updateProductsLikeOld: (
         data: UpdateProductsLikeOldData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<UpdateProductsLikeOldResponse>(
             'profile/like-products',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -92,14 +92,15 @@ const productProfile = {
      */
     getRecentViewProducts: (
         params: GetRecentViewProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetRecentViewProductsResponse>(
             'profile/recent-products',
             {
                 searchParams: qs.stringify(params),
+                next: { tags: ['recent-products'] },
                 ...options,
-            }
+            },
         );
     },
 
@@ -111,7 +112,7 @@ const productProfile = {
      */
     registerRecentViewProduct: (
         data: RegisterRecentViewProductData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post('profile/recent-products', {
             json: data,
@@ -126,7 +127,7 @@ const productProfile = {
      */
     deleteRecentViewProducts: (
         params: DeleteRecentViewProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.delete('profile/recent-products', {
             searchParams: qs.stringify(params),
@@ -155,14 +156,14 @@ const productProfile = {
      */
     getLikeBrandsCount: (
         params: GetLikeBrandsCountParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetLikeBrandsCountResponse>(
             'profile/like-brands/count',
             {
                 searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -174,14 +175,14 @@ const productProfile = {
      */
     getMemberLikeBrandList: (
         params?: GetMemberLikeBrandListParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetMemberLikeBrandListResponse>(
             'profile/like-brands/member',
             {
                 searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -203,7 +204,7 @@ const productProfile = {
                     version: '1.1',
                 },
                 ...options,
-            }
+            },
         );
     },
 
@@ -217,7 +218,7 @@ const productProfile = {
             'profile/like-products/count',
             {
                 ...options,
-            }
+            },
         );
     },
 };

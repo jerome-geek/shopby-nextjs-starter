@@ -50,7 +50,7 @@ export default function LoginPage() {
 
     const { socialLoginList } = useSnsLogin();
     const availableSocialLoginList = socialLoginList.filter(
-        ({ isAvailable }) => isAvailable
+        ({ isAvailable }) => isAvailable,
     );
     const isSocialLoginVisible = availableSocialLoginList.length > 0;
 
@@ -64,10 +64,11 @@ export default function LoginPage() {
                 })
                 .json();
 
+            // TODO: 30분 더 길게 추가
             await cookieTokenManager.setToken({
                 accessToken: data.accessToken,
                 refreshToken: data.refreshToken,
-                expiresIn: data.expiresIn,
+                expiresIn: data.expiresIn + 1800,
                 refreshTokenExpiresIn: data.refreshTokenExpiresIn,
             });
 
@@ -122,16 +123,16 @@ export default function LoginPage() {
                                 gap: { base: '8px' },
                             })}
                         >
-                            <InputLabel htmlFor="memberId">
+                            <InputLabel htmlFor='memberId'>
                                 {t('아이디')}
                             </InputLabel>
                             <InputField
                                 {...register('memberId')}
-                                type="text"
-                                id="memberId"
+                                type='text'
+                                id='memberId'
                                 placeholder={t('아이디를 입력해 주세요')}
                             />
-                            <ErrorMessage name="memberId" />
+                            <ErrorMessage name='memberId' />
                         </div>
 
                         {/* 비밀번호 입력 */}
@@ -142,16 +143,16 @@ export default function LoginPage() {
                                 gap: { base: '8px' },
                             })}
                         >
-                            <InputLabel htmlFor="password">
+                            <InputLabel htmlFor='password'>
                                 {t('비밀번호')}
                             </InputLabel>
                             <InputField
                                 {...register('password')}
-                                type="password"
-                                id="password"
+                                type='password'
+                                id='password'
                                 placeholder={t('비밀번호를 입력해 주세요')}
                             />
-                            <ErrorMessage name="password" />
+                            <ErrorMessage name='password' />
                         </div>
 
                         {/* 아이디 저장 체크박스 */}
@@ -164,18 +165,18 @@ export default function LoginPage() {
                         >
                             <Controller
                                 control={control}
-                                name="isSaved"
+                                name='isSaved'
                                 render={({ field }) => {
                                     return (
                                         <InputCheckbox
-                                            id="isSaved"
+                                            id='isSaved'
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
                                         />
                                     );
                                 }}
                             />
-                            <InputLabel isCheckbox htmlFor="isSaved">
+                            <InputLabel isCheckbox htmlFor='isSaved'>
                                 {t('아이디 저장')}
                             </InputLabel>
                         </div>
@@ -189,9 +190,9 @@ export default function LoginPage() {
                             })}
                         >
                             <Button
-                                type="submit"
-                                frame="solid"
-                                variant="primary"
+                                type='submit'
+                                frame='solid'
+                                variant='primary'
                                 disabled={isSubmitting}
                             >
                                 <span>
@@ -200,9 +201,9 @@ export default function LoginPage() {
                             </Button>
 
                             <Button
-                                type="button"
-                                frame="outlined"
-                                variant="primary"
+                                type='button'
+                                frame='outlined'
+                                variant='primary'
                                 onClick={() =>
                                     router.push(PATHS.SIGNUP.REGISTER_METHOD)
                                 }
@@ -272,8 +273,8 @@ export default function LoginPage() {
                                 return (
                                     <li key={`social-login-button-${provider}`}>
                                         <Button
-                                            type="button"
-                                            frame="solid"
+                                            type='button'
+                                            frame='solid'
                                             variant={provider}
                                             onClick={() =>
                                                 onClick({ returnUrl })
@@ -284,7 +285,7 @@ export default function LoginPage() {
                                         </Button>
                                     </li>
                                 );
-                            }
+                            },
                         )}
                     </ul>
                 )}

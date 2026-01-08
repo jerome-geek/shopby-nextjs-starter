@@ -7,7 +7,7 @@ import {
     setTokenHeader,
 } from '@/api/core/utils';
 
-const baseRequest = ky.create({
+const request = ky.create({
     prefixUrl: 'https://shop-api.e-ncp.com/',
     timeout: 10000,
     headers: {
@@ -23,10 +23,6 @@ const baseRequest = ky.create({
         beforeRetry: [beforeRetry], // 재시도 전 토큰 갱신 (handleRefreshToken)
         afterResponse: [logResponse], // 응답 후 에러 처리 (handleError)
     },
-});
-
-const request = baseRequest.extend({
-    timeout: 10 * 1000,
     retry: {
         limit: 3, // 재시도 횟수
         statusCodes: [401], // 401 에러일 때 재시도

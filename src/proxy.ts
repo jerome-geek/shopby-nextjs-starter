@@ -49,7 +49,7 @@ export async function proxy(req: NextRequest) {
         if (process.env.NODE_ENV === 'development') {
             console.log(`[Middleware] Public route: ${pathname}`);
         }
-        return NextResponse.next();
+        return res;
     }
 
     // 보호된 라우트 체크 (인증 필요)
@@ -74,7 +74,6 @@ export async function proxy(req: NextRequest) {
         }
 
         try {
-            // TODO: 토큰 갱신
             const updateAccessTokenResponse = await ky
                 .put<UpdateAccessTokenResponse>(
                     'https://shop-api.e-ncp.com/oauth2',

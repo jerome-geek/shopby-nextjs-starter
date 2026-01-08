@@ -6,6 +6,7 @@ import productKeys from '@/hooks/queryKeys/productKeys';
 import profileKeys from '@/hooks/queryKeys/profileKeys';
 import termsKeys from '@/hooks/queryKeys/termsKeys';
 import categoryKeys from '@/hooks/queryKeys/categoryKeys';
+import productProfileKeys from '@/hooks/queryKeys/productProfileKeys';
 
 export {
     accumulationKeys,
@@ -16,4 +17,5 @@ export {
     profileKeys,
     termsKeys,
     categoryKeys,
+    productProfileKeys,
 };

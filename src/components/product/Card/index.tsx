@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { Price, ProductPrice } from '@/components/product/Card/index.styled';
 import {
@@ -17,6 +18,8 @@ import { ImageUrlType } from '@/models/product';
 import { css } from '@/styled-system/css';
 import { token } from '@/styled-system/tokens';
 import { CURRENCY, getDiscountRate } from '@/utils/currency';
+import { useProductProfileMutation } from '@/hooks/mutations';
+import useDialog from '@/hooks/useDialog';
 
 interface ProductCardProps {
     productNo: number;
@@ -49,11 +52,45 @@ const ProductCard = ({
     immediateDiscountAmt = 0,
     additionDiscountAmt = 0,
 }: ProductCardProps) => {
+    const { openDialog } = useDialog();
+
+    const {
+        like: { mutate: likeMutate },
+    } = useProductProfileMutation();
+
     const onLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         // TODO: 상품 좋아요 기능 구현 예정
         console.log('🚀 ~ onLikeButtonClick ~ e:', e);
+
+        // if (!checkLogin()) {
+        //     openLoginDialog();
+        //     return;
+        // }
+
+        likeMutate(
+            {
+                data: {
+                    items: [
+                        {
+                            productNo,
+                            like: liked ? 'N' : 'Y',
+                        },
+                    ],
+                },
+            },
+            {
+                onSuccess: () => {
+                    // router.refresh();
+                    openDialog({
+                        message: liked
+                            ? '좋아하는 상품에서 제거하였습니다.'
+                            : '좋아하는 상품에 추가하였습니다.',
+                    });
+                },
+            },
+        );
     };
 
     return (
@@ -96,7 +133,7 @@ const ProductCard = ({
                     })}
                     onClick={onLikeButtonClick}
                 >
-                    {!liked ? (
+                    {liked ? (
                         <HeartLikeFilledSmallIcon />
                     ) : (
                         <HeartLikeSmallIcon />
@@ -129,7 +166,7 @@ const ProductCard = ({
                             >
                                 {brandName}
                             </span>
-                            <SmallCaretIcon direction="right" />
+                            <SmallCaretIcon direction='right' />
                         </Link>
                     )}
 
@@ -212,7 +249,7 @@ const ProductCard = ({
                                                     backgroundColor:
                                                         token('colors.gray90'),
                                                     color: token(
-                                                        'colors.white'
+                                                        'colors.white',
                                                     ),
                                                     fontSize: '1rem',
                                                     fontWeight: '600',

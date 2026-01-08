@@ -1,6 +1,5 @@
-import Link from 'next/link';
-
 import productProfile from '@/api/product/profile';
+import ProductCard from '@/components/product/Card';
 import ViewAllLink from '@/components/ui/view-all-link';
 import { PATHS } from '@/const/paths';
 import { getTranslation } from '@/i18n/server';
@@ -9,16 +8,19 @@ import { css } from '@/styled-system/css';
 export default async function RecentWishlist() {
     const { t } = await getTranslation();
 
-    let items = [];
-
-    try {
-        const response = await productProfile.getLikeProducts().json();
-        if (response.items.length > 0) {
-            items = response.items;
-        }
-    } catch (error) {
-        console.error(error);
-    }
+    const items = await productProfile
+        .getRecentViewProducts({
+            pageNumber: 1,
+            pageSize: 10,
+            soldout: true,
+            hasOptionValues: false,
+            hasMaxCouponAmt: false,
+        })
+        .json()
+        .catch((error) => {
+            console.error(error);
+            return [];
+        });
 
     const hasItems = items.length > 0;
 
@@ -40,18 +42,14 @@ export default async function RecentWishlist() {
                         fontWeight: 'bold',
                     })}
                 >
-                    {t('나의 관심')}
+                    {t('최근 본 상품')}
                 </h3>
                 <ViewAllLink href={PATHS.MYPAGE.WISH}>
                     {t('전체보기')}
                 </ViewAllLink>
             </div>
 
-            <div
-                className={css({
-                    backgroundColor: '#fff',
-                })}
-            >
+            <div>
                 {hasItems ? (
                     <ul
                         className={css({
@@ -62,26 +60,13 @@ export default async function RecentWishlist() {
                                 md: 'repeat(5, 1fr)',
                             },
                             gap: '20px',
-                            border: '1px solid #eee',
-                            backgroundColor: '#fbfbfb',
                         })}
                     >
-                        <li
-                            className={css({
-                                gridColumn: '1 / -1',
-                                padding: '100px 0',
-                                textAlign: 'center',
-                                color: '#999',
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '10px',
-                            })}
-                        >
-                            <p>{t('구현 예정')}</p>
-                        </li>
+                        {items.map((item) => (
+                            <li key={item.productNo}>
+                                <ProductCard {...item} />
+                            </li>
+                        ))}
                     </ul>
                 ) : (
                     <div
@@ -97,7 +82,7 @@ export default async function RecentWishlist() {
                             border: '1px solid #eee',
                         })}
                     >
-                        <p>{t('관심 상품 내역이 없습니다.')}</p>
+                        <p>{t('최근 본 상품 내역이 없습니다.')}</p>
                     </div>
                 )}
             </div>

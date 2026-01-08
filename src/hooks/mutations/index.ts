@@ -1,3 +1,4 @@
+import useProductProfileMutation from '@/hooks/mutations/useProductProfileMutation';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 
-export { useProfileMutation };
+export { useProductProfileMutation, useProfileMutation };
