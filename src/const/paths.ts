@@ -221,6 +221,6 @@ const PATHS = {
         OPEN_AUTH: '/app/open-id-sign-in',
         LOGIN_BRIDGE: '/app/login-bridge',
     },
-};
+} as const;
 
 export { PATHS };

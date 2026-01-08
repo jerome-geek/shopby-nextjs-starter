@@ -97,7 +97,6 @@ export default function MypageSearchPeriod() {
                 alignItems: { base: 'flex-start', md: 'center' },
                 justifyContent: 'space-between',
                 gap: '16px',
-                marginBottom: '40px',
             })}
         >
             {/* 왼쪽: 기간 선택 버튼군 */}

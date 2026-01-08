@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { cookieTokenManager } from '@/api/core/cookie';
 import { css, cx } from '@/styled-system/css';
 import { PATHS } from '@/const/paths';
+import { token } from '@/styled-system/tokens';
 
 type MenuItem = {
     title: string;
@@ -52,18 +53,18 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                 transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
             })}
         >
-            <h2
+            <h1
                 className={css({
-                    fontSize: '32px',
+                    fontSize: '3.2rem',
                     fontWeight: 'bold',
-                    color: '#000',
+                    color: token('colors.black'),
                     lineHeight: 1,
                     letterSpacing: '-1px',
-                    marginBottom: '20px',
+                    paddingBottom: '20px',
                 })}
             >
                 {t('마이페이지')}
-            </h2>
+            </h1>
 
             <hr
                 className={css({
@@ -88,7 +89,7 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                             className={css({
                                 fontSize: '16px',
                                 fontWeight: 'bold',
-                                color: '#000',
+                                color: token('colors.black'),
                                 marginBottom: '16px',
                             })}
                         >
@@ -117,14 +118,16 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                                                         transition:
                                                             'color 0.2s',
                                                         _hover: {
-                                                            color: '#000',
+                                                            color: token(
+                                                                'colors.black',
+                                                            ),
                                                         },
                                                     }),
                                                     isActive &&
                                                         css({
                                                             color: '#000 !important',
                                                             fontWeight: 'bold',
-                                                        })
+                                                        }),
                                                 )}
                                             >
                                                 <motion.span
@@ -152,7 +155,9 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                                                     textAlign: 'left',
                                                     transition: 'color 0.2s',
                                                     _hover: {
-                                                        color: '#000',
+                                                        color: token(
+                                                            'colors.black',
+                                                        ),
                                                     },
                                                 })}
                                             >
@@ -190,7 +195,7 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                     textAlign: 'left',
                     width: '180px', // 버튼 너비 고정
                     _hover: {
-                        color: '#000',
+                        color: token('colors.black'),
                     },
                 })}
             >

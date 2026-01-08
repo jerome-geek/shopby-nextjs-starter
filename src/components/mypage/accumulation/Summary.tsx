@@ -1,6 +1,7 @@
 import { accumulation } from '@/api/manage';
 import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import { POINT } from '@/utils/currency';
 
 export default async function AccumulationSummary() {
@@ -23,13 +24,13 @@ export default async function AccumulationSummary() {
     }
 
     return (
-        <section className={css({ mb: '60px' })}>
+        <section>
             <h3
                 className={css({
                     fontSize: '18px',
                     fontWeight: 'bold',
                     mb: '16px',
-                    color: '#222',
+                    color: token('colors.black'),
                 })}
             >
                 {t('적립금내역')}

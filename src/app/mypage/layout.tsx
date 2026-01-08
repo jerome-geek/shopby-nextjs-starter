@@ -1,12 +1,11 @@
-import { pipe, when } from '@fxts/core';
+import { flatMap, fromEntries, map, pipe, when } from '@fxts/core';
 
 import { orderConfiguration } from '@/api/order';
 import MyPageSidebar from '@/components/mypage/sidebar';
+import MyPageTitle from '@/components/mypage/title';
 import { PATHS } from '@/const/paths';
 import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
-
-export const dynamic = 'force-dynamic';
 
 export default async function MyPageLayout({
     children,
@@ -100,11 +99,17 @@ export default async function MyPageLayout({
         },
     ];
 
+    const titleMap = pipe(
+        menuList,
+        flatMap((a) => a.children),
+        map((a) => [a.url, a.title] as const),
+        fromEntries,
+    );
+
     return (
         <div
             className={css({
                 margin: '0 auto',
-                // padding: { base: '24px 16px 80px', lg: '40px 0' },
                 padding: { base: '40px 0', md: '100px 0' },
                 display: 'flex',
                 gap: { base: '0', lg: '60px' },
@@ -115,7 +120,10 @@ export default async function MyPageLayout({
         >
             <MyPageSidebar menuList={menuList} />
 
-            <main className={css({ flex: 1, minWidth: 0 })}>{children}</main>
+            <section className={css({ flex: 1, minWidth: 0 })}>
+                <MyPageTitle titleMap={titleMap} />
+                {children}
+            </section>
         </div>
     );
 }
