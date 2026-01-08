@@ -1,5 +1,7 @@
 'use client';
 
+import { css, cva } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import { map, pipe, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,9 +15,6 @@ import { MenuIcon } from '@/components/icons';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import { GetCategoryResponse } from '@/models/display/category';
-import { css, cva } from '@/styled-system/css';
-import { text } from '@/styled-system/recipes';
-import { token } from '@/styled-system/tokens';
 
 const Menu = ({ categoryData }: { categoryData?: GetCategoryResponse }) => {
     const { t } = useTranslation();
@@ -114,15 +113,13 @@ const Menu = ({ categoryData }: { categoryData?: GetCategoryResponse }) => {
                         })}
                         currentColor={isOpen ? 'white' : 'black'}
                     />
+
                     <span
-                        className={text({
-                            size: { base: 'headline1' },
-                            weight: { base: 'regular', md: 'medium' },
-                        })}
-                        style={{
+                        className={css({
+                            textStyle: 'headline1.medium',
                             lineHeight: '20px',
                             color: isOpen ? 'white' : 'black',
-                        }}
+                        })}
                     >
                         {t('카테고리')}
                     </span>
@@ -147,14 +144,14 @@ const Menu = ({ categoryData }: { categoryData?: GetCategoryResponse }) => {
                         aria-label={menu.label}
                     >
                         <span
-                            className={text({
-                                size: { base: 'headline1' },
-                                weight: { base: 'regular', md: 'medium' },
-                            })}
-                            style={{
+                            className={css({
+                                textStyle: {
+                                    base: 'headline1.regular',
+                                    md: 'headline1.medium',
+                                },
                                 lineHeight: '20px',
                                 color: 'inherit',
-                            }}
+                            })}
                         >
                             {menu.label}
                         </span>

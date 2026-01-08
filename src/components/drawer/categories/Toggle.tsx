@@ -1,12 +1,11 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { css } from '@/styled-system/css';
 import { motion } from 'motion/react';
 import { ToggleGroup } from 'radix-ui';
+import { useRef, useState } from 'react';
 
 import { useDragScroll } from '@/hooks/utils';
-import { css } from '@/styled-system/css';
-import { text } from '@/styled-system/recipes';
 
 interface ToggleProps {
     defaultValue?: string;
@@ -108,17 +107,14 @@ const Toggle = (props: ToggleProps) => {
                             })}
                         >
                             <span
-                                className={text({
-                                    size: { base: 'headline1' },
-                                    weight: 'medium',
+                                className={css({
+                                    textStyle: 'headline1.medium',
                                     color:
                                         value === item.value
                                             ? 'white'
                                             : 'gray80',
-                                })}
-                                style={{
                                     transition: 'color 0.8s ease',
-                                }}
+                                })}
                             >
                                 {item.label}
                             </span>

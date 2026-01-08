@@ -1,20 +1,19 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
-import { useEffect, useMemo } from 'react';
+import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import dayjs from 'dayjs';
+import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { Button } from '@/components/ui/button';
+import { useInfiniteAccumulationList } from '@/hooks/infiniteQueries/manage/accumulation';
+import useMediaQuery from '@/hooks/useMediaQuery';
 import {
     GetAccumulationsParams,
     GetAccumulationsResponse,
 } from '@/models/manage/accumulation';
-import { css } from '@/styled-system/css';
-import { useInfiniteAccumulationList } from '@/hooks/infiniteQueries/manage/accumulation';
-import { token } from '@/styled-system/tokens';
 import { POINT } from '@/utils/currency';
-import useMediaQuery from '@/hooks/useMediaQuery';
-import { Button } from '@/components/ui/button';
-import { text } from '@/styled-system/recipes';
 
 interface AccumulationListProps {
     searchParams: GetAccumulationsParams;
@@ -189,9 +188,8 @@ export default function AccumulationList({
                             })}
                         >
                             <span
-                                className={text({
-                                    size: 'body1',
-                                    weight: 'regular',
+                                className={css({
+                                    textStyle: 'body1.regular',
                                 })}
                             >
                                 {dayjs(item.registerYmdt).format('YYYY-MM-DD')}

@@ -1,5 +1,7 @@
 'use client';
 
+import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import { isEmpty } from '@fxts/core';
 import { motion } from 'motion/react';
 import Link from 'next/link';
@@ -7,13 +9,10 @@ import { useParams } from 'next/navigation';
 import { Portal } from 'radix-ui';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Swiper, SwiperProps, SwiperSlide, SwiperClass } from 'swiper/react';
+import { Swiper, SwiperClass, SwiperProps, SwiperSlide } from 'swiper/react';
 
 import { CategoriesProps } from '@/components/drawer/categories';
 import { SmallCaretIcon } from '@/components/icons';
-import { css } from '@/styled-system/css';
-import { text } from '@/styled-system/recipes';
-import { token } from '@/styled-system/tokens';
 
 const DeskTopCategories = ({
     oneDepthCategoryList,
@@ -133,18 +132,15 @@ const DeskTopCategories = ({
                                 }}
                             >
                                 <span
-                                    className={text({
-                                        size: { base: 'headline1' },
-                                        weight: 'medium',
+                                    className={css({
+                                        textStyle: 'headline1.medium',
+                                        lineHeight: '20px',
                                         color:
                                             selectCategoryNo ===
                                             category.categoryNo
                                                 ? 'black'
                                                 : 'gray60',
                                     })}
-                                    style={{
-                                        lineHeight: '20px',
-                                    }}
                                 >
                                     {category.label}
                                 </span>
@@ -292,16 +288,12 @@ const DeskTopCategories = ({
                                             })}
                                         >
                                             <span
-                                                className={text({
-                                                    size: {
-                                                        base: 'headline1',
-                                                    },
-                                                    weight: 'medium',
+                                                className={css({
+                                                    textStyle:
+                                                        'headline1.medium',
                                                     color: 'black',
-                                                })}
-                                                style={{
                                                     whiteSpace: 'nowrap',
-                                                }}
+                                                })}
                                             >
                                                 {category.label}
                                             </span>
@@ -342,11 +334,9 @@ const DeskTopCategories = ({
                                                         })}
                                                     >
                                                         <span
-                                                            className={text({
-                                                                size: {
-                                                                    base: 'body1',
-                                                                },
-                                                                weight: 'regular',
+                                                            className={css({
+                                                                textStyle:
+                                                                    'body1.regular',
                                                                 color: 'gray90',
                                                             })}
                                                         >

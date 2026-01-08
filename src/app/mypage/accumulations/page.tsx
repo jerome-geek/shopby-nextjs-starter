@@ -1,3 +1,6 @@
+import { getTranslation } from '@/i18n/server';
+import { css } from '@/styled-system/css';
+import { vstack } from '@/styled-system/patterns';
 import { map, pipe, range, toArray, toAsync } from '@fxts/core';
 import dayjs from 'dayjs';
 
@@ -6,12 +9,8 @@ import SearchPaging from '@/components/common/SearchPaging';
 import AccumulationList from '@/components/mypage/accumulation/List';
 import AccumulationSummary from '@/components/mypage/accumulation/Summary';
 import MypageSearchPeriod from '@/components/mypage/search-period';
-import { getTranslation } from '@/i18n/server';
 import { GetAccumulationsParams } from '@/models/manage/accumulation';
-import { css } from '@/styled-system/css';
 import { getIsMobile } from '@/utils/device.server';
-import { vstack } from '@/styled-system/patterns';
-import { text } from '@/styled-system/recipes';
 
 type MypageAccumulationsPageProps = AppPageProps<'/mypage/accumulations'>;
 
@@ -68,9 +67,8 @@ export default async function MypageAccumulationsPage(
 
                 <div className={vstack({ gap: '4', alignItems: 'flex-start' })}>
                     <p
-                        className={text({
-                            size: 'headline1',
-                            weight: 'semibold',
+                        className={css({
+                            textStyle: 'headline2.semibold',
                         })}
                         dangerouslySetInnerHTML={{
                             __html: t('총 <b>{{totalCount}}</b>건', {

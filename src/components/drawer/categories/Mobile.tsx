@@ -1,5 +1,7 @@
 'use client';
 
+import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 import { isUndefined } from '@fxts/core';
 import { motion } from 'motion/react';
 import Link from 'next/link';
@@ -16,9 +18,6 @@ import {
     SmallCaretIcon,
 } from '@/components/icons';
 import { PATHS } from '@/const/paths';
-import { css } from '@/styled-system/css';
-import { text } from '@/styled-system/recipes';
-import { token } from '@/styled-system/tokens';
 
 const cartCount = 13;
 const BOTTOM_NAVIGATION_HEIGHT = 61;
@@ -256,9 +255,8 @@ const MobileCategories = ({
                 })}
             >
                 <h2
-                    className={text({
-                        size: { base: 'title2' },
-                        weight: 'semibold',
+                    className={css({
+                        textStyle: 'title2.semibold',
                         color: 'black',
                     })}
                 >
@@ -401,18 +399,15 @@ const MobileCategories = ({
                                 aria-selected={index === 0}
                             >
                                 <span
-                                    className={text({
-                                        size: { base: 'headline2' },
-                                        weight: 'medium',
-                                        color: 'gray90',
-                                    })}
-                                    style={{
+                                    className={css({
                                         whiteSpace: 'nowrap',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
                                         maxWidth: '100%',
                                         display: 'block',
-                                    }}
+                                        textStyle: 'headline2.medium',
+                                        color: 'gray90',
+                                    })}
                                 >
                                     {category.label}
                                 </span>
@@ -477,9 +472,8 @@ const MobileCategories = ({
                                 })}
                             >
                                 <span
-                                    className={text({
-                                        size: { base: 'heading' },
-                                        weight: 'semibold',
+                                    className={css({
+                                        textStyle: 'heading.semibold',
                                         color: 'black',
                                     })}
                                 >
@@ -518,9 +512,8 @@ const MobileCategories = ({
                                             })}
                                         >
                                             <span
-                                                className={text({
-                                                    size: { base: 'body1' },
-                                                    weight: 'regular',
+                                                className={css({
+                                                    textStyle: 'body1.regular',
                                                     color: 'gray90',
                                                 })}
                                             >
