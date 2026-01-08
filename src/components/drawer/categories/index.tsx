@@ -11,7 +11,7 @@ import MobileCategories from '@/components/drawer/categories/Mobile';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { MultiLevelCategory } from '@/models/display';
 import { GetCategoryResponse } from '@/models/display/category';
-import { findCategory } from '@/utils/category';
+import { findFlatCategory } from '@/utils/category';
 
 interface CategoriesDrawerProps {
     isOpen: boolean;
@@ -39,7 +39,7 @@ const Categories = ({
     const mediaQueryResult = useMediaQuery('(max-width: 767px)');
     const isMobile = mediaQueryResult === true;
 
-    const findCategoryData = findCategory(
+    const findCategoryData = findFlatCategory(
         categoryData?.flatCategories ?? [],
         categoryNo,
     );

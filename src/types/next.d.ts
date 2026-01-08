@@ -7,6 +7,13 @@ declare global {
      * 새로운 페이지가 생기면 어디서든 이 인터페이스를 확장할 수 있습니다.
      */
     interface SearchParamsMap {
+        '/categories/[categoryNo]/products': {
+            childCategoryNo?: number;
+            pageNumber?: number;
+            pageSize?: number;
+            by?: OrderByType;
+            direction?: OrderDirectionType;
+        };
         '/products/[productNo]': {
             channelType?: ChannelType;
             preview?: boolean;

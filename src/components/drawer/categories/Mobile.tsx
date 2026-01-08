@@ -1,11 +1,10 @@
 'use client';
 
-import { css } from '@/styled-system/css';
-import { token } from '@/styled-system/tokens';
 import { isUndefined } from '@fxts/core';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
+import { overlay } from 'overlay-kit';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +16,10 @@ import {
     BigSearchIcon,
     SmallCaretIcon,
 } from '@/components/icons';
+import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
+import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 
 const cartCount = 13;
 const BOTTOM_NAVIGATION_HEIGHT = 61;
@@ -31,7 +33,9 @@ const MobileCategories = ({
     const { t } = useTranslation();
 
     const params = useParams();
-    const categoryNo = (params.categoryNo ?? '') as string;
+    const searchParams = useSearchParams();
+    const childCategoryNo = searchParams.get('childCategoryNo') ?? '';
+    const categoryNo = childCategoryNo || ((params.categoryNo ?? '') as string);
 
     const twoDepthCategoryListRef = useRef<HTMLUListElement>(null);
     const threeDepthCategoryListRef = useRef<HTMLUListElement>(null);
@@ -500,7 +504,12 @@ const MobileCategories = ({
                                 {category.children.map((child) => (
                                     <li key={child.categoryNo}>
                                         <Link
-                                            href={`/categories/${child.categoryNo}/products`}
+                                            href={`/categories/${category.categoryNo}/products?childCategoryNo=${child.categoryNo}`}
+                                            onClick={() =>
+                                                overlay.close(
+                                                    OVERLAY_ID.CATEGORIES_DRAWER,
+                                                )
+                                            }
                                             aria-selected={
                                                 categoryNo ===
                                                 child.categoryNo.toString()

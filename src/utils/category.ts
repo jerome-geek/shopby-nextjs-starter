@@ -1,6 +1,6 @@
-import { FlatCategory } from '@/models/display';
+import { FlatCategory, MultiLevelCategory } from '@/models/display';
 
-export const findCategory = (
+export const findFlatCategory = (
     flatCategories: FlatCategory[],
     categoryNo: string | number,
 ) => {
@@ -15,4 +15,32 @@ export const findCategory = (
     );
 
     return findCategory;
+};
+
+export const findMultiLevelCategory = (
+    multiLevelCategories: MultiLevelCategory[],
+    flatCategory: FlatCategory,
+    categoryNo: number,
+    index = 1,
+): MultiLevelCategory | null => {
+    const findCategory = multiLevelCategories?.find(
+        (category) =>
+            category.categoryNo ===
+            flatCategory[`depth${index}CategoryNo` as keyof FlatCategory],
+    );
+
+    if (findCategory?.categoryNo === categoryNo) {
+        return findCategory;
+    }
+
+    if (findCategory) {
+        return findMultiLevelCategory(
+            findCategory?.children ?? [],
+            flatCategory,
+            categoryNo,
+            index + 1,
+        );
+    }
+
+    return null;
 };

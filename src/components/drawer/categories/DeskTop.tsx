@@ -5,7 +5,7 @@ import { token } from '@/styled-system/tokens';
 import { isEmpty } from '@fxts/core';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { Portal } from 'radix-ui';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,9 @@ const DeskTopCategories = ({
     const { t } = useTranslation();
 
     const params = useParams();
-    const categoryNo = (params.categoryNo ?? '') as string;
+    const searchParams = useSearchParams();
+    const childCategoryNo = searchParams.get('childCategoryNo') ?? '';
+    const categoryNo = childCategoryNo || ((params.categoryNo ?? '') as string);
 
     const findTwoDepthCategoryIndex = twoDepthCategoryList.findIndex(
         (category) => {
@@ -316,7 +318,7 @@ const DeskTopCategories = ({
                                                     })}
                                                 >
                                                     <Link
-                                                        href={`/categories/${child.categoryNo}/products`}
+                                                        href={`/categories/${category.categoryNo}/products?childCategoryNo=${child.categoryNo}`}
                                                         aria-selected={
                                                             categoryNo ===
                                                             child.categoryNo.toString()
