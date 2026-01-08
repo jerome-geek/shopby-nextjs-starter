@@ -8,10 +8,6 @@ import Link from 'next/link';
 import { HeartBigIcon, StarIcon } from '@/components/icons';
 import { Price } from '@/models/product';
 import { Brand } from '@/models/product/product';
-import { css, cx } from '@/styled-system/css';
-import { flex } from '@/styled-system/patterns';
-import { text } from '@/styled-system/recipes';
-import { token } from '@/styled-system/tokens';
 import { getDiscountRate, KRW } from '@/utils/currency';
 
 interface ProductInfoProps {
