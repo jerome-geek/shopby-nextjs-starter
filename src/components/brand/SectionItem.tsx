@@ -1,7 +1,6 @@
 'use client';
 
 import { css } from '@/styled-system/css';
-import { text } from '@/styled-system/recipes';
 import { token } from '@/styled-system/tokens';
 import { isEmpty, pipe, take, toArray } from '@fxts/core';
 import Image from 'next/image';
@@ -98,18 +97,16 @@ const BrandSectionItem = ({ sectionData, products }: BrandSectionItemProps) => {
                     })}
                 >
                     <h2
-                        className={text({
-                            size: 'title1',
-                            weight: 'semibold',
+                        className={css({
+                            textStyle: 'title1.semibold',
                             color: 'black',
                         })}
                     >
                         {sectionData.label}
                     </h2>
                     <p
-                        className={text({
-                            size: 'headline1',
-                            weight: 'regular',
+                        className={css({
+                            textStyle: 'headline1.regular',
                             color: 'gray90',
                         })}
                     >
