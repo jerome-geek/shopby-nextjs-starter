@@ -1,5 +1,8 @@
 'use client';
 
+import { css } from '@/styled-system/css';
+import { flex } from '@/styled-system/patterns';
+import { token } from '@/styled-system/tokens';
 import Link from 'next/link';
 
 import { HeartBigIcon, StarIcon } from '@/components/icons';
@@ -78,12 +81,8 @@ export default function ProductInfo({
                             // TODO: base 체크
                             <Link
                                 href={`/brands/${brand.brandNo}`}
-                                className={text({
-                                    size: { base: 'heading', md: 'heading' },
-                                    weight: {
-                                        base: 'semibold',
-                                        md: 'semibold',
-                                    },
+                                className={css({
+                                    textStyle: 'heading.semibold',
                                     color: 'gray80',
                                 })}
                             >
@@ -110,9 +109,11 @@ export default function ProductInfo({
                         </button>
                     </div>
                     <h1
-                        className={text({
-                            size: { base: 'headline2', md: 'title2' },
-                            weight: { base: 'bold', md: 'semibold' },
+                        className={css({
+                            textStyle: {
+                                base: 'headline2.bold',
+                                md: 'title2.semibold',
+                            },
                         })}
                         dangerouslySetInnerHTML={{ __html: productName }}
                     />
@@ -142,9 +143,8 @@ export default function ProductInfo({
                         })}
                     </div>
                     <span
-                        className={text({
-                            size: 'caption',
-                            weight: 'regular',
+                        className={css({
+                            textStyle: 'caption.regular',
                             color: 'gray80',
                         })}
                     >{`${reviewRate}(${reviewCnt})`}</span>
@@ -154,17 +154,15 @@ export default function ProductInfo({
             <div>
                 <div>
                     <p
-                        className={cx(
-                            text({
-                                size: { base: 'heading', md: 'title1' },
-                                weight: 'bold',
-                            }),
-                            css({
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                            }),
-                        )}
+                        className={css({
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            textStyle: {
+                                base: 'heading.bold',
+                                md: 'title1.bold',
+                            },
+                        })}
                     >
                         <b className={css({ color: token('colors.red') })}>
                             {discountRate}
@@ -172,17 +170,15 @@ export default function ProductInfo({
                         {discountPrice}
                     </p>
                     <p
-                        className={cx(
-                            text({
-                                size: { base: 'heading', md: 'title1' },
-                                weight: 'bold',
-                            }),
-                            css({
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                            }),
-                        )}
+                        className={css({
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            textStyle: {
+                                base: 'heading.bold',
+                                md: 'title1.bold',
+                            },
+                        })}
                     >
                         <b className={css({ color: token('colors.red') })}>
                             {maxDiscountRate}

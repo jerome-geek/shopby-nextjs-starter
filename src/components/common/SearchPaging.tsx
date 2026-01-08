@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import Paging from './index';
+import Paging from '@/components/ui/paging';
 
 interface SearchPagingProps {
     totalCount: number;

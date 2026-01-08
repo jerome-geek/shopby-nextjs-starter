@@ -3,18 +3,17 @@ import Link from 'next/link';
 
 import { accumulation } from '@/api/manage';
 import { getCachedProfile } from '@/api/member/profile.server';
-import { coupon } from '@/api/promotion';
+import { getCachedCouponSummary } from '@/api/promotion/coupon.server';
 import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
+import { flex, hstack, vstack } from '@/styled-system/patterns';
 import { KRW } from '@/utils/currency';
 
 interface MyPageSummaryProps {
-    gradeLabel?: string;
     reviewCount?: number;
 }
 
 export default async function MyPageSummary({
-    gradeLabel = 'WELCOME',
     reviewCount = 5,
 }: MyPageSummaryProps) {
     const { t } = await getTranslation();
@@ -29,138 +28,152 @@ export default async function MyPageSummary({
                 expireEndYmdt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
             })
             .json(),
-        coupon.getCouponSummary().json(),
+        getCachedCouponSummary(),
     ]);
-    console.log('🚀 ~ MyPageSummary ~ profileData:', profileData);
 
     return (
         <section
             className={css({
                 width: '100%',
-                backgroundColor: '#111',
-                borderRadius: '8px',
-                padding: { base: '20px', md: '30px 40px' },
+                backgroundColor: '#151515',
+                borderRadius: '12px',
+                padding: { base: '24px', md: '44px 50px' },
                 color: '#fff',
                 display: 'flex',
                 flexDirection: { base: 'column', md: 'row' },
-                alignItems: { base: 'flex-start', md: 'center' },
-                justifyContent: 'space-between',
+                alignItems: { base: 'stretch', md: 'center' },
                 marginBottom: { base: '30px', md: '40px' },
-                gap: { base: '20px', md: '0' },
             })}
         >
             {/* 왼쪽: 회원 정보 */}
             <div
-                className={css({
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px',
-                    paddingRight: { base: '0', md: '40px' },
-                    paddingBottom: { base: '20px', md: '0' },
+                className={vstack({
+                    alignItems: 'flex-start',
+                    gap: '6px',
+                    paddingRight: { base: '0', md: '50px' },
+                    paddingBottom: { base: '24px', md: '0' },
                     borderRight: { base: 'none', md: '1px solid #333' },
                     borderBottom: { base: '1px solid #333', md: 'none' },
-                    minWidth: { base: '100%', md: '200px' },
-                    width: { base: '100%', md: 'auto' },
+                    minWidth: { md: '260px' },
                 })}
             >
-                <div
-                    className={css({
+                <Link
+                    href='#'
+                    className={hstack({
                         fontSize: '14px',
-                        color: '#ddd',
-                        marginBottom: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
+                        color: '#eee',
+                        fontWeight: '500',
                         gap: '4px',
+                        _hover: { color: '#fff' },
                     })}
                 >
-                    {gradeLabel}
-                    <span className={css({ fontSize: '12px' })}>{'>'}</span>
-                </div>
-                <div
+                    {profileData.memberGradeName}
+                    <span
+                        className={css({ fontSize: '12px', marginTop: '1px' })}
+                    >
+                        &gt;
+                    </span>
+                </Link>
+                <h2
                     className={css({
-                        fontSize: '24px',
-                        fontWeight: 'bold',
+                        fontSize: { base: '22px', md: '26px' },
+                        fontWeight: '700',
+                        letterSpacing: '-0.02em',
+                        lineHeight: 1.3,
                     })}
                 >
                     {t('{{memberName}}님', {
                         memberName: profileData.memberName,
                     })}
-                </div>
+                </h2>
             </div>
 
             {/* 오른쪽: 통계 정보 (적립금, 쿠폰, 후기) */}
             <div
-                className={css({
-                    display: 'flex',
+                className={flex({
                     flex: 1,
                     width: '100%',
-                    justifyContent: 'space-around',
-                    paddingTop: { base: '10px', md: '0' },
+                    justifyContent: 'space-between',
+                    paddingLeft: { base: '0', md: '10px' },
+                    paddingTop: { base: '24px', md: '0' },
                 })}
             >
                 <SummaryItem
                     label={t('적립금')}
                     value={KRW(accumulationData.totalAvailableAmt).format()}
+                    href='/mypage/accumulations'
                 />
                 <SummaryItem
                     label={t('보유쿠폰')}
                     value={t('{{couponCount}}장', {
                         couponCount: couponData.usableCouponCnt,
                     })}
+                    href='/mypage/coupons'
                 />
                 <SummaryItem
                     label={t('후기 작성')}
                     value={t('{{reviewCount}}건', {
                         reviewCount,
                     })}
+                    href='/mypage/reviews/writeable'
+                    isLast
                 />
             </div>
         </section>
     );
 }
 
-function SummaryItem({ label, value }: { label: string; value: string }) {
+interface SummaryItemProps {
+    label: string;
+    value: string;
+    href: string;
+    isLast?: boolean;
+}
+
+function SummaryItem({ label, value, href, isLast }: SummaryItemProps) {
     return (
         <Link
-            href="#"
+            href={href}
             className={css({
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                flex: 1,
                 gap: '8px',
                 position: 'relative',
-                padding: '0 20px',
-                whiteSpace: 'nowrap',
-                _after: {
-                    content: '""',
-                    position: 'absolute',
-                    right: { base: '-10px', sm: '-20px', md: '-40px' },
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '1px',
-                    height: '40%',
-                    backgroundColor: '#333',
-                    display: 'block',
+                transition: 'all 0.2s ease',
+                _hover: {
+                    transform: 'translateY(-2px)',
+                    '& span:first-child': { color: '#aaa' },
                 },
-                _last: {
-                    _after: {
-                        display: 'none',
-                    },
-                },
+                _after: !isLast
+                    ? {
+                          content: '""',
+                          position: 'absolute',
+                          right: 0,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          width: '1px',
+                          height: '24px',
+                          backgroundColor: '#333',
+                      }
+                    : {},
             })}
         >
             <span
                 className={css({
                     fontSize: '13px',
                     color: '#888',
+                    fontWeight: '500',
                 })}
             >
                 {label}
             </span>
             <span
                 className={css({
-                    fontSize: { base: '18px', md: '20px' },
-                    fontWeight: 'bold',
+                    fontSize: { base: '18px', md: '22px' },
+                    fontWeight: '700',
+                    color: '#fff',
                 })}
             >
                 {value}

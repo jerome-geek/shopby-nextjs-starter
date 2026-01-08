@@ -13,6 +13,8 @@ import {
     GetNewProductCategoriesResponse,
 } from '@/models/display/category';
 
+export const CATEGORY_REVALIDATE_MS = 60 * 60 * 24; // 24시간
+
 const category = {
     /**
      * 전체 카테고리 조회하기
@@ -36,7 +38,7 @@ const category = {
             'categories/new-product-categories',
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -46,14 +48,17 @@ const category = {
      */
     getCategoriesByManagementCode: (
         data: GetCategoriesByManagementCodeData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetCategoriesByManagementCodeResponse>(
             'categories/search-by-management-code',
             {
+                next: {
+                    revalidate: CATEGORY_REVALIDATE_MS,
+                },
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -66,7 +71,7 @@ const category = {
             'categories/simple-1depth',
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -79,9 +84,12 @@ const category = {
     getCategory: (
         categoryNo: string | number,
         params?: GetCategoryParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetCategoryResponse>(`categories/${categoryNo}`, {
+            next: {
+                revalidate: CATEGORY_REVALIDATE_MS,
+            },
             searchParams: qs.stringify(params),
             ...options,
         });

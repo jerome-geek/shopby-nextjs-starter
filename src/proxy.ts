@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 
 import { cookieTokenManager } from '@/api/core/cookie';
 import { PATHS } from '@/const/paths';
+import { UpdateAccessTokenResponse } from '@/models/auth/oauth2';
 
 /**
  * 보호된 라우트 목록
@@ -46,16 +47,16 @@ export async function proxy(request: NextRequest) {
 
     // 2. 보호된 라우트 체크 (인증 필요)
     const isProtectedRoute = protectedRoutes.some((route) =>
-        pathname.startsWith(route)
+        pathname.startsWith(route),
     );
 
     if (isProtectedRoute) {
         // request.cookies를 직접 사용하여 토큰 확인 (middleware 표준 방식)
         const accessToken = request.cookies.get(
-            cookieTokenManager.ACCESS_TOKEN_KEY
+            cookieTokenManager.ACCESS_TOKEN_KEY,
         )?.value;
         const refreshToken = request.cookies.get(
-            cookieTokenManager.REFRESH_TOKEN_KEY
+            cookieTokenManager.REFRESH_TOKEN_KEY,
         )?.value;
 
         // Case 1: 둘 다 없는 '완전한 미로그인' 상태 -> 로그인 페이지로 리다이렉트
@@ -65,7 +66,7 @@ export async function proxy(request: NextRequest) {
 
             if (process.env.NODE_ENV === 'development') {
                 console.log(
-                    `[Middleware] No tokens found for ${pathname}, redirecting to login`
+                    `[Middleware] No tokens found for ${pathname}, redirecting to login`,
                 );
             }
 
@@ -76,7 +77,7 @@ export async function proxy(request: NextRequest) {
         if (!accessToken && refreshToken) {
             if (process.env.NODE_ENV === 'development') {
                 console.log(
-                    `[Middleware] Access token missing, attempting to refresh for ${pathname}`
+                    `[Middleware] Access token missing, attempting to refresh for ${pathname}`,
                 );
             }
 
@@ -89,17 +90,12 @@ export async function proxy(request: NextRequest) {
                             version: '1.0',
                             clientId: process.env.NEXT_PUBLIC_CLIENT_ID || '',
                             platform: 'PC',
-                            'Shop-By-Authorization': 'Bearer ',
+                            'Shop-By-Authorization': `Bearer ${accessToken}`,
                             'Refresh-Token': refreshToken,
                         },
                         timeout: 5000,
                     })
-                    .json<{
-                        accessToken: string;
-                        expiresIn: number;
-                        refreshToken?: string;
-                        refreshTokenExpiresIn: number;
-                    }>();
+                    .json<UpdateAccessTokenResponse>();
 
                 if (data.accessToken) {
                     const response = NextResponse.next();
@@ -117,23 +113,23 @@ export async function proxy(request: NextRequest) {
                     response.cookies.set(
                         cookieTokenManager.ACCESS_TOKEN_KEY,
                         data.accessToken,
-                        { ...cookieOptions, maxAge: data.expiresIn }
+                        { ...cookieOptions, maxAge: data.expiresIn },
                     );
 
-                    if (data.refreshToken) {
-                        response.cookies.set(
-                            cookieTokenManager.REFRESH_TOKEN_KEY,
-                            data.refreshToken,
-                            {
-                                ...cookieOptions,
-                                maxAge: data.refreshTokenExpiresIn,
-                            }
-                        );
-                    }
+                    // if (data.refreshToken) {
+                    //     response.cookies.set(
+                    //         cookieTokenManager.REFRESH_TOKEN_KEY,
+                    //         data.refreshToken,
+                    //         {
+                    //             ...cookieOptions,
+                    //             maxAge: data.refreshTokenExpiresIn,
+                    //         },
+                    //     );
+                    // }
 
                     if (process.env.NODE_ENV === 'development') {
                         console.log(
-                            '🔄 [Middleware] Token refreshed successfully via ky'
+                            '🔄 [Middleware] Token refreshed successfully via ky',
                         );
                     }
 
