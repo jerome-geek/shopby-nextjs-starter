@@ -10,7 +10,6 @@ export {
     getTokenFromHeaders,
     isTokenValidFromAppRouter,
     isTokenValidFromHeaders,
-    parseCookies,
 } from './cookie';
 
 // LocalStorage 관련

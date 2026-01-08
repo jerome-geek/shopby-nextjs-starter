@@ -9,7 +9,8 @@
         "build": "panda codegen && next build",
         "start": "next start",
         "lint": "next lint",
-        "panda": "panda codegen"
+        "panda": "panda codegen",
+        "test": "vitest run"
     },
     "dependencies": {
         "@fxts/core": "^1.21.1",
@@ -46,13 +47,14 @@
     "devDependencies": {
         "@eslint/eslintrc": "^3",
         "@pandacss/dev": "^1.7.0",
-        "@types/node": "^20",
+        "@types/node": "^20.19.27",
         "@types/qs": "^6.14.0",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "@types/ua-parser-js": "^0.7.39",
         "eslint": "^9",
         "eslint-config-next": "^16.0.10",
-        "typescript": "^5"
+        "typescript": "^5",
+        "vitest": "^4.0.16"
     }
 }

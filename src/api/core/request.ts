@@ -1,11 +1,9 @@
-import ky, { BeforeRequestHook } from 'ky';
+import ky from 'ky';
 
-import { cookieTokenManager, getTokenFromAppRouter } from '@/api/core/cookie';
 import {
     logRequest,
     logResponse,
-    refreshToken,
-    setRefreshTokenHeader,
+    beforeRetry,
     setTokenHeader,
 } from '@/api/core/utils';
 
@@ -22,10 +20,8 @@ const baseRequest = ky.create({
     },
     hooks: {
         beforeRequest: [logRequest, setTokenHeader], // 요청 전 헤더에 인증 토큰 추가 (setTokenHeader)
-        beforeRetry: [refreshToken], // 재시도 전 토큰 갱신 (handleRefreshToken)
-        afterResponse: [
-            // logResponse
-        ], // 응답 후 에러 처리 (handleError)
+        beforeRetry: [beforeRetry], // 재시도 전 토큰 갱신 (handleRefreshToken)
+        afterResponse: [logResponse], // 응답 후 에러 처리 (handleError)
     },
 });
 
@@ -33,7 +29,7 @@ const request = baseRequest.extend({
     timeout: 10 * 1000,
     retry: {
         limit: 3, // 재시도 횟수
-        statusCodes: [401, 400], // 401 에러일 때 재시도
+        statusCodes: [401], // 401 에러일 때 재시도
         methods: ['get'], // 재시도를 적용할 HTTP 메서드
         backoffLimit: 3 * 1000, // 재시도 간격의 최댓값
     },
@@ -51,7 +47,8 @@ export const authRequest = ky.create({
         language: 'ko',
         currency: 'KRW',
     },
-    hooks: { beforeRequest: [setTokenHeader, setRefreshTokenHeader] },
+
+    // hooks: { beforeRequest: [setTokenHeader, setRefreshTokenHeader] },
 });
 
 export default request;

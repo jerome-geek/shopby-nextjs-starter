@@ -11,8 +11,12 @@ import {
  */
 function getStorageKey(key: string): string {
     const prefix = process.env.NEXT_PUBLIC_APP_NAME || 'shopby';
+
     return `${prefix}_${key}`;
 }
+
+export const ACCESS_TOKEN_KEY = getStorageKey('access-token');
+export const REFRESH_TOKEN_KEY = getStorageKey('refresh-token');
 
 /**
  * 쿠키 기반 토큰 관리 클래스
@@ -22,12 +26,14 @@ export class CookieTokenManager {
     private static instance: CookieTokenManager;
     public readonly ACCESS_TOKEN_KEY: string;
     public readonly REFRESH_TOKEN_KEY: string;
+    public readonly ACCESS_TOKEN_EXPIRES_AT_KEY: string;
 
     private readonly isProduction = process.env.NODE_ENV === 'production';
 
     private constructor() {
         this.ACCESS_TOKEN_KEY = getStorageKey('access-token');
         this.REFRESH_TOKEN_KEY = getStorageKey('refresh-token');
+        this.ACCESS_TOKEN_EXPIRES_AT_KEY = getStorageKey('at-expires');
     }
 
     static getInstance(): CookieTokenManager {
@@ -78,13 +84,20 @@ export class CookieTokenManager {
             expiresIn?: number;
             refreshTokenExpiresIn?: number;
         },
-        options?: OptionsType
+        options?: OptionsType,
     ) {
         const context = await this.getServerContext();
         const mergedOptions = { ...context, ...options } as OptionsType;
 
         // Access Token 저장
         await setCookie(this.ACCESS_TOKEN_KEY, accessToken, {
+            ...this.getCookieOptions(expiresIn),
+            ...mergedOptions,
+        } as OptionsType);
+
+        // 만료 시간(timestamp) 저장 (선제적 갱신용)
+        const expiresAt = Date.now() + expiresIn * 1000;
+        await setCookie(this.ACCESS_TOKEN_EXPIRES_AT_KEY, String(expiresAt), {
             ...this.getCookieOptions(expiresIn),
             ...mergedOptions,
         } as OptionsType);
@@ -145,6 +158,7 @@ export class CookieTokenManager {
         } as OptionsType;
         await deleteCookie(this.ACCESS_TOKEN_KEY, clearOptions);
         await deleteCookie(this.REFRESH_TOKEN_KEY, clearOptions);
+        await deleteCookie(this.ACCESS_TOKEN_EXPIRES_AT_KEY, clearOptions);
     }
 
     /**
@@ -185,20 +199,3 @@ export const getServerCookies = async () => {
 
 export const getTokenFromHeaders = () => cookieTokenManager.getToken();
 export const isTokenValidFromHeaders = () => cookieTokenManager.hasToken();
-
-/**
- * 미들웨어 또는 옵션에서 직접 쿠키를 다룰 때 사용하는 헬퍼
- */
-export const parseCookies = (
-    cookieString: string | null | undefined
-): Record<string, string> => {
-    if (!cookieString) return {};
-    const cookies: Record<string, string> = {};
-    cookieString.split(';').forEach((cookie) => {
-        const [name, value] = cookie.trim().split('=');
-        if (name && value) {
-            cookies[name] = decodeURIComponent(value);
-        }
-    });
-    return cookies;
-};

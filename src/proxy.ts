@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server';
+import { getCookies, setCookie } from 'cookies-next';
 import ky from 'ky';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-import { cookieTokenManager } from '@/api/core/cookie';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/api/core/cookie';
 import { PATHS } from '@/const/paths';
 import { UpdateAccessTokenResponse } from '@/models/auth/oauth2';
 
@@ -26,42 +27,41 @@ const publicRoutes: string[] = [
     '/company',
 ];
 
-export async function proxy(request: NextRequest) {
-    const { pathname } = request.nextUrl;
-
-    // 1. 공개 라우트 체크 (인증 불필요)
-    const isPublicRoute = publicRoutes.some((route) => {
+const checkPublicRoute = (pathname: string) => {
+    return publicRoutes.some((route) => {
         if (route === '/') {
             return pathname === '/';
         }
         return pathname === route || pathname.startsWith(`${route}/`);
     });
+};
+
+const checkPrivateRoute = (pathname: string) => {
+    return protectedRoutes.some((route) => pathname.startsWith(route));
+};
+
+export async function proxy(req: NextRequest) {
+    const res = NextResponse.next();
+    const { pathname } = req.nextUrl;
 
     // 공개 라우트는 인증 체크 없이 통과
-    if (isPublicRoute) {
+    if (checkPublicRoute(pathname)) {
         if (process.env.NODE_ENV === 'development') {
             console.log(`[Middleware] Public route: ${pathname}`);
         }
         return NextResponse.next();
     }
 
-    // 2. 보호된 라우트 체크 (인증 필요)
-    const isProtectedRoute = protectedRoutes.some((route) =>
-        pathname.startsWith(route),
-    );
+    // 보호된 라우트 체크 (인증 필요)
+    if (checkPrivateRoute(pathname)) {
+        const cookies = await getCookies({ res, req });
+        console.log('🚀 ~ proxy ~ cookies:', cookies);
 
-    if (isProtectedRoute) {
-        // request.cookies를 직접 사용하여 토큰 확인 (middleware 표준 방식)
-        const accessToken = request.cookies.get(
-            cookieTokenManager.ACCESS_TOKEN_KEY,
-        )?.value;
-        const refreshToken = request.cookies.get(
-            cookieTokenManager.REFRESH_TOKEN_KEY,
-        )?.value;
+        const accessToken = cookies?.[ACCESS_TOKEN_KEY];
+        const refreshToken = cookies?.[REFRESH_TOKEN_KEY];
 
-        // Case 1: 둘 다 없는 '완전한 미로그인' 상태 -> 로그인 페이지로 리다이렉트
-        if (!accessToken && !refreshToken) {
-            const loginUrl = new URL(PATHS.AUTH.LOGIN, request.url);
+        if (!accessToken) {
+            const loginUrl = new URL(PATHS.AUTH.LOGIN, req.url);
             loginUrl.searchParams.set('returnUrl', pathname);
 
             if (process.env.NODE_ENV === 'development') {
@@ -73,88 +73,53 @@ export async function proxy(request: NextRequest) {
             return NextResponse.redirect(loginUrl);
         }
 
-        // Case 2: Access Token은 없는데 Refresh Token은 있는 경우 -> Middleware에서 즉시 갱신
-        if (!accessToken && refreshToken) {
-            if (process.env.NODE_ENV === 'development') {
-                console.log(
-                    `[Middleware] Access token missing, attempting to refresh for ${pathname}`,
-                );
-            }
-
-            try {
-                // 순환 참조 및 전역 hooks와의 간섭을 피하기 위해 ky를 직접 호출 (Pure Instance)
-                const data = await ky
-                    .put('https://shop-api.e-ncp.com/oauth2', {
+        try {
+            // TODO: 토큰 갱신
+            const updateAccessTokenResponse = await ky
+                .put<UpdateAccessTokenResponse>(
+                    'https://shop-api.e-ncp.com/oauth2',
+                    {
                         headers: {
-                            'Content-Type': 'application/json',
-                            version: '1.0',
-                            clientId: process.env.NEXT_PUBLIC_CLIENT_ID || '',
-                            platform: 'PC',
                             'Shop-By-Authorization': `Bearer ${accessToken}`,
                             'Refresh-Token': refreshToken,
                         },
-                        timeout: 5000,
-                    })
-                    .json<UpdateAccessTokenResponse>();
+                    },
+                )
+                .json();
+            console.log(
+                '🚀 ~ proxy ~ updateAccessTokenResponse:',
+                updateAccessTokenResponse,
+            );
 
-                if (data.accessToken) {
-                    const response = NextResponse.next();
+            // 토큰 갱신 성공 시
+            if (updateAccessTokenResponse?.accessToken) {
+                const isProd = process.env.NODE_ENV === 'production';
 
-                    // 새로운 토큰들을 응답 쿠키에 설정
-                    const isProd = process.env.NODE_ENV === 'production';
-                    const cookieOptions = {
+                await setCookie(
+                    ACCESS_TOKEN_KEY,
+                    updateAccessTokenResponse.accessToken,
+                    {
                         path: '/',
+                        httpOnly: isProd,
                         secure: isProd,
                         sameSite: (isProd ? 'strict' : 'lax') as
                             | 'strict'
                             | 'lax',
-                    };
+                    },
+                );
 
-                    response.cookies.set(
-                        cookieTokenManager.ACCESS_TOKEN_KEY,
-                        data.accessToken,
-                        { ...cookieOptions, maxAge: data.expiresIn },
-                    );
-
-                    // if (data.refreshToken) {
-                    //     response.cookies.set(
-                    //         cookieTokenManager.REFRESH_TOKEN_KEY,
-                    //         data.refreshToken,
-                    //         {
-                    //             ...cookieOptions,
-                    //             maxAge: data.refreshTokenExpiresIn,
-                    //         },
-                    //     );
-                    // }
-
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log(
-                            '🔄 [Middleware] Token refreshed successfully via ky',
-                        );
-                    }
-
-                    return response;
-                } else {
-                    throw new Error('No access token in response');
-                }
-            } catch (error) {
-                console.error('❌ [Middleware] Token refresh failed:', error);
-
-                // 갱신 실패 시 모든 쿠키를 삭제하고 로그인 페이지로 강제 이동
-                const loginUrl = new URL(PATHS.AUTH.LOGIN, request.url);
-                loginUrl.searchParams.set('returnUrl', pathname);
-                const response = NextResponse.redirect(loginUrl);
-
-                response.cookies.delete(cookieTokenManager.ACCESS_TOKEN_KEY);
-                response.cookies.delete(cookieTokenManager.REFRESH_TOKEN_KEY);
-
-                return response;
+                // 토큰 갱신 후 응답
+                res.headers.set(
+                    ACCESS_TOKEN_KEY,
+                    updateAccessTokenResponse.accessToken,
+                );
             }
+        } catch (error) {
+            console.log('🚀 ~ proxy ~ error:', error);
         }
     }
 
-    // 3. 응답 생성
-    return NextResponse.next();
+    return res;
 }
 
 /**

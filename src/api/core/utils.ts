@@ -14,6 +14,8 @@ import {
 } from '@/api/core/cookie';
 import { PATHS } from '@/const/paths';
 
+import { getCookies } from 'cookies-next/client';
+
 export const DEFAULT_API_RETRY_BACKOFF_LIMIT = 3 * 1000;
 export const DEFAULT_API_RETRY_LIMIT = 4;
 export const DEFAULT_API_TIMEOUT = 10 * 1000;
@@ -30,66 +32,39 @@ export const logResponse: AfterResponseHook = (request, _, response) => {
     }
 };
 
-// 전역적으로 토큰 갱신 상태를 공유하기 위한 Promise 변수
-let refreshPromise: Promise<string | null> | null = null;
-
-export const refreshToken: BeforeRetryHook = async ({ request, error }) => {
+export const beforeRetry: BeforeRetryHook = async ({ error, retryCount }) => {
     const response = (error as HTTPError).response;
-
-    // 401(Unauthorized) 혹은 400(Bad Request) 에러인 경우에만 토큰 갱신 시도 고려
-    if (response?.status !== 401 && response?.status !== 400) {
-        return;
+    if (response?.status !== 401) {
+        return ky.stop;
     }
 
-    // 1. 이미 다른 요청에 의해 토큰 갱신이 진행 중이라면 그 작업을 기다림 (Queueing)
-    if (refreshPromise) {
-        try {
-            const newAccessToken = await refreshPromise;
-            if (newAccessToken) {
-                request.headers.set(
-                    'Shop-By-Authorization',
-                    `Bearer ${newAccessToken}`,
-                );
-                return;
-            }
-        } catch (e) {
-            // 진행 중이던 갱신 작업이 실패했다면 재시도 중단
-            return ky.stop;
-        }
+    if (retryCount === DEFAULT_API_RETRY_LIMIT - 1) {
+        // await UserService.onLoginDurationExpired();
+        return ky.stop;
     }
 
-    // 2. 내가 첫 번째로 도착한 요청이라면 갱신 프로세스를 시작하고 약속(Promise)을 선언함 (Locking)
-    refreshPromise = (async () => {
-        try {
-            let currentAccessToken: string | null = null;
-            let currentRefreshToken: string | null = null;
+    // refresh token을 이용하여 access token을 가져옵니다.
+    //   await UserService.getAccessTokenByRefreshToken();
 
-            if (typeof window !== 'undefined') {
-                currentAccessToken = await cookieTokenManager.getToken();
-                currentRefreshToken =
-                    await cookieTokenManager.getRefreshToken();
-            } else {
-                currentAccessToken = await getTokenFromAppRouter();
-                currentRefreshToken = await getRefreshTokenFromAppRouter();
-            }
+    const isServer = typeof window === 'undefined';
+    try {
+        console.log('🚀 ~ refreshToken ~ isServer:', isServer);
+        if (isServer) {
+            const { getCookiesFromServer } = await import(
+                '@/api/core/utils.server'
+            );
+            const cookies = await getCookiesFromServer();
+            const currentAccessToken = cookies?.['wannamake_access-token'];
+            console.log(
+                '🚀 ~ refreshToken ~ currentAccessToken:',
+                currentAccessToken,
+            );
+            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
+            console.log(
+                '🚀 ~ refreshToken ~ currentRefreshToken:',
+                currentRefreshToken,
+            );
 
-            // 400 에러인데 액세스 토큰이 여전히 존재한다면, 단순한 요청 오류일 확률이 높음
-            if (response?.status === 400 && currentAccessToken) {
-                return null;
-            }
-
-            if (!currentRefreshToken) {
-                throw new Error('No refresh token available');
-            }
-
-            if (process.env.NODE_ENV === 'development') {
-                console.log(
-                    '🚀 Attempting to Refresh Token due to status:',
-                    response.status,
-                );
-            }
-
-            // 토큰 갱신 API 호출
             const refreshResponse = await oauth2
                 .updateAccessToken({
                     headers: {
@@ -98,61 +73,104 @@ export const refreshToken: BeforeRetryHook = async ({ request, error }) => {
                     },
                 })
                 .json();
+            console.log(
+                '🚀 ~ refreshToken ~ refreshResponse:',
+                refreshResponse,
+            );
+        } else {
+            const cookies = getCookies();
+            const currentAccessToken = cookies?.['wannamake_access-token'];
+            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
 
-            // 새로운 토큰 쿠키에 저장
-            await cookieTokenManager.setToken({
-                accessToken: refreshResponse.accessToken,
-                // refreshToken: refreshResponse.refreshToken,
-                expiresIn: Number(refreshResponse.expiresIn),
-                // refreshTokenExpiresIn: Number(
-                //     refreshResponse.refreshTokenExpiresIn,
-                // ),
-            });
-
-            if (process.env.NODE_ENV === 'development') {
-                console.log('🔄 Token Refreshed Successfully!');
-            }
-
-            return refreshResponse.accessToken;
-        } finally {
-            // 작업이 끝나면 공유 변수 초기화
-            refreshPromise = null;
+            const refreshResponse = await oauth2
+                .updateAccessToken({
+                    headers: {
+                        'Shop-By-Authorization': `Bearer ${currentAccessToken || ''}`,
+                        'Refresh-Token': currentRefreshToken,
+                    },
+                })
+                .json();
+            console.log(
+                '🚀 ~ refreshToken ~ refreshResponse:',
+                refreshResponse,
+            );
         }
-    })();
+    } catch (error) {
+        console.log('🚀 ~ refreshToken ~ error:', error);
+    }
+};
+
+export const refreshToken: BeforeRetryHook = async ({ request, error }) => {
+    const isServer = typeof window === 'undefined';
+    const response = (error as HTTPError).response;
+
+    if (response?.status !== 401) {
+        return;
+    }
 
     try {
-        const newAccessToken = await refreshPromise;
+        console.log('🚀 ~ refreshToken ~ isServer:', isServer);
+        if (isServer) {
+            const { getCookiesFromServer } = await import(
+                '@/api/core/utils.server'
+            );
+            const cookies = await getCookiesFromServer();
+            const currentAccessToken = cookies?.['wannamake_access-token'];
+            console.log(
+                '🚀 ~ refreshToken ~ currentAccessToken:',
+                currentAccessToken,
+            );
+            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
+            console.log(
+                '🚀 ~ refreshToken ~ currentRefreshToken:',
+                currentRefreshToken,
+            );
 
-        if (!newAccessToken) {
-            return;
-        }
-
-        // 현재 재시도하는 요청의 헤더 갈아끼우기
-        request.headers.set(
-            'Shop-By-Authorization',
-            `Bearer ${newAccessToken}`,
-        );
-    } catch (refreshError) {
-        if (process.env.NODE_ENV === 'development') {
-            console.error('❌ Token Refresh Failed:', refreshError);
-        }
-        await cookieTokenManager.clearTokens();
-        if (typeof window === 'undefined') {
-            redirect(PATHS.AUTH.LOGIN);
+            const refreshResponse = await oauth2
+                .updateAccessToken({
+                    headers: {
+                        'Shop-By-Authorization': `Bearer ${currentAccessToken || ''}`,
+                        'Refresh-Token': currentRefreshToken,
+                    },
+                })
+                .json();
+            console.log(
+                '🚀 ~ refreshToken ~ refreshResponse:',
+                refreshResponse,
+            );
         } else {
-            window.location.href = PATHS.AUTH.LOGIN;
+            const cookies = getCookies();
+            const currentAccessToken = cookies?.['wannamake_access-token'];
+            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
+
+            const refreshResponse = await oauth2
+                .updateAccessToken({
+                    headers: {
+                        'Shop-By-Authorization': `Bearer ${currentAccessToken || ''}`,
+                        'Refresh-Token': currentRefreshToken,
+                    },
+                })
+                .json();
+            console.log(
+                '🚀 ~ refreshToken ~ refreshResponse:',
+                refreshResponse,
+            );
         }
-        return ky.stop;
+    } catch (error) {
+        console.log('🚀 ~ refreshToken ~ error:', error);
     }
 };
 
 export const setTokenHeader: BeforeRequestHook = async (request) => {
     let token: string | null = null;
+
     if (typeof window !== 'undefined') {
         token = await cookieTokenManager.getToken();
     } else {
         token = await getTokenFromAppRouter();
     }
+
+    console.log('🚀 ~ setTokenHeader ~ token:', token);
 
     if (token) {
         request.headers.set('Shop-By-Authorization', `Bearer ${token}`);
