@@ -55,3 +55,5 @@ export const SORT_OPTIONS: {
         direction: 'DESC',
     },
 ];
+
+export const PRODUCT_COLOR_CUSTOM_PROPERTY_NO = 1314;

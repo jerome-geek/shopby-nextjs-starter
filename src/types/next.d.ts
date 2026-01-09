@@ -11,6 +11,7 @@ declare global {
             childCategoryNo?: number;
             pageNumber?: number;
             pageSize?: number;
+            categoryNos?: number[];
             by?: OrderByType;
             direction?: OrderDirectionType;
         };

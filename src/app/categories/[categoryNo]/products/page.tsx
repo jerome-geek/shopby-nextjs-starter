@@ -10,6 +10,7 @@ import { getIsMobile } from '@/utils/device.server';
 import NewProductList from '@/components/product/new/ProductList';
 import { vstack } from '@/styled-system/patterns';
 import { SORT_OPTIONS } from '@/const/product';
+import ProductSearchSort from '@/components/product/search-sort';
 
 export type ProductsPageProps =
     AppPageProps<'/categories/[categoryNo]/products'>;
@@ -22,8 +23,10 @@ export default async function ProductsPage(props: ProductsPageProps) {
     const pageNumber = Number(searchParams.pageNumber) || 1;
     const pageSize = Number(searchParams.pageSize) || 2;
     const categoryNo = Number(params.categoryNo) || 0;
+    const categoryNos = searchParams.categoryNos;
     const childCategoryNo = Number(searchParams.childCategoryNo) || 0;
 
+    console.log(categoryNos);
     const by = searchParams.by;
     const direction = searchParams.direction;
 
@@ -36,6 +39,12 @@ export default async function ProductsPage(props: ProductsPageProps) {
         order: {
             by: by || SORT_OPTIONS[0].by,
             direction: direction || SORT_OPTIONS[0].direction,
+        },
+        categoryOperator: 'AND',
+        filter: {
+            soldout: true,
+            discountedComparison: 'BETWEEN',
+            saleStatus: 'RESERVATION_AND_ONSALE',
         },
     };
 
@@ -75,12 +84,14 @@ export default async function ProductsPage(props: ProductsPageProps) {
 
             <div
                 className={vstack({
-                    gap: '36px',
+                    gap: { base: '0', md: '36px' },
                     alignItems: 'end',
                     marginTop: { base: '0', md: '80px' },
                     flex: 1,
                 })}
             >
+                <ProductSearchSort isMobile={isMobile} onlyRender='desktop' />
+
                 <NewProductList
                     searchParams={productSearchParams}
                     initialData={initialData}

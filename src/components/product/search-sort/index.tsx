@@ -9,7 +9,13 @@ import { hstack } from '@/styled-system/patterns';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { SortIcon } from '@/components/icons/SortIcon';
 
-export default function ProductSearchSort({ isMobile }: { isMobile: boolean }) {
+export default function ProductSearchSort({
+    isMobile,
+    onlyRender,
+}: {
+    isMobile: boolean;
+    onlyRender?: 'mobile' | 'desktop';
+}) {
     const isMobileView = useMediaQuery('(max-width: 767px)');
     const activeIsMobile = isMobileView ?? isMobile;
 
@@ -33,6 +39,14 @@ export default function ProductSearchSort({ isMobile }: { isMobile: boolean }) {
         params.set('direction', sort.direction);
         router.push(`${pathname}?${params.toString()}`);
     };
+
+    if (onlyRender === 'desktop' && activeIsMobile) {
+        return null;
+    }
+
+    if (onlyRender === 'mobile' && !activeIsMobile) {
+        return null;
+    }
 
     return activeIsMobile ? (
         <button

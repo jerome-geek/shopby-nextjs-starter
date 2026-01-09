@@ -24,6 +24,7 @@ export default function NewProductList({
     searchParams,
     initialData,
 }: NewProductListProps) {
+    console.log(searchParams);
     const {
         data: infiniteProductListData,
         hasNextPage,
@@ -42,6 +43,8 @@ export default function NewProductList({
             },
         },
     });
+
+    console.log(infiniteProductListData);
 
     // TODO: PC인 경우 별도 처리 필요
     const productList = useMemo(() => {
