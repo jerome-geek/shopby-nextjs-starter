@@ -44,6 +44,53 @@ export async function proxy(req: NextRequest) {
     const res = NextResponse.next();
     const { pathname } = req.nextUrl;
 
+    const cookies = await getCookies({ res, req });
+    console.log('🚀 ~ proxy ~ cookies:', cookies);
+
+    const accessToken = cookies?.[ACCESS_TOKEN_KEY];
+    const refreshToken = cookies?.[REFRESH_TOKEN_KEY];
+    try {
+        const updateAccessTokenResponse = await ky
+            .put<UpdateAccessTokenResponse>(
+                'https://shop-api.e-ncp.com/oauth2',
+                {
+                    headers: {
+                        'Shop-By-Authorization': `Bearer ${accessToken}`,
+                        'Refresh-Token': refreshToken,
+                    },
+                },
+            )
+            .json();
+        console.log(
+            '🚀 ~ proxy ~ updateAccessTokenResponse:',
+            updateAccessTokenResponse,
+        );
+
+        // 토큰 갱신 성공 시
+        if (updateAccessTokenResponse?.accessToken) {
+            const isProd = process.env.NODE_ENV === 'production';
+
+            await setCookie(
+                ACCESS_TOKEN_KEY,
+                updateAccessTokenResponse.accessToken,
+                {
+                    path: '/',
+                    httpOnly: isProd,
+                    secure: isProd,
+                    sameSite: (isProd ? 'strict' : 'lax') as 'strict' | 'lax',
+                },
+            );
+
+            // 토큰 갱신 후 응답
+            res.headers.set(
+                ACCESS_TOKEN_KEY,
+                updateAccessTokenResponse.accessToken,
+            );
+        }
+    } catch (error) {
+        console.log('🚀 ~ proxy ~ error:', error);
+    }
+
     // 공개 라우트는 인증 체크 없이 통과
     if (checkPublicRoute(pathname)) {
         if (process.env.NODE_ENV === 'development') {
@@ -54,12 +101,6 @@ export async function proxy(req: NextRequest) {
 
     // 보호된 라우트 체크 (인증 필요)
     if (checkPrivateRoute(pathname)) {
-        const cookies = await getCookies({ res, req });
-        console.log('🚀 ~ proxy ~ cookies:', cookies);
-
-        const accessToken = cookies?.[ACCESS_TOKEN_KEY];
-        const refreshToken = cookies?.[REFRESH_TOKEN_KEY];
-
         if (!accessToken) {
             const loginUrl = new URL(PATHS.AUTH.LOGIN, req.url);
             loginUrl.searchParams.set('returnUrl', pathname);
@@ -71,50 +112,6 @@ export async function proxy(req: NextRequest) {
             }
 
             return NextResponse.redirect(loginUrl);
-        }
-
-        try {
-            const updateAccessTokenResponse = await ky
-                .put<UpdateAccessTokenResponse>(
-                    'https://shop-api.e-ncp.com/oauth2',
-                    {
-                        headers: {
-                            'Shop-By-Authorization': `Bearer ${accessToken}`,
-                            'Refresh-Token': refreshToken,
-                        },
-                    },
-                )
-                .json();
-            console.log(
-                '🚀 ~ proxy ~ updateAccessTokenResponse:',
-                updateAccessTokenResponse,
-            );
-
-            // 토큰 갱신 성공 시
-            if (updateAccessTokenResponse?.accessToken) {
-                const isProd = process.env.NODE_ENV === 'production';
-
-                await setCookie(
-                    ACCESS_TOKEN_KEY,
-                    updateAccessTokenResponse.accessToken,
-                    {
-                        path: '/',
-                        httpOnly: isProd,
-                        secure: isProd,
-                        sameSite: (isProd ? 'strict' : 'lax') as
-                            | 'strict'
-                            | 'lax',
-                    },
-                );
-
-                // 토큰 갱신 후 응답
-                res.headers.set(
-                    ACCESS_TOKEN_KEY,
-                    updateAccessTokenResponse.accessToken,
-                );
-            }
-        } catch (error) {
-            console.log('🚀 ~ proxy ~ error:', error);
         }
     }
 

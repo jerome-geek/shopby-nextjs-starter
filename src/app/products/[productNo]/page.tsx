@@ -59,13 +59,11 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
     );
 
     const isLogin = await isAuthenticated();
-    console.log('🚀 ~ ProductDetailPage ~ isLogin:', isLogin);
 
     if (isLogin) {
-        const respont1 = await productProfile.registerRecentViewProduct({
+        await productProfile.registerRecentViewProduct({
             productNo,
         });
-        console.log('🚀 ~ ProductDetailPage ~ respont1:', respont1);
     }
 
     return (
@@ -130,12 +128,14 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
                         })}
                     >
                         <ProductInfo
-                            brand={productDetailData.brand}
-                            productName={productDetailData.baseInfo.productName}
-                            likeCnt={productDetailData.counter.likeCnt || 0}
-                            reviewRate={productDetailData.reviewRate}
-                            reviewCnt={productDetailData.counter.reviewCnt || 0}
-                            price={productDetailData.price}
+                            params={props.params}
+                            searchParams={props.searchParams}
+                            // brand={productDetailData.brand}
+                            // productName={productDetailData.baseInfo.productName}
+                            // likeCnt={productDetailData.counter.likeCnt || 0}
+                            // reviewRate={productDetailData.reviewRate}
+                            // reviewCnt={productDetailData.counter.reviewCnt || 0}
+                            // price={productDetailData.price}
                         />
                     </div>
                 </aside>

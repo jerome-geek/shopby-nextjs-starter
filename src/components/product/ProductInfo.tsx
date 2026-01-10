@@ -1,5 +1,3 @@
-'use client';
-
 import { css } from '@/styled-system/css';
 import { flex } from '@/styled-system/patterns';
 import { token } from '@/styled-system/tokens';
@@ -9,25 +7,71 @@ import { HeartIcon, StarIcon } from '@/components/icons';
 import { Price } from '@/models/product';
 import { Brand } from '@/models/product/product';
 import { getDiscountRate, KRW } from '@/utils/currency';
+import { getCachedProductDetail } from '@/api/product/product.server';
+import LikeButton from '@/components/product/LikeButton';
+import { getTranslation } from '@/i18n/server';
+import { productOption } from '@/api/product';
+import {
+    FlatProductOption,
+    MultiProductOption,
+} from '@/components/product/option';
+import { join, pipe, split } from '@fxts/core';
+import { FlatOption } from '@/models/product/productOption';
 
-interface ProductInfoProps {
-    productName: string;
-    brand?: Brand;
-    likeCnt: number;
-    reviewCnt: number;
-    reviewRate: number;
-    price: Price;
-}
+// interface ProductInfoProps {
+//     productName: string;
+//     brand?: Brand;
+//     likeCnt: number;
+//     reviewCnt: number;
+//     reviewRate: number;
+//     price: Price;
+// }
 
-export default function ProductInfo({
-    productName,
-    brand,
-    likeCnt,
-    reviewCnt,
-    reviewRate,
-    price,
-}: ProductInfoProps) {
-    const { salePrice, immediateDiscountAmt, additionDiscountAmt } = price;
+type ProductDetailPageProps = AppPageProps<'/products/[productNo]'>;
+
+export default async function ProductInfo(props: ProductDetailPageProps) {
+    const { t } = await getTranslation();
+
+    const params = await props.params;
+    const productNo = Number(params.productNo);
+
+    const searchParams = await props.searchParams;
+    const channelType = searchParams.channelType;
+    const preview = searchParams.preview || false;
+
+    const productDetailData = await getCachedProductDetail(productNo, {
+        preview,
+        channelType,
+    });
+
+    const productOptionData = await productOption
+        .getProductOption(productNo, {
+            preview,
+            // channelType,
+        })
+        .json();
+    console.log('🚀 ~ ProductInfo ~ productOptionData:', productOptionData);
+
+    const isFlatOptionUsed =
+        !!productOptionData &&
+        productOptionData.selectType === 'FLAT' &&
+        productOptionData.type === 'COMBINATION' &&
+        productOptionData.flatOptions.length > 0;
+
+    const isMultiLevelOptionUsed =
+        !!productOptionData &&
+        productOptionData.selectType === 'MULTI' &&
+        productOptionData.type === 'COMBINATION' &&
+        productOptionData.multiLevelOptions.length > 0;
+
+    const brand = productDetailData.brand;
+    const productName = productDetailData.baseInfo.productName;
+    const liked = productDetailData.liked;
+    const likeCnt = productDetailData.counter.likeCnt || 0;
+    const reviewRate = productDetailData.reviewRate;
+    const reviewCnt = productDetailData.counter.reviewCnt || 0;
+    const { salePrice, immediateDiscountAmt, additionDiscountAmt } =
+        productDetailData.price;
 
     const discountRate = getDiscountRate(salePrice, immediateDiscountAmt);
     const discountPrice = KRW(salePrice)
@@ -44,8 +88,19 @@ export default function ProductInfo({
         .subtract(additionDiscountAmt)
         .format();
 
-    const onLikeButtonClick = () => {
-        console.log('like button clicked');
+    const getFlatOptionLabel = (option: FlatOption) => {
+        const value = pipe(option.value, split('|'), join(' / '));
+
+        if (option.saleType === 'SOLDOUT') {
+            return `${value} - ${t('품절')}`;
+        }
+
+        if (option.addPrice > 0) {
+            // return `${value} ${addPriceString(option.addPrice)}`;
+            return value;
+        }
+
+        return value;
     };
 
     return (
@@ -86,23 +141,11 @@ export default function ProductInfo({
                             </Link>
                         )}
 
-                        <button
-                            className={css({ marginLeft: 'auto' })}
-                            onClick={onLikeButtonClick}
-                        >
-                            <HeartIcon />
-                            <span
-                                className={css({
-                                    fontSize: '1rem',
-                                    lineHeight: '1.4',
-                                    letterSpacing: '-2%',
-                                    fontWeight: '500',
-                                    color: token('colors.gray70'),
-                                })}
-                            >
-                                {likeCnt}
-                            </span>
-                        </button>
+                        <LikeButton
+                            productNo={productNo}
+                            liked={liked}
+                            likeCnt={likeCnt}
+                        />
                     </div>
                     <h1
                         className={css({
@@ -190,7 +233,84 @@ export default function ProductInfo({
                 })}
             />
 
-            <div>11</div>
+            <div
+                className={css({
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    fontSize: '1.4rem',
+                    lineHeight: '1.6',
+                })}
+            >
+                {/* 
+                   TODO: 배송/혜택 데이터 매핑 가이드
+                   - 배송비: productDetailData.deliveryFee.deliveryAmt (0이면 무료)
+                   - 무료배송조건: productDetailData.deliveryFee.defaultDeliveryConditionLabel
+                   - 추가배송비: productDetailData.deliveryFee.remoteDeliveryAreaFees (존재할 경우)
+                   - 배송 정보: productDetailData.shippingInfo.shippingConfig.shippingAreaType (PARTNER: 업체배송, M_MALL: 자체배송)
+                   - 배송 시작 안내: productDetailData.baseInfo.deliveryCustomerInfo
+                   - 포인트 적립: productDetailData.price.accumulationAmtWhenBuyConfirm
+                */}
+
+                {/* 배송비 */}
+                <dl className={flex({ gap: '20px' })}>
+                    <dt className={css({ width: '80px', color: 'gray70' })}>
+                        배송비
+                    </dt>
+                    <dd className={css({ color: 'gray90' })}>
+                        <p className={css({ fontWeight: '600' })}>3,000원</p>
+                        <p
+                            className={css({
+                                fontSize: '1.3rem',
+                                color: 'gray60',
+                            })}
+                        >
+                            50,000원 이상 구매시 무료배송
+                        </p>
+                        <p
+                            className={css({
+                                fontSize: '1.3rem',
+                                color: 'gray60',
+                            })}
+                        >
+                            제주도 포함 도서/산간 추가 배송비 3,000원
+                        </p>
+                    </dd>
+                </dl>
+                {/* 배송 정보 */}
+                <dl className={flex({ gap: '20px' })}>
+                    <dt className={css({ width: '80px', color: 'gray70' })}>
+                        배송 정보
+                    </dt>
+                    <dd className={css({ color: 'gray90' })}>
+                        <p>업체배송</p>
+                        <p
+                            className={css({
+                                fontSize: '1.3rem',
+                                color: 'gray60',
+                            })}
+                        >
+                            결제 완료 후 2일 이내 배송 시작
+                        </p>
+                    </dd>
+                </dl>
+                {/* 추가 혜택 */}
+                <dl className={flex({ gap: '20px' })}>
+                    <dt className={css({ width: '80px', color: 'gray70' })}>
+                        {t('추가 혜택')}
+                    </dt>
+                    <dd className={css({ color: 'gray90' })}>
+                        {/* <p>135포인트 적립</p> */}
+                        <p>
+                            {t('{{accumulationAmtWhenBuyConfirm}}포인트 적립', {
+                                accumulationAmtWhenBuyConfirm:
+                                    productDetailData.price
+                                        .accumulationAmtWhenBuyConfirm,
+                            })}
+                        </p>
+                    </dd>
+                </dl>
+            </div>
 
             <div>{/* TODO: 브랜드영역 */}</div>
 
@@ -200,7 +320,30 @@ export default function ProductInfo({
                 })}
             />
 
-            <div>옵션영역</div>
+            <div>
+                {isFlatOptionUsed && (
+                    <FlatProductOption
+                        productOptionListData={productOptionData}
+                        isOptionDisabled={(option) =>
+                            option.value === 'disabled'
+                        }
+                        getFlatOptionLabel={getFlatOptionLabel}
+                        // onChange={(e) => console.log(e)}
+                        // onChange={onFlatOptionChange}
+                        // checkOptionDisabled={(option) =>
+                        //     pipe(option, isOptionDisabled, not)
+                        // }
+                    />
+                )}
+
+                {isMultiLevelOptionUsed && (
+                    <MultiProductOption
+                        productOptionListData={productOptionData}
+                        // onChange={onMultiOptionChange}
+                        // onChange={(e) => console.log(e)}
+                    />
+                )}
+            </div>
 
             <div>예상결제금액</div>
 

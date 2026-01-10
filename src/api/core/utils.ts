@@ -32,7 +32,11 @@ export const logResponse: AfterResponseHook = (request, _, response) => {
     }
 };
 
-export const beforeRetry: BeforeRetryHook = async ({ error, retryCount }) => {
+export const beforeRetry: BeforeRetryHook = async ({
+    request,
+    error,
+    retryCount,
+}) => {
     const response = (error as HTTPError).response;
     if (response?.status !== 401) {
         return ky.stop;
@@ -77,6 +81,11 @@ export const beforeRetry: BeforeRetryHook = async ({ error, retryCount }) => {
                 '🚀 ~ refreshToken ~ refreshResponse:',
                 refreshResponse,
             );
+            const newToken = refreshResponse.accessToken;
+            // 2. [중요] 현재 실행 중인 리트라이 요청에만 새 토큰 주입
+            // 이렇게 하면 쿠키는 못 바꿔도, 현재 페이지 렌더링은 에러 없이 끝낼 수 있습니다.
+            // request.headers.set('Authorization', `Bearer ${newToken}`);
+            request.headers.set('Shop-By-Authorization', `Bearer ${newToken}`);
         } else {
             const cookies = getCookies();
             const currentAccessToken = cookies?.['wannamake_access-token'];
@@ -96,6 +105,7 @@ export const beforeRetry: BeforeRetryHook = async ({ error, retryCount }) => {
             );
         }
     } catch (error) {
+        console.dir(error);
         console.log('🚀 ~ refreshToken ~ error:', error);
     }
 };
