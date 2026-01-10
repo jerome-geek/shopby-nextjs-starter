@@ -313,7 +313,6 @@
 
 // export default ProductSectionItem;
 
-
 'use client';
 
 import { css } from '@/styled-system/css';
@@ -327,14 +326,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { BigCaretIcon, SmallCaretIcon } from '@/components/icons';
 import SectionSkeleton from '@/components/main/product-display/Skeleton';
-import ProductCard from '@/components/product/Card';
+import ProductCard from '@/components/product/card';
 import { PATHS } from '@/const/paths';
 import { useProductDisplaySwiper } from '@/hooks/main/useProductDisplaySwiper';
 import {
     GetProductSectionByIdResponse,
-    ProductSectionProduct
+    ProductSectionProduct,
 } from '@/models/display/productSection';
-
 
 interface ProductSectionItemProps {
     sectionData: GetProductSectionByIdResponse;
@@ -371,7 +369,10 @@ const ProductSectionItem = ({
 
     const handleMoreClick = () => {
         if (sectionType) {
-            router.push(SECTION_TYPE_MAP[sectionType as keyof typeof SECTION_TYPE_MAP].path);
+            router.push(
+                SECTION_TYPE_MAP[sectionType as keyof typeof SECTION_TYPE_MAP]
+                    .path,
+            );
         }
     };
 
@@ -443,7 +444,7 @@ const ProductSectionItem = ({
                 >
                     {sectionData.label}
                 </h2>
-                 {isShowMore && (
+                {isShowMore && (
                     <button
                         type='button'
                         aria-label='더보기'

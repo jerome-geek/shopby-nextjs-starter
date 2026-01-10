@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { Price, ProductPrice } from '@/components/product/Card/index.styled';
+import { Price, ProductPrice } from '@/components/product/card/index.styled';
 import {
     HeartLikeFilledSmallIcon,
     HeartLikeSmallIcon,

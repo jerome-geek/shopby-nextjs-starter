@@ -1,5 +1,5 @@
 import productProfile from '@/api/product/profile';
-import ProductCard from '@/components/product/Card';
+import ProductCard from '@/components/product/card';
 import ViewAllLink from '@/components/ui/view-all-link';
 import { PATHS } from '@/const/paths';
 import { getTranslation } from '@/i18n/server';

@@ -40,12 +40,11 @@ import { ErrorBoundary } from '@suspensive/react';
 import { Suspense } from 'react';
 
 import SectionList from '@/components/main/product-display/SectionList';
-import BestSection from '@/components/product/Best/Section';
+import BestSection from '@/components/product/best/Section';
 import Section from '@/components/product/display-section/Section';
 import NewSection from '@/components/product/new/Section';
 
 const ProductDisplaySection = async () => {
-
     const desktopSections = () => {
         return (
             <ErrorBoundary fallback={<div>Error</div>}>
@@ -85,8 +84,8 @@ const ProductDisplaySection = async () => {
                     </div>
                 </Suspense>
             </ErrorBoundary>
-        )
-    }
+        );
+    };
 
     const mobileSections = () => {
         return (
@@ -116,7 +115,7 @@ const ProductDisplaySection = async () => {
                     <div>아티클6</div>
                 </Suspense>
             </ErrorBoundary>
-        )
+        );
     };
 
     return (

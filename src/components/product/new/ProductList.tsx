@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { isEmpty } from '@fxts/core';
 
-import ProductCard from '@/components/product/Card';
+import ProductCard from '@/components/product/card';
 import { useInfiniteProductList } from '@/hooks/infiniteQueries/product/product';
 import {
     ProductSearchParams,
