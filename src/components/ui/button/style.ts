@@ -4,10 +4,7 @@ import { token } from '@/styled-system/tokens';
 export const button = cva({
     base: {
         borderRadius: '8px',
-        fontWeight: 'bold',
-        fontSize: '17px',
-        lineHeight: '1.5',
-        letterSpacing: '-1.3%',
+        textStyle: 'heading.bold',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -59,10 +56,7 @@ export const button = cva({
 export const outlinedButton = cva({
     base: {
         borderRadius: '8px',
-        fontWeight: 'bold',
-        fontSize: '17px',
-        lineHeight: '1.5',
-        letterSpacing: '-1.3%',
+        textStyle: 'heading.bold',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

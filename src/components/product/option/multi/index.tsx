@@ -14,6 +14,7 @@ import {
     ProductOptionResponse,
 } from '@/models/product/productOption';
 import Select from '@/components/ui/Select';
+import { useProductOptionActions } from '@/store/product/useProductOptionStore';
 import { css } from '@/styled-system/css';
 import { flex } from '@/styled-system/patterns';
 import { addPriceString } from '@/utils/currency';
@@ -36,6 +37,8 @@ const MultiProductOption = ({
     checkOptionDisabled,
 }: MultiProductOptionProps) => {
     const { t } = useTranslation();
+
+    const { addOption } = useProductOptionActions();
 
     // const { isMobile } = useResponsive();
 
@@ -137,18 +140,8 @@ const MultiProductOption = ({
             }),
         );
 
-        // onChange({
-        //     ...v,
-        //     label: `${t('옵션')} : ${pipe(
-        //         selectedValueList,
-        //         compact,
-        //         append(v),
-        //         map((a) => t(a?.value || '')),
-        //         join('|'),
-        //     )}`,
-        // });
-
         if (isFlatOption(v)) {
+            addOption(v);
             setSecondOptionList(null);
             setThirdOptionList(null);
             setFourthOptionList(null);
@@ -182,38 +175,54 @@ const MultiProductOption = ({
         switch (index) {
             case FIRST_OPTION_INDEX:
                 return (
-                    <span>{`${
-                        labels[FIRST_OPTION_INDEX - 1]
-                    }을 먼저 선택해 주세요.`}</span>
+                    <span>
+                        {t('{{option}}을 먼저 선택해주세요.', {
+                            option: labels[FIRST_OPTION_INDEX - 1],
+                        })}
+                    </span>
                 );
             case SECOND_OPTION_INDEX:
                 return (
-                    <span>{`${
-                        labels[SECOND_OPTION_INDEX - 1]
-                    }을 먼저 선택해 주세요.`}</span>
+                    <span>
+                        {t('{{option}}을 먼저 선택해주세요.', {
+                            option: labels[SECOND_OPTION_INDEX - 1],
+                        })}
+                    </span>
                 );
             case THIRD_OPTION_INDEX:
                 return (
-                    <span>{`${
-                        labels[THIRD_OPTION_INDEX - 1]
-                    }을 먼저 선택해 주세요.`}</span>
+                    <span>
+                        {t('{{option}}을 먼저 선택해주세요.', {
+                            option: labels[THIRD_OPTION_INDEX - 1],
+                        })}
+                    </span>
                 );
             case FOURTH_OPTION_INDEX:
                 return (
-                    <span>{`${
-                        labels[FOURTH_OPTION_INDEX - 1]
-                    }을 먼저 선택해 주세요.`}</span>
+                    <span>
+                        {t('{{option}}을 먼저 선택해주세요.', {
+                            option: labels[FOURTH_OPTION_INDEX - 1],
+                        })}
+                    </span>
                 );
             case FIFTH_OPTION_INDEX:
                 return (
-                    <span>{`${
-                        labels[FIFTH_OPTION_INDEX - 1]
-                    }을 먼저 선택해 주세요.`}</span>
+                    <span>
+                        {t('{{option}}을 먼저 선택해주세요.', {
+                            option: labels[FIFTH_OPTION_INDEX - 1],
+                        })}
+                    </span>
                 );
             default:
-                return <span>{`옵션을 선택해 주세요.`}</span>;
+                return <span>{t('옵션을 선택해 주세요.')}</span>;
         }
     };
+
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     if (!productOptionListData) {
         return null;
@@ -221,7 +230,7 @@ const MultiProductOption = ({
 
     return (
         <div
-            className={flex({ gap: '8px' })}
+            className={flex({ gap: '8px', width: '100%' })}
             role='group'
             aria-label={t('분리형 옵션')}
         >
@@ -229,6 +238,7 @@ const MultiProductOption = ({
                 return (
                     <Select
                         key={`multiLevelOption-${index}`}
+                        instanceId={`multi-select-${index}`}
                         name={label}
                         aria-label={label}
                         placeholder={label}
@@ -256,7 +266,7 @@ const MultiProductOption = ({
                                 productOptionListData.labels,
                             )
                         }
-                        menuPortalTarget={document.body}
+                        menuPortalTarget={isMounted ? document.body : undefined}
                         // menuPlacement={isMobile ? 'top' : 'auto'}
                     />
                 );

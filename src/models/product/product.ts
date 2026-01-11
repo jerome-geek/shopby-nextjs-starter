@@ -327,7 +327,7 @@ export interface ProductDetailResponse {
     /** 리뷰 작성 가능 여부 */
     reviewAvailable: boolean;
     /** 카테고리 목록 */
-    categories: Category[];
+    categories: DisplayCategory[];
     /** 재고정보 */
     stock: ProductStock;
     /** 기간 */
@@ -1436,6 +1436,10 @@ export interface Category {
     }[];
     /** 전체 카테고리 명 */
     fullCategoryLabel: string;
+}
+export interface DisplayCategory extends Category {
+    /** 대표 전시 카테고리 여부 */
+    representativeYn: 'Y' | 'N';
 }
 
 export interface ProductItem {

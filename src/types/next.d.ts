@@ -17,6 +17,7 @@ declare global {
         '/products/[productNo]': {
             channelType?: ChannelType;
             preview?: boolean;
+            tab?: string;
         };
         '/terms/[termsType]': { termsNo?: string };
         '/products/new': {

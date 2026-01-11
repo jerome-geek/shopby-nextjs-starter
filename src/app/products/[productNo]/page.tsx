@@ -1,41 +1,16 @@
-import { Metadata, ResolvingMetadata } from 'next';
+import { filter, flatMap, join, map, pipe, prop, toArray } from '@fxts/core';
 import { notFound } from 'next/navigation';
 
 import { getCachedProductDetail } from '@/api/product/product.server';
-import productProfile from '@/api/product/profile';
-import GuestRecentViewProductLogger from '@/components/product/GuestRecentViewProductLogger';
-import ProductMainImage from '@/components/product/MainImage';
-import ProductInfo from '@/components/product/ProductInfo';
+import CategoryBestProducts from '@/components/product/detail/category-best-products';
+import ProductDescription from '@/components/product/detail/Description';
+import ProductDetailTab, { Tab } from '@/components/product/detail/Tab';
 import { css } from '@/styled-system/css';
-import { isAuthenticated } from '@/utils/auth.server';
+import DutyInfo from '@/components/product/detail/DutyInfo';
+import { vstack } from '@/styled-system/patterns';
+import PartnerInfo from '@/components/product/detail/PartnerInfo';
 
 type ProductDetailPageProps = AppPageProps<'/products/[productNo]'>;
-
-export async function generateMetadata(
-    props: ProductDetailPageProps,
-    parent: ResolvingMetadata,
-): Promise<Metadata> {
-    const params = await props.params;
-    const productNo = Number(params.productNo);
-
-    if (isNaN(productNo) || productNo <= 0) {
-        return {};
-    }
-
-    const searchParams = await props.searchParams;
-    const channelType = searchParams.channelType;
-    const preview = searchParams.preview || false;
-
-    const productDetailData = await getCachedProductDetail(productNo, {
-        preview,
-        channelType,
-    });
-
-    return {
-        title: productDetailData.baseInfo.productName,
-        description: productDetailData.baseInfo.promotionText,
-    };
-}
 
 export default async function ProductDetailPage(props: ProductDetailPageProps) {
     const params = await props.params;
@@ -46,125 +21,108 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
     }
 
     const searchParams = await props.searchParams;
-    const channelType = searchParams.channelType;
-    const preview = searchParams.preview || false;
+    const tab = searchParams.tab;
 
     const productDetailData = await getCachedProductDetail(productNo, {
-        preview,
-        channelType,
+        preview: false,
     });
     console.log(
         '🚀 ~ ProductDetailPage ~ productDetailData:',
         productDetailData,
     );
+    const categoryNos = pipe(
+        productDetailData,
+        prop('categories'),
+        filter((a) => a.representativeYn === 'Y'),
+        flatMap((b) => b.categories),
+        map((c) => c.categoryNo),
+        toArray,
+    );
+    console.log('🚀 ~ ProductDetailPage ~ categoryNos:', categoryNos);
 
-    const isLogin = await isAuthenticated();
+    const {
+        contentHeader = '',
+        content = '',
+        contentFooter = '',
+    } = productDetailData.baseInfo;
 
-    if (isLogin) {
-        await productProfile.registerRecentViewProduct({
-            productNo,
-        });
-    }
+    const productContent = pipe(
+        [contentHeader, content, contentFooter],
+        filter((a) => !!a),
+        join(''),
+    );
+
+    const TABS: Tab[] = [
+        { id: 'info', label: '상품 정보' },
+        {
+            id: 'review',
+            label: '리뷰',
+            count: productDetailData.counter.reviewCnt,
+        },
+        {
+            id: 'qna',
+            label: '문의',
+            count: productDetailData.counter.inquiryCnt,
+        },
+    ];
 
     return (
-        <article
-            className={css({
-                maxWidth: '1280px',
-                margin: '0 auto',
-                padding: { base: '20px', md: '40px 20px' },
-            })}
-        >
-            {!isLogin && <GuestRecentViewProductLogger productNo={productNo} />}
+        <>
+            <ProductDetailTab tabs={TABS} />
 
-            {/* CSS Grid 레이아웃: 소스 순서는 모바일 기준(이미지->정보->상세), 데스크탑은 Grid로 재배치 */}
-            <section
+            <div
                 className={css({
-                    display: 'grid',
-                    // 모바일: 1열, 데스크탑: 2열 (좌측 1fr, 우측 486px 고정)
-                    gridTemplateColumns: { base: '1fr', md: '1fr 486px' },
-                    gap: { base: '40px', md: '24px' },
-                    alignItems: 'start',
-                    justifyContent: 'center',
+                    padding: '40px 0',
                 })}
             >
-                {/* 1. 상품 이미지 영역 */}
-                {/* 데스크탑: 1열 1행 */}
-                <div
-                    className={css({
-                        gridColumn: { md: '1' },
-                        gridRow: { md: '1' },
-                        width: '100%',
-                        maxWidth: { md: '690px' },
-                        margin: { md: '0 auto' }, // 좌측 컬럼 내 중앙 정렬 느낌
-                        display: 'flex',
-                        justifyContent: 'center',
-                    })}
-                >
-                    <ProductMainImage
-                        imageUrls={productDetailData.baseInfo.imageUrls}
-                    />
-                </div>
-
-                {/* 2. 상품 구매 정보 영역 (Sticky) */}
-                {/* 모바일: 2번째 순서 (자연스럽게 이미지 아래 위치) */}
-                {/* 데스크탑: 2열 전체(1~2행 병합)에 위치하며 Sticky 동작 */}
-                <aside
-                    className={css({
-                        gridColumn: { md: '2' },
-                        gridRow: { md: '1 / span 2' },
-                        width: '100%',
-                        position: { md: 'sticky' },
-                        top: { md: '100px' },
-                        height: 'fit-content',
-                        zIndex: 1,
-                    })}
-                >
+                {(!tab || tab === 'info') && (
                     <div
-                        className={css({
-                            minHeight: '400px',
-                            backgroundColor: '#fafafa',
-                            padding: '20px',
-                            border: '1px dashed #ddd',
+                        role='tabpanel'
+                        id='tabpanel-info'
+                        aria-labelledby='tab-info'
+                        className={vstack({
+                            gap: '10px',
+                            alignItems: 'stretch',
                         })}
                     >
-                        <ProductInfo
-                            params={props.params}
-                            searchParams={props.searchParams}
-                            // brand={productDetailData.brand}
-                            // productName={productDetailData.baseInfo.productName}
-                            // likeCnt={productDetailData.counter.likeCnt || 0}
-                            // reviewRate={productDetailData.reviewRate}
-                            // reviewCnt={productDetailData.counter.reviewCnt || 0}
-                            // price={productDetailData.price}
+                        <ProductDescription threshold={500}>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: productContent,
+                                }}
+                            />
+                        </ProductDescription>
+
+                        <CategoryBestProducts categoryNos={categoryNos} />
+
+                        <DutyInfo
+                            dutyInfo={productDetailData.baseInfo.dutyInfo}
                         />
-                    </div>
-                </aside>
 
-                {/* 3. 상품 상세 설명, 리뷰 등 긴 콘텐츠 */}
-                {/* 모바일: 3번째 순서 */}
-                {/* 데스크탑: 1열 2행 (이미지 바로 아래) */}
-                <div
-                    className={css({
-                        gridColumn: { md: '1' },
-                        gridRow: { md: '2' },
-                        width: '100%',
-                        maxWidth: { md: '690px' },
-                        margin: { md: '0 auto' },
-                        minHeight: '1000px',
-                    })}
-                >
-                    <div
-                        className={css({
-                            borderTop: '1px solid #eee',
-                            paddingTop: '40px',
-                            marginTop: { md: '60px' }, // 이미지와 상세설명 사이 간격
-                        })}
-                    >
-                        <h3>상품 상세 정보</h3>
-                        <p>여기에 긴 상품 상세 설명이 들어갑니다...</p>
+                        <PartnerInfo partner={productDetailData.partner} />
                     </div>
-                </div>
-            </section>
-        </article>
+                )}
+                {tab === 'review' && (
+                    <div
+                        role='tabpanel'
+                        id='tabpanel-review'
+                        aria-labelledby='tab-review'
+                    >
+                        <h3>리뷰 ({productDetailData.counter.reviewCnt})</h3>
+                        <p>리뷰 목록이 여기에 표시됩니다.</p>
+                    </div>
+                )}
+                {tab === 'qna' && (
+                    <div
+                        role='tabpanel'
+                        id='tabpanel-qna'
+                        aria-labelledby='tab-qna'
+                    >
+                        <h3>문의 ({productDetailData.counter.inquiryCnt})</h3>
+                        <p>상품 문의 목록이 여기에 표시됩니다.</p>
+                    </div>
+                )}
+            </div>
+        </>
     );
 }

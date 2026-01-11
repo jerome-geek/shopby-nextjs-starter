@@ -10,7 +10,7 @@ const SolidButton = ({
 }: SolidButtonProps) => {
     return (
         <button
-            type="button"
+            type='button'
             className={cx(button({ visual: variant }), className)}
             {...props}
         >

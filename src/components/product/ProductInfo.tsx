@@ -1,31 +1,22 @@
-import { css } from '@/styled-system/css';
-import { flex } from '@/styled-system/patterns';
-import { token } from '@/styled-system/tokens';
+import { join, pipe, split } from '@fxts/core';
 import Link from 'next/link';
 
-import { HeartIcon, StarIcon } from '@/components/icons';
-import { Price } from '@/models/product';
-import { Brand } from '@/models/product/product';
-import { getDiscountRate, KRW } from '@/utils/currency';
-import { getCachedProductDetail } from '@/api/product/product.server';
-import LikeButton from '@/components/product/LikeButton';
-import { getTranslation } from '@/i18n/server';
 import { productOption } from '@/api/product';
+import { getCachedProductDetail } from '@/api/product/product.server';
+import { StarIcon } from '@/components/icons';
+import ProductActionButtons from '@/components/product/detail/ProductActionButtons';
+import LikeButton from '@/components/product/LikeButton';
 import {
     FlatProductOption,
     MultiProductOption,
 } from '@/components/product/option';
-import { join, pipe, split } from '@fxts/core';
+import SelectedOptionList from '@/components/product/SelectedOptionList';
+import { getTranslation } from '@/i18n/server';
 import { FlatOption } from '@/models/product/productOption';
-
-// interface ProductInfoProps {
-//     productName: string;
-//     brand?: Brand;
-//     likeCnt: number;
-//     reviewCnt: number;
-//     reviewRate: number;
-//     price: Price;
-// }
+import { css } from '@/styled-system/css';
+import { flex, vstack } from '@/styled-system/patterns';
+import { token } from '@/styled-system/tokens';
+import { getDiscountRate, KRW } from '@/utils/currency';
 
 type ProductDetailPageProps = AppPageProps<'/products/[productNo]'>;
 
@@ -50,7 +41,6 @@ export default async function ProductInfo(props: ProductDetailPageProps) {
             // channelType,
         })
         .json();
-    console.log('🚀 ~ ProductInfo ~ productOptionData:', productOptionData);
 
     const isFlatOptionUsed =
         !!productOptionData &&
@@ -105,8 +95,8 @@ export default async function ProductInfo(props: ProductDetailPageProps) {
 
     return (
         <div
-            className={flex({
-                flexDirection: 'column',
+            className={vstack({
+                alignItems: 'stretch',
                 gap: { base: '16px', md: '24px' },
             })}
         >
@@ -171,7 +161,7 @@ export default async function ProductInfo(props: ProductDetailPageProps) {
                         aria-hidden='true'
                     >
                         {[1, 2, 3, 4, 5].map((num) => {
-                            const displayRate = 4.5;
+                            const displayRate = reviewRate;
                             const fill =
                                 displayRate >= num
                                     ? 100
@@ -203,9 +193,12 @@ export default async function ProductInfo(props: ProductDetailPageProps) {
                             },
                         })}
                     >
-                        <b className={css({ color: token('colors.red') })}>
-                            {discountRate}
-                        </b>
+                        {discountRate && (
+                            <b className={css({ color: token('colors.red') })}>
+                                {discountRate}
+                            </b>
+                        )}
+
                         {discountPrice}
                     </p>
                     <p
@@ -219,9 +212,11 @@ export default async function ProductInfo(props: ProductDetailPageProps) {
                             },
                         })}
                     >
-                        <b className={css({ color: token('colors.red') })}>
-                            {maxDiscountRate}
-                        </b>
+                        {maxDiscountRate && (
+                            <b className={css({ color: token('colors.red') })}>
+                                {maxDiscountRate}
+                            </b>
+                        )}
                         {maxDiscountPrice}
                     </p>
                 </div>
@@ -320,7 +315,12 @@ export default async function ProductInfo(props: ProductDetailPageProps) {
                 })}
             />
 
-            <div>
+            <div
+                className={vstack({
+                    gap: '8px',
+                    width: '100%',
+                })}
+            >
                 {isFlatOptionUsed && (
                     <FlatProductOption
                         productOptionListData={productOptionData}
@@ -345,9 +345,13 @@ export default async function ProductInfo(props: ProductDetailPageProps) {
                 )}
             </div>
 
-            <div>예상결제금액</div>
+            <SelectedOptionList />
 
-            <div>버튼영역</div>
+            <ProductActionButtons
+                productNo={productNo}
+                liked={liked}
+                likeCnt={likeCnt}
+            />
         </div>
     );
 }

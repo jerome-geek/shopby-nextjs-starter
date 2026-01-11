@@ -293,6 +293,7 @@ export default defineConfig({
                         fontSize: '1.7rem', // 17px
                         lineHeight: 1.5,
                         fontWeight: 600, // Semibold
+                        letterSpacing: '-0.013em', // -1.3%
                     },
                 },
                 // Headline
@@ -314,6 +315,7 @@ export default defineConfig({
                     value: {
                         fontSize: '1.5rem', // 15px
                         lineHeight: 1.3,
+                        letterSpacing: '-0.013em', // -1.3%
                         fontWeight: 700, // Bold
                     },
                 },
@@ -321,6 +323,7 @@ export default defineConfig({
                     value: {
                         fontSize: '1.5rem', // 15px
                         lineHeight: 1.3,
+                        letterSpacing: '-0.013em', // -1.3%
                         fontWeight: 600, // Semibold
                     },
                 },
@@ -328,6 +331,7 @@ export default defineConfig({
                     value: {
                         fontSize: '1.5rem', // 15px
                         lineHeight: 1.3,
+                        letterSpacing: '-0.013em', // -1.3%
                         fontWeight: 500, // Medium
                     },
                 },
@@ -343,6 +347,7 @@ export default defineConfig({
                     value: {
                         fontSize: '1.4rem', // 14px
                         lineHeight: 1.4,
+                        letterSpacing: '-0.02em', // -2%
                         fontWeight: 500, // Medium
                     },
                 },
@@ -350,6 +355,7 @@ export default defineConfig({
                     value: {
                         fontSize: '1.4rem', // 14px
                         lineHeight: 1.4,
+                        letterSpacing: '-0.02em', // -2%
                         fontWeight: 400, // Regular
                     },
                 },

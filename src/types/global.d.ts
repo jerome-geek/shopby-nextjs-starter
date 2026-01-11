@@ -63,12 +63,6 @@ declare global {
         error: any;
     }
 
-    interface Tab {
-        key: string;
-        name: string;
-        isActive: boolean;
-    }
-
     interface InfiniteResponse<T> {
         data: T;
         pageNumber: number;

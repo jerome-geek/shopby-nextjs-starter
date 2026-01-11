@@ -12,6 +12,7 @@ import {
 } from '@/models/product/productOption';
 // import { useResponsive } from '@/hooks/utils';
 import Select from '@/components/ui/Select';
+import { useProductOptionActions } from '@/store/product/useProductOptionStore';
 
 interface FlatProductOptionProps {
     // productNo: number;
@@ -31,6 +32,7 @@ const FlatProductOption = ({
     checkOptionDisabled,
 }: FlatProductOptionProps) => {
     const { t } = useTranslation();
+    const { addOption } = useProductOptionActions();
 
     // const { isMobile } = useResponsive();
 
@@ -55,7 +57,9 @@ const FlatProductOption = ({
     }, [productOptionListData]);
 
     const onOptionChange = (v: SingleValue<FlatOption>) => {
-        // onChange(v);
+        if (v) {
+            addOption(v);
+        }
         setSelected(null);
     };
 

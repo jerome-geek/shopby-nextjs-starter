@@ -2,9 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
-import { Price, ProductPrice } from '@/components/product/card/index.styled';
 import {
     HeartLikeFilledSmallIcon,
     HeartLikeSmallIcon,
@@ -12,14 +10,16 @@ import {
     SmallCaretIcon,
     StarMiniIcon,
 } from '@/components/icons';
+import { ProductPrice } from '@/components/product/card/index.styled';
 import { PATHS } from '@/const/paths';
+import { useProductProfileMutation } from '@/hooks/mutations';
+import { useAuth } from '@/hooks/useAuth';
+import useDialog from '@/hooks/useDialog';
 import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 import { css } from '@/styled-system/css';
 import { token } from '@/styled-system/tokens';
-import { CURRENCY, getDiscountRate } from '@/utils/currency';
-import { useProductProfileMutation } from '@/hooks/mutations';
-import useDialog from '@/hooks/useDialog';
+import { CURRENCY } from '@/utils/currency';
 
 interface ProductCardProps {
     productNo: number;
@@ -52,22 +52,22 @@ const ProductCard = ({
     immediateDiscountAmt = 0,
     additionDiscountAmt = 0,
 }: ProductCardProps) => {
-    const { openDialog } = useDialog();
+    const { openDialog, openLoginDialog } = useDialog();
 
     const {
         like: { mutate: likeMutate },
     } = useProductProfileMutation();
 
+    const { isAuthenticated } = useAuth();
+
     const onLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        // TODO: 상품 좋아요 기능 구현 예정
-        console.log('🚀 ~ onLikeButtonClick ~ e:', e);
 
-        // if (!checkLogin()) {
-        //     openLoginDialog();
-        //     return;
-        // }
+        if (!isAuthenticated) {
+            openLoginDialog();
+            return;
+        }
 
         likeMutate(
             {

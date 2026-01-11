@@ -29,6 +29,12 @@ const Select = <
     const { t } = useTranslation();
 
     const customStyles: StylesConfig<Option, IsMulti, Group> = {
+        container: (base, state) => {
+            return {
+                ...base,
+                width: '100%',
+            };
+        },
         control: (base, state) => ({
             ...base,
             display: 'flex',
@@ -43,7 +49,7 @@ const Select = <
             borderColor: state.isFocused
                 ? token('colors.gray.600')
                 : token('colors.gray.400'),
-            borderRadius: '6px',
+            borderRadius: '8px',
             transition: 'all 0.2s',
             boxShadow: 'none',
             outline: 'none',
