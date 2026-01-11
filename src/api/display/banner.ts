@@ -2,7 +2,7 @@ import { join } from '@fxts/core';
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetBannerExtraInfosParams,
     GetBannerExtraInfosResponse,
@@ -10,23 +10,26 @@ import {
     GetBannersResponse,
 } from '@/models/display/banner';
 
+const BANNER_REVALIDATE_MS = 60 * 60 * 1; // 1시간
+
 const banner = {
     /**
-     *  배너 추가 정보 조회하기
-     *  배너의 추가 정보를 조회하는 API 입니다.
-     *  - 배너 섹션 번호 또는 배너 번호 리스트로 조회 가능합니다.
-     *  - 두 값을 모두 입력하는 경우, 배너 섹션 번호를 조회됩니다.
+     * 배너 추가 정보 조회하기
+     *  - 배너의 추가 정보를 조회하는 API 입니다.
+     *   - 배너 섹션 번호 또는 배너 번호 리스트로 조회 가능합니다.
+     *   - 두 값을 모두 입력하는 경우, 배너 섹션 번호를 조회됩니다.
      */
     getBannerExtraInfos: (
         params: GetBannerExtraInfosParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetBannerExtraInfosResponse>(
             'display/banners/extraInfos',
             {
                 searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
+                next: { revalidate: BANNER_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 
@@ -38,7 +41,10 @@ const banner = {
     getBanners: (bannerSectionCodes: string[], options?: Options) => {
         return request.get<GetBannersResponse>(
             `display/banners/${join(',', bannerSectionCodes)}`,
-            options
+            {
+                next: { revalidate: BANNER_REVALIDATE_MS },
+                ...options,
+            },
         );
     },
 
@@ -50,7 +56,7 @@ const banner = {
     getBannersByIds: (bannerSectionIds: string[], options?: Options) => {
         return request.get<GetBannersByIdsResponse>(
             `display/banners/id/${join(',', bannerSectionIds)}`,
-            options
+            { next: { revalidate: BANNER_REVALIDATE_MS }, ...options },
         );
     },
 };

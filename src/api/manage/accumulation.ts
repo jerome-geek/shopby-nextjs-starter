@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetAccumulationsParams,
     GetAccumulationsResponse,
@@ -33,7 +33,7 @@ const accumulation = {
      */
     getExpirationAccumulations: (
         params?: GetExpirationAccumulationListParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetExpirationAccumulationListResponse>(
             'profile/accumulations/expiration',
@@ -43,7 +43,7 @@ const accumulation = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -53,7 +53,7 @@ const accumulation = {
      */
     getAccumulationSummary: (
         params?: GetAccumulationSummaryParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetAccumulationSummaryResponse>(
             'profile/accumulations/summary',
@@ -63,7 +63,7 @@ const accumulation = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -76,7 +76,7 @@ const accumulation = {
             'profile/accumulations/waiting',
             {
                 ...options,
-            }
+            },
         );
     },
 };

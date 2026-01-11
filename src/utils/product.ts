@@ -16,6 +16,7 @@ import {
 
 // import { SelectedOption } from '@/reducers/useOptionSelect';
 import { ExtraProduct } from '@/models/product/product';
+import { env } from '@/configs/env';
 
 /**
  * 품절여부 확인
@@ -75,7 +76,7 @@ const makeProductName = (productName: string, brandName: string = '') => {
 };
 
 const parseLikeCount = (likeCount: number) => {
-    const isKorean = import.meta.env.VITE_LANG === 'ko';
+    const isKorean = env.NEXT_PUBLIC_LOCALE === 'ko';
 
     if (isKorean) {
         if (likeCount > 999999) {

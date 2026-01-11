@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { publicRequest, request } from '@/api/core/request';
 import {
     CategoryProductReviewsParams,
     GetCategoryProductReviewResponse,
@@ -50,17 +50,17 @@ const review = {
      */
     getCategoryProductReviews: (
         params: CategoryProductReviewsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetCategoryProductReviewResponse>(
-            '/category/product-reviews',
+            'category/product-reviews',
             {
                 searchParams: qs.stringify(params, {
                     arrayFormat: 'repeat',
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -69,11 +69,11 @@ const review = {
      *  - 상품평 게시판 설정을 조회하는 API입니다
      */
     getReviewBoardConfig: (options?: Options) => {
-        return request.get<GetReviewBoardConfigResponse>(
-            '/product-reviews/configurations',
+        return publicRequest.get<GetReviewBoardConfigResponse>(
+            'product-reviews/configurations',
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -85,17 +85,17 @@ const review = {
     getPhotoReviewList: (
         productNo: number,
         params: GetPhotoReviewListParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetPhotoReviewListResponse>(
-            `/products/${productNo}/photo-reviews`,
+            `products/${productNo}/photo-reviews`,
             {
                 searchParams: qs.stringify(params, {
                     arrayFormat: 'repeat',
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -108,17 +108,17 @@ const review = {
     getProductReviewList: (
         productNo: number,
         params: GetProductReviewListParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductReviewListResponse>(
-            `/products/${productNo}/product-reviews`,
+            `products/${productNo}/product-reviews`,
             {
                 searchParams: qs.stringify(params, {
                     arrayFormat: 'repeat',
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -129,14 +129,14 @@ const review = {
     registerProductReview: (
         productNo: number,
         data: RegisterProductReviewData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<RegisterProductReviewResponse>(
-            `/products/${productNo}/product-reviews`,
+            `products/${productNo}/product-reviews`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -147,17 +147,17 @@ const review = {
     getReviewableOptions: (
         productNo: number,
         params: GetReviewableOptionsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetReviewableOptionResponse>(
-            `/products/${productNo}/reviewable-options`,
+            `products/${productNo}/reviewable-options`,
             {
                 searchParams: qs.stringify(params, {
                     arrayFormat: 'repeat',
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -168,7 +168,7 @@ const review = {
     getProductReviewListV2: (
         productNo: number,
         params: GetReviewListV2Params,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetReviewListV2Response>(
             `products/${productNo}/product-reviews/`,
@@ -182,7 +182,7 @@ const review = {
                     ...options?.headers,
                     version: '2.0',
                 },
-            }
+            },
         );
     },
 
@@ -193,14 +193,14 @@ const review = {
     getReviewCountByRatingRange: (
         productNo: number,
         data: GetReviewCountByRatingRangeData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetReviewCountByRatingRangeResponse>(
             `products/${productNo}/summary`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -212,7 +212,7 @@ const review = {
         productNo: number,
         reviewNo: number,
         params?: GetProductReviewParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductReviewResponse>(
             `products/${productNo}/product-reviews/${reviewNo}`,
@@ -222,7 +222,7 @@ const review = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -235,14 +235,14 @@ const review = {
         productNo: number,
         reviewNo: number,
         data: UpdateProductReviewData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(
             `products/${productNo}/product-reviews/${reviewNo}`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -254,13 +254,13 @@ const review = {
     deleteProductReview: (
         productNo: number,
         reviewNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.delete(
             `products/${productNo}/product-reviews/${reviewNo}`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -278,7 +278,7 @@ const review = {
         productNo: number,
         reviewNo: number,
         params: GetProductReviewCommentsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductReviewCommentResponse>(
             `products/${productNo}/product-reviews/${reviewNo}/comments`,
@@ -288,7 +288,7 @@ const review = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -299,13 +299,13 @@ const review = {
     recommendProductReview: (
         productNo: number,
         reviewNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(
             `products/${productNo}/product-reviews/${reviewNo}/recommend`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -316,13 +316,13 @@ const review = {
     cancelProductReviewRecommend: (
         productNo: number,
         reviewNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.delete(
             `products/${productNo}/product-reviews/${reviewNo}/recommend`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -334,14 +334,14 @@ const review = {
         productNo: number,
         reviewNo: number,
         data: ReportProductReviewData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(
             `products/${productNo}/product-reviews/${reviewNo}/report`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -351,13 +351,13 @@ const review = {
     cancelReportProductReview: (
         productNo: number,
         reviewNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.delete(
             `products/${productNo}/product-reviews/${reviewNo}/report`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -367,7 +367,7 @@ const review = {
      */
     getMyProductReviews: (
         params: GetMyProductReviewsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetMyProductReviewsResponse>(
             'profile/product-reviews',
@@ -377,7 +377,7 @@ const review = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -387,7 +387,7 @@ const review = {
      */
     getReviewableProducts: (
         params: GetReviewableProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetReviewableProductsResponse>(
             'profile/order-options/product-reviewable',
@@ -397,7 +397,7 @@ const review = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -411,7 +411,7 @@ const review = {
      */
     getReviewBoardList: (
         params: GetReviewBoardListParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetReviewBoardListResponse>('reviews/boards', {
             searchParams: qs.stringify(params, {
@@ -442,7 +442,7 @@ const review = {
      */
     getReviewedProducts: (
         params: GetReviewsProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetReviewedProductsResponse>(
             'reviews/boards/reviewed-products',
@@ -452,7 +452,7 @@ const review = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 };

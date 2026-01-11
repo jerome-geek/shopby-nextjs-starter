@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetPagedShippingAddressListResponse,
     GetPagedShippingAddressParams,
@@ -25,7 +25,7 @@ const shippingAddress = {
             'profile/shipping-addresses',
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -38,14 +38,14 @@ const shippingAddress = {
      */
     registerShippingAddress: (
         data: RegisterShippingAddressData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<RegisterShippingAddressResponse>(
             'profile/shipping-addresses',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
     /**
@@ -54,7 +54,7 @@ const shippingAddress = {
      */
     getPagedShippingAddressList: (
         params: GetPagedShippingAddressParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetPagedShippingAddressListResponse>(
             'profile/shipping-addresses/booked',
@@ -64,7 +64,7 @@ const shippingAddress = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -77,7 +77,7 @@ const shippingAddress = {
             'profile/shipping-addresses/recent',
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -90,7 +90,7 @@ const shippingAddress = {
             `profile/shipping-addresses/${addressNo}`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -102,14 +102,14 @@ const shippingAddress = {
     updateShippingAddress: (
         addressNo: number,
         data: RegisterShippingAddressData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put<RegisterShippingAddressResponse>(
             `profile/shipping-addresses/${addressNo}`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -131,7 +131,7 @@ const shippingAddress = {
             `profile/shipping-addresses/${addressNo}/default`,
             {
                 ...options,
-            }
+            },
         );
     },
 

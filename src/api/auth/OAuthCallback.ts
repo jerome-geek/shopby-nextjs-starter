@@ -1,7 +1,7 @@
 import qs from 'qs';
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetOpenIdListResponse,
     IssueOpenIdAccessTokenParams,
@@ -33,7 +33,7 @@ const OAuthCallback = {
      */
     issueOpenIdAccessToken: (
         params: IssueOpenIdAccessTokenParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get('oauth/callback', {
             searchParams: qs.stringify(params),

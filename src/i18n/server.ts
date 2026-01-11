@@ -1,10 +1,12 @@
 import { createInstance } from 'i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
-import ko from './ko.json';
-import en from './en.json';
+
+import { env } from '@/configs/env';
+import en from '@/i18n/en.json';
+import ko from '@/i18n/ko.json';
 
 const getLocale = () => {
-    return process.env.NEXT_PUBLIC_LOCALE || 'ko';
+    return env.NEXT_PUBLIC_LOCALE || 'ko';
 };
 
 const initI18next = async (lng: string) => {
@@ -15,7 +17,7 @@ const initI18next = async (lng: string) => {
                 if (language === 'ko') return ko;
                 if (language === 'en') return en;
                 return ko;
-            })
+            }),
         )
         .init({
             lng,

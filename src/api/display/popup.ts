@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     DesignPopupData,
     GetAllPopupParams,
@@ -19,7 +19,7 @@ const popup = {
     getDesignPopups: (
         data: DesignPopupData,
         platform: string,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetDesignPopupResponse>('/design-popups', {
             json: data,
@@ -38,7 +38,7 @@ const popup = {
     getAllPopups: (
         params?: GetAllPopupParams,
         platform?: string,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetAllPopupResponse>('/display/popups', {
             searchParams: qs.stringify(params),
@@ -56,7 +56,7 @@ const popup = {
     getPopups: (
         popupNos: number[],
         params?: GetAllPopupParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetAllPopupResponse>(`/display/popups/${popupNos}`, {
             searchParams: qs.stringify(params),
@@ -71,14 +71,14 @@ const popup = {
     getPopupsById: (
         popupIds: string[],
         params?: GetPopupsByIdParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetAllPopupResponse>(
             `/display/popups/ids/${popupIds}`,
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 };

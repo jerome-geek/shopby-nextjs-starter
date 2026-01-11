@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { publicRequest, request } from '@/api/core/request';
 import {
     ReportArticleData,
     PostArticleParams,
@@ -31,9 +31,12 @@ const board = {
      *  - 전체 게시판의 설정정보를 조회하는 API 입니다
      */
     getConfig: (options?: Options) => {
-        return request.get<GetBoardConfigResponse>('boards/configurations', {
-            ...options,
-        });
+        return publicRequest.get<GetBoardConfigResponse>(
+            'boards/configurations',
+            {
+                ...options,
+            },
+        );
     },
 
     /**
@@ -44,7 +47,7 @@ const board = {
     getPostList: (
         params?: GetPostListParams,
         data?: GetPostListData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetPostListResponse>('boards/posts', {
             json: data,
@@ -63,7 +66,7 @@ const board = {
     getArticleList: (
         boardNo: string,
         params?: GetArticleListParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetArticleListResponse>(
             `boards/${boardNo}/articles`,
@@ -73,7 +76,7 @@ const board = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -84,7 +87,7 @@ const board = {
     writeArticle: (
         boardNo: string,
         data: PostArticleParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(`boards/${boardNo}/articles`, {
             json: data,
@@ -97,11 +100,11 @@ const board = {
      *  - 특정 게시판(게시판 번호 기준)의 카테고리를 조회하는 API 입니다
      */
     getCategories: (boardNo: string, options?: Options) => {
-        return request.get<GetCategoriesResponse>(
+        return publicRequest.get<GetCategoriesResponse>(
             `boards/${boardNo}/categories`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -131,7 +134,7 @@ const board = {
         boardNo: string,
         articleNo: number,
         params?: GetArticleParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetArticleResponse>(
             `boards/${boardNo}/articles/${articleNo}`,
@@ -141,7 +144,7 @@ const board = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -154,7 +157,7 @@ const board = {
         boardNo: string,
         articleNo: number,
         data?: UpdateArticleData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(`boards/${boardNo}/articles/${articleNo}`, {
             json: data,
@@ -171,7 +174,7 @@ const board = {
         boardNo: string,
         articleNo: number,
         data?: DeleteArticleData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.delete(`boards/${boardNo}/articles/${articleNo}`, {
             json: data,
@@ -188,7 +191,7 @@ const board = {
         boardNo: string,
         postNo: number,
         params?: GetArticleV2Params,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetArticleV2Response>(
             `boards/${boardNo}/posts/${postNo}`,
@@ -198,7 +201,7 @@ const board = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -211,7 +214,7 @@ const board = {
         boardNo: string,
         articleNo: number,
         data?: DeleteArticleData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(`boards/${boardNo}/articles/${articleNo}/editable`, {
             json: data,
@@ -225,13 +228,13 @@ const board = {
     recommendArticle: (
         boardNo: string,
         articleNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(
             `boards/${boardNo}/articles/${articleNo}/recommend`,
             {
                 ...options,
-            }
+            },
         );
     },
     /**
@@ -240,13 +243,13 @@ const board = {
     cancelArticleRecommend: (
         boardNo: string,
         articleNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.delete(
             `boards/${boardNo}/articles/${articleNo}/recommend`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -258,7 +261,7 @@ const board = {
         boardNo: string,
         articleNo: number,
         params?: GetRepliesByBoardNoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetRepliesByBoardNoResponse>(
             `boards/${boardNo}/articles/${articleNo}/replies`,
@@ -268,7 +271,7 @@ const board = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -280,7 +283,7 @@ const board = {
         boardNo: string,
         articleNo: number,
         data: ReportArticleData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(`boards/${boardNo}/articles/${articleNo}/report`, {
             json: data,
@@ -294,13 +297,13 @@ const board = {
     cancelReportArticle: (
         boardNo: string,
         articleNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.delete(
             `boards/${boardNo}/articles/${articleNo}/report`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -312,7 +315,7 @@ const board = {
         boardNo: string,
         postNo: number,
         params: DownloadFileParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get(`boards/${boardNo}/posts/${postNo}/file`, {
             searchParams: qs.stringify(params, {
@@ -331,7 +334,7 @@ const board = {
         boardNo: string,
         postNo: number,
         params?: GetRepliesByBoardNoV2Params,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetRepliesByBoardNoV2Response>(
             `boards/${boardNo}/posts/${postNo}/replies`,
@@ -341,7 +344,7 @@ const board = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 };

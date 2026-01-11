@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { publicRequest, request } from '@/api/core/request';
 import {
     GetAllProductInquiriesParams,
     GetAllProductInquiriesResponse,
@@ -26,14 +26,14 @@ const productInquiry = {
      */
     getAllProductInquiries: (
         params: GetAllProductInquiriesParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetAllProductInquiriesResponse>(
             'products/inquiries',
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -42,13 +42,14 @@ const productInquiry = {
      *  - 상품문의 게시판 설정 조회하는 API입니다
      */
     getConfig: (options?: Options) => {
-        return request.get<GetProductInquiryConfigResponse>(
+        return publicRequest.get<GetProductInquiryConfigResponse>(
             'products/inquiries/configurations',
             {
                 ...options,
-            }
+            },
         );
     },
+
     /**
      * 상품문의 태그 전체 조회하기
      *  - 상품문의 태그 전체 조회하는 API입니다.
@@ -58,7 +59,7 @@ const productInquiry = {
             'products/inquiries/tags',
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -71,7 +72,7 @@ const productInquiry = {
     updateProductInquiry: (
         inquiryNo: number,
         data: UpdateProductInquiryData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(`products/inquiries/${inquiryNo}`, {
             json: data,
@@ -100,14 +101,14 @@ const productInquiry = {
     getProductInquiries: (
         productNo: number,
         params?: GetProductInquiriesParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductInquiriesResponse>(
             `products/${productNo}/inquiries`,
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -118,14 +119,14 @@ const productInquiry = {
     writeProductInquiry: (
         productNo: number,
         data: WriteProductInquiryData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<WriteProductInquiryResponse>(
             `products/${productNo}/inquiries`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -146,7 +147,7 @@ const productInquiry = {
     reportProductInquiry: (
         productNo: number,
         data: ReportProductInquiryData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(`products/${productNo}/inquiries/report`, {
             json: data,
@@ -162,11 +163,11 @@ const productInquiry = {
     getProductInquiry: (
         productNo: number,
         inquiryNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductInquiryResponse>(
             `products/${productNo}/inquiries/${inquiryNo}`,
-            options
+            options,
         );
     },
 
@@ -177,14 +178,14 @@ const productInquiry = {
      */
     getMyProductInquiries: (
         params: GetMyProductInquiriesParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetMyProductInquiriesResponse>(
             '/profile/product-inquiries',
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 

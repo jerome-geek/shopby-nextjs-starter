@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetBrandChildrenResponse,
     GetBrandDetailResponse,
@@ -39,7 +39,7 @@ const brand = {
      */
     getBrandExtraInfo: (
         params?: GetBrandsExtraInfoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetBrandsExtraInfoResponse>('brands/extraInfo', {
             searchParams: qs.stringify(params),
@@ -64,14 +64,14 @@ const brand = {
      */
     getBrandsByNos: (
         params: GetBrandInfoByBrandNoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetBrandInfoByBrandNoResponse>(
             'brands/search-by-nos',
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -105,7 +105,7 @@ const brand = {
             `brands/${displayBrandNo}/children`,
             {
                 ...options,
-            }
+            },
         );
     },
 };

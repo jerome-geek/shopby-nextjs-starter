@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { publicRequest } from '@/api/core/request';
 import { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 
 const memberConfig = {
@@ -11,11 +11,11 @@ const memberConfig = {
      *  - 상태종류 : 필수(REQUIRED), 사용(USED), 미사용(NOT_USED)
      */
     getMemberExtraInfo: (options?: Options) => {
-        return request.get<GetMemberExtraInfoResponse>(
+        return publicRequest.get<GetMemberExtraInfoResponse>(
             'config/member-extra-info',
             {
                 ...options,
-            }
+            },
         );
     },
 };

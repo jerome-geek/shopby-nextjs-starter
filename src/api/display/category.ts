@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { publicRequest } from '@/api/core/request';
 import {
     Get1depthCategoryResponse,
     GetCategoriesByManagementCodeData,
@@ -23,7 +23,7 @@ const category = {
      *   - 원본 카테고리 목록(flatCategories)을 조회합니다
      */
     getCategories: (params?: GetCategoriesParams, options?: Options) => {
-        return request.get<GetCategoriesResponse>('categories', {
+        return publicRequest.get<GetCategoriesResponse>('categories', {
             searchParams: qs.stringify(params),
             ...options,
         });
@@ -34,7 +34,7 @@ const category = {
      *  - 판매 시작일이 1주일 이내인 상품이 존재하는 카테고리 조회하는 API입니다
      */
     getNewProductCategories: (options?: Options) => {
-        return request.get<GetNewProductCategoriesResponse>(
+        return publicRequest.get<GetNewProductCategoriesResponse>(
             'categories/new-product-categories',
             {
                 ...options,
@@ -50,7 +50,7 @@ const category = {
         data: GetCategoriesByManagementCodeData,
         options?: Options,
     ) => {
-        return request.post<GetCategoriesByManagementCodeResponse>(
+        return publicRequest.post<GetCategoriesByManagementCodeResponse>(
             'categories/search-by-management-code',
             {
                 next: {
@@ -67,7 +67,7 @@ const category = {
      *  - 1차 카테고리 관련 간단한 정보를 조회하는 API 입니다
      */
     get1depthCategory: (options?: Options) => {
-        return request.get<Get1depthCategoryResponse>(
+        return publicRequest.get<Get1depthCategoryResponse>(
             'categories/simple-1depth',
             {
                 ...options,
@@ -86,13 +86,16 @@ const category = {
         params?: GetCategoryParams,
         options?: Options,
     ) => {
-        return request.get<GetCategoryResponse>(`categories/${categoryNo}`, {
-            next: {
-                revalidate: CATEGORY_REVALIDATE_MS,
+        return publicRequest.get<GetCategoryResponse>(
+            `categories/${categoryNo}`,
+            {
+                next: {
+                    revalidate: CATEGORY_REVALIDATE_MS,
+                },
+                searchParams: qs.stringify(params),
+                ...options,
             },
-            searchParams: qs.stringify(params),
-            ...options,
-        });
+        );
     },
 };
 

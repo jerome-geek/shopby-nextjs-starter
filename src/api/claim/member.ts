@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     CancelOptionsData,
     ClaimPriceInfo,
@@ -59,7 +59,7 @@ const memberClaim = {
      */
     getEstimatedRefundPrice: (
         data: EstimatedRefundPriceData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<ClaimPriceInfo>('profile/claims/estimate', {
             json: data,
@@ -73,7 +73,7 @@ const memberClaim = {
      */
     requestReturnMultipleOptions: (
         data: RequestReturnMultipleOptionsData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post('profile/claims/return', {
             json: data,
@@ -87,14 +87,14 @@ const memberClaim = {
      */
     checkFreeGiftSatisfy: (
         data: CheckFreeGiftSatisfyData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<CheckFreeGiftSatisfyResponse>(
             'profile/claims/free-gifts/satisfy',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -105,7 +105,7 @@ const memberClaim = {
     updateReturnAccount: (
         claimNo: number,
         data: RefundAccountData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(`profile/claims/${claimNo}/account`, {
             json: data,
@@ -120,7 +120,7 @@ const memberClaim = {
     checkClaimValidation: (claimNo: number, options?: Options) => {
         return request.get<CheckWithdrawResponse>(
             `profile/claims/${claimNo}/check-withdraw`,
-            options
+            options,
         );
     },
 
@@ -131,7 +131,7 @@ const memberClaim = {
     getClaimDetailByClaimNo: (claimNo: number, options?: Options) => {
         return request.get<GetClaimDetailByClaimNoResponse>(
             `profile/claims/${claimNo}/result`,
-            options
+            options,
         );
     },
 
@@ -150,7 +150,7 @@ const memberClaim = {
     getOrderOptionDetailForClaim: (
         orderOptionNo: number,
         params: GetOrderOptionDetailForClaimParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetOrderOptionDetailForClaimResponse>(
             `profile/order-options/${orderOptionNo}/claims`,
@@ -160,7 +160,7 @@ const memberClaim = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -171,14 +171,14 @@ const memberClaim = {
     requestCancelClaimOption: (
         orderOptionNo: number,
         data: CancelClaimOptionData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(
             `profile/order-options/${orderOptionNo}/claims/cancel`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -190,7 +190,7 @@ const memberClaim = {
     getClaimOptionPrice: (
         orderOptionNo: number,
         params: GetClaimOptionPriceParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<ClaimPriceInfo>(
             `profile/order-options/${orderOptionNo}/claims/estimate`,
@@ -200,7 +200,7 @@ const memberClaim = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -211,14 +211,14 @@ const memberClaim = {
     requestExchange: (
         orderOptionNo: number,
         data: RequestExchangeData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(
             `profile/order-options/${orderOptionNo}/claims/exchange`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -228,11 +228,11 @@ const memberClaim = {
      */
     getClaimDetailByOrderOptionNo: (
         orderOptionNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetClaimDetailByClaimNoResponse>(
             `profile/order-options/${orderOptionNo}/claims/result`,
-            options
+            options,
         );
     },
 
@@ -243,14 +243,14 @@ const memberClaim = {
     requestReturnOfSingleOption: (
         orderOptionNo: number,
         data: ReturnSingleOptionData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(
             `profile/order-options/${orderOptionNo}/claims/return`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -260,11 +260,11 @@ const memberClaim = {
      */
     withdrawClaimByOrderOptionNo: (
         orderOptionNo: number,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(
             `profile/order-options/${orderOptionNo}/claims/withdraw`,
-            options
+            options,
         );
     },
 
@@ -275,7 +275,7 @@ const memberClaim = {
     requestCancel: (
         orderNo: string,
         data: CancelClaimData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post(`profile/orders/${orderNo}/claims/cancel`, {
             json: data,

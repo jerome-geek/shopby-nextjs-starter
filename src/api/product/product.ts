@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 
 import {
     GetBestReviewProductsParams,
@@ -62,7 +62,7 @@ const product = {
      */
     getProductExtraInfo: (
         params: GetProductExtraInfoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductExtraInfoResponse>('products/extraInfo', {
             searchParams: qs.stringify(params, {
@@ -79,14 +79,14 @@ const product = {
      */
     getFavoriteKeywords: (
         params: GetFavoriteKeywordsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetFavoriteKeywordsResponse>(
             'products/favoriteKeywords',
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -96,14 +96,14 @@ const product = {
      */
     getGroupManagementCodes: (
         data: GetGroupManagementCodesData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GroupManagementCodeResponse>(
             'products/group-management-code',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -113,7 +113,7 @@ const product = {
      */
     getProductPublicInfo: (
         params: GetProductPublicInfoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductPublicInfoResponse>(
             'products/public-info',
@@ -123,7 +123,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -132,7 +132,7 @@ const product = {
      */
     getChangeableRegularDeliveryProducts: (
         params?: GetRegularDeliveryProductsByProductNos,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetChangeableRegularDeliveryProductsResponse>(
             'products/regular-delivery',
@@ -142,7 +142,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -152,7 +152,7 @@ const product = {
      */
     requestRestockNotification: (
         data: RequestRestockNotificationData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post('products/restock', {
             json: data,
@@ -181,14 +181,14 @@ const product = {
      */
     getProductsInfoByProductNos: (
         data: GetProductsInfoByProductNosData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetProductsInfoByProductNosResponse>(
             'products/search-by-nos',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -198,7 +198,7 @@ const product = {
      */
     getProductsShippingInfo: (
         params: GetProductsShippingInfoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductsShippingInfoResponse>(
             'products/shipping-info',
@@ -208,7 +208,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -219,7 +219,7 @@ const product = {
     getProductDetail: (
         productNo: number,
         params?: GetProductDetailParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<ProductDetailResponse>(`products/${productNo}`, {
             searchParams: qs.stringify(params, {
@@ -238,7 +238,7 @@ const product = {
      */
     getBestReviewProducts: (
         params: GetBestReviewProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetBestReviewProductsResponse>(
             'products/best-review/search',
@@ -248,7 +248,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -260,7 +260,7 @@ const product = {
      */
     getBestSellerProducts: (
         params?: GetBestSellerProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetBestSellerProductsResponse>(
             'products/best-seller/search',
@@ -270,7 +270,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -280,7 +280,7 @@ const product = {
      */
     getRegularDeliveryProductsByProductNos: (
         params: GetRegularDeliveryProductsByProductNos,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetRegularDeliveryProductsResponse>(
             'products/regular-delivery',
@@ -290,7 +290,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -300,7 +300,7 @@ const product = {
      */
     getKeywordsByProductNo: (
         params: GetKeywordsByProductNoParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetKeywordsByProductNoResponse>(
             'products/search/keywords',
@@ -310,7 +310,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -325,7 +325,7 @@ const product = {
      */
     getProductSearchSummary: (
         params: GetProductSearchSummaryParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductSearchSummaryResponse>(
             'products/search/summary',
@@ -335,7 +335,7 @@ const product = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -346,7 +346,7 @@ const product = {
      */
     getProductDisplayCategories: (productNo: number) => {
         return request.get<GetProductDisplayCategoriesResponse>(
-            `products/${productNo}/display-categories`
+            `products/${productNo}/display-categories`,
         );
     },
 
@@ -363,7 +363,7 @@ const product = {
             `products/${productNo}/extra-products`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -376,7 +376,7 @@ const product = {
             `products/${productNo}/purchasable`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -390,7 +390,7 @@ const product = {
             `products/${productNo}/related-products`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -404,7 +404,7 @@ const product = {
             `products/${productNo}/standard-category`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -417,7 +417,7 @@ const product = {
             `products/${productNo}/url-shortening`,
             {
                 ...options,
-            }
+            },
         );
     },
 };

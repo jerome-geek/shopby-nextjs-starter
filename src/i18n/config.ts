@@ -5,9 +5,10 @@ import { initReactI18next } from 'react-i18next';
 
 import ko from '@/i18n/ko.json';
 import en from '@/i18n/en.json';
+import { env } from '@/configs/env';
 
 const getLocale = () => {
-    return process.env.NEXT_PUBLIC_LOCALE || 'ko';
+    return env.NEXT_PUBLIC_LOCALE || 'ko';
 };
 
 const locale = getLocale();

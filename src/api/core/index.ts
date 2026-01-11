@@ -1,7 +1,3 @@
-import request from '@/api/core/request';
-
-export { request };
-
 // Cookie 관련
 export {
     cookieTokenManager,

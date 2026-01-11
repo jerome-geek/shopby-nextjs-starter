@@ -1,7 +1,7 @@
 import qs from 'qs';
 import type { Options } from 'ky';
 
-import request from '@/api/core/request';
+import { request } from '@/api/core/request';
 import {
     GenerateCaptchaImageParams,
     GenerateCaptchaImageResponse,
@@ -16,7 +16,7 @@ const captcha = {
      */
     generateCaptchaImage: (
         params: GenerateCaptchaImageParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GenerateCaptchaImageResponse>('captcha/image', {
             searchParams: qs.stringify(params),

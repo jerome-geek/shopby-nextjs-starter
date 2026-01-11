@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import request from '@/api/core/request';
+import { publicRequest, request } from '@/api/core/request';
 import {
     DownloadInquiryFileParams,
     GetInquiriesParams,
@@ -51,11 +51,11 @@ const inquiry = {
      *  - 1:1 문의 설정을 조회하는 API 입니다
      */
     getInquiryConfig: (options?: Options) => {
-        return request.get<GetInquiryConfigResponse>(
+        return publicRequest.get<GetInquiryConfigResponse>(
             'inquiries/configurations',
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -64,7 +64,7 @@ const inquiry = {
      *  - 1:1 문의 유형을 조회하는 API 입니다.
      */
     getInquiryTypes: (params?: GetInquiryTypesParams, options?: Options) => {
-        return request.get<GetInquiryTypesResponse>('inquiries/types', {
+        return publicRequest.get<GetInquiryTypesResponse>('inquiries/types', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,
@@ -91,7 +91,7 @@ const inquiry = {
     updateInquiry: (
         inquiryNo: number,
         data: UpdateInquiryData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(`inquiries/${inquiryNo}`, {
             json: data,
@@ -120,7 +120,7 @@ const inquiry = {
     updatePartOfInquiry: (
         inquiryNo: number,
         data: UpdateInquiryData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.patch(`inquiries/${inquiryNo}`, {
             json: data,
@@ -135,7 +135,7 @@ const inquiry = {
     downloadInquiryFile: (
         inquiryNo: number,
         params: DownloadInquiryFileParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get(`inquiries/${inquiryNo}/file`, {
             searchParams: qs.stringify(params, {

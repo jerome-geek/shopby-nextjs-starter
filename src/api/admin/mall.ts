@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import request from '@/api/core/request';
+import { publicRequest } from '@/api/core/request';
 import {
     GetMallInternationalizationSettingsResponse,
     GetMallPartnersResponse,
@@ -22,7 +22,7 @@ const mall = {
      *   - Client Component에서 사용 시: useQuery로 감싼 커스텀 훅 사용
      */
     getMall: (options?: Options) => {
-        return request.get<GetMallResponse>('malls', {
+        return publicRequest.get<GetMallResponse>('malls', {
             cache: 'force-cache',
             next: { revalidate: MALL_REVALIDATE_MS },
             ...options,
@@ -34,7 +34,7 @@ const mall = {
      *   - 현재 몰의 다국어, 환율 설정 조회를 조회하는 API입니다.
      */
     getMallInternationalizationSettings: (options?: Options) => {
-        return request.get<GetMallInternationalizationSettingsResponse>(
+        return publicRequest.get<GetMallInternationalizationSettingsResponse>(
             'malls/internationalization',
             {
                 cache: 'force-cache',
@@ -49,7 +49,7 @@ const mall = {
      *   - 몰과 계약한 파트너 목록을 조회하는 API입니다.
      */
     getMallPartners: (options?: Options) => {
-        return request.get<GetMallPartnersResponse>('malls/partners', {
+        return publicRequest.get<GetMallPartnersResponse>('malls/partners', {
             cache: 'force-cache',
             next: { revalidate: MALL_REVALIDATE_MS },
             ...options,
@@ -61,7 +61,7 @@ const mall = {
      *   - 현재 도메인의 보안서버정보를 조회하는 API입니다.
      */
     getSslInfo: (options?: Options) => {
-        return request.get<GetSslInfoResponse>('malls/ssl', {
+        return publicRequest.get<GetSslInfoResponse>('malls/ssl', {
             cache: 'force-cache',
             next: { revalidate: MALL_REVALIDATE_MS },
             ...options,

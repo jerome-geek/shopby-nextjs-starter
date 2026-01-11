@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import { ApplyCouponParams, ApplyCouponResponse } from '@/models/order';
 import {
     CouponApplyData,
@@ -40,7 +40,7 @@ const orderSheet = {
     getOrderSheet: (
         orderSheetNo: string,
         params?: GetOrderSheetParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetOrderSheetResponse>(
             `order-sheets/${orderSheetNo}`,
@@ -50,7 +50,7 @@ const orderSheet = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -63,14 +63,14 @@ const orderSheet = {
     getCalculatedOrderSheet: (
         orderSheetNo: string,
         data: GetCalculatedOrderSheetData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetCalculatedOrderSheetResponse>(
             `order-sheets/${orderSheetNo}/calculate`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -81,7 +81,7 @@ const orderSheet = {
     getAvailableCoupons: (
         orderSheetNo: string,
         params?: ApplyCouponParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<ApplyCouponResponse>(
             `order-sheets/${orderSheetNo}/coupons`,
@@ -91,7 +91,7 @@ const orderSheet = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -102,14 +102,14 @@ const orderSheet = {
     applyCoupon: (
         orderSheetNo: string,
         data: CouponApplyData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<CouponApplyResponse>(
             `order-sheets/${orderSheetNo}/coupons/apply`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -120,14 +120,14 @@ const orderSheet = {
     getAppliedCouponPrice: (
         orderSheetNo: string,
         data: GetAppliedCouponPriceData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetAppliedCouponPriceResponse>(
             `order-sheets/${orderSheetNo}/coupons/calculate`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -139,14 +139,14 @@ const orderSheet = {
     getMaximumAppliedCouponPrice: (
         orderSheetNo: string,
         data?: GetMaximumAppliedCouponPriceData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<GetMaximumAppliedCouponPriceResponse>(
             `order-sheets/${orderSheetNo}/coupons/maximum`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 };

@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     CheckCartValidationResponse,
     DeleteCartParams,
@@ -80,7 +80,7 @@ const cart = {
      */
     getSelectedCartPrice: (
         params: GetSelectedCartPriceParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetSelectedCartPriceResponse>('cart/calculate', {
             searchParams: qs.stringify(params, {
@@ -110,7 +110,7 @@ const cart = {
      */
     getSelectedCartGroupPrice: (
         params: GetSelectedCartGroupPriceParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetCartListResponse>('cart/subset', {
             searchParams: qs.stringify(params, {
@@ -137,7 +137,7 @@ const cart = {
      */
     getMaximumCouponCartPrice: (
         params: GetMaximumCouponCartPriceParams,
-        options: Options
+        options: Options,
     ) => {
         return request.get<GetMaximumCouponCartPriceResponse>(
             'cart/coupons/maximum',
@@ -147,7 +147,7 @@ const cart = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 };

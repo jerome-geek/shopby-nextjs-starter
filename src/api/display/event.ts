@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetClosedEventsParams,
     GetClosedEventsResponse,
@@ -24,6 +24,8 @@ import {
     SearchEventsByProgressResponse,
 } from '@/models/display/event';
 
+const EVENT_REVALIDATE_MS = 60 * 60 * 1; // 1시간
+
 const event = {
     /**
      * 이벤트 기간안에 포함된 모든 이벤트 목록 조회하기
@@ -36,6 +38,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS },
             ...options,
         });
     },
@@ -55,6 +58,7 @@ const event = {
                 arrayFormat: 'repeat',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS },
             ...options,
             headers: {
                 ...options?.headers,
@@ -74,6 +78,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS },
             ...options,
         });
     },
@@ -86,7 +91,7 @@ const event = {
      */
     getEventsByProductNos: (
         params: GetEventsByProductNosParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetEventsByProductNosResponse>(
             'display/events/products',
@@ -95,8 +100,9 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 
@@ -110,6 +116,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS },
             ...options,
         });
     },
@@ -127,7 +134,7 @@ const event = {
      */
     searchEventsByEventNos: (
         params: SearchEventsByEventNosParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<SearchEventsByEventNosResponse>(
             'display/events/search-by-nos',
@@ -136,8 +143,9 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 
@@ -147,7 +155,7 @@ const event = {
      */
     searchEventsByProgress: (
         params: SearchEventsByProgressParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<SearchEventsByProgressResponse>(
             'display/events/search-by-progress',
@@ -156,8 +164,9 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 
@@ -175,8 +184,9 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 
@@ -189,8 +199,9 @@ const event = {
         return request.get<GetEventsByProductNoResponse>(
             `display/events/products/${productNo}`,
             {
+                next: { revalidate: EVENT_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 
@@ -207,10 +218,11 @@ const event = {
     getEvent: (
         eventKey: string | number,
         params?: GetEventParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetEventResponse>(`display/events/${eventKey}/`, {
             searchParams: qs.stringify(params),
+            next: { revalidate: EVENT_REVALIDATE_MS },
             ...options,
             headers: {
                 ...options?.headers,
@@ -229,10 +241,11 @@ const event = {
     getEventById: (
         eventId: string,
         params?: GetEventByIdParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetEventResponse>(`display/events/ids/${eventId}`, {
             searchParams: qs.stringify(params),
+            next: { revalidate: EVENT_REVALIDATE_MS },
             ...options,
             headers: {
                 ...options?.headers,
@@ -253,14 +266,15 @@ const event = {
         eventNo: number,
         sectionNo: number,
         params?: GetEventProductDisplaySectionParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetEventProductDisplaySectionResponse>(
             `display/events/${eventNo}/sections/${sectionNo}`,
             {
                 searchParams: qs.stringify(params),
+                next: { revalidate: EVENT_REVALIDATE_MS },
                 ...options,
-            }
+            },
         );
     },
 };

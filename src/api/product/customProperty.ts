@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import { GetCustomPropertiesResponse } from '@/models/product/customProperty';
 
 const customProperty = {
@@ -14,7 +14,7 @@ const customProperty = {
             'products/custom-properties',
             {
                 ...options,
-            }
+            },
         );
     },
 };

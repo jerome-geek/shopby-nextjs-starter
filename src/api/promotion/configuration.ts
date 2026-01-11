@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import { GetCouponConfigurationResponse } from '@/models/promotion/configuration';
 
 const configuration = {
@@ -9,7 +9,7 @@ const configuration = {
             'promotions/configurations',
             {
                 ...options,
-            }
+            },
         );
     },
 };

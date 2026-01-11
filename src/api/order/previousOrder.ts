@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetGuestPreviousOrderResponse,
     GetPreviousOrderResponse,
@@ -33,7 +33,7 @@ const previousOrder = {
             `previous-orders/${orderNo}`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -45,7 +45,7 @@ const previousOrder = {
             `previous-orders/guest/${orderNo}`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -55,14 +55,14 @@ const previousOrder = {
     issueGuestPreviousOrderToken: (
         orderNo: string,
         data: IssueGuestPreviousOrderTokenData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<IssueGuestPreviousOrderTokenResponse>(
             `previous-orders/guest/${orderNo}`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 };

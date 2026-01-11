@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import { ImagesType } from '@/models/manage';
 
 const file = {

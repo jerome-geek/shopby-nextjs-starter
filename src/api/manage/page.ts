@@ -1,7 +1,7 @@
 import qs from 'qs';
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { publicRequest, request } from '@/api/core/request';
 import {
     GetExternalScriptsParams,
     GetExternalScriptsResponse,
@@ -14,9 +14,9 @@ const page = {
      */
     getExternalScripts: (
         params: GetExternalScriptsParams,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.get<GetExternalScriptsResponse>('page/scripts', {
+        return publicRequest.get<GetExternalScriptsResponse>('page/scripts', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,

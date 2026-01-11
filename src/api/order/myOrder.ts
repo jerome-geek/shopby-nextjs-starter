@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetOrderDetailForClaimParams,
     GetOrderDetailForClaimResponse,
@@ -50,7 +50,7 @@ const myOrder = {
     getOrderDetail: (
         orderNo: string,
         params?: GetOrderDetailParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetOrderDetailResponse>(
             `profile/orders/${orderNo}`,
@@ -60,7 +60,7 @@ const myOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -71,7 +71,7 @@ const myOrder = {
      */
     getPreviousOrdersSummary: (
         params?: GetPreviousOrdersSummaryParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetPreviousOrdersSummaryResponse>(
             'profile/previous-orders/summary',
@@ -81,7 +81,7 @@ const myOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -92,7 +92,7 @@ const myOrder = {
      */
     getOrderOptionStatus: (
         params: GetOrderOptionStatusParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetOrderOptionStatusResponse>(
             'profile/order-options/summary/status',
@@ -102,7 +102,7 @@ const myOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -125,7 +125,7 @@ const myOrder = {
             `profile/order-options/${orderOptionNo}/delivery-done`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -143,7 +143,7 @@ const myOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -154,7 +154,7 @@ const myOrder = {
      */
     getOrderStatusSummary: (
         params: GetOrderStatusSummaryParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetOrderStatusSummaryResponse>(
             'profile/orders/summary/status',
@@ -164,7 +164,7 @@ const myOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -176,14 +176,14 @@ const myOrder = {
     modifyCashReceipt: (
         orderNo: string,
         data?: ModifyCashReceiptData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put<ModifyCashReceiptResponse>(
             `profile/orders/${orderNo}/cashReceipt`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -194,14 +194,14 @@ const myOrder = {
     requestCashReceipt: (
         orderNo: string,
         data?: RequestCashReceiptData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<RequestCashReceiptResponse>(
             `profile/orders/${orderNo}/cashReceipt`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -213,7 +213,7 @@ const myOrder = {
     getOrderDetailForClaim: (
         orderNo: string,
         params?: GetOrderDetailForClaimParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetOrderDetailForClaimResponse>(
             `profile/orders/${orderNo}/claim`,
@@ -223,7 +223,7 @@ const myOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -236,7 +236,7 @@ const myOrder = {
         orderNo: string,
         params?: UpdateDeliveryInformationParams,
         data?: UpdateDeliveryInformationData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put(`profile/orders/${orderNo}/deliveries`, {
             json: data,
@@ -256,7 +256,7 @@ const myOrder = {
             `profile/orders/${orderNo}/payment-receipt-url`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -268,7 +268,7 @@ const myOrder = {
             `profile/orders/${orderNo}/simple-receipt-url`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -280,7 +280,7 @@ const myOrder = {
             `profile/orders/${orderNo}/specification`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -293,7 +293,7 @@ const myOrder = {
             `profile/orders/${orderNo}/cashReceipt/cancel`,
             {
                 ...options,
-            }
+            },
         );
     },
 };

@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import request from '@/api/core/request';
+import { publicRequest } from '@/api/core/request';
 import { GetHolidayParams, GetHolidayResponse } from '@/models/manage/holiday';
 
 /**
@@ -10,7 +10,7 @@ import { GetHolidayParams, GetHolidayResponse } from '@/models/manage/holiday';
  */
 const holiday = {
     getHoliday: (params: GetHolidayParams, options?: Options) => {
-        return request.get<GetHolidayResponse>('holiday', {
+        return publicRequest.get<GetHolidayResponse>('holiday', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,

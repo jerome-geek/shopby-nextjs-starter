@@ -1,7 +1,7 @@
 import qs from 'qs';
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetOptionImagesResponse,
     GetProductOptionImagesResponse,
@@ -37,14 +37,14 @@ const productOption = {
     getProductOption: (
         productNo: number,
         params?: GetProductOptionParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<ProductOptionResponse>(
             `products/${productNo}/options`,
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -58,7 +58,7 @@ const productOption = {
             `products/${productNo}/options/images`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -70,13 +70,13 @@ const productOption = {
     getOptionImages: (
         productNo: number,
         optionNo: string,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetOptionImagesResponse>(
             `products/${productNo}/options/${optionNo}/images`,
             {
                 ...options,
-            }
+            },
         );
     },
 };

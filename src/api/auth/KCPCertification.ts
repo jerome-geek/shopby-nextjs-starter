@@ -1,7 +1,7 @@
 import qs from 'qs';
 import type { Options } from 'ky';
 
-import request from '@/api/core/request';
+import { request } from '@/api/core/request';
 import {
     AuthenticateAdultParams,
     AuthenticateAdultResponse,
@@ -43,14 +43,14 @@ const KCPCertification = {
      */
     getKCPCertificationResult: (
         params: GetKCPCertificationResultParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetKCPCertificationResultResponse>(
             'kcp/id-verification/response',
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 };

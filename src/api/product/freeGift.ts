@@ -1,7 +1,7 @@
 import qs from 'qs';
 import type { Options } from 'ky';
 
-import request from '@/api/core/request';
+import { request } from '@/api/core/request';
 import {
     GetFreeGiftConditionByOrderAmountParams,
     GetFreeGiftConditionByOrderAmountResponse,
@@ -17,14 +17,14 @@ const freeGift = {
      */
     getFreeGiftConditionByOrderAmount: (
         params: GetFreeGiftConditionByOrderAmountParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetFreeGiftConditionByOrderAmountResponse>(
             'free-gift-condition/order-amount',
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -37,7 +37,7 @@ const freeGift = {
             `free-gift-condition/${productNo}`,
             {
                 ...options,
-            }
+            },
         );
     },
 };

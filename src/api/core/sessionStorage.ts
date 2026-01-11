@@ -1,11 +1,11 @@
+import { env } from '@/configs/env';
+
 /**
  * 스토리지 키에 prefix를 추가하는 헬퍼 함수
  */
 function getStorageKey(key: string): string {
-    const prefix =
-        process.env.NEXT_PUBLIC_STORAGE_PREFIX ||
-        process.env.NEXT_PUBLIC_CLIENT_ID ||
-        'shopby';
+    const prefix = env.NEXT_PUBLIC_APP_NAME || 'shopby';
+
     return `${prefix}_${key}`;
 }
 
@@ -71,4 +71,3 @@ export class SessionStorageManager {
         }
     }
 }
-

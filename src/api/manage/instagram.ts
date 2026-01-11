@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { publicRequest } from '@/api/core/request';
 import { GetFeedsResponse } from '@/models/manage/instagram';
 
 const instagram = {
@@ -10,7 +10,7 @@ const instagram = {
      *  - 조회간 에러 발생시, 에러 정보가 Response 객체에 포함됩니다.
      */
     getFeeds: (options?: Options) => {
-        return request.get<GetFeedsResponse>('shopby/instagram/media', {
+        return publicRequest.get<GetFeedsResponse>('shopby/instagram/media', {
             ...options,
         });
     },

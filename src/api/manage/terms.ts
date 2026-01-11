@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { publicRequest } from '@/api/core/request';
 import {
     AdditionalTermsResponse,
     GetAdditionalTermsData,
@@ -22,7 +22,7 @@ const terms = {
      *  - 해당 쇼핑몰의 약관을 조회하는 API 입니다
      */
     getTermList: (params: GetTermListParams, options?: Options) => {
-        return request.get<GetTermListResponse>('terms', {
+        return publicRequest.get<GetTermListResponse>('terms', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,
@@ -36,7 +36,7 @@ const terms = {
      *  - 해당 쇼핑몰의 약관을 조회하는 API (ver 1.1) 치환하고 싶은 문구를 replacementPhrase 항목에 [key: value]형태로 넣어서 치환할 수 있습니다.
      */
     getTermListByPost: (data: GetTermListByPostData, options?: Options) => {
-        return request.post<GetTermListResponse>('terms', {
+        return publicRequest.post<GetTermListResponse>('terms', {
             json: data,
             headers: {
                 version: '1.1',
@@ -50,7 +50,7 @@ const terms = {
      *  - 해당 쇼핑몰의 추가 약관을 조회하는 API 입니다.
      */
     getAdditionalTerms: (data: GetAdditionalTermsData, options?: Options) => {
-        return request.post<AdditionalTermsResponse>('terms/custom', {
+        return publicRequest.post<AdditionalTermsResponse>('terms/custom', {
             json: data,
             ...options,
         });
@@ -61,7 +61,7 @@ const terms = {
      *  - 해당 쇼핑몰 약관의 변경이력을 조회하는 API 입니다
      */
     getTermHistory: (params: GetTermHistoryParams, options?: Options) => {
-        return request.get<GetTermsHistoryResponse>('terms/history', {
+        return publicRequest.get<GetTermsHistoryResponse>('terms/history', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,
@@ -75,7 +75,7 @@ const terms = {
      * - 해당 쇼핑몰의 현재 적용중인 약관타입만 조회하는 API 입니다.
      */
     getUsedTerms: (params: GetUsedTermsParams, options?: Options) => {
-        return request.get<GetUsedTermsResponse>('terms/used', {
+        return publicRequest.get<GetUsedTermsResponse>('terms/used', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,
@@ -89,9 +89,12 @@ const terms = {
      *  - 특정 약관(약관번호 기준)을 상세 조회하는 API 입니다
      */
     getTermDetail: (termsNo: number, options?: Options) => {
-        return request.get<GetTermDetailByPostResponse>(`terms/${termsNo}`, {
-            ...options,
-        });
+        return publicRequest.get<GetTermDetailByPostResponse>(
+            `terms/${termsNo}`,
+            {
+                ...options,
+            },
+        );
     },
 
     /**
@@ -104,13 +107,16 @@ const terms = {
         data: GetTermDetailByPostData,
         options?: Options,
     ) => {
-        return request.post<GetTermDetailByPostResponse>(`terms/${termsNo}`, {
-            json: data,
-            headers: {
-                version: '1.1',
+        return publicRequest.post<GetTermDetailByPostResponse>(
+            `terms/${termsNo}`,
+            {
+                json: data,
+                headers: {
+                    version: '1.1',
+                },
+                ...options,
             },
-            ...options,
-        });
+        );
     },
 };
 

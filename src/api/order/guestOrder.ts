@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import { ClaimType, OrderRequestType } from '@/models';
 import { OrderDetailResponse, TokenIssueData } from '@/models/order';
 import {
@@ -43,7 +43,7 @@ const guestOrder = {
     getOrderDetail: (
         orderNo: string,
         params?: GetOrderDetailParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<OrderDetailResponse>(`guest/orders/${orderNo}`, {
             searchParams: qs.stringify(params, {
@@ -61,7 +61,7 @@ const guestOrder = {
     issueOrderToken: (
         orderNo: string,
         data: TokenIssueData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<OrderDetailResponse>(`guest/orders/${orderNo}`, {
             json: data,
@@ -78,7 +78,7 @@ const guestOrder = {
             `guest/order-options/${orderOptionNo}/confirm`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -91,7 +91,7 @@ const guestOrder = {
             `guest/order-options/${orderOptionNo}/delivery-done`,
             {
                 ...options,
-            }
+            },
         );
     },
 
@@ -103,14 +103,14 @@ const guestOrder = {
     updateCashReceipt: (
         orderNo: string,
         data: RequestCashReceiptData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put<UpdateCashReceiptResponse>(
             `guest/orders/${orderNo}/cashReceipt`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -121,14 +121,14 @@ const guestOrder = {
     requestCashReceipt: (
         orderNo: string,
         data: RequestCashReceiptData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<RequestCashReceiptResponse>(
             `guest/orders/${orderNo}/cashReceipt`,
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -144,7 +144,7 @@ const guestOrder = {
             orderRequestType?: OrderRequestType;
             claimType?: ClaimType;
         },
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<OrderDetailResponse>(
             `guest/orders/${orderNo}/claim`,
@@ -154,7 +154,7 @@ const guestOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -166,7 +166,7 @@ const guestOrder = {
         orderNo: string,
         params: UpdateDeliveryInfoParams,
         data: UpdateDeliveryInfoData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put<OrderDetailResponse>(
             `guest/orders/${orderNo}/deliveries`,
@@ -177,7 +177,7 @@ const guestOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -189,7 +189,7 @@ const guestOrder = {
     sendPasswordByEmail: (
         orderNo: string,
         params: SendPasswordByEmailParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<OrderDetailResponse>(
             `guest/orders/${orderNo}/forgot-password`,
@@ -199,7 +199,7 @@ const guestOrder = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 };

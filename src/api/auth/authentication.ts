@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import request from '@/api/core/request';
+import { request } from '@/api/core/request';
 import {
     CheckCertificatedNumberParams,
     CheckCertificatedNumberViaEmailParams,
@@ -36,7 +36,7 @@ const authentication = {
      */
     checkCertificatedNumber: (
         params: CheckCertificatedNumberParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get('authentications', {
             searchParams: qs.stringify(params),
@@ -53,7 +53,7 @@ const authentication = {
      */
     sendCertificatedNumber: (
         data: SendCertificatedNumberData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<SendCertificatedNumberResponse>('authentications', {
             json: data,
@@ -67,14 +67,14 @@ const authentication = {
      */
     checkCertificatedNumberViaEmail: (
         params: CheckCertificatedNumberViaEmailParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<CheckCertificatedNumberViaEmailResponse>(
             'authentications/email',
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -84,7 +84,7 @@ const authentication = {
      */
     sendCertificatedNumberViaEmail: (
         data: SendCertificatedNumberViaEmailData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post('authentications/email', {
             json: data,
@@ -98,7 +98,7 @@ const authentication = {
      */
     checkCertificatedNumberViaSMS: (
         params: CheckCertificatedNumberViaSMSParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get('authentications/sms', {
             searchParams: qs.stringify(params),
@@ -112,14 +112,14 @@ const authentication = {
      */
     sendCertificatedNumberViaSMS: (
         data: SendCertificatedNumberViaSMSData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<SendCertificatedNumberViaSMSResponse>(
             'authentications/sms',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -135,7 +135,7 @@ const authentication = {
                           ...params,
                           state: generateCSRFToken(),
                       }
-                    : params
+                    : params,
             ),
             ...options,
         });
@@ -153,7 +153,7 @@ const authentication = {
     issueOpenIdAccessToken: (
         data: IssueOpenIdAccessTokenData,
         params?: IssueOpenIdAccessTokenParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<IssueOpenIdAccessTokenResponse>('oauth/openid', {
             json: data,
@@ -220,7 +220,7 @@ const authentication = {
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -233,7 +233,7 @@ const authentication = {
             'oauth/openid/app-card/trans-no',
             {
                 ...options,
-            }
+            },
         );
     },
 

@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     WriteNaverPayOrderSheetData,
     RegisterWishListData,
@@ -15,7 +15,7 @@ const naverPay = {
      */
     writeNaverPayOrderSheet: (
         data: WriteNaverPayOrderSheetData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post('payments/naver/orderSheet', {
             json: data,
@@ -29,14 +29,14 @@ const naverPay = {
      */
     checkNaverPayValidate: (
         data: CheckNaverPayValidateData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put<CheckNaverPayValidateResponse>(
             'payments/naver/validate',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 

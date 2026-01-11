@@ -1,14 +1,15 @@
 import qs from 'qs';
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
-
+import { publicRequest, request } from '@/api/core/request';
 import {
     BlockMemberData,
     CheckDuplicateCIParams,
     CheckDuplicateCIResponse,
     CheckDuplicateEmailParams,
     CheckDuplicateEmailResponse,
+    CheckDuplicateExternalMemberData,
+    CheckDuplicateExternalMemberResponse,
     CheckDuplicateIdParams,
     CheckDuplicateIdResponse,
     CheckDuplicateMemberByEmailParams,
@@ -34,6 +35,8 @@ import {
     GetBlockedMembersParams,
     GetBlockedMembersResponse,
     GetDormantAccountResponse,
+    GetExtraInfosParams,
+    GetExtraInfosResponse,
     GetGradeResponse,
     GetMaskingAccountInfoParams,
     GetMaskingAccountInfoResponse,
@@ -91,7 +94,7 @@ const profile = {
      *  - 회원 프로필 등록 시 사용하는 API 입니다
      */
     createProfile: (data: CreateProfileData, options?: Options) => {
-        return request.post<CreateProfileResponse>('profile', {
+        return publicRequest.post<CreateProfileResponse>('profile', {
             json: data,
             ...options,
         });
@@ -117,7 +120,7 @@ const profile = {
      */
     updateProfileAddress: (
         data: UpdateProfileAddressData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put('profile/address', {
             json: data,
@@ -138,7 +141,7 @@ const profile = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -161,7 +164,7 @@ const profile = {
      */
     createBrandMemberProfile: (
         data: CreateBrandMemberProfileData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post<CreateProfileResponse>('profile/brand-oauth', {
             json: data,
@@ -175,9 +178,9 @@ const profile = {
      */
     updatePasswordByCertificationNo: (
         data: UpdatePasswordByCertificationNoData,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.post('profile/change-password-after-cert', {
+        return publicRequest.post('profile/change-password-after-cert', {
             json: data,
             ...options,
         });
@@ -210,7 +213,7 @@ const profile = {
      */
     releaseDormancyAccount: (
         data: ReleaseDormancyAccountData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.put('profile/dormancy', {
             json: data,
@@ -237,7 +240,7 @@ const profile = {
      *      - 인증번호 확인 또는 휴대폰 본인인증을 사용하지 않은 경우 아이디, 이름, 휴대폰번호, 이메일은 마스킹된 결과가 노출됩니다
      */
     findId: (data: FindIdData, options?: Options) => {
-        return request.post<FindIdResponse>('profile/find-id', {
+        return publicRequest.post<FindIdResponse>('profile/find-id', {
             json: data,
             ...options,
         });
@@ -248,10 +251,13 @@ const profile = {
      *  - 회원 정보의 이메일로 비밀번호 재설정 주소 전달
      */
     findPassword: (data: FindPasswordData, options?: Options) => {
-        return request.post<FindPasswordResponse>('profile/find-password', {
-            json: data,
-            ...options,
-        });
+        return publicRequest.post<FindPasswordResponse>(
+            'profile/find-password',
+            {
+                json: data,
+                ...options,
+            },
+        );
     },
 
     /**
@@ -270,9 +276,9 @@ const profile = {
      */
     findIdByCertification: (
         params: FindIdByCertificationParams,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.get<FindIdByCertificationResponse>('profile/id', {
+        return publicRequest.get<FindIdByCertificationResponse>('profile/id', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,
@@ -286,7 +292,7 @@ const profile = {
      *  - 인증 후 회원 아이디를 변경할 수 있는 API 입니다
      */
     updateId: (data: UpdateIdData, options?: Options) => {
-        return request.put('profile/id', {
+        return publicRequest.put('profile/id', {
             json: data,
             ...options,
         });
@@ -302,7 +308,7 @@ const profile = {
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -343,7 +349,7 @@ const profile = {
      */
     updateProfileByCertification: (
         data: UpdateProfileByCertificationData,
-        options?: Options
+        options?: Options,
     ) => {
         return request.post('profile/rename', {
             json: data,
@@ -413,7 +419,7 @@ const profile = {
      */
     checkDuplicateEmail: (
         params: CheckDuplicateEmailParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<CheckDuplicateEmailResponse>('profile/email/exist', {
             searchParams: qs.stringify(params, {
@@ -422,6 +428,23 @@ const profile = {
             }),
             ...options,
         });
+    },
+
+    /**
+     * 외부회원 중복확인하기
+     *  - 전달 받은 openAccessToken을 활용하여 해당 토큰에 해당하는 회원이 이미 가입되어있는지 확인합니다. 외부회원연동을 사용하는 몰에서만 사용가능합니다.
+     */
+    checkDuplicateExternalMember: (
+        data: CheckDuplicateExternalMemberData,
+        options?: Options,
+    ) => {
+        return publicRequest.post<CheckDuplicateExternalMemberResponse>(
+            'profile/external-member/exist',
+            {
+                json: data,
+                ...options,
+            },
+        );
     },
 
     /**
@@ -440,7 +463,7 @@ const profile = {
      *  - 해당 쇼핑몰에 입력한 아이디로 가진 회원이 있는지 확인합니다. true가 회신되는 경우 이미 해당 아이디로 가입한 회원이 존재합니다 (아이디 중복 입력)
      */
     checkDuplicateId: (params: CheckDuplicateIdParams, options?: Options) => {
-        return request.get<CheckDuplicateIdResponse>('profile/id/exist', {
+        return publicRequest.get<CheckDuplicateIdResponse>('profile/id/exist', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,
@@ -450,14 +473,31 @@ const profile = {
     },
 
     /**
+     * 회원별 추가항목 조회
+     *  - 회원별 추가항목 정보를 조회합니다. 추가항목 공개여부가 Y 인 항목들만 조회가 가능합니다.
+     */
+    getExtraInfos: (params: GetExtraInfosParams, options?: Options) => {
+        return publicRequest.get<GetExtraInfosResponse>(
+            'profile/member/extra-infos',
+            {
+                searchParams: qs.stringify(params, {
+                    arrayFormat: 'comma',
+                    allowDots: true,
+                }),
+                ...options,
+            },
+        );
+    },
+
+    /**
      * 해당 쇼핑몰에 휴대폰 번호 중복여부 확인하기
      *  - 해당 쇼핑몰에 입력한 휴대폰번호가 있는지 확인하는 API 입니다
      */
     checkDuplicateMobileNo: (
         params: CheckDuplicateMobileNoParams,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.get<CheckDuplicateMobileNoResponse>(
+        return publicRequest.get<CheckDuplicateMobileNoResponse>(
             'profile/mobile/exist',
             {
                 searchParams: qs.stringify(params, {
@@ -465,7 +505,7 @@ const profile = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -475,9 +515,9 @@ const profile = {
      */
     checkDuplicateNickname: (
         params: CheckDuplicateNicknameParams,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.get<CheckDuplicateNicknameResponse>(
+        return publicRequest.get<CheckDuplicateNicknameResponse>(
             'profile/nickname/exist',
             {
                 searchParams: qs.stringify(params, {
@@ -485,7 +525,7 @@ const profile = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -495,9 +535,9 @@ const profile = {
      */
     getMaskingAccountInfo: (
         params: GetMaskingAccountInfoParams,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.get<GetMaskingAccountInfoResponse>(
+        return publicRequest.get<GetMaskingAccountInfoResponse>(
             'profile/password/search-account',
             {
                 searchParams: qs.stringify(params, {
@@ -505,7 +545,7 @@ const profile = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -515,9 +555,9 @@ const profile = {
      */
     sendUpdatePasswordEmail: (
         data: SendUpdatePasswordEmailData,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.put('profile/password/sending-email-with-url', {
+        return publicRequest.put('profile/password/sending-email-with-url', {
             json: data,
             ...options,
         });
@@ -529,9 +569,9 @@ const profile = {
      */
     checkDuplicateMemberByEmail: (
         params: CheckDuplicateMemberByEmailParams,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.get<CheckDuplicateMemberByEmailResponse>(
+        return publicRequest.get<CheckDuplicateMemberByEmailResponse>(
             'profile/member/equals/with-email',
             {
                 searchParams: qs.stringify(params, {
@@ -539,7 +579,7 @@ const profile = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -550,9 +590,9 @@ const profile = {
      */
     checkDuplicateMemberByMobile: (
         params: CheckDuplicateMemberByMobileParams,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.get<CheckDuplicateMemberByMobileResponse>(
+        return publicRequest.get<CheckDuplicateMemberByMobileResponse>(
             'profile/member/equals/with-mobile',
             {
                 searchParams: qs.stringify(params, {
@@ -560,7 +600,7 @@ const profile = {
                     allowDots: true,
                 }),
                 ...options,
-            }
+            },
         );
     },
 
@@ -571,14 +611,14 @@ const profile = {
      */
     updatePasswordByCertificationKey: (
         data: UpdatePasswordByCertificationKeyData,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.put(
+        return publicRequest.put(
             'profile/password/no-authentication/after-certification',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 
@@ -589,30 +629,31 @@ const profile = {
      */
     updatePasswordByEmailCertification: (
         data: UpdatePasswordByEmailCertificationData,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.put(
+        return publicRequest.put(
             'profile/password/no-authentication/certificated-by-email',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
+
     /**
      * SMS 인증 후 패스워드 변경하기
      *  - 로그인하지않은 사용자의 비밀번호를 변경합니다 (SMS 인증 사용)
      */
     updatePasswordBySMSCertification: (
         data: UpdatePasswordBySMSCertificationData,
-        options?: Options
+        options?: Options,
     ) => {
-        return request.put(
+        return publicRequest.put(
             'profile/password/no-authentication/certificated-by-sms',
             {
                 json: data,
                 ...options,
-            }
+            },
         );
     },
 };

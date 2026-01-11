@@ -1,7 +1,7 @@
-import qs from 'qs';
 import type { Options } from 'ky';
+import qs from 'qs';
 
-import { request } from '@/api/core';
+import { publicRequest } from '@/api/core/request';
 import {
     GetMemberGradeParams,
     GetMemberGradeResponse,
@@ -14,7 +14,7 @@ const memberGrade = {
      *  - 회원 등급 번호 미 입력 시 쇼핑몰에 등록된 모든 회원 등급 정보를 조회합니다.
      */
     getMemberGrade: (params: GetMemberGradeParams, options?: Options) => {
-        return request.get<GetMemberGradeResponse>('member-grades', {
+        return publicRequest.get<GetMemberGradeResponse>('member-grades', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,

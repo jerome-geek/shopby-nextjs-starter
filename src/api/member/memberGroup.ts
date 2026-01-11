@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { publicRequest } from '@/api/core/request';
 import {
     GetMemberGroupParams,
     GetMemberGroupResponse,
@@ -15,7 +15,7 @@ const memberGroup = {
      *  - 회원 그룹 번호 미 입력 시 쇼핑몰에 등록된 모든 그룹 정보를 조회합니다.
      */
     getMemberGroup: (params: GetMemberGroupParams, options?: Options) => {
-        return request.get<GetMemberGroupResponse>('member-groups', {
+        return publicRequest.get<GetMemberGroupResponse>('member-groups', {
             searchParams: qs.stringify(params, {
                 arrayFormat: 'comma',
                 allowDots: true,

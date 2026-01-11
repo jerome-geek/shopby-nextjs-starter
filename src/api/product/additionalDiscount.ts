@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import request from '@/api/core/request';
+import { request } from '@/api/core/request';
 import {
     GetAdditionalDiscountParams,
     GetAdditionalDiscountResponse,
@@ -13,14 +13,14 @@ const additionalDiscount = {
      */
     getAdditionalDiscount: (
         searchParams: GetAdditionalDiscountParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetAdditionalDiscountResponse>(
             'additional-discounts/by-product-no',
             {
                 searchParams: { ...searchParams },
                 ...options,
-            }
+            },
         );
     },
 };

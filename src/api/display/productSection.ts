@@ -1,7 +1,7 @@
 import type { Options } from 'ky';
 import qs from 'qs';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import {
     GetProductSectionProductsParams,
     GetProductSectionProductsResponse,
@@ -33,7 +33,7 @@ const productSection = {
                 headers: {
                     version: '2.0',
                 },
-            }
+            },
         );
     },
 
@@ -50,7 +50,7 @@ const productSection = {
                 headers: {
                     version: '2.0',
                 },
-            }
+            },
         );
     },
 
@@ -62,14 +62,14 @@ const productSection = {
     getProductSectionProductsByNo: (
         sectionNo: string,
         params: GetProductSectionProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductSectionProductsResponse>(
             `display/sections/${sectionNo}/products`,
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 
@@ -81,14 +81,14 @@ const productSection = {
     getProductSectionProductsById: (
         sectionId: string,
         params: GetProductSectionProductsParams,
-        options?: Options
+        options?: Options,
     ) => {
         return request.get<GetProductSectionProductsResponse>(
             `display/sections/ids/${sectionId}/products`,
             {
                 searchParams: qs.stringify(params),
                 ...options,
-            }
+            },
         );
     },
 };

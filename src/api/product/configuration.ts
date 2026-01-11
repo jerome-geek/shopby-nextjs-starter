@@ -1,6 +1,6 @@
 import type { Options } from 'ky';
 
-import { request } from '@/api/core';
+import { request } from '@/api/core/request';
 import { GetNaverShoppingConfigurationResponse } from '@/models/product/configuration';
 
 const configuration = {
@@ -12,7 +12,7 @@ const configuration = {
             'products/configuration/naver-shopping',
             {
                 ...options,
-            }
+            },
         );
     },
 };

@@ -879,6 +879,16 @@ export interface CheckDuplicateEmailResponse {
     status: Nullable<MemberStatsType>;
 }
 
+export interface CheckDuplicateExternalMemberData {
+    /** IdP(Identity Provider, 아이디 제공자) 엑세스 토큰 */
+    openAccessToken: string;
+}
+
+export interface CheckDuplicateExternalMemberResponse {
+    /** 메일 발송 대상 이메일^|true */
+    result: string;
+}
+
 export interface CheckDuplicateExternalEmailParams {
     /** IdP(Identity Provider, 아이디 제공자) 엑세스 토큰 */
     openAccessToken: string;
@@ -912,7 +922,7 @@ export interface CheckDuplicateIdResponse {
 
 export interface GetExtraInfosParams {
     /** 회원번호 목록  */
-    memberNos: string;
+    memberNos: number[];
 }
 
 export interface GetExtraInfosResponse {
@@ -921,12 +931,12 @@ export interface GetExtraInfosResponse {
 
 export interface MemberSummaryExtraInfo {
     /** 회원 추가항목 목록 */
-    memberExtraInfos: MemberExtraInfos;
+    memberExtraInfos: MemberExtraInfo[];
     /** 회원 번호 */
     memberNo: number;
 }
 
-export interface MemberExtraInfos {
+export interface MemberExtraInfo {
     /** 추가항목 명 */
     extraInfoName: string;
     /** 추가항목 텍스트 내용 */
