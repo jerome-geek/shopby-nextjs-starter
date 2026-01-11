@@ -10,7 +10,6 @@ import { HeartLikeFilledSmallIcon } from '@/components/icons/HeartLikeFilledSmal
 import { HeartLikeSmallIcon } from '@/components/icons/HeartLikeSmall';
 import { HeartMiniIcon } from '@/components/icons/HeartMiniIcon';
 import { HomeIcon } from '@/components/icons/HomeIcon';
-import { InstagramIcon } from '@/components/icons/InstagramIcon';
 import { MenuIcon } from '@/components/icons/MenuIcon';
 import { SearchIcon } from '@/components/icons/SearchIcon';
 import { SmallCaretIcon } from '@/components/icons/SmallCaretIcon';
@@ -31,11 +30,10 @@ export {
     HeartLikeSmallIcon,
     HeartMiniIcon,
     HomeIcon,
-    InstagramIcon,
     MenuIcon,
     SearchIcon,
     SmallCaretIcon,
+    StarIcon,
     StarMiniIcon,
     UserIcon,
-    StarIcon,
 };

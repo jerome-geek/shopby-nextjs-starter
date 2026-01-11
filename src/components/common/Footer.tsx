@@ -1,40 +1,66 @@
 import Link from 'next/link';
 
 import { mall } from '@/api/admin';
-import { InstagramIcon } from '@/components/icons/InstagramIcon';
-import { YouTubeIcon } from '@/components/icons/YouTubeIcon';
-import { PATHS } from '@/const/paths';
-import { css } from '@/styled-system/css';
-import MobileBottomNavigation from './MobileBottomNavigation';
 import { getCachedCategoryData } from '@/api/display/category.server';
+import MobileBottomNavigation from '@/components/common/MobileBottomNavigation';
+import { InstagramIcon, YoutubeIcon } from '@/components/icons/footer';
+import { PATHS } from '@/const/paths';
+import { getTranslation } from '@/i18n/server';
+import { css } from '@/styled-system/css';
+import { vstack } from '@/styled-system/patterns';
+import { token } from '@/styled-system/tokens';
 
 export default async function Footer() {
+    const { t } = await getTranslation();
+
     try {
         const mallData = await mall.getMall().json();
 
         const categoryData = await getCachedCategoryData();
 
-        const navigation = {
-            links: [
-                { label: '이용약관', href: `${PATHS.AUTH.TERMS.MAIN}/USE` },
+        const {
+            serviceBasicInfo: {
+                companyName,
+                representativeName,
+                address,
+                representPhoneNo,
+                businessRegistrationNo,
+                onlineMarketingBusinessDeclarationNo,
+                privacyManagerName,
+            },
+        } = mallData;
+
+        const menuGroups = [
+            [
+                { label: t('WannaMake 소개'), href: PATHS.COMPANY },
+                { label: t('이용약관'), href: `${PATHS.AUTH.TERMS.MAIN}/USE` },
                 {
-                    label: '개인정보처리방침',
+                    label: t('개인정보처리방침'),
                     href: `${PATHS.AUTH.TERMS.MAIN}/PI_PROCESS`,
                 },
-                // TODO: 이용안내의 경우 게시판 사용할 것
-                { label: '이용안내', href: '/guide' },
             ],
-        };
+            [
+                { label: t('공지사항'), href: PATHS.SUPPORT.NOTICE.LIST },
+                { label: t('FAQ'), href: PATHS.SUPPORT.FAQ },
+                { label: t('1:1문의'), href: PATHS.MYPAGE.INQUIRIES.MAIN },
+                { label: t('입점/제휴 문의'), href: '/partnership' },
+            ],
+        ];
 
         // const socialMedia = {
         //     instagram: mallData.serviceBasicInfo.instagramUrl,
         //     youtube: mallData.serviceBasicInfo.youtubeUrl,
         // };
+        const socialMediaList = [
+            { id: 'instagram', url: '/', icon: <InstagramIcon /> },
+            { id: 'youtube', url: '/', icon: <YoutubeIcon /> },
+        ];
 
         const copyright = {
             disclaimer:
-                '본 쇼핑몰은 판매자가 등록한 상품정보에 대해 책임을 지지 않습니다.',
-            copyrightText: `© ${new Date().getFullYear()} ${mallData.serviceBasicInfo.companyName}. All rights reserved.`,
+                '일부 상품의 경우 (주)제니지니앤로이드는 통신판매의 당사자가 아닌 통신판매중개자로서 상품, 상품정보, 거래에 대한 책임이 제한될 수 있으므로, 각 상품 페이지에서 구체적인 내용을 확인하시기 바랍니다.',
+            copyrightText:
+                'COPYRIGHT ⓒ (주)제니지니앤로이드 ALL RIGHTS RESERVED.',
         };
 
         return (
@@ -42,7 +68,7 @@ export default async function Footer() {
                 <footer
                     className={css({
                         width: '100%',
-                        backgroundColor: '#F5F5F5',
+                        backgroundColor: token('colors.gray20'),
                         paddingY: { base: '32px', lg: '48px' },
                         paddingBottom: { base: '80px', md: '48px' }, // 모바일 하단 네비게이션 공간 확보
                         marginTop: 'auto',
@@ -62,58 +88,208 @@ export default async function Footer() {
                         <div
                             className={css({
                                 flex: 1,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: { base: '20px', md: '55px' },
                             })}
                         >
-                            <h2
+                            <h3
                                 className={css({
-                                    fontSize: { base: '14px', lg: '16px' },
-                                    fontWeight: 'bold',
-                                    color: '{colors.foreground}',
-                                    marginBottom: { base: '12px', lg: '16px' },
+                                    textStyle: 'body1.bold',
+                                    color: token('colors.gray80'),
+                                    // marginBottom: '32px',
                                 })}
                             >
-                                {mallData.serviceBasicInfo.companyName} 사업자
-                                정보
-                            </h2>
+                                {`${companyName} 사업자 정보`}
+                            </h3>
                             {/* 웹: 회사 상세 정보 */}
-                            <div
+                            <dl
                                 className={css({
                                     display: { base: 'none', lg: 'flex' },
                                     flexDirection: 'column',
                                     gap: '8px',
-                                    fontSize: '14px',
-                                    color: '#666666',
-                                    lineHeight: '1.6',
                                 })}
                             >
-                                <p>
-                                    {`대표자명: ${mallData.serviceBasicInfo.representativeName}`}
-                                </p>
-                                <p>{`주소 : ${mallData.serviceBasicInfo.address}`}</p>
-                                <p>
-                                    {`대표전화 : ${mallData.serviceBasicInfo.representPhoneNo}`}
-                                </p>
-                                <p>
-                                    {`사업자등록번호 : ${mallData.serviceBasicInfo.businessRegistrationNo}`}
-                                </p>
-                                <p>
-                                    {`통신판매업신고번호: ${mallData.serviceBasicInfo.onlineMarketingBusinessDeclarationNo}`}
-                                    <Link
-                                        // href={companyInfo.businessInfoUrl}
-                                        href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${mallData.serviceBasicInfo.businessRegistrationNo?.replace(/-/g, '') || ''}`}
+                                <div
+                                    className={css({
+                                        display: 'flex',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    <dt
                                         className={css({
-                                            color: '{colors.foreground}',
-                                            textDecoration: 'underline',
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray60'),
+                                            whiteSpace: 'nowrap',
                                         })}
                                     >
-                                        사업자정보확인
-                                    </Link>
-                                </p>
-                                <p>
-                                    {`개인정보보호책임자: ${mallData.serviceBasicInfo.privacyManagerName}`}
-                                </p>
-                                <p>호스팅 서비스 : 엔에이치엔커머스(주)</p>
-                            </div>
+                                        {t('대표자명')}
+                                    </dt>
+                                    <dd
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    >
+                                        {representativeName}
+                                    </dd>
+                                </div>
+                                <div
+                                    className={css({
+                                        display: 'flex',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    <dt
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray60'),
+                                            whiteSpace: 'nowrap',
+                                        })}
+                                    >
+                                        {t('주소')}
+                                    </dt>
+                                    <dd
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    >
+                                        {address}
+                                    </dd>
+                                </div>
+                                <div
+                                    className={css({
+                                        display: 'flex',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    <dt
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray60'),
+                                            whiteSpace: 'nowrap',
+                                        })}
+                                    >
+                                        {t('대표 전화')}
+                                    </dt>
+                                    <dd
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    >
+                                        {representPhoneNo}
+                                    </dd>
+                                </div>
+                                <div
+                                    className={css({
+                                        display: 'flex',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    <dt
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray60'),
+                                            whiteSpace: 'nowrap',
+                                        })}
+                                    >
+                                        {t('사업자등록번호')}
+                                    </dt>
+                                    <dd
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    >
+                                        {businessRegistrationNo}
+                                    </dd>
+                                </div>
+                                <div
+                                    className={css({
+                                        display: 'flex',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    <dt
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray60'),
+                                            whiteSpace: 'nowrap',
+                                        })}
+                                    >
+                                        {t('통신판매업신고번호')}
+                                    </dt>
+                                    <dd
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray80'),
+                                            display: 'flex',
+                                            gap: '8px',
+                                        })}
+                                    >
+                                        {onlineMarketingBusinessDeclarationNo}
+                                        <Link
+                                            href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${businessRegistrationNo?.replace(/-/g, '') || ''}`}
+                                            className={css({
+                                                color: token('colors.gray60'),
+                                                textDecoration: 'underline',
+                                            })}
+                                        >
+                                            사업자정보확인
+                                        </Link>
+                                    </dd>
+                                </div>
+                                <div
+                                    className={css({
+                                        display: 'flex',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    <dt
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray60'),
+                                            whiteSpace: 'nowrap',
+                                        })}
+                                    >
+                                        {t('개인정보보호책임자')}
+                                    </dt>
+                                    <dd
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    >
+                                        {privacyManagerName}
+                                    </dd>
+                                </div>
+                                <div
+                                    className={css({
+                                        display: 'flex',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    <dt
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray60'),
+                                            whiteSpace: 'nowrap',
+                                        })}
+                                    >
+                                        {t('호스팅 서비스')}
+                                    </dt>
+                                    <dd
+                                        className={css({
+                                            textStyle: 'body1.regular',
+                                            color: token('colors.gray80'),
+                                        })}
+                                    >
+                                        {t('엔에이치엔커머스(주)')}
+                                    </dd>
+                                </div>
+                            </dl>
                             {/* 모바일: 저작권 정보 */}
                             <div
                                 className={css({
@@ -136,106 +312,134 @@ export default async function Footer() {
                                 flex: 1,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '24px',
+                                gap: '88px',
                             })}
                         >
-                            {/* 네비게이션 링크 */}
                             <div
-                                className={css({
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    gap: '8px',
-                                    fontSize: { base: '12px', lg: '14px' },
-                                    color: '#666666',
+                                className={vstack({
+                                    gap: '20px',
+                                    alignItems: 'stretch',
                                 })}
                             >
-                                {navigation.links.map((link, index) => (
-                                    <span key={link.href}>
-                                        {index > 0 && (
-                                            <span
-                                                className={css({
-                                                    color: '#CCCCCC',
-                                                })}
-                                            >
-                                                {' '}
-                                                ·{' '}
-                                            </span>
-                                        )}
-                                        <Link
-                                            href={link.href}
+                                {/* 네비게이션 링크 */}
+                                <nav
+                                    className={css({
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '12px',
+                                    })}
+                                >
+                                    {menuGroups.map((group, groupIdx) => (
+                                        <ul
+                                            key={groupIdx}
                                             className={css({
-                                                color: '#666666',
-                                                textDecoration: 'none',
-                                                _hover: {
-                                                    color: '{colors.foreground}',
-                                                },
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                alignItems: 'center',
+                                                columnGap: '12px',
+                                                rowGap: '8px',
                                             })}
                                         >
-                                            {link.label}
-                                        </Link>
-                                    </span>
-                                ))}
-                            </div>
+                                            {group.map(
+                                                ({ label, href }, itemIdx) => (
+                                                    <li
+                                                        key={href}
+                                                        className={css({
+                                                            display: 'flex',
+                                                            alignItems:
+                                                                'center',
+                                                            _after:
+                                                                itemIdx <
+                                                                group.length - 1
+                                                                    ? {
+                                                                          content:
+                                                                              '"·"',
+                                                                          marginLeft:
+                                                                              '12px',
+                                                                          color: token(
+                                                                              'colors.gray50',
+                                                                          ),
+                                                                          fontSize:
+                                                                              '14px',
+                                                                          fontWeight:
+                                                                              'bold',
+                                                                      }
+                                                                    : {},
+                                                        })}
+                                                    >
+                                                        <Link
+                                                            href={href}
+                                                            prefetch={false}
+                                                            className={css({
+                                                                textStyle:
+                                                                    label ===
+                                                                    '개인정보처리방침'
+                                                                        ? 'headline2.semibold'
+                                                                        : 'headline2.medium',
+                                                                color: token(
+                                                                    'colors.gray80',
+                                                                ),
+                                                                transition:
+                                                                    'color 0.2s',
+                                                                _hover: {
+                                                                    color: token(
+                                                                        'colors.gray90',
+                                                                    ),
+                                                                },
+                                                            })}
+                                                        >
+                                                            {label}
+                                                        </Link>
+                                                    </li>
+                                                ),
+                                            )}
+                                        </ul>
+                                    ))}
+                                </nav>
 
-                            {/* 소셜 미디어 아이콘 */}
-                            <div
-                                className={css({
-                                    display: 'flex',
-                                    gap: { base: '8px', lg: '12px' },
-                                })}
-                            >
-                                <a
-                                    href={'/'}
-                                    target='_blank'
-                                    rel='noopener noreferrer'
+                                {/* 소셜 미디어 아이콘 */}
+                                <ul
                                     className={css({
                                         display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        width: { base: '36px', lg: '40px' },
-                                        height: { base: '36px', lg: '40px' },
-                                        border: '1px solid #CCCCCC',
-                                        borderRadius: '8px',
-                                        color: '#666666',
-                                        _hover: {
-                                            color: '{colors.foreground}',
-                                            borderColor: '{colors.foreground}',
-                                        },
+                                        gap: { base: '10px', md: '8px' },
                                     })}
                                 >
-                                    <InstagramIcon
-                                        className={css({
-                                            width: '20px',
-                                            height: '20px',
-                                        })}
-                                    />
-                                </a>
-                                <a
-                                    href={'/'}
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    className={css({
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        width: { base: '36px', lg: '40px' },
-                                        height: { base: '36px', lg: '40px' },
-                                        border: '1px solid #CCCCCC',
-                                        borderRadius: '8px',
-                                        color: '#666666',
-                                        _hover: {
-                                            color: '{colors.foreground}',
-                                            borderColor: '{colors.foreground}',
+                                    {socialMediaList.map(
+                                        ({ id, url, icon }) => {
+                                            return (
+                                                <li key={id}>
+                                                    <Link
+                                                        href={url}
+                                                        target='_blank'
+                                                        rel='noopener noreferrer'
+                                                        className={css({
+                                                            display: 'flex',
+                                                            alignItems:
+                                                                'center',
+                                                            justifyContent:
+                                                                'center',
+                                                            width: '32px',
+                                                            height: '32px',
+                                                            // border: '1px solid #CCCCCC',
+                                                            borderRadius: '50%',
+                                                            background:
+                                                                token(
+                                                                    'colors.white',
+                                                                ),
+                                                            _hover: {
+                                                                color: '{colors.foreground}',
+                                                                borderColor:
+                                                                    '{colors.foreground}',
+                                                            },
+                                                        })}
+                                                    >
+                                                        {icon}
+                                                    </Link>
+                                                </li>
+                                            );
                                         },
-                                    })}
-                                >
-                                    <YouTubeIcon
-                                        className={css({
-                                            width: '20px',
-                                            height: '20px',
-                                        })}
-                                    />
-                                </a>
+                                    )}
+                                </ul>
                             </div>
 
                             {/* 저작권 정보 (데스크톱만 표시) */}
@@ -243,14 +447,22 @@ export default async function Footer() {
                                 className={css({
                                     display: { base: 'none', lg: 'flex' },
                                     flexDirection: 'column',
-                                    gap: '8px',
-                                    fontSize: '12px',
-                                    color: '#666666',
-                                    lineHeight: '1.6',
                                 })}
                             >
-                                <p>{copyright.disclaimer}</p>
-                                <p>{`COPYRIGHT ⓒ ${mallData.serviceBasicInfo.companyName} ALL RIGHTS RESERVED.`}</p>
+                                <p
+                                    className={css({
+                                        textStyle: 'caption.regular',
+                                        color: token('colors.gray60'),
+                                    })}
+                                >
+                                    {copyright.disclaimer}
+                                </p>
+                                <p
+                                    className={css({
+                                        textStyle: 'caption.semibold',
+                                        color: token('colors.gray60'),
+                                    })}
+                                >{`COPYRIGHT ⓒ ${mallData.serviceBasicInfo.companyName} ALL RIGHTS RESERVED.`}</p>
                             </div>
                         </div>
                     </div>

@@ -385,6 +385,7 @@ export default defineConfig({
                     value: {
                         fontSize: '1.2rem', // 12px
                         lineHeight: 1.4,
+                        letterSpacing: '-0.02em', // -2%
                         fontWeight: 600, // Semibold
                     },
                 },
@@ -392,6 +393,7 @@ export default defineConfig({
                     value: {
                         fontSize: '1.2rem', // 12px
                         lineHeight: 1.4,
+                        letterSpacing: '-0.02em', // -2%
                         fontWeight: 400, // Regular
                     },
                 },
