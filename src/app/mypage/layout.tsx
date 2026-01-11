@@ -7,6 +7,8 @@ import { PATHS } from '@/const/paths';
 import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
 
+export const dynamic = 'force-dynamic';
+
 export default async function MyPageLayout({
     children,
 }: {

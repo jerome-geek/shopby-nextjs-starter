@@ -70,31 +70,27 @@ export default function AccumulationList({
         );
     }, [activeIsMobile, initialData, infiniteAccumulationListData]);
 
+    const lastPageNumber = useMemo(() => {
+        if (!infiniteAccumulationListData) return 1;
+        const pages = infiniteAccumulationListData.pages;
+        return pages[pages.length - 1]?.pageNumber || 1;
+    }, [infiniteAccumulationListData]);
+
     // 모바일 모드에서 [더보기] 클릭 시 URL의 pageNumber를 최신 페이지로 업데이트 (새로고침 시 상태 유지용)
     useEffect(() => {
-        if (
-            activeIsMobile &&
-            !isFetchingNextPage &&
-            infiniteAccumulationListData
-        ) {
-            const pages = infiniteAccumulationListData.pages;
-            const lastPage = pages[pages.length - 1];
-            const currentPage = lastPage?.pageNumber;
-
-            if (currentPage && currentPage > 1) {
-                const params = new URLSearchParams(window.location.search);
-                if (params.get('pageNumber') !== currentPage.toString()) {
-                    params.set('pageNumber', currentPage.toString());
-                    const newUrl = `${window.location.pathname}?${params.toString()}`;
-                    window.history.replaceState(
-                        { ...window.history.state, as: newUrl, url: newUrl },
-                        '',
-                        newUrl,
-                    );
-                }
+        if (activeIsMobile && !isFetchingNextPage && lastPageNumber > 1) {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('pageNumber') !== lastPageNumber.toString()) {
+                params.set('pageNumber', lastPageNumber.toString());
+                const newUrl = `${window.location.pathname}?${params.toString()}`;
+                window.history.replaceState(
+                    { ...window.history.state, as: newUrl, url: newUrl },
+                    '',
+                    newUrl,
+                );
             }
         }
-    }, [infiniteAccumulationListData, activeIsMobile, isFetchingNextPage]);
+    }, [lastPageNumber, activeIsMobile, isFetchingNextPage]);
 
     const getExpireYmdt = ({
         registerYmdt,

@@ -7,7 +7,7 @@ import { InstagramIcon, YoutubeIcon } from '@/components/icons/footer';
 import { PATHS } from '@/const/paths';
 import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
-import { vstack } from '@/styled-system/patterns';
+import { center, vstack } from '@/styled-system/patterns';
 import { token } from '@/styled-system/tokens';
 
 export default async function Footer() {
@@ -412,15 +412,9 @@ export default async function Footer() {
                                                         href={url}
                                                         target='_blank'
                                                         rel='noopener noreferrer'
-                                                        className={css({
-                                                            display: 'flex',
-                                                            alignItems:
-                                                                'center',
-                                                            justifyContent:
-                                                                'center',
+                                                        className={center({
                                                             width: '32px',
                                                             height: '32px',
-                                                            // border: '1px solid #CCCCCC',
                                                             borderRadius: '50%',
                                                             background:
                                                                 token(
