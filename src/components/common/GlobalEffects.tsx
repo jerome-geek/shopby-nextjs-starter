@@ -8,6 +8,7 @@ import { useRouteChange } from '@/hooks/utils';
 
 const GlobalEffects = () => {
     useRouteChange(() => {
+        window.scrollTo(0, 0);
         overlay.closeAll();
     });
 
