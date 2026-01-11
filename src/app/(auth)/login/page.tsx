@@ -245,6 +245,7 @@ export default function LoginPage() {
                             >
                                 <Link
                                     href={href}
+                                    prefetch={false}
                                     className={css({
                                         color: 'gray.600',
                                         _hover: {

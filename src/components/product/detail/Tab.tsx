@@ -5,7 +5,8 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { css } from '@/styled-system/css';
-import { flex } from '@/styled-system/patterns';
+import { center, flex } from '@/styled-system/patterns';
+import { token } from '@/styled-system/tokens';
 
 export interface Tab {
     id: string;
@@ -36,14 +37,14 @@ export default function ProductDetailTab({ tabs }: { tabs: Tab[] }) {
                 role='tablist'
                 aria-label={t('상품 상세 정보 탭')}
             >
-                {tabs.map((tab) => {
-                    const isActive = activeTab === tab.id;
+                {tabs.map(({ id, label, count }) => {
+                    const isActive = activeTab === id;
                     const params = new URLSearchParams(searchParams.toString());
-                    params.set('tab', tab.id);
+                    params.set('tab', id);
 
                     return (
                         <li
-                            key={tab.id}
+                            key={id}
                             className={flex({
                                 flex: 1,
                                 alignItems: 'center',
@@ -56,15 +57,14 @@ export default function ProductDetailTab({ tabs }: { tabs: Tab[] }) {
                             <Link
                                 href={`${pathname}?${params.toString()}`}
                                 scroll={false}
+                                prefetch={false}
                                 role='tab'
-                                id={`tab-${tab.id}`}
+                                id={`tab-${id}`}
                                 aria-selected={isActive}
-                                aria-controls={`tabpanel-${tab.id}`}
-                                className={flex({
+                                aria-controls={`tabpanel-${id}`}
+                                className={center({
                                     width: '100%',
                                     height: '100%',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
                                     textDecoration: 'none',
                                     _after: isActive
                                         ? {
@@ -81,14 +81,13 @@ export default function ProductDetailTab({ tabs }: { tabs: Tab[] }) {
                             >
                                 <span
                                     className={css({
-                                        fontSize: '1.4rem',
-                                        fontWeight: isActive ? '700' : '500',
-                                        color: isActive ? 'black' : 'gray60',
+                                        textStyle: 'heading.semibold',
+                                        color: token('colors.black'),
                                     })}
                                 >
-                                    {tab.label}{' '}
-                                    {tab.count !== undefined &&
-                                        `(${tab.count})`}
+                                    {count === undefined
+                                        ? label
+                                        : `${label} (${count})`}
                                 </span>
                             </Link>
                         </li>

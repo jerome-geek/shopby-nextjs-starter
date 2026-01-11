@@ -12,25 +12,36 @@ import { PATHS } from '@/const/paths';
 import { css } from '@/styled-system/css';
 import { token } from '@/styled-system/tokens';
 import { getCachedCategoryData } from '@/api/display/category.server';
+import { center } from '@/styled-system/patterns';
 
 export default async function Header() {
     const cartCount = 13; // TODO: 실제 장바구니 아이템 수로 교체
 
     const categoryData = await getCachedCategoryData();
 
+    const iconList = [
+        {
+            id: 'user',
+            href: PATHS.MYPAGE.MAIN,
+            Icon: <UserIcon currentColor={token('colors.black')} />,
+        },
+        { id: 'heart', href: PATHS.MYPAGE.WISH, Icon: <BigHeartIcon /> },
+        { id: 'cart', href: PATHS.ORDER.CART, Icon: <BigCartIcon /> },
+    ];
+
     try {
         return (
             <header
+                id='header'
                 className={css({
                     position: 'sticky',
                     top: 0,
                     zIndex: 50,
                     width: '100%',
-                    backgroundColor: '{colors.background}',
-                    borderBottom: '1px solid {colors.border}',
+                    backgroundColor: token('colors.white'),
+                    borderBottom: `1px solid ${token('colors.gray20')}`,
                     padding: { base: '29px 0 64px', md: '0' },
                 })}
-                id='header'
             >
                 {/* 메인 헤더 */}
                 <div
@@ -56,6 +67,7 @@ export default async function Header() {
                         {/* 브랜드 로고 */}
                         <Link
                             href={PATHS.MAIN}
+                            prefetch={false}
                             className={css({
                                 fontSize: '20px',
                                 fontWeight: 'bold',
@@ -80,98 +92,54 @@ export default async function Header() {
                             gap: '16px',
                         })}
                     >
-                        <Link
-                            href={PATHS.MYPAGE.MAIN}
-                            className={css({
-                                position: 'relative',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '24px',
-                                height: '24px',
-                                color: '{colors.foreground}',
-                                cursor: 'pointer',
-                                _hover: {
-                                    opacity: 0.7,
-                                },
-                            })}
-                        >
-                            <UserIcon currentColor={token('colors.black')} />
-                        </Link>
-
-                        <Link
-                            href={PATHS.MYPAGE.WISH}
-                            className={css({
-                                position: 'relative',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '24px',
-                                height: '24px',
-                                color: '{colors.foreground}',
-                                cursor: 'pointer',
-                                _hover: {
-                                    opacity: 0.7,
-                                },
-                            })}
-                        >
-                            <BigHeartIcon />
-                        </Link>
-
-                        {/* 장바구니 아이콘 */}
-                        <Link
-                            href={PATHS.ORDER.CART}
-                            className={css({
-                                position: 'relative',
-                                display: 'flex',
-                                order: { base: 3, md: 1 },
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '24px',
-                                height: '24px',
-                                color: '{colors.foreground}',
-                                cursor: 'pointer',
-                                _hover: {
-                                    opacity: 0.7,
-                                },
-                            })}
-                        >
-                            <BigCartIcon />
-                            {cartCount > 0 && (
-                                <span
-                                    className={css({
-                                        position: 'absolute',
-                                        top: '-6px',
-                                        right: '-6px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        width: '20px',
-                                        height: '20px',
-                                        fontSize: '1rem',
-                                        fontWeight: 'semibold',
-                                        lineHeight: '1.5',
-                                        letterSpacing: '-2%',
-                                        color: token('colors.white'),
-                                        backgroundColor: token('colors.red'),
-                                        borderRadius: '50%',
+                        {iconList.map((icon) => {
+                            return (
+                                <Link
+                                    key={icon.href}
+                                    href={icon.href}
+                                    prefetch={false}
+                                    className={center({
+                                        position: 'relative',
+                                        width: '24px',
+                                        height: '24px',
+                                        cursor: 'pointer',
+                                        _hover: {
+                                            opacity: 0.7,
+                                        },
                                     })}
                                 >
-                                    {cartCount > 99 ? '99+' : cartCount}
-                                </span>
-                            )}
-                        </Link>
+                                    {icon.Icon}
+                                    {icon.id === 'cart' && cartCount > 0 && (
+                                        <span
+                                            className={center({
+                                                position: 'absolute',
+                                                top: '-6px',
+                                                right: '-6px',
+                                                width: '20px',
+                                                height: '20px',
+                                                fontSize: '1rem',
+                                                fontWeight: 'semibold',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '-2%',
+                                                color: token('colors.white'),
+                                                backgroundColor:
+                                                    token('colors.red'),
+                                                borderRadius: '50%',
+                                            })}
+                                        >
+                                            {cartCount > 99 ? '99+' : cartCount}
+                                        </span>
+                                    )}
+                                </Link>
+                            );
+                        })}
 
                         {/* 검색 아이콘 */}
                         <button
-                            className={css({
-                                display: 'flex',
+                            className={center({
                                 order: { base: 1, md: 2 },
-                                alignItems: 'center',
-                                justifyContent: 'center',
                                 width: '24px',
                                 height: '24px',
-                                color: '{colors.foreground}',
                                 cursor: 'pointer',
                                 _hover: {
                                     opacity: 0.7,
@@ -183,14 +151,11 @@ export default async function Header() {
 
                         {/* 알림 아이콘 */}
                         <button
-                            className={css({
+                            className={center({
                                 display: { base: 'flex', md: 'none' },
                                 order: { base: 2 },
-                                alignItems: 'center',
-                                justifyContent: 'center',
                                 width: '24px',
                                 height: '24px',
-                                color: '{colors.foreground}',
                                 cursor: 'pointer',
                                 _hover: {
                                     opacity: 0.7,

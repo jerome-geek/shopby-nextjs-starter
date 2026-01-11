@@ -1,7 +1,5 @@
 'use client';
 
-import { css, cva } from '@/styled-system/css';
-import { token } from '@/styled-system/tokens';
 import { map, pipe, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -15,6 +13,8 @@ import { MenuIcon } from '@/components/icons';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import { GetCategoryResponse } from '@/models/display/category';
+import { css, cva } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 
 const Menu = ({ categoryData }: { categoryData?: GetCategoryResponse }) => {
     const { t } = useTranslation();

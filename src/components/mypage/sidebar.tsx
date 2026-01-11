@@ -109,6 +109,7 @@ export default function MyPageSidebar({ menuList }: MyPageSidebarProps) {
                                         {item.url ? (
                                             <Link
                                                 href={item.url}
+                                                prefetch={false}
                                                 className={cx(
                                                     css({
                                                         display: 'block',
