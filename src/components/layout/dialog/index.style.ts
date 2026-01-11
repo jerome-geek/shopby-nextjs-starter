@@ -17,10 +17,11 @@ export const dialogContainerStyle = css({
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     zIndex: 1001,
-    minWidth: '300px',
-
-    // ${mediaQueries.SM} {
-    //     width: 100%;
-    //     max-width: 540px;
-    // }
+    minWidth: '432px',
+    borderRadius: '24px',
+    overflow: 'hidden',
+    padding: '48px 24px 24px 24px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '36px',
 });

@@ -4,9 +4,11 @@ import { token } from '@/styled-system/tokens';
 export const ContentContainerStyle = css({
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
-    padding: '24px 40px',
+    alignItems: 'center',
+    gap: '12px',
     whiteSpace: 'nowrap',
+
+    '& > svg': { width: '72px', height: '72px' },
 });
 
 export const titleContainerStyle = css({
@@ -29,7 +31,9 @@ export const titleContainerStyle = css({
 
 export const dialogFooterStyle = css({
     display: 'flex',
-    height: '40px',
+    gap: '8px',
+    height: '52px',
+
     '& button': {
         flex: 1,
         width: '100%',

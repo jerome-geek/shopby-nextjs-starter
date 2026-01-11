@@ -50,24 +50,24 @@ const DialogLayout = ({
                             show: { opacity: 0.6 },
                             hide: { opacity: 0 },
                         }}
-                        initial="init"
-                        animate="show"
-                        exit="hide"
+                        initial='init'
+                        animate='show'
+                        exit='hide'
                     />
                     <motion.div
                         className={dialogContainerStyle}
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="dialog-title"
-                        aria-describedby="dialog-description"
+                        role='dialog'
+                        aria-modal='true'
+                        aria-labelledby='dialog-title'
+                        aria-describedby='dialog-description'
                         variants={{
                             init: { opacity: 0, x: '-50%', y: '-55%' },
                             show: { opacity: 1, x: '-50%', y: '-50%' },
                             hide: { opacity: 0, x: '-50%', y: '-55%' },
                         }}
-                        initial="init"
-                        animate="show"
-                        exit="hide"
+                        initial='init'
+                        animate='show'
+                        exit='hide'
                         style={{ maxWidth }}
                     >
                         {children}

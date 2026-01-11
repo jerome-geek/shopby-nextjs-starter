@@ -11,11 +11,14 @@ import {
     dialogFooterStyle,
     titleContainerStyle,
 } from '@/components/ui/dialog/confirm/index.style';
+import { Button } from '@/components/ui/button';
+import { BigCartIcon } from '@/components/icons';
+import { token } from '@/styled-system/tokens';
 
 export interface ConfirmDialogProps extends DefaultDialogProps {
     type?: 'confirm' | 'modal';
     confirm?: () => void;
-    iconType?: 'auth' | 'lock' | 'warning';
+    iconType?: 'auth' | 'lock' | 'warning' | 'cart';
     Title?: React.ReactNode;
     Description?: React.ReactNode;
     confirmText?: string;
@@ -39,6 +42,9 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
     return (
         <DialogLayout {...props} maxWidth={400}>
             <div className={ContentContainerStyle}>
+                {iconType === 'cart' && (
+                    <BigCartIcon currentColor={token('colors.gray70')} />
+                )}
                 {/* <S.IconContainer>
                     {iconType === 'auth' && <DialogAuthIcon />}
                     {iconType === 'lock' && <DialogLockIcon />}
@@ -56,13 +62,15 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
 
             <div className={dialogFooterStyle}>
                 {type === 'confirm' && (
-                    <button type="button" onClick={close}>
+                    <Button type='button' frame='outlined' onClick={close}>
                         <span>{t(cancelText)}</span>
-                    </button>
+                    </Button>
                 )}
 
-                <button
-                    type="button"
+                <Button
+                    type='button'
+                    frame='solid'
+                    variant='primary'
                     autoFocus
                     onClick={() => {
                         if (confirm) {
@@ -73,7 +81,7 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
                     }}
                 >
                     <span>{t(confirmText)}</span>
-                </button>
+                </Button>
             </div>
         </DialogLayout>
     );

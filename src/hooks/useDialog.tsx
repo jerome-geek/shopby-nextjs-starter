@@ -7,11 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
+import { css } from '@/styled-system/css';
+import { token } from '@/styled-system/tokens';
 
 interface UseDialogProps {
     message: string;
     description?: string;
-    iconType?: 'auth' | 'lock' | 'warning';
+    iconType?: 'auth' | 'lock' | 'warning' | 'cart';
     type?: 'confirm' | 'modal';
     confirm?: () => void;
     confirmText?: string;
@@ -35,6 +37,7 @@ const useDialog = () => {
 
     const openDialog = useCallback(
         ({
+            type,
             message,
             description,
             iconType = 'warning',
@@ -47,13 +50,16 @@ const useDialog = () => {
                 return (
                     <ConfirmDialog
                         {...props}
+                        type={type}
                         iconType={iconType}
                         Title={
                             <p
-                                style={{
+                                className={css({
+                                    textStyle: 'heading.semibold',
                                     wordBreak: 'break-word',
                                     whiteSpace: 'normal',
-                                }}
+                                    color: token('colors.gray90'),
+                                })}
                                 dangerouslySetInnerHTML={{ __html: t(message) }}
                             />
                         }
@@ -74,7 +80,7 @@ const useDialog = () => {
                 );
             }, options);
         },
-        [t]
+        [t],
     );
 
     const openAsyncDialog = useCallback(
@@ -124,7 +130,7 @@ const useDialog = () => {
                 );
             }, options);
         },
-        [t]
+        [t],
     );
 
     const openLoginDialog = useCallback(() => {
@@ -132,7 +138,7 @@ const useDialog = () => {
             return (
                 <ConfirmDialog
                     {...props}
-                    iconType="auth"
+                    iconType='auth'
                     Title={<p>{t('로그인 후 이용하실 수 있습니다.')}</p>}
                     Description={
                         <p>{t('로그인 페이지로 이동하시겠습니까?')}</p>
