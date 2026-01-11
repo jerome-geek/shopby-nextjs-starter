@@ -48,6 +48,7 @@ export const authRequest = ky.create({
         language: 'ko',
         currency: 'KRW',
     },
+    hooks: { beforeRequest: [logRequest] },
 
     // hooks: { beforeRequest: [setTokenHeader, setRefreshTokenHeader] },
 });

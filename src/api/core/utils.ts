@@ -1,3 +1,4 @@
+import { deleteCookie, getCookies } from 'cookies-next/client';
 import ky, {
     AfterResponseHook,
     BeforeRequestHook,
@@ -8,13 +9,13 @@ import { redirect } from 'next/navigation';
 
 import { oauth2 } from '@/api/auth';
 import {
+    ACCESS_TOKEN_KEY,
     cookieTokenManager,
     getRefreshTokenFromAppRouter,
     getTokenFromAppRouter,
+    REFRESH_TOKEN_KEY,
 } from '@/api/core/cookie';
 import { PATHS } from '@/const/paths';
-
-import { getCookies } from 'cookies-next/client';
 
 export const DEFAULT_API_RETRY_BACKOFF_LIMIT = 3 * 1000;
 export const DEFAULT_API_RETRY_LIMIT = 4;
@@ -22,7 +23,7 @@ export const DEFAULT_API_TIMEOUT = 10 * 1000;
 
 export const logRequest: BeforeRequestHook = (request) => {
     if (process.env.NODE_ENV === 'development') {
-        console.log('API Request:', request.url);
+        console.log('API Request:', request);
     }
 };
 
@@ -58,12 +59,12 @@ export const beforeRetry: BeforeRetryHook = async ({
                 '@/api/core/utils.server'
             );
             const cookies = await getCookiesFromServer();
-            const currentAccessToken = cookies?.['wannamake_access-token'];
+            const currentAccessToken = cookies?.[ACCESS_TOKEN_KEY];
             console.log(
                 '🚀 ~ refreshToken ~ currentAccessToken:',
                 currentAccessToken,
             );
-            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
+            const currentRefreshToken = cookies?.[REFRESH_TOKEN_KEY];
             console.log(
                 '🚀 ~ refreshToken ~ currentRefreshToken:',
                 currentRefreshToken,
@@ -88,8 +89,8 @@ export const beforeRetry: BeforeRetryHook = async ({
             request.headers.set('Shop-By-Authorization', `Bearer ${newToken}`);
         } else {
             const cookies = getCookies();
-            const currentAccessToken = cookies?.['wannamake_access-token'];
-            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
+            const currentAccessToken = cookies?.[ACCESS_TOKEN_KEY];
+            const currentRefreshToken = cookies?.[REFRESH_TOKEN_KEY];
 
             const refreshResponse = await oauth2
                 .updateAccessToken({
@@ -105,8 +106,10 @@ export const beforeRetry: BeforeRetryHook = async ({
             );
         }
     } catch (error) {
-        console.dir(error);
-        console.log('🚀 ~ refreshToken ~ error:', error);
+        console.dir('🚀 ~ refreshToken ~ error:', error);
+        deleteCookie(ACCESS_TOKEN_KEY);
+        deleteCookie(REFRESH_TOKEN_KEY);
+        redirect(PATHS.AUTH.LOGIN);
     }
 };
 
@@ -125,12 +128,12 @@ export const refreshToken: BeforeRetryHook = async ({ request, error }) => {
                 '@/api/core/utils.server'
             );
             const cookies = await getCookiesFromServer();
-            const currentAccessToken = cookies?.['wannamake_access-token'];
+            const currentAccessToken = cookies?.[ACCESS_TOKEN_KEY];
             console.log(
                 '🚀 ~ refreshToken ~ currentAccessToken:',
                 currentAccessToken,
             );
-            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
+            const currentRefreshToken = cookies?.[REFRESH_TOKEN_KEY];
             console.log(
                 '🚀 ~ refreshToken ~ currentRefreshToken:',
                 currentRefreshToken,
@@ -150,8 +153,8 @@ export const refreshToken: BeforeRetryHook = async ({ request, error }) => {
             );
         } else {
             const cookies = getCookies();
-            const currentAccessToken = cookies?.['wannamake_access-token'];
-            const currentRefreshToken = cookies?.['wannamake_refresh-token'];
+            const currentAccessToken = cookies?.[ACCESS_TOKEN_KEY];
+            const currentRefreshToken = cookies?.[REFRESH_TOKEN_KEY];
 
             const refreshResponse = await oauth2
                 .updateAccessToken({

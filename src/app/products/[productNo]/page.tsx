@@ -9,6 +9,7 @@ import { css } from '@/styled-system/css';
 import DutyInfo from '@/components/product/detail/DutyInfo';
 import { vstack } from '@/styled-system/patterns';
 import PartnerInfo from '@/components/product/detail/PartnerInfo';
+import ProductInquiry from '@/components/product/detail/product-inquiry';
 
 type ProductDetailPageProps = AppPageProps<'/products/[productNo]'>;
 
@@ -102,6 +103,7 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
                         <PartnerInfo partner={productDetailData.partner} />
                     </div>
                 )}
+
                 {tab === 'review' && (
                     <div
                         role='tabpanel'
@@ -112,14 +114,14 @@ export default async function ProductDetailPage(props: ProductDetailPageProps) {
                         <p>리뷰 목록이 여기에 표시됩니다.</p>
                     </div>
                 )}
+
                 {tab === 'qna' && (
                     <div
                         role='tabpanel'
                         id='tabpanel-qna'
                         aria-labelledby='tab-qna'
                     >
-                        <h3>문의 ({productDetailData.counter.inquiryCnt})</h3>
-                        <p>상품 문의 목록이 여기에 표시됩니다.</p>
+                        <ProductInquiry productNo={productNo} />
                     </div>
                 )}
             </div>
