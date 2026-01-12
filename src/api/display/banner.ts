@@ -3,6 +3,7 @@ import type { Options } from 'ky';
 import qs from 'qs';
 
 import { request } from '@/api/core/request';
+import { ONE_WEEK } from '@/const/time';
 import {
     GetBannerExtraInfosParams,
     GetBannerExtraInfosResponse,
@@ -10,7 +11,7 @@ import {
     GetBannersResponse,
 } from '@/models/display/banner';
 
-const BANNER_REVALIDATE_MS = 60 * 60 * 1; // 1시간
+const BANNER_REVALIDATE_MS = ONE_WEEK;
 
 const banner = {
     /**
@@ -27,7 +28,7 @@ const banner = {
             'display/banners/extraInfos',
             {
                 searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
-                next: { revalidate: BANNER_REVALIDATE_MS },
+                next: { revalidate: BANNER_REVALIDATE_MS, tags: ['banner'] },
                 ...options,
             },
         );
@@ -42,7 +43,7 @@ const banner = {
         return request.get<GetBannersResponse>(
             `display/banners/${join(',', bannerSectionCodes)}`,
             {
-                next: { revalidate: BANNER_REVALIDATE_MS },
+                next: { revalidate: BANNER_REVALIDATE_MS, tags: ['banner'] },
                 ...options,
             },
         );
@@ -56,7 +57,10 @@ const banner = {
     getBannersByIds: (bannerSectionIds: string[], options?: Options) => {
         return request.get<GetBannersByIdsResponse>(
             `display/banners/id/${join(',', bannerSectionIds)}`,
-            { next: { revalidate: BANNER_REVALIDATE_MS }, ...options },
+            {
+                next: { revalidate: BANNER_REVALIDATE_MS, tags: ['banner'] },
+                ...options,
+            },
         );
     },
 };

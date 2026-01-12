@@ -9,14 +9,29 @@ import { ShopbyTermHistoryTypes, ShopbyTermsTypes } from '@/models';
 import { TermHistory } from '@/models/manage/terms';
 import { css } from '@/styled-system/css';
 
-export const revalidate = 604800; // 일주일 (60초 * 60분 * 24시간 * 7일)
+export const revalidate = 604800;
+
+export async function generateStaticParams() {
+    return [
+        {
+            termsType: 'USE',
+            termsNo: [],
+        },
+        {
+            termsType: 'PI_PROCESS',
+            termsNo: [],
+        },
+    ];
+}
 
 export default async function TermsDetailPage({
     params,
-    searchParams,
-}: AppPageProps<'/terms/[termsType]'>) {
-    const { termsType } = await params;
-    const { termsNo } = await searchParams;
+}: AppPageProps<'/terms/[termsType]/[[...termsNo]]'>) {
+    const { termsType, termsNo: termsNoParams } = (await params) as {
+        termsType: string;
+        termsNo?: string[];
+    };
+    const termsNo = termsNoParams?.[0];
 
     const { t } = await getTranslation();
 

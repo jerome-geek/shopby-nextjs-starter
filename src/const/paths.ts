@@ -5,7 +5,7 @@ const PATHS = {
         LOGIN: '/login',
         TERMS: {
             MAIN: '/terms',
-            DETAIL: '/terms/:termsType',
+            DETAIL: '/terms/:termsType/:termsNo*',
         },
     },
 

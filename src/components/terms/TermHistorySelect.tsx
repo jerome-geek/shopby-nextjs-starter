@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,11 +18,12 @@ export default function TermsHistorySelect({
     currentTermsNo,
 }: TermsHistorySelectProps) {
     const id = useId();
+    const params = useParams();
+    const termsType = params.termsType as string;
 
     const { t } = useTranslation();
 
     const router = useRouter();
-    const searchParams = useSearchParams();
 
     const currentValue = currentTermsNo
         ? historyList.find((item) => item.termsNo === currentTermsNo)
@@ -39,9 +40,8 @@ export default function TermsHistorySelect({
         if (!item) {
             return;
         }
-        const params = new URLSearchParams(searchParams.toString());
-        params.set('termsNo', item.termsNo.toString());
-        router.push(`?${params.toString()}`);
+        // 이력 선택 시 /terms/[termsType]/[termsNo] 경로로 이동
+        router.push(`/terms/${termsType}/${item.termsNo}`);
     };
 
     return (

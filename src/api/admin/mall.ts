@@ -1,6 +1,7 @@
 import type { Options } from 'ky';
 
 import { publicRequest } from '@/api/core/request';
+import { ONE_WEEK } from '@/const/time';
 import {
     GetMallInternationalizationSettingsResponse,
     GetMallPartnersResponse,
@@ -8,7 +9,7 @@ import {
     GetSslInfoResponse,
 } from '@/models/admin/mall';
 
-export const MALL_REVALIDATE_MS = 60 * 60 * 24; // 24시간으로 통일
+export const MALL_REVALIDATE_MS = ONE_WEEK;
 
 const mall = {
     /**
@@ -24,7 +25,7 @@ const mall = {
     getMall: (options?: Options) => {
         return publicRequest.get<GetMallResponse>('malls', {
             cache: 'force-cache',
-            next: { revalidate: MALL_REVALIDATE_MS },
+            next: { revalidate: MALL_REVALIDATE_MS, tags: ['mall'] },
             ...options,
         });
     },
@@ -38,7 +39,7 @@ const mall = {
             'malls/internationalization',
             {
                 cache: 'force-cache',
-                next: { revalidate: MALL_REVALIDATE_MS },
+                next: { revalidate: MALL_REVALIDATE_MS, tags: ['mall'] },
                 ...options,
             },
         );
@@ -51,7 +52,7 @@ const mall = {
     getMallPartners: (options?: Options) => {
         return publicRequest.get<GetMallPartnersResponse>('malls/partners', {
             cache: 'force-cache',
-            next: { revalidate: MALL_REVALIDATE_MS },
+            next: { revalidate: MALL_REVALIDATE_MS, tags: ['mall'] },
             ...options,
         });
     },
@@ -63,7 +64,7 @@ const mall = {
     getSslInfo: (options?: Options) => {
         return publicRequest.get<GetSslInfoResponse>('malls/ssl', {
             cache: 'force-cache',
-            next: { revalidate: MALL_REVALIDATE_MS },
+            next: { revalidate: MALL_REVALIDATE_MS, tags: ['mall'] },
             ...options,
         });
     },

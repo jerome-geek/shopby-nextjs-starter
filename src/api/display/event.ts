@@ -23,8 +23,9 @@ import {
     SearchEventsByProgressParams,
     SearchEventsByProgressResponse,
 } from '@/models/display/event';
+import { ONE_WEEK } from '@/const/time';
 
-const EVENT_REVALIDATE_MS = 60 * 60 * 1; // 1시간
+const EVENT_REVALIDATE_MS = ONE_WEEK;
 
 const event = {
     /**
@@ -38,7 +39,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
-            next: { revalidate: EVENT_REVALIDATE_MS },
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
         });
     },
@@ -58,7 +59,7 @@ const event = {
                 arrayFormat: 'repeat',
                 allowDots: true,
             }),
-            next: { revalidate: EVENT_REVALIDATE_MS },
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
             headers: {
                 ...options?.headers,
@@ -78,7 +79,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
-            next: { revalidate: EVENT_REVALIDATE_MS },
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
         });
     },
@@ -100,7 +101,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
-                next: { revalidate: EVENT_REVALIDATE_MS },
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -116,7 +117,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
-            next: { revalidate: EVENT_REVALIDATE_MS },
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
         });
     },
@@ -143,7 +144,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
-                next: { revalidate: EVENT_REVALIDATE_MS },
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -164,7 +165,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
-                next: { revalidate: EVENT_REVALIDATE_MS },
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -184,7 +185,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
-                next: { revalidate: EVENT_REVALIDATE_MS },
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -199,7 +200,7 @@ const event = {
         return request.get<GetEventsByProductNoResponse>(
             `display/events/products/${productNo}`,
             {
-                next: { revalidate: EVENT_REVALIDATE_MS },
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -222,7 +223,7 @@ const event = {
     ) => {
         return request.get<GetEventResponse>(`display/events/${eventKey}/`, {
             searchParams: qs.stringify(params),
-            next: { revalidate: EVENT_REVALIDATE_MS },
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
             headers: {
                 ...options?.headers,
@@ -245,7 +246,7 @@ const event = {
     ) => {
         return request.get<GetEventResponse>(`display/events/ids/${eventId}`, {
             searchParams: qs.stringify(params),
-            next: { revalidate: EVENT_REVALIDATE_MS },
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
             headers: {
                 ...options?.headers,
@@ -272,7 +273,7 @@ const event = {
             `display/events/${eventNo}/sections/${sectionNo}`,
             {
                 searchParams: qs.stringify(params),
-                next: { revalidate: EVENT_REVALIDATE_MS },
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );

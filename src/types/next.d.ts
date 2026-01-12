@@ -19,7 +19,7 @@ declare global {
             preview?: boolean;
             tab?: string;
         };
-        '/terms/[termsType]': { termsNo?: string };
+        '/terms/[termsType]/[[...termsNo]]': {};
         '/products/new': {
             pageNumber?: number;
             pageSize?: number;

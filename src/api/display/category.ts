@@ -2,6 +2,7 @@ import type { Options } from 'ky';
 import qs from 'qs';
 
 import { publicRequest } from '@/api/core/request';
+import { ONE_WEEK } from '@/const/time';
 import {
     Get1depthCategoryResponse,
     GetCategoriesByManagementCodeData,
@@ -13,7 +14,7 @@ import {
     GetNewProductCategoriesResponse,
 } from '@/models/display/category';
 
-export const CATEGORY_REVALIDATE_MS = 60 * 60 * 24; // 24시간
+export const CATEGORY_REVALIDATE_MS = ONE_WEEK;
 
 const category = {
     /**
@@ -55,6 +56,7 @@ const category = {
             {
                 next: {
                     revalidate: CATEGORY_REVALIDATE_MS,
+                    tags: ['category'],
                 },
                 json: data,
                 ...options,
