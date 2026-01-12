@@ -9,11 +9,13 @@ import { GetMallResponse } from '@/models/admin/mall';
 import { SmallCaretIcon } from '@/components/icons';
 
 interface RegisterButtonProps {
+    productNo: number;
     inquiryTypeList: GetMallResponse['productInquiryType'];
 }
 
 export default function RegisterButton({
     inquiryTypeList,
+    productNo,
 }: RegisterButtonProps) {
     const { t } = useTranslation();
 
@@ -21,7 +23,8 @@ export default function RegisterButton({
         overlay.open((props) => {
             return (
                 <ProductInquiryDialog
-                    title='문의하기'
+                    title={t('문의하기')}
+                    productNo={productNo}
                     inquiryTypeList={inquiryTypeList}
                     {...props}
                 />

@@ -16,11 +16,12 @@ export default function TextArea({ className, ...props }: TextAreaProps) {
                     border: `1px solid ${token('colors.gray50')}`,
                     borderRadius: '8px',
                     padding: '12px',
-                    textStyle: 'body1.regular',
+                    textStyle: 'body2.regular',
                     color: token('colors.gray80'),
                     resize: 'none',
                     minHeight: '150px',
                     _placeholder: {
+                        textStyle: 'body1.regular',
                         color: token('colors.gray60'),
                     },
                 }),

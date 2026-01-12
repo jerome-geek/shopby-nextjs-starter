@@ -7,6 +7,8 @@ import { getTranslation } from '@/i18n/server';
 import { css } from '@/styled-system/css';
 import { hstack, vstack } from '@/styled-system/patterns';
 import { token } from '@/styled-system/tokens';
+import CustomAccordion from '@/components/common/CustomAccordion';
+import { HStack, VStack } from '@/styled-system/jsx';
 
 export default async function ProductInquiry({
     productNo,
@@ -16,7 +18,6 @@ export default async function ProductInquiry({
     const { t } = await getTranslation();
 
     const mallData = await mall.getMall().json();
-    console.log('🚀 ~ ProductInquiry ~ mallData:', mallData);
 
     const data = await productInquiry
         .getProductInquiries(productNo, {
@@ -29,32 +30,50 @@ export default async function ProductInquiry({
     console.log('🚀 ~ ProductInquiry ~ data:', data);
 
     return (
-        <div
-            className={vstack({
-                gap: '24px',
-                alignItems: 'stretch',
-            })}
-        >
-            <div className={hstack({ justifyContent: 'space-between' })}>
+        <VStack alignItems='stretch' gap='24px'>
+            <HStack justifyContent='space-between'>
                 <h3 className={css({ textStyle: 'title2.semibold' })}>
                     {t(`문의 (${data.totalCount})`)}
                 </h3>
 
-                <RegisterButton inquiryTypeList={mallData.productInquiryType} />
-            </div>
+                <RegisterButton
+                    productNo={productNo}
+                    inquiryTypeList={mallData.productInquiryType}
+                />
+            </HStack>
 
             <ul>
-                <li>
-                    <p
-                        className={css({
-                            textStyle: 'body1.medium',
-                            color: token('colors.gray80'),
-                        })}
-                    >
-                        {t('등록된 상품문의가 없습니다.')}
-                    </p>
-                </li>
+                {data.items.length === 0 ? (
+                    <li>
+                        <p
+                            className={css({
+                                textStyle: 'body1.medium',
+                                color: token('colors.gray80'),
+                            })}
+                        >
+                            {t('등록된 상품문의가 없습니다.')}
+                        </p>
+                    </li>
+                ) : (
+                    data.items.map((item) => {
+                        console.log('🚀 ~ ProductInquiry ~ item:', item);
+                        return (
+                            <li>
+                                <CustomAccordion
+                                    type='single'
+                                    items={[
+                                        {
+                                            value: item.inquiryNo.toString(),
+                                            header: item.title,
+                                            content: item.content,
+                                        },
+                                    ]}
+                                />
+                            </li>
+                        );
+                    })
+                )}
             </ul>
-        </div>
+        </VStack>
     );
 }

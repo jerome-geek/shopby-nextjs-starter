@@ -1,26 +1,28 @@
 'use client';
+import { overlay } from 'overlay-kit';
 
+import Link from 'next/link';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import Link from 'next/link';
 
 import DialogLayout, { DefaultDialogProps } from '@/components/layout/dialog';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
 import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import TextArea from '@/components/ui/input/TextArea';
 import Select from '@/components/ui/Select';
+import { PATHS } from '@/const/paths';
+import { useProductInquiryMutation } from '@/hooks/mutations';
+import useApiError from '@/hooks/useApiError';
+import useDialog from '@/hooks/useDialog';
 import { GetMallResponse } from '@/models/admin/mall';
 import { WriteProductInquiryData } from '@/models/display/productInquiry';
 import { css } from '@/styled-system/css';
-import { HStack, VStack } from '@/styled-system/jsx';
+import { Divider, HStack, VStack } from '@/styled-system/jsx';
 import { vstack } from '@/styled-system/patterns';
 import { token } from '@/styled-system/tokens';
-import { PATHS } from '@/const/paths';
-import useDialog from '@/hooks/useDialog';
-import { useProductInquiryMutation } from '@/hooks/mutations';
-import useApiError from '@/hooks/useApiError';
 
 interface ProductInquiryDialogProps extends DefaultDialogProps {
     title?: string;
@@ -104,9 +106,12 @@ export default function ProductInquiryDialog({
                 },
             );
         } else {
+            if (!productNo) {
+                return;
+            }
             registerMutate(
                 {
-                    productNo: 132407476,
+                    productNo,
                     data: { ...data, title: data.title || '' },
                 },
                 {
@@ -114,6 +119,7 @@ export default function ProductInquiryDialog({
                         await openAsyncDialog({
                             message: t('상품문의가 등록되었습니다.'),
                         });
+                        overlay.closeAll();
                     },
                     onError: (error) => {
                         handleError(error);
@@ -171,14 +177,34 @@ export default function ProductInquiryDialog({
                         </VStack>
 
                         <VStack alignItems='stretch' gap='12px'>
-                            <p
+                            <InputLabel
+                                htmlFor='title'
+                                className={css({
+                                    textStyle: 'headline2.semibold',
+                                })}
+                            >
+                                {t('문의 제목')}
+                            </InputLabel>
+                            <InputField
+                                id='title'
+                                placeholder={t('문의의 제목을 작성해 주세요.')}
+                                {...register('title', {
+                                    required: t('문의의 제목을 작성해 주세요.'),
+                                })}
+                            />
+                        </VStack>
+
+                        <VStack alignItems='stretch' gap='12px'>
+                            <InputLabel
+                                htmlFor='content'
                                 className={css({
                                     textStyle: 'headline2.semibold',
                                 })}
                             >
                                 {t('문의 내용')}
-                            </p>
+                            </InputLabel>
                             <TextArea
+                                id='content'
                                 placeholder={t('문의의 내용을 작성해 주세요.')}
                                 {...register('content', {
                                     required: t('문의의 내용을 작성해 주세요.'),
@@ -205,10 +231,9 @@ export default function ProductInquiryDialog({
                             </InputLabel>
                         </HStack>
 
-                        <hr
-                            className={css({
-                                border: `1px solid ${token('colors.gray20')}`,
-                            })}
+                        <Divider
+                            orientation='horizontal'
+                            color={token('colors.gray20')}
                         />
 
                         <VStack alignItems='stretch' gap='8px'>

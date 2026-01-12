@@ -18,7 +18,7 @@ const InputFieldContainer = ({
                     flexDirection: 'column',
                     gap: '6px',
                 }),
-                className
+                className,
             )}
         >
             {children}
