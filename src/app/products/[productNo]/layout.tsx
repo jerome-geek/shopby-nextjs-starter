@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+
 import { getCachedProductDetail } from '@/api/product/product.server';
 import productProfile from '@/api/product/profile';
 import GuestRecentViewProductLogger from '@/components/product/GuestRecentViewProductLogger';
@@ -5,7 +7,6 @@ import ProductMainImage from '@/components/product/MainImage';
 import ProductInfo from '@/components/product/ProductInfo';
 import { css } from '@/styled-system/css';
 import { isAuthenticated } from '@/utils/auth.server';
-import { notFound } from 'next/navigation';
 
 type ProductDetailLayoutProps = {
     children: React.ReactNode;

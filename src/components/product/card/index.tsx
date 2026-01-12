@@ -18,6 +18,8 @@ import useDialog from '@/hooks/useDialog';
 import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 import { css } from '@/styled-system/css';
+import { VStack } from '@/styled-system/jsx';
+import { vstack } from '@/styled-system/patterns';
 import { token } from '@/styled-system/tokens';
 import { CURRENCY } from '@/utils/currency';
 
@@ -94,10 +96,9 @@ const ProductCard = ({
     };
 
     return (
-        <div
-            className={css({
-                display: 'flex',
-                flexDirection: 'column',
+        <article
+            className={vstack({
+                alignItems: 'stretch',
                 gap: { base: '12px' },
             })}
         >
@@ -141,60 +142,45 @@ const ProductCard = ({
                 </button>
             </Link>
 
-            <div>
-                <div
-                    className={css({
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '4px',
-                    })}
-                >
+            <VStack alignItems='stretch' gap={{ base: 0, md: '6px' }}>
+                <VStack alignItems='stretch' gap={{ base: 0, md: '4px' }}>
                     {brandName && (
                         <Link
+                            prefetch={false}
                             href={`${PATHS.BRANDS.MAIN}/${brandNo}`}
                             className={css({
+                                textStyle: {
+                                    base: 'body2/semibold',
+                                    md: 'headline1.medium',
+                                },
                                 display: 'flex',
                                 alignItems: 'center',
                             })}
                         >
-                            <span
-                                className={css({
-                                    fontSize: '1.4rem',
-                                    lineHeight: '1.4',
-                                    letterSpacing: '-2%',
-                                })}
-                            >
-                                {brandName}
-                            </span>
+                            <span>{brandName}</span>
                             <SmallCaretIcon direction='right' />
                         </Link>
                     )}
 
-                    <p
+                    <h3
                         className={css({
                             display: '-webkit-box',
-                            lineClamp: 2,
+                            lineClamp: { base: 1, md: 2 },
                             boxOrient: 'vertical',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            fontWeight: { base: '400' },
-                            fontSize: '1.4rem',
-                            lineHeight: '1.4',
-                            letterSpacing: '-2%',
+                            textStyle: {
+                                base: 'body2.regular',
+                                md: 'body1.regular',
+                            },
                             color: token('colors.gray90'),
                         })}
                     >
                         {productName}
-                        {productName}
-                    </p>
-                </div>
-                <div
-                    className={css({
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '6px',
-                    })}
-                >
+                    </h3>
+                </VStack>
+
+                <VStack alignItems='stretch' gap='6px'>
                     <div
                         className={css({
                             display: 'flex',
@@ -274,11 +260,8 @@ const ProductCard = ({
                         className={css({
                             display: 'flex',
                             gap: '8px',
+                            textStyle: 'label/heart',
                             color: token('colors.gray70'),
-                            fontSize: '1rem',
-                            fontWeight: '500',
-                            lineHeight: '1.4',
-                            letterSpacing: '-2%',
                         })}
                     >
                         <li
@@ -302,9 +285,9 @@ const ProductCard = ({
                             <span>{likeCount}</span>
                         </li>
                     </ul>
-                </div>
-            </div>
-        </div>
+                </VStack>
+            </VStack>
+        </article>
     );
 };
 

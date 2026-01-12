@@ -414,6 +414,14 @@ export default defineConfig({
                         fontWeight: 600, // Semibold
                     },
                 },
+                'label/heart': {
+                    value: {
+                        fontSize: '1rem',
+                        lineHeight: '1.4',
+                        letterSpacing: '-0.02em',
+                        fontWeight: 500,
+                    },
+                },
             },
             recipes: {
                 // TODO: 브랜치 머지 시 충돌 방지를 위해 추후 삭제 처리 할 예정 - @joy
