@@ -6,8 +6,7 @@ const labelStyles = cva({
     base: {
         position: 'relative',
         alignSelf: 'flex-start',
-        fontSize: { base: '1.2rem', md: '1.4rem' },
-        fontWeight: 'bold',
+        textStyle: 'body1.regular',
         display: 'flex',
         gap: { base: '8px' },
     },

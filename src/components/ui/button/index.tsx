@@ -1,5 +1,6 @@
 import OutlinedButton from '@/components/ui/button/outlined';
 import SolidButton from '@/components/ui/button/solid';
+import TextButton from '@/components/ui/button/TextButton';
 import { ButtonProps } from '@/components/ui/button/types';
 
 export const Button = (props: ButtonProps) => {
@@ -9,8 +10,7 @@ export const Button = (props: ButtonProps) => {
     }
 
     if (props.frame === 'text') {
-        // return <TextButton {...props} />;
-        return <></>;
+        return <TextButton {...props} />;
     }
 
     return <SolidButton {...props} />;

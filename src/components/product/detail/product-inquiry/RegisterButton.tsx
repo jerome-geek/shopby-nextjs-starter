@@ -1,12 +1,12 @@
 'use client';
 
 import { overlay } from 'overlay-kit';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import TextButton from '@/components/ui/button/TextButton';
 import ProductInquiryDialog from '@/components/ui/dialog/product-inquiry';
-import ViewAllLink from '@/components/ui/view-all-link';
 import { GetMallResponse } from '@/models/admin/mall';
+import { SmallCaretIcon } from '@/components/icons';
 
 interface RegisterButtonProps {
     inquiryTypeList: GetMallResponse['productInquiryType'];
@@ -17,10 +17,7 @@ export default function RegisterButton({
 }: RegisterButtonProps) {
     const { t } = useTranslation();
 
-    const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    const onClick = () => {
         overlay.open((props) => {
             return (
                 <ProductInquiryDialog
@@ -33,8 +30,9 @@ export default function RegisterButton({
     };
 
     return (
-        <ViewAllLink href='/inquiry' onClick={onClick}>
-            {t('문의하기')}
-        </ViewAllLink>
+        <TextButton frame='text' variant='primary' onClick={onClick}>
+            <span>{t('문의하기')}</span>
+            <SmallCaretIcon direction='right' />
+        </TextButton>
     );
 }

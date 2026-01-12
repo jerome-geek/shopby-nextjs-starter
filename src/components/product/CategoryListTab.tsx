@@ -27,7 +27,7 @@ export default function CategoryListTab({
     return (
         <div>
             <ul
-                role="tablist"
+                role='tablist'
                 className={css({
                     paddingX: '22px',
                     display: 'flex',
@@ -36,7 +36,7 @@ export default function CategoryListTab({
                 })}
             >
                 <li
-                    role="tab"
+                    role='tab'
                     aria-selected={isAllSelected}
                     className={css({
                         paddingY: '12px',
@@ -72,7 +72,7 @@ export default function CategoryListTab({
                     return (
                         <li
                             key={child.categoryNo}
-                            role="tab"
+                            role='tab'
                             aria-selected={isSelected}
                             className={css({
                                 paddingY: '12px',
@@ -98,6 +98,7 @@ export default function CategoryListTab({
                             })}
                         >
                             <Link
+                                prefetch={false}
                                 href={`${href}?categoryNo=${child.categoryNo}`}
                                 aria-current={isSelected ? 'page' : undefined}
                             >

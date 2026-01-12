@@ -73,3 +73,34 @@ export const outlinedButton = cva({
         color: token('colors.black'),
     },
 });
+
+export const textButtonStyle = cva({
+    base: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+        transition: 'color 0.2s, font-weight 0.2s',
+        whiteSpace: 'nowrap',
+        cursor: 'pointer',
+        gap: '2px',
+        color: token('colors.gray80'),
+        textStyle: 'body1.regular',
+        // _hover: {
+        //     color: hoverColor,
+        // },
+        // _after: {
+        //     content: '""',
+        //     position: 'absolute',
+        //     right: '0',
+        //     top: '50%',
+        //     width: '8px',
+        //     height: '8px',
+        //     borderTop: '1px solid currentColor',
+        //     borderRight: '1px solid currentColor',
+        //     transform: 'translateY(-50%) rotate(45deg)',
+        //     marginTop: '1px',
+        //     transition: 'transform 0.2s',
+        //     color: token('colors.gray70'),
+        // },
+    },
+});

@@ -38,7 +38,7 @@ export default async function NewProductsPage(props: NewProductsPageProps) {
                 })
                 .json();
         }),
-        toArray
+        toArray,
     );
 
     const initialData = response.map((data, index) => ({
