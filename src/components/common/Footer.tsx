@@ -42,15 +42,11 @@ export default async function Footer() {
             [
                 { label: t('공지사항'), href: PATHS.SUPPORT.NOTICE.LIST },
                 { label: t('FAQ'), href: PATHS.SUPPORT.FAQ },
-                { label: t('1:1문의'), href: PATHS.MYPAGE.INQUIRIES.MAIN },
+                { label: t('1:1 문의'), href: PATHS.MYPAGE.INQUIRIES.MAIN },
                 { label: t('입점/제휴 문의'), href: '/partnership' },
             ],
         ];
 
-        // const socialMedia = {
-        //     instagram: mallData.serviceBasicInfo.instagramUrl,
-        //     youtube: mallData.serviceBasicInfo.youtubeUrl,
-        // };
         const socialMediaList = [
             { id: 'instagram', url: '/', icon: <InstagramIcon /> },
             { id: 'youtube', url: '/', icon: <YoutubeIcon /> },

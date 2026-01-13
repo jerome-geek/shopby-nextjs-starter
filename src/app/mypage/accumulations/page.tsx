@@ -1,15 +1,13 @@
-import { map, pipe, range, toArray, toAsync } from '@fxts/core';
+import { concurrent, map, pipe, range, toArray, toAsync } from '@fxts/core';
 import dayjs from 'dayjs';
 
-import { getTranslation } from '@/i18n/server';
-import { css } from '@/styled-system/css';
-import { vstack } from '@/styled-system/patterns';
 import { accumulation } from '@/api/manage';
 import SearchPaging from '@/components/common/SearchPaging';
 import AccumulationList from '@/components/mypage/accumulation/List';
-import AccumulationSummary from '@/components/mypage/accumulation/Summary';
-import MypageSearchPeriod from '@/components/mypage/search-period';
+import { getTranslation } from '@/i18n/server';
 import { GetAccumulationsParams } from '@/models/manage/accumulation';
+import { css } from '@/styled-system/css';
+import { VStack } from '@/styled-system/jsx';
 import { getIsMobile } from '@/utils/device.server';
 
 type MypageAccumulationsPageProps = AppPageProps<'/mypage/accumulations'>;
@@ -47,6 +45,7 @@ export default async function MypageAccumulationsPage(
                 })
                 .json();
         }),
+        concurrent(5),
         toArray,
     );
 
@@ -59,31 +58,25 @@ export default async function MypageAccumulationsPage(
         initialData[initialData.length - 1]?.data.totalCount ?? 0;
 
     return (
-        <div className={vstack({ gap: '10', alignItems: 'stretch' })}>
-            <AccumulationSummary />
+        <VStack alignItems='stretch' gap='6'>
+            <VStack alignItems='stretch' gap='4'>
+                <p
+                    className={css({
+                        textStyle: 'headline2.semibold',
+                    })}
+                    dangerouslySetInnerHTML={{
+                        __html: t('총 <b>{{totalCount}}</b>건', {
+                            totalCount,
+                        }),
+                    }}
+                />
 
-            <div className={vstack({ gap: '6', alignItems: 'stretch' })}>
-                <MypageSearchPeriod />
-
-                <div className={vstack({ gap: '4', alignItems: 'flex-start' })}>
-                    <p
-                        className={css({
-                            textStyle: 'headline2.semibold',
-                        })}
-                        dangerouslySetInnerHTML={{
-                            __html: t('총 <b>{{totalCount}}</b>건', {
-                                totalCount,
-                            }),
-                        }}
-                    />
-
-                    <AccumulationList
-                        searchParams={accumulationsSearchParams}
-                        initialData={initialData}
-                        isMobile={isMobile}
-                    />
-                </div>
-            </div>
+                <AccumulationList
+                    searchParams={accumulationsSearchParams}
+                    initialData={initialData}
+                    isMobile={isMobile}
+                />
+            </VStack>
 
             <div
                 className={css({
@@ -94,6 +87,6 @@ export default async function MypageAccumulationsPage(
             >
                 <SearchPaging totalCount={totalCount} pageSize={pageSize} />
             </div>
-        </div>
+        </VStack>
     );
 }
