@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Geist, Geist_Mono } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import Link from 'next/link';
+import { HeroBanner } from '@/components/hero-banner';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -32,6 +33,10 @@ export default function Home() {
             <div
                 className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
             >
+                {/* Full-width HeroBanner */}
+                <HeroBanner />
+
+                {/* Max-width container for main content */}
                 <main className={styles.main}>
                     <Image
                         className={styles.logo}
