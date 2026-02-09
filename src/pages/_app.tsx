@@ -9,8 +9,12 @@ import { generateDefaultSeo } from 'next-seo/pages';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ReactLenis } from 'lenis/react';
+import { OverlayProvider } from 'overlay-kit';
+import { AnimatePresence, motion } from 'motion/react';
+import { useRouter } from 'next/router';
 
 export default function App({ Component, pageProps }: AppProps) {
+    const router = useRouter();
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -31,12 +35,24 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <ReactLenis root>
             <QueryClientProvider client={queryClient}>
-                <Head>{defaultSeo}</Head>
-                <Component {...pageProps} />
-                <Toaster />
-                <ReactQueryDevtools initialIsOpen={false} />
-                <Analytics />
-                <SpeedInsights />
+                <OverlayProvider>
+                    <Head>{defaultSeo}</Head>
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={router.route}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <Component {...pageProps} />
+                        </motion.div>
+                    </AnimatePresence>
+                    <Toaster />
+                    <ReactQueryDevtools initialIsOpen={false} />
+                    <Analytics />
+                    <SpeedInsights />
+                </OverlayProvider>
             </QueryClientProvider>
         </ReactLenis>
     );
