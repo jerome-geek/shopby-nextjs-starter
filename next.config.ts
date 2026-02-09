@@ -7,6 +7,18 @@ const nextConfig: NextConfig = {
     /* config options here */
     reactCompiler: true,
     reactStrictMode: true,
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '*.cdn-nhncommerce.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'shopby-images.cdn-nhncommerce.com',
+            },
+        ],
+    },
 };
 
 export default withVanillaExtract(nextConfig);
