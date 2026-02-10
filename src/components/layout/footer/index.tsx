@@ -43,7 +43,7 @@ export function Footer() {
                             베스트
                         </Link>
                         <Link
-                            href={PATHS.CATEGORIES.LIST}
+                            href={'/'}
                             className={styles.footerLink}
                         >
                             카테고리

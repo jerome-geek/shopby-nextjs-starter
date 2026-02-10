@@ -109,7 +109,7 @@ export function Header({ cartCount = 0 }: HeaderProps) {
             <div className={styles.headerInner}>
                 {/* 로고 & 네비게이션 */}
                 <div className={styles.logoSection}>
-                    <Link href={PATHS.HOME} className={styles.logo}>
+                    <Link href={PATHS.MAIN} className={styles.logo}>
                         WannaMake
                     </Link>
                     <Menu categoryData={categoryData} />
@@ -124,7 +124,7 @@ export function Header({ cartCount = 0 }: HeaderProps) {
 
                     {/* 마이페이지 */}
                     <Link
-                        href={PATHS.MYPAGE.INDEX}
+                        href={PATHS.MYPAGE.MAIN}
                         className={styles.iconLink}
                         aria-label="마이페이지"
                     >
@@ -133,7 +133,7 @@ export function Header({ cartCount = 0 }: HeaderProps) {
 
                     {/* 위시리스트 */}
                     <Link
-                        href={PATHS.MYPAGE.WISHLIST}
+                        href={PATHS.MYPAGE.WISH}
                         className={styles.iconLink}
                         aria-label="위시리스트"
                     >
@@ -142,7 +142,7 @@ export function Header({ cartCount = 0 }: HeaderProps) {
 
                     {/* 장바구니 */}
                     <Link
-                        href={PATHS.CART}
+                        href={PATHS.ORDER.CART}
                         className={styles.iconLink}
                         aria-label="장바구니"
                     >

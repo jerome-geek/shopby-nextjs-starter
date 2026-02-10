@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import '@/i18n/config';
 import React, { useState } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
