@@ -1,3 +1,4 @@
+import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
 export const header = style({
@@ -111,38 +112,6 @@ export const iconButton = style({
     },
 });
 
-export const iconLink = style({
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    transition: 'background-color 0.2s ease',
-
-    ':hover': {
-        backgroundColor: '#f5f5f5',
-    },
-});
-
-export const cartBadge = style({
-    position: 'absolute',
-    top: '2px',
-    right: '2px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: '18px',
-    height: '18px',
-    padding: '0 4px',
-    fontSize: '11px',
-    fontWeight: 600,
-    color: '#ffffff',
-    backgroundColor: '#ef4444',
-    borderRadius: '9px',
-});
-
 export const mobileMenuButton = style({
     display: 'none',
 
@@ -157,6 +126,85 @@ export const mobileMenuButton = style({
             background: 'transparent',
             borderRadius: '50%',
             cursor: 'pointer',
+        },
+    },
+});
+
+export const iconLink = style({
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    cursor: 'pointer',
+    transition: 'opacity 0.2s ease',
+
+    ':hover': {
+        opacity: 0.7,
+    },
+});
+
+export const cartBadge = style({
+    position: 'absolute',
+    top: '-6px',
+    right: '-6px',
+    width: '20px',
+    height: '20px',
+    fontSize: '1rem',
+    fontWeight: 'semibold',
+    lineHeight: '1.5',
+    letterSpacing: '-2%',
+    color: vars.color.white,
+    backgroundColor: vars.color.red,
+    borderRadius: '50%',
+
+    fontFamily: 'Pretendard',
+    fontWeight: 600,
+    fontSize: '1rem',
+    lineHeight: '150%',
+    letterSpacing: '-2%',
+    textAlign: 'center',
+});
+
+export const searchIcon = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    cursor: 'pointer',
+    transition: 'opacity 0.2s ease',
+    order: 1,
+
+    ':hover': {
+        opacity: 0.7,
+    },
+
+    '@media': {
+        '(min-width: 768px)': {
+            order: 2,
+        },
+    },
+});
+
+export const alarmIcon = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    cursor: 'pointer',
+    transition: 'opacity 0.2s ease',
+    order: 2,
+
+    ':hover': {
+        opacity: 0.7,
+    },
+
+    '@media': {
+        '(min-width: 768px)': {
+            display: 'none',
         },
     },
 });

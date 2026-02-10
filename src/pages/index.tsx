@@ -68,7 +68,7 @@ export default function Home({
                 <HeroBanner />
 
                 {/* Max-width container for main content */}
-                <main className={styles.main}>
+                <section className={styles.main}>
                     <Image
                         className={styles.logo}
                         src="/next.svg"
@@ -162,7 +162,7 @@ export default function Home({
                             Best Products (Skeleton Demo)
                         </Link>
                     </div>
-                </main>
+                </section>
             </div>
         </>
     );

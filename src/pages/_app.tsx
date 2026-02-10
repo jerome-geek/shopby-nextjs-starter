@@ -1,22 +1,23 @@
-import '@/styles/globals.css';
-import '@/i18n/config';
-import React, { useState } from 'react';
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Toaster } from 'sonner';
-import { generateDefaultSeo } from 'next-seo/pages';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ReactLenis } from 'lenis/react';
-import { OverlayProvider } from 'overlay-kit';
 import { AnimatePresence, motion } from 'motion/react';
-import { useRouter } from 'next/router';
-
+import { generateDefaultSeo } from 'next-seo/pages';
+import type { AppProps } from 'next/app';
 import { Noto_Sans_KR } from 'next/font/google';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { OverlayProvider } from 'overlay-kit';
+import { useState } from 'react';
+import { Toaster } from 'sonner';
 
 import { Layout } from '@/components/layout';
+
+import '@/styles/global.css';
+import '@/i18n/config';
+import '@/styles/globals.css';
 
 const notoSansKr = Noto_Sans_KR({
     subsets: ['latin'],
@@ -48,21 +49,19 @@ export default function App({ Component, pageProps }: AppProps) {
             <QueryClientProvider client={queryClient}>
                 <OverlayProvider>
                     <Head>{defaultSeo}</Head>
-                    <main className={notoSansKr.className}>
-                        <Layout>
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={router.route}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <Component {...pageProps} />
-                                </motion.div>
-                            </AnimatePresence>
-                        </Layout>
-                    </main>
+                    <Layout className={notoSansKr.className}>
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={router.route}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Component {...pageProps} />
+                            </motion.div>
+                        </AnimatePresence>
+                    </Layout>
                     <Toaster />
                     <ReactQueryDevtools initialIsOpen={false} />
                     <Analytics />

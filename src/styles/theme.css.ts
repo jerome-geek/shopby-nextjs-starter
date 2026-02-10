@@ -6,6 +6,7 @@ export const vars = createGlobalTheme(':root', {
         // 기본 색상
         white: '#FFFFFF',
         black: '#000000',
+        red: '#FB5047',
 
         // Primary 색상
         primary: '#000000',
