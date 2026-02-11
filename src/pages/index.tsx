@@ -7,7 +7,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { HeroBanner } from '@/components/hero-banner';
 import mall from '@/api/admin/mall';
 import type { GetMallResponse } from '@/models/admin/mall';
-import styles from '@/styles/Home.module.css';
+import * as styles from '@/styles/Home.css';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',

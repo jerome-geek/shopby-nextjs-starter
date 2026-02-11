@@ -6,53 +6,25 @@ import type { Swiper as SwiperType } from 'swiper';
 import { Autoplay, Navigation } from 'swiper/modules';
 
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
-import type {
-    Banner,
-    BannerAccount,
-    GetBannersResponse,
-} from '@/models/display/banner';
-import styles from './HeroBanner.module.css';
+import type { Banner } from '@/models/display/banner';
+import * as styles from './HeroBanner.css';
+import { normalizeImageUrl, extractBannerContents } from '@/utils/shopby';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 
+
 const BANNER_ID = 'MAIN_TOP';
 
-/** protocol-relative URL (//)을 https://로 변환 */
-function normalizeImageUrl(url: string | undefined): string {
-    if (!url) return '';
-    if (url.startsWith('//')) {
-        return `https:${url}`;
-    }
-    return url;
-}
-
-/** 배너 > 구좌 > 콘텐츠 3계층에서 콘텐츠(Banner[]) 추출 */
-function extractBannerContents(data: GetBannersResponse): Banner[] {
-    if (!data || data.length === 0) return [];
-
-    const bannerSection = data[0];
-    if (!bannerSection?.accounts) return [];
-
-    return bannerSection.accounts
-        .sort(
-            (a: BannerAccount, b: BannerAccount) =>
-                a.displayOrder - b.displayOrder,
-        )
-        .flatMap((account: BannerAccount) =>
-            account.banners.sort(
-                (a: Banner, b: Banner) => a.displayOrder - b.displayOrder,
-            ),
-        );
-}
 
 function HeroBannerContent() {
-    const { data } = useBannerList({
+    const { data: banners } = useBannerList<Banner[]>({
         type: 'id',
         banners: [BANNER_ID],
+        options: {
+            select: extractBannerContents,
+        },
     });
-
-    const banners = extractBannerContents(data);
     const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(
         null,
     );

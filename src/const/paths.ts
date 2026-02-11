@@ -65,6 +65,10 @@ export const PATHS = {
         DETAIL: '/products/:productNo',
     },
 
+    CATEGORIES: {
+        DETAIL: (categoryNo: number) => `/categories/${categoryNo}`,
+    },
+
     BRANDS: {
         /** 브랜드 리스트 */
         MAIN: '/brands',
