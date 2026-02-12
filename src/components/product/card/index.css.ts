@@ -25,6 +25,8 @@ export const thumbWrapper = style({
 });
 
 export const thumb = style({
+    width: '100%',
+    height: '100%',
     objectFit: 'cover',
     animation: `${fadeIn} 0.25s ease-in-out forwards`,
 });

@@ -3,7 +3,7 @@
 import { Suspense, useState, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
-import { Autoplay, Navigation } from 'swiper/modules';
+import { Autoplay, Navigation, EffectCoverflow } from 'swiper/modules';
 
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 import type { Banner } from '@/models/display/banner';
@@ -12,10 +12,9 @@ import { normalizeImageUrl, extractBannerContents } from '@/utils/shopby';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-
+import 'swiper/css/effect-coverflow';
 
 const BANNER_ID = 'MAIN_TOP';
-
 
 function HeroBannerContent() {
     const { data: banners } = useBannerList<Banner[]>({
@@ -56,9 +55,18 @@ function HeroBannerContent() {
         <section className={styles.heroBanner}>
             <div className={styles.swiperContainer}>
                 <Swiper
-                    modules={[Autoplay, Navigation]}
-                    spaceBetween={16}
-                    slidesPerView="auto"
+                    modules={[Autoplay, Navigation, EffectCoverflow]}
+                    spaceBetween={0}
+                    slidesPerView={'auto'}
+                    centeredSlides={true}
+                    effect={'coverflow'}
+                    coverflowEffect={{
+                        rotate: 0,
+                        stretch: 80,
+                        depth: 200,
+                        modifier: 1,
+                        slideShadows: false,
+                    }}
                     loop={true}
                     autoplay={{
                         delay: 4000,

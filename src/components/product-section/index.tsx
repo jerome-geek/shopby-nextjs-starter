@@ -1,8 +1,20 @@
+'use client';
+
+import Link from 'next/link';
+import { Grid } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/grid';
+
+import { SmallCaretIcon } from '@/components/icons';
 import ProductCard from '@/components/product/card';
 import {
     useProductSectionById,
     useProductSectionProductList,
 } from '@/hooks/query/display/productSection';
+
+import * as styles from './index.css';
 
 const ProductSection = () => {
     // MAIN_01
@@ -31,11 +43,62 @@ const ProductSection = () => {
     );
 
     return (
-        <div>
-            <ul>
+        <section className={styles.section}>
+            <div className={styles.header}>
+                <div className={styles.titleWrapper}>
+                    <h3 className={styles.title}>{data?.label}</h3>
+                    {data?.promotionText && (
+                        <p className={styles.subtitle}>{data?.promotionText}</p>
+                    )}
+                </div>
+                <Link href="/" className={styles.moreLink}>
+                    <SmallCaretIcon direction="right" width={16} height={16} />
+                </Link>
+            </div>
+            <Swiper
+                className={styles.swiperContainer}
+                modules={[Grid]}
+                grid={{
+                    rows: 2,
+                    fill: 'row',
+                }}
+                spaceBetween={12}
+                slidesPerView={3.2}
+                slidesOffsetBefore={16}
+                slidesOffsetAfter={16}
+                breakpoints={{
+                    768: {
+                        slidesPerView: 4.2,
+                        grid: {
+                            rows: 2,
+                            fill: 'row',
+                        },
+                        slidesOffsetBefore: 0,
+                        slidesOffsetAfter: 0,
+                    },
+                    1024: {
+                        slidesPerView: 5.2,
+                        grid: {
+                            rows: 2,
+                            fill: 'row',
+                        },
+                        slidesOffsetBefore: 0,
+                        slidesOffsetAfter: 0,
+                    },
+                    1280: {
+                        slidesPerView: 6.2,
+                        grid: {
+                            rows: 2,
+                            fill: 'row',
+                        },
+                        slidesOffsetBefore: 0,
+                        slidesOffsetAfter: 0,
+                    },
+                }}
+            >
                 {productSectionProductListData?.products.map((product) => {
                     return (
-                        <li key={product.productNo}>
+                        <SwiperSlide key={product.productNo}>
                             <ProductCard
                                 productNo={product.productNo}
                                 productName={product.productName}
@@ -69,11 +132,11 @@ const ProductSection = () => {
                                     product.additionDiscountAmt
                                 }
                             />
-                        </li>
+                        </SwiperSlide>
                     );
                 })}
-            </ul>
-        </div>
+            </Swiper>
+        </section>
     );
 };
 

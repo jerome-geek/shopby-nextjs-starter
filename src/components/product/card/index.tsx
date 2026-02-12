@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
 import {
@@ -17,6 +16,7 @@ import useDialog from '@/hooks/useDialog';
 import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
+import { normalizeImageUrl } from '@/utils/shopby';
 
 import * as styles from './index.css';
 
@@ -98,11 +98,9 @@ const ProductCard = ({
                 href={`${PATHS.PRODUCTS.MAIN}/${productNo}`}
                 className={styles.thumbWrapper}
             >
-                <Image
-                    src={`https:${imageUrlInfo[0].url}`}
+                <img
+                    src={normalizeImageUrl(imageUrlInfo[0].url)}
                     alt={`${productName} 상품 이미지`}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
                     className={styles.thumb}
                 />
 
@@ -150,8 +148,10 @@ const ProductCard = ({
                                 return (
                                     <li key={`product-sticker-${sticker.name}`}>
                                         {sticker.type === 'IMAGE' && (
-                                            <Image
-                                                src={`https:${sticker.label}`}
+                                            <img
+                                                src={normalizeImageUrl(
+                                                    sticker.label,
+                                                )}
                                                 alt={sticker.label}
                                                 width={20}
                                                 height={20}

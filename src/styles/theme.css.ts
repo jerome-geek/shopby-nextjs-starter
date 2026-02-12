@@ -13,15 +13,15 @@ export const vars = createGlobalTheme(':root', {
 
         // Gray 스케일
         gray: {
-            10: '#F9F9F9',
-            20: '#F4F4F4',
+            10: '#FAFAFA',
+            20: '#F1F1F1',
             30: '#EEEEEE',
             40: '#E0E0E0',
-            50: '#BDBDBD',
-            60: '#9E9E9E',
+            50: '#B3B7B4',
+            60: '#656966',
             70: '#757575',
-            80: '#616161',
-            90: '#424242',
+            80: '#3A403C',
+            90: '#1E231F',
             100: '#212121',
             200: '#E5E5E5',
             300: '#D4D4D4',
@@ -31,6 +31,23 @@ export const vars = createGlobalTheme(':root', {
             700: '#404040',
             800: '#262626',
             900: '#171717',
+        },
+
+        // 추가된 색상 (Pink, Green, Ivory)
+        pink: {
+            20: '#FFEBEE',
+            50: '#ECB2BB',
+            80: '#E2808F',
+            100: '#F12345',
+        },
+        green: {
+            20: '#F5FAF2',
+            40: '#EBF7E6',
+            80: '#89A17F',
+            100: '#39532E',
+        },
+        ivory: {
+            10: '#FFFBF9',
         },
 
         // 소셜 로그인 색상
@@ -57,5 +74,31 @@ export const vars = createGlobalTheme(':root', {
         md: '16px',
         lg: '24px',
         xl: '32px',
+    },
+
+    // 타이포그래피 (Figma Text Styles)
+    typography: {
+        fontSize: {
+            'display-1': '40px',
+            'display-2': '30px',
+            'title-1': '24px',
+            'title-2': '20px',
+            heading: '18px',
+            headline: '16px',
+            'body-1': '16px',
+            'body-2': '14px',
+            'caption-1': '12px',
+            'caption-2': '11px',
+        },
+        fontWeight: {
+            regular: '400',
+            medium: '500',
+            semibold: '600',
+            bold: '700',
+        },
+        lineHeight: {
+            base: '1.5',
+            tight: '1.32', // 132%
+        },
     },
 });

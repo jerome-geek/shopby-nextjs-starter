@@ -10,7 +10,7 @@ const buttonSecondaryBorder = createVar();
 
 export const page = style({
     vars: {
-        [background]: '#fafafa',
+        [background]: '#ffffff',
         [foreground]: '#fff',
         [textPrimary]: '#000',
         [textSecondary]: '#666',
@@ -23,6 +23,9 @@ export const page = style({
     minHeight: '100vh',
     fontFamily: 'var(--font-geist-sans)',
     backgroundColor: background,
+    maxWidth: '1200px',
+    margin: '0 auto',
+    width: '100%',
     '@media': {
         '(prefers-color-scheme: dark)': {
             vars: {
@@ -33,9 +36,9 @@ export const page = style({
                 [buttonPrimaryHover]: '#ccc',
                 [buttonSecondaryHover]: '#1a1a1a',
                 [buttonSecondaryBorder]: '#1a1a1a',
-            }
-        }
-    }
+            },
+        },
+    },
 });
 
 export const main = style({
@@ -50,9 +53,9 @@ export const main = style({
     margin: '0 auto',
     '@media': {
         '(max-width: 600px)': {
-            padding: '48px 24px'
-        }
-    }
+            padding: '48px 24px',
+        },
+    },
 });
 
 export const intro = style({
@@ -63,9 +66,9 @@ export const intro = style({
     gap: '24px',
     '@media': {
         '(max-width: 600px)': {
-            gap: '16px'
-        }
-    }
+            gap: '16px',
+        },
+    },
 });
 
 globalStyle(`${intro} h1`, {
@@ -80,9 +83,9 @@ globalStyle(`${intro} h1`, {
         '(max-width: 600px)': {
             fontSize: '32px',
             lineHeight: '40px',
-            letterSpacing: '-1.92px'
-        }
-    }
+            letterSpacing: '-1.92px',
+        },
+    },
 });
 
 globalStyle(`${intro} p`, {
@@ -90,12 +93,12 @@ globalStyle(`${intro} p`, {
     fontSize: '18px',
     lineHeight: '32px',
     textWrap: 'balance' as any,
-    color: textSecondary
+    color: textSecondary,
 });
 
 globalStyle(`${intro} a`, {
     fontWeight: 500,
-    color: textPrimary
+    color: textPrimary,
 });
 
 export const ctas = style({
@@ -104,7 +107,7 @@ export const ctas = style({
     width: '100%',
     maxWidth: '440px',
     gap: '16px',
-    fontSize: '14px'
+    fontSize: '14px',
 });
 
 globalStyle(`${ctas} a`, {
@@ -118,7 +121,7 @@ globalStyle(`${ctas} a`, {
     transition: '0.2s',
     cursor: 'pointer',
     width: 'fit-content',
-    fontWeight: 500
+    fontWeight: 500,
 });
 
 export const primary = style({
@@ -129,10 +132,10 @@ export const primary = style({
         '(hover: hover) and (pointer: fine)': {
             ':hover': {
                 background: buttonPrimaryHover,
-                borderColor: 'transparent'
-            }
-        }
-    }
+                borderColor: 'transparent',
+            },
+        },
+    },
 });
 
 export const secondary = style({
@@ -141,16 +144,16 @@ export const secondary = style({
         '(hover: hover) and (pointer: fine)': {
             ':hover': {
                 background: buttonSecondaryHover,
-                borderColor: 'transparent'
-            }
-        }
-    }
+                borderColor: 'transparent',
+            },
+        },
+    },
 });
 
 export const logo = style({
     '@media': {
         '(prefers-color-scheme: dark)': {
-            filter: 'invert()'
-        }
-    }
+            filter: 'invert()',
+        },
+    },
 });

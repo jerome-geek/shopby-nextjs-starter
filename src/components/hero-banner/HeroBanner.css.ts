@@ -2,19 +2,21 @@ import { style, globalStyle, keyframes } from '@vanilla-extract/css';
 
 const shimmer = keyframes({
     '0%': { backgroundPosition: '200% 0' },
-    '100%': { backgroundPosition: '-200% 0' }
+    '100%': { backgroundPosition: '-200% 0' },
 });
 
 export const heroBanner = style({
     position: 'relative',
-    width: '100%',
+    width: '100vw',
+    marginLeft: 'calc(50% - 50vw)',
+    marginRight: 'calc(50% - 50vw)',
     padding: '24px 0',
     backgroundColor: '#f5f5f5',
     '@media': {
         '(max-width: 768px)': {
-            padding: '16px 0'
-        }
-    }
+            padding: '16px 0',
+        },
+    },
 });
 
 export const swiperContainer = style({
@@ -23,9 +25,9 @@ export const swiperContainer = style({
     padding: '0 24px',
     '@media': {
         '(max-width: 768px)': {
-            padding: '0 16px'
-        }
-    }
+            padding: '0 16px',
+        },
+    },
 });
 
 export const swiper = style({
@@ -34,47 +36,40 @@ export const swiper = style({
 });
 
 export const slide = style({
-    width: '320px !important' as any,
+    width: '70vw !important' as any,
+    aspectRatio: '320 / 427',
     height: 'auto',
+    borderRadius: '12px',
+    overflow: 'hidden',
     '@media': {
-        '(max-width: 768px)': {
-            width: '280px !important' as any
+        '(min-width: 768px)': {
+            width: '320px !important' as any,
         },
-        '(max-width: 480px)': {
-            width: '240px !important' as any
-        }
-    }
+        '(min-width: 1024px)': {
+            width: '320px !important' as any,
+        },
+    },
 });
 
 export const card = style({
     display: 'block',
     position: 'relative',
     width: '100%',
-    height: '380px',
-    borderRadius: '16px',
-    overflow: 'hidden',
+    height: '100%',
     textDecoration: 'none',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     selectors: {
         '&:hover': {
             transform: 'translateY(-4px)',
-            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)'
-        }
-    },
-    '@media': {
-        '(max-width: 768px)': {
-            height: '320px'
+            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
         },
-        '(max-width: 480px)': {
-            height: '280px'
-        }
-    }
+    },
 });
 
 export const cardImage = style({
     width: '100%',
     height: '100%',
-    objectFit: 'cover'
+    objectFit: 'cover',
 });
 
 export const cardContent = style({
@@ -83,12 +78,13 @@ export const cardContent = style({
     left: 0,
     right: 0,
     padding: '24px',
-    background: 'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%)',
+    background:
+        'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%)',
     '@media': {
         '(max-width: 768px)': {
-            padding: '16px'
-        }
-    }
+            padding: '16px',
+        },
+    },
 });
 
 export const cardTitle = style({
@@ -99,9 +95,9 @@ export const cardTitle = style({
     textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
     '@media': {
         '(max-width: 768px)': {
-            fontSize: '1.25rem'
-        }
-    }
+            fontSize: '1.25rem',
+        },
+    },
 });
 
 export const cardDescription = style({
@@ -112,9 +108,9 @@ export const cardDescription = style({
     textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
     '@media': {
         '(max-width: 768px)': {
-            fontSize: '0.8125rem'
-        }
-    }
+            fontSize: '0.8125rem',
+        },
+    },
 });
 
 export const controls = style({
@@ -122,7 +118,7 @@ export const controls = style({
     alignItems: 'center',
     justifyContent: 'center',
     gap: '16px',
-    marginTop: '20px'
+    marginTop: '20px',
 });
 
 export const controlButton = style({
@@ -138,9 +134,9 @@ export const controlButton = style({
     transition: 'color 0.2s ease',
     selectors: {
         '&:hover': {
-            color: '#333'
-        }
-    }
+            color: '#333',
+        },
+    },
 });
 
 // Since the JS uses class names like .navPrev and .navNext for Swiper navigation,
@@ -148,8 +144,8 @@ export const controlButton = style({
 // However, looking at the TSX:
 // navigation={{ prevEl: `.${styles.navPrev}`, nextEl: `.${styles.navNext}` }}
 // BUT, in the module.css provided, navPrev and navNext were NOT defined!
-// They were likely using default swiper classes or just missing. 
-// Wait, looking at module.css content again... lines 1-223. 
+// They were likely using default swiper classes or just missing.
+// Wait, looking at module.css content again... lines 1-223.
 // checking module.css content...
 // I don't see .navPrev or .navNext in the module.css content I read!
 // It seems the original code might have been broken or relying on something else?
@@ -176,13 +172,13 @@ export const pageIndicator = style({
     fontSize: '0.875rem',
     color: '#666',
     minWidth: '48px',
-    textAlign: 'center'
+    textAlign: 'center',
 });
 
 export const skeletonWrapper = style({
     display: 'flex',
     gap: '16px',
-    overflow: 'hidden'
+    overflow: 'hidden',
 });
 
 export const skeletonCard = style({
@@ -196,21 +192,22 @@ export const skeletonCard = style({
     '@media': {
         '(max-width: 768px)': {
             width: '280px',
-            height: '320px'
+            height: '320px',
         },
         '(max-width: 480px)': {
             width: '240px',
-            height: '280px'
-        }
-    }
+            height: '280px',
+        },
+    },
 });
 
 export const skeletonImage = style({
     width: '100%',
     height: '100%',
-    background: 'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%)',
+    background:
+        'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%)',
     backgroundSize: '200% 100%',
-    animation: `${shimmer} 1.5s infinite`
+    animation: `${shimmer} 1.5s infinite`,
 });
 
 export const skeletonContent = style({
@@ -218,7 +215,7 @@ export const skeletonContent = style({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: '24px'
+    padding: '24px',
 });
 
 export const skeletonTitle = style({
@@ -226,12 +223,12 @@ export const skeletonTitle = style({
     height: '24px',
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: '4px',
-    marginBottom: '8px'
+    marginBottom: '8px',
 });
 
 export const skeletonDescription = style({
     width: '80%',
     height: '16px',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: '4px'
+    borderRadius: '4px',
 });

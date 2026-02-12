@@ -1,0 +1,391 @@
+{
+    "styles": {
+        "colors": [
+            {
+                "name": "Black #000000",
+                "description": "가격, 큰 강조",
+                "token": "black-000000",
+                "type": "solid"
+            },
+            {
+                "name": "Gray 90 #1E231F",
+                "description": "상품 이름, 본문 강조",
+                "token": "gray-90-1e231f",
+                "type": "solid"
+            },
+            {
+                "name": "Gray 80 #3A403C",
+                "description": "본문",
+                "token": "gray-80-3a403c",
+                "type": "solid"
+            },
+            {
+                "name": "Gray 60 #656966",
+                "description": "설명(캡션)",
+                "token": "gray-60-656966",
+                "type": "solid"
+            },
+            {
+                "name": "Gray 50 #B3B7B4",
+                "description": "스트로크, 예시 문구",
+                "token": "gray-50-b3b7b4",
+                "type": "solid"
+            },
+            {
+                "name": "Gray 20 #F1F1F1",
+                "description": "배경색, 연한 스트로크",
+                "token": "gray-20-f1f1f1",
+                "type": "solid"
+            },
+            {
+                "name": "Gray 10 #FAFAFA",
+                "description": "더 연한 배경색",
+                "token": "gray-10-fafafa",
+                "type": "solid"
+            },
+            {
+                "name": "White #FFFFFF",
+                "description": "Red, Black이 배경일 때 사용: 가격, 큰 강조",
+                "token": "white-ffffff",
+                "type": "solid"
+            },
+            {
+                "name": "Pink 100 #F12345",
+                "description": "알림, 경고, 할인",
+                "token": "pink-100-f12345",
+                "type": "solid"
+            },
+            {
+                "name": "Pink 80 #E2808F",
+                "token": "pink-80-e2808f",
+                "type": "solid"
+            },
+            {
+                "name": "Pink 50 #ECB2BB",
+                "token": "pink-50-ecb2bb",
+                "type": "solid"
+            },
+            {
+                "name": "Pink 20 #FFEBEE",
+                "token": "pink-20-ffebee",
+                "type": "solid"
+            },
+            {
+                "name": "Green 100 #39532E",
+                "token": "green-100-39532e",
+                "type": "solid"
+            },
+            {
+                "name": "Green 80 #89A17F",
+                "token": "green-80-89a17f",
+                "type": "solid"
+            },
+            {
+                "name": "Green 40 #EBF7E6",
+                "token": "green-40-ebf7e6",
+                "type": "solid"
+            },
+            {
+                "name": "Green 20 #F5FAF2",
+                "token": "green-20-f5faf2",
+                "type": "solid"
+            },
+            {
+                "name": "Ivory 10 #FFFBF9",
+                "token": "ivory-10-fffbf9",
+                "type": "solid"
+            }
+        ],
+        "textStyles": [
+            {
+                "name": "Display 1/Semibold",
+                "token": "display-1-semibold",
+                "type": "text",
+                "description": "PC에서 텍스트를 가장 크게 나타낼 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "40px",
+                "lineHeight": 1.3200000524520874,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Display 2/Bold",
+                "token": "display-2-bold",
+                "type": "text",
+                "description": "텍스트를 가장 크게 나타낼 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "700",
+                "fontSize": "30px",
+                "lineHeight": 1.3200000524520874,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Display 2/Semibold",
+                "token": "display-2-semibold",
+                "type": "text",
+                "description": "텍스트를 가장 크게 나타낼 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "30px",
+                "lineHeight": 1.3200000524520874,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Title 1/Bold",
+                "token": "title-1-bold",
+                "type": "text",
+                "description": "텍스트를 크게 나타낼 때(제목) 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "700",
+                "fontSize": "22px",
+                "lineHeight": 1.3200000524520874,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Title 1/Semibold",
+                "token": "title-1-semibold",
+                "type": "text",
+                "description": "텍스트를 크게 나타낼 때(제목) 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "22px",
+                "lineHeight": 1.3200000524520874,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Title 2/Semibold",
+                "token": "title-2-semibold",
+                "type": "text",
+                "description": "텍스트를 크게 나타낼 때(소제목) 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "20px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-0.5%"
+            },
+            {
+                "name": "Heading/Bold",
+                "token": "heading-bold",
+                "type": "text",
+                "description": "Headline보다 더 중요한 정보가 있을 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "700",
+                "fontSize": "18px",
+                "lineHeight": 1.5,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Heading/Semibold",
+                "token": "heading-semibold",
+                "type": "text",
+                "description": "Headline보다 더 중요한 정보가 있을 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "18px",
+                "lineHeight": 1.5,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Heading/Medium",
+                "token": "heading-medium",
+                "type": "text",
+                "description": "Headline보다 더 중요한 정보가 있을 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "500",
+                "fontSize": "18px",
+                "lineHeight": 1.5,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Headline/Bold",
+                "token": "headline-bold",
+                "type": "text",
+                "description": "Body의 타이틀 및 강조하고 싶은 버튼 요소에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "700",
+                "fontSize": "15px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-0.20000000298023224%"
+            },
+            {
+                "name": "Headline/Semibold",
+                "token": "headline-semibold",
+                "type": "text",
+                "description": "Body의 타이틀 및 강조하고 싶은 버튼 요소에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "15px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-0.20000000298023224%"
+            },
+            {
+                "name": "Headline/Medium",
+                "token": "headline-medium",
+                "type": "text",
+                "description": "Body의 타이틀 및 강조하고 싶은 버튼 요소에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "500",
+                "fontSize": "15px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-0.20000000298023224%"
+            },
+            {
+                "name": "Headline/Regular",
+                "token": "headline-regular",
+                "type": "text",
+                "description": "Body의 타이틀 및 강조하고 싶은 버튼 요소에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "400",
+                "fontSize": "15px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-0.20000000298023224%"
+            },
+            {
+                "name": "Body 1/Bold",
+                "token": "body-1-bold",
+                "type": "text",
+                "description": "읽기 쉬워야 하는 정보나 글을 매우 강조할 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "700",
+                "fontSize": "14px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Body 1/Semibold",
+                "token": "body-1-semibold",
+                "type": "text",
+                "description": "읽기 쉬워야 하는 정보나 글을 매우 강조할 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "14px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Body 1/Medium",
+                "token": "body-1-medium",
+                "type": "text",
+                "description": "읽기 쉬워야 하는 정보나 글을 강조할 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "500",
+                "fontSize": "14px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Body 1/Regular",
+                "token": "body-1-regular",
+                "type": "text",
+                "description": "읽기 쉬워야 하는 정보나 글에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "400",
+                "fontSize": "14px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Body 2/Semibold",
+                "token": "body-2-semibold",
+                "type": "text",
+                "description": "작은 정보와 글의 제목을 강조 표기할 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "13px",
+                "lineHeight": 1.2999999523162842,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Body 2/Medium",
+                "token": "body-2-medium",
+                "type": "text",
+                "description": "작은 정보와 글의 주제를 표기할 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "500",
+                "fontSize": "13px",
+                "lineHeight": 1.2999999523162842,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Body 2/Regular",
+                "token": "body-2-regular",
+                "type": "text",
+                "description": "작은 정보와 글을 표기할 때 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "400",
+                "fontSize": "13px",
+                "lineHeight": 1.2999999523162842,
+                "letterSpacing": "-1.2999999523162842%"
+            },
+            {
+                "name": "Caption 1/Semibold",
+                "token": "caption-1-semibold",
+                "type": "text",
+                "description": "다음 페이지/부분으로 넘어가는 작은 텍스트에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "12px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Caption 1/Regular",
+                "token": "caption-1-regular",
+                "type": "text",
+                "description": "다음 페이지/부분으로 넘어가는 작은 텍스트에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "400",
+                "fontSize": "12px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-2%"
+            },
+            {
+                "name": "Caption 2/Semibold",
+                "token": "caption-2-semibold",
+                "type": "text",
+                "description": "아이콘 밑에 아이콘의 제목으로 들어가는 글이 선택되었거나 강조할 때 \n사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "600",
+                "fontSize": "10px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-0.20000000298023224%"
+            },
+            {
+                "name": "Caption 2/Regular",
+                "token": "caption-2-regular",
+                "type": "text",
+                "description": "아이콘 밑에 아이콘의 제목으로 들어가는 글에 사용",
+                "fontFamily": "Pretendard",
+                "fontWeight": "400",
+                "fontSize": "10px",
+                "lineHeight": 1.399999976158142,
+                "letterSpacing": "-0.20000000298023224%"
+            }
+        ],
+        "effectStyles": [],
+        "gridStyles": [
+            {
+                "name": "Mobile 4 columns",
+                "token": "mobile-4-columns",
+                "type": "grid",
+                "grids": [
+                    {
+                        "pattern": "columns",
+                        "count": 4,
+                        "gutter": 16,
+                        "margin": 20
+                    }
+                ]
+            }
+        ]
+    },
+    "collections": {},
+    "metadata": {
+        "exportDate": "2026-02-12T16:57:27.778Z",
+        "figmaFileKey": "unknown",
+        "fileName": "[JollyPot] Design (Copy)",
+        "pluginVersion": "1.0.0",
+        "collectionsFound": 0,
+        "collectionsExported": 0
+    }
+}
