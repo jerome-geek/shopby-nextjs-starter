@@ -22,12 +22,11 @@ export function Header() {
     const { data: categoriesByCodeData } = useCategoriesByCode({
         data: { codes: ['MAIN'] },
     });
-    console.log('🚀 ~ Header ~ data:', categoriesByCodeData);
     const categoryNo = categoriesByCodeData?.[0]?.displayCategoryNo ?? 0;
+
     const { data: categoryData } = useCategory({
         categoryNo,
     });
-    console.log('🚀 ~ Header ~ categoryData:', categoryData);
 
     const iconList = [
         {

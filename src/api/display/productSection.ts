@@ -3,6 +3,7 @@ import qs from 'qs';
 
 import { request } from '@/api/core/request';
 import {
+    GetProductSectionByIdResponse,
     GetProductSectionProductsParams,
     GetProductSectionProductsResponse,
     GetProductSectionResponse,
@@ -25,7 +26,7 @@ const productSection = {
      *  - 상품 진열 번호(sectionNo)를 기준으로 상품 진열을 조회하는 API 입니다. 버전 v2.0 API 입니다.
      *  - 상품에 대한 조회는 상품 진열 상세조회 API 를 통해 호출이 필요합니다.
      */
-    getProductSection: (sectionNo: string, options?: Options) => {
+    getProductSection: (sectionNo: number, options?: Options) => {
         return request.get<GetProductSectionResponse>(
             `display/sections/${sectionNo}`,
             {
@@ -43,7 +44,7 @@ const productSection = {
      *  - 상품에 대한 조회는 상품 진열 상세조회 API 를 통해 호출이 필요합니다.
      */
     getProductSectionById: (sectionId: string, options?: Options) => {
-        return request.get<GetProductSectionResponse>(
+        return request.get<GetProductSectionByIdResponse>(
             `display/sections/ids/${sectionId}`,
             {
                 ...options,

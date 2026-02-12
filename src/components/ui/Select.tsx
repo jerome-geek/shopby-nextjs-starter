@@ -1,7 +1,9 @@
 import { Ref } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactSelect, {
+    ActionMeta,
     GroupBase,
+    OnChangeValue,
     Props,
     SelectInstance,
     StylesConfig,
@@ -13,17 +15,12 @@ interface SelectProps<
     Option,
     IsMulti extends boolean = false,
     Group extends GroupBase<Option> = GroupBase<Option>,
-> extends Props<Option, IsMulti, Group> {
+> extends Omit<Props<Option, IsMulti, Group>, 'value' | 'onChange'> {
     ref?: Ref<SelectInstance<Option, IsMulti, Group>>;
-    name?: string;
-    placeholder?: string;
-    isSearchable?: boolean;
-    formatOptionLabel?: (option: Option) => React.ReactNode;
-    options?: readonly (Option | Group)[];
-    value?: Option | null;
+    value?: OnChangeValue<Option, IsMulti> | null;
     onChange?: (
-        newValue: Option | null, // Simplified for single select mostly
-        actionMeta: any
+        newValue: OnChangeValue<Option, IsMulti>,
+        actionMeta: ActionMeta<Option>,
     ) => void;
 }
 
@@ -104,8 +101,8 @@ const Select = <
             backgroundColor: state.isSelected
                 ? vars.color.gray[300]
                 : state.isFocused
-                    ? vars.color.gray[100]
-                    : 'transparent',
+                  ? vars.color.gray[100]
+                  : 'transparent',
             textDecoration: state.isDisabled ? 'line-through' : 'none',
             ':active': {
                 backgroundColor: vars.color.gray[200],

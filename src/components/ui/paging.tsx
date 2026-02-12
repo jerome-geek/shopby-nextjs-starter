@@ -2,7 +2,7 @@
 
 import { HTMLAttributes, useEffect, useState } from 'react';
 import { map, pipe, range, toArray } from '@fxts/core';
-// import { SmallCaretIcon } from '@/components/icons';
+import { SmallCaretIcon } from '@/components/icons';
 import * as styles from './paging.css';
 
 interface PagingProps extends HTMLAttributes<HTMLDivElement> {
@@ -44,7 +44,7 @@ const Paging = ({
                 page,
                 isSelected: page === currentPageIndex,
             })),
-            toArray
+            toArray,
         );
     };
 
@@ -59,7 +59,7 @@ const Paging = ({
         }
         if (parseTotalPage - parseCurrentPage <= 1) {
             setCurrentPageList(
-                pageList(parseTotalPage - 4, parseTotalPage, parseCurrentPage)
+                pageList(parseTotalPage - 4, parseTotalPage, parseCurrentPage),
             );
             return;
         }
@@ -67,8 +67,8 @@ const Paging = ({
             pageList(
                 parseCurrentPage - 2,
                 parseCurrentPage + 2,
-                parseCurrentPage
-            )
+                parseCurrentPage,
+            ),
         );
     }, [parseCurrentPage, parseTotalPage]);
 
@@ -97,7 +97,7 @@ const Paging = ({
                             className={styles.arrowButton}
                         >
                             <span className={styles.buttonContents}>
-                                {/* <SmallCaretIcon direction="left" /> */}
+                                <SmallCaretIcon direction="left" />
                             </span>
                         </button>
                     </>

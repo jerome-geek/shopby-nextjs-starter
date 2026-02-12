@@ -12,14 +12,14 @@ import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 import useDialog from '@/hooks/useDialog';
 import { NcpOpenIdProviderType } from '@/models';
 // import { shopbyTokenStorage } from '@/utils/storage';
-// import {
-//     AppleIcon,
-//     FacebookIcon,
-//     GoogleIcon,
-//     KakaoIcon,
-//     LineIcon,
-//     NaverIcon,
-// } from '@/components/icons/login';
+import {
+    AppleIcon,
+    FacebookIcon,
+    GoogleIcon,
+    KakaoIcon,
+    LineIcon,
+    NaverIcon,
+} from '@/components/icons/login';
 
 const useSnsLogin = () => {
     const { t } = useTranslation();
@@ -53,8 +53,9 @@ const useSnsLogin = () => {
             const data = await authentication
                 .getOpenIdLoginUrl({
                     provider,
-                    redirectUri: `${window.location.origin}${PATHS.CALLBACK.AUTH
-                        }?provider=${provider}&prompt=${isLoginDisplay ? 'login' : ''}`,
+                    redirectUri: `${window.location.origin}${
+                        PATHS.CALLBACK.AUTH
+                    }?provider=${provider}&prompt=${isLoginDisplay ? 'login' : ''}`,
                 })
                 .json();
 
@@ -246,7 +247,7 @@ const useSnsLogin = () => {
             // ),
             isAvailable: true,
             onClick: openKakaoRegister,
-            // Icon: KakaoIcon,
+            Icon: KakaoIcon,
         },
         {
             provider: 'kakao-sync' as const,
@@ -258,7 +259,7 @@ const useSnsLogin = () => {
             // ),
             isAvailable: true,
             onClick: openKakaoSync,
-            // Icon: KakaoIcon,
+            Icon: KakaoIcon,
         },
         {
             provider: 'naver' as const,
@@ -270,7 +271,7 @@ const useSnsLogin = () => {
             // ),
             isAvailable: true,
             onClick: openNaverRegister,
-            // Icon: NaverIcon,
+            Icon: NaverIcon,
         },
         {
             provider: 'apple' as const,
@@ -282,7 +283,7 @@ const useSnsLogin = () => {
             // ),
             isAvailable: true,
             onClick: openAppleRegister,
-            // Icon: AppleIcon,
+            Icon: AppleIcon,
         },
         {
             provider: 'facebook' as const,
@@ -294,7 +295,7 @@ const useSnsLogin = () => {
             // ),
             isAvailable: true,
             onClick: openFacebookRegister,
-            // Icon: FacebookIcon,
+            Icon: FacebookIcon,
         },
         {
             provider: 'google' as const,
@@ -306,7 +307,7 @@ const useSnsLogin = () => {
             // ),
             isAvailable: true,
             onClick: openGoogleRegister,
-            // Icon: GoogleIcon,
+            Icon: GoogleIcon,
         },
         {
             provider: 'line' as const,
@@ -318,7 +319,7 @@ const useSnsLogin = () => {
             // ),
             isAvailable: true,
             onClick: openLineRegister,
-            // Icon: LineIcon,
+            Icon: LineIcon,
         },
     ];
 

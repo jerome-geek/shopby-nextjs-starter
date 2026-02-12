@@ -179,8 +179,10 @@ export interface GetEventByIdParams {
     preview: boolean;
 }
 
-export interface GetEventProductDisplaySectionParams
-    extends Omit<Paging, 'hasTotalCount'> {
+export interface GetEventProductDisplaySectionParams extends Omit<
+    Paging,
+    'hasTotalCount'
+> {
     /** 정렬조건 (SALE: 판매시작일 오름차순 - default, ADMIN_SETTING: 관리자 설정 순서, BEST_SELLER: 판매순, BEST_REVIEW: 리뷰순, PRICE: 가격순) */
     order?: EventProductOrder;
     /** 정렬 순서 */
@@ -204,14 +206,13 @@ export interface GetEventProductDisplaySectionResponse {
     products: EventProduct[];
 }
 
-export interface EventProduct
-    extends Omit<
-        ProductItem,
-        | 'deliveryConditionInfo'
-        | 'productType'
-        | 'shippingArea'
-        | 'accumulationAmtWhenBuyConfirm'
-    > {
+export interface EventProduct extends Omit<
+    ProductItem,
+    | 'deliveryConditionInfo'
+    | 'productType'
+    | 'shippingArea'
+    | 'accumulationAmtWhenBuyConfirm'
+> {
     /** 상품 유효기간 */
     expirationYmdt: string;
     unitPriceInfo: {

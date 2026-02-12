@@ -21,8 +21,13 @@ const categoryKeys = {
         [...categoryKeys.lists(), managementCode] as const,
 
     details: () => [...categoryKeys.all, 'detail'] as const,
-    detail: (categoryNo: number, searchParams?: GetCategoryParams) =>
-        [...categoryKeys.all, 'detail', categoryNo, searchParams] as const,
+    detail: (categoryNo: string | number, searchParams?: GetCategoryParams) =>
+        [
+            ...categoryKeys.all,
+            'detail',
+            String(categoryNo),
+            searchParams,
+        ] as const,
 };
 
 export default categoryKeys;

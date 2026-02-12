@@ -107,11 +107,9 @@ export const buttonContents = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    ':hover': {
-        selectors: {
-            '& svg path': {
-                stroke: vars.color.black,
-            },
+    selectors: {
+        '&:hover svg path': {
+            stroke: vars.color.black,
         },
     },
 });

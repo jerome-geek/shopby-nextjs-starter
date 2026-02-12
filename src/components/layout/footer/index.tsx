@@ -1,130 +1,265 @@
 import Link from 'next/link';
+import { useMemo, useState, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 
 import { PATHS } from '@/const/paths';
+
+import { InstagramIcon } from '@/components/icons/footer/InstagramIcon';
+import { YoutubeIcon } from '@/components/icons/footer/YoutubeIcon';
+import { SmallCaretIcon } from '@/components/icons/SmallCaretIcon';
+
 import * as styles from './Footer.css';
 
-// 소셜 아이콘
-const InstagramIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-    </svg>
-);
+function FooterContent() {
+    const { t } = useTranslation();
+    const { data: mallData } = useMall();
+    const [isExpanded, setIsExpanded] = useState(false);
 
-const YoutubeIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-    </svg>
-);
+    const menuGroups = useMemo(
+        () => [
+            [
+                {
+                    label: t('WannaMake 소개'),
+                    href: `${PATHS.AUTH.TERMS.MAIN}/MALL_INTRODUCTION`,
+                },
+                {
+                    label: t('이용약관'),
+                    href: `${PATHS.AUTH.TERMS.MAIN}/USE`,
+                },
+                {
+                    label: t('개인정보처리방침'),
+                    href: `${PATHS.AUTH.TERMS.MAIN}/PI_PROCESS`,
+                },
+            ],
+            [
+                {
+                    label: t('공지사항'),
+                    href: '/boards/notice',
+                },
+                {
+                    label: t('FAQ'),
+                    href: '/boards/faq',
+                },
+                {
+                    label: t('1:1 문의'),
+                    href: PATHS.MYPAGE.INQUIRIES.MAIN,
+                },
+                {
+                    label: t('입점/제휴 문의'),
+                    href: '/partnership',
+                },
+            ],
+        ],
+        [t],
+    );
 
-const BlogIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-    </svg>
-);
+    // 소셜 미디어 링크
+    const socialMediaList = useMemo(
+        () => [
+            { id: 'instagram', url: '/', icon: <InstagramIcon /> },
+            { id: 'youtube', url: '/', icon: <YoutubeIcon /> },
+        ],
+        [],
+    );
 
-export function Footer() {
+    // 저작권 및 면책 정보
+    const copyright = useMemo(
+        () => ({
+            disclaimer: t(
+                '일부 상품의 경우 (주)제니지니앤로이드는 통신판매의 당사자가 아닌 통신판매중개자로서 상품, 상품정보, 거래에 대한 책임이 제한될 수 있으므로, 각 상품 페이지에서 구체적인 내용을 확인하시기 바랍니다.',
+            ),
+            copyrightText: t(
+                'COPYRIGHT ⓒ {{companyName}} ALL RIGHTS RESERVED.',
+                {
+                    companyName:
+                        mallData?.serviceBasicInfo.companyName ||
+                        '(주)제니지니앤로이드',
+                },
+            ),
+        }),
+        [mallData?.serviceBasicInfo.companyName, t],
+    );
+
+    // 회사 정보
+    const companyInfo = useMemo(
+        () => ({
+            companyName: mallData?.serviceBasicInfo.companyName ?? '',
+            representativeName:
+                mallData?.serviceBasicInfo.representativeName ?? '',
+            address: mallData?.serviceBasicInfo.address ?? '',
+            representPhoneNo: mallData?.serviceBasicInfo.representPhoneNo ?? '',
+            businessRegistrationNo:
+                mallData?.serviceBasicInfo.businessRegistrationNo ?? '',
+            onlineMarketingBusinessDeclarationNo:
+                mallData?.serviceBasicInfo
+                    .onlineMarketingBusinessDeclarationNo ?? '',
+            privacyManagerName:
+                mallData?.serviceBasicInfo.privacyManagerName ?? '',
+        }),
+        [mallData?.serviceBasicInfo],
+    );
+
     return (
-        <footer className={styles.footer}>
-            <div className={styles.footerInner}>
-                {/* 상단 링크 섹션 */}
-                <div className={styles.footerTop}>
-                    <div className={styles.footerSection}>
-                        <h4 className={styles.footerTitle}>쇼핑하기</h4>
-                        <Link
-                            href={PATHS.PRODUCTS.NEW}
-                            className={styles.footerLink}
-                        >
-                            신상품
-                        </Link>
-                        <Link
-                            href={PATHS.PRODUCTS.BEST}
-                            className={styles.footerLink}
-                        >
-                            베스트
-                        </Link>
-                        <Link
-                            href={'/'}
-                            className={styles.footerLink}
-                        >
-                            카테고리
-                        </Link>
+        <footer className={styles.footerContainer} id="footer">
+            <div className={styles.footerInnerContainer}>
+                {/* 왼쪽: 회사 정보 */}
+                <div className={styles.companyInfoSection}>
+                    <h3
+                        className={styles.companyTitle}
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                setIsExpanded(!isExpanded);
+                            }
+                        }}
+                    >
+                        {t('{{companyName}} 사업자 정보', {
+                            companyName: companyInfo.companyName,
+                        })}
+                        <SmallCaretIcon
+                            className={styles.companyTitleIcon}
+                            data-expanded={isExpanded}
+                        />
+                    </h3>
+
+                    {/* 모바일: 저작권 정보 */}
+                    <div
+                        className={styles.mobileCopyrightSection}
+                        data-expanded={isExpanded}
+                    >
+                        <p>{copyright.disclaimer}</p>
+                        <p>{copyright.copyrightText}</p>
                     </div>
 
-                    <div className={styles.footerSection}>
-                        <h4 className={styles.footerTitle}>고객센터</h4>
-                        <Link href="/faq" className={styles.footerLink}>
-                            자주 묻는 질문
-                        </Link>
-                        <Link href="/contact" className={styles.footerLink}>
-                            1:1 문의
-                        </Link>
-                        <Link href="/notice" className={styles.footerLink}>
-                            공지사항
-                        </Link>
-                    </div>
-
-                    <div className={styles.footerSection}>
-                        <h4 className={styles.footerTitle}>회사 정보</h4>
-                        <Link href="/about" className={styles.footerLink}>
-                            회사 소개
-                        </Link>
-                        <Link href="/terms" className={styles.footerLink}>
-                            이용약관
-                        </Link>
-                        <Link href="/privacy" className={styles.footerLink}>
-                            개인정보처리방침
-                        </Link>
-                    </div>
-
-                    <div className={styles.footerSection}>
-                        <h4 className={styles.footerTitle}>연락처</h4>
-                        <span className={styles.footerLink}>1588-0000</span>
-                        <span className={styles.footerLink}>
-                            평일 10:00 - 18:00
-                        </span>
-                        <span className={styles.footerLink}>
-                            점심 12:00 - 13:00
-                        </span>
-                    </div>
+                    {/* 웹(데스크톱): 상세 회사 정보 */}
+                    <dl
+                        className={styles.companyDetailsList}
+                        data-expanded={isExpanded}
+                    >
+                        <div className={styles.companyDetailsItem}>
+                            <dt>{t('대표자명')}</dt>
+                            <dd>{companyInfo.representativeName}</dd>
+                        </div>
+                        <div className={styles.companyDetailsItem}>
+                            <dt>{t('주소')}</dt>
+                            <dd>{companyInfo.address}</dd>
+                        </div>
+                        <div className={styles.companyDetailsItem}>
+                            <dt>{t('대표 전화')}</dt>
+                            <dd>{companyInfo.representPhoneNo}</dd>
+                        </div>
+                        <div className={styles.companyDetailsItem}>
+                            <dt>{t('사업자등록번호')}</dt>
+                            <dd>{companyInfo.businessRegistrationNo}</dd>
+                        </div>
+                        <div className={styles.companyDetailsItem}>
+                            <dt>{t('통신판매업신고번호')}</dt>
+                            <dd>
+                                {
+                                    companyInfo.onlineMarketingBusinessDeclarationNo
+                                }
+                                <Link
+                                    href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${
+                                        companyInfo.businessRegistrationNo?.replace(
+                                            /-/g,
+                                            '',
+                                        ) || ''
+                                    }`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {t('사업자정보확인')}
+                                </Link>
+                            </dd>
+                        </div>
+                        <div className={styles.companyDetailsItem}>
+                            <dt>{t('개인정보보호책임자')}</dt>
+                            <dd>{companyInfo.privacyManagerName}</dd>
+                        </div>
+                        <div className={styles.companyDetailsItem}>
+                            <dt>{t('호스팅 서비스')}</dt>
+                            <dd>{t('엔에이치엔커머스(주)')}</dd>
+                        </div>
+                    </dl>
                 </div>
 
-                {/* 하단 저작권 & 소셜 */}
-                <div className={styles.footerBottom}>
-                    <p className={styles.copyright}>
-                        © {new Date().getFullYear()} WannaMake. All rights
-                        reserved.
-                    </p>
-                    <div className={styles.socialLinks}>
-                        <a
-                            href="https://instagram.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={styles.socialLink}
-                            aria-label="Instagram"
-                        >
-                            <InstagramIcon />
-                        </a>
-                        <a
-                            href="https://youtube.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={styles.socialLink}
-                            aria-label="YouTube"
-                        >
-                            <YoutubeIcon />
-                        </a>
-                        <a
-                            href="https://blog.naver.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={styles.socialLink}
-                            aria-label="Blog"
-                        >
-                            <BlogIcon />
-                        </a>
+                {/* 오른쪽: 네비게이션, 소셜 미디어, 저작권 */}
+                <div className={styles.linksSection}>
+                    {/* 네비게이션 링크 */}
+                    <div className={styles.navigationWrapper}>
+                        <nav className={styles.navigationContainer}>
+                            {menuGroups.map((group, groupIdx) => (
+                                <ul
+                                    className={styles.menuGroupList}
+                                    key={groupIdx}
+                                >
+                                    {group.map(({ label, href }) => (
+                                        <li
+                                            className={styles.menuGroupItem}
+                                            key={href}
+                                        >
+                                            <Link
+                                                href={href}
+                                                className={styles.menuGroupLink}
+                                            >
+                                                {label ===
+                                                t('개인정보처리방침') ? (
+                                                    <strong>{label}</strong>
+                                                ) : (
+                                                    <span>{label}</span>
+                                                )}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ))}
+                        </nav>
+
+                        {/* 소셜 미디어 아이콘 */}
+                        <ul className={styles.socialMediaList}>
+                            {socialMediaList.map(({ id, url, icon }) => (
+                                <li className={styles.socialMediaItem} key={id}>
+                                    <Link
+                                        href={url}
+                                        className={styles.socialMediaLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {icon}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* 저작권 정보 (데스크톱만) */}
+                    <div className={styles.desktopCopyrightSection}>
+                        <p>{copyright.disclaimer}</p>
+                        <p>{copyright.copyrightText}</p>
                     </div>
                 </div>
             </div>
         </footer>
+    );
+}
+
+function FooterSkeleton() {
+    return (
+        <div
+            style={{
+                width: '100%',
+                height: '400px', // 일반적인 푸터 높이
+                backgroundColor: '#f5f5f5',
+            }}
+        />
+    );
+}
+
+export function Footer() {
+    return (
+        <Suspense fallback={<FooterSkeleton />}>
+            <FooterContent />
+        </Suspense>
     );
 }

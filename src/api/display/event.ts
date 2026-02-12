@@ -23,11 +23,15 @@ import {
     SearchEventsByProgressParams,
     SearchEventsByProgressResponse,
 } from '@/models/display/event';
+import { ONE_WEEK } from '@/const/time';
+
+const EVENT_REVALIDATE_MS = ONE_WEEK;
 
 const event = {
     /**
      * 이벤트 기간안에 포함된 모든 이벤트 목록 조회하기
      *  - 이벤트 기간안에 포함된 모든 이벤트 목록 조회하는 API입니다
+     *  - 1일 캐시하여 사용하고 있습니다. (cached)
      */
     getEvents: (params?: GetEventsParams, options?: Options) => {
         return request.get<GetEventsResponse>('display/events', {
@@ -35,6 +39,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
         });
     },
@@ -54,6 +59,7 @@ const event = {
                 arrayFormat: 'repeat',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
             headers: {
                 ...options?.headers,
@@ -65,6 +71,7 @@ const event = {
     /**
      * 종료된 모든 이벤트 목록 조회하기
      *  - 종료된 모든 이벤트 목록 조회하는 API입니다
+     *  - 1일 캐시하여 사용하고 있습니다. (cached)
      */
     getClosedEvents: (params?: GetClosedEventsParams, options?: Options) => {
         return request.get<GetClosedEventsResponse>('display/events/close', {
@@ -72,6 +79,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
         });
     },
@@ -80,6 +88,7 @@ const event = {
      * 다수의 상품 번호로 이벤트 목록 조회하기
      *  - 다수의 상품 번호로 이벤트 목록 조회하는 API입니다
      *   - 예시. 10001, 10002 상품으로 조회 시, 10001상품이 포함된 기획전과 10002 상품이 포함된 기획전 모두 조회
+     *  - 1일 캐시하여 사용하고 있습니다. (cached)
      */
     getEventsByProductNos: (
         params: GetEventsByProductNosParams,
@@ -92,6 +101,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -107,6 +117,7 @@ const event = {
                 arrayFormat: 'comma',
                 allowDots: true,
             }),
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
         });
     },
@@ -116,6 +127,11 @@ const event = {
      * - 기획전번호 리스트로 기획전을 조회하는 API 입니다.
      * - 현재 진행중인 기획전만 조회되고, 그 이외(진행대기, 종료)에는 조회되지 않습니다.
      * - 플랫폼별, 멤버그룹별, 멤버등급별에 따라 접근 불가능한 기획전은 조회되지 않습니다.
+     * - products: 상품 목록 응답
+     *   - 응답에서 기획전 내 상품목록은 전시순서가 가장 앞선 1개의 섹션 상품 목록이 조회되며, 상품 전시 순서에 의해 정렬됩니다.
+     *   - 상품 목록은 countPerEvent 변수에 의해 응답 상품 개수가 제한되며,
+     *   - 그 중 품절상품, 판매종료된 상품은 soldout, saleStatus 파라미터에 의해 다시 제외될 수 있습니다.
+     *   - 예를 들어, 15개의 상품 목록은 먼저 countPerEvent = 10에 의해 10개 상품으로 제한되고, 품절상품 및 판매 종료 상품이 제외되어 실제 결과가 10개 미만으로 표시될 수 있습니다.
      */
     searchEventsByEventNos: (
         params: SearchEventsByEventNosParams,
@@ -128,6 +144,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -148,6 +165,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -167,6 +185,7 @@ const event = {
                     arrayFormat: 'comma',
                     allowDots: true,
                 }),
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );
@@ -175,11 +194,15 @@ const event = {
     /**
      * 특정 상품을 포함하는 이벤트 목록 조회하기
      *  - 특정 상품을 포함하는 이벤트 목록 조회 API입니다
+     *  - 1일 캐시하여 사용하고 있습니다. (cached)
      */
     getEventsByProduct: (productNo: number, options?: Options) => {
         return request.get<GetEventsByProductNoResponse>(
             `display/events/products/${productNo}`,
-            options,
+            {
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
+                ...options,
+            },
         );
     },
 
@@ -191,6 +214,7 @@ const event = {
      *  - eventNo와 eventId 둘 다 검색 가능합니다.
      *  - 현재 진행중인 기획전만 조회되고, 그 이외(진행대기, 종료)에는 조회되지 않습니다.
      *  - 플랫폼별, 멤버그룹별, 멤버등급별에 따라 접근 불가능한 기획전은 조회되지 않습니다.
+     *  - 에러코드: EVEC0001(기획전이 존재하지 않는 경우), EVEC0002(현재 진행중인 기획전이 아닌 경우), EVEC0003(접근할 수 없는 기획전인 경우)
      */
     getEvent: (
         eventKey: string | number,
@@ -199,6 +223,7 @@ const event = {
     ) => {
         return request.get<GetEventResponse>(`display/events/${eventKey}/`, {
             searchParams: qs.stringify(params),
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
             headers: {
                 ...options?.headers,
@@ -212,6 +237,7 @@ const event = {
      *  - ID로 기획전을 조회하는 API입니다.
      *  - 현재 진행중인 기획전만 조회되고, 그 이외(진행대기, 종료)에는 조회되지 않습니다.
      *  - 플랫폼별, 멤버그룹별, 멤버등급별에 따라 접근 불가능한 기획전은 조회되지 않습니다.
+     *  - 에러코드: EVEC0001(기획전이 존재하지 않는 경우), EVEC0002(현재 진행중인 기획전이 아닌 경우), EVEC0003(접근할 수 없는 기획전인 경우)
      */
     getEventById: (
         eventId: string,
@@ -220,6 +246,7 @@ const event = {
     ) => {
         return request.get<GetEventResponse>(`display/events/ids/${eventId}`, {
             searchParams: qs.stringify(params),
+            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
             ...options,
             headers: {
                 ...options?.headers,
@@ -234,6 +261,7 @@ const event = {
      *  - size: 상품을 조회하는 최대 페이지 사이즈는 30입니다.
      *  - 현재 진행중인 기획전만 조회되고, 그 이외(진행대기, 종료)에는 조회되지 않습니다.
      *  - 플랫폼별, 멤버그룹별, 멤버등급별에 따라 접근 불가능한 상품진열 상품은 조회되지 않습니다.
+     *  - 에러코드: EVEC0001(기획전이 존재하지 않는 경우), EVEC0002(현재 진행중인 기획전이 아닌 경우), EVEC0003(접근할 수 없는 기획전인 경우)
      */
     getEventProductDisplaySection: (
         eventNo: number,
@@ -245,6 +273,7 @@ const event = {
             `display/events/${eventNo}/sections/${sectionNo}`,
             {
                 searchParams: qs.stringify(params),
+                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
                 ...options,
             },
         );

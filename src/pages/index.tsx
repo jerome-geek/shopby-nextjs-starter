@@ -8,6 +8,9 @@ import { HeroBanner } from '@/components/hero-banner';
 import mall from '@/api/admin/mall';
 import type { GetMallResponse } from '@/models/admin/mall';
 import * as styles from '@/styles/Home.css';
+import IconBanner from '@/components/banner/icon';
+import { Suspense } from 'react';
+import ProductSection from '@/components/product-section';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -23,34 +26,32 @@ interface HomeProps {
     mallInfo: GetMallResponse | null;
 }
 
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-    try {
-        const mallInfo = await mall.getMall().json();
+// export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+//     try {
+//         const mallInfo = await mall.getMall().json();
 
-        return {
-            props: {
-                mallInfo,
-            },
-            revalidate: 60 * 60, // 1시간마다 재생성 (ISR)
-        };
-    } catch (error) {
-        console.error('Failed to fetch mall info:', error);
-        return {
-            props: {
-                mallInfo: null,
-            },
-            revalidate: 60, // 에러 시 1분 후 재시도
-        };
-    }
-};
+//         return {
+//             props: {
+//                 mallInfo,
+//             },
+//             revalidate: 60 * 60, // 1시간마다 재생성 (ISR)
+//         };
+//     } catch (error) {
+//         console.error('Failed to fetch mall info:', error);
+//         return {
+//             props: {
+//                 mallInfo,
+//             },
+//             revalidate: 60, // 에러 시 1분 후 재시도
+//         };
+//     }
+// };
 
-export default function Home({
-    mallInfo,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Home() {
     return (
         <>
             <Head>
-                <title>{mallInfo?.mall.mallName ?? 'ShopBy Store'}</title>
+                <title>Wannamake</title>
                 <meta
                     name="description"
                     content="Welcome to our online store"
@@ -67,6 +68,12 @@ export default function Home({
                 {/* Full-width HeroBanner */}
                 <HeroBanner />
 
+                <Suspense>
+                    <IconBanner />
+                </Suspense>
+
+                <ProductSection />
+
                 {/* Max-width container for main content */}
                 <section className={styles.main}>
                     <Image
@@ -78,10 +85,6 @@ export default function Home({
                         priority
                     />
                     <div className={styles.intro}>
-                        <h1>
-                            {mallInfo?.mall.mallName ??
-                                'To get started, edit the index.tsx file.'}
-                        </h1>
                         <p>
                             Looking for a starting point or more instructions?
                             Head over to{' '}

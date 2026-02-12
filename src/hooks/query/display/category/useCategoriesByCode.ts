@@ -33,11 +33,11 @@ const useCategoriesByCode = <T = GetCategoriesByManagementCodeResponse>({
     return useQuery({
         queryKey: categoryKeys.byCode(data),
         queryFn: async () => {
-            const responseData = await category
+            const response = await category
                 .getCategoriesByManagementCode(data)
                 .json();
 
-            return responseData;
+            return response;
         },
         enabled: !isEmpty(data.codes),
         placeholderData: keepPreviousData,

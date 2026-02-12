@@ -32,7 +32,7 @@ const productKeys = {
         [...productKeys.lists(), 'infinite', memberNo, searchParams] as const,
     infiniteBestList: (
         memberNo: number,
-        searchParams: GetBestSellerProductsParams
+        searchParams: GetBestSellerProductsParams,
     ) =>
         [
             ...productKeys.lists(),
@@ -58,11 +58,11 @@ const productKeys = {
     detail: (
         productNo: number,
         memberNo?: number,
-        searchParams?: GetProductDetailParams
+        searchParams?: GetProductDetailParams,
     ) => [...productKeys.details(), productNo, memberNo, searchParams] as const,
     detailByProductNos: (
         searchParams: GetProductsInfoByProductNosData,
-        memberNo?: number
+        memberNo?: number,
     ) => [...productKeys.details(), 'list', searchParams, memberNo] as const,
 
     /** 상품 옵션 조회 */
@@ -70,7 +70,7 @@ const productKeys = {
     option: (
         productNo: number,
         memberNo?: number,
-        searchParams?: GetProductOptionParams
+        searchParams?: GetProductOptionParams,
     ) => [...productKeys.options(), productNo, memberNo, searchParams] as const,
 
     groupManagementCode: (searchParams: GetGroupManagementCodesData) =>
@@ -88,6 +88,9 @@ const productKeys = {
 
     extraProducts: (productNo: number) =>
         [...productKeys.all, 'extraProducts', productNo] as const,
+
+    keywords: (productNos: number[]) =>
+        [...productKeys.all, 'keywords', productNos] as const,
 };
 
 export default productKeys;

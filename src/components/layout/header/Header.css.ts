@@ -1,13 +1,23 @@
 import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
+import { media } from '@/styles/media';
 
 export const header = style({
-    position: 'sticky',
+    position: 'fixed',
     top: 0,
+    left: 0,
+    right: 0,
+    height: '64px', // 높이 명시
     zIndex: 50,
-    width: '100%',
     backgroundColor: '#ffffff',
-    borderBottom: '1px solid #e5e5e5',
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
+    borderBottom: '1px solid #f5f5f5',
+
+    '@media': {
+        [media.mobile]: {
+            height: '56px', // 모바일 높이 명시
+        },
+    },
 });
 
 export const headerInner = style({
@@ -15,8 +25,9 @@ export const headerInner = style({
     alignItems: 'center',
     justifyContent: 'space-between',
     maxWidth: '1200px',
+    height: '100%', // 부모 높이에 맞춤
     margin: '0 auto',
-    padding: '16px 24px',
+    padding: '0 24px', // 상하 패딩 제거 (height로 조절)
     gap: '32px',
 
     '@media': {
@@ -151,10 +162,6 @@ export const cartBadge = style({
     right: '-6px',
     width: '20px',
     height: '20px',
-    fontSize: '1rem',
-    fontWeight: 'semibold',
-    lineHeight: '1.5',
-    letterSpacing: '-2%',
     color: vars.color.white,
     backgroundColor: vars.color.red,
     borderRadius: '50%',

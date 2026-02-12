@@ -15,7 +15,7 @@ import { PATHS } from '@/const/paths';
 import useSnsLogin from '@/hooks/useSnsLogin';
 import useApiError from '@/hooks/useApiError';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
-import * as styles from './index.css';
+import * as styles from '@/styles/pages/login.css';
 
 export default function LoginPage() {
     const { t } = useTranslation();
@@ -62,12 +62,12 @@ export default function LoginPage() {
                 .json();
 
             // TODO: 30분 더 길게 추가
-            await cookieTokenManager.setToken({
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken,
-                expiresIn: data.expiresIn + 1800,
-                refreshTokenExpiresIn: data.refreshTokenExpiresIn,
-            });
+            // await cookieTokenManager.setToken({
+            //     accessToken: data.accessToken,
+            //     refreshToken: data.refreshToken,
+            //     expiresIn: data.expiresIn + 1800,
+            //     refreshTokenExpiresIn: data.refreshTokenExpiresIn,
+            // });
 
             router.push(returnUrl || PATHS.MAIN);
         } catch (error) {
@@ -82,54 +82,52 @@ export default function LoginPage() {
                 <div className={styles.loginFormSection}>
                     <form className={styles.form} onSubmit={onSubmit}>
                         {/* 로그인 헤더 */}
-                        <h1 className={styles.heading}>
-                            {t('로그인')}
-                        </h1>
+                        <h1 className={styles.heading}>{t('로그인')}</h1>
 
                         {/* 아이디 입력 */}
                         <div className={styles.inputGroup}>
-                            <InputLabel htmlFor='memberId'>
+                            <InputLabel htmlFor="memberId">
                                 {t('아이디')}
                             </InputLabel>
                             <InputField
                                 {...register('memberId')}
-                                type='text'
-                                id='memberId'
+                                type="text"
+                                id="memberId"
                                 placeholder={t('아이디를 입력해 주세요')}
                             />
-                            <ErrorMessage name='memberId' />
+                            <ErrorMessage name="memberId" />
                         </div>
 
                         {/* 비밀번호 입력 */}
                         <div className={styles.inputGroup}>
-                            <InputLabel htmlFor='password'>
+                            <InputLabel htmlFor="password">
                                 {t('비밀번호')}
                             </InputLabel>
                             <InputField
                                 {...register('password')}
-                                type='password'
-                                id='password'
+                                type="password"
+                                id="password"
                                 placeholder={t('비밀번호를 입력해 주세요')}
                             />
-                            <ErrorMessage name='password' />
+                            <ErrorMessage name="password" />
                         </div>
 
                         {/* 아이디 저장 체크박스 */}
                         <div className={styles.checkboxGroup}>
                             <Controller
                                 control={control}
-                                name='isSaved'
+                                name="isSaved"
                                 render={({ field }) => {
                                     return (
                                         <InputCheckbox
-                                            id='isSaved'
+                                            id="isSaved"
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
                                         />
                                     );
                                 }}
                             />
-                            <InputLabel isCheckbox htmlFor='isSaved'>
+                            <InputLabel isCheckbox htmlFor="isSaved">
                                 {t('아이디 저장')}
                             </InputLabel>
                         </div>
@@ -137,20 +135,22 @@ export default function LoginPage() {
                         {/* 버튼 컨테이너 */}
                         <div className={styles.buttonContainer}>
                             <Button
-                                type='submit'
-                                frame='solid'
-                                variant='primary'
+                                type="submit"
+                                frame="solid"
+                                variant="primary"
                                 disabled={isSubmitting}
                             >
                                 <span>
-                                    {isSubmitting ? t('로그인 중...') : t('로그인')}
+                                    {isSubmitting
+                                        ? t('로그인 중...')
+                                        : t('로그인')}
                                 </span>
                             </Button>
 
                             <Button
-                                type='button'
-                                frame='outlined'
-                                variant='primary'
+                                type="button"
+                                frame="outlined"
+                                variant="primary"
                                 onClick={() =>
                                     router.push(PATHS.SIGNUP.REGISTER_METHOD)
                                 }
@@ -183,8 +183,8 @@ export default function LoginPage() {
                                 return (
                                     <li key={`social-login-button-${provider}`}>
                                         <Button
-                                            type='button'
-                                            frame='solid'
+                                            type="button"
+                                            frame="solid"
                                             variant={provider}
                                             onClick={() =>
                                                 onClick({ returnUrl })

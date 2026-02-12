@@ -1,4 +1,9 @@
-import { GetArticleListParams, GetArticleParams } from '@/models/manage/board';
+import {
+    GetArticleListParams,
+    GetArticleParams,
+    GetPostListData,
+    GetPostListParams,
+} from '@/models/manage/board';
 
 const boardKeys = {
     all: ['boards'] as const,
@@ -29,6 +34,15 @@ const boardKeys = {
             memberNo,
             searchParams,
         ] as const,
+
+    /** 게시글 리스트 조회하기(버전 2) */
+    postList: (searchParams?: GetPostListParams, data?: GetPostListData) =>
+        [...boardKeys.lists(), 'post', searchParams, data] as const,
+    infinitePostList: (
+        searchParams?: GetPostListParams,
+        data?: GetPostListData,
+    ) =>
+        [...boardKeys.lists(), 'post', 'infinite', searchParams, data] as const,
 
     /** 게시글 상세 */
     details: () => [...boardKeys.all, 'detail'] as const,

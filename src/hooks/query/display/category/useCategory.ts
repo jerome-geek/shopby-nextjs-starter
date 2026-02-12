@@ -34,11 +34,11 @@ const useCategory = <T = GetCategoryResponse>({
     return useQuery({
         queryKey: categoryKeys.detail(categoryNo, searchParams),
         queryFn: async () => {
-            const responseData = await category
+            const response = await category
                 .getCategory(categoryNo, searchParams)
                 .json();
 
-            return responseData;
+            return response;
         },
         enabled: !!categoryNo,
         placeholderData: keepPreviousData,
