@@ -14,229 +14,123 @@ import * as styles from './Footer.css';
 function FooterContent() {
     const { t } = useTranslation();
     const { data: mallData } = useMall();
-    const [isExpanded, setIsExpanded] = useState(false);
 
-    const menuGroups = useMemo(
-        () => [
-            [
-                {
-                    label: t('WannaMake 소개'),
-                    href: `${PATHS.AUTH.TERMS.MAIN}/MALL_INTRODUCTION`,
-                },
-                {
-                    label: t('이용약관'),
-                    href: `${PATHS.AUTH.TERMS.MAIN}/USE`,
-                },
-                {
-                    label: t('개인정보처리방침'),
-                    href: `${PATHS.AUTH.TERMS.MAIN}/PI_PROCESS`,
-                },
-            ],
-            [
-                {
-                    label: t('공지사항'),
-                    href: '/boards/notice',
-                },
-                {
-                    label: t('FAQ'),
-                    href: '/boards/faq',
-                },
-                {
-                    label: t('1:1 문의'),
-                    href: PATHS.MYPAGE.INQUIRIES.MAIN,
-                },
-                {
-                    label: t('입점/제휴 문의'),
-                    href: '/partnership',
-                },
-            ],
-        ],
-        [t],
-    );
-
-    // 소셜 미디어 링크
-    const socialMediaList = useMemo(
-        () => [
-            { id: 'instagram', url: '/', icon: <InstagramIcon /> },
-            { id: 'youtube', url: '/', icon: <YoutubeIcon /> },
-        ],
-        [],
-    );
-
-    // 저작권 및 면책 정보
-    const copyright = useMemo(
-        () => ({
-            disclaimer: t(
-                '일부 상품의 경우 (주)제니지니앤로이드는 통신판매의 당사자가 아닌 통신판매중개자로서 상품, 상품정보, 거래에 대한 책임이 제한될 수 있으므로, 각 상품 페이지에서 구체적인 내용을 확인하시기 바랍니다.',
-            ),
-            copyrightText: t(
-                'COPYRIGHT ⓒ {{companyName}} ALL RIGHTS RESERVED.',
-                {
-                    companyName:
-                        mallData?.serviceBasicInfo.companyName ||
-                        '(주)제니지니앤로이드',
-                },
-            ),
-        }),
-        [mallData?.serviceBasicInfo.companyName, t],
-    );
-
-    // 회사 정보
     const companyInfo = useMemo(
         () => ({
-            companyName: mallData?.serviceBasicInfo.companyName ?? '',
+            companyName:
+                mallData?.serviceBasicInfo.companyName ||
+                '(주)제니지니앤로이드',
             representativeName:
-                mallData?.serviceBasicInfo.representativeName ?? '',
-            address: mallData?.serviceBasicInfo.address ?? '',
-            representPhoneNo: mallData?.serviceBasicInfo.representPhoneNo ?? '',
+                mallData?.serviceBasicInfo.representativeName || '홍길동',
+            address:
+                mallData?.serviceBasicInfo.address ||
+                '서울특별시 강남구 테헤란로 123, 4층',
+            representPhoneNo:
+                mallData?.serviceBasicInfo.representPhoneNo || '1588-0000',
             businessRegistrationNo:
-                mallData?.serviceBasicInfo.businessRegistrationNo ?? '',
+                mallData?.serviceBasicInfo.businessRegistrationNo ||
+                '123-45-67890',
             onlineMarketingBusinessDeclarationNo:
                 mallData?.serviceBasicInfo
-                    .onlineMarketingBusinessDeclarationNo ?? '',
-            privacyManagerName:
-                mallData?.serviceBasicInfo.privacyManagerName ?? '',
+                    .onlineMarketingBusinessDeclarationNo ||
+                '2024-서울강남-12345',
+            email: 'help@jollypot.com', // Mall data에 이메일이 없을 경우 대비
         }),
         [mallData?.serviceBasicInfo],
+    );
+
+    const menuLinks = useMemo(
+        () => [
+            {
+                label: t('이용약관'),
+                href: `${PATHS.AUTH.TERMS.MAIN}/USE`,
+            },
+            {
+                label: t('개인정보처리방침'),
+                href: `${PATHS.AUTH.TERMS.MAIN}/PI_PROCESS`,
+            },
+            {
+                label: t('사업자정보확인'),
+                href: `https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${
+                    companyInfo.businessRegistrationNo?.replace(/-/g, '') || ''
+                }`,
+                target: '_blank',
+            },
+        ],
+        [t, companyInfo.businessRegistrationNo],
     );
 
     return (
         <footer className={styles.footerContainer} id="footer">
             <div className={styles.footerInnerContainer}>
-                {/* 왼쪽: 회사 정보 */}
-                <div className={styles.companyInfoSection}>
-                    <h3
-                        className={styles.companyTitle}
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                setIsExpanded(!isExpanded);
-                            }
-                        }}
-                    >
-                        {t('{{companyName}} 사업자 정보', {
-                            companyName: companyInfo.companyName,
-                        })}
-                        <SmallCaretIcon
-                            className={styles.companyTitleIcon}
-                            data-expanded={isExpanded}
-                        />
+                {/* 회사 정보 섹션 */}
+                <div className={styles.companySection}>
+                    <h3 className={styles.companyName}>
+                        {companyInfo.companyName}
                     </h3>
-
-                    {/* 모바일: 저작권 정보 */}
-                    <div
-                        className={styles.mobileCopyrightSection}
-                        data-expanded={isExpanded}
-                    >
-                        <p>{copyright.disclaimer}</p>
-                        <p>{copyright.copyrightText}</p>
-                    </div>
-
-                    {/* 웹(데스크톱): 상세 회사 정보 */}
-                    <dl
-                        className={styles.companyDetailsList}
-                        data-expanded={isExpanded}
-                    >
-                        <div className={styles.companyDetailsItem}>
-                            <dt>{t('대표자명')}</dt>
-                            <dd>{companyInfo.representativeName}</dd>
+                    <div className={styles.infoList}>
+                        <div className={styles.infoItem}>
+                            <span>{t('대표이사')}:</span>
+                            <span>{companyInfo.representativeName}</span>
                         </div>
-                        <div className={styles.companyDetailsItem}>
-                            <dt>{t('주소')}</dt>
-                            <dd>{companyInfo.address}</dd>
+                        <div className={styles.infoItem}>
+                            <span>{t('사업자등록번호')}:</span>
+                            <span>{companyInfo.businessRegistrationNo}</span>
                         </div>
-                        <div className={styles.companyDetailsItem}>
-                            <dt>{t('대표 전화')}</dt>
-                            <dd>{companyInfo.representPhoneNo}</dd>
-                        </div>
-                        <div className={styles.companyDetailsItem}>
-                            <dt>{t('사업자등록번호')}</dt>
-                            <dd>{companyInfo.businessRegistrationNo}</dd>
-                        </div>
-                        <div className={styles.companyDetailsItem}>
-                            <dt>{t('통신판매업신고번호')}</dt>
-                            <dd>
+                        <div className={styles.infoItem}>
+                            <span>{t('통신판매업신고')}:</span>
+                            <span>
                                 {
                                     companyInfo.onlineMarketingBusinessDeclarationNo
                                 }
-                                <Link
-                                    href={`https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${
-                                        companyInfo.businessRegistrationNo?.replace(
-                                            /-/g,
-                                            '',
-                                        ) || ''
-                                    }`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {t('사업자정보확인')}
-                                </Link>
-                            </dd>
+                            </span>
                         </div>
-                        <div className={styles.companyDetailsItem}>
-                            <dt>{t('개인정보보호책임자')}</dt>
-                            <dd>{companyInfo.privacyManagerName}</dd>
+                        <div className={styles.infoItem}>
+                            <span>{companyInfo.address}</span>
                         </div>
-                        <div className={styles.companyDetailsItem}>
-                            <dt>{t('호스팅 서비스')}</dt>
-                            <dd>{t('엔에이치엔커머스(주)')}</dd>
-                        </div>
-                    </dl>
+                    </div>
                 </div>
 
-                {/* 오른쪽: 네비게이션, 소셜 미디어, 저작권 */}
-                <div className={styles.linksSection}>
-                    {/* 네비게이션 링크 */}
-                    <div className={styles.navigationWrapper}>
-                        <nav className={styles.navigationContainer}>
-                            {menuGroups.map((group, groupIdx) => (
-                                <ul
-                                    className={styles.menuGroupList}
-                                    key={groupIdx}
-                                >
-                                    {group.map(({ label, href }) => (
-                                        <li
-                                            className={styles.menuGroupItem}
-                                            key={href}
-                                        >
-                                            <Link
-                                                href={href}
-                                                className={styles.menuGroupLink}
-                                            >
-                                                {label ===
-                                                t('개인정보처리방침') ? (
-                                                    <strong>{label}</strong>
-                                                ) : (
-                                                    <span>{label}</span>
-                                                )}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ))}
-                        </nav>
-
-                        {/* 소셜 미디어 아이콘 */}
-                        <ul className={styles.socialMediaList}>
-                            {socialMediaList.map(({ id, url, icon }) => (
-                                <li className={styles.socialMediaItem} key={id}>
-                                    <Link
-                                        href={url}
-                                        className={styles.socialMediaLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {icon}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                {/* 고객센터 섹션 */}
+                <div className={styles.csSection}>
+                    <h3 className={styles.csTitle}>{t('고객센터')}</h3>
+                    <div className={styles.infoList}>
+                        <div className={styles.infoItem}>
+                            <span>{t('전화')}:</span>
+                            <span>{companyInfo.representPhoneNo}</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <span>{t('이메일')}:</span>
+                            <span>{companyInfo.email}</span>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <span>{t('운영시간')}:</span>
+                            <span>
+                                {t('평일 09:00 - 18:00 (주말 및 공휴일 휴무)')}
+                            </span>
+                        </div>
                     </div>
+                </div>
 
-                    {/* 저작권 정보 (데스크톱만) */}
-                    <div className={styles.desktopCopyrightSection}>
-                        <p>{copyright.disclaimer}</p>
-                        <p>{copyright.copyrightText}</p>
+                {/* 하단 링크 & 저작권 */}
+                <div>
+                    <nav className={styles.bottomLinks}>
+                        {menuLinks.map((link) => (
+                            <Link
+                                key={link.label}
+                                href={link.href}
+                                className={styles.bottomLink}
+                                target={link.target}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </nav>
+                    <div className={styles.copyrightSection}>
+                        <p className={styles.copyright}>
+                            © 2024 {companyInfo.companyName}. All rights
+                            reserved.
+                        </p>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,8 @@ import { ReactNode } from 'react';
 
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
-import * as styles from './Layout.css';
+import { BottomNav } from '@/components/layout/bottom-navigation';
+import * as styles from '@/components/layout/Layout.css';
 
 interface LayoutProps {
     children: ReactNode;
@@ -18,6 +19,7 @@ export function Layout({ children, className }: LayoutProps) {
             <main className={styles.main}>{children}</main>
 
             <Footer />
+            <BottomNav />
         </div>
     );
 }
