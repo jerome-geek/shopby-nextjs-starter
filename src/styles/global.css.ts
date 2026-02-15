@@ -1,5 +1,17 @@
+import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
-import { globalStyle } from '@vanilla-extract/css';
+
+export const visuallyHidden = style({
+    position: 'absolute',
+    width: '1px',
+    height: '1px',
+    padding: '0',
+    margin: '-1px',
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    whiteSpace: 'nowrap',
+    border: '0',
+});
 
 // Reset & Base Styles
 globalStyle('*', {
@@ -64,7 +76,7 @@ globalStyle('img, picture, video, canvas, svg', {
 });
 
 // Lists
-globalStyle('ul, ol', {
+globalStyle('ul, ol, dl, dt, dd', {
     margin: 0,
     padding: 0,
     listStyle: 'none',

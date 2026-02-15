@@ -1,12 +1,9 @@
-import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { HeroBanner } from '@/components/hero-banner';
-import mall from '@/api/admin/mall';
-import type { GetMallResponse } from '@/models/admin/mall';
 import * as styles from '@/styles/Home.css';
 import IconBanner from '@/components/banner/icon';
 import { Suspense } from 'react';
@@ -21,31 +18,6 @@ const geistMono = Geist_Mono({
     variable: '--font-geist-mono',
     subsets: ['latin'],
 });
-
-interface HomeProps {
-    mallInfo: GetMallResponse | null;
-}
-
-// export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-//     try {
-//         const mallInfo = await mall.getMall().json();
-
-//         return {
-//             props: {
-//                 mallInfo,
-//             },
-//             revalidate: 60 * 60, // 1시간마다 재생성 (ISR)
-//         };
-//     } catch (error) {
-//         console.error('Failed to fetch mall info:', error);
-//         return {
-//             props: {
-//                 mallInfo,
-//             },
-//             revalidate: 60, // 에러 시 1분 후 재시도
-//         };
-//     }
-// };
 
 export default function Home() {
     return (
