@@ -1,0 +1,48 @@
+import {
+    UseQueryOptions,
+    keepPreviousData,
+    useQuery,
+} from '@tanstack/react-query';
+import { HTTPError } from 'ky';
+
+import { productProfile } from '@/api/product';
+import { productProfileKeys } from '@/hooks/queryKeys';
+import {
+    GetLikeProductsParams,
+    GetLikeProductsResponse,
+} from '@/models/product/profile';
+
+interface UseLikeProductListParams<T = GetLikeProductsResponse> {
+    searchParams: GetLikeProductsParams;
+    memberNo?: number;
+    options?: Omit<
+        UseQueryOptions<
+            GetLikeProductsResponse,
+            HTTPError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof productProfileKeys)['likeProductList']>
+        >,
+        'queryKey' | 'queryFn'
+    >;
+}
+
+const useLikeProductList = <T = GetLikeProductsResponse>({
+    searchParams,
+    memberNo = 0,
+    options,
+}: UseLikeProductListParams<T>) => {
+    return useQuery({
+        queryKey: productProfileKeys.likeProductList(memberNo, searchParams),
+        queryFn: async () => {
+            const data = await productProfile
+                .getLikeProducts(searchParams)
+                .json();
+
+            return data;
+        },
+        placeholderData: keepPreviousData,
+        ...options,
+    });
+};
+
+export default useLikeProductList;

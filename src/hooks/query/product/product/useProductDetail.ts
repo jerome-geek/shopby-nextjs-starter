@@ -1,14 +1,16 @@
-import { HTTPError } from 'ky';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { HTTPError } from 'ky';
+import { useSearchParams } from 'next/navigation';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
+import { ChannelType } from '@/models';
 import {
     GetProductDetailParams,
     ProductDetailResponse,
 } from '@/models/product/product';
 
-interface UseProductDetailParams<T> {
+interface UseProductDetailParams<T = ProductDetailResponse> {
     productNo: number;
     searchParams?: GetProductDetailParams;
     options?: Omit<
@@ -27,16 +29,25 @@ const useProductDetail = <T = ProductDetailResponse>({
     searchParams,
     options,
 }: UseProductDetailParams<T>) => {
+    const query = useSearchParams();
+    const preview = query.get('preview') === 'true';
+    const channelType = query.get('channelType') as ChannelType;
+
     return useQuery({
         queryKey: productKeys.detail(productNo, searchParams),
         queryFn: async () => {
-            const response = await product
-                .getProductDetail(productNo, searchParams)
+            const data = await product
+                .getProductDetail(productNo, {
+                    channelType,
+                    ...(preview && { preview }),
+                    ...searchParams,
+                })
                 .json();
 
-            return response;
+            return data;
         },
-        enabled: !!productNo,
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
         ...options,
     });
 };
