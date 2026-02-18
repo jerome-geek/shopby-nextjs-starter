@@ -1,4 +1,4 @@
-import { style, globalStyle, keyframes } from '@vanilla-extract/css';
+import { style, keyframes } from '@vanilla-extract/css';
 
 const shimmer = keyframes({
     '0%': { backgroundPosition: '200% 0' },
@@ -21,11 +21,10 @@ export const heroBanner = style({
 
 export const swiperContainer = style({
     width: '100%',
-    // Removed max-width and margin: 0 auto to make it full width
-    padding: '0 24px',
+    padding: '0 40px',
     '@media': {
         '(max-width: 768px)': {
-            padding: '0 16px',
+            padding: '0 20px',
         },
     },
 });
@@ -36,17 +35,22 @@ export const swiper = style({
 });
 
 export const slide = style({
-    width: '70vw !important' as any,
+    width: '320px !important' as any,
     aspectRatio: '320 / 427',
     height: 'auto',
-    borderRadius: '12px',
+    borderRadius: '24px',
     overflow: 'hidden',
-    '@media': {
-        '(min-width: 768px)': {
-            width: '320px !important' as any,
+    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+    opacity: 0.6,
+    selectors: {
+        '&.swiper-slide-active': {
+            opacity: 1,
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
         },
-        '(min-width: 1024px)': {
-            width: '320px !important' as any,
+    },
+    '@media': {
+        '(max-width: 768px)': {
+            width: '280px !important' as any,
         },
     },
 });
@@ -57,19 +61,14 @@ export const card = style({
     width: '100%',
     height: '100%',
     textDecoration: 'none',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    selectors: {
-        '&:hover': {
-            transform: 'translateY(-4px)',
-            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
-        },
-    },
+    backgroundColor: '#fff',
 });
 
 export const cardImage = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+    display: 'block',
 });
 
 export const cardContent = style({
@@ -77,38 +76,43 @@ export const cardContent = style({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: '24px',
+    padding: '32px 24px',
     background:
-        'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%)',
+        'linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%)',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
     '@media': {
         '(max-width: 768px)': {
-            padding: '16px',
+            padding: '24px 16px',
         },
     },
 });
 
 export const cardTitle = style({
-    fontSize: '1.5rem',
+    fontSize: '1.75rem',
     fontWeight: 700,
-    margin: '0 0 8px',
-    lineHeight: 1.3,
-    textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
+    margin: '0 0 4px',
+    lineHeight: 1.2,
+    color: '#fff',
+    letterSpacing: '-0.02em',
     '@media': {
         '(max-width: 768px)': {
-            fontSize: '1.25rem',
+            fontSize: '1.5rem',
         },
     },
 });
 
 export const cardDescription = style({
-    fontSize: '0.875rem',
+    fontSize: '1rem',
     margin: 0,
-    lineHeight: 1.5,
-    opacity: 0.9,
-    textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
+    lineHeight: 1.4,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: 400,
+    opacity: 0.8,
     '@media': {
         '(max-width: 768px)': {
-            fontSize: '0.8125rem',
+            fontSize: '0.9375rem',
         },
     },
 });
@@ -184,7 +188,8 @@ export const skeletonWrapper = style({
 export const skeletonCard = style({
     flexShrink: 0,
     width: '320px',
-    height: '380px',
+    aspectRatio: '320 / 427',
+    height: 'auto',
     borderRadius: '16px',
     backgroundColor: '#e0e0e0',
     position: 'relative',
@@ -192,11 +197,9 @@ export const skeletonCard = style({
     '@media': {
         '(max-width: 768px)': {
             width: '280px',
-            height: '320px',
         },
         '(max-width: 480px)': {
             width: '240px',
-            height: '280px',
         },
     },
 });

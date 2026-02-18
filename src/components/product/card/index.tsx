@@ -134,6 +134,18 @@ const ProductCard = ({
 
                 <div className={styles.priceArea}>
                     <div className={styles.priceWrapper}>
+                        {(immediateDiscountAmt > 0 ||
+                            additionDiscountAmt > 0) && (
+                            <span className={styles.discountPrice}>
+                                {Math.floor(
+                                    ((immediateDiscountAmt +
+                                        additionDiscountAmt) /
+                                        salePrice) *
+                                        100,
+                                )}
+                                %
+                            </span>
+                        )}
                         <span className={styles.productPrice}>
                             {CURRENCY(salePrice, { precision: 0 })
                                 .subtract(immediateDiscountAmt)

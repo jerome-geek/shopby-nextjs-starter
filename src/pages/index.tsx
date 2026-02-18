@@ -7,7 +7,8 @@ import { HeroBanner } from '@/components/hero-banner';
 import * as styles from '@/styles/Home.css';
 import IconBanner from '@/components/banner/icon';
 import { Suspense } from 'react';
-import ProductSection from '@/components/product-section';
+import TimeSale from '@/components/section/timeSale';
+import Best from '@/components/section/best';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -34,6 +35,7 @@ export default function Home() {
                 />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+
             <div
                 className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
             >
@@ -44,7 +46,11 @@ export default function Home() {
                     <IconBanner />
                 </Suspense>
 
-                <ProductSection />
+                <TimeSale />
+
+                <Best />
+
+                {/* <ProductSection /> */}
 
                 {/* Max-width container for main content */}
                 <section className={styles.main}>

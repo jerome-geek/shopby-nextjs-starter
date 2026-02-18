@@ -55,11 +55,8 @@ const productKeys = {
 
     /** 상품 상세 조회 */
     details: () => [...productKeys.all, 'detail'] as const,
-    detail: (
-        productNo: number,
-        memberNo?: number,
-        searchParams?: GetProductDetailParams,
-    ) => [...productKeys.details(), productNo, memberNo, searchParams] as const,
+    detail: (productNo: number, searchParams?: GetProductDetailParams) =>
+        [...productKeys.details(), productNo, searchParams] as const,
     detailByProductNos: (
         searchParams: GetProductsInfoByProductNosData,
         memberNo?: number,

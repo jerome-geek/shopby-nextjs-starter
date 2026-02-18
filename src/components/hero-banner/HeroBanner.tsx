@@ -13,8 +13,10 @@ import { normalizeImageUrl, extractBannerContents } from '@/utils/shopby';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-coverflow';
+import Link from 'next/link';
+import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 
-const BANNER_ID = 'MAIN_TOP';
+const BANNER_ID = 'HERO-BANNER';
 
 function HeroBannerContent() {
     const { data: banners } = useBannerList<Banner[]>({
@@ -56,22 +58,28 @@ function HeroBannerContent() {
             <div className={styles.swiperContainer}>
                 <Swiper
                     modules={[Autoplay, Navigation, EffectCoverflow]}
-                    spaceBetween={0}
-                    slidesPerView={'auto'}
-                    centeredSlides={true}
+                    spaceBetween={12}
+                    slidesPerView={1.1}
+                    loop
+                    centeredSlides
+                    grabCursor
                     effect={'coverflow'}
                     coverflowEffect={{
-                        rotate: 0,
-                        stretch: 80,
-                        depth: 200,
+                        // rotate: 0,
+                        // stretch: 25,
+                        // depth: 100,
+                        // modifier: 1.2,
+                        // slideShadows: false,
+                        rotate: 30,
+                        stretch: 25,
+                        depth: 130,
                         modifier: 1,
                         slideShadows: false,
                     }}
-                    loop={true}
-                    autoplay={{
-                        delay: 4000,
-                        disableOnInteraction: false,
-                    }}
+                    // autoplay={{
+                    //     delay: 4000,
+                    //     disableOnInteraction: false,
+                    // }}
                     navigation={{
                         prevEl: `.${styles.navPrev}`,
                         nextEl: `.${styles.navNext}`,
@@ -85,13 +93,12 @@ function HeroBannerContent() {
                             key={banner.bannerNo}
                             className={styles.slide}
                         >
-                            <a
-                                href={banner.landingUrl || '#'}
-                                target={
-                                    banner.browerTargetType === 'NEW'
-                                        ? '_blank'
-                                        : '_self'
-                                }
+                            <Link
+                                href={getLandingUrl({
+                                    landingUrl: banner.landingUrlType,
+                                    landingUrlType: banner.landingUrlType,
+                                })}
+                                target={getLinkTarget(banner.browerTargetType)}
                                 rel={
                                     banner.browerTargetType === 'NEW'
                                         ? 'noopener noreferrer'
@@ -127,7 +134,7 @@ function HeroBannerContent() {
                                         </p>
                                     )}
                                 </div>
-                            </a>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Swiper>

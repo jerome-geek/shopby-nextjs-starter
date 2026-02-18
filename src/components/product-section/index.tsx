@@ -96,45 +96,48 @@ const ProductSection = () => {
                     },
                 }}
             >
-                {productSectionProductListData?.products.map((product) => {
-                    return (
-                        <SwiperSlide key={product.productNo}>
-                            <ProductCard
-                                productNo={product.productNo}
-                                productName={product.productName}
-                                imageUrlInfo={product.imageUrlInfo.map(
-                                    (img) => ({
-                                        imageUrlType:
-                                            img.imageUrlType || 'IMAGE_URL',
-                                        type: img.imageUrlType || 'IMAGE_URL',
-                                        url: img.url,
-                                    }),
-                                )}
-                                brandNo={product.brandNo}
-                                brandName={product.brandName}
-                                stickerInfos={product.stickerInfos.map(
-                                    (sticker, stickerIndex) => ({
-                                        no: stickerIndex + 1,
-                                        name: sticker.label,
-                                        label: sticker.label,
-                                        type: sticker.type,
-                                    }),
-                                )}
-                                likeCount={product.likeCount}
-                                liked={product.liked}
-                                reviewRating={product.reviewRating}
-                                totalReviewCount={product.totalReviewCount}
-                                salePrice={product.salePrice}
-                                immediateDiscountAmt={
-                                    product.immediateDiscountAmt
-                                }
-                                additionDiscountAmt={
-                                    product.additionDiscountAmt
-                                }
-                            />
-                        </SwiperSlide>
-                    );
-                })}
+                {(productSectionProductListData?.products ?? []).map(
+                    (product) => {
+                        return (
+                            <SwiperSlide key={product.productNo}>
+                                <ProductCard
+                                    productNo={product.productNo}
+                                    productName={product.productName}
+                                    imageUrlInfo={product.imageUrlInfo.map(
+                                        (img) => ({
+                                            imageUrlType:
+                                                img.imageUrlType || 'IMAGE_URL',
+                                            type:
+                                                img.imageUrlType || 'IMAGE_URL',
+                                            url: img.url,
+                                        }),
+                                    )}
+                                    brandNo={product.brandNo}
+                                    brandName={product.brandName}
+                                    stickerInfos={product.stickerInfos.map(
+                                        (sticker, stickerIndex) => ({
+                                            no: stickerIndex + 1,
+                                            name: sticker.label,
+                                            label: sticker.label,
+                                            type: sticker.type,
+                                        }),
+                                    )}
+                                    likeCount={product.likeCount}
+                                    liked={product.liked}
+                                    reviewRating={product.reviewRating}
+                                    totalReviewCount={product.totalReviewCount}
+                                    salePrice={product.salePrice}
+                                    immediateDiscountAmt={
+                                        product.immediateDiscountAmt
+                                    }
+                                    additionDiscountAmt={
+                                        product.additionDiscountAmt
+                                    }
+                                />
+                            </SwiperSlide>
+                        );
+                    },
+                )}
             </Swiper>
         </section>
     );
