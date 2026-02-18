@@ -69,3 +69,12 @@ export interface GetAdditionalDiscountResponse {
         discountAmount: MemberTargetType;
     }[];
 }
+
+export interface GetAdditionalDiscountByProductNosParams {
+    /** 상품번호 */
+    productNos: number[];
+}
+
+export interface GetAdditionalDiscountByProductNosResponse {
+    data: GetAdditionalDiscountResponse[];
+}

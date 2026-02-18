@@ -1,5 +1,6 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const container = style({
     backgroundColor: vars.color.white,
@@ -35,17 +36,19 @@ export const content = style({
     gap: '12px',
 });
 
-export const brand = style({
-    fontSize: '14px',
-    color: vars.color.gray[60],
-});
+export const brand = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.gray[60],
+    },
+]);
 
-export const title = style({
-    fontSize: '20px',
-    fontWeight: 700,
-    color: vars.color.black,
-    lineHeight: '1.4',
-});
+export const productName = style([
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+    },
+]);
 
 export const priceContainer = style({
     display: 'flex',

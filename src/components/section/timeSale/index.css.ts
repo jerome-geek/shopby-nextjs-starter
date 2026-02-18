@@ -1,9 +1,13 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const section = style({
     padding: '40px 20px',
     backgroundColor: vars.color.white,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
     '@media': {
         'screen and (min-width: 768px)': {
             padding: '60px 40px',
@@ -16,60 +20,65 @@ export const section = style({
 export const header = style({
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '24px',
+    alignItems: 'center',
 });
 
 export const titleWrapper = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '2px',
 });
 
 export const titleRow = style({
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
+    gap: '8px',
 });
 
-export const title = style({
-    fontSize: '24px',
-    fontWeight: 800,
-    color: vars.color.black,
-});
+export const title = style([
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+    },
+]);
 
-export const timer = style({
-    fontSize: '24px',
-    fontWeight: 800,
-    color: '#FF3366', // Adjust to match the red in image
-    fontVariantNumeric: 'tabular-nums',
-});
+export const timer = style([
+    textStyles.headingBold,
+    {
+        color: vars.color.pink['100'],
+        fontVariantNumeric: 'tabular-nums',
+    },
+]);
 
-export const subtitle = style({
-    fontSize: '14px',
-    color: vars.color.gray[60],
-});
+export const subtitle = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+    },
+]);
 
-export const viewAll = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    fontSize: '14px',
-    color: vars.color.gray[50],
-    textDecoration: 'none',
-});
+export const viewAll = style([
+    textStyles.caption1Regular,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '2px',
+        color: vars.color.gray['60'],
+        textDecoration: 'none',
+    },
+]);
 
 export const productGrid = style({
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: '16px',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '12px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
     '@media': {
-        'screen and (max-width: 480px)': {
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '12px',
+        'screen and (min-width: 768px)': {
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '16px',
         },
     },
 });

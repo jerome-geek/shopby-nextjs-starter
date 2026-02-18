@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ProductCard from '@/components/product/card';
 import * as styles from './index.css';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
+import { Button } from '@/components/ui/button';
 
 const calculateTimeLeft = () => {
     const now = new Date();
@@ -72,6 +73,10 @@ export default function TimeSale() {
                 includeStopProduct: false,
             },
         });
+    console.log(
+        '🚀 ~ TimeSale ~ productSectionProductListData:',
+        productSectionProductListData,
+    );
 
     const filteredProducts = useMemo(() => {
         return (
@@ -93,7 +98,9 @@ export default function TimeSale() {
         );
     }, [productSectionProductListData?.products]);
 
-    if (filteredProducts.length === 0) return null;
+    if (filteredProducts.length === 0) {
+        return null;
+    }
 
     return (
         <section className={styles.section}>
@@ -142,10 +149,15 @@ export default function TimeSale() {
                             liked={product.liked}
                             reviewRating={product.reviewRating}
                             totalReviewCount={product.totalReviewCount}
+                            isAdditionalDiscount
                         />
                     </li>
                 ))}
             </ul>
+
+            <Button type="button" frame="solid" variant="primary">
+                <span>라이프 타임특가 더보기</span>
+            </Button>
         </section>
     );
 }

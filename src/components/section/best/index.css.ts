@@ -1,9 +1,14 @@
-import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const section = style({
     padding: '40px 20px',
     backgroundColor: vars.color.white,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
     '@media': {
         'screen and (min-width: 768px)': {
             padding: '60px 40px',
@@ -16,35 +21,38 @@ export const section = style({
 export const header = style({
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '24px',
+    alignItems: 'center',
 });
 
 export const titleWrapper = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '2px',
 });
 
-export const title = style({
-    fontSize: '24px',
-    fontWeight: 800,
-    color: vars.color.black,
-});
+export const title = style([
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+    },
+]);
 
-export const subtitle = style({
-    fontSize: '14px',
-    color: vars.color.gray[60],
-});
+export const subtitle = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray[60],
+    },
+]);
 
-export const viewAll = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    fontSize: '14px',
-    color: vars.color.gray[50],
-    textDecoration: 'none',
-});
+export const viewAll = style([
+    textStyles.caption1Regular,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '2px',
+        color: vars.color.gray[60],
+    },
+]);
 
 export const categoryList = style({
     display: 'flex',
@@ -89,18 +97,23 @@ export const productGridItem = style({
     position: 'relative',
 });
 
-export const rankBadge = style({
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    color: vars.color.white,
-    padding: '4px 10px',
-    fontSize: '14px',
-    fontWeight: 700,
-    borderBottomRightRadius: '8px',
-    zIndex: 2,
-});
+export const rankBadge = style([
+    textStyles.caption1Semibold,
+    {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: vars.color.white,
+        zIndex: 2,
+        borderTopLeftRadius: '4px',
+        width: '24px',
+        height: '24px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+]);
 
 export const moreButton = style({
     display: 'flex',
@@ -124,4 +137,16 @@ export const moreButton = style({
             backgroundColor: '#EEF2EE',
         },
     },
+});
+
+export const emptyMessage = style({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    padding: '40px 0',
+    color: vars.color.gray[60],
+    fontSize: '14px',
+    backgroundColor: vars.color.gray[10],
+    borderRadius: '4px',
 });

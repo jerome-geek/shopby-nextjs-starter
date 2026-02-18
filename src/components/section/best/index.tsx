@@ -1,58 +1,72 @@
 'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { ArrowIcon } from '@/components/icons/ArrowIcon';
 import ProductCard from '@/components/product/card';
-import * as styles from './index.css';
+import * as styles from '@/components/section/best/index.css';
+import { PATHS } from '@/const/paths';
+import {
+    useCategoriesByCode,
+    useCategory,
+} from '@/hooks/query/display/category';
+import { useBestSellerProductList } from '@/hooks/query/product/product';
 
 import 'swiper/css';
 import 'swiper/css/grid';
 import 'swiper/css/pagination';
-
-const CATEGORIES = ['리빙', '키즈', '패션', '라이프', '뷰티', '푸드', '홈데코'];
-
-const MOCK_BEST_PRODUCTS = Array.from({ length: 10 }).map((_, i) => ({
-    productNo: 200 + i,
-    productName: `베스트 상품 ${i + 1}`,
-    brandName: '프리미엄 브랜드',
-    brandNo: 500,
-    salePrice: 35000 + i * 1000,
-    immediateDiscountAmt: 5000,
-    additionDiscountAmt: 2000,
-    imageUrlInfo: [
-        {
-            url: `https://images.unsplash.com/photo-${1580000000000 + i * 1000}?q=80&w=400&auto=format&fit=crop`,
-            type: 'IMAGE_URL' as const,
-            imageUrlType: 'IMAGE_URL' as const,
-        },
-    ],
-    stickerInfos: [
-        { type: 'TEXT' as const, label: '베스트', name: 'best' },
-        { type: 'TEXT' as const, label: '무료배송', name: 'delivery' },
-    ],
-    likeCount: 150 + i * 10,
-    liked: false,
-    reviewRating: 4.5,
-    totalReviewCount: 80 + i,
-    rank: i + 1,
-}));
+import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 
 export default function Best() {
-    const [activeCategory, setActiveCategory] = useState('키즈');
+    const { t } = useTranslation();
+
+    // TODO: 메인페이지에 필요한 코드들을 서버에서 조회해서 클라이언트로 넘겨줄 수 있도록, 실시간으로 반영 가능한지 체크
+    const { data: categoriesByCodeData } = useCategoriesByCode({
+        data: { codes: ['BEST'] },
+    });
+
+    const displayCategoryNo = categoriesByCodeData?.[0].displayCategoryNo || 0;
+
+    const { data: categoryData } = useCategory({
+        categoryNo: displayCategoryNo,
+        options: {
+            enabled: displayCategoryNo !== 0,
+        },
+    });
+
+    const [selectedCategory, setSelectedCategory] = useState(0);
+    const activeCategory =
+        selectedCategory ||
+        (categoryData?.flatCategories[0]?.depth2CategoryNo ?? 0);
+
+    const { data: bestSellerProductListData } = useBestSellerProductList({
+        searchParams: {
+            pageNumber: 1,
+            pageSize: 10,
+            categoryNos: [activeCategory],
+        },
+        options: {
+            enabled: activeCategory !== 0,
+        },
+    });
+
+    const bestSellerProductList = bestSellerProductListData?.items || [];
 
     return (
         <section className={styles.section}>
             <div className={styles.header}>
                 <div className={styles.titleWrapper}>
-                    <h2 className={styles.title}>베스트 랭킹</h2>
+                    <h2 className={styles.title}>{t('베스트 랭킹')}</h2>
                     <p className={styles.subtitle}>
-                        지금 가장 많이 찾는 아이템
+                        {t('지금 가장 많이 찾는 아이템')}
                     </p>
                 </div>
-                <Link href="/best" className={styles.viewAll}>
-                    전체보기
+
+                <Link href={PATHS.PRODUCTS.BEST} className={styles.viewAll}>
+                    {t('전체보기')}
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path
                             d="M9 18l6-6-6-6"
@@ -66,83 +80,83 @@ export default function Best() {
             </div>
 
             <div className={styles.categoryList}>
-                {CATEGORIES.map((cat) => (
+                {categoryData?.flatCategories.map((category) => (
                     <button
-                        key={cat}
+                        key={category.depth2CategoryNo}
                         className={`${styles.categoryTab} ${
-                            activeCategory === cat
+                            activeCategory === category.depth2CategoryNo
                                 ? styles.categoryTabActive
                                 : ''
                         }`}
-                        onClick={() => setActiveCategory(cat)}
+                        onClick={() =>
+                            setSelectedCategory(category.depth2CategoryNo)
+                        }
                     >
-                        {cat}
+                        {category.depth2Label}
                     </button>
                 ))}
             </div>
 
             <div className={styles.swiperContainer}>
-                <Swiper
-                    slidesPerView={2.2}
-                    grid={{
-                        rows: 2,
-                        fill: 'row',
-                    }}
-                    spaceBetween={16}
-                    modules={[Grid, Pagination]}
-                    breakpoints={{
-                        768: {
-                            slidesPerView: 5,
-                            grid: {
-                                rows: 2,
-                                fill: 'row',
+                {bestSellerProductList.length > 0 ? (
+                    <Swiper
+                        slidesPerView={2.2}
+                        grid={{
+                            rows: 2,
+                            fill: 'row',
+                        }}
+                        spaceBetween={16}
+                        modules={[Grid, Pagination]}
+                        breakpoints={{
+                            768: {
+                                slidesPerView: 5,
+                                grid: {
+                                    rows: 2,
+                                    fill: 'row',
+                                },
                             },
-                        },
-                    }}
-                >
-                    {MOCK_BEST_PRODUCTS.map((product) => (
-                        <SwiperSlide
-                            key={product.productNo}
-                            className={styles.productGridItem}
-                        >
-                            <div className={styles.rankBadge}>
-                                {product.rank}
-                            </div>
-                            <ProductCard
-                                productNo={product.productNo}
-                                productName={product.productName}
-                                brandName={product.brandName}
-                                brandNo={product.brandNo}
-                                salePrice={product.salePrice}
-                                immediateDiscountAmt={
-                                    product.immediateDiscountAmt
-                                }
-                                additionDiscountAmt={
-                                    product.additionDiscountAmt
-                                }
-                                imageUrlInfo={product.imageUrlInfo}
-                                stickerInfos={product.stickerInfos}
-                                likeCount={product.likeCount}
-                                liked={product.liked}
-                                reviewRating={product.reviewRating}
-                                totalReviewCount={product.totalReviewCount}
-                            />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                        }}
+                    >
+                        {bestSellerProductList.map((product, index) => (
+                            <SwiperSlide
+                                key={product.productNo}
+                                className={styles.productGridItem}
+                            >
+                                <div className={styles.rankBadge}>
+                                    <span>{index + 1}</span>
+                                </div>
+                                <ProductCard
+                                    productNo={product.productNo}
+                                    productName={product.productName}
+                                    brandName={product.brandName}
+                                    brandNo={product.brandNo}
+                                    salePrice={product.salePrice}
+                                    immediateDiscountAmt={
+                                        product.immediateDiscountAmt
+                                    }
+                                    additionDiscountAmt={
+                                        product.additionDiscountAmt
+                                    }
+                                    imageUrlInfo={product.imageUrlInfo}
+                                    stickerInfos={product.stickerInfos}
+                                    likeCount={product.likeCount}
+                                    liked={product.liked}
+                                    reviewRating={product.reviewRating}
+                                    totalReviewCount={product.totalReviewCount}
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <div className={styles.emptyMessage}>
+                        {t('등록된 상품이 없습니다.')}
+                    </div>
+                )}
             </div>
 
             <Link href="/best" className={styles.moreButton}>
-                베스트 랭킹 더보기
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M9 18l6-6-6-6"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-                </svg>
+                {t('베스트 랭킹 더보기')}
+                <ArrowIcon direction="right" />
             </Link>
         </section>
     );

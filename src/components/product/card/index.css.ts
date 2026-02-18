@@ -1,5 +1,6 @@
 import { style, keyframes } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 const fadeIn = keyframes({
     '0%': { opacity: 0 },
@@ -17,11 +18,12 @@ export const thumbWrapper = style({
     display: 'block',
     width: '100%',
     position: 'relative',
-    aspectRatio: '4/5',
+    aspectRatio: '1/1',
     backgroundColor: vars.color.gray[10],
     borderRadius: '4px',
     overflow: 'hidden',
     contain: 'layout',
+    transform: 'translateZ(0)',
 });
 
 export const thumb = style({
@@ -33,8 +35,8 @@ export const thumb = style({
 
 export const likeButton = style({
     position: 'absolute',
-    top: '11px',
-    right: '11px',
+    bottom: '5px',
+    right: '6px',
     zIndex: 1,
     border: 'none',
     cursor: 'pointer',
@@ -42,11 +44,11 @@ export const likeButton = style({
     padding: 0,
 });
 
-export const content = style({
+export const productInfoContainer = style({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
-    gap: 0,
+    gap: '4px',
     minHeight: '100px',
     '@media': {
         'screen and (min-width: 768px)': {
@@ -70,42 +72,33 @@ export const brandInfoWrapper = style({
     },
 });
 
-export const brand = style({
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '1.2rem',
-    fontWeight: 600,
-    '@media': {
-        'screen and (min-width: 768px)': {
-            fontSize: '1.8rem',
-            fontWeight: 500,
+export const brand = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray[60],
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '1.2rem',
+        fontWeight: 600,
+    },
+]);
+
+export const productName = style([
+    textStyles.body2Medium,
+    {
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        color: vars.color.black,
+        '@media': {
+            'screen and (min-width: 768px)': {
+                fontSize: '1.4rem',
+            },
         },
     },
-});
-
-export const name = style({
-    display: '-webkit-box',
-    WebkitLineClamp: 1,
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    color: vars.color.gray[90],
-    fontSize: '1.2rem',
-    fontWeight: 400,
-    '@media': {
-        'screen and (min-width: 768px)': {
-            WebkitLineClamp: 2,
-            fontSize: '1.4rem',
-        },
-    },
-});
-
-export const priceArea = style({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    gap: '6px',
-});
+]);
 
 export const priceWrapper = style({
     display: 'flex',

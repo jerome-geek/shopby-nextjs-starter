@@ -37,6 +37,9 @@ export default function App({ Component, pageProps }: AppProps) {
                 defaultOptions: {
                     queries: {
                         staleTime: 60 * 1000,
+                        refetchOnWindowFocus:
+                            process.env.NODE_ENV === 'production',
+                        refetchOnMount: process.env.NODE_ENV === 'production',
                     },
                 },
             }),

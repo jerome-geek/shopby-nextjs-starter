@@ -14,6 +14,7 @@ import { Clock, Star, Truck } from 'lucide-react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { ChannelType } from '@/models';
+import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -61,45 +62,38 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                         </SwiperSlide>
                     ))}
                 </Swiper>
-            </div>
 
-            {isTimeSale && (
-                <div className={styles.timeSaleBar}>
-                    <Clock size={16} />
-                    <span>타임특가 10:59:11 남음</span>
-                </div>
-            )}
-
-            <div className={styles.content}>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-start',
-                    }}
-                >
-                    <div className={styles.brand}>{brand.name}</div>
-                    <button
+                {isTimeSale && (
+                    <div
                         style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#666',
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            zIndex: 10,
                         }}
                     >
-                        <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                        >
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                        </svg>
-                    </button>
-                </div>
+                        <ProductAdditionalDiscount
+                            type="detail"
+                            productNo={productNo}
+                        />
+                    </div>
+                )}
+            </div>
 
-                <h1 className={styles.title}>{baseInfo.productName}</h1>
+            <div className={styles.content}>
+                {brand && (
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                        }}
+                    >
+                        <span className={styles.brand}>{brand.name}</span>
+                    </div>
+                )}
+
+                <h1 className={styles.productName}>{baseInfo.productName}</h1>
 
                 <div className={styles.ratingContainer}>
                     <Star
@@ -187,8 +181,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryClient = new QueryClient();
 
     const searchParams = {
-        channelType: context.query.channelType as ChannelType,
-        preview: !!context.query.preview,
+        channelType: (context.query.channelType as ChannelType) || null,
+        preview: context.query.preview === 'true',
     };
 
     if (productNo) {
@@ -204,12 +198,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 const response = await product
                     .getProductDetail(parsedProductNo, searchParams)
                     .json();
+
                 return response;
             },
         });
     }
     console.log('===========================');
     console.log(dehydrate(queryClient));
+    console.log(JSON.stringify(dehydrate(queryClient)));
 
     return {
         props: {

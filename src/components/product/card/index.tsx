@@ -5,9 +5,6 @@ import Link from 'next/link';
 import {
     HeartLikeFilledSmallIcon,
     HeartLikeSmallIcon,
-    HeartMiniIcon,
-    SmallCaretIcon,
-    StarMiniIcon,
 } from '@/components/icons';
 import { PATHS } from '@/const/paths';
 import { useProductProfileMutation } from '@/hooks/mutations';
@@ -17,8 +14,9 @@ import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
-
+import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 import * as styles from './index.css';
+import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 
 interface ProductCardProps {
     productNo: number;
@@ -34,6 +32,7 @@ interface ProductCardProps {
     salePrice: number;
     immediateDiscountAmt?: number;
     additionDiscountAmt?: number;
+    isAdditionalDiscount?: boolean;
 }
 
 const ProductCard = ({
@@ -50,6 +49,7 @@ const ProductCard = ({
     salePrice,
     immediateDiscountAmt = 0,
     additionDiscountAmt = 0,
+    isAdditionalDiscount,
 }: ProductCardProps) => {
     const { openDialog, openLoginDialog } = useDialog();
 
@@ -108,15 +108,13 @@ const ProductCard = ({
                     className={styles.likeButton}
                     onClick={onLikeButtonClick}
                 >
-                    {liked ? (
-                        <HeartLikeFilledSmallIcon />
-                    ) : (
-                        <HeartLikeSmallIcon />
-                    )}
+                    <BookmarkIcon isActive={liked} />
                 </button>
             </Link>
 
-            <div className={styles.content}>
+            <ProductAdditionalDiscount type="thumbnail" productNo={productNo} />
+
+            <div className={styles.productInfoContainer}>
                 <div className={styles.brandInfoWrapper}>
                     {brandName && (
                         <Link
@@ -125,74 +123,56 @@ const ProductCard = ({
                             className={styles.brand}
                         >
                             <span>{brandName}</span>
-                            <SmallCaretIcon direction="right" />
                         </Link>
                     )}
 
-                    <h3 className={styles.name}>{productName}</h3>
+                    <h3 className={styles.productName}>{productName}</h3>
                 </div>
 
-                <div className={styles.priceArea}>
-                    <div className={styles.priceWrapper}>
-                        {(immediateDiscountAmt > 0 ||
-                            additionDiscountAmt > 0) && (
-                            <span className={styles.discountPrice}>
-                                {Math.floor(
-                                    ((immediateDiscountAmt +
-                                        additionDiscountAmt) /
-                                        salePrice) *
-                                        100,
-                                )}
-                                %
-                            </span>
-                        )}
-                        <span className={styles.productPrice}>
-                            {CURRENCY(salePrice, { precision: 0 })
-                                .subtract(immediateDiscountAmt)
-                                .subtract(additionDiscountAmt)
-                                .format()}
+                <div className={styles.priceWrapper}>
+                    {(immediateDiscountAmt > 0 || additionDiscountAmt > 0) && (
+                        <span className={styles.discountPrice}>
+                            {Math.floor(
+                                ((immediateDiscountAmt + additionDiscountAmt) /
+                                    salePrice) *
+                                    100,
+                            )}
+                            %
                         </span>
-                    </div>
-
-                    {stickerInfos && stickerInfos.length > 0 && (
-                        <ul className={styles.stickerList}>
-                            {stickerInfos.map((sticker) => {
-                                return (
-                                    <li key={`product-sticker-${sticker.name}`}>
-                                        {sticker.type === 'IMAGE' && (
-                                            <img
-                                                src={normalizeImageUrl(
-                                                    sticker.label,
-                                                )}
-                                                alt={sticker.label}
-                                                width={20}
-                                                height={20}
-                                            />
-                                        )}
-                                        {sticker.type === 'TEXT' && (
-                                            <span
-                                                className={styles.textSticker}
-                                            >
-                                                {sticker.label}
-                                            </span>
-                                        )}
-                                    </li>
-                                );
-                            })}
-                        </ul>
                     )}
-
-                    <ul className={styles.statsList}>
-                        <li className={styles.statItem}>
-                            <StarMiniIcon />
-                            <span>{`${reviewRating} (${totalReviewCount})`}</span>
-                        </li>
-                        <li className={styles.statItem}>
-                            <HeartMiniIcon />
-                            <span>{likeCount}</span>
-                        </li>
-                    </ul>
+                    <span className={styles.productPrice}>
+                        {CURRENCY(salePrice, { precision: 0 })
+                            .subtract(immediateDiscountAmt)
+                            .subtract(additionDiscountAmt)
+                            .format()}
+                    </span>
                 </div>
+
+                {stickerInfos && stickerInfos.length > 0 && (
+                    <ul className={styles.stickerList}>
+                        {stickerInfos.map((sticker) => {
+                            return (
+                                <li key={`product-sticker-${sticker.name}`}>
+                                    {sticker.type === 'IMAGE' && (
+                                        <img
+                                            src={normalizeImageUrl(
+                                                sticker.label,
+                                            )}
+                                            alt={sticker.label}
+                                            width={20}
+                                            height={20}
+                                        />
+                                    )}
+                                    {sticker.type === 'TEXT' && (
+                                        <span className={styles.textSticker}>
+                                            {sticker.label}
+                                        </span>
+                                    )}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                )}
             </div>
         </article>
     );

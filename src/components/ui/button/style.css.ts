@@ -1,34 +1,45 @@
 import { recipe } from '@vanilla-extract/recipes';
+
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const button = recipe({
-    base: {
-        borderRadius: '8px',
-        fontSize: '1.6rem',
-        fontWeight: '700',
-        lineHeight: '1.5',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '8px',
-        border: 'none',
-        cursor: 'pointer',
-        height: '52px',
-        width: '100%',
-        transition: 'all 0.3s ease',
-        ':disabled': {
-            backgroundColor: '#F4F3F3',
-            color: '#8A8684',
-            cursor: 'not-allowed',
+    base: [
+        textStyles.headingSemibold,
+        {
+            borderRadius: '4px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            height: '52px',
+            width: '100%',
+            transition: 'all 0.3s ease',
+            ':disabled': {
+                backgroundColor: '#F4F3F3',
+                color: '#8A8684',
+                cursor: 'not-allowed',
+            },
         },
-    },
+    ],
     variants: {
         visual: {
             primary: {
-                color: '#ffffff',
+                color: vars.color.white,
                 backgroundColor: vars.color.primary,
                 ':hover:not(:disabled)': {
-                    backgroundColor: '#333333',
+                    color: vars.color.gray['60'],
+                    backgroundColor: vars.color.gray['20'],
+                },
+            },
+            secondary: {
+                color: vars.color.white,
+                backgroundColor: vars.color.secondary,
+                ':hover:not(:disabled)': {
+                    color: vars.color.gray['60'],
+                    backgroundColor: vars.color.gray['20'],
                 },
             },
             kakao: {
