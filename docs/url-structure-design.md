@@ -22,42 +22,88 @@
 
 ### 🛒 쇼핑몰 영역 (Commerce Hub)
 
-쇼핑몰 전용 탐색 기능은 `/shop` 하위로 묶어 컨텍스트를 유지합니다.
+쇼핑몰 내비게이션 및 메인 진입점입니다. 각 브랜드 홈 성격의 페이지로 구성됩니다.
 
-| 경로                   | 설명                 | 비고                        |
-| :--------------------- | :------------------- | :-------------------------- |
-| `/shop`                | **쇼핑몰 메인**      | 기획전, 베스트 등 커머스 뷰 |
-| `/shop/categories/:id` | 카테고리별 상품 목록 | 기존 `/categories/:id` 대체 |
-| `/shop/best`           | 베스트 상품 목록     |                             |
-| `/shop/new`            | 신상품 목록          |                             |
-| `/shop/sale`           | 세일 상품 목록       |                             |
-| `/shop/events`         | 기획전 리스트        | 기존 `/events` 대체         |
+| 경로          | 설명                 | 비고                           |
+| :------------ | :------------------- | :----------------------------- |
+| `/shop`       | **쇼핑몰 홈 (발견)** | 기본 쇼핑 메인 (큐레이션 중심) |
+| `/shop/life`  | **라이프 홈**        | 라이프스타일 테마 특화 메인    |
+| `/shop/kids`  | **키즈 홈**          | 키즈/영유아 테마 특화 메인     |
+| `/events`     | 기획전 리스트        | 진행 중인 모든 이벤트          |
+| `/events/:id` | 기획전 상세          | 특정 기획전 상품 리스트        |
 
-### 📦 상품 및 트랜잭션 (Shallow Paths)
+### 📦 상품 및 리스트 (Product & Selection)
 
-구매와 직접 연결되는 페이지는 SEO 점수와 공유 편의성을 위해 `/shop`을 붙이지 않고 짧게 유지합니다.
+상품 탐색 및 상세 정보는 `/products`와 `/categories` 경로를 사용하여 접근성을 높입니다.
 
 | 경로                | 설명                      | 비고                     |
 | :------------------ | :------------------------ | :----------------------- |
 | **`/products/:id`** | **상품 상세 페이지**      | **최우선 SEO 관리 대상** |
+| `/products/best`    | 베스트 상품 랭킹          | 판매량/인기순 리스트     |
+| `/products/new`     | 신상품 목록               | 최신 등록순 리스트       |
+| `/products/sale`    | 세일 상품 목록            | 할인 중인 상품 리스트    |
+| `/categories/:id`   | 카테고리별 상품 목록      |                          |
 | `/brands/:id`       | 브랜드 상세 페이지        |                          |
 | `/search`           | 통합 검색 (레시피 + 상품) |                          |
-| `/order/cart`       | 장바구니                  |                          |
-| `/order/sheet`      | 주문서 작성               |                          |
 
-### 👤 유저 및 공통 영역
+### � 주문 및 공통 영역 (Transaction & User)
 
-| 경로         | 설명            | 비고 |
-| :----------- | :-------------- | :--- |
-| `/login`     | 로그인          |      |
-| `/signup`    | 회원가입        |      |
-| `/mypage/*`  | 마이페이지 전체 |      |
-| `/support/*` | 고객센터        |      |
+| 경로           | 설명            | 비고 |
+| :------------- | :-------------- | :--- |
+| `/order/cart`  | 장바구니        |      |
+| `/order/sheet` | 주문서 작성     |      |
+| `/login`       | 로그인          |      |
+| `/signup`      | 회원가입        |      |
+| `/mypage/*`    | 마이페이지 전체 |      |
+| `/support/*`   | 고객센터        |      |
 
 ---
 
-## 3. SEO 관점의 기대 효과
+## 3. 구현 전략: Catch-all Routes (`[[...slug]].tsx`)
+
+동일한 레이아웃을 공유하는 쇼핑몰 메인 페이지들(`/shop`, `/shop/life`, `/shop/kids`)은 Next.js의 **Optional Catch-all Routes**를 사용하여 코드 중복 없이 효율적으로 관리합니다.
+
+### 🛠️ 구현 예시 (`pages/shop/[[...slug]].tsx`)
+
+```tsx
+import { GetServerSideProps } from 'next';
+
+const SHOP_TYPES = {
+    DEFAULT: 'discovery',
+    LIFE: 'life',
+    KIDS: 'kids',
+} as const;
+
+export default function ShopMainPage({ type }) {
+    // 1. 공통 레이아웃 내에서 type에 따라 다른 데이터/섹션 렌더링
+    return <ShopLayout type={type} />;
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    const slug = params?.slug as string[] | undefined;
+    const path = slug?.[0]; // /shop/life 에서 'life' 추출
+
+    // 2. 허용되지 않은 경로는 404 처리
+    const validPaths = [undefined, SHOP_TYPES.LIFE, SHOP_TYPES.KIDS];
+    if (path && !validPaths.includes(path)) {
+        return { notFound: true };
+    }
+
+    // 3. 타입 결정 및 해당 데이터 프리페칭
+    const type = path || SHOP_TYPES.DEFAULT;
+
+    return {
+        props: { type },
+    };
+};
+```
+
+---
+
+## 4. SEO 관점의 기대 효과
 
 1.  **Index 권위 분산 방지**: 메인 페이지에 레시피 콘텐츠를 배치함으로써 '레시피', '요리' 같은 대중적인 키워드로 검색 엔진 지수를 확보합니다.
-2.  **Short URL for Products**: 상품 상세 URL을 `/products/:id`로 유지하여 구글 검색 결과에서 클릭률(CTR)을 높이고 URL 뎁스에 따른 가중치 하락을 방지합니다.
-3.  **명확한 위계(Hierarchy)**: `/shop`과 `/recipes`를 분리함으로써 구글 봇이 "이 사이트는 요리 정보를 제공함과 동시에 식재료를 판매하는 전문적인 곳"임을 명확히 인지하게 합니다.
+2.  **Breadcrumb 최적화**: `/products/best`와 같은 구조는 검색 엔진이 사이트 위계를 쉽게 파악하게 하며, 사용자가 상세 페이지에서 상위 리스트로 이동하는 흐름을 직관적으로 만듭니다.
+3.  **Short URL for Products**: 상품 권위 분산을 위해 상세 URL을 `/products/:id`로 짧게 유지하여 클릭률(CTR)과 가중치를 확보합니다.
+4.  **세그먼트 메인 운영**: `/shop/life`, `/shop/kids` 등 카테고리 홈을 독립적인 URL로 운영하여 타겟 키워드(예: '아이방 인테리어', '주방 소품')에 대한 랜딩 페이지 경쟁력을 갖춥니다.
+5.  **Clean Routing**: 중복 레이아웃을 단일 파일로 관리하면서도 각 경로별로 고유한 Meta 태그를 주입할 수 있어 SEO 관리가 매우 용이합니다.

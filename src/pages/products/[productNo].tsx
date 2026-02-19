@@ -1,20 +1,22 @@
+import { Star, Truck } from 'lucide-react';
 import { Suspense } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
+
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
 import { useSuspenseProductDetail } from '@/hooks/suspenseQuery/product';
-import * as styles from './[productNo].css';
+import * as styles from '@/pages/products/[productNo].css';
 import { CURRENCY } from '@/utils/currency';
-import { Clock, Star, Truck } from 'lucide-react';
+import { ChannelType } from '@/models';
+import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { ChannelType } from '@/models';
-import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
+import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -44,65 +46,113 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         (price.immediateDiscountAmt || 0) -
         (price.additionDiscountAmt || 0);
 
+    // TODO: 좋아요 기능 구현
+    const onLikeButtonClick = () => {};
+
     return (
         <div className={styles.container}>
             <div className={styles.thumbnailContainer}>
-                <Swiper
-                    pagination={{ clickable: true }}
-                    modules={[Pagination]}
-                    className="mySwiper"
-                >
-                    {baseInfo.imageUrlInfo?.map((image, index) => (
-                        <SwiperSlide key={index}>
-                            <img
-                                src={image.url}
-                                alt={`${baseInfo.productName} - ${index + 1}`}
-                                className={styles.thumbnail}
-                            />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-
-                {isTimeSale && (
-                    <div
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            zIndex: 10,
+                <div className={styles.imageWrapper}>
+                    <Swiper
+                        modules={[Pagination]}
+                        pagination={{
+                            clickable: true,
+                            el: '.product-detail-pagination',
+                            renderBullet: (index, className) => {
+                                return `<span class="${className} ${styles.bullet}"></span>`;
+                            },
                         }}
+                        className={styles.swiperContainer}
                     >
-                        <ProductAdditionalDiscount
-                            type="detail"
-                            productNo={productNo}
-                        />
-                    </div>
-                )}
+                        {baseInfo.imageUrlInfo?.map((image, index) => (
+                            <SwiperSlide key={index}>
+                                <img
+                                    src={image.url}
+                                    alt={`${baseInfo.productName} - ${index + 1}`}
+                                    className={styles.thumbnail}
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+
+                    {isTimeSale && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                zIndex: 10,
+                                width: '100%',
+                            }}
+                        >
+                            <ProductAdditionalDiscount
+                                type="detail"
+                                productNo={productNo}
+                            />
+                        </div>
+                    )}
+                </div>
+
+                <div
+                    className={`${styles.paginationContainer} product-detail-pagination`}
+                />
             </div>
 
             <div className={styles.content}>
-                {brand && (
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                    }}
+                >
                     <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'flex-start',
+                            flexDirection: 'column',
+                            gap: '10px',
                         }}
                     >
-                        <span className={styles.brand}>{brand.name}</span>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '4px',
+                            }}
+                        >
+                            {brand && (
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'flex-start',
+                                    }}
+                                >
+                                    <span className={styles.brand}>
+                                        {brand.name}
+                                    </span>
+                                </div>
+                            )}
+
+                            <h1 className={styles.productName}>
+                                {baseInfo.productName}
+                            </h1>
+                        </div>
+
+                        <div className={styles.ratingContainer}>
+                            <Star size={14} fill="#E2808F" stroke="#E2808F" />
+                            <strong className={styles.reviewRate}>
+                                {productDetail.reviewRate || 0}
+                            </strong>
+                            <span className={styles.reviewCount}>
+                                ({counter.reviewCnt || 0})
+                            </span>
+                        </div>
                     </div>
-                )}
 
-                <h1 className={styles.productName}>{baseInfo.productName}</h1>
-
-                <div className={styles.ratingContainer}>
-                    <Star
-                        size={14}
-                        className={styles.starIcon}
-                        fill="currentColor"
-                    />
-                    <strong>{productDetail.reviewRate || 0}</strong>
-                    <span>({counter.reviewCnt || 0})</span>
+                    <button type="button" onClick={onLikeButtonClick}>
+                        <BookmarkIcon isActive={productDetail.liked} />
+                    </button>
                 </div>
 
                 <div
@@ -110,24 +160,29 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'flex-end',
-                        marginTop: '16px',
                     }}
                 >
-                    <div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '2px',
+                        }}
+                    >
                         {discountRate > 0 && (
-                            <div className={styles.originalPrice}>
+                            <span className={styles.originalPrice}>
                                 {CURRENCY(price.salePrice).format()}
-                            </div>
+                            </span>
                         )}
                         <div className={styles.priceContainer}>
                             {discountRate > 0 && (
-                                <div className={styles.discountRate}>
+                                <span className={styles.discountRate}>
                                     {discountRate}%
-                                </div>
+                                </span>
                             )}
-                            <div className={styles.finalPrice}>
+                            <span className={styles.finalPrice}>
                                 {CURRENCY(finalPrice).format()}
-                            </div>
+                            </span>
                         </div>
                     </div>
                     <button className={styles.couponButton}>쿠폰 받기</button>
@@ -150,6 +205,11 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             빠른배송
                         </span>
                     </div>
+                </div>
+
+                <div>
+                    {/* TODO: */}
+                    사진리뷰
                 </div>
             </div>
         </div>

@@ -39,7 +39,7 @@ const additionalDiscount = {
         return request.get<GetAdditionalDiscountByProductNosResponse>(
             'additional-discounts/by-product-nos',
             {
-                searchParams: qs.stringify(params),
+                searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
                 ...options,
             },
         );

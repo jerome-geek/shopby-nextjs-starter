@@ -5,22 +5,48 @@ import { textStyles } from '@/styles/typography.css';
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
+    padding: '0 20px',
 });
 
 export const thumbnailContainer = style({
     width: '100%',
+});
+
+export const imageWrapper = style({
+    width: '100%',
     aspectRatio: '1 / 1',
     position: 'relative',
-    backgroundColor: vars.color.gray[10],
+    overflow: 'hidden',
 });
 
-globalStyle(`${thumbnailContainer} .swiper-pagination-bullet`, {
-    backgroundColor: vars.color.white,
-    opacity: 0.5,
+export const swiperContainer = style({
+    width: '100%',
+    height: '100%',
 });
 
-globalStyle(`${thumbnailContainer} .swiper-pagination-bullet-active`, {
+export const paginationContainer = style({
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '16px 0',
+});
+
+export const bullet = style({
+    width: '6px',
+    height: '6px',
+    backgroundColor: vars.color.gray['50'],
+    borderRadius: '50%',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    margin: '0 !important',
     opacity: 1,
+    selectors: {
+        // 이 라이브러리 클래스는 Swiper가 활성화될 때 자동으로 붙여주므로 여기서 타겟팅 가능
+        '&.swiper-pagination-bullet-active': {
+            backgroundColor: vars.color.green['100'],
+        },
+    },
 });
 
 export const thumbnail = style({
@@ -30,10 +56,10 @@ export const thumbnail = style({
 });
 
 export const content = style({
-    padding: '20px',
+    // padding: '20px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '20px',
 });
 
 export const brand = style([
@@ -69,11 +95,13 @@ export const finalPrice = style({
     color: vars.color.black,
 });
 
-export const originalPrice = style({
-    fontSize: '14px',
-    color: vars.color.gray[40],
-    textDecoration: 'line-through',
-});
+export const originalPrice = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['50'],
+        textDecoration: 'line-through',
+    },
+]);
 
 export const timeSaleBar = style({
     backgroundColor: '#FCE4EC', // Light pink
@@ -103,13 +131,21 @@ export const ratingContainer = style({
     alignItems: 'center',
     gap: '4px',
     fontSize: '14px',
-    color: vars.color.gray[60],
-    marginTop: '4px',
 });
 
-export const starIcon = style({
-    color: '#FFD700',
-});
+export const reviewRate = style([
+    textStyles.body2Semibold,
+    {
+        color: vars.color.gray['80'],
+    },
+]);
+
+export const reviewCount = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['60'],
+    },
+]);
 
 export const deliveryBox = style({
     backgroundColor: '#F8F9F8',

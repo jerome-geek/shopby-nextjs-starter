@@ -16,7 +16,7 @@ import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
 import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 import * as styles from './index.css';
-import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
+import ThumbnailBookmarkIcon from '@/components/icons/ThumbnailBookmarkIcon';
 
 interface ProductCardProps {
     productNo: number;
@@ -108,7 +108,7 @@ const ProductCard = ({
                     className={styles.likeButton}
                     onClick={onLikeButtonClick}
                 >
-                    <BookmarkIcon isActive={liked} />
+                    <ThumbnailBookmarkIcon isActive={liked} />
                 </button>
             </Link>
 

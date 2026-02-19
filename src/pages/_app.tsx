@@ -59,8 +59,9 @@ export default function App({ Component, pageProps }: AppProps) {
                         <Head>{defaultSeo}</Head>
                         <Layout className={notoSansKr.className}>
                             <AnimatePresence mode="wait">
+                                {/* TODO: router.route를 사용할 경우 slug페이지에서 애니메이션이 미동작하는 경우가 있어 router.asPath 사용, 이 경우 queryParameter가 변경되는 경우에도 페이지 transition이 동작함 */}
                                 <motion.div
-                                    key={router.route}
+                                    key={router.asPath}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}

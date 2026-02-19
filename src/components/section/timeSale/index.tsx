@@ -6,6 +6,7 @@ import ProductCard from '@/components/product/card';
 import * as styles from './index.css';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
 import { Button } from '@/components/ui/button';
+import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 
 const calculateTimeLeft = () => {
     const now = new Date();
@@ -97,6 +98,16 @@ export default function TimeSale() {
                 })) || []
         );
     }, [productSectionProductListData?.products]);
+
+    // const { data: additionalDiscountData } = useAdditionalDiscountByProductNos({
+    //     searchParams: {
+    //         productNos: filteredProducts.map((product) => product.productNo),
+    //     },
+    // });
+    // console.log(
+    //     '🚀 ~ TimeSale ~ additionalDiscountData:',
+    //     additionalDiscountData,
+    // );
 
     if (filteredProducts.length === 0) {
         return null;
