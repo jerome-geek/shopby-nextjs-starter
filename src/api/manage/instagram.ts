@@ -1,6 +1,6 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { publicRequest } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import { GetFeedsResponse } from '@/models/manage/instagram';
 
 const instagram = {
@@ -9,8 +9,10 @@ const instagram = {
      *  - 해당 쇼핑몰의 인스타그램 게시글 목록을 조회하는 API 입니다.
      *  - 조회간 에러 발생시, 에러 정보가 Response 객체에 포함됩니다.
      */
-    getFeeds: (options?: Options) => {
-        return publicRequest.get<GetFeedsResponse>('shopby/instagram/media', {
+    getFeeds: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetFeedsResponse>({
+            method: 'GET',
+            url: '/shopby/instagram/media',
             ...options,
         });
     },

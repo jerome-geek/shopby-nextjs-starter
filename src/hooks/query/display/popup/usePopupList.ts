@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { popup } from '@/api/display';
 import { GetAllPopupParams, GetAllPopupResponse } from '@/models/display/popup';
@@ -11,7 +11,7 @@ interface UseAllPopupListParams<T = GetAllPopupResponse> {
     options?: Omit<
         UseQueryOptions<
             GetAllPopupResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof popupKeys)['detailByPopupNos']>
         >,
@@ -27,9 +27,9 @@ const usePopupList = <T = GetAllPopupResponse>({
     return useQuery({
         queryKey: popupKeys.detailByPopupNos(popupNos),
         queryFn: async () => {
-            const response = await popup.getPopups(popupNos, params).json();
+            const response = await popup.getPopups(popupNos, params);
 
-            return response;
+            return response.data;
         },
         ...options,
     });

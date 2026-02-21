@@ -4,7 +4,7 @@ import {
     UseQueryOptions,
 } from '@tanstack/react-query';
 import { isEmpty } from '@fxts/core';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { category } from '@/api/display';
 import { categoryKeys } from '@/hooks/queryKeys';
@@ -18,7 +18,7 @@ interface UseCategoriesByCodeParams<T = GetCategoriesByManagementCodeResponse> {
     options?: Omit<
         UseQueryOptions<
             GetCategoriesByManagementCodeResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof categoryKeys)['byCode']>
         >,
@@ -33,11 +33,9 @@ const useCategoriesByCode = <T = GetCategoriesByManagementCodeResponse>({
     return useQuery({
         queryKey: categoryKeys.byCode(data),
         queryFn: async () => {
-            const response = await category
-                .getCategoriesByManagementCode(data)
-                .json();
+            const response = await category.getCategoriesByManagementCode(data);
 
-            return response;
+            return response.data;
         },
         enabled: !isEmpty(data.codes),
         placeholderData: keepPreviousData,

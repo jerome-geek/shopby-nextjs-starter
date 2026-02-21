@@ -1,7 +1,7 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { publicRequest } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     Get1depthCategoryResponse,
     GetCategoriesByManagementCodeData,
@@ -20,9 +20,14 @@ const category = {
      *   - 계층을 가지는 카테고리 목록(multiLevelCategories)을 조회합니다 (최대 5 depth)
      *   - 원본 카테고리 목록(flatCategories)을 조회합니다
      */
-    getCategories: (params?: GetCategoriesParams, options?: Options) => {
-        return publicRequest.get<GetCategoriesResponse>('categories', {
-            searchParams: qs.stringify(params),
+    getCategories: (
+        params?: GetCategoriesParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetCategoriesResponse>({
+            method: 'GET',
+            url: '/categories',
+            params,
             ...options,
         });
     },
@@ -31,11 +36,12 @@ const category = {
      * 신상품이 있는 카테고리 조회하기
      *  - 판매 시작일이 1주일 이내인 상품이 존재하는 카테고리 조회하는 API입니다
      */
-    getNewProductCategories: (options?: Options) => {
-        return publicRequest.get<GetNewProductCategoriesResponse>(
-            'categories/new-product-categories',
-            options,
-        );
+    getNewProductCategories: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetNewProductCategoriesResponse>({
+            method: 'GET',
+            url: '/categories/new-product-categories',
+            ...options,
+        });
     },
 
     /**
@@ -44,26 +50,26 @@ const category = {
      */
     getCategoriesByManagementCode: (
         data: GetCategoriesByManagementCodeData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return publicRequest.post<GetCategoriesByManagementCodeResponse>(
-            'categories/search-by-management-code',
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<GetCategoriesByManagementCodeResponse>({
+            method: 'POST',
+            url: '/categories/search-by-management-code',
+            data,
+            ...options,
+        });
     },
 
     /**
      * 1차 카테고리 간단 정보 조회하기
      *  - 1차 카테고리 관련 간단한 정보를 조회하는 API 입니다
      */
-    get1depthCategory: (options?: Options) => {
-        return publicRequest.get<Get1depthCategoryResponse>(
-            'categories/simple-1depth',
-            options,
-        );
+    get1depthCategory: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<Get1depthCategoryResponse>({
+            method: 'GET',
+            url: '/categories/simple-1depth',
+            ...options,
+        });
     },
 
     /**
@@ -75,15 +81,14 @@ const category = {
     getCategory: (
         categoryNo: string | number,
         params?: GetCategoryParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return publicRequest.get<GetCategoryResponse>(
-            `categories/${categoryNo}`,
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetCategoryResponse>({
+            method: 'GET',
+            url: `/categories/${categoryNo}`,
+            params,
+            ...options,
+        });
     },
 };
 

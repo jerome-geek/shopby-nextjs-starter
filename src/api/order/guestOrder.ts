@@ -1,7 +1,7 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import { ClaimType, OrderRequestType } from '@/models';
 import { OrderDetailResponse, TokenIssueData } from '@/models/order';
 import {
@@ -25,13 +25,16 @@ const guestOrder = {
      *  - 비회원의 장바구니금액 및 합배송 상품을 계산하여 목록을 가져오는 API 입니다
      *  - 쇼핑몰배송의 경우, 파트너명을 '쇼핑몰배송'으로 내려줍니다
      */
-    getCart: (data: GetCartData, params?: GetCartParams, options?: Options) => {
-        return request.post<GetCartResponse>('guest/cart', {
-            json: data,
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getCart: (
+        data: GetCartData,
+        params?: GetCartParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetCartResponse>({
+            method: 'POST',
+            url: '/guest/cart',
+            data,
+            params,
             ...options,
         });
     },
@@ -43,13 +46,12 @@ const guestOrder = {
     getOrderDetail: (
         orderNo: string,
         params?: GetOrderDetailParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<OrderDetailResponse>(`guest/orders/${orderNo}`, {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest<OrderDetailResponse>({
+            method: 'GET',
+            url: `/guest/orders/${orderNo}`,
+            params,
             ...options,
         });
     },
@@ -61,10 +63,12 @@ const guestOrder = {
     issueOrderToken: (
         orderNo: string,
         data: TokenIssueData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<OrderDetailResponse>(`guest/orders/${orderNo}`, {
-            json: data,
+        return shopbyRequest<OrderDetailResponse>({
+            method: 'POST',
+            url: `/guest/orders/${orderNo}`,
+            data,
             ...options,
         });
     },
@@ -73,26 +77,27 @@ const guestOrder = {
      * 비회원 상품 주문 구매확정 처리하기
      *  - 배송중, 배송완료 상태의 상품주문을 구매확정 처리하는 API 입니다
      */
-    confirmOrder: (orderOptionNo: number, options?: Options) => {
-        return request.put<OrderDetailResponse>(
-            `guest/order-options/${orderOptionNo}/confirm`,
-            {
-                ...options,
-            },
-        );
+    confirmOrder: (orderOptionNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<OrderDetailResponse>({
+            method: 'PUT',
+            url: `/guest/order-options/${orderOptionNo}/confirm`,
+            ...options,
+        });
     },
 
     /**
      * 비회원 상품 주문 배송완료 처리하기
      *  - 배송중 상태의 상품주문을 배송완료 처리하는 API 입니다
      */
-    confirmDeliveryCompletion: (orderOptionNo: number, options?: Options) => {
-        return request.put<OrderDetailResponse>(
-            `guest/order-options/${orderOptionNo}/delivery-done`,
-            {
-                ...options,
-            },
-        );
+    confirmDeliveryCompletion: (
+        orderOptionNo: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<OrderDetailResponse>({
+            method: 'PUT',
+            url: `/guest/order-options/${orderOptionNo}/delivery-done`,
+            ...options,
+        });
     },
 
     /**
@@ -103,15 +108,14 @@ const guestOrder = {
     updateCashReceipt: (
         orderNo: string,
         data: RequestCashReceiptData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put<UpdateCashReceiptResponse>(
-            `guest/orders/${orderNo}/cashReceipt`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<UpdateCashReceiptResponse>({
+            method: 'PUT',
+            url: `/guest/orders/${orderNo}/cashReceipt`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -121,15 +125,14 @@ const guestOrder = {
     requestCashReceipt: (
         orderNo: string,
         data: RequestCashReceiptData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<RequestCashReceiptResponse>(
-            `guest/orders/${orderNo}/cashReceipt`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<RequestCashReceiptResponse>({
+            method: 'POST',
+            url: `/guest/orders/${orderNo}/cashReceipt`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -144,18 +147,14 @@ const guestOrder = {
             orderRequestType?: OrderRequestType;
             claimType?: ClaimType;
         },
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<OrderDetailResponse>(
-            `guest/orders/${orderNo}/claim`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<OrderDetailResponse>({
+            method: 'GET',
+            url: `/guest/orders/${orderNo}/claim`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -166,19 +165,15 @@ const guestOrder = {
         orderNo: string,
         params: UpdateDeliveryInfoParams,
         data: UpdateDeliveryInfoData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put<OrderDetailResponse>(
-            `guest/orders/${orderNo}/deliveries`,
-            {
-                json: data,
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'PUT',
+            url: `/guest/orders/${orderNo}/deliveries`,
+            data,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -189,18 +184,14 @@ const guestOrder = {
     sendPasswordByEmail: (
         orderNo: string,
         params: SendPasswordByEmailParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<OrderDetailResponse>(
-            `guest/orders/${orderNo}/forgot-password`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'GET',
+            url: `/guest/orders/${orderNo}/forgot-password`,
+            params,
+            ...options,
+        });
     },
 };
 

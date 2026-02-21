@@ -1,6 +1,6 @@
 import { isEmpty } from '@fxts/core';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import {
@@ -15,7 +15,7 @@ interface UseLikeBrandListParams<T = GetLikeBrandsResponse> {
     options?: Omit<
         UseQueryOptions<
             GetLikeBrandsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof brandKeys)['likeList']>
         >,
@@ -31,7 +31,7 @@ const useLikeBrandList = <T = GetLikeBrandsResponse>({
     return useQuery({
         queryKey: brandKeys.likeList(memberNo, params),
         queryFn: async () => {
-            const data = await productProfile.getLikeBrands(params).json();
+            const { data } = await productProfile.getLikeBrands(params);
 
             return data;
         },

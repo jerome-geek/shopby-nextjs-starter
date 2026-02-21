@@ -4,7 +4,7 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productSection } from '@/api/display';
 import { productSectionKeys } from '@/hooks/queryKeys';
@@ -15,7 +15,7 @@ interface UseProductSectionByIdParams<T = GetProductSectionByIdResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductSectionByIdResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productSectionKeys)['detail']>
         >,
@@ -30,11 +30,10 @@ const useProductSectionById = <T = GetProductSectionByIdResponse>({
     return useQuery({
         queryKey: productSectionKeys.detail(sectionId),
         queryFn: async () => {
-            const response = await productSection
-                .getProductSectionById(sectionId)
-                .json();
+            const { data } =
+                await productSection.getProductSectionById(sectionId);
 
-            return response;
+            return data;
         },
         enabled: !isEmpty(sectionId),
         placeholderData: keepPreviousData,

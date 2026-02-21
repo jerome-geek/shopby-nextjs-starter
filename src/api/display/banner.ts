@@ -1,8 +1,8 @@
 import { join } from '@fxts/core';
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetBannerExtraInfosParams,
     GetBannerExtraInfosResponse,
@@ -19,37 +19,44 @@ const banner = {
      */
     getBannerExtraInfos: (
         params: GetBannerExtraInfosParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetBannerExtraInfosResponse>(
-            'display/banners/extraInfos',
-            {
-                searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetBannerExtraInfosResponse>({
+            method: 'GET',
+            url: 'display/banners/extraInfos',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 배너목록 조회하기(Code)
      *  - 코드 정보들로 배너들을 조회하는 API입니다
      */
-    getBanners: (bannerSectionCodes: string[], options?: Options) => {
-        return request.get<GetBannersResponse>(
-            `display/banners/${join(',', bannerSectionCodes)}`,
-            options,
-        );
+    getBanners: (
+        bannerSectionCodes: string[],
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetBannersResponse>({
+            method: 'GET',
+            url: `display/banners/${join(',', bannerSectionCodes)}`,
+            ...options,
+        });
     },
 
     /**
      * 배너목록 조회하기(ID)
      *  - ID 정보로 배너들을 조회하는 API입니다
      */
-    getBannersByIds: (bannerSectionIds: string[], options?: Options) => {
-        return request.get<GetBannersByIdsResponse>(
-            `display/banners/id/${join(',', bannerSectionIds)}`,
-            options,
-        );
+    getBannersByIds: (
+        bannerSectionIds: string[],
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetBannersByIdsResponse>({
+            method: 'GET',
+            url: `display/banners/id/${join(',', bannerSectionIds)}`,
+            ...options,
+        });
     },
 };
 

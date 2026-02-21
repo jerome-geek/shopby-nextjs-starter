@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetProductSectionByIdResponse,
     GetProductSectionProductsParams,
@@ -15,8 +14,10 @@ const productSection = {
      * 상품 진열 리스트 조회하기
      *  - 상품 진열 리스트를 반환합니다
      */
-    getProductSections: (options?: Options) => {
-        return request.get<GetProductSectionsResponse>('display/sections', {
+    getProductSections: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetProductSectionsResponse>({
+            method: 'GET',
+            url: '/display/sections',
             ...options,
         });
     },
@@ -26,16 +27,16 @@ const productSection = {
      *  - 상품 진열 번호(sectionNo)를 기준으로 상품 진열을 조회하는 API 입니다. 버전 v2.0 API 입니다.
      *  - 상품에 대한 조회는 상품 진열 상세조회 API 를 통해 호출이 필요합니다.
      */
-    getProductSection: (sectionNo: number, options?: Options) => {
-        return request.get<GetProductSectionResponse>(
-            `display/sections/${sectionNo}`,
-            {
-                ...options,
-                headers: {
-                    version: '2.0',
-                },
+    getProductSection: (sectionNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetProductSectionResponse>({
+            method: 'GET',
+            url: `/display/sections/${sectionNo}`,
+            ...options,
+            headers: {
+                ...options?.headers,
+                version: '2.0',
             },
-        );
+        });
     },
 
     /**
@@ -43,16 +44,19 @@ const productSection = {
      *  - 상품 진열 ID(sectionId)를 기준으로 상품 진열을 조회하는 API 입니다. 버전 v2.0 API 입니다.
      *  - 상품에 대한 조회는 상품 진열 상세조회 API 를 통해 호출이 필요합니다.
      */
-    getProductSectionById: (sectionId: string, options?: Options) => {
-        return request.get<GetProductSectionByIdResponse>(
-            `display/sections/ids/${sectionId}`,
-            {
-                ...options,
-                headers: {
-                    version: '2.0',
-                },
+    getProductSectionById: (
+        sectionId: string,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetProductSectionByIdResponse>({
+            method: 'GET',
+            url: `/display/sections/ids/${sectionId}`,
+            ...options,
+            headers: {
+                ...options?.headers,
+                version: '2.0',
             },
-        );
+        });
     },
 
     /**
@@ -63,15 +67,14 @@ const productSection = {
     getProductSectionProductsByNo: (
         sectionNo: string,
         params: GetProductSectionProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductSectionProductsResponse>(
-            `display/sections/${sectionNo}/products`,
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductSectionProductsResponse>({
+            method: 'GET',
+            url: `/display/sections/${sectionNo}/products`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -82,15 +85,14 @@ const productSection = {
     getProductSectionProductsById: (
         sectionId: string,
         params: GetProductSectionProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductSectionProductsResponse>(
-            `display/sections/ids/${sectionId}/products`,
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductSectionProductsResponse>({
+            method: 'GET',
+            url: `/display/sections/ids/${sectionId}/products`,
+            params,
+            ...options,
+        });
     },
 };
 

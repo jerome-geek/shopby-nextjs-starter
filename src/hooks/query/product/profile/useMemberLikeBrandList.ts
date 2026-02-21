@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import { productProfileKeys } from '@/hooks/queryKeys';
@@ -14,7 +14,7 @@ interface UseMemberLikeBrandListParams<T = GetMemberLikeBrandListResponse> {
     options?: Omit<
         UseQueryOptions<
             GetMemberLikeBrandListResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productProfileKeys)['likeBrandList']>
         >,
@@ -30,9 +30,8 @@ const useMemberLikeBrandList = <T = GetMemberLikeBrandListResponse>({
     return useQuery({
         queryKey: productProfileKeys.likeBrandList(memberNo, searchParams),
         queryFn: async () => {
-            const data = await productProfile
-                .getMemberLikeBrandList(searchParams)
-                .json();
+            const { data } =
+                await productProfile.getMemberLikeBrandList(searchParams);
 
             return data;
         },

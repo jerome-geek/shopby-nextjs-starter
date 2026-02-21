@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { sticker } from '@/api/display';
 import { GetStickersResponse } from '@/models/display/sticker';
@@ -8,7 +8,7 @@ export interface UseStickerListParams<T = GetStickersResponse> {
     options?: Omit<
         UseQueryOptions<
             GetStickersResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ['sticker']
         >,
@@ -22,9 +22,9 @@ const useStickerList = <T = GetStickersResponse>({
     return useQuery({
         queryKey: ['sticker'],
         queryFn: async () => {
-            const response = await sticker.getStickers().json();
+            const { data } = await sticker.getStickers();
 
-            return response;
+            return data;
         },
         ...options,
     });

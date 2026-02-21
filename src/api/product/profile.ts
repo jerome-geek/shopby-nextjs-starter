@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     DeleteRecentViewProductsParams,
     GetGuestRecentViewProductsParams,
@@ -32,15 +31,14 @@ const productProfile = {
      */
     getGuestRecentViewProducts: (
         params: GetGuestRecentViewProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetRecentViewProductsResponse>(
-            'guest/recent-products',
-            {
-                searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetRecentViewProductsResponse>({
+            method: 'GET',
+            url: '/guest/recent-products',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -48,9 +46,14 @@ const productProfile = {
      *  - 좋아요한 브랜드 목록을 전체 조회하는 API입니다.
      *  - 더보기 방식으로 조회를 원할 경우 displayBrandNo를 추가해주시면 됩니다.(pageNumber는 제외 하고 요청)
      */
-    getLikeBrands: (params: GetLikeBrandsParams, options?: Options) => {
-        return request.get<GetLikeBrandsResponse>('profile/like-brands', {
-            searchParams: qs.stringify(params),
+    getLikeBrands: (
+        params: GetLikeBrandsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetLikeBrandsResponse>({
+            method: 'GET',
+            url: '/profile/like-brands',
+            params,
             ...options,
         });
     },
@@ -60,9 +63,14 @@ const productProfile = {
      *  - 회원이 좋아하는 상품목록 조회하는 API입니다
      *  - 로그인 이후에만 호출 가능합니다(accessToken)
      */
-    getLikeProducts: (params?: GetLikeProductsParams, options?: Options) => {
-        return request.get<GetLikeProductsResponse>('profile/like-products', {
-            searchParams: qs.stringify(params),
+    getLikeProducts: (
+        params?: GetLikeProductsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetLikeProductsResponse>({
+            method: 'GET',
+            url: '/profile/like-products',
+            params,
             ...options,
         });
     },
@@ -74,15 +82,14 @@ const productProfile = {
      */
     updateProductsLikeOld: (
         data: UpdateProductsLikeOldData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<UpdateProductsLikeOldResponse>(
-            'profile/like-products',
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<UpdateProductsLikeOldResponse>({
+            method: 'POST',
+            url: '/profile/like-products',
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -92,15 +99,14 @@ const productProfile = {
      */
     getRecentViewProducts: (
         params: GetRecentViewProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetRecentViewProductsResponse>(
-            'profile/recent-products',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetRecentViewProductsResponse>({
+            method: 'GET',
+            url: '/profile/recent-products',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -111,10 +117,12 @@ const productProfile = {
      */
     registerRecentViewProduct: (
         data: RegisterRecentViewProductData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post('profile/recent-products', {
-            json: data,
+        return shopbyRequest({
+            method: 'POST',
+            url: '/profile/recent-products',
+            data,
             ...options,
         });
     },
@@ -126,10 +134,12 @@ const productProfile = {
      */
     deleteRecentViewProducts: (
         params: DeleteRecentViewProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.delete('profile/recent-products', {
-            searchParams: qs.stringify(params),
+        return shopbyRequest({
+            method: 'DELETE',
+            url: '/profile/recent-products',
+            params,
             ...options,
         });
     },
@@ -142,9 +152,14 @@ const productProfile = {
      *  - 50개를 넘게 등록했을 경우 최근 등록된 좋아요 브랜드 정보만 남게 됩니다.
      *  - 해당 회원이 이미 좋아요한 브랜드를 중복으로 요청할 경우 좋아요 수는 카운팅 되지 않습니다.
      */
-    toggleLikeBrands: (data: ToggleLikeBrandsData, options?: Options) => {
-        return request.post('profile/like-brands/', {
-            json: data,
+    toggleLikeBrands: (
+        data: ToggleLikeBrandsData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'POST',
+            url: '/profile/like-brands',
+            data,
             ...options,
         });
     },
@@ -155,15 +170,14 @@ const productProfile = {
      */
     getLikeBrandsCount: (
         params: GetLikeBrandsCountParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetLikeBrandsCountResponse>(
-            'profile/like-brands/count',
-            {
-                searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetLikeBrandsCountResponse>({
+            method: 'GET',
+            url: '/profile/like-brands/count',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -174,15 +188,14 @@ const productProfile = {
      */
     getMemberLikeBrandList: (
         params?: GetMemberLikeBrandListParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetMemberLikeBrandListResponse>(
-            'profile/like-brands/member',
-            {
-                searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetMemberLikeBrandListResponse>({
+            method: 'GET',
+            url: '/profile/like-brands/member',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -193,18 +206,20 @@ const productProfile = {
      *  - 로그인 이후에만 호출 가능합니다(accessToken)
      *  - header의 Version 값은 1.1로 요청해야합니다.
      */
-    updateProductsLike: (data: UpdateProductsLikeData, options?: Options) => {
-        return request.post<UpdateProductsLikeResponse>(
-            'profile/like-products',
-            {
-                json: data,
-                headers: {
-                    ...options?.headers,
-                    version: '1.1',
-                },
-                ...options,
+    updateProductsLike: (
+        data: UpdateProductsLikeData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<UpdateProductsLikeResponse>({
+            method: 'POST',
+            url: '/profile/like-products',
+            data,
+            ...options,
+            headers: {
+                ...options?.headers,
+                version: '1.1',
             },
-        );
+        });
     },
 
     /**
@@ -212,11 +227,12 @@ const productProfile = {
      *  - 회원이 좋아하는 상품 수를 조회하는 API입니다
      *  - 로그인 이후에만 호출 가능합니다(accessToken)
      */
-    getLikeProductsCount: (options?: Options) => {
-        return request.get<GetLikeProductsCountResponse>(
-            'profile/like-products/count',
-            options,
-        );
+    getLikeProductsCount: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetLikeProductsCountResponse>({
+            method: 'GET',
+            url: '/profile/like-products/count',
+            ...options,
+        });
     },
 };
 

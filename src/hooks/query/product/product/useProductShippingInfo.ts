@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -13,7 +13,7 @@ interface UseShippingInfoParams<T = GetProductsShippingInfoResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductsShippingInfoResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['shippingInfo']>
         >,
@@ -28,9 +28,8 @@ const useProductShippingInfo = <T = GetProductsShippingInfoResponse>({
     return useQuery({
         queryKey: productKeys.shippingInfo(searchParams),
         queryFn: async () => {
-            const data = await product
-                .getProductsShippingInfo(searchParams)
-                .json();
+            const { data } =
+                await product.getProductsShippingInfo(searchParams);
 
             return data;
         },

@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productSection } from '@/api/display';
 import {
@@ -14,7 +14,7 @@ interface UseProductSectionProductList<T = GetProductSectionProductsResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductSectionProductsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productSectionKeys)['products']>
         >,
@@ -31,11 +31,12 @@ const useProductSectionProductList = <T = GetProductSectionProductsResponse>({
     return useQuery({
         queryKey: productSectionKeys.products(sectionId, searchParams),
         queryFn: async () => {
-            const response = await productSection
-                .getProductSectionProductsById(sectionId, searchParams)
-                .json();
+            const { data } = await productSection.getProductSectionProductsById(
+                sectionId,
+                searchParams,
+            );
 
-            return response;
+            return data;
         },
         ...options,
     });

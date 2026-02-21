@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
-import type { Options } from 'ky';
+import { AxiosError } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 
 import { popup } from '@/api/display';
 import popupKeys from '@/hooks/queryKeys/popupKeys';
@@ -9,11 +9,11 @@ import { GetAllPopupParams, GetAllPopupResponse } from '@/models/display/popup';
 interface UseAllPopupListParams<T = GetAllPopupResponse> {
     params?: GetAllPopupParams;
     platform?: string;
-    kyOptions?: Options;
+    axiosRequestConfig?: AxiosRequestConfig;
     options?: Omit<
         UseQueryOptions<
             GetAllPopupResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof popupKeys)['list']>
         >,
@@ -24,17 +24,19 @@ interface UseAllPopupListParams<T = GetAllPopupResponse> {
 const useAllPopupList = <T = GetAllPopupResponse>({
     params,
     platform,
-    kyOptions,
+    axiosRequestConfig,
     options,
 }: UseAllPopupListParams<T>) => {
     return useQuery({
-        queryKey: popupKeys.list(params, platform, kyOptions),
+        queryKey: popupKeys.list(params, platform, axiosRequestConfig),
         queryFn: async () => {
-            const response = await popup
-                .getAllPopups(params, platform, kyOptions)
-                .json();
+            const { data } = await popup.getAllPopups(
+                params,
+                platform,
+                axiosRequestConfig,
+            );
 
-            return response;
+            return data;
         },
         ...options,
     });

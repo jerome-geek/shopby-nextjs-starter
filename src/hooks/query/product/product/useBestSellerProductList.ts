@@ -3,7 +3,7 @@ import {
     useQuery,
     UseQueryOptions,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -20,7 +20,7 @@ export interface UseBestSellerProductListParams<
     options?: Omit<
         UseQueryOptions<
             GetBestSellerProductsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['bestList']>
         >,
@@ -36,9 +36,7 @@ const useBestSellerProductList = <T = GetBestSellerProductsResponse>({
     return useQuery({
         queryKey: productKeys.bestList(memberNo, searchParams),
         queryFn: async () => {
-            const data = await product
-                .getBestSellerProducts(searchParams)
-                .json();
+            const { data } = await product.getBestSellerProducts(searchParams);
 
             return data;
         },

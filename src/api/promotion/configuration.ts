@@ -1,16 +1,15 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import { GetCouponConfigurationResponse } from '@/models/promotion/configuration';
 
 const configuration = {
-    getConfig: (options?: Options) => {
-        return request.get<GetCouponConfigurationResponse>(
-            'promotions/configurations',
-            {
-                ...options,
-            },
-        );
+    getConfig: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetCouponConfigurationResponse>({
+            method: 'GET',
+            url: '/promotions/configurations',
+            ...options,
+        });
     },
 };
 

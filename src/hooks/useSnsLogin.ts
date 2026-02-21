@@ -50,16 +50,14 @@ const useSnsLogin = () => {
             provider: NcpOpenIdProviderType;
             isLoginDisplay?: boolean;
         }) => {
-            const data = await authentication
-                .getOpenIdLoginUrl({
-                    provider,
-                    redirectUri: `${window.location.origin}${
-                        PATHS.CALLBACK.AUTH
-                    }?provider=${provider}&prompt=${isLoginDisplay ? 'login' : ''}`,
-                })
-                .json();
+            const response = await authentication.getOpenIdLoginUrl({
+                provider,
+                redirectUri: `${window.location.origin}${
+                    PATHS.CALLBACK.AUTH
+                }?provider=${provider}&prompt=${isLoginDisplay ? 'login' : ''}`,
+            });
 
-            return data;
+            return response.data;
         },
     });
 
@@ -92,10 +90,11 @@ const useSnsLogin = () => {
     const openNaverRegister = async ({
         returnUrl,
     }: { returnUrl?: string } = {}) => {
-        const data = await mutateAsync({
+        const response = await mutateAsync({
             provider: 'ncp_naver',
         });
-        if (!data.loginUrl && data.loginUrl.length === 0) {
+
+        if (!response.loginUrl && response.loginUrl.length === 0) {
             openDialog({
                 message: t(
                     '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
@@ -104,17 +103,17 @@ const useSnsLogin = () => {
             return;
         }
 
-        openLoginTab(data.loginUrl, returnUrl);
+        openLoginTab(response.loginUrl, returnUrl);
     };
 
     const openKakaoRegister = async ({
         returnUrl,
     }: { returnUrl?: string } = {}) => {
-        const data = await mutateAsync({
+        const response = await mutateAsync({
             provider: 'ncp_kakao',
         });
 
-        if (!data.loginUrl && data.loginUrl.length === 0) {
+        if (!response.loginUrl && response.loginUrl.length === 0) {
             openDialog({
                 message: t(
                     '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
@@ -123,7 +122,7 @@ const useSnsLogin = () => {
             return;
         }
 
-        openLoginTab(data.loginUrl, returnUrl);
+        openLoginTab(response.loginUrl, returnUrl);
     };
 
     const openKakaoSync = async ({
@@ -133,12 +132,12 @@ const useSnsLogin = () => {
         isLoginDisplay?: boolean;
         returnUrl?: string;
     } = {}) => {
-        const data = await mutateAsync({
+        const response = await mutateAsync({
             provider: 'ncp_kakao-sync',
             isLoginDisplay,
         });
 
-        if (!data.loginUrl && data.loginUrl.length === 0) {
+        if (!response.loginUrl && response.loginUrl.length === 0) {
             openDialog({
                 message: t(
                     '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
@@ -147,7 +146,7 @@ const useSnsLogin = () => {
             return;
         }
 
-        openLoginTab(data.loginUrl, returnUrl);
+        openLoginTab(response.loginUrl, returnUrl);
     };
 
     const openKcpAuthRegister = () => {
@@ -161,9 +160,9 @@ const useSnsLogin = () => {
     const openAppleRegister = async ({
         returnUrl,
     }: { returnUrl?: string } = {}) => {
-        const data = await mutateAsync({ provider: 'ncp_apple' });
+        const response = await mutateAsync({ provider: 'ncp_apple' });
 
-        if (!data.loginUrl && data.loginUrl.length === 0) {
+        if (!response.loginUrl && response.loginUrl.length === 0) {
             openDialog({
                 message: t(
                     '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
@@ -172,15 +171,15 @@ const useSnsLogin = () => {
             return;
         }
 
-        openLoginTab(data.loginUrl, returnUrl);
+        openLoginTab(response.loginUrl, returnUrl);
     };
 
     const openFacebookRegister = async ({
         returnUrl,
     }: { returnUrl?: string } = {}) => {
-        const data = await mutateAsync({ provider: 'ncp_facebook' });
+        const response = await mutateAsync({ provider: 'ncp_facebook' });
 
-        if (!data.loginUrl && data.loginUrl.length === 0) {
+        if (!response.loginUrl && response.loginUrl.length === 0) {
             openDialog({
                 message: t(
                     '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
@@ -194,15 +193,15 @@ const useSnsLogin = () => {
         //     return;
         // }
 
-        openLoginTab(data.loginUrl, returnUrl);
+        openLoginTab(response.loginUrl, returnUrl);
     };
 
     const openGoogleRegister = async ({
         returnUrl,
     }: { returnUrl?: string } = {}) => {
-        const data = await mutateAsync({ provider: 'ncp_google' });
+        const response = await mutateAsync({ provider: 'ncp_google' });
 
-        if (!data.loginUrl && data.loginUrl.length === 0) {
+        if (!response.loginUrl && response.loginUrl.length === 0) {
             openDialog({
                 message: t(
                     '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
@@ -216,15 +215,15 @@ const useSnsLogin = () => {
         //     return;
         // }
 
-        openLoginTab(data.loginUrl, returnUrl);
+        openLoginTab(response.loginUrl, returnUrl);
     };
 
     const openLineRegister = async ({
         returnUrl,
     }: { returnUrl?: string } = {}) => {
-        const data = await mutateAsync({ provider: 'ncp_line' });
+        const response = await mutateAsync({ provider: 'ncp_line' });
 
-        if (!data.loginUrl && data.loginUrl.length === 0) {
+        if (!response.loginUrl && response.loginUrl.length === 0) {
             openDialog({
                 message: t(
                     '간편 회원가입에 실패했습니다. 고객센터에 문의해주세요.',
@@ -233,7 +232,7 @@ const useSnsLogin = () => {
             return;
         }
 
-        openLoginTab(data.loginUrl, returnUrl);
+        openLoginTab(response.loginUrl, returnUrl);
     };
 
     const socialLoginList = [

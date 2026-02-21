@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { publicRequest } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import { GetHolidayParams, GetHolidayResponse } from '@/models/manage/holiday';
 
 /**
@@ -9,12 +8,11 @@ import { GetHolidayParams, GetHolidayResponse } from '@/models/manage/holiday';
  *  - 해당 연도와 월에 존재하는 공휴일을 조회하는 API입니다.
  */
 const holiday = {
-    getHoliday: (params: GetHolidayParams, options?: Options) => {
-        return publicRequest.get<GetHolidayResponse>('holiday', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getHoliday: (params: GetHolidayParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetHolidayResponse>({
+            method: 'GET',
+            url: '/holiday',
+            params,
             ...options,
         });
     },

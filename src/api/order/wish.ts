@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     DeleteWishListParams,
     DeleteWishListResponse,
@@ -16,8 +15,10 @@ const wish = {
      * 위시리스트 리스트 가져오기
      *  - 위시리스트를 조회하는 API 입니다.
      */
-    getWishList: (options?: Options) => {
-        return request.get<GetWishListResponse>('wish', {
+    getWishList: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetWishListResponse>({
+            method: 'GET',
+            url: '/wish',
             ...options,
         });
     },
@@ -26,9 +27,14 @@ const wish = {
      * 위시리스트 수정하기
      *  - 위시리스트를 수정하는 API 입니다.
      */
-    updateWishList: (data: UpdateWishListData, options?: Options) => {
-        return request.put('wish', {
-            json: data,
+    updateWishList: (
+        data: UpdateWishListData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'PUT',
+            url: '/wish',
+            data,
             ...options,
         });
     },
@@ -37,9 +43,14 @@ const wish = {
      * 위시리스트 등록하기
      *  - 위시리스트를 등록하는 API 입니다.
      */
-    registerWishList: (data: RegisterWishListData, options?: Options) => {
-        return request.post<{ count: number }>('wish', {
-            json: data,
+    registerWishList: (
+        data: RegisterWishListData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<{ count: number }>({
+            method: 'POST',
+            url: '/wish',
+            data,
             ...options,
         });
     },
@@ -48,11 +59,14 @@ const wish = {
      * 위시리스트 삭제하기
      *  - 위시리스트를 삭제하는 API 입니다.
      */
-    deleteWishList: (params: DeleteWishListParams, options?: Options) => {
-        return request.delete<DeleteWishListResponse>('wish', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-            }),
+    deleteWishList: (
+        params: DeleteWishListParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<DeleteWishListResponse>({
+            method: 'DELETE',
+            url: '/wish',
+            params,
             ...options,
         });
     },
@@ -61,8 +75,10 @@ const wish = {
      * 위시리스트 개수 가져오기
      *  - 위시리스트 개수를 조회하는 API 입니다.
      */
-    getWishListCount: (options?: Options) => {
-        return request.get<GetWishListCountResponse>('wish/count', {
+    getWishListCount: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetWishListCountResponse>({
+            method: 'GET',
+            url: '/wish/count',
             ...options,
         });
     },

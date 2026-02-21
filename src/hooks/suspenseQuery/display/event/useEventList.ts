@@ -2,7 +2,7 @@ import {
     UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
@@ -13,7 +13,7 @@ interface UseEventListParams<T = GetEventsResponse> {
     options?: Omit<
         UseSuspenseQueryOptions<
             GetEventsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof eventKeys)['list']>
         >,
@@ -28,7 +28,7 @@ const useEventList = <T = GetEventsResponse>({
     return useSuspenseQuery({
         queryKey: eventKeys.list(params),
         queryFn: async () => {
-            const data = await event.getEventsV2(params).json();
+            const { data } = await event.getEventsV2(params);
 
             return data;
         },

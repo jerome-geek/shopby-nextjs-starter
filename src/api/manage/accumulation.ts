@@ -1,7 +1,7 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetAccumulationsParams,
     GetAccumulationsResponse,
@@ -17,12 +17,14 @@ const accumulation = {
      * 적립금 이력 조회하기
      *  - 적립금 이력을 전체 검색하는 API 입니다
      */
-    getAccumulations: (params?: GetAccumulationsParams, options?: Options) => {
-        return request.get<GetAccumulationsResponse>('profile/accumulations', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getAccumulations: (
+        params?: GetAccumulationsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetAccumulationsResponse>({
+            method: 'GET',
+            url: '/profile/accumulations',
+            params,
             ...options,
         });
     },
@@ -33,18 +35,14 @@ const accumulation = {
      */
     getExpirationAccumulations: (
         params?: GetExpirationAccumulationListParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetExpirationAccumulationListResponse>(
-            'profile/accumulations/expiration',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetExpirationAccumulationListResponse>({
+            method: 'GET',
+            url: '/profile/accumulations/expiration',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -53,31 +51,26 @@ const accumulation = {
      */
     getAccumulationSummary: (
         params?: GetAccumulationSummaryParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetAccumulationSummaryResponse>(
-            'profile/accumulations/summary',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetAccumulationSummaryResponse>({
+            method: 'GET',
+            url: '/profile/accumulations/summary',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 해당 회원의 예상 적립금 조회하기
      *  - 해당 회원의 예상 적립금(적립대기)을 조회하는 API 입니다
      */
-    getExpectAccumulation: (options?: Options) => {
-        return request.get<GetExpectAccumulationResponse>(
-            'profile/accumulations/waiting',
-            {
-                ...options,
-            },
-        );
+    getExpectAccumulation: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetExpectAccumulationResponse>({
+            method: 'GET',
+            url: '/profile/accumulations/waiting',
+            ...options,
+        });
     },
 };
 

@@ -5,6 +5,7 @@ const withVanillaExtract = createVanillaExtractPlugin();
 
 const nextConfig: NextConfig = {
     /* config options here */
+    pageExtensions: ['tsx', 'api.ts'],
     reactCompiler: true,
     reactStrictMode: true,
     images: {

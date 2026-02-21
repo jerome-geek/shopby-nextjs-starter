@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 
 import {
     GetCouponSummaryParams,
@@ -28,12 +27,14 @@ const coupon = {
      * 내 쿠폰 가져오기
      *  - 로그인한 사용자가 보유한 쿠폰중 사용가능한 쿠폰과 이미 사용한 쿠폰을 구분하여 조회합니다
      */
-    getUserCoupons: (params?: GetUserCouponsParams, options?: Options) => {
-        return request.get<GetUserCouponsResponse>('coupons', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getUserCoupons: (
+        params?: GetUserCouponsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetUserCouponsResponse>({
+            method: 'GET',
+            url: '/coupons',
+            params,
             ...options,
         });
     },
@@ -42,8 +43,10 @@ const coupon = {
      * 발급 가능한 쿠폰 조회하기
      *  - 상품과 상관없이 오늘 날짜 기준으로 다운로드 가능한 쿠폰을 모두 조회합니다
      */
-    getIssuableCoupons: (options?: Options) => {
-        return request.get<GetIssuableCouponResponse>('coupons/issuable', {
+    getIssuableCoupons: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetIssuableCouponResponse>({
+            method: 'GET',
+            url: '/coupons/issuable',
             ...options,
         });
     },
@@ -52,12 +55,14 @@ const coupon = {
      * 내 쿠폰 요약정보 가져오기
      *  - 로그인한 사용자가 보유한 쿠폰의 정보를 요약하여 조회합니다
      */
-    getCouponSummary: (params?: GetCouponSummaryParams, options?: Options) => {
-        return request.get<GetCouponSummaryResponse>('coupons/summary', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getCouponSummary: (
+        params?: GetCouponSummaryParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetCouponSummaryResponse>({
+            method: 'GET',
+            url: '/coupons/summary',
+            params,
             ...options,
         });
     },
@@ -66,13 +71,15 @@ const coupon = {
      * 코드 쿠폰 발급하기
      *  - 등록된 프로모션 코드를 이용해 쿠폰을 발급받습니다
      */
-    issueCouponByPromotionCode: (promotionCode: string, options?: Options) => {
-        return request.post<IssueCouponByPromotionCodeResponse>(
-            `coupons/register-code/${promotionCode}`,
-            {
-                ...options,
-            },
-        );
+    issueCouponByPromotionCode: (
+        promotionCode: string,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<IssueCouponByPromotionCodeResponse>({
+            method: 'POST',
+            url: `/coupons/register-code/${promotionCode}`,
+            ...options,
+        });
     },
 
     /**
@@ -82,15 +89,14 @@ const coupon = {
     issueCoupon: (
         couponNo: number,
         data?: IssueCouponData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<IssueCouponResponse>(
-            `coupons/${couponNo}/download`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<IssueCouponResponse>({
+            method: 'POST',
+            url: `/coupons/${couponNo}/download`,
+            data,
+            ...options,
+        });
     },
     /**
      * 쿠폰번호로 제외 대상 조회하기
@@ -99,18 +105,14 @@ const coupon = {
     getExcludeTargetsByCouponNumber: (
         couponNo: number,
         params: GetExcludeTargetsByCouponNumberParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetExcludeTargetsByCouponNumberResponse>(
-            `coupons/${couponNo}/exclude-targets`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetExcludeTargetsByCouponNumberResponse>({
+            method: 'GET',
+            url: `/coupons/${couponNo}/exclude-targets`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -120,31 +122,26 @@ const coupon = {
     getCouponTargets: (
         couponNo: number,
         params: GetCouponTargetsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetCouponTargetsResponse>(
-            `coupons/${couponNo}/targets`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetCouponTargetsResponse>({
+            method: 'GET',
+            url: `/coupons/${couponNo}/targets`,
+            params,
+            ...options,
+        });
     },
 
     /**
      * 기획전 번호로 쿠폰 발급하기
      *  - 해당 기획전에서 다운로드받을 수 있는 모든 쿠폰을 발급합니다
      */
-    issueEventCoupons: (eventNo: number, options?: Options) => {
-        return request.post<IssueEventCouponsResponse>(
-            `coupons/events/${eventNo}/download`,
-            {
-                ...options,
-            },
-        );
+    issueEventCoupons: (eventNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<IssueEventCouponsResponse>({
+            method: 'POST',
+            url: `/coupons/events/${eventNo}/download`,
+            ...options,
+        });
     },
 
     /**
@@ -154,15 +151,14 @@ const coupon = {
     issueProductCoupons: (
         productNo: number,
         data?: IssueProductCouponsData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<IssueProductCouponsResponse>(
-            `coupons/products/${productNo}/download`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<IssueProductCouponsResponse>({
+            method: 'POST',
+            url: `/coupons/products/${productNo}/download`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -172,18 +168,14 @@ const coupon = {
     getIssuableCouponsByProductNo: (
         productNo: number,
         params?: GetIssuableCouponsByProductNoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetIssuableCouponsByProductNoResponse>(
-            `coupons/products/${productNo}/issuable/coupons`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetIssuableCouponsByProductNoResponse>({
+            method: 'GET',
+            url: `/coupons/products/${productNo}/issuable/coupons`,
+            params,
+            ...options,
+        });
     },
 };
 

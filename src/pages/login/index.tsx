@@ -53,14 +53,11 @@ export default function LoginPage() {
 
     const onSubmit = handleSubmit(async ({ memberId, password, isSaved }) => {
         try {
-            const data = await oauth2
-                .issueAccessToken({
-                    memberId,
-                    password,
-                    keepLogin: true,
-                })
-                .json();
-
+            const data = await oauth2.issueAccessToken({
+                memberId,
+                password,
+                keepLogin: true,
+            });
             // TODO: 30분 더 길게 추가
             // await cookieTokenManager.setToken({
             //     accessToken: data.accessToken,

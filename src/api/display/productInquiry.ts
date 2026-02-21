@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { publicRequest, request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import type { SearchDate } from '@/models/common';
 import {
     GetAllProductInquiriesParams,
@@ -27,41 +26,38 @@ const productInquiry = {
      */
     getAllProductInquiries: (
         params: GetAllProductInquiriesParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetAllProductInquiriesResponse>(
-            'products/inquiries',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetAllProductInquiriesResponse>({
+            method: 'GET',
+            url: '/products/inquiries',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 상품문의 게시판 설정 조회하기
      *  - 상품문의 게시판 설정 조회하는 API입니다
      */
-    getConfig: (options?: Options) => {
-        return publicRequest.get<GetProductInquiryConfigResponse>(
-            'products/inquiries/configurations',
-            {
-                ...options,
-            },
-        );
+    getConfig: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetProductInquiryConfigResponse>({
+            method: 'GET',
+            url: '/products/inquiries/configurations',
+            ...options,
+        });
     },
 
     /**
      * 상품문의 태그 전체 조회하기
      *  - 상품문의 태그 전체 조회하는 API입니다.
      */
-    getProductInquiryTags: (options?: Options) => {
-        return request.get<GetProductInquiryTagsResponse>(
-            'products/inquiries/tags',
-            {
-                ...options,
-            },
-        );
+    getProductInquiryTags: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetProductInquiryTagsResponse>({
+            method: 'GET',
+            url: '/products/inquiries/tags',
+            ...options,
+        });
     },
 
     /**
@@ -73,10 +69,12 @@ const productInquiry = {
     updateProductInquiry: (
         inquiryNo: number,
         data: UpdateProductInquiryData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put(`products/inquiries/${inquiryNo}`, {
-            json: data,
+        return shopbyRequest({
+            method: 'PUT',
+            url: `/products/inquiries/${inquiryNo}`,
+            data,
             ...options,
         });
     },
@@ -86,8 +84,10 @@ const productInquiry = {
      *  - 상품문의를 삭제하는 API입니다
      *  - 작성자 본인만 삭제 가능합니다
      */
-    deleteProductInquiry: (inquiryNo: number, options?: Options) => {
-        return request.delete(`products/inquiries/${inquiryNo}`, {
+    deleteProductInquiry: (inquiryNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/products/inquiries/${inquiryNo}`,
             ...options,
         });
     },
@@ -102,15 +102,14 @@ const productInquiry = {
     getProductInquiries: (
         productNo: number,
         params?: GetProductInquiriesParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductInquiriesResponse>(
-            `products/${productNo}/inquiries`,
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductInquiriesResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/inquiries`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -120,23 +119,27 @@ const productInquiry = {
     writeProductInquiry: (
         productNo: number,
         data: WriteProductInquiryData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<WriteProductInquiryResponse>(
-            `products/${productNo}/inquiries`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<WriteProductInquiryResponse>({
+            method: 'POST',
+            url: `/products/${productNo}/inquiries`,
+            data,
+            ...options,
+        });
     },
 
     /**
      * 상품문의 신고 취소하기
      *  - 상품문의 신고 취소하는 API입니다.
      */
-    cancelReportProductInquiry: (inquiryNo: number, options?: Options) => {
-        return request.delete(`products/${inquiryNo}/inquiries/report`, {
+    cancelReportProductInquiry: (
+        inquiryNo: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/products/${inquiryNo}/inquiries/report`,
             ...options,
         });
     },
@@ -148,10 +151,12 @@ const productInquiry = {
     reportProductInquiry: (
         productNo: number,
         data: ReportProductInquiryData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post(`products/${productNo}/inquiries/report`, {
-            json: data,
+        return shopbyRequest({
+            method: 'POST',
+            url: `/products/${productNo}/inquiries/report`,
+            data,
             ...options,
         });
     },
@@ -164,12 +169,13 @@ const productInquiry = {
     getProductInquiry: (
         productNo: number,
         inquiryNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductInquiryResponse>(
-            `products/${productNo}/inquiries/${inquiryNo}`,
-            options,
-        );
+        return shopbyRequest<GetProductInquiryResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/inquiries/${inquiryNo}`,
+            ...options,
+        });
     },
 
     /**
@@ -179,24 +185,28 @@ const productInquiry = {
      */
     getMyProductInquiries: (
         params: GetMyProductInquiriesParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetMyProductInquiriesResponse>(
-            '/profile/product-inquiries',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetMyProductInquiriesResponse>({
+            method: 'GET',
+            url: '/profile/product-inquiries',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 내 상품문의 횟수 조회하기
      *  - 내 상품문의 횟수를 조회하는 API입니다
      */
-    getMyProductInquiriesCount: (params: SearchDate, options?: Options) => {
-        return request.get('/profile/product-inquiries/count', {
-            searchParams: qs.stringify(params),
+    getMyProductInquiriesCount: (
+        params: SearchDate,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'GET',
+            url: '/profile/product-inquiries/count',
+            params,
             ...options,
         });
     },

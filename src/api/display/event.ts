@@ -1,7 +1,7 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetClosedEventsParams,
     GetClosedEventsResponse,
@@ -33,13 +33,11 @@ const event = {
      *  - 이벤트 기간안에 포함된 모든 이벤트 목록 조회하는 API입니다
      *  - 1일 캐시하여 사용하고 있습니다. (cached)
      */
-    getEvents: (params?: GetEventsParams, options?: Options) => {
-        return request.get<GetEventsResponse>('display/events', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
-            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
+    getEvents: (params?: GetEventsParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetEventsResponse>({
+            method: 'GET',
+            url: '/display/events',
+            params,
             ...options,
         });
     },
@@ -53,18 +51,15 @@ const event = {
      *   - keywordInfo.value가 없는 경우에는 검색조건으로 사용되지 않습니다
      *  - header의 'Version' 값을 2.0으로 요청해야 정상 동작합니다
      */
-    getEventsV2: (params: GetEventsV2Params, options?: Options) => {
-        return request.get<GetEventsResponse>('display/events', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'repeat',
-                allowDots: true,
-            }),
-            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
-            ...options,
+    getEventsV2: (params: GetEventsV2Params, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetEventsResponse>({
+            method: 'GET',
+            url: '/display/events',
             headers: {
                 ...options?.headers,
                 version: '2.0',
             },
+            ...options,
         });
     },
 
@@ -73,13 +68,14 @@ const event = {
      *  - 종료된 모든 이벤트 목록 조회하는 API입니다
      *  - 1일 캐시하여 사용하고 있습니다. (cached)
      */
-    getClosedEvents: (params?: GetClosedEventsParams, options?: Options) => {
-        return request.get<GetClosedEventsResponse>('display/events/close', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
-            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
+    getClosedEvents: (
+        params?: GetClosedEventsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetClosedEventsResponse>({
+            method: 'GET',
+            url: '/display/events/close',
+            params,
             ...options,
         });
     },
@@ -92,32 +88,28 @@ const event = {
      */
     getEventsByProductNos: (
         params: GetEventsByProductNosParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetEventsByProductNosResponse>(
-            'display/events/products',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
-                ...options,
-            },
-        );
+        return shopbyRequest<GetEventsByProductNosResponse>({
+            method: 'GET',
+            url: '/display/events/products',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 기획전명으로 기획전 검색하기
      *  - 기획전명으로 기획전을 조회하는 API ( like 검색 )
      */
-    searchEventsByName: (params: SearchEventsByName, options?: Options) => {
-        return request.get<GetEventsResponse>('display/events/search-by-name', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
-            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
+    searchEventsByName: (
+        params: SearchEventsByName,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetEventsResponse>({
+            method: 'GET',
+            url: '/display/events/search-by-name',
+            params,
             ...options,
         });
     },
@@ -135,19 +127,14 @@ const event = {
      */
     searchEventsByEventNos: (
         params: SearchEventsByEventNosParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<SearchEventsByEventNosResponse>(
-            'display/events/search-by-nos',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
-                ...options,
-            },
-        );
+        return shopbyRequest<SearchEventsByEventNosResponse>({
+            method: 'GET',
+            url: '/display/events/search-by-nos',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -156,19 +143,14 @@ const event = {
      */
     searchEventsByProgress: (
         params: SearchEventsByProgressParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<SearchEventsByProgressResponse>(
-            'display/events/search-by-progress',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
-                ...options,
-            },
-        );
+        return shopbyRequest<SearchEventsByProgressResponse>({
+            method: 'GET',
+            url: '/display/events/search-by-progress',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -177,18 +159,16 @@ const event = {
      *  - 현재 진행중인 기획전만 조회되고, 그 이외(진행대기, 종료)에는 조회되지 않습니다.
      *  - 플랫폼별, 멤버그룹별, 멤버등급별에 따라 접근 불가능한 기획전은 조회되지 않습니다.
      */
-    getSectionsByEventNos: (eventNos: number[], options?: Options) => {
-        return request.get<GetSectionsByEventNosResponse>(
-            'display/events/sections',
-            {
-                searchParams: qs.stringify(eventNos, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
-                ...options,
-            },
-        );
+    getSectionsByEventNos: (
+        eventNos: number[],
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetSectionsByEventNosResponse>({
+            method: 'GET',
+            url: '/display/events/sections',
+            params: eventNos,
+            ...options,
+        });
     },
 
     /**
@@ -196,14 +176,12 @@ const event = {
      *  - 특정 상품을 포함하는 이벤트 목록 조회 API입니다
      *  - 1일 캐시하여 사용하고 있습니다. (cached)
      */
-    getEventsByProduct: (productNo: number, options?: Options) => {
-        return request.get<GetEventsByProductNoResponse>(
-            `display/events/products/${productNo}`,
-            {
-                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
-                ...options,
-            },
-        );
+    getEventsByProduct: (productNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetEventsByProductNoResponse>({
+            method: 'GET',
+            url: `/display/events/products/${productNo}`,
+            ...options,
+        });
     },
 
     /**
@@ -219,11 +197,12 @@ const event = {
     getEvent: (
         eventKey: string | number,
         params?: GetEventParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetEventResponse>(`display/events/${eventKey}/`, {
-            searchParams: qs.stringify(params),
-            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
+        return shopbyRequest<GetEventResponse>({
+            method: 'GET',
+            url: `/display/events/${eventKey}/`,
+            params,
             ...options,
             headers: {
                 ...options?.headers,
@@ -242,11 +221,12 @@ const event = {
     getEventById: (
         eventId: string,
         params?: GetEventByIdParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetEventResponse>(`display/events/ids/${eventId}`, {
-            searchParams: qs.stringify(params),
-            next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
+        return shopbyRequest<GetEventResponse>({
+            method: 'GET',
+            url: `/display/events/ids/${eventId}`,
+            params,
             ...options,
             headers: {
                 ...options?.headers,
@@ -267,16 +247,14 @@ const event = {
         eventNo: number,
         sectionNo: number,
         params?: GetEventProductDisplaySectionParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetEventProductDisplaySectionResponse>(
-            `display/events/${eventNo}/sections/${sectionNo}`,
-            {
-                searchParams: qs.stringify(params),
-                next: { revalidate: EVENT_REVALIDATE_MS, tags: ['event'] },
-                ...options,
-            },
-        );
+        return shopbyRequest<GetEventProductDisplaySectionResponse>({
+            method: 'GET',
+            url: `/display/events/${eventNo}/sections/${sectionNo}`,
+            params,
+            ...options,
+        });
     },
 };
 

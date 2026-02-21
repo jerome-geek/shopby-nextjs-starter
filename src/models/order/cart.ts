@@ -22,7 +22,7 @@ export interface GetCartListResponse {
 }
 
 /** 장바구니 등록리스트 */
-export interface RegisterCartData {
+export type RegisterCartData = {
     /** 본상품번호(추가상품이라면 필수 입력) (nullable) */
     baseProductNo?: Nullable<number>;
     /** 장바구니 그룹 아이디 (nullable) */
@@ -35,10 +35,10 @@ export interface RegisterCartData {
     optionNo: number;
     /** 상품번호 */
     productNo: number;
-}
+}[];
 
 /** 장바구니 수정 리스트 */
-export interface UpdateCartData {
+export type UpdateCartData = {
     /** 장바구니 그룹 아이디 (nullable) */
     groupId?: Nullable<string>;
     /** 구매개수 */
@@ -47,7 +47,7 @@ export interface UpdateCartData {
     optionInputs?: Omit<OptionInputs, 'required'>[];
     /** 장바구니 번호 */
     cartNo: number;
-}
+}[];
 
 export interface GetCartCountResponse {
     /** 회원의 총 Cart 상품수 */

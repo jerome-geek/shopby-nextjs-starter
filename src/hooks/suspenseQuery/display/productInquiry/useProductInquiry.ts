@@ -2,7 +2,7 @@ import {
     UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
@@ -14,7 +14,7 @@ interface UseProductInquiryParams<T = GetProductInquiryResponse> {
     options?: Omit<
         UseSuspenseQueryOptions<
             GetProductInquiryResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productInquiryKeys)['detail']>
         >,
@@ -30,10 +30,10 @@ const useProductInquiry = <T = GetProductInquiryResponse>({
     return useSuspenseQuery({
         queryKey: productInquiryKeys.detail(productNo, inquiryNo),
         queryFn: async () => {
-            const data = await productInquiry
-                .getProductInquiry(productNo, inquiryNo)
-                .json();
-
+            const { data } = await productInquiry.getProductInquiry(
+                productNo,
+                inquiryNo,
+            );
             return data;
         },
         ...options,

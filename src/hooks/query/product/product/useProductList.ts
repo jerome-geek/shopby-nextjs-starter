@@ -1,4 +1,4 @@
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -18,7 +18,7 @@ export interface UseProductListParams<T = ProductsSearchResponse> {
     options?: Omit<
         UseQueryOptions<
             ProductsSearchResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['list']>
         >,
@@ -34,7 +34,7 @@ const useProductList = <T = ProductsSearchResponse>({
     return useQuery({
         queryKey: productKeys.list(memberNo, searchParams),
         queryFn: async () => {
-            const data = await product.searchProducts(searchParams).json();
+            const { data } = await product.searchProducts(searchParams);
 
             return data;
         },

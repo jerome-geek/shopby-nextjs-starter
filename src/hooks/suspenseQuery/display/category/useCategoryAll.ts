@@ -2,7 +2,7 @@ import {
     UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { category } from '@/api/display';
 import { categoryKeys } from '@/hooks/queryKeys';
@@ -16,7 +16,7 @@ interface UseCategoryAllParams<T = GetCategoriesResponse> {
     options?: Omit<
         UseSuspenseQueryOptions<
             GetCategoriesResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof categoryKeys)['list']>
         >,
@@ -31,7 +31,7 @@ const useCategoryAll = <T = GetCategoriesResponse>({
     return useSuspenseQuery({
         queryKey: categoryKeys.list(params),
         queryFn: async () => {
-            const data = await category.getCategories().json();
+            const { data } = await category.getCategories();
 
             return data;
         },

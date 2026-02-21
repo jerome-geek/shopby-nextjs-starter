@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { publicRequest, request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     CategoryProductReviewsParams,
     GetCategoryProductReviewResponse,
@@ -50,31 +49,26 @@ const review = {
      */
     getCategoryProductReviews: (
         params: CategoryProductReviewsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetCategoryProductReviewResponse>(
-            'category/product-reviews',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetCategoryProductReviewResponse>({
+            method: 'GET',
+            url: '/category/product-reviews',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 상품평 게시판 설정 조회하기
      *  - 상품평 게시판 설정을 조회하는 API입니다
      */
-    getReviewBoardConfig: (options?: Options) => {
-        return publicRequest.get<GetReviewBoardConfigResponse>(
-            'product-reviews/configurations',
-            {
-                ...options,
-            },
-        );
+    getReviewBoardConfig: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetReviewBoardConfigResponse>({
+            method: 'GET',
+            url: '/product-reviews/configurations',
+            ...options,
+        });
     },
 
     /**
@@ -85,18 +79,14 @@ const review = {
     getPhotoReviewList: (
         productNo: number,
         params: GetPhotoReviewListParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetPhotoReviewListResponse>(
-            `products/${productNo}/photo-reviews`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetPhotoReviewListResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/photo-reviews`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -108,18 +98,14 @@ const review = {
     getProductReviewList: (
         productNo: number,
         params: GetProductReviewListParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductReviewListResponse>(
-            `products/${productNo}/product-reviews`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductReviewListResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/product-reviews`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -129,15 +115,14 @@ const review = {
     registerProductReview: (
         productNo: number,
         data: RegisterProductReviewData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<RegisterProductReviewResponse>(
-            `products/${productNo}/product-reviews`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<RegisterProductReviewResponse>({
+            method: 'POST',
+            url: `/products/${productNo}/product-reviews`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -147,18 +132,14 @@ const review = {
     getReviewableOptions: (
         productNo: number,
         params: GetReviewableOptionsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetReviewableOptionResponse>(
-            `products/${productNo}/reviewable-options`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetReviewableOptionResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/reviewable-options`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -168,22 +149,18 @@ const review = {
     getProductReviewListV2: (
         productNo: number,
         params: GetReviewListV2Params,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetReviewListV2Response>(
-            `products/${productNo}/product-reviews/`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-                headers: {
-                    ...options?.headers,
-                    version: '2.0',
-                },
+        return shopbyRequest<GetReviewListV2Response>({
+            method: 'GET',
+            url: `/products/${productNo}/product-reviews/`,
+            params,
+            ...options,
+            headers: {
+                ...options?.headers,
+                version: '2.0',
             },
-        );
+        });
     },
 
     /**
@@ -193,15 +170,14 @@ const review = {
     getReviewCountByRatingRange: (
         productNo: number,
         data: GetReviewCountByRatingRangeData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GetReviewCountByRatingRangeResponse>(
-            `products/${productNo}/summary`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<GetReviewCountByRatingRangeResponse>({
+            method: 'POST',
+            url: `/products/${productNo}/summary`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -212,18 +188,14 @@ const review = {
         productNo: number,
         reviewNo: number,
         params?: GetProductReviewParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductReviewResponse>(
-            `products/${productNo}/product-reviews/${reviewNo}`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductReviewResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/product-reviews/${reviewNo}`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -235,15 +207,14 @@ const review = {
         productNo: number,
         reviewNo: number,
         data: UpdateProductReviewData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put(
-            `products/${productNo}/product-reviews/${reviewNo}`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'PUT',
+            url: `/products/${productNo}/product-reviews/${reviewNo}`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -254,14 +225,13 @@ const review = {
     deleteProductReview: (
         productNo: number,
         reviewNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.delete(
-            `products/${productNo}/product-reviews/${reviewNo}`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/products/${productNo}/product-reviews/${reviewNo}`,
+            ...options,
+        });
     },
 
     /**
@@ -278,18 +248,14 @@ const review = {
         productNo: number,
         reviewNo: number,
         params: GetProductReviewCommentsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductReviewCommentResponse>(
-            `products/${productNo}/product-reviews/${reviewNo}/comments`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductReviewCommentResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/product-reviews/${reviewNo}/comments`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -299,14 +265,13 @@ const review = {
     recommendProductReview: (
         productNo: number,
         reviewNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post(
-            `products/${productNo}/product-reviews/${reviewNo}/recommend`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'POST',
+            url: `/products/${productNo}/product-reviews/${reviewNo}/recommend`,
+            ...options,
+        });
     },
 
     /**
@@ -316,14 +281,13 @@ const review = {
     cancelProductReviewRecommend: (
         productNo: number,
         reviewNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.delete(
-            `products/${productNo}/product-reviews/${reviewNo}/recommend`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/products/${productNo}/product-reviews/${reviewNo}/recommend`,
+            ...options,
+        });
     },
 
     /**
@@ -334,15 +298,14 @@ const review = {
         productNo: number,
         reviewNo: number,
         data: ReportProductReviewData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post(
-            `products/${productNo}/product-reviews/${reviewNo}/report`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'POST',
+            url: `/products/${productNo}/product-reviews/${reviewNo}/report`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -351,14 +314,13 @@ const review = {
     cancelReportProductReview: (
         productNo: number,
         reviewNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.delete(
-            `products/${productNo}/product-reviews/${reviewNo}/report`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/products/${productNo}/product-reviews/${reviewNo}/report`,
+            ...options,
+        });
     },
 
     /**
@@ -367,18 +329,14 @@ const review = {
      */
     getMyProductReviews: (
         params: GetMyProductReviewsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetMyProductReviewsResponse>(
-            'profile/product-reviews',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetMyProductReviewsResponse>({
+            method: 'GET',
+            url: 'profile/product-reviews',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -387,18 +345,14 @@ const review = {
      */
     getReviewableProducts: (
         params: GetReviewableProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetReviewableProductsResponse>(
-            'profile/order-options/product-reviewable',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetReviewableProductsResponse>({
+            method: 'GET',
+            url: 'profile/order-options/product-reviewable',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -411,13 +365,12 @@ const review = {
      */
     getReviewBoardList: (
         params: GetReviewBoardListParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetReviewBoardListResponse>('reviews/boards', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'repeat',
-                allowDots: true,
-            }),
+        return shopbyRequest<GetReviewBoardListResponse>({
+            method: 'GET',
+            url: 'reviews/boards',
+            params,
             ...options,
         });
     },
@@ -426,8 +379,10 @@ const review = {
      * 상품리뷰 태그 전체 조회하기
      *  - 상품리뷰 태그 전체 조회하는 API입니다
      */
-    getReviewTags: (options?: Options) => {
-        return request.get<GetReviewTagsResponse>('reviews/tags', {
+    getReviewTags: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetReviewTagsResponse>({
+            method: 'GET',
+            url: 'reviews/tags',
             ...options,
         });
     },
@@ -442,18 +397,14 @@ const review = {
      */
     getReviewedProducts: (
         params: GetReviewsProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetReviewedProductsResponse>(
-            'reviews/boards/reviewed-products',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'repeat',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetReviewedProductsResponse>({
+            method: 'GET',
+            url: 'reviews/boards/reviewed-products',
+            params,
+            ...options,
+        });
     },
 };
 

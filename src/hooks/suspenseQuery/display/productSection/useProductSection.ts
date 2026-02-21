@@ -2,7 +2,7 @@ import {
     UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productSection } from '@/api/display';
 import { productSectionKeys } from '@/hooks/queryKeys';
@@ -13,7 +13,7 @@ interface UseProductSectionParams<T = GetProductSectionResponse> {
     options?: Omit<
         UseSuspenseQueryOptions<
             GetProductSectionResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productSectionKeys)['detail']>
         >,
@@ -28,9 +28,7 @@ const useProductSection = <T = GetProductSectionResponse>({
     return useSuspenseQuery({
         queryKey: productSectionKeys.detail(sectionNo),
         queryFn: async () => {
-            const data = await productSection
-                .getProductSection(sectionNo)
-                .json();
+            const { data } = await productSection.getProductSection(sectionNo);
 
             return data;
         },

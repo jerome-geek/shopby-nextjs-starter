@@ -1,6 +1,6 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     WriteNaverPayOrderSheetData,
     RegisterWishListData,
@@ -15,10 +15,12 @@ const naverPay = {
      */
     writeNaverPayOrderSheet: (
         data: WriteNaverPayOrderSheetData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post('payments/naver/orderSheet', {
-            json: data,
+        return shopbyRequest({
+            method: 'POST',
+            url: '/payments/naver/orderSheet',
+            data,
             ...options,
         });
     },
@@ -29,24 +31,28 @@ const naverPay = {
      */
     checkNaverPayValidate: (
         data: CheckNaverPayValidateData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put<CheckNaverPayValidateResponse>(
-            'payments/naver/validate',
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<CheckNaverPayValidateResponse>({
+            method: 'PUT',
+            url: '/payments/naver/validate',
+            data,
+            ...options,
+        });
     },
 
     /**
      * 네이버페이 찜 등록하기
      * - 네이버페이 찜을 등록하는 API 입니다.
      */
-    registerWishList: (data: RegisterWishListData, options?: Options) => {
-        return request.post('payments/naver/wish-list', {
-            json: data,
+    registerWishList: (
+        data: RegisterWishListData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'POST',
+            url: '/payments/naver/wish-list',
+            data,
             ...options,
         });
     },

@@ -1,7 +1,7 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     DesignPopupData,
     GetAllPopupParams,
@@ -19,12 +19,15 @@ const popup = {
     getDesignPopups: (
         data: DesignPopupData,
         platform: string,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GetDesignPopupResponse>('/design-popups', {
-            json: data,
+        return shopbyRequest<GetDesignPopupResponse>({
+            method: 'POST',
+            url: '/design-popups',
+            data,
             headers: {
                 platform,
+                ...options?.headers,
             },
             ...options,
         });
@@ -38,12 +41,15 @@ const popup = {
     getAllPopups: (
         params?: GetAllPopupParams,
         platform?: string,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetAllPopupResponse>('/display/popups', {
-            searchParams: qs.stringify(params),
+        return shopbyRequest<GetAllPopupResponse>({
+            method: 'GET',
+            url: '/display/popups',
+            params,
             headers: {
                 platform,
+                ...options?.headers,
             },
             ...options,
         });
@@ -56,10 +62,12 @@ const popup = {
     getPopups: (
         popupNos: number[],
         params?: GetAllPopupParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetAllPopupResponse>(`/display/popups/${popupNos}`, {
-            searchParams: qs.stringify(params),
+        return shopbyRequest({
+            method: 'GET',
+            url: `/display/popups/${popupNos}`,
+            params,
             ...options,
         });
     },
@@ -71,15 +79,14 @@ const popup = {
     getPopupsById: (
         popupIds: string[],
         params?: GetPopupsByIdParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetAllPopupResponse>(
-            `/display/popups/ids/${popupIds}`,
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'GET',
+            url: `/display/popups/ids/${popupIds}`,
+            params,
+            ...options,
+        });
     },
 };
 

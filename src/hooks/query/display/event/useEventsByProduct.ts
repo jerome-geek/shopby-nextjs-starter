@@ -3,7 +3,7 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import { GetEventsByProductNoResponse } from '@/models/display/event';
@@ -13,7 +13,7 @@ interface UseEventParams<T = GetEventsByProductNoResponse> {
     options?: Omit<
         UseQueryOptions<
             GetEventsByProductNoResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [string, { productNo: number }]
         >,
@@ -28,7 +28,7 @@ const useEventsByProduct = <T = GetEventsByProductNoResponse>({
     return useQuery({
         queryKey: ['eventsByProduct', { productNo }],
         queryFn: async () => {
-            const data = await event.getEventsByProduct(productNo).json();
+            const { data } = await event.getEventsByProduct(productNo);
 
             return data;
         },

@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
 
@@ -14,7 +14,7 @@ interface UseMyReviewListParams<T = GetMyProductReviewsResponse> {
     options?: Omit<
         UseQueryOptions<
             GetMyProductReviewsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [
                 string,
@@ -36,11 +36,9 @@ const useMyReviewList = <T = GetMyProductReviewsResponse>({
     return useQuery({
         queryKey: ['myReviewList', { searchParams, memberNo }],
         queryFn: async () => {
-            const response = await review
-                .getMyProductReviews(searchParams)
-                .json();
+            const { data } = await review.getMyProductReviews(searchParams);
 
-            return response;
+            return data;
         },
         enabled: memberNo !== 0,
         ...options,

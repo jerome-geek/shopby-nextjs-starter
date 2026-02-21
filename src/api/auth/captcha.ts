@@ -1,7 +1,6 @@
-import qs from 'qs';
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GenerateCaptchaImageParams,
     GenerateCaptchaImageResponse,
@@ -16,10 +15,12 @@ const captcha = {
      */
     generateCaptchaImage: (
         params: GenerateCaptchaImageParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GenerateCaptchaImageResponse>('captcha/image', {
-            searchParams: qs.stringify(params),
+        return shopbyRequest<GenerateCaptchaImageResponse>({
+            method: 'GET',
+            url: '/captcha/image',
+            params,
             ...options,
         });
     },
@@ -28,9 +29,14 @@ const captcha = {
      * 캡챠 인증코드 확인하기
      * 캡챠 인증코드 확인하기 위한 API 입니다.
      */
-    verifyCaptchaImage: (data: VerifyCaptchaImageData, options?: Options) => {
-        return request.post('captcha/verify', {
-            json: data,
+    verifyCaptchaImage: (
+        data: VerifyCaptchaImageData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'POST',
+            url: '/captcha/verify',
+            data,
             ...options,
         });
     },

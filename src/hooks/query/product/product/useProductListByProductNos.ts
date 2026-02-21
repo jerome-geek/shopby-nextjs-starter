@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -14,7 +14,7 @@ interface UseProductListByProductNos<T = GetProductsInfoByProductNosResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductsInfoByProductNosResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['list']>
         >,
@@ -29,9 +29,8 @@ const useProductListByProductNos = <T = GetProductsInfoByProductNosResponse>({
     return useQuery({
         queryKey: productKeys.list(0, searchParams),
         queryFn: async () => {
-            const data = await product
-                .getProductsInfoByProductNos(searchParams)
-                .json();
+            const { data } =
+                await product.getProductsInfoByProductNos(searchParams);
 
             return data;
         },

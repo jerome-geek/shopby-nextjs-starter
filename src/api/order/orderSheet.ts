@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import { ApplyCouponParams, ApplyCouponResponse } from '@/models/order';
 import {
     CouponApplyData,
@@ -25,9 +24,14 @@ const orderSheet = {
      *  - 주문서 페이지 진입전에 실행합니다
      *  - 비회원 주문인 경우 accessToken을 null로 보냅니다
      */
-    writeOrderSheet: (data: WriteOrderSheetData, options?: Options) => {
-        return request.post<WriteOrderSheetResponse>('order-sheets', {
-            json: data,
+    writeOrderSheet: (
+        data: WriteOrderSheetData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<WriteOrderSheetResponse>({
+            method: 'POST',
+            url: '/order-sheets',
+            data,
             ...options,
         });
     },
@@ -40,18 +44,14 @@ const orderSheet = {
     getOrderSheet: (
         orderSheetNo: string,
         params?: GetOrderSheetParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetOrderSheetResponse>(
-            `order-sheets/${orderSheetNo}`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetOrderSheetResponse>({
+            method: 'GET',
+            url: `/order-sheets/${orderSheetNo}`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -63,36 +63,32 @@ const orderSheet = {
     getCalculatedOrderSheet: (
         orderSheetNo: string,
         data: GetCalculatedOrderSheetData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GetCalculatedOrderSheetResponse>(
-            `order-sheets/${orderSheetNo}/calculate`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<GetCalculatedOrderSheetResponse>({
+            method: 'POST',
+            url: `/order-sheets/${orderSheetNo}/calculate`,
+            data,
+            ...options,
+        });
     },
 
     /**
      * 적용할 수 있는 쿠폰 정보 조회하기
      *  - 해당 주문에 적용할 수 있는 쿠폰을 조회하는 API 입니다
+     * TODO: 체크해보기
      */
     getAvailableCoupons: (
         orderSheetNo: string,
         params?: ApplyCouponParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<ApplyCouponResponse>(
-            `order-sheets/${orderSheetNo}/coupons`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<ApplyCouponResponse>({
+            method: 'GET',
+            url: `/order-sheets/${orderSheetNo}/coupons`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -102,15 +98,14 @@ const orderSheet = {
     applyCoupon: (
         orderSheetNo: string,
         data: CouponApplyData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<CouponApplyResponse>(
-            `order-sheets/${orderSheetNo}/coupons/apply`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<CouponApplyResponse>({
+            method: 'POST',
+            url: `/order-sheets/${orderSheetNo}/coupons/apply`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -120,15 +115,14 @@ const orderSheet = {
     getAppliedCouponPrice: (
         orderSheetNo: string,
         data: GetAppliedCouponPriceData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GetAppliedCouponPriceResponse>(
-            `order-sheets/${orderSheetNo}/coupons/calculate`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<GetAppliedCouponPriceResponse>({
+            method: 'POST',
+            url: `/order-sheets/${orderSheetNo}/coupons/calculate`,
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -139,15 +133,14 @@ const orderSheet = {
     getMaximumAppliedCouponPrice: (
         orderSheetNo: string,
         data?: GetMaximumAppliedCouponPriceData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GetMaximumAppliedCouponPriceResponse>(
-            `order-sheets/${orderSheetNo}/coupons/maximum`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<GetMaximumAppliedCouponPriceResponse>({
+            method: 'POST',
+            url: `/order-sheets/${orderSheetNo}/coupons/maximum`,
+            data,
+            ...options,
+        });
     },
 };
 

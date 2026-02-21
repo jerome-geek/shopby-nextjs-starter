@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { additionalDiscount } from '@/api/product';
 import {
@@ -12,7 +12,7 @@ interface UseAdditionalDiscountParams<T = GetAdditionalDiscountResponse> {
     options?: Omit<
         UseQueryOptions<
             GetAdditionalDiscountResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [string, { searchParams: GetAdditionalDiscountParams }]
         >,
@@ -27,9 +27,8 @@ const useAdditionalDiscount = <T = GetAdditionalDiscountResponse>({
     return useQuery({
         queryKey: ['additionalDiscount', { searchParams }],
         queryFn: async () => {
-            const data = await additionalDiscount
-                .getAdditionalDiscount(searchParams)
-                .json();
+            const { data } =
+                await additionalDiscount.getAdditionalDiscount(searchParams);
 
             return data;
         },

@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import {
@@ -14,7 +14,7 @@ interface UseGuestRecentViewProductListParams<
     options?: Omit<
         UseQueryOptions<
             GetRecentViewProductsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [string, { searchParams: GetGuestRecentViewProductsParams }]
         >,
@@ -29,9 +29,8 @@ const useGuestRecentViewProductList = <T = GetRecentViewProductsResponse>({
     return useQuery({
         queryKey: ['guestRecentViewProducts', { searchParams }],
         queryFn: async () => {
-            const data = await productProfile
-                .getGuestRecentViewProducts(searchParams)
-                .json();
+            const { data } =
+                await productProfile.getGuestRecentViewProducts(searchParams);
 
             return data;
         },

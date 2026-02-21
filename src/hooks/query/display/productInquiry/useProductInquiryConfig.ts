@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
@@ -9,7 +9,7 @@ interface UseProductInquiryConfigParams<T = GetProductInquiryConfigResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductInquiryConfigResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productInquiryKeys)['config']>
         >,
@@ -23,9 +23,9 @@ const useProductInquiryConfig = <T = GetProductInquiryConfigResponse>({
     return useQuery({
         queryKey: productInquiryKeys.config(),
         queryFn: async () => {
-            const response = await productInquiry.getConfig().json();
+            const { data } = await productInquiry.getConfig();
 
-            return response;
+            return data;
         },
         staleTime: 60 * 60 * 1000,
         gcTime: 2 * 60 * 60 * 1000,

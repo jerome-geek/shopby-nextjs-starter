@@ -3,7 +3,7 @@ import {
     useQuery,
     UseQueryOptions,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { category } from '@/api/display';
 import { categoryKeys } from '@/hooks/queryKeys';
@@ -18,7 +18,7 @@ interface UseCategoryParams<T = GetCategoryResponse> {
     options?: Omit<
         UseQueryOptions<
             GetCategoryResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof categoryKeys)['detail']>
         >,
@@ -34,11 +34,12 @@ const useCategory = <T = GetCategoryResponse>({
     return useQuery({
         queryKey: categoryKeys.detail(categoryNo, searchParams),
         queryFn: async () => {
-            const response = await category
-                .getCategory(categoryNo, searchParams)
-                .json();
+            const { data } = await category.getCategory(
+                categoryNo,
+                searchParams,
+            );
 
-            return response;
+            return data;
         },
         enabled: !!categoryNo,
         placeholderData: keepPreviousData,

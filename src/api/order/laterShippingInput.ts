@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import { OrderDetailResponse } from '@/models/order';
 import {
     GetAreaFeesParams,
@@ -19,12 +18,11 @@ const laterShippingInput = {
      *  - 암호화 된 배송 번호 리스트(encryptedShippingNo): 선물하는 시점에 동일한 수령자 연락처를 입력한 배송번호 목록
      *  - 배송번호 리스트 중 1개 이상의 배송에 추가 배송비를 부과하는 주소가 응답됩니다.
      */
-    getAreaFees: (params: GetAreaFeesParams, options?: Options) => {
-        return request.get<GetAreaFeesResponse>('later-input/areafees', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getAreaFees: (params: GetAreaFeesParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetAreaFeesResponse>({
+            method: 'GET',
+            url: 'later-input/areafees',
+            params,
             ...options,
         });
     },
@@ -33,12 +31,14 @@ const laterShippingInput = {
      *  - 암호화된 배송 번호 리스트로 주문 상세정보를 조회하는 API 입니다.
      *  - 암호화 된 배송 번호 리스트(encryptedShippingNo): 선물하는 시점에 동일한 수령자 연락처를 입력한 배송번호 목록
      */
-    getOrderDetail: (params: GetLaterOrderDetailParams, options?: Options) => {
-        return request.get<OrderDetailResponse>('later-input/order', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getOrderDetail: (
+        params: GetLaterOrderDetailParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<OrderDetailResponse>({
+            method: 'GET',
+            url: 'later-input/order',
+            params,
             ...options,
         });
     },
@@ -48,12 +48,14 @@ const laterShippingInput = {
      *  - 나중에 입력된 배송지를 조회하는 API 입니다.
      *  - 암호화 된 배송 번호 리스트(encryptedShippingNo): 선물하는 시점에 동일한 수령자 연락처를 입력한 배송번호 목록
      */
-    getShippings: (params: GetShippingsParams, options?: Options) => {
-        return request.get<GetShippingsResponse>('later-input/shippings', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getShippings: (
+        params: GetShippingsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetShippingsResponse>({
+            method: 'GET',
+            url: 'later-input/shippings',
+            params,
             ...options,
         });
     },
@@ -63,9 +65,14 @@ const laterShippingInput = {
      *  - 암호화 된 배송 번호 리스트(encryptedShippingNo): 선물하는 시점에 동일한 수령자 연락처를 입력한 배송번호
      *  - 암호화된 배송 번호 리스트(encryptedShippingNo)에 해당하는 모든 배송지를 수정합니다.
      */
-    updateShippings: (data: UpdateShippingData, options?: Options) => {
-        return request.put('later-input/shippings', {
-            json: data,
+    updateShippings: (
+        data: UpdateShippingData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'PUT',
+            url: 'later-input/shippings',
+            data,
             ...options,
         });
     },

@@ -3,7 +3,7 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import { productProfileKeys } from '@/hooks/queryKeys';
@@ -18,7 +18,7 @@ interface UseLikeProductListParams<T = GetLikeProductsResponse> {
     options?: Omit<
         UseQueryOptions<
             GetLikeProductsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productProfileKeys)['likeProductList']>
         >,
@@ -34,9 +34,7 @@ const useLikeProductList = <T = GetLikeProductsResponse>({
     return useQuery({
         queryKey: productProfileKeys.likeProductList(memberNo, searchParams),
         queryFn: async () => {
-            const data = await productProfile
-                .getLikeProducts(searchParams)
-                .json();
+            const { data } = await productProfile.getLikeProducts(searchParams);
 
             return data;
         },

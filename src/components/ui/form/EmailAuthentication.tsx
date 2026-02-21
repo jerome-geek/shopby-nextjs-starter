@@ -62,7 +62,7 @@ export default function EmailAuthentication() {
 
     const isAvailable =
         mallData.mallJoinConfig.authenticationType ===
-        'AUTHENTICATION_BY_EMAIL' &&
+            'AUTHENTICATION_BY_EMAIL' &&
         mallData.mallJoinConfig.authenticationTimeType === 'JOIN_TIME';
 
     const { control, setValue } = useFormContext();
@@ -98,26 +98,23 @@ export default function EmailAuthentication() {
         }
 
         try {
-            const { exist } = await profile
-                .checkDuplicateEmail({
-                    email: emailWatch,
-                })
-                .json();
+            const { data } = await profile.checkDuplicateEmail({
+                email: emailWatch,
+            });
 
-            if (exist) {
+            if (data.exist) {
                 openDialog({ message: t('이메일이 중복되었습니다.') });
                 return;
             }
 
-            const { remainTime } = await authentication
-                .sendCertificatedNumber({
+            const { data: sendCertificatedNumberData } =
+                await authentication.sendCertificatedNumber({
                     usage: 'JOIN',
                     type: 'EMAIL',
                     notiAccount: emailWatch,
-                })
-                .json();
+                });
 
-            startTimer(remainTime);
+            startTimer(sendCertificatedNumberData.remainTime);
             dispatch({ type: 'SEND_SUCCESS' });
 
             openDialog({ message: t('인증번호가 발송되었습니다.') });
@@ -141,14 +138,12 @@ export default function EmailAuthentication() {
         const certificatedNumber = certificatedNumberRef.current.value;
 
         try {
-            await authentication
-                .checkCertificatedNumber({
-                    usage: 'JOIN',
-                    type: 'EMAIL',
-                    notiAccount: emailWatch,
-                    certificatedNumber,
-                })
-                .json();
+            await authentication.checkCertificatedNumber({
+                usage: 'JOIN',
+                type: 'EMAIL',
+                notiAccount: emailWatch,
+                certificatedNumber,
+            });
 
             // 인증 성공 처리
             dispatch({ type: 'VERIFY_SUCCESS' });
@@ -177,8 +172,8 @@ export default function EmailAuthentication() {
                     {authStatus === 'VERIFIED'
                         ? t('인증 완료')
                         : authStatus === 'EXPIRED'
-                            ? t('인증번호 재발송')
-                            : t('인증번호 발송')}
+                          ? t('인증번호 재발송')
+                          : t('인증번호 발송')}
                 </span>
             </Button>
             {authStatus !== 'IDLE' && authStatus !== 'VERIFIED' && (

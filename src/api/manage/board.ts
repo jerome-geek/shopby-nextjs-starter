@@ -1,16 +1,14 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { publicRequest, request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
-    ReportArticleData,
-    PostArticleParams,
     DeleteArticleData,
     DownloadFileParams,
     GetArticleListParams,
     GetArticleListResponse,
     GetArticleParams,
     GetArticleResponse,
+    GetArticleV2Params,
     GetArticleV2Response,
     GetBoardConfigResponse,
     GetCategoriesResponse,
@@ -21,8 +19,9 @@ import {
     GetRepliesByBoardNoResponse,
     GetRepliesByBoardNoV2Params,
     GetRepliesByBoardNoV2Response,
+    PostArticleParams,
+    ReportArticleData,
     UpdateArticleData,
-    GetArticleV2Params,
 } from '@/models/manage/board';
 
 const board = {
@@ -30,13 +29,12 @@ const board = {
      * 게시판 설정 조회하기
      *  - 전체 게시판의 설정정보를 조회하는 API 입니다
      */
-    getConfig: (options?: Options) => {
-        return publicRequest.get<GetBoardConfigResponse>(
-            'boards/configurations',
-            {
-                ...options,
-            },
-        );
+    getConfig: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetBoardConfigResponse>({
+            method: 'GET',
+            url: '/boards/configurations',
+            ...options,
+        });
     },
 
     /**
@@ -47,14 +45,13 @@ const board = {
     getPostList: (
         params?: GetPostListParams,
         data?: GetPostListData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GetPostListResponse>('boards/posts', {
-            json: data,
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest<GetPostListResponse>({
+            method: 'POST',
+            url: '/boards/posts',
+            data,
+            params,
             ...options,
         });
     },
@@ -66,18 +63,14 @@ const board = {
     getArticleList: (
         boardNo: string,
         params?: GetArticleListParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetArticleListResponse>(
-            `boards/${boardNo}/articles`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetArticleListResponse>({
+            method: 'GET',
+            url: `boards/${boardNo}/articles`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -87,10 +80,12 @@ const board = {
     writeArticle: (
         boardNo: string,
         data: PostArticleParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post(`boards/${boardNo}/articles`, {
-            json: data,
+        return shopbyRequest({
+            method: 'POST',
+            url: `boards/${boardNo}/articles`,
+            data,
             ...options,
         });
     },
@@ -99,20 +94,21 @@ const board = {
      * 게시판 카테고리 목록 조회하기
      *  - 특정 게시판(게시판 번호 기준)의 카테고리를 조회하는 API 입니다
      */
-    getCategories: (boardNo: string, options?: Options) => {
-        return publicRequest.get<GetCategoriesResponse>(
-            `boards/${boardNo}/categories`,
-            {
-                ...options,
-            },
-        );
+    getCategories: (boardNo: string, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetCategoriesResponse>({
+            method: 'GET',
+            url: `boards/${boardNo}/categories`,
+            ...options,
+        });
     },
 
     /**
      * 게시글 스크랩
      */
-    scrapPost: (postNo: string, options?: Options) => {
-        return request.post(`boards/post/scrap/${postNo}`, {
+    scrapPost: (postNo: string, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'POST',
+            url: `boards/post/scrap/${postNo}`,
             ...options,
         });
     },
@@ -120,8 +116,10 @@ const board = {
     /**
      * 게시글 스크랩 취소
      */
-    cancelScrapPost: (postNo: string, options?: Options) => {
-        return request.delete(`boards/post/scrap/${postNo}`, {
+    cancelScrapPost: (postNo: string, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `boards/post/scrap/${postNo}`,
             ...options,
         });
     },
@@ -134,18 +132,14 @@ const board = {
         boardNo: string,
         articleNo: number,
         params?: GetArticleParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetArticleResponse>(
-            `boards/${boardNo}/articles/${articleNo}`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetArticleResponse>({
+            method: 'GET',
+            url: `boards/${boardNo}/articles/${articleNo}`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -157,10 +151,12 @@ const board = {
         boardNo: string,
         articleNo: number,
         data?: UpdateArticleData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put(`boards/${boardNo}/articles/${articleNo}`, {
-            json: data,
+        return shopbyRequest({
+            method: 'PUT',
+            url: `boards/${boardNo}/articles/${articleNo}`,
+            data,
             ...options,
         });
     },
@@ -174,10 +170,12 @@ const board = {
         boardNo: string,
         articleNo: number,
         data?: DeleteArticleData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.delete(`boards/${boardNo}/articles/${articleNo}`, {
-            json: data,
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `boards/${boardNo}/articles/${articleNo}`,
+            data,
             ...options,
         });
     },
@@ -191,18 +189,14 @@ const board = {
         boardNo: string,
         postNo: number,
         params?: GetArticleV2Params,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetArticleV2Response>(
-            `boards/${boardNo}/posts/${postNo}`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetArticleV2Response>({
+            method: 'GET',
+            url: `boards/${boardNo}/posts/${postNo}`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -214,10 +208,12 @@ const board = {
         boardNo: string,
         articleNo: number,
         data?: DeleteArticleData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put(`boards/${boardNo}/articles/${articleNo}/editable`, {
-            json: data,
+        return shopbyRequest({
+            method: 'PUT',
+            url: `boards/${boardNo}/articles/${articleNo}/editable`,
+            data,
             ...options,
         });
     },
@@ -228,14 +224,13 @@ const board = {
     recommendArticle: (
         boardNo: string,
         articleNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post(
-            `boards/${boardNo}/articles/${articleNo}/recommend`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'POST',
+            url: `boards/${boardNo}/articles/${articleNo}/recommend`,
+            ...options,
+        });
     },
     /**
      * 게시글 추천 취소
@@ -243,14 +238,13 @@ const board = {
     cancelArticleRecommend: (
         boardNo: string,
         articleNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.delete(
-            `boards/${boardNo}/articles/${articleNo}/recommend`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `boards/${boardNo}/articles/${articleNo}/recommend`,
+            ...options,
+        });
     },
 
     /**
@@ -261,18 +255,14 @@ const board = {
         boardNo: string,
         articleNo: number,
         params?: GetRepliesByBoardNoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetRepliesByBoardNoResponse>(
-            `boards/${boardNo}/articles/${articleNo}/replies`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetRepliesByBoardNoResponse>({
+            method: 'GET',
+            url: `boards/${boardNo}/articles/${articleNo}/replies`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -283,10 +273,12 @@ const board = {
         boardNo: string,
         articleNo: number,
         data: ReportArticleData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post(`boards/${boardNo}/articles/${articleNo}/report`, {
-            json: data,
+        return shopbyRequest({
+            method: 'POST',
+            url: `boards/${boardNo}/articles/${articleNo}/report`,
+            data,
             ...options,
         });
     },
@@ -297,14 +289,13 @@ const board = {
     cancelReportArticle: (
         boardNo: string,
         articleNo: number,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.delete(
-            `boards/${boardNo}/articles/${articleNo}/report`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/boards/${boardNo}/articles/${articleNo}/report`,
+            ...options,
+        });
     },
 
     /**
@@ -315,13 +306,12 @@ const board = {
         boardNo: string,
         postNo: number,
         params: DownloadFileParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get(`boards/${boardNo}/posts/${postNo}/file`, {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest({
+            method: 'GET',
+            url: `/boards/${boardNo}/posts/${postNo}/file`,
+            params,
             ...options,
         });
     },
@@ -334,18 +324,14 @@ const board = {
         boardNo: string,
         postNo: number,
         params?: GetRepliesByBoardNoV2Params,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetRepliesByBoardNoV2Response>(
-            `boards/${boardNo}/posts/${postNo}/replies`,
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetRepliesByBoardNoV2Response>({
+            method: 'GET',
+            url: `boards/${boardNo}/posts/${postNo}/replies`,
+            params,
+            ...options,
+        });
     },
 };
 

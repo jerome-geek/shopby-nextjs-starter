@@ -4,7 +4,7 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
 import { reviewKeys } from '@/hooks/queryKeys';
@@ -19,7 +19,7 @@ interface UseProductReviewListParams<T = GetProductReviewListResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductReviewListResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof reviewKeys)['list']>
         >,
@@ -35,12 +35,12 @@ const useProductReviewList = <T = GetProductReviewListResponse>({
     return useQuery({
         queryKey: reviewKeys.list(productNo, searchParams),
         queryFn: async () => {
-            const response = await review.getProductReviewList(
+            const { data } = await review.getProductReviewList(
                 productNo,
                 searchParams,
             );
 
-            return response.json();
+            return data;
         },
         enabled: !isEmpty(productNo),
         placeholderData: keepPreviousData,

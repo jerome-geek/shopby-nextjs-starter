@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 
@@ -8,7 +8,7 @@ interface UseFavoriteKeywordsParams<T = string[]> {
     options?: Omit<
         UseQueryOptions<
             string[],
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [string, { size: number }]
         >,
@@ -23,7 +23,7 @@ const useFavoriteKeywords = <T = string[]>({
     return useQuery({
         queryKey: ['favoriteKeywords', { size }],
         queryFn: async () => {
-            const data = await product.getFavoriteKeywords({ size }).json();
+            const { data } = await product.getFavoriteKeywords({ size });
 
             return data;
         },

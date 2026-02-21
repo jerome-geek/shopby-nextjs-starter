@@ -69,11 +69,10 @@ export const getStaticProps: GetStaticProps<TermsDetailPageProps> = async ({
         // SHOPBY_TERMS_TYPE_MAP에 있는 타입이면 일단 시도
         if (isHistoryType) {
             try {
-                historyData = await terms
-                    .getTermHistory({
-                        termsType: upperType as ShopbyTermHistoryTypes,
-                    })
-                    .json();
+                const response = await terms.getTermHistory({
+                    termsType: upperType as ShopbyTermHistoryTypes,
+                });
+                historyData = response.data;
             } catch (e) {
                 console.error('History fetch failed:', e);
             }
@@ -81,15 +80,12 @@ export const getStaticProps: GetStaticProps<TermsDetailPageProps> = async ({
 
         // 2. 특정 약관 번호가 요청된 경우 상세 조회, 없으면 리스트에서 현재 적용 중인 약관 조회
         if (termsNo) {
-            termData = await terms.getTermDetail(Number(termsNo)).json();
+            termData = await terms.getTermDetail(Number(termsNo));
         } else {
-            const response = await terms
-                .getTermList({
-                    termsTypes: [upperType as ShopbyTermsTypes],
-                    usedOnly: true,
-                })
-                .json();
-
+            const response = await terms.getTermList({
+                termsTypes: [upperType as ShopbyTermsTypes],
+                usedOnly: true,
+            });
             // API 응답 구조에 맞게 매핑 (ko -> ko, use -> use 등)
             const termKey = termsType.toLowerCase();
             termData = response[termKey as keyof typeof response];

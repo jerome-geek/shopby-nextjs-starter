@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
@@ -11,7 +11,7 @@ interface useProductInquiryParams<T = GetProductInquiryResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductInquiryResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productInquiryKeys)['detail']>
         >,
@@ -27,11 +27,12 @@ const useProductInquiry = <T = GetProductInquiryResponse>({
     return useQuery({
         queryKey: productInquiryKeys.detail(productNo, inquiryNo),
         queryFn: async () => {
-            const response = await productInquiry
-                .getProductInquiry(productNo, inquiryNo)
-                .json();
+            const { data } = await productInquiry.getProductInquiry(
+                productNo,
+                inquiryNo,
+            );
 
-            return response;
+            return data;
         },
         enabled: inquiryNo !== 0 && productNo !== 0,
         ...options,

@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { banner } from '@/api/display';
 import { bannerKeys } from '@/hooks/queryKeys';
@@ -13,7 +13,7 @@ interface UseBannerExtraInfosParams<T = GetBannerExtraInfosResponse> {
     options?: Omit<
         UseQueryOptions<
             GetBannerExtraInfosResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof bannerKeys)['extraInfos']>
         >,
@@ -28,7 +28,7 @@ const useBannerExtraInfos = <T = GetBannerExtraInfosResponse>({
     return useQuery({
         queryKey: bannerKeys.extraInfos(params),
         queryFn: async () => {
-            const data = await banner.getBannerExtraInfos(params).json();
+            const { data } = await banner.getBannerExtraInfos(params);
 
             return data;
         },

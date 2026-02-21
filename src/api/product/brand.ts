@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetBrandChildrenResponse,
     GetBrandDetailResponse,
@@ -23,12 +22,11 @@ const brand = {
      *  - Paging 기능 제공합니다
      *  - 상품에 매핑된 브랜드를 조회합니다.
      */
-    getBrands: (params?: GetBrandsParams, options?: Options) => {
-        return request.get<GetBrandsResponse>('display/brands', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getBrands: (params?: GetBrandsParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetBrandsResponse>({
+            method: 'GET',
+            url: '/display/brands',
+            params,
             ...options,
         });
     },
@@ -39,24 +37,28 @@ const brand = {
      */
     getBrandExtraInfo: (
         params?: GetBrandsExtraInfoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetBrandsExtraInfoResponse>(
-            'display/brands/extraInfo',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetBrandsExtraInfoResponse>({
+            method: 'GET',
+            url: '/display/brands/extraInfo',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 브랜드 조회하기
      *  - 브랜드 조회하는 API입니다.
      */
-    searchBrands: (params: SearchBrandsParams, options?: Options) => {
-        return request.get<SearchBrandResponse>('display/brands/search', {
-            searchParams: qs.stringify(params),
+    searchBrands: (
+        params: SearchBrandsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<SearchBrandResponse>({
+            method: 'GET',
+            url: '/display/brands/search',
+            params,
             ...options,
         });
     },
@@ -67,23 +69,24 @@ const brand = {
      */
     getBrandsByNos: (
         params: GetBrandInfoByBrandNoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetBrandInfoByBrandNoResponse>(
-            'display/brands/search-by-nos',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetBrandInfoByBrandNoResponse>({
+            method: 'GET',
+            url: '/display/brands/search-by-nos',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 브랜드 트리 조회하기
      *  - 브랜드 트리 조회하는 API입니다
      */
-    getBrandTreeInfo: (options?: Options) => {
-        return request.get<GetBrandTreeResponse>('display/brands/tree', {
+    getBrandTreeInfo: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetBrandTreeResponse>({
+            method: 'GET',
+            url: '/display/brands/tree',
             ...options,
         });
     },
@@ -92,13 +95,12 @@ const brand = {
      * 브랜드 상세 조회하기
      *  - 브랜드 상세 조회하는 API입니다
      */
-    getBrandDetail: (displayBrandNo: number, options?: Options) => {
-        return request.get<GetBrandDetailResponse>(
-            `display/brands/${displayBrandNo}`,
-            {
-                ...options,
-            },
-        );
+    getBrandDetail: (displayBrandNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetBrandDetailResponse>({
+            method: 'GET',
+            url: `/display/brands/${displayBrandNo}`,
+            ...options,
+        });
     },
 
     /**
@@ -106,13 +108,15 @@ const brand = {
      *  - 자식 브랜드를 조회하는 API입니다
      *  - 해당 브랜드의 바로 하위 브랜드의 정보를 조회합니다
      */
-    getBrandChildrenInfo: (displayBrandNo: number, options?: Options) => {
-        return request.get<GetBrandChildrenResponse>(
-            `display/brands/${displayBrandNo}/children`,
-            {
-                ...options,
-            },
-        );
+    getBrandChildrenInfo: (
+        displayBrandNo: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetBrandChildrenResponse>({
+            method: 'GET',
+            url: `/display/brands/${displayBrandNo}/children`,
+            ...options,
+        });
     },
 };
 

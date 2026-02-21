@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
@@ -13,7 +13,7 @@ interface UseEventsByEventNosParams<T = SearchEventsByEventNosResponse> {
     options?: Omit<
         UseQueryOptions<
             SearchEventsByEventNosResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof eventKeys)['searchByEventNos']>
         >,
@@ -28,9 +28,7 @@ const useEventsByEventNos = <T = SearchEventsByEventNosResponse>({
     return useQuery({
         queryKey: eventKeys.searchByEventNos(searchParams),
         queryFn: async () => {
-            const data = await event
-                .searchEventsByEventNos(searchParams)
-                .json();
+            const { data } = await event.searchEventsByEventNos(searchParams);
 
             return data;
         },

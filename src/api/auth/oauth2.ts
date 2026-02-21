@@ -1,6 +1,6 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { authRequest } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     IssueOpenIdAccessTokenData,
     IssueOpenIdAccessTokenResponse,
@@ -20,8 +20,12 @@ const oauth2 = {
      *  - Refresh-Token 로 리프레시 토큰을 전달하면 됩니다.
      *  - ex) Shop-By-Authorization : Bearer test-access-token
      */
-    updateAccessToken: (options?: Options) => {
-        return authRequest.put<UpdateAccessTokenResponse>('oauth2', options);
+    updateAccessToken: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<UpdateAccessTokenResponse>({
+            method: 'PUT',
+            url: '/oauth2',
+            ...options,
+        });
     },
 
     /**
@@ -31,9 +35,14 @@ const oauth2 = {
      *  - 회원 리프레시 토큰의 기본 유효 기간은 1 일 입니다.
      *  - keepLogin을 true로 요청하면 리프레시 토큰 유효 기간을 90 일인 토큰이 생성됩니다.
      */
-    issueAccessToken: (data: IssueAccessTokenData, options?: Options) => {
-        return authRequest.post<IssueAccessTokenResponse>('oauth2', {
-            json: data,
+    issueAccessToken: (
+        data: IssueAccessTokenData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<IssueAccessTokenResponse>({
+            method: 'POST',
+            url: '/oauth2',
+            data,
             ...options,
         });
     },
@@ -44,8 +53,12 @@ const oauth2 = {
      *  - Shop-By-Authorization 로 액세스 토큰을 전달하면 됩니다.
      *  - ex) Shop-By-Authorization : Bearer test-access-token
      */
-    deleteAccessToken: (options?: Options) => {
-        return authRequest.delete('oauth2', options);
+    deleteAccessToken: (options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: '/oauth2',
+            ...options,
+        });
     },
 
     /**
@@ -58,15 +71,14 @@ const oauth2 = {
      */
     refreshOpenIdAccessToken: (
         data: IssueOpenIdAccessTokenData,
-        options?: Options
+        options?: AxiosRequestConfig,
     ) => {
-        return authRequest.put<RefreshOpenIdAccessTokenResponse>(
-            'oauth2/openid',
-            {
-                json: data,
-                ...options,
-            }
-        );
+        return shopbyRequest<RefreshOpenIdAccessTokenResponse>({
+            method: 'PUT',
+            url: '/oauth2/openid',
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -77,15 +89,14 @@ const oauth2 = {
      */
     issueOpenIdAccessToken: (
         data: IssueOpenIdAccessTokenData,
-        options?: Options
+        options?: AxiosRequestConfig,
     ) => {
-        return authRequest.post<IssueOpenIdAccessTokenResponse>(
-            'oauth2/openid',
-            {
-                json: data,
-                ...options,
-            }
-        );
+        return shopbyRequest<IssueOpenIdAccessTokenResponse>({
+            method: 'POST',
+            url: '/oauth2/openid',
+            data,
+            ...options,
+        });
     },
 };
 

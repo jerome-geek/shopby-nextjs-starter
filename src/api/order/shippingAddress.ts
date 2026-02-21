@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetPagedShippingAddressListResponse,
     GetPagedShippingAddressParams,
@@ -20,13 +19,12 @@ const shippingAddress = {
      *  - 주소지정보를 조회하는 API 입니다
      *  - 기본 배송지(defaultAddress)가 가장 상단에 노출되며, 이후 최근 사용된 주소 순서로 나열됩니다 (최근 사용시간의 역순로 정렬)
      */
-    getShippingAddressList: (options?: Options) => {
-        return request.get<GetShippingAddressListResponse>(
-            'profile/shipping-addresses',
-            {
-                ...options,
-            },
-        );
+    getShippingAddressList: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetShippingAddressListResponse>({
+            method: 'GET',
+            url: '/profile/shipping-addresses',
+            ...options,
+        });
     },
 
     /**
@@ -38,15 +36,14 @@ const shippingAddress = {
      */
     registerShippingAddress: (
         data: RegisterShippingAddressData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<RegisterShippingAddressResponse>(
-            'profile/shipping-addresses',
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<RegisterShippingAddressResponse>({
+            method: 'POST',
+            url: '/profile/shipping-addresses',
+            data,
+            ...options,
+        });
     },
     /**
      * 패이징 처리 된 배송지 목록 가져오기
@@ -54,44 +51,38 @@ const shippingAddress = {
      */
     getPagedShippingAddressList: (
         params: GetPagedShippingAddressParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetPagedShippingAddressListResponse>(
-            'profile/shipping-addresses/booked',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetPagedShippingAddressListResponse>({
+            method: 'GET',
+            url: '/profile/shipping-addresses/booked',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 최근 배송지 가져오기
      *  - 로그인한 사용자의 최근배송지 목록을 조회하는 API 입니다.
      */
-    getRecentShippingAddress: (options?: Options) => {
-        return request.get<GetRecentShippingAddressResponse>(
-            'profile/shipping-addresses/recent',
-            {
-                ...options,
-            },
-        );
+    getRecentShippingAddress: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetRecentShippingAddressResponse>({
+            method: 'GET',
+            url: '/profile/shipping-addresses/recent',
+            ...options,
+        });
     },
 
     /**
      * 배송지 가져오기
      *  - 선택한 배송지의 세부 정보를 조회하는 API 입니다
      */
-    getShippingAddress: (addressNo: number, options?: Options) => {
-        return request.get<GetShippingAddressResponse>(
-            `profile/shipping-addresses/${addressNo}`,
-            {
-                ...options,
-            },
-        );
+    getShippingAddress: (addressNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetShippingAddressResponse>({
+            method: 'GET',
+            url: `/profile/shipping-addresses/${addressNo}`,
+            ...options,
+        });
     },
 
     /**
@@ -102,23 +93,27 @@ const shippingAddress = {
     updateShippingAddress: (
         addressNo: number,
         data: RegisterShippingAddressData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put<RegisterShippingAddressResponse>(
-            `profile/shipping-addresses/${addressNo}`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<RegisterShippingAddressResponse>({
+            method: 'PUT',
+            url: `/profile/shipping-addresses/${addressNo}`,
+            data,
+            ...options,
+        });
     },
 
     /**
      * 배송지 삭제하기
      *  - 선택한 배송지 주소를 삭제하는 API 입니다
      */
-    deleteShippingAddress: (addressNo: number, options?: Options) => {
-        return request.delete(`profile/shipping-addresses/${addressNo}`, {
+    deleteShippingAddress: (
+        addressNo: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/profile/shipping-addresses/${addressNo}`,
             ...options,
         });
     },
@@ -126,20 +121,24 @@ const shippingAddress = {
      * 기본 배송지 수정하기
      *  - 선택한 배송지를 기본배송지로 지정하는 API 입니다
      */
-    updateDefaultShippingAddress: (addressNo: number, options?: Options) => {
-        return request.put<UpdateDefaultShippingAddressResponse>(
-            `profile/shipping-addresses/${addressNo}/default`,
-            {
-                ...options,
-            },
-        );
+    updateDefaultShippingAddress: (
+        addressNo: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<UpdateDefaultShippingAddressResponse>({
+            method: 'PUT',
+            url: `/profile/shipping-addresses/${addressNo}/default`,
+            ...options,
+        });
     },
 
     /**
      *  배송 enum 정보 조회
      */
-    getShippingEnumInfo: (options?: Options) => {
-        return request.get<GetShippingEnumInfoResponse>('shippings/enums', {
+    getShippingEnumInfo: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetShippingEnumInfoResponse>({
+            method: 'GET',
+            url: '/shippings/enums',
             ...options,
         });
     },

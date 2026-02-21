@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetGuestPreviousOrderResponse,
     GetPreviousOrderResponse,
@@ -15,12 +14,14 @@ const previousOrder = {
     /**
      * 이전주문 검색
      */
-    getPreviousOrders: (params: GetPreviousOrdersParams, options?: Options) => {
-        return request.get<GetPreviousOrdersResponse>('previous-orders', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getPreviousOrders: (
+        params: GetPreviousOrdersParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetPreviousOrdersResponse>({
+            method: 'GET',
+            url: '/previous-orders',
+            params,
             ...options,
         });
     },
@@ -28,25 +29,23 @@ const previousOrder = {
     /**
      * 이전주문 상세조회
      */
-    getPreviousOrder: (orderNo: string, options?: Options) => {
-        return request.get<GetPreviousOrderResponse>(
-            `previous-orders/${orderNo}`,
-            {
-                ...options,
-            },
-        );
+    getPreviousOrder: (orderNo: string, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetPreviousOrderResponse>({
+            method: 'GET',
+            url: `/previous-orders/${orderNo}`,
+            ...options,
+        });
     },
 
     /**
      * 비회원 이전주문 상세조회
      */
-    getGuestPreviousOrder: (orderNo: string, options?: Options) => {
-        return request.get<GetGuestPreviousOrderResponse>(
-            `previous-orders/guest/${orderNo}`,
-            {
-                ...options,
-            },
-        );
+    getGuestPreviousOrder: (orderNo: string, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetGuestPreviousOrderResponse>({
+            method: 'GET',
+            url: `/previous-orders/guest/${orderNo}`,
+            ...options,
+        });
     },
 
     /**
@@ -55,15 +54,14 @@ const previousOrder = {
     issueGuestPreviousOrderToken: (
         orderNo: string,
         data: IssueGuestPreviousOrderTokenData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<IssueGuestPreviousOrderTokenResponse>(
-            `previous-orders/guest/${orderNo}`,
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<IssueGuestPreviousOrderTokenResponse>({
+            method: 'POST',
+            url: `/previous-orders/guest/${orderNo}`,
+            data,
+            ...options,
+        });
     },
 };
 

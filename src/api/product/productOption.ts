@@ -1,7 +1,6 @@
-import qs from 'qs';
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetOptionImagesResponse,
     GetProductOptionImagesResponse,
@@ -11,17 +10,20 @@ import {
     ProductOptionResponse,
 } from '@/models/product/productOption';
 
+// TODO: 다시 한 번 체크
 const productOption = {
     /**
      * 옵션 목록 조회하기
      *  - 옵션 목록을 조회하는 API입니다
      */
-    getProductOptions: (params: GetProductOptionsParams, options?: Options) => {
-        return request.get<GetProductOptionsResponse>('products/options', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getProductOptions: (
+        params: GetProductOptionsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetProductOptionsResponse>({
+            method: 'GET',
+            url: '/products/options',
+            params,
             ...options,
         });
     },
@@ -37,15 +39,14 @@ const productOption = {
     getProductOption: (
         productNo: number,
         params?: GetProductOptionParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<ProductOptionResponse>(
-            `products/${productNo}/options`,
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<ProductOptionResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/options`,
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -53,13 +54,15 @@ const productOption = {
      *  - 상품에 해당하는 옵션 이미지 목록 조회하는 API입니다
      *  - 옵션 상세 보기 시, 사용합니다
      */
-    getProductOptionImages: (productNo: number, options?: Options) => {
-        return request.get<GetProductOptionImagesResponse>(
-            `products/${productNo}/options/images`,
-            {
-                ...options,
-            },
-        );
+    getProductOptionImages: (
+        productNo: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetProductOptionImagesResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/options/images`,
+            ...options,
+        });
     },
 
     /**
@@ -70,14 +73,13 @@ const productOption = {
     getOptionImages: (
         productNo: number,
         optionNo: string,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetOptionImagesResponse>(
-            `products/${productNo}/options/${optionNo}/images`,
-            {
-                ...options,
-            },
-        );
+        return shopbyRequest<GetOptionImagesResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/options/${optionNo}/images`,
+            ...options,
+        });
     },
 };
 

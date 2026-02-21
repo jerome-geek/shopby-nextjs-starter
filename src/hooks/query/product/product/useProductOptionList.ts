@@ -1,6 +1,6 @@
 import { useSearchParams } from 'next/navigation';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productOption } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -16,7 +16,7 @@ export interface UseProductOptionListParams<T = ProductOptionResponse> {
     options?: Omit<
         UseQueryOptions<
             ProductOptionResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['option']>
         >,
@@ -36,12 +36,10 @@ const useProductOptionList = <T = ProductOptionResponse>({
     return useQuery({
         queryKey: productKeys.option(productNo, memberNo, searchParams),
         queryFn: async () => {
-            const data = await productOption
-                .getProductOption(productNo, {
-                    ...(preview && { preview }),
-                    ...searchParams,
-                })
-                .json();
+            const { data } = await productOption.getProductOption(productNo, {
+                ...(preview && { preview }),
+                ...searchParams,
+            });
 
             return data;
         },

@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
 import {
@@ -12,7 +12,7 @@ interface UseReviewableProductListParams<T = GetReviewableProductsResponse> {
     options?: Omit<
         UseQueryOptions<
             GetReviewableProductsResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [string, { searchParams: GetReviewableProductsParams }]
         >,
@@ -27,11 +27,9 @@ const useReviewableProductList = <T = GetReviewableProductsResponse>({
     return useQuery({
         queryKey: ['reviewableList', { searchParams }],
         queryFn: async () => {
-            const response = await review
-                .getReviewableProducts(searchParams)
-                .json();
+            const { data } = await review.getReviewableProducts(searchParams);
 
-            return response;
+            return data;
         },
         ...options,
     });

@@ -1,7 +1,6 @@
-import qs from 'qs';
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetFreeGiftConditionByOrderAmountParams,
     GetFreeGiftConditionByOrderAmountResponse,
@@ -17,28 +16,26 @@ const freeGift = {
      */
     getFreeGiftConditionByOrderAmount: (
         params: GetFreeGiftConditionByOrderAmountParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetFreeGiftConditionByOrderAmountResponse>(
-            'free-gift-condition/order-amount',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetFreeGiftConditionByOrderAmountResponse>({
+            method: 'GET',
+            url: '/free-gift-condition/order-amount',
+            params,
+            ...options,
+        });
     },
 
     /**
      *  사은품 지급가능한 조건 조회하기
      *   - 상품번호에 해당하는 지급가능한 조건 조회하는 API입니다.
      */
-    getFreeGiftCondition: (productNo: number, options?: Options) => {
-        return request.get<GetFreeGiftConditionResponse>(
-            `free-gift-condition/${productNo}`,
-            {
-                ...options,
-            },
-        );
+    getFreeGiftCondition: (productNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetFreeGiftConditionResponse>({
+            method: 'GET',
+            url: `/free-gift-condition/${productNo}`,
+            ...options,
+        });
     },
 };
 

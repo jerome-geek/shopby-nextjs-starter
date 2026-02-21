@@ -1,6 +1,6 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import { GetExternalScriptsResponse } from '@/models/manage/page';
 
 const externalScript = {
@@ -9,8 +9,10 @@ const externalScript = {
      *
      * - 몰에서 사용중인 외부 스크립트 리스트를 불러옵니다.
      */
-    getExternalScripts: (options?: Options) => {
-        return request.get<GetExternalScriptsResponse>('external-scripts', {
+    getExternalScripts: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetExternalScriptsResponse>({
+            method: 'GET',
+            url: '/external-scripts',
             ...options,
         });
     },

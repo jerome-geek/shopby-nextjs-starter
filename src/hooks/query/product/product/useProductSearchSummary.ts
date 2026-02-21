@@ -3,7 +3,7 @@ import {
     useQuery,
     UseQueryOptions,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -20,7 +20,7 @@ export interface useProductSearchSummaryParams<
     options?: Omit<
         UseQueryOptions<
             GetProductSearchSummaryResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['summary']>
         >,
@@ -35,9 +35,8 @@ const useProductSearchSummary = <T = GetProductSearchSummaryResponse>({
     return useQuery({
         queryKey: productKeys.summary(searchParams),
         queryFn: async () => {
-            const data = await product
-                .getProductSearchSummary(searchParams)
-                .json();
+            const { data } =
+                await product.getProductSearchSummary(searchParams);
 
             return data;
         },

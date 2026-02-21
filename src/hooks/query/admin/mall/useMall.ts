@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { mall } from '@/api/admin';
 import { GetMallResponse } from '@/models/admin/mall';
@@ -8,7 +8,7 @@ interface useMallParams<T = GetMallResponse> {
     options?: Omit<
         UseQueryOptions<
             GetMallResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [string]
         >,
@@ -20,7 +20,7 @@ const useMall = ({ options }: useMallParams = {}) => {
     return useQuery({
         queryKey: ['mallInfo'],
         queryFn: async () => {
-            const data = await mall.getMall().json();
+            const { data } = await mall.getMall();
 
             return data;
         },

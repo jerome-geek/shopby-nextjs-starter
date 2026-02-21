@@ -9,7 +9,7 @@ export const container = style({
 });
 
 export const thumbnailContainer = style({
-    width: '100%',
+    margin: '0 -20px',
 });
 
 export const imageWrapper = style({
@@ -73,6 +73,13 @@ export const productName = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
+    },
+]);
+
+export const promotionText = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
     },
 ]);
 

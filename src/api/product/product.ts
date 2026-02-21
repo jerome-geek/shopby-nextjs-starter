@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 
 import {
     GetBestReviewProductsParams,
@@ -46,12 +45,14 @@ const product = {
      * 묶음 배송 상품 목록 조회하기
      *  - 묶음 배송 상품 목록 조회하는 API입니다
      */
-    getBundleProducts: (params: GetBundleProductsParams, options?: Options) => {
-        return request.get('products/bundle-shipping', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getBundleProducts: (
+        params: GetBundleProductsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'GET',
+            url: '/products/bundle-shipping',
+            params,
             ...options,
         });
     },
@@ -62,13 +63,12 @@ const product = {
      */
     getProductExtraInfo: (
         params: GetProductExtraInfoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductExtraInfoResponse>('products/extraInfo', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest<GetProductExtraInfoResponse>({
+            method: 'GET',
+            url: '/products/extraInfo',
+            params,
             ...options,
         });
     },
@@ -79,15 +79,14 @@ const product = {
      */
     getFavoriteKeywords: (
         params: GetFavoriteKeywordsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetFavoriteKeywordsResponse>(
-            'products/favoriteKeywords',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetFavoriteKeywordsResponse>({
+            method: 'GET',
+            url: '/products/favoriteKeywords',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -96,15 +95,14 @@ const product = {
      */
     getGroupManagementCodes: (
         data: GetGroupManagementCodesData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GroupManagementCodeResponse>(
-            'products/group-management-code',
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<GroupManagementCodeResponse>({
+            method: 'POST',
+            url: '/products/group-management-code',
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -113,18 +111,14 @@ const product = {
      */
     getProductPublicInfo: (
         params: GetProductPublicInfoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductPublicInfoResponse>(
-            'products/public-info',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductPublicInfoResponse>({
+            method: 'GET',
+            url: '/products/public-info',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -132,18 +126,14 @@ const product = {
      */
     getChangeableRegularDeliveryProducts: (
         params?: GetRegularDeliveryProductsByProductNos,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetChangeableRegularDeliveryProductsResponse>(
-            'products/regular-delivery',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetChangeableRegularDeliveryProductsResponse>({
+            method: 'GET',
+            url: '/products/regular-delivery',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -152,10 +142,12 @@ const product = {
      */
     requestRestockNotification: (
         data: RequestRestockNotificationData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post('products/restock', {
-            json: data,
+        return shopbyRequest({
+            method: 'POST',
+            url: '/products/restock',
+            data,
             ...options,
         });
     },
@@ -165,12 +157,14 @@ const product = {
      *  - 상품 목록 조회하는 API입니다
      *   - Paging 기능 제공합니다. (페이지당 조회가능한 최대 상품 개수는 500개 입니다.)
      */
-    searchProducts: (params: ProductSearchParams, options?: Options) => {
-        return request.get<ProductsSearchResponse>('products/search', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    searchProducts: (
+        params: ProductSearchParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<ProductsSearchResponse>({
+            method: 'GET',
+            url: '/products/search',
+            params,
             ...options,
         });
     },
@@ -181,15 +175,14 @@ const product = {
      */
     getProductsInfoByProductNos: (
         data: GetProductsInfoByProductNosData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<GetProductsInfoByProductNosResponse>(
-            'products/search-by-nos',
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductsInfoByProductNosResponse>({
+            method: 'POST',
+            url: '/products/search-by-nos',
+            data,
+            ...options,
+        });
     },
 
     /**
@@ -198,18 +191,14 @@ const product = {
      */
     getProductsShippingInfo: (
         params: GetProductsShippingInfoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductsShippingInfoResponse>(
-            'products/shipping-info',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductsShippingInfoResponse>({
+            method: 'GET',
+            url: '/products/shipping-info',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -219,13 +208,12 @@ const product = {
     getProductDetail: (
         productNo: number,
         params?: GetProductDetailParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<ProductDetailResponse>(`products/${productNo}`, {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest<ProductDetailResponse>({
+            method: 'GET',
+            url: `/products/${productNo}`,
+            params,
             ...options,
         });
     },
@@ -238,18 +226,14 @@ const product = {
      */
     getBestReviewProducts: (
         params: GetBestReviewProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetBestReviewProductsResponse>(
-            'products/best-review/search',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetBestReviewProductsResponse>({
+            method: 'GET',
+            url: '/products/best-review/search',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -260,18 +244,14 @@ const product = {
      */
     getBestSellerProducts: (
         params?: GetBestSellerProductsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetBestSellerProductsResponse>(
-            'products/best-seller/search',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetBestSellerProductsResponse>({
+            method: 'GET',
+            url: '/products/best-seller/search',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -280,18 +260,14 @@ const product = {
      */
     getRegularDeliveryProductsByProductNos: (
         params: GetRegularDeliveryProductsByProductNos,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetRegularDeliveryProductsResponse>(
-            'products/regular-delivery',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetRegularDeliveryProductsResponse>({
+            method: 'GET',
+            url: '/products/regular-delivery',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -300,18 +276,14 @@ const product = {
      */
     getKeywordsByProductNo: (
         params: GetKeywordsByProductNoParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetKeywordsByProductNoResponse>(
-            'products/search/keywords',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetKeywordsByProductNoResponse>({
+            method: 'GET',
+            url: '/products/search/keywords',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -325,18 +297,14 @@ const product = {
      */
     getProductSearchSummary: (
         params: GetProductSearchSummaryParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetProductSearchSummaryResponse>(
-            'products/search/summary',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetProductSearchSummaryResponse>({
+            method: 'GET',
+            url: '/products/search/summary',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -345,9 +313,10 @@ const product = {
      *  - 마지막 뎁스 번호는 depth5No, 전체 전시카테고리 경로는 fullCategoryName 으로 확인할 수 있습니다
      */
     getProductDisplayCategories: (productNo: number) => {
-        return request.get<GetProductDisplayCategoriesResponse>(
-            `products/${productNo}/display-categories`,
-        );
+        return shopbyRequest<GetProductDisplayCategoriesResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/display-categories`,
+        });
     },
 
     /**
@@ -358,26 +327,27 @@ const product = {
      *   - multiOptions[].optionValue(옵션값)는 빈값으로 노출됩니다.
      *   - 필수옵션 및 선택옵션의 옵션 값들은 multiOptions.children[]의 1depth로만 노출됩니다.
      */
-    getExtraProducts: (productNo: number, options?: Options) => {
-        return request.get<GetExtraProductsResponse>(
-            `products/${productNo}/extra-products`,
-            {
-                ...options,
-            },
-        );
+    getExtraProducts: (productNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetExtraProductsResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/extra-products`,
+            ...options,
+        });
     },
 
     /**
      * 상품번호로 상품우선구매권한 조회
      *  - 상품에 매핑된 상품우선구매권한 정보를 조회하는 API 입니다.
      */
-    getPriorityPurchasableRight: (productNo: number, options?: Options) => {
-        return request.get<GetPriorityPurchasableRightResponse>(
-            `products/${productNo}/purchasable`,
-            {
-                ...options,
-            },
-        );
+    getPriorityPurchasableRight: (
+        productNo: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetPriorityPurchasableRightResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/purchasable`,
+            ...options,
+        });
     },
 
     /**
@@ -385,13 +355,12 @@ const product = {
      *  - 관련 상품 정보를 조회하는 API입니다
      *  - 관련 상품은 설정된 기준에 따라 최대 500개까지 조회할 수 있습니다
      */
-    getRelatedProducts: (productNo: number, options?: Options) => {
-        return request.get<GetRelatedProductsResponse>(
-            `products/${productNo}/related-products`,
-            {
-                ...options,
-            },
-        );
+    getRelatedProducts: (productNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetRelatedProductsResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/related-products`,
+            ...options,
+        });
     },
 
     /**
@@ -399,26 +368,24 @@ const product = {
      *  - 상품번호에 해당하는 표준 카테고리를 조회하는 API입니다
      *  - 마지막 뎁스 번호는 depth4No, 전체 표준 카테고리 경로는 fullCategoryName 으로 확인할 수 있습니다.
      */
-    getStandardCategory: (productNo: number, options?: Options) => {
-        return request.get<GetStandardCategoryResponse>(
-            `products/${productNo}/standard-category`,
-            {
-                ...options,
-            },
-        );
+    getStandardCategory: (productNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetStandardCategoryResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/standard-category`,
+            ...options,
+        });
     },
 
     /**
      * 상품 번호와 쇼핑몰 번호에 해당하는 단축URL 조회하기
      *  - 상품번호와 쇼핑몰 번호에 해당하는 단축URL 조회하는 API입니다
      */
-    getShortUrl: (productNo: number, options?: Options) => {
-        return request.get<GetShortUrlResponse>(
-            `products/${productNo}/url-shortening`,
-            {
-                ...options,
-            },
-        );
+    getShortUrl: (productNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetShortUrlResponse>({
+            method: 'GET',
+            url: `/products/${productNo}/url-shortening`,
+            ...options,
+        });
     },
 };
 

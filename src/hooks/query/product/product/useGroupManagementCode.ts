@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -14,7 +14,7 @@ interface UseGroupManagementCodeParams<T = GroupManagementCodeResponse> {
     options?: Omit<
         UseQueryOptions<
             GroupManagementCodeResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['groupManagementCode']>
         >,
@@ -29,9 +29,8 @@ const useGroupManagementCode = <T = GroupManagementCodeResponse>({
     return useQuery({
         queryKey: productKeys.groupManagementCode(searchParams),
         queryFn: async () => {
-            const data = await product
-                .getGroupManagementCodes(searchParams)
-                .json();
+            const { data } =
+                await product.getGroupManagementCodes(searchParams);
 
             return data;
         },

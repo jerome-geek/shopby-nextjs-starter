@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
@@ -17,7 +17,7 @@ interface UseEventProductSectionParams<
     options?: Omit<
         UseQueryOptions<
             GetEventProductDisplaySectionResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof eventKeys)['productSection']>
         >,
@@ -34,10 +34,11 @@ const useEventProductSection = <T = GetEventProductDisplaySectionResponse>({
     return useQuery({
         queryKey: eventKeys.productSection(eventNo, sectionNo, searchParams),
         queryFn: async () => {
-            const data = await event
-                .getEventProductDisplaySection(eventNo, sectionNo, searchParams)
-                .json();
-
+            const { data } = await event.getEventProductDisplaySection(
+                eventNo,
+                sectionNo,
+                searchParams,
+            );
             return data;
         },
         ...options,

@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetAdditionalDiscountByProductNosParams,
     GetAdditionalDiscountByProductNosResponse,
@@ -16,15 +15,14 @@ const additionalDiscount = {
      */
     getAdditionalDiscount: (
         params: GetAdditionalDiscountParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetAdditionalDiscountResponse>(
-            'additional-discounts/by-product-no',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetAdditionalDiscountResponse>({
+            method: 'GET',
+            url: 'additional-discounts/by-product-no',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -34,15 +32,14 @@ const additionalDiscount = {
      */
     getAdditionalDiscountByProductNos: (
         params: GetAdditionalDiscountByProductNosParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetAdditionalDiscountByProductNosResponse>(
-            'additional-discounts/by-product-nos',
-            {
-                searchParams: qs.stringify(params, { arrayFormat: 'comma' }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetAdditionalDiscountByProductNosResponse>({
+            method: 'GET',
+            url: 'additional-discounts/by-product-nos',
+            params,
+            ...options,
+        });
     },
 };
 

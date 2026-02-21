@@ -1,7 +1,6 @@
-import qs from 'qs';
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetOpenIdListResponse,
     IssueOpenIdAccessTokenParams,
@@ -16,9 +15,14 @@ const OAuthCallback = {
      *   - nextUrl을 이용하여 로그인 성공 후 돌아갈 callback URL을 설정할 수 있습니다.
      *   - 쇼핑몰 운영자가 기본 도메인을 등록한 경우 /로 시작하는 상대 주소를 사용할 수 있고, 그 외의 경우에는 올바른 HTTP URL을 전달해야 합니다.
      */
-    openLoginPage: (params: OpenLoginPageParams, options?: Options) => {
-        return request.get('oauth/begin', {
-            searchParams: qs.stringify(params),
+    openLoginPage: (
+        params: OpenLoginPageParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'GET',
+            url: '/oauth/begin',
+            params,
             ...options,
         });
     },
@@ -33,10 +37,12 @@ const OAuthCallback = {
      */
     issueOpenIdAccessToken: (
         params: IssueOpenIdAccessTokenParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get('oauth/callback', {
-            searchParams: qs.stringify(params),
+        return shopbyRequest({
+            method: 'GET',
+            url: '/oauth/callback',
+            params,
             ...options,
         });
     },
@@ -46,7 +52,10 @@ const OAuthCallback = {
      *  - 연동된 SNS를 조회하는 API 입니다.
      */
     getOpenIdList: () => {
-        return request.get<GetOpenIdListResponse>('oauth/openid/list');
+        return shopbyRequest<GetOpenIdListResponse>({
+            method: 'GET',
+            url: '/oauth/openid/list',
+        });
     },
 };
 

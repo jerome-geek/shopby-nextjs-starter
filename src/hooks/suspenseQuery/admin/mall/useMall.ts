@@ -2,7 +2,7 @@ import {
     useSuspenseQuery,
     UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { mall } from '@/api/admin';
 import { GetMallResponse } from '@/models/admin/mall';
@@ -11,7 +11,7 @@ interface useMallParams<T = GetMallResponse> {
     options?: Omit<
         UseSuspenseQueryOptions<
             GetMallResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             [string]
         >,
@@ -23,7 +23,7 @@ const useMall = ({ options }: useMallParams = {}) => {
     return useSuspenseQuery({
         queryKey: ['mallInfo'],
         queryFn: async () => {
-            const data = await mall.getMall().json();
+            const { data } = await mall.getMall();
 
             return data;
         },

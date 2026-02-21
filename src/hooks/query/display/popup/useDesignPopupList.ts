@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { popup } from '@/api/display';
 import popupKeys from '@/hooks/queryKeys/popupKeys';
@@ -14,7 +14,7 @@ interface UseDesignPopupListParams<T = GetDesignPopupResponse> {
     options?: Omit<
         UseQueryOptions<
             GetDesignPopupResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof popupKeys)['design']>
         >,
@@ -30,9 +30,9 @@ const useDesignPopupList = <T = GetDesignPopupResponse>({
     return useQuery({
         queryKey: popupKeys.design(data, platform),
         queryFn: async () => {
-            const response = await popup.getDesignPopups(data, platform).json();
+            const response = await popup.getDesignPopups(data, platform);
 
-            return response;
+            return response.data;
         },
         ...options,
     });

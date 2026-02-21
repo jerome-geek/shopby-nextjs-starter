@@ -1,7 +1,6 @@
-import qs from 'qs';
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     AuthenticateAdultParams,
     AuthenticateAdultResponse,
@@ -19,9 +18,14 @@ const KCPCertification = {
      *   - 한 번 성인인증을 완료한 회원은 인증을 완료한 시점부터 1년동안 인증 기록이 유지됩니다.
      *   - 기간 내에 다시 인증에 성공할 경우 성인인증 일시와 만료일은 갱신됩니다.
      */
-    authenticateAdult: (params: AuthenticateAdultParams, options?: Options) => {
-        return request.post<AuthenticateAdultResponse>('kcp/age-verification', {
-            searchParams: qs.stringify(params),
+    authenticateAdult: (
+        params: AuthenticateAdultParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<AuthenticateAdultResponse>({
+            method: 'POST',
+            url: '/kcp/age-verification',
+            params,
             ...options,
         });
     },
@@ -30,9 +34,11 @@ const KCPCertification = {
      * KCP 본인인증 요청하기
      *  - KCP 본인인증을 위한 form을 생성하기 위한 API 입니다
      */
-    getKCPForm: (params: GetKCPFormParams, options?: Options) => {
-        return request.get<GetKCPFormResponse>('kcp/id-verification/form', {
-            searchParams: qs.stringify(params),
+    getKCPForm: (params: GetKCPFormParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetKCPCertificationResultResponse>({
+            method: 'GET',
+            url: '/kcp/id-verification/form',
+            params,
             ...options,
         });
     },
@@ -43,15 +49,14 @@ const KCPCertification = {
      */
     getKCPCertificationResult: (
         params: GetKCPCertificationResultParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetKCPCertificationResultResponse>(
-            'kcp/id-verification/response',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetKCPFormResponse>({
+            method: 'GET',
+            url: '/kcp/id-verification/response',
+            params,
+            ...options,
+        });
     },
 };
 

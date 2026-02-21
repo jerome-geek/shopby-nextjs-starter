@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -9,7 +9,7 @@ interface UseLikeProductCountParams<T = { likedCount: number }> {
     options?: Omit<
         UseQueryOptions<
             { likedCount: number },
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['likeCount']>
         >,
@@ -24,7 +24,7 @@ const useLikeProductCount = <T = { likedCount: number }>({
     return useQuery({
         queryKey: productKeys.likeCount(memberNo),
         queryFn: async () => {
-            const data = await productProfile.getLikeProductsCount().json();
+            const { data } = await productProfile.getLikeProductsCount();
 
             return data;
         },

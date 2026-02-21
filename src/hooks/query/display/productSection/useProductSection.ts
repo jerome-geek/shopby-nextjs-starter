@@ -1,6 +1,6 @@
 import { isEmpty } from '@fxts/core';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productSection } from '@/api/display';
 import { productSectionKeys } from '@/hooks/queryKeys';
@@ -11,7 +11,7 @@ interface UseProductSectionParams<T = GetProductSectionResponse> {
     options?: Omit<
         UseQueryOptions<
             GetProductSectionResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productSectionKeys)['detail']>
         >,
@@ -26,11 +26,9 @@ const useProductSection = <T = GetProductSectionResponse>({
     return useQuery({
         queryKey: productSectionKeys.detail(sectionNo),
         queryFn: async () => {
-            const response = await productSection
-                .getProductSection(sectionNo)
-                .json();
+            const { data } = await productSection.getProductSection(sectionNo);
 
-            return response;
+            return data;
         },
         enabled: !isEmpty(sectionNo),
         ...options,

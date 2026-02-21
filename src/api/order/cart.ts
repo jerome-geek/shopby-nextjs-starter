@@ -1,7 +1,7 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     CheckCartValidationResponse,
     DeleteCartParams,
@@ -22,12 +22,11 @@ const cart = {
      * 장바구니 가져오기
      *  - 로그인된 유저의 장바구니 목록을 조회하기 위한 API 입니다
      */
-    getCartList: (params: GetCartListParams, options?: Options) => {
-        return request.get<GetCartListResponse>('cart', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getCartList: (params: GetCartListParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetCartListResponse>({
+            method: 'GET',
+            url: '/cart',
+            params,
             ...options,
         });
     },
@@ -38,9 +37,11 @@ const cart = {
      *  - 옵션 종류는 변경할 수 없습니다
      *  - 옵션변경은 변경할 옵션을 삭제한 후 신규등록하는 방법으로 수정합니다
      */
-    updateCart: (data: UpdateCartData[], options?: Options) => {
-        return request.put('cart', {
-            json: data,
+    updateCart: (data: UpdateCartData, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'PUT',
+            url: '/cart',
+            data,
             ...options,
         });
     },
@@ -49,9 +50,11 @@ const cart = {
      * 장바구니 등록하기
      *  - 로그인된 유저의 장바구니에 상품(옵션)을 추가하는 API 입니다
      */
-    registerCart: (data: RegisterCartData[], options?: Options) => {
-        return request.post<GetCartCountResponse>('cart', {
-            json: data,
+    registerCart: (data: RegisterCartData, options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetCartCountResponse>({
+            method: 'POST',
+            url: '/cart',
+            data,
             ...options,
         });
     },
@@ -61,12 +64,11 @@ const cart = {
      *  - 장바구니 목록에서 장바구니를 삭제하는 API 입니다
      *  - cartNo를 List형으로 전달해야 합니다
      */
-    deleteCart: (params: DeleteCartParams, options?: Options) => {
-        return request.delete<GetCartCountResponse>('cart', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    deleteCart: (params: DeleteCartParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: '/cart',
+            params,
             ...options,
         });
     },
@@ -80,13 +82,12 @@ const cart = {
      */
     getSelectedCartPrice: (
         params: GetSelectedCartPriceParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetSelectedCartPriceResponse>('cart/calculate', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest<GetSelectedCartPriceResponse>({
+            method: 'GET',
+            url: '/cart/calculate',
+            params,
             ...options,
         });
     },
@@ -95,8 +96,10 @@ const cart = {
      * 장바구니에 담긴 상품 개수 가져오기
      *  - 로그인된 유저의 장바구니에 담긴 상품 개수를 조회하기 위한 API 입니다
      */
-    getCartCount: (options?: Options) => {
-        return request.get<GetCartCountResponse>('cart/count', {
+    getCartCount: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetCartCountResponse>({
+            method: 'GET',
+            url: '/cart/count',
             ...options,
         });
     },
@@ -110,13 +113,12 @@ const cart = {
      */
     getSelectedCartGroupPrice: (
         params: GetSelectedCartGroupPriceParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetCartListResponse>('cart/subset', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest<GetCartListResponse>({
+            method: 'GET',
+            url: '/cart/subset',
+            params,
             ...options,
         });
     },
@@ -125,8 +127,10 @@ const cart = {
      * 장바구니에 저장된 모든 상품 구매 가능 여부 확인하기
      *  - 장바구니에 저장된 모든 상품의 구매 가능 여부를 확인하는 API 입니다
      */
-    checkCartValidation: (options?: Options) => {
-        return request.get<CheckCartValidationResponse>('cart/validate', {
+    checkCartValidation: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<CheckCartValidationResponse>({
+            method: 'GET',
+            url: '/cart/validate',
             ...options,
         });
     },
@@ -137,18 +141,14 @@ const cart = {
      */
     getMaximumCouponCartPrice: (
         params: GetMaximumCouponCartPriceParams,
-        options: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<GetMaximumCouponCartPriceResponse>(
-            'cart/coupons/maximum',
-            {
-                searchParams: qs.stringify(params, {
-                    arrayFormat: 'comma',
-                    allowDots: true,
-                }),
-                ...options,
-            },
-        );
+        return shopbyRequest<GetMaximumCouponCartPriceResponse>({
+            method: 'GET',
+            url: '/cart/coupons/maximum',
+            params,
+            ...options,
+        });
     },
 };
 

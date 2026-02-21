@@ -7,6 +7,7 @@ import * as styles from './index.css';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
 import { Button } from '@/components/ui/button';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
+import { ImageUrlType } from '@/models';
 
 const calculateTimeLeft = () => {
     const now = new Date();
@@ -87,7 +88,7 @@ export default function TimeSale() {
                     ...product,
                     imageUrlInfo: product.imageUrlInfo?.map((img) => ({
                         url: img.url,
-                        type: 'IMAGE_URL' as const,
+                        type: 'IMAGE_URL' as ImageUrlType,
                     })),
                     stickerInfos:
                         product.stickerInfos?.map((sticker) => ({
@@ -154,7 +155,7 @@ export default function TimeSale() {
                             salePrice={product.salePrice}
                             immediateDiscountAmt={product.immediateDiscountAmt}
                             additionDiscountAmt={product.additionDiscountAmt}
-                            imageUrlInfo={product.imageUrlInfo}
+                            imageUrlInfo={[]}
                             stickerInfos={product.stickerInfos}
                             likeCount={product.likeCount}
                             liked={product.liked}

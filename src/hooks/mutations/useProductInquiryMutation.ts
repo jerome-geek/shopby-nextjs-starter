@@ -6,7 +6,7 @@ import {
     UpdateProductInquiryData,
 } from '@/models/display/productInquiry';
 
-export const useProductInquiryMutation = () => {
+const useProductInquiryMutation = () => {
     const queryClient = useQueryClient();
 
     const register = useMutation({
@@ -16,7 +16,7 @@ export const useProductInquiryMutation = () => {
         }: {
             productNo: number;
             data: WriteProductInquiryData;
-        }) => productInquiry.writeProductInquiry(productNo, data).json(),
+        }) => productInquiry.writeProductInquiry(productNo, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: productInquiryKeys.all });
         },
@@ -29,7 +29,7 @@ export const useProductInquiryMutation = () => {
         }: {
             inquiryNo: number;
             data: UpdateProductInquiryData;
-        }) => productInquiry.updateProductInquiry(inquiryNo, data).json(),
+        }) => productInquiry.updateProductInquiry(inquiryNo, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: productInquiryKeys.all });
         },
@@ -37,7 +37,7 @@ export const useProductInquiryMutation = () => {
 
     const remove = useMutation({
         mutationFn: (inquiryNo: number) =>
-            productInquiry.deleteProductInquiry(inquiryNo).json(),
+            productInquiry.deleteProductInquiry(inquiryNo),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: productInquiryKeys.all });
         },
@@ -49,3 +49,5 @@ export const useProductInquiryMutation = () => {
         remove,
     };
 };
+
+export default useProductInquiryMutation;

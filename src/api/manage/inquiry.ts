@@ -1,7 +1,7 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
-import { publicRequest, request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     DownloadInquiryFileParams,
     GetInquiriesParams,
@@ -24,12 +24,14 @@ const inquiry = {
      *   - inquiryStatuses, 여러 개의 1:1문의 상태 조회 가능. ','로 구분
      *   - (ASKED: 레거시 호환용, ISSUED와 같다)
      */
-    getInquiries: (params?: GetInquiriesParams, options?: Options) => {
-        return request.get<GetInquiriesResponse>('inquiries', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getInquiries: (
+        params?: GetInquiriesParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetInquiriesResponse>({
+            method: 'GET',
+            url: '/inquiries',
+            params,
             ...options,
         });
     },
@@ -39,9 +41,11 @@ const inquiry = {
      *  - 1:1 문의를 등록하는 API 입니다
      *  - 샵바이프리미엄 쇼핑몰에서만 비회원 1:1문의가 가능합니다. 비회원 등록 시에는 email을 필수로 입력해야 합니다
      */
-    writeInquiry: (data: WriteInquiryData, options?: Options) => {
-        return request.post<WriteInquiryResponse>('inquiries', {
-            json: data,
+    writeInquiry: (data: WriteInquiryData, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'POST',
+            url: '/inquiries',
+            data,
             ...options,
         });
     },
@@ -50,25 +54,26 @@ const inquiry = {
      * 1:1 문의 설정 조회하기
      *  - 1:1 문의 설정을 조회하는 API 입니다
      */
-    getInquiryConfig: (options?: Options) => {
-        return publicRequest.get<GetInquiryConfigResponse>(
-            'inquiries/configurations',
-            {
-                ...options,
-            },
-        );
+    getInquiryConfig: (options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'GET',
+            url: '/inquiries/configurations',
+            ...options,
+        });
     },
 
     /**
      * 1:1 문의 유형 조회
      *  - 1:1 문의 유형을 조회하는 API 입니다.
      */
-    getInquiryTypes: (params?: GetInquiryTypesParams, options?: Options) => {
-        return publicRequest.get<GetInquiryTypesResponse>('inquiries/types', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+    getInquiryTypes: (
+        params?: GetInquiryTypesParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'GET',
+            url: '/inquiries/types',
+            params,
             ...options,
         });
     },
@@ -77,8 +82,10 @@ const inquiry = {
      * 1:1 문의 상세 조회하기 (문의번호 기준)
      *  - 특정 1:1 문의(문의번호 기준)를 상세 조회하는 API 입니다
      */
-    getInquiry: (inquiryNo: number, options?: Options) => {
-        return request.get<GetInquiryResponse>(`inquiries/${inquiryNo}`, {
+    getInquiry: (inquiryNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'GET',
+            url: `/inquiries/${inquiryNo}`,
             ...options,
         });
     },
@@ -91,10 +98,12 @@ const inquiry = {
     updateInquiry: (
         inquiryNo: number,
         data: UpdateInquiryData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.put(`inquiries/${inquiryNo}`, {
-            json: data,
+        return shopbyRequest({
+            method: 'PUT',
+            url: `/inquiries/${inquiryNo}`,
+            data,
             ...options,
         });
     },
@@ -103,8 +112,10 @@ const inquiry = {
      * 1:1 문의 삭제하기
      *  - 특정 1:1 문의(문의번호 기준)를 삭제하는 API 입니다
      */
-    deleteInquiry: (inquiryNo: number, options?: Options) => {
-        return request.delete(`inquiries/${inquiryNo}`, {
+    deleteInquiry: (inquiryNo: number, options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: `/inquiries/${inquiryNo}`,
             ...options,
         });
     },
@@ -120,10 +131,12 @@ const inquiry = {
     updatePartOfInquiry: (
         inquiryNo: number,
         data: UpdateInquiryData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.patch(`inquiries/${inquiryNo}`, {
-            json: data,
+        return shopbyRequest({
+            method: 'PATCH',
+            url: `/inquiries/${inquiryNo}`,
+            data,
             ...options,
         });
     },
@@ -135,13 +148,12 @@ const inquiry = {
     downloadInquiryFile: (
         inquiryNo: number,
         params: DownloadInquiryFileParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get(`inquiries/${inquiryNo}/file`, {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest({
+            method: 'GET',
+            url: `/inquiries/${inquiryNo}/file`,
+            params,
             ...options,
         });
     },

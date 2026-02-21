@@ -1,2 +1,4 @@
-export * from './useProductInquiryMutation';
-export * from './useProductProfileMutation';
+import useProductInquiryMutation from '@/hooks/mutations/useProductInquiryMutation';
+import useProductProfileMutation from '@/hooks/mutations/useProductProfileMutation';
+
+export { useProductInquiryMutation, useProductProfileMutation };

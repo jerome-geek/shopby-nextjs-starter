@@ -3,10 +3,10 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
-import eventKeys from '@/hooks/queryKeys/eventKeys';
+import { eventKeys } from '@/hooks/queryKeys';
 import { GetEventByIdParams, GetEventResponse } from '@/models/display/event';
 
 interface UseEventParams<T = GetEventResponse> {
@@ -15,7 +15,7 @@ interface UseEventParams<T = GetEventResponse> {
     options?: Omit<
         UseQueryOptions<
             GetEventResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof eventKeys)['detailById']>
         >,
@@ -31,7 +31,7 @@ const useEventById = <T = GetEventResponse>({
     return useQuery({
         queryKey: eventKeys.detailById(eventId, params),
         queryFn: async () => {
-            const data = await event.getEventById(eventId, params).json();
+            const { data } = await event.getEventById(eventId, params);
 
             return data;
         },

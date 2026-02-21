@@ -1,6 +1,6 @@
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     ReservePaymentData,
     ReservePaymentResponse,
@@ -11,9 +11,14 @@ const purchase = {
      * 주문 예약하기
      *  - 주문을 예약하는 API 입니다.
      */
-    reservePayment: (data: ReservePaymentData, options?: Options) => {
-        return request.post<ReservePaymentResponse>('payments/reserve', {
-            json: data,
+    reservePayment: (
+        data: ReservePaymentData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<ReservePaymentResponse>({
+            method: 'POST',
+            url: '/payments/reserve',
+            data,
             ...options,
         });
     },

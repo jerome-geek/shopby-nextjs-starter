@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -13,7 +13,7 @@ interface UseLikeBrandCountListParams<T = GetLikeBrandsCountResponse> {
     options?: Omit<
         UseQueryOptions<
             GetLikeBrandsCountResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['likeBrandCountList']>
         >,
@@ -28,9 +28,8 @@ const useLikeBrandCountList = <T = GetLikeBrandsCountResponse>({
     return useQuery({
         queryKey: productKeys.likeBrandCountList(searchParams),
         queryFn: async () => {
-            const data = await productProfile
-                .getLikeBrandsCount(searchParams)
-                .json();
+            const { data } =
+                await productProfile.getLikeBrandsCount(searchParams);
 
             return data;
         },

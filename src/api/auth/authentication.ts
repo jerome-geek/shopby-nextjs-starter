@@ -1,7 +1,6 @@
-import type { Options } from 'ky';
-import qs from 'qs';
+import type { AxiosRequestConfig } from 'axios';
 
-import { request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     CheckCertificatedNumberParams,
     CheckCertificatedNumberViaEmailParams,
@@ -24,6 +23,7 @@ import {
     SendCertificatedNumberData,
     SendCertificatedNumberResponse,
     SendCertificatedNumberViaEmailData,
+    SendCertificatedNumberViaEmailResponse,
     SendCertificatedNumberViaSMSData,
     SendCertificatedNumberViaSMSResponse,
 } from '@/models/auth/authentication';
@@ -36,10 +36,12 @@ const authentication = {
      */
     checkCertificatedNumber: (
         params: CheckCertificatedNumberParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get('authentications', {
-            searchParams: qs.stringify(params),
+        return shopbyRequest({
+            method: 'GET',
+            url: '/authentications',
+            params,
             ...options,
         });
     },
@@ -53,10 +55,12 @@ const authentication = {
      */
     sendCertificatedNumber: (
         data: SendCertificatedNumberData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<SendCertificatedNumberResponse>('authentications', {
-            json: data,
+        return shopbyRequest<SendCertificatedNumberResponse>({
+            method: 'POST',
+            url: '/authentications',
+            data,
             ...options,
         });
     },
@@ -67,15 +71,14 @@ const authentication = {
      */
     checkCertificatedNumberViaEmail: (
         params: CheckCertificatedNumberViaEmailParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get<CheckCertificatedNumberViaEmailResponse>(
-            'authentications/email',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+        return shopbyRequest<CheckCertificatedNumberViaEmailResponse>({
+            method: 'GET',
+            url: '/authentications/email',
+            params,
+            ...options,
+        });
     },
 
     /**
@@ -84,10 +87,12 @@ const authentication = {
      */
     sendCertificatedNumberViaEmail: (
         data: SendCertificatedNumberViaEmailData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post('authentications/email', {
-            json: data,
+        return shopbyRequest<SendCertificatedNumberViaEmailResponse>({
+            method: 'POST',
+            url: '/authentications/email',
+            data,
             ...options,
         });
     },
@@ -98,10 +103,12 @@ const authentication = {
      */
     checkCertificatedNumberViaSMS: (
         params: CheckCertificatedNumberViaSMSParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.get('authentications/sms', {
-            searchParams: qs.stringify(params),
+        return shopbyRequest({
+            method: 'GET',
+            url: '/authentications/sms',
+            params,
             ...options,
         });
     },
@@ -112,31 +119,33 @@ const authentication = {
      */
     sendCertificatedNumberViaSMS: (
         data: SendCertificatedNumberViaSMSData,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<SendCertificatedNumberViaSMSResponse>(
-            'authentications/sms',
-            {
-                json: data,
-                ...options,
-            },
-        );
+        return shopbyRequest<SendCertificatedNumberViaSMSResponse>({
+            method: 'POST',
+            url: '/authentications/sms',
+            data,
+            ...options,
+        });
     },
 
     /**
      * OpenId 로그인 url 조회하기
      *  - OpenId 로그인 url 조회하기 위한 API 입니다
      */
-    getOpenIdLoginUrl: (params: GetOpenIdLoginUrlParams, options?: Options) => {
-        return request.get<GetOpenIdLoginUrlResponse>('oauth/login-url', {
-            searchParams: qs.stringify(
-                params.provider === 'ncp_line'
-                    ? {
-                          ...params,
-                          state: generateCSRFToken(),
-                      }
-                    : params,
-            ),
+    getOpenIdLoginUrl: (
+        params: GetOpenIdLoginUrlParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GetOpenIdLoginUrlResponse>({
+            method: 'GET',
+            url: '/oauth/login-url',
+            params: {
+                ...params,
+                ...(params.provider === 'ncp_line' && {
+                    state: generateCSRFToken(),
+                }),
+            },
             ...options,
         });
     },
@@ -153,11 +162,13 @@ const authentication = {
     issueOpenIdAccessToken: (
         data: IssueOpenIdAccessTokenData,
         params?: IssueOpenIdAccessTokenParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return request.post<IssueOpenIdAccessTokenResponse>('oauth/openid', {
-            json: data,
-            searchParams: qs.stringify(params),
+        return shopbyRequest<IssueOpenIdAccessTokenResponse>({
+            method: 'POST',
+            url: '/oauth/openid',
+            data,
+            params,
             ...options,
         });
     },
@@ -166,9 +177,14 @@ const authentication = {
      * SNS 연동 해제하기
      *  - SNS연동을 해제하는 API 입니다.
      */
-    disconnectSNS: (params: DisconnectSMSParams, options?: Options) => {
-        return request.delete('oauth/openId', {
-            searchParams: qs.stringify(params),
+    disconnectSNS: (
+        params: DisconnectSMSParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: '/oauth/openId',
+            params,
             ...options,
         });
     },
@@ -180,9 +196,14 @@ const authentication = {
      *  - 자동 로그인을 위해 keepLogin을 true로 요청하면 유효 기간이 90일인 토큰이 생성됩니다
      *  - 유효 기간이 길기 때문에 토큰 탈취시 보안에 취약할 수 있습니다
      */
-    issueAccessToken: (data: IssueAccessTokenData, options?: Options) => {
-        return request.post<IssueAccessTokenResponse>('oauth/token', {
-            json: data,
+    issueAccessToken: (
+        data: IssueAccessTokenData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<IssueAccessTokenResponse>({
+            method: 'POST',
+            url: '/oauth/token',
+            data,
             ...options,
         });
     },
@@ -192,8 +213,10 @@ const authentication = {
      *  - AccessToken 만료 처리(ncp, payco 회원 동일)를 하기 위한 API 입니다
      *  - 회원의 엑세스 토큰을 삭제하여 로그아웃합니다
      */
-    deleteAccessToken: (options?: Options) => {
-        return request.delete('oauth/token', {
+    deleteAccessToken: (options?: AxiosRequestConfig) => {
+        return shopbyRequest({
+            method: 'DELETE',
+            url: '/oauth/token',
             ...options,
         });
     },
@@ -203,9 +226,11 @@ const authentication = {
      *  - 일반 회원에 SNS 연동을 하는 API 입니다.
      *  - 외부 IdP(Identity Provider, 아이디 제공자)를 이용하는 회원이 로그인할 때 사용합니다.
      */
-    linkSNS: (params: LinkSNSParams, options?: Options) => {
-        return request.get<LinkSNSResponse>('oauth/openid/link', {
-            searchParams: qs.stringify(params),
+    linkSNS: (params: LinkSNSParams, options?: AxiosRequestConfig) => {
+        return shopbyRequest<LinkSNSResponse>({
+            method: 'GET',
+            url: '/oauth/openid/link',
+            params,
             ...options,
         });
     },
@@ -214,27 +239,28 @@ const authentication = {
      * 앱카드 QR Code 생성하기
      *  - 인증 거래번호(transNo)를 통해 QR Code를 생성하기 위한 API 입니다.
      */
-    generateAppCardQr: (params: GenerateAppCardQrParams, options?: Options) => {
-        return request.get<GenerateAppCardQrResponse>(
-            'oauth/openid/app-card/qr',
-            {
-                searchParams: qs.stringify(params),
-                ...options,
-            },
-        );
+    generateAppCardQr: (
+        params: GenerateAppCardQrParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest<GenerateAppCardQrResponse>({
+            method: 'GET',
+            url: '/oauth/openid/app-card/qr',
+            params,
+            ...options,
+        });
     },
 
     /**
      * 앱카드 거래번호 및 토큰 발급하기
      *  - 앱 카드 로그인시 필요한 인증 거래번호(transNo)와 인증거래 확인 토큰(token) 발급하기 위한 API 입니다.
      */
-    issueAppCardTransNo: (options?: Options) => {
-        return request.get<IssueAppCardTransNoResponse>(
-            'oauth/openid/app-card/trans-no',
-            {
-                ...options,
-            },
-        );
+    issueAppCardTransNo: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<IssueAppCardTransNoResponse>({
+            method: 'GET',
+            url: '/oauth/openid/app-card/trans-no',
+            ...options,
+        });
     },
 
     /**
@@ -244,8 +270,10 @@ const authentication = {
      *  - 따라서 아이디와 비밀번호를 사용해 로그인한 사용자는 응답이 모두 null 입니다.
      *  - 또한 서버는 프로바이더 토큰을 로그인 외에는 사용하지 않기 때문에 프로바이더 토큰 갱신 등은 사용자가 직접 해야 합니다.
      */
-    getOpenIdAccessToken: (options?: Options) => {
-        return request.get<GetOpenIdAccessTokenResponse>('openid/token', {
+    getOpenIdAccessToken: (options?: AxiosRequestConfig) => {
+        return shopbyRequest<GetOpenIdAccessTokenResponse>({
+            method: 'GET',
+            url: '/openid/token',
             ...options,
         });
     },

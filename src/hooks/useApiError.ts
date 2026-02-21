@@ -1,7 +1,6 @@
 'use client';
 
-import { HTTPError, TimeoutError } from 'ky';
-import { useCallback } from 'react';
+import { AxiosError, isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import useDialog from '@/hooks/useDialog';
@@ -16,7 +15,7 @@ export interface ErrorHandlerConfig {
      */
     statusHandlers?: Record<
         number,
-        (error: HTTPError) => string | null | Promise<string | null>
+        (error: AxiosError) => string | null | Promise<string | null>
     >;
     /** true일 경우 팝업을 띄우지 않고 에러 메시지만 반환합니다. */
     silent?: boolean;
@@ -33,8 +32,8 @@ interface ErrorStrategy {
     isMatch: (error: unknown) => boolean;
     /** 에러 메시지를 추출하거나 동작을 수행함 (메시지가 없으면 null 반환) */
     getMessage: (
-        error: any,
-        config: ErrorHandlerConfig
+        error: unknown,
+        config: ErrorHandlerConfig,
     ) => Promise<string | null>;
 }
 
@@ -57,21 +56,22 @@ const useApiError = () => {
     const strategies: ErrorStrategy[] = [
         {
             name: 'HttpError',
-            isMatch: (e): e is HTTPError => {
-                return e instanceof HTTPError;
+            isMatch: (e): e is AxiosError => {
+                return isAxiosError(e) && e.response !== undefined;
             },
-            getMessage: async (e: HTTPError, config) => {
-                const status = e.response.status;
+            getMessage: async (err: unknown, config) => {
+                const e = err as AxiosError;
+                const status = e.response?.status;
 
-                if (config.statusHandlers?.[status]) {
+                if (status && config.statusHandlers?.[status]) {
                     const result = await config.statusHandlers[status](e);
                     return result;
                 }
 
                 try {
-                    const errorData = await e.response.clone().json();
+                    const errorData = e.response?.data as { message?: string };
                     return (
-                        errorData.message ||
+                        errorData?.message ||
                         t('알 수 없는 서버 오류가 발생했습니다.')
                     );
                 } catch {
@@ -81,8 +81,11 @@ const useApiError = () => {
         },
         {
             name: 'TimeoutError',
-            isMatch: (e): e is TimeoutError => {
-                return e instanceof TimeoutError;
+            isMatch: (e): e is AxiosError => {
+                return (
+                    isAxiosError(e) &&
+                    (e.code === 'ECONNABORTED' || e.code === 'ETIMEDOUT')
+                );
             },
             getMessage: async () => {
                 return t('요청 시간이 초과되었습니다. 다시 시도해 주세요.');
@@ -90,12 +93,15 @@ const useApiError = () => {
         },
         {
             name: 'NetworkError',
-            isMatch: (e): e is TypeError => {
-                return e instanceof TypeError;
+            isMatch: (e): e is TypeError | AxiosError => {
+                return (
+                    e instanceof TypeError ||
+                    (isAxiosError(e) && e.request && !e.response)
+                );
             },
             getMessage: async () => {
                 return t(
-                    '네트워크 연결이 원활하지 않습니다. 인터넷 접속 상태를 확인해 주세요.'
+                    '네트워크 연결이 원활하지 않습니다. 인터넷 접속 상태를 확인해 주세요.',
                 );
             },
         },
@@ -104,7 +110,8 @@ const useApiError = () => {
             isMatch: (e): e is Error => {
                 return e instanceof Error;
             },
-            getMessage: async (e: Error) => {
+            getMessage: async (err: unknown) => {
+                const e = err as Error;
                 return e.message;
             },
         },
@@ -122,33 +129,30 @@ const useApiError = () => {
     /**
      * 에러를 가공하여 적절한 처리(팝업 등)를 수행합니다.
      */
-    const handleError = useCallback(
-        async (
-            error: unknown,
-            config: ErrorHandlerConfig = {}
-        ): Promise<string | null> => {
-            const { log = true, silent = false } = config;
+    const handleError = async (
+        error: unknown,
+        config: ErrorHandlerConfig = {},
+    ): Promise<string | null> => {
+        const { log = true, silent = false } = config;
 
-            if (log) {
-                console.error('🚀 useApiError Handle:', error);
-            }
+        if (log) {
+            console.error('🚀 useApiError Handle:', error);
+        }
 
-            for (const strategy of strategies) {
-                if (strategy.isMatch(error)) {
-                    const message = await strategy.getMessage(error, config);
+        for (const strategy of strategies) {
+            if (strategy.isMatch(error)) {
+                const message = await strategy.getMessage(error, config);
 
-                    if (message && !silent) {
-                        openDialog({ message });
-                    }
-
-                    return message;
+                if (message && !silent) {
+                    openDialog({ message });
                 }
-            }
 
-            return null;
-        },
-        [t, openDialog]
-    );
+                return message;
+            }
+        }
+
+        return null;
+    };
 
     return { handleError };
 };

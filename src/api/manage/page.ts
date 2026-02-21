@@ -1,7 +1,6 @@
-import qs from 'qs';
-import type { Options } from 'ky';
+import type { AxiosRequestConfig } from 'axios';
 
-import { publicRequest, request } from '@/api/core/request';
+import { shopbyRequest } from '@/api/core/request';
 import {
     GetExternalScriptsParams,
     GetExternalScriptsResponse,
@@ -14,13 +13,12 @@ const page = {
      */
     getExternalScripts: (
         params: GetExternalScriptsParams,
-        options?: Options,
+        options?: AxiosRequestConfig,
     ) => {
-        return publicRequest.get<GetExternalScriptsResponse>('page/scripts', {
-            searchParams: qs.stringify(params, {
-                arrayFormat: 'comma',
-                allowDots: true,
-            }),
+        return shopbyRequest<GetExternalScriptsResponse>({
+            method: 'GET',
+            url: '/page/scripts',
+            params,
             ...options,
         });
     },

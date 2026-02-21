@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 import { useSearchParams } from 'next/navigation';
 
 import { product } from '@/api/product';
@@ -16,7 +16,7 @@ interface UseProductDetailParams<T = ProductDetailResponse> {
     options?: Omit<
         UseQueryOptions<
             ProductDetailResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productKeys)['detail']>
         >,
@@ -36,13 +36,11 @@ const useProductDetail = <T = ProductDetailResponse>({
     return useQuery({
         queryKey: productKeys.detail(productNo, searchParams),
         queryFn: async () => {
-            const data = await product
-                .getProductDetail(productNo, {
-                    channelType,
-                    ...(preview && { preview }),
-                    ...searchParams,
-                })
-                .json();
+            const { data } = await product.getProductDetail(productNo, {
+                channelType,
+                ...(preview && { preview }),
+                ...searchParams,
+            });
 
             return data;
         },

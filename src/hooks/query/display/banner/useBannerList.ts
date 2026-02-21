@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { banner } from '@/api/display';
 import { bannerKeys } from '@/hooks/queryKeys';
@@ -12,7 +12,7 @@ interface UseBannerListParams<T = GetBannersResponse> {
     options?: Omit<
         UseQueryOptions<
             GetBannersResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof bannerKeys)['list']>
         >,
@@ -23,11 +23,11 @@ interface UseBannerListParams<T = GetBannersResponse> {
 const createQueryFn = (type: 'code' | 'id', banners: string[]) => {
     return async () => {
         if (type === 'code') {
-            const data = await banner.getBanners(banners).json();
+            const { data } = await banner.getBanners(banners);
 
             return data;
         } else {
-            const data = await banner.getBannersByIds(banners).json();
+            const { data } = await banner.getBannersByIds(banners);
 
             return data;
         }

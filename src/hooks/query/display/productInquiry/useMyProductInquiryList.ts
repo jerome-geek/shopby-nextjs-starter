@@ -3,7 +3,7 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { HTTPError } from 'ky';
+import { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
 import {
@@ -18,7 +18,7 @@ interface useProductInquiryListParams<T = GetMyProductInquiriesResponse> {
     options?: Omit<
         UseQueryOptions<
             GetMyProductInquiriesResponse,
-            HTTPError<ShopByErrorResponse>,
+            AxiosError<ShopByErrorResponse>,
             T,
             ReturnType<(typeof productInquiryKeys)['myList']>
         >,
@@ -34,13 +34,10 @@ const useMyProductInquiryList = <T = GetMyProductInquiriesResponse>({
     return useQuery({
         queryKey: productInquiryKeys.myList(searchParams, memberNo),
         queryFn: async () => {
-            const response = await productInquiry
-                .getMyProductInquiries({
-                    ...searchParams,
-                })
-                .json();
+            const { data } =
+                await productInquiry.getMyProductInquiries(searchParams);
 
-            return response;
+            return data;
         },
         placeholderData: keepPreviousData,
         enabled: memberNo !== 0,
