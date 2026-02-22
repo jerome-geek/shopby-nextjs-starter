@@ -46,8 +46,8 @@ export default function App({ Component, pageProps }: AppProps) {
     );
 
     const defaultSeo = generateDefaultSeo({
-        titleTemplate: '%s | My Shop',
-        defaultTitle: 'My Shop',
+        titleTemplate: '%s | JollyPot',
+        defaultTitle: 'JollyPot',
         description: 'Headless Commerce Example',
     });
 

@@ -11,6 +11,7 @@ import {
     PREVIOUS_ORDER_STATUS_MAP,
     PRODUCT_INQUIRY_MAP,
     PRODUCT_REVIEW_REPORT_MAP,
+    SHOPBY_JOIN_AGREEMENT_TYPE_MAP,
     SHOPBY_TERM_HISTORY_MAP,
     SHOPBY_TERMS_TYPE_MAP,
 } from '@/const/label';
@@ -1227,8 +1228,8 @@ type NcpOpenIdProviderType =
 /** 성별 */
 type Sex = 'M' | 'F';
 
+type ShopbyJoinAgreementTypes = keyof typeof SHOPBY_JOIN_AGREEMENT_TYPE_MAP;
 type ShopbyTermsTypes = keyof typeof SHOPBY_TERMS_TYPE_MAP;
-
 type ShopbyTermHistoryTypes = keyof typeof SHOPBY_TERM_HISTORY_MAP;
 
 /** 배송조건 */
@@ -1650,7 +1651,6 @@ type ProductGroupType = 'DELIVERY' | 'SERVICE';
 type MappingType = 'SINGLE' | 'MAPPING';
 
 export type {
-    MappingType,
     AccumulationDisplayFormatType,
     AccumulationGivePointType,
     AccumulationReasonType,
@@ -1736,13 +1736,13 @@ export type {
     ImageUrlType,
     InputMatchingType,
     InquirySearchType,
-    ProductInquirySearchType,
     InquiryStatusType,
     InstType,
     IntroRedirectionType,
     KcpCode,
     LimitedMemberType,
     LocalCode,
+    MappingType,
     MemberJoinConfigType,
     MemberStatsType,
     MemberTargetType,
@@ -1784,6 +1784,7 @@ export type {
     ProductGroupType,
     ProductInquiryLabelType,
     ProductInquiryReportType,
+    ProductInquirySearchType,
     ProductInquiryType,
     ProductOrderType,
     ProductReviewReportLabelType,
@@ -1814,6 +1815,7 @@ export type {
     Sex,
     SexCode,
     ShippingAreaType,
+    ShopbyJoinAgreementTypes,
     ShopbyTermHistoryTypes,
     ShopbyTermsTypes,
     ShopSpecificationFields,

@@ -96,7 +96,7 @@ const ProductCard = ({
                 className={styles.thumbWrapper}
             >
                 <img
-                    src={normalizeImageUrl(imageUrlInfo[0].url)}
+                    src={normalizeImageUrl(imageUrlInfo?.[0]?.url)}
                     alt={`${productName} 상품 이미지`}
                     className={styles.thumb}
                 />

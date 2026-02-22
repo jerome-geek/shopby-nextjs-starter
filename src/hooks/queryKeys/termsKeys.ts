@@ -1,5 +1,6 @@
 import {
     GetTermHistoryParams,
+    GetTermListByPostData,
     GetTermListParams,
     GetUsedTermsParams,
 } from '@/models/manage/terms';
@@ -10,6 +11,9 @@ const termsKeys = {
     lists: () => [...termsKeys.all, 'list'] as const,
     list: (searchParams: GetTermListParams) =>
         [...termsKeys.lists(), searchParams] as const,
+
+    listV2: (data: GetTermListByPostData) =>
+        [...termsKeys.lists(), 'v2', data] as const,
 
     details: () => [...termsKeys.all, 'detail'] as const,
     detail: (termsNo: number) => [...termsKeys.details(), termsNo] as const,

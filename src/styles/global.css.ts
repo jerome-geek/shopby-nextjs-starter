@@ -1,4 +1,4 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { globalKeyframes, globalStyle, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const visuallyHidden = style({
@@ -148,4 +148,15 @@ globalStyle('button', {
 
 globalStyle('label', {
     cursor: 'pointer',
+});
+
+globalKeyframes('slideDownFade', {
+    from: {
+        opacity: 0,
+        transform: 'translateY(-10px)',
+    },
+    to: {
+        opacity: 1,
+        transform: 'translateY(0)',
+    },
 });

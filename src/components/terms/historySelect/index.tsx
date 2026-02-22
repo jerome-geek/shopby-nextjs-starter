@@ -2,10 +2,9 @@ import { useRouter } from 'next/router';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import * as styles from '@/components/terms/historySelect/index.css';
 import Select from '@/components/ui/Select';
 import { TermHistory } from '@/models/manage/terms';
-
-import * as styles from './TermHistorySelect.css';
 
 interface TermsHistorySelectProps {
     historyList: TermHistory[];
@@ -35,11 +34,14 @@ export default function TermsHistorySelect({
     };
 
     const onChange = (item: TermHistory | null) => {
-        if (!item) {
+        if (!item || item.termsNo === currentValue?.termsNo) {
             return;
         }
-        // 이력 선택 시 /terms/[termsType]/[termsNo] 경로로 이동
-        router.push(`/terms/${termsType}/${item.termsNo}`);
+
+        // 이력 선택 시 쿼리 파라미터로 이동 (CSR용)
+        router.push(`/terms/${termsType}?termsNo=${item.termsNo}`, undefined, {
+            shallow: true,
+        });
     };
 
     return (

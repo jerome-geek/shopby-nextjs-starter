@@ -1,4 +1,4 @@
-import { MemberStatsType, Sex, ShopbyTermsTypes } from '@/models';
+import { MemberStatsType, Sex, ShopbyJoinAgreementTypes } from '@/models';
 
 export interface ProfileBody {
     birthday?: string;
@@ -18,7 +18,7 @@ export interface ProfileBody {
     password?: string;
     telephoneNo?: string;
     directMailAgreed?: boolean;
-    joinTermsAgreements?: ShopbyTermsTypes[]; // TODO: 회원가입 API 분리시 타입 재정의 필요
+    joinTermsAgreements?: ShopbyJoinAgreementTypes[]; // TODO: 회원가입 API 분리시 타입 재정의 필요
     additionalInfo?: string;
     nickname?: string;
     detailAddress?: string;

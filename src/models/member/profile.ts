@@ -10,7 +10,7 @@ import {
     ProviderType,
     ReportType,
     Sex,
-    ShopbyTermsTypes,
+    ShopbyJoinAgreementTypes,
     SupplyType,
 } from '@/models';
 
@@ -247,7 +247,7 @@ export interface UpdateProfileData {
     /** 전화번호 (nullable) */
     telephoneNo?: string;
     /** 가입시 동의한 선택 동의 항목 */
-    joinTermsAgreements?: ShopbyTermsTypes[];
+    joinTermsAgreements?: ShopbyJoinAgreementTypes[];
     /** 도로명주소 상세 (nullable) */
     detailAddress?: string;
     /** 환불 계좌번호 (nullable) */
@@ -386,7 +386,7 @@ export interface BlockMemberData {
 
 export interface CreateBrandMemberProfileData {
     /** 선택 동의 항목 (nullable) */
-    joinTermsAgreements?: ShopbyTermsTypes[];
+    joinTermsAgreements?: ShopbyJoinAgreementTypes[];
     /** 이메일 알림 수신 동의 여부 (nullable) */
     directMainAgreed?: boolean;
     /** SMS 알림 수신 동의 여부 (nullable) */
@@ -395,20 +395,19 @@ export interface CreateBrandMemberProfileData {
     pushNotificationAgreed?: boolean;
 }
 
-export interface CreateBrandMemberProfileResponse
-    extends Omit<
-        CreateProfileResponse,
-        | 'extraInfo'
-        | 'memberGradeNo'
-        | 'pushNotificationDisagreeYmdt'
-        | 'smsDisagreeYmdt'
-        | 'memberGradeImageUrl'
-        | 'certificationType'
-        | 'recommender'
-        | 'registrationNo'
-        | 'customTermsAgreement'
-        | 'directMailDisagreeYmdt'
-    > {}
+export interface CreateBrandMemberProfileResponse extends Omit<
+    CreateProfileResponse,
+    | 'extraInfo'
+    | 'memberGradeNo'
+    | 'pushNotificationDisagreeYmdt'
+    | 'smsDisagreeYmdt'
+    | 'memberGradeImageUrl'
+    | 'certificationType'
+    | 'recommender'
+    | 'registrationNo'
+    | 'customTermsAgreement'
+    | 'directMailDisagreeYmdt'
+> {}
 
 export interface UpdatePasswordByCertificationNoData {
     /** 비밀번호 찾기 방법 */
@@ -680,7 +679,7 @@ export interface SignUpByOpenIdData {
     /** 전화번호 (nullable) */
     telephoneNo?: string;
     /** 선택 동의 항목 (nullable) */
-    joinTermsAgreements?: ShopbyTermsTypes[];
+    joinTermsAgreements?: ShopbyJoinAgreementTypes[];
     /** 이메일 알림 수신 동의 여부 (nullable) */
     directMailAgreed?: boolean;
     /** 닉네임 (nullable) */
@@ -750,7 +749,7 @@ export interface SignUpByOpenIdResponse {
         /** 추가 동의 항목 번호 (nullable) */
         customTermsNo: Nullable<string>;
         /** 선택 동의 유형 */
-        termsType: ShopbyTermsTypes;
+        termsType: ShopbyJoinAgreementTypes;
     }[];
     /** 지번주소 상세 (nullable) */
     jibunDetailAddress: Nullable<string>;
