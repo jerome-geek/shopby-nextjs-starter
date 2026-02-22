@@ -1,22 +1,24 @@
+import { QueryClient } from '@tanstack/react-query';
 import { Star, Truck } from 'lucide-react';
-import { Suspense, useState } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Suspense, useMemo, useState } from 'react';
 import { Pagination } from 'swiper/modules';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { product } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-import { useSuspenseProductDetail } from '@/hooks/suspenseQuery/product';
+import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
+import PhotoReview from '@/components/product/photoReview';
+import ProductTabs from '@/components/product/productTabs';
+import { useProductDetail } from '@/hooks/suspenseQuery/product';
+import { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo].css';
 import { CURRENCY } from '@/utils/currency';
-import { ChannelType } from '@/models';
-import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
 import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import useProductLike from '@/hooks/useProductLike';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { filter, pipe, join } from '@fxts/core';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -32,7 +34,7 @@ function ProductDetailView({
 }: ProductDetailViewProps) {
     const [paginationEl, setPaginationEl] = useState<HTMLElement | null>(null);
 
-    const { data: productDetail } = useSuspenseProductDetail({
+    const { data: productDetailData } = useProductDetail({
         productNo,
         searchParams,
     });
@@ -40,7 +42,25 @@ function ProductDetailView({
     // 임시 타임세일 변수
     const isTimeSale = true;
 
-    const { baseInfo, price, counter, brand } = productDetail;
+    const { baseInfo, price, counter, brand } = productDetailData;
+
+    const productContent = useMemo(() => {
+        if (!productDetailData) {
+            return '';
+        }
+
+        const {
+            contentHeader = '',
+            content = '',
+            contentFooter = '',
+        } = productDetailData.baseInfo;
+
+        return pipe(
+            [contentHeader, content, contentFooter],
+            filter((a) => !!a),
+            join(''),
+        );
+    }, [productDetailData]);
 
     const discountRate = Math.round(
         ((price.salePrice -
@@ -166,7 +186,7 @@ function ProductDetailView({
                                     stroke="#E2808F"
                                 />
                                 <strong className={styles.reviewRate}>
-                                    {productDetail.reviewRate || 0}
+                                    {productDetailData.reviewRate || 0}
                                 </strong>
                                 <span className={styles.reviewCount}>
                                     ({counter.reviewCnt || 0})
@@ -178,10 +198,10 @@ function ProductDetailView({
                             type="button"
                             onClick={onLikeButtonClick(
                                 productNo,
-                                productDetail.liked,
+                                productDetailData.liked,
                             )}
                         >
-                            <BookmarkIcon isActive={productDetail.liked} />
+                            <BookmarkIcon isActive={productDetailData.liked} />
                         </button>
                     </div>
 
@@ -239,10 +259,13 @@ function ProductDetailView({
                         </div>
                     </div>
 
-                    <div>
-                        {/* TODO: */}
-                        사진리뷰
-                    </div>
+                    <PhotoReview images={baseInfo.imageUrlInfo} />
+
+                    <ProductTabs
+                        reviewCount={counter.reviewCnt || 0}
+                        inquiryCount={counter.inquiryCnt || 0}
+                        productContent={productContent}
+                    />
                 </div>
             </div>
         </div>
@@ -278,7 +301,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const searchParams = {
-        channelType: (context.query.channelType as ChannelType) || undefined,
+        channelType: (context.query.channelType as ChannelType) || null,
         preview: context.query.preview === 'true',
     };
 

@@ -5,6 +5,7 @@ import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { BottomNav } from '@/components/layout/bottom-navigation';
 import * as styles from '@/components/layout/Layout.css';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 
 interface LayoutProps {
     children: ReactNode;
@@ -19,6 +20,7 @@ export function Layout({ children, className }: LayoutProps) {
             <main className={styles.main}>{children}</main>
 
             <Footer />
+            <ScrollToTop />
             <BottomNav />
         </div>
     );

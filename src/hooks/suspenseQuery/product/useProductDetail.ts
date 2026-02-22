@@ -11,7 +11,7 @@ import {
     ProductDetailResponse,
 } from '@/models/product/product';
 
-interface UseSuspenseProductDetailParams<T = ProductDetailResponse> {
+interface UseProductDetailParams<T = ProductDetailResponse> {
     productNo: number;
     searchParams?: GetProductDetailParams;
     options?: Omit<
@@ -25,11 +25,11 @@ interface UseSuspenseProductDetailParams<T = ProductDetailResponse> {
     >;
 }
 
-const useSuspenseProductDetail = <T = ProductDetailResponse>({
+const useProductDetail = <T = ProductDetailResponse>({
     productNo,
     searchParams,
     options,
-}: UseSuspenseProductDetailParams<T>) => {
+}: UseProductDetailParams<T>) => {
     return useSuspenseQuery({
         queryKey: productKeys.detail(productNo, searchParams),
         queryFn: async () => {
@@ -44,4 +44,4 @@ const useSuspenseProductDetail = <T = ProductDetailResponse>({
     });
 };
 
-export default useSuspenseProductDetail;
+export default useProductDetail;

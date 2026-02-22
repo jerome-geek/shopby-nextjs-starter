@@ -1,3 +1,3 @@
-import useSuspenseProductDetail from './useSuspenseProductDetail';
+import useProductDetail from '@/hooks/suspenseQuery/product/useProductDetail';
 
-export { useSuspenseProductDetail };
+export { useProductDetail };

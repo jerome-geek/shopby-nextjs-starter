@@ -78,7 +78,7 @@ const review = {
      */
     getPhotoReviewList: (
         productNo: number,
-        params: GetPhotoReviewListParams,
+        params?: GetPhotoReviewListParams,
         options?: AxiosRequestConfig,
     ) => {
         return shopbyRequest<GetPhotoReviewListResponse>({

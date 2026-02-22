@@ -14,8 +14,8 @@ const reviewKeys = {
     lists: () => [...reviewKeys.all, 'list'] as const,
     list: (productNo: number, searchParams: GetProductReviewListParams) =>
         [...reviewKeys.lists(), productNo, searchParams] as const,
-    photoList: (searchParams: GetPhotoReviewListParams) =>
-        [...reviewKeys.lists(), 'photo', searchParams] as const,
+    photoList: (productNo: number, searchParams?: GetPhotoReviewListParams) =>
+        [...reviewKeys.lists(), 'photo', productNo, searchParams] as const,
 
     details: () => [...reviewKeys.all, 'detail'] as const,
     detail: (productNo: number, reviewNo: number) =>
