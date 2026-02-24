@@ -53,8 +53,7 @@ const ProductCard = ({
     const {
         like: { mutate: likeMutate },
     } = useProductProfileMutation();
-
-    const { isAuthenticated } = useAuth();
+    const isAuthenticated = useAuth();
 
     const onLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();

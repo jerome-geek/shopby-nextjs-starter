@@ -6,6 +6,7 @@ export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
     padding: '0 20px',
+    paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
 });
 
 export const thumbnailContainer = style({
@@ -190,3 +191,45 @@ export const badgeActive = style({
     backgroundColor: '#A8B7A8',
     color: vars.color.white,
 });
+
+export const bottomBar = style({
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: vars.color.white,
+    borderTop: `1px solid ${vars.color.gray[20]}`,
+    padding: '12px 20px',
+    display: 'flex',
+    gap: '12px',
+    zIndex: 100,
+    paddingBottom: 'max(12px, env(safe-area-inset-bottom))', // For iOS Home Indicator
+});
+
+export const giftButton = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '56px',
+    height: '56px',
+    border: `1px solid ${vars.color.gray[30]}`,
+    borderRadius: '4px',
+    backgroundColor: vars.color.white,
+    flexShrink: 0,
+});
+
+export const buyButton = style([
+    textStyles.body1Semibold,
+    {
+        flex: 1,
+        backgroundColor: '#E58A99', // Color matched from image broadly
+        color: vars.color.white,
+        border: 'none',
+        borderRadius: '4px',
+        height: '56px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+    },
+]);

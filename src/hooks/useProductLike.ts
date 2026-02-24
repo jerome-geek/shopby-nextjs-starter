@@ -18,7 +18,7 @@ const useProductLike = () => {
         like: { mutate: likeMutate },
     } = useProductProfileMutation();
 
-    const { isAuthenticated } = useAuth();
+    const isAuthenticated = useAuth();
 
     const onLikeButtonClick =
         (productNo: number, liked: boolean) => (e?: React.SyntheticEvent) => {

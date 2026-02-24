@@ -1,24 +1,27 @@
+import { filter, join, pipe } from '@fxts/core';
 import { QueryClient } from '@tanstack/react-query';
-import { Star, Truck } from 'lucide-react';
+import { Gift, Star, Truck } from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { overlay } from 'overlay-kit';
 import { Suspense, useMemo, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { product } from '@/api/product';
+import OptionSelectBottomSheet from '@/components/bottom-sheet/OptionSelect';
+import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 import PhotoReview from '@/components/product/photoReview';
 import ProductTabs from '@/components/product/productTabs';
+import { OVERLAY_ID } from '@/const/overlay';
 import { useProductDetail } from '@/hooks/suspenseQuery/product';
+import useProductLike from '@/hooks/useProductLike';
 import { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo].css';
 import { CURRENCY } from '@/utils/currency';
 
-import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
-import useProductLike from '@/hooks/useProductLike';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { filter, pipe, join } from '@fxts/core';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -75,6 +78,17 @@ function ProductDetailView({
         (price.additionDiscountAmt || 0);
 
     const { onLikeButtonClick } = useProductLike();
+
+    const openOptionBottomSheet = () => {
+        overlay.open(
+            (props) => (
+                <OptionSelectBottomSheet {...props} productNo={productNo} />
+            ),
+            {
+                overlayId: OVERLAY_ID.OPTION_BOTTOM_SHEET,
+            },
+        );
+    };
 
     return (
         <div className={styles.container}>
@@ -267,6 +281,13 @@ function ProductDetailView({
                         productContent={productContent}
                     />
                 </div>
+            </div>
+
+            <div className={styles.bottomBar}>
+                <button className={styles.giftButton}>
+                    <Gift size={24} color="#333" />
+                </button>
+                <button className={styles.buyButton}>구매하기</button>
             </div>
         </div>
     );
