@@ -3,6 +3,7 @@ import {
     GetArticleParams,
     GetPostListData,
     GetPostListParams,
+    GetRepliesByBoardNoParams,
 } from '@/models/manage/board';
 
 const boardKeys = {
@@ -17,11 +18,8 @@ const boardKeys = {
 
     /** 게시글 리스트 */
     lists: () => [...boardKeys.all, 'list'] as const,
-    list: (
-        boardNo: string,
-        memberNo?: number,
-        searchParams?: GetArticleListParams,
-    ) => [...boardKeys.lists(), boardNo, memberNo, searchParams] as const,
+    list: (boardNo: string, searchParams?: GetArticleListParams) =>
+        [...boardKeys.lists(), boardNo, searchParams] as const,
     infiniteList: (
         boardNo: string,
         memberNo?: number,
@@ -49,21 +47,16 @@ const boardKeys = {
     detail: (
         boardNo: string,
         articleNo: number,
-        memberNo?: number,
         searchParams?: GetArticleParams,
-    ) =>
-        [
-            ...boardKeys.details(),
-            boardNo,
-            articleNo,
-            memberNo,
-            searchParams,
-        ] as const,
+    ) => [...boardKeys.details(), boardNo, articleNo, searchParams] as const,
 
     /** 게시글 답글 리스트 */
     replies: () => [...boardKeys.all, 'replies'] as const,
-    reply: (boardNo: string, articleNo: number) =>
-        [...boardKeys.replies(), boardNo, articleNo] as const,
+    reply: (
+        boardNo: string,
+        articleNo: number,
+        searchParams?: GetRepliesByBoardNoParams,
+    ) => [...boardKeys.replies(), boardNo, articleNo, searchParams] as const,
 };
 
 export default boardKeys;

@@ -32,9 +32,8 @@ const useAccumulationSummary = <T = GetAccumulationSummaryResponse>({
     return useQuery({
         queryKey: accumulationKeys.summaryDetail(searchParams),
         queryFn: async () => {
-            const { data } = await accumulation.getAccumulationSummary(
-                searchParams,
-            );
+            const { data } =
+                await accumulation.getAccumulationSummary(searchParams);
 
             return data;
         },

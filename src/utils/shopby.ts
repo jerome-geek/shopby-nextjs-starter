@@ -1,8 +1,8 @@
 import type { Banner, BannerAccount, GetBannersResponse } from '@/models/display/banner';
 
 /** protocol-relative URL (//)을 https://로 변환 */
-export function normalizeImageUrl(url: string | undefined): string {
-    if (!url) return '';
+export function normalizeImageUrl(url: string | undefined): string | undefined {
+    if (!url) return undefined;
     if (url.startsWith('//')) {
         return `https:${url}`;
     }

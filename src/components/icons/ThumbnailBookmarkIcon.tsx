@@ -56,7 +56,7 @@ export function ThumbnailBookmarkIcon({
                             color-interpolation-filters="sRGB"
                         >
                             <feFlood
-                                flood-opacity="0"
+                                floodOpacity="0"
                                 result="BackgroundImageFix"
                             />
                             <feColorMatrix
@@ -111,7 +111,7 @@ export function ThumbnailBookmarkIcon({
                             color-interpolation-filters="sRGB"
                         >
                             <feFlood
-                                flood-opacity="0"
+                                floodOpacity="0"
                                 result="BackgroundImageFix"
                             />
                             <feColorMatrix

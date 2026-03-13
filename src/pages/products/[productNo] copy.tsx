@@ -268,14 +268,14 @@ function ProductDetailView({
                     />
                 </div>
             </div>
-            <div className={styles.stickyFooter}>
+            {/* <div className={styles.stickyFooter}>
                 <button type="button" className={styles.iconButton}>
                     <Gift size={24} strokeWidth={1.5} />
                 </button>
                 <button type="button" className={styles.purchaseButton}>
                     구매하기
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 }

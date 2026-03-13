@@ -1,20 +1,13 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { media } from '@/styles/media';
 
 export const section = style({
-    padding: '40px 20px',
-    backgroundColor: vars.color.white,
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-    '@media': {
-        'screen and (min-width: 768px)': {
-            padding: '60px 40px',
-            maxWidth: '1200px',
-            margin: '0 auto',
-        },
-    },
 });
 
 export const header = style({
@@ -75,10 +68,11 @@ export const productGrid = style({
     listStyle: 'none',
     padding: 0,
     margin: 0,
+
     '@media': {
-        'screen and (min-width: 768px)': {
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '16px',
+        [media.desktop]: {
+            gridTemplateColumns: 'repeat(6, 1fr)',
+            gap: '48px 24px',
         },
     },
 });

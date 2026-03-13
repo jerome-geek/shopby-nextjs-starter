@@ -8,7 +8,7 @@ import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { product } from '@/api/product';
-import OptionSelectBottomSheet from '@/components/bottom-sheet/OptionSelect';
+// import OptionSelectBottomSheet from '@/components/bottom-sheet/OptionSelect';
 import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 import PhotoReview from '@/components/product/photoReview';
@@ -82,7 +82,8 @@ function ProductDetailView({
     const openOptionBottomSheet = () => {
         overlay.open(
             (props) => (
-                <OptionSelectBottomSheet {...props} productNo={productNo} />
+                // <OptionSelectBottomSheet {...props} productNo={productNo} />
+                <></>
             ),
             {
                 overlayId: OVERLAY_ID.OPTION_BOTTOM_SHEET,

@@ -29,16 +29,8 @@ const accumulationKeys = {
         ] as const,
 
     summary: () => [...accumulationKeys.all, 'summary'] as const,
-    summaryDetail: (
-        memberNo?: number,
-        searchParams?: GetAccumulationSummaryParams,
-    ) =>
-        [
-            ...accumulationKeys.summary(),
-            'detail',
-            memberNo,
-            searchParams,
-        ] as const,
+    summaryDetail: (searchParams?: GetAccumulationSummaryParams) =>
+        [...accumulationKeys.summary(), 'detail', searchParams] as const,
 
     waiting: () => [...accumulationKeys.all, 'waiting'] as const,
     waitingDetail: (memberNo?: number) =>

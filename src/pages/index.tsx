@@ -1,14 +1,20 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
 import { Geist, Geist_Mono } from 'next/font/google';
+import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
+import { LazyRender } from '@/components/common/LazyRender';
 import { HeroBanner } from '@/components/hero-banner';
 import * as styles from '@/styles/Home.css';
-import IconBanner from '@/components/banner/icon';
-import { Suspense } from 'react';
-import TimeSale from '@/components/section/timeSale';
-import Best from '@/components/section/best';
+
+const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
+    ssr: false,
+});
+const Best = dynamic(() => import('@/components/section/best'), {
+    ssr: false,
+});
+const RecipeSection = dynamic(() => import('@/components/section/recipe'), {
+    ssr: false,
+});
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -24,7 +30,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Wannamake</title>
+                <title>JollyPot</title>
                 <meta
                     name="description"
                     content="Welcome to our online store"
@@ -36,115 +42,58 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div
-                className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
+            <section
+                className={`${styles.main} ${geistSans.variable} ${geistMono.variable}`}
             >
                 {/* Full-width HeroBanner */}
                 <HeroBanner />
 
-                <Suspense>
-                    <IconBanner />
-                </Suspense>
+                <LazyRender minHeight={300}>
+                    <div className={styles.recipeGrid}>
+                        <RecipeSection />
+                        <RecipeSection />
+                    </div>
+                </LazyRender>
 
-                <TimeSale />
+                {/* 라이프 타임특가 */}
+                <LazyRender minHeight={400}>
+                    <TimeSale
+                        sectionId="TIMESALE-LIFE"
+                        title="오늘만 특가"
+                        buttonLabel="라이프 타임특가 더보기"
+                    />
+                </LazyRender>
 
-                <Best />
+                <LazyRender minHeight={300}>
+                    <div className={styles.recipeGrid}>
+                        <RecipeSection />
+                        <RecipeSection />
+                    </div>
+                </LazyRender>
+
+                {/* 키즈 타임특가 */}
+                <LazyRender minHeight={400}>
+                    <TimeSale
+                        sectionId="TIMESALE-KIDS"
+                        title="키즈 타임특가"
+                        buttonLabel="키즈 타임특가 더보기"
+                    />
+                </LazyRender>
+
+                <LazyRender minHeight={300}>
+                    <div className={styles.recipeGrid}>
+                        <RecipeSection />
+                        <RecipeSection />
+                    </div>
+                </LazyRender>
+
+                {/* 라이프 베스트 */}
+                <LazyRender minHeight={500}>
+                    <Best />
+                </LazyRender>
 
                 {/* <ProductSection /> */}
-
-                {/* Max-width container for main content */}
-                <section className={styles.main}>
-                    <Image
-                        className={styles.logo}
-                        src="/next.svg"
-                        alt="Next.js logo"
-                        width={100}
-                        height={20}
-                        priority
-                    />
-                    <div className={styles.intro}>
-                        <p>
-                            Looking for a starting point or more instructions?
-                            Head over to{' '}
-                            <a
-                                href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Templates
-                            </a>{' '}
-                            or the{' '}
-                            <a
-                                href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Learning
-                            </a>{' '}
-                            center.
-                        </p>
-                    </div>
-                    <div className={styles.ctas}>
-                        <a
-                            className={styles.primary}
-                            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Image
-                                className={styles.logo}
-                                src="/vercel.svg"
-                                alt="Vercel logomark"
-                                width={16}
-                                height={16}
-                            />
-                            Deploy Now
-                        </a>
-                        <a
-                            className={styles.secondary}
-                            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Documentation
-                        </a>
-                    </div>
-                    <div
-                        style={{
-                            marginTop: '40px',
-                            display: 'flex',
-                            gap: '20px',
-                        }}
-                    >
-                        <Link
-                            href="/products/new"
-                            style={{
-                                padding: '12px 24px',
-                                backgroundColor: '#0070f3',
-                                color: 'white',
-                                borderRadius: '5px',
-                                textDecoration: 'none',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            New Products (Skeleton Demo)
-                        </Link>
-                        <Link
-                            href="/products/best"
-                            style={{
-                                padding: '12px 24px',
-                                backgroundColor: '#10b981',
-                                color: 'white',
-                                borderRadius: '5px',
-                                textDecoration: 'none',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            Best Products (Skeleton Demo)
-                        </Link>
-                    </div>
-                </section>
-            </div>
+            </section>
         </>
     );
 }

@@ -77,9 +77,6 @@ function HeroBannerContent() {
             },
             style: { overflow: 'visible' },
             onSwiper: (swiper) => (swiperRef.current = swiper),
-            onSlideChange: (swiper: SwiperType) => {
-                console.log('🚀 ~ HeroBannerContent ~ swiper1111:', swiper);
-            },
         }),
         [isMobile, hasMultipleBanners],
     );

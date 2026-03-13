@@ -15,7 +15,7 @@ import {
 interface UseBoardReplyListParams<T = GetRepliesByBoardNoResponse> {
     boardNo: string;
     articleNo: number;
-    params?: GetRepliesByBoardNoParams;
+    searchParams?: GetRepliesByBoardNoParams;
     options?: Omit<
         UseQueryOptions<
             GetRepliesByBoardNoResponse,
@@ -30,16 +30,16 @@ interface UseBoardReplyListParams<T = GetRepliesByBoardNoResponse> {
 const useBoardReplyList = <T = GetRepliesByBoardNoResponse>({
     boardNo,
     articleNo,
-    params,
+    searchParams,
     options,
 }: UseBoardReplyListParams<T>) => {
     return useQuery({
-        queryKey: boardKeys.reply(boardNo, articleNo, params),
+        queryKey: boardKeys.reply(boardNo, articleNo, searchParams),
         queryFn: async () => {
             const { data } = await board.getRepliesByBoardNo(
                 boardNo,
                 articleNo,
-                params,
+                searchParams,
             );
 
             return data;
