@@ -82,7 +82,7 @@ export const categoryTab = style({
 });
 
 export const categoryTabActive = style({
-    backgroundColor: '#869D8A', // Muted green matching the image
+    backgroundColor: vars.color.secondary, // Muted green matching the image
     color: vars.color.white,
     fontWeight: 600,
 });
@@ -123,7 +123,7 @@ export const moreButton = style({
     width: '100%',
     padding: '16px',
     marginTop: '32px',
-    backgroundColor: '#F7F9F7',
+    backgroundColor: vars.color.green['20'],
     borderRadius: '12px',
     fontSize: '16px',
     fontWeight: 600,
@@ -134,7 +134,7 @@ export const moreButton = style({
     transition: 'background-color 0.2s ease',
     selectors: {
         '&:hover': {
-            backgroundColor: '#EEF2EE',
+            backgroundColor: vars.color.green['40'],
         },
     },
 });

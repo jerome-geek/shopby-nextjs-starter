@@ -10,25 +10,15 @@ interface MenuProps {
     categoryData?: GetCategoryResponse;
 }
 
-const MenuIcon = ({ isOpen }: { isOpen: boolean }) => (
+const MenuIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        {isOpen ? (
-            <path
-                d="M6 18L18 6M6 6L18 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-        ) : (
-            <path
-                d="M3 12H21M3 6H21M3 18H21"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-        )}
+        <path
+            d="M3 12H21M3 6H21M3 18H21"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
     </svg>
 );
 
@@ -54,8 +44,9 @@ export function Menu({ categoryData }: MenuProps) {
     const drawerRef = useRef<HTMLDivElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    const rootCategories =
-        categoryData?.multiLevelCategories?.[0]?.children ?? [];
+    const rootCategories = useMemo(() => {
+        return categoryData?.multiLevelCategories?.[0]?.children ?? [];
+    }, [categoryData]);
 
     const activeCategory = useMemo(() => {
         return rootCategories.find(
@@ -140,20 +131,60 @@ export function Menu({ categoryData }: MenuProps) {
                 onClick={toggleDrawer}
                 aria-expanded={isDrawerOpen}
             >
-                <MenuIcon isOpen={isDrawerOpen} />
-                카테고리
+                <MenuIcon />
+                <span>카테고리</span>
             </button>
 
-            <div className={styles.menuList}>
-                <Link href={PATHS.PRODUCTS.BEST} className={styles.menuItem}>
-                    베스트
+            <div className={styles.menuListContainer}>
+                <Link href={PATHS.MAIN} className={styles.homeItem}>
+                    <span>홈</span>
                 </Link>
-                <Link href={PATHS.PRODUCTS.NEW} className={styles.menuItem}>
-                    신상
-                </Link>
-                <Link href={PATHS.PRODUCTS.LIST} className={styles.menuItem}>
-                    전체보기
-                </Link>
+
+                <div className={styles.separator} />
+
+                <ul className={styles.menuList}>
+                    <li>
+                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                            <span>발견</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                            <span>키즈</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                            <span>라이프</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href={PATHS.PRODUCTS.BEST}
+                            className={styles.menuItem}
+                        >
+                            <span>베스트</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                            <span>기획전</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            href={PATHS.PRODUCTS.NEW}
+                            className={styles.menuItem}
+                        >
+                            <span>신상품</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                            <span>특가</span>
+                        </Link>
+                    </li>
+                </ul>
             </div>
 
             <AnimatePresence>

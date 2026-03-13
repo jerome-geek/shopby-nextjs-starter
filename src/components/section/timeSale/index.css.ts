@@ -88,7 +88,7 @@ export const timerBadge = style({
     position: 'absolute',
     top: '10px',
     left: '10px',
-    backgroundColor: 'rgba(255, 51, 102, 0.9)',
+    backgroundColor: vars.color.pink['100'],
     color: vars.color.white,
     padding: '2px 8px',
     borderRadius: '4px',

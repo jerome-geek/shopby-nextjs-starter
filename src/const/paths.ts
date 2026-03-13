@@ -225,5 +225,10 @@ export const PATHS = {
         OPEN_AUTH: '/app/open-id-sign-in',
         LOGIN_BRIDGE: '/app/login-bridge',
     },
-} as const;
 
+    RECIPES: {
+        MAIN: '/recipes',
+        WRITE: '/recipes/write',
+        DETAIL: '/recipes/:recipeNo',
+    },
+} as const;

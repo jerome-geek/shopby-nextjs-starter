@@ -5,8 +5,7 @@ import { textStyles } from '@/styles/typography.css';
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
-    padding: '0 20px',
-    paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
+    padding: '0 20px 80px',
 });
 
 export const thumbnailContainer = style({
@@ -94,7 +93,7 @@ export const priceContainer = style({
 export const discountRate = style({
     fontSize: '20px',
     fontWeight: 700,
-    color: vars.color.pink['100'],
+    color: '#FF3366',
 });
 
 export const finalPrice = style({
@@ -112,8 +111,8 @@ export const originalPrice = style([
 ]);
 
 export const timeSaleBar = style({
-    backgroundColor: vars.color.pink['20'], // Light pink
-    color: vars.color.pink['100'],
+    backgroundColor: '#FCE4EC', // Light pink
+    color: '#D81B60',
     padding: '10px 20px',
     display: 'flex',
     alignItems: 'center',
@@ -156,7 +155,7 @@ export const reviewCount = style([
 ]);
 
 export const deliveryBox = style({
-    backgroundColor: vars.color.gray['10'],
+    backgroundColor: '#F8F9F8',
     padding: '16px',
     borderRadius: '8px',
     marginTop: '20px',
@@ -188,48 +187,50 @@ export const badge = style({
 });
 
 export const badgeActive = style({
-    backgroundColor: vars.color.secondary,
+    backgroundColor: '#A8B7A8',
     color: vars.color.white,
 });
 
-export const bottomBar = style({
+export const stickyFooter = style({
     position: 'fixed',
     bottom: 0,
     left: 0,
     right: 0,
+    padding: '12px 20px',
+    paddingBottom: 'calc(12px + env(safe-area-inset-bottom))',
     backgroundColor: vars.color.white,
     borderTop: `1px solid ${vars.color.gray[20]}`,
-    padding: '12px 20px',
     display: 'flex',
-    gap: '12px',
+    gap: '8px',
     zIndex: 100,
-    paddingBottom: 'max(12px, env(safe-area-inset-bottom))', // For iOS Home Indicator
 });
 
-export const giftButton = style({
+export const iconButton = style({
+    width: '52px',
+    height: '52px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '56px',
-    height: '56px',
-    border: `1px solid ${vars.color.gray[30]}`,
-    borderRadius: '4px',
     backgroundColor: vars.color.white,
+    border: `1px solid ${vars.color.gray[40]}`,
+    borderRadius: '4px',
+    cursor: 'pointer',
     flexShrink: 0,
+    color: vars.color.black,
 });
 
-export const buyButton = style([
+export const purchaseButton = style([
     textStyles.body1Semibold,
     {
         flex: 1,
-        backgroundColor: vars.color.primary, // Color matched from image broadly
+        height: '52px',
+        backgroundColor: vars.color.primary,
         color: vars.color.white,
-        border: 'none',
         borderRadius: '4px',
-        height: '56px',
+        border: 'none',
+        cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        cursor: 'pointer',
     },
 ]);

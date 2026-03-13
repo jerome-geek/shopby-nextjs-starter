@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { vars } from '@/styles/theme.css';
 
 export const container = style({
     display: 'flex',
@@ -7,7 +8,7 @@ export const container = style({
 });
 
 export const loginFormSection = style({
-    backgroundColor: 'white',
+    backgroundColor: vars.color.white,
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
@@ -32,7 +33,7 @@ export const form = style({
 export const heading = style({
     fontSize: '1.875rem', // 3xl
     fontWeight: 'bold',
-    color: 'black',
+    color: vars.color.black,
 });
 
 export const inputGroup = style({
@@ -75,7 +76,7 @@ export const linkItem = style({
             transform: 'translateY(-50%)',
             width: '1px',
             height: '10px',
-            backgroundColor: '#9ca3af', // gray.400
+            backgroundColor: vars.color.gray['400'],
         },
     },
     '@media': {
@@ -90,10 +91,10 @@ export const linkItem = style({
 });
 
 export const link = style({
-    color: '#4b5563', // gray.600
+    color: vars.color.gray['600'],
     textDecoration: 'none',
     ':hover': {
-        color: 'black',
+        color: vars.color.black,
     },
 });
 

@@ -1,4 +1,6 @@
-import { style, keyframes } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
+
+import { vars } from '@/styles/theme.css';
 
 const shimmer = keyframes({
     '0%': { backgroundPosition: '200% 0' },
@@ -7,11 +9,11 @@ const shimmer = keyframes({
 
 export const heroBanner = style({
     position: 'relative',
-    width: '100vw',
-    marginLeft: 'calc(50% - 50vw)',
-    marginRight: 'calc(50% - 50vw)',
-    padding: '24px 0',
-    backgroundColor: '#f5f5f5',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '32px',
+    overflow: 'visible',
+
     '@media': {
         '(max-width: 768px)': {
             padding: '16px 0',
@@ -21,21 +23,19 @@ export const heroBanner = style({
 
 export const swiperContainer = style({
     width: '100%',
-    padding: '0 40px',
-    '@media': {
-        '(max-width: 768px)': {
-            padding: '0 20px',
-        },
-    },
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '24px 0',
+    overflow: 'visible',
 });
 
 export const swiper = style({
     width: '100%',
-    overflow: 'visible !important' as any,
+    height: '100%',
+    overflow: 'visible !important',
 });
 
 export const slide = style({
-    width: '320px !important' as any,
     aspectRatio: '320 / 427',
     height: 'auto',
     borderRadius: '24px',
@@ -43,14 +43,14 @@ export const slide = style({
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     opacity: 0.6,
     selectors: {
-        '&.swiper-slide-active': {
+        '&.swiper-slide-active, &.swiper-slide-prev, &.swiper-slide-next': {
             opacity: 1,
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
         },
     },
     '@media': {
         '(max-width: 768px)': {
-            width: '280px !important' as any,
+            width: '280px !important',
         },
     },
 });
@@ -61,7 +61,7 @@ export const card = style({
     width: '100%',
     height: '100%',
     textDecoration: 'none',
-    backgroundColor: '#fff',
+    backgroundColor: vars.color.white,
 });
 
 export const cardImage = style({
@@ -94,7 +94,7 @@ export const cardTitle = style({
     fontWeight: 700,
     margin: '0 0 4px',
     lineHeight: 1.2,
-    color: '#fff',
+    color: vars.color.white,
     letterSpacing: '-0.02em',
     '@media': {
         '(max-width: 768px)': {
@@ -120,27 +120,72 @@ export const cardDescription = style({
 export const controls = style({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: '16px',
-    marginTop: '20px',
+    justifyContent: 'space-between',
+    gap: '24px',
+    width: '100%',
+    maxWidth: '1200px',
+    margin: '0 auto',
+
+    '@media': {
+        '(max-width: 768px)': {
+            display: 'none',
+        },
+    },
 });
 
-export const controlButton = style({
+export const progressBox = style({
+    flex: 1,
+    position: 'relative',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+
+    vars: {
+        '--swiper-pagination-progressbar-size': '3px',
+        '--swiper-pagination-progressbar-bg-color': vars.color.gray['20'],
+        '--swiper-pagination-color': vars.color.gray['80'],
+    },
+});
+
+export const swiperPagination = style({
+    width: '100%',
+    backgroundColor: vars.color.gray['200'],
+    top: '50% !important',
+    transform: 'translateY(-50%) !important',
+});
+
+export const arrowBox = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+});
+
+export const navButton = style({
+    width: '24px',
+    height: '24px',
+    cursor: 'pointer',
+    color: vars.color.black,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '32px',
-    height: '32px',
+    transition: 'opacity 0.2s',
+});
+
+export const controlButton = style({
+    background: 'none',
     border: 'none',
-    background: 'transparent',
-    color: '#666',
+    padding: 0,
     cursor: 'pointer',
-    transition: 'color 0.2s ease',
-    selectors: {
-        '&:hover': {
-            color: '#333',
-        },
-    },
+    color: vars.color.black,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+});
+
+export const separator = style({
+    width: '1px',
+    height: '12px',
+    backgroundColor: vars.color.gray['50'],
 });
 
 // Since the JS uses class names like .navPrev and .navNext for Swiper navigation,
@@ -191,7 +236,7 @@ export const skeletonCard = style({
     aspectRatio: '320 / 427',
     height: 'auto',
     borderRadius: '16px',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: vars.color.gray['40'],
     position: 'relative',
     overflow: 'hidden',
     '@media': {

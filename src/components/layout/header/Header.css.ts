@@ -1,21 +1,21 @@
 import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 import { media } from '@/styles/media';
+import { textStyles } from '@/styles/typography.css';
 
 export const header = style({
     position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
-    height: '64px', // 높이 명시
-    zIndex: 50,
-    backgroundColor: '#ffffff',
-    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)',
-    borderBottom: '1px solid #f5f5f5',
+    height: '90px',
+    zIndex: 1000,
+    backgroundColor: vars.color.white,
+    borderBottom: `1px solid ${vars.color.gray['30']}`,
 
     '@media': {
         [media.mobile]: {
-            height: '56px', // 모바일 높이 명시
+            height: '56px',
         },
     },
 });
@@ -41,26 +41,49 @@ export const headerInner = style({
 export const logoSection = style({
     display: 'flex',
     alignItems: 'center',
-    gap: '32px',
+    gap: '24px',
 
     '@media': {
         '(max-width: 768px)': {
-            gap: '16px',
+            gap: '12px',
         },
     },
 });
 
 export const logo = style({
-    fontSize: '20px',
-    fontWeight: 700,
-    color: '#111111',
-    textDecoration: 'none',
-    transition: 'opacity 0.2s ease',
-
-    ':hover': {
-        opacity: 0.7,
-    },
+    display: 'flex',
+    alignItems: 'center',
+    width: '107px',
+    height: '40px',
+    flexShrink: 0,
 });
+
+export const recipeButton = style([
+    textStyles.headlineSemibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '6px 10px',
+        backgroundColor: vars.color.green['100'], // 이미지의 짙은 녹색
+        color: vars.color.white,
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s ease',
+        whiteSpace: 'nowrap',
+
+        ':hover': {
+            backgroundColor: vars.color.gray['90'], // Approximate dark green hover
+        },
+
+        '@media': {
+            '(max-width: 1024px)': {
+                display: 'none',
+            },
+        },
+    },
+]);
 
 export const nav = style({
     display: 'flex',
@@ -77,29 +100,35 @@ export const nav = style({
 export const navLink = style({
     fontSize: '14px',
     fontWeight: 500,
-    color: '#333333',
+    color: vars.color.gray['80'],
     textDecoration: 'none',
     padding: '8px 12px',
     borderRadius: '8px',
     transition: 'all 0.2s ease',
 
     ':hover': {
-        backgroundColor: '#f5f5f5',
-        color: '#000000',
+        backgroundColor: vars.color.gray['20'],
+        color: vars.color.black,
     },
 });
 
 export const navLinkActive = style({
-    backgroundColor: '#111111',
-    color: '#ffffff',
+    backgroundColor: vars.color.gray['100'],
+    color: vars.color.white,
 
     ':hover': {
-        backgroundColor: '#333333',
-        color: '#ffffff',
+        backgroundColor: vars.color.gray['80'],
+        color: vars.color.white,
     },
 });
 
 export const utilitySection = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '24px',
+});
+
+export const iconList = style({
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
@@ -119,7 +148,7 @@ export const iconButton = style({
     transition: 'background-color 0.2s ease',
 
     ':hover': {
-        backgroundColor: '#f5f5f5',
+        backgroundColor: vars.color.gray['20'],
     },
 });
 

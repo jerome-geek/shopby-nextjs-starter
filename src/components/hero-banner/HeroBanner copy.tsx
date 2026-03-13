@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Suspense, useState, useCallback, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
@@ -10,18 +10,18 @@ import {
     EffectCoverflow,
     Pagination,
 } from 'swiper/modules';
-import Link from 'next/link';
 
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 import type { Banner } from '@/models/display/banner';
 import * as styles from './HeroBanner.css';
 import { normalizeImageUrl, extractBannerContents } from '@/utils/shopby';
-import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
+import Link from 'next/link';
+import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 
 const BANNER_ID = 'HERO-BANNER';
 
@@ -33,28 +33,29 @@ function HeroBannerContent() {
             select: extractBannerContents,
         },
     });
+    console.log('🚀 ~ HeroBannerContent ~ banners:', banners);
     const swiperRef = useRef<SwiperType | null>(null);
 
     const hasMultipleBanners = banners.length > 1;
     const [currentIndex, setCurrentIndex] = useState(1);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [isAutoplayPaused, setIsAutoplayPaused] = useState(false);
 
     const handleSlideChange = useCallback((swiper: SwiperType) => {
         setCurrentIndex(swiper.realIndex + 1);
     }, []);
 
-    const onAutoPlayButtonClick = () => {
+    const handleToggleAutoplay = () => {
         const swiper = swiperRef.current;
 
         if (!swiper?.autoplay) {
             return;
         }
 
-        setIsAutoPlaying((prev) => {
+        setIsAutoplayPaused((prev) => {
             if (prev) {
-                swiper.autoplay?.stop();
-            } else {
                 swiper.autoplay?.start();
+            } else {
+                swiper.autoplay?.stop();
             }
             return !prev;
         });
@@ -68,33 +69,28 @@ function HeroBannerContent() {
         <section className={styles.heroBanner}>
             <div className={styles.swiperContainer}>
                 <Swiper
-                    key={banners.length}
                     modules={[
                         Autoplay,
                         Navigation,
                         Pagination,
                         // EffectCoverflow
                     ]}
-                    effect="slide"
                     spaceBetween={24}
                     slidesPerView={3}
                     centeredSlides
                     loop={hasMultipleBanners}
-                    autoplay={{
-                        delay: 5000,
-                        disableOnInteraction: false,
-                    }}
+                    // loopAdditionalSlides={-1}
                     grabCursor
                     pagination={{
                         type: 'progressbar',
                         el: `.${styles.swiperPagination}`,
-                        renderProgressbar: (progressbarFillClass) => {
-                            return (
-                                '<span class="' +
-                                progressbarFillClass +
-                                '"></span>'
-                            );
-                        },
+                        // renderProgressbar: (progressbarFillClass) => {
+                        //     return (
+                        //         '<span class="' +
+                        //         progressbarFillClass +
+                        //         '"></span>'
+                        //     );
+                        // },
                     }}
                     navigation={{
                         prevEl: `.${styles.navPrev}`,
@@ -102,7 +98,6 @@ function HeroBannerContent() {
                     }}
                     onSwiper={(swiper) => (swiperRef.current = swiper)}
                     onSlideChange={handleSlideChange}
-                    style={{ overflow: 'visible' }}
                 >
                     {banners.map((banner) => (
                         <SwiperSlide
@@ -183,10 +178,41 @@ function HeroBannerContent() {
 
                     <button
                         className={styles.controlButton}
-                        onClick={onAutoPlayButtonClick}
-                        aria-label={isAutoPlaying ? '일시정지' : '재생'}
+                        onClick={handleToggleAutoplay}
+                        aria-label={isAutoplayPaused ? '재생' : '일시정지'}
                     >
-                        {isAutoPlaying ? <Pause /> : <Play />}
+                        {isAutoplayPaused ? (
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        ) : (
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <rect
+                                    x="7"
+                                    y="5"
+                                    width="2"
+                                    height="14"
+                                    fill="currentColor"
+                                />
+                                <rect
+                                    x="15"
+                                    y="5"
+                                    width="2"
+                                    height="14"
+                                    fill="currentColor"
+                                />
+                            </svg>
+                        )}
                     </button>
                 </div>
             </div>

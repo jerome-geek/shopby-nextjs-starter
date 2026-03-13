@@ -18,8 +18,8 @@ export const button = recipe({
             width: '100%',
             transition: 'all 0.3s ease',
             ':disabled': {
-                backgroundColor: '#F4F3F3',
-                color: '#8A8684',
+                backgroundColor: vars.color.gray['20'],
+                color: vars.color.gray['500'],
                 cursor: 'not-allowed',
             },
         },
@@ -43,31 +43,31 @@ export const button = recipe({
                 },
             },
             kakao: {
-                color: '#000000',
+                color: vars.color.black,
                 backgroundColor: vars.color.kakao,
             },
             'kakao-sync': {
-                color: '#000000',
+                color: vars.color.black,
                 backgroundColor: vars.color.kakao,
             },
             naver: {
-                color: '#ffffff',
+                color: vars.color.white,
                 backgroundColor: vars.color.naver,
             },
             apple: {
-                color: '#ffffff',
+                color: vars.color.white,
                 backgroundColor: vars.color.apple,
             },
             facebook: {
-                color: '#ffffff',
+                color: vars.color.white,
                 backgroundColor: vars.color.facebook,
             },
             line: {
-                color: '#ffffff',
+                color: vars.color.white,
                 backgroundColor: vars.color.line,
             },
             google: {
-                color: '#000000',
+                color: vars.color.black,
                 backgroundColor: vars.color.google,
                 border: `1px solid ${vars.color.gray[50]}`,
             },
@@ -89,8 +89,8 @@ export const outlinedButton = recipe({
         width: '100%',
         transition: 'all 0.3s ease',
         ':disabled': {
-            backgroundColor: '#F4F3F3',
-            color: '#8A8684',
+            backgroundColor: vars.color.gray['20'],
+            color: vars.color.gray['500'],
             cursor: 'not-allowed',
         },
         border: `1px solid ${vars.color.gray[50]}`,

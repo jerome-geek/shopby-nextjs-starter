@@ -1,35 +1,49 @@
+import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
     position: 'static',
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '24px',
 });
 
-export const categoryButton = style({
+export const categoryButton = style([
+    textStyles.headlineSemibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '7.5px 10px',
+        backgroundColor: vars.color.white,
+        color: vars.color.black,
+        border: `1px solid ${vars.color.gray['60']}`,
+        borderRadius: '4px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        zIndex: 101,
+
+        ':hover': {
+            backgroundColor: vars.color.gray['80'],
+            borderColor: vars.color.gray['80'],
+            color: vars.color.white,
+        },
+
+        selectors: {
+            '&[aria-expanded="true"]': {
+                backgroundColor: vars.color.gray['80'],
+                borderColor: vars.color.gray['80'],
+                color: vars.color.white,
+            },
+        },
+    },
+]);
+
+export const menuListContainer = style({
     display: 'flex',
     alignItems: 'center',
-    gap: '6px',
-    padding: '8px 16px',
-    backgroundColor: '#111111',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '24px',
-    fontSize: '14px',
-    fontWeight: 600,
-    cursor: 'pointer',
-    transition: 'background-color 0.2s ease',
-    zIndex: 101,
-
-    ':hover': {
-        backgroundColor: '#333333',
-    },
-});
-
-export const menuList = style({
-    display: 'flex',
-    gap: '8px',
+    gap: '18px',
 
     '@media': {
         '(max-width: 768px)': {
@@ -38,35 +52,45 @@ export const menuList = style({
     },
 });
 
-export const menuItem = style({
-    padding: '8px 16px',
-    color: '#333333',
-    fontSize: '14px',
-    fontWeight: 500,
-    textDecoration: 'none',
-    borderRadius: '24px',
-    border: '1px solid #e5e5e5',
-    transition: 'all 0.2s ease',
-
-    ':hover': {
-        backgroundColor: '#f5f5f5',
-        borderColor: '#cccccc',
-        color: '#111111',
-    },
+export const menuList = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
 });
+
+export const menuItem = style([
+    textStyles.headlineSemibold,
+    {
+        color: vars.color.gray['80'],
+        textDecoration: 'none',
+        transition: 'color 0.2s ease',
+        whiteSpace: 'nowrap',
+
+        ':hover': {
+            color: vars.color.black,
+        },
+    },
+]);
+
+export const separator = style({
+    width: '1px',
+    height: '12px',
+    backgroundColor: vars.color.gray['50'],
+});
+
+export const homeItem = style([menuItem, { color: vars.color.black }]);
 
 export const drawerContainer = style({
     position: 'fixed',
-    top: '73px',
+    top: '80px', // Header height
     left: 0,
     width: '100%',
-    backgroundColor: '#ffffff',
-    borderBottom: '1px solid #f5f5f5',
+    backgroundColor: vars.color.white,
+    borderBottom: `1px solid ${vars.color.gray['20']}`,
     zIndex: 100,
     padding: '30px 0 50px',
-    maxHeight: 'calc(100vh - 73px)',
+    maxHeight: 'calc(100vh - 80px)',
     overflow: 'hidden',
-    // animation 제거됨 (Framer Motion 사용)
     boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
 });
 
@@ -97,7 +121,7 @@ export const sidebarItem = style({
     padding: '10px 0',
     fontSize: '15px',
     fontWeight: 500,
-    color: '#999999',
+    color: vars.color.gray['500'],
     cursor: 'pointer',
     background: 'none',
     border: 'none',
@@ -105,15 +129,15 @@ export const sidebarItem = style({
     transition: 'color 0.2s ease',
 
     ':hover': {
-        color: '#555555',
+        color: vars.color.gray['600'],
     },
 });
 
 export const sidebarItemActive = style({
-    color: '#111111',
+    color: vars.color.gray['100'],
     fontWeight: 700,
     ':hover': {
-        color: '#111111',
+        color: vars.color.gray['100'],
     },
 });
 
@@ -167,12 +191,12 @@ export const subCategoryTitle = style({
 
 export const leafCategoryLink = style({
     fontSize: '13px',
-    color: '#888888',
+    color: vars.color.gray['500'],
     textDecoration: 'none',
     transition: 'color 0.2s',
 
     ':hover': {
-        color: '#333333',
+        color: vars.color.gray['80'],
     },
 });
 
@@ -185,9 +209,9 @@ export const scrollButton = style({
     width: '40px',
     height: '40px',
     borderRadius: '50%',
-    backgroundColor: '#ffffff',
+    backgroundColor: vars.color.white,
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-    border: '1px solid #e5e5e5',
+    border: `1px solid ${vars.color.gray['200']}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -196,7 +220,7 @@ export const scrollButton = style({
     transition: 'all 0.2s ease',
 
     ':hover': {
-        backgroundColor: '#f9f9f9',
+        backgroundColor: vars.color.gray['10'],
         boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
     },
 });

@@ -35,7 +35,7 @@ export const detailContainer = style([
         gap: '4px',
         padding: '12px 0',
         color: vars.color.gray['90'],
-        backgroundColor: '#FFEBEECC',
+        backgroundColor: vars.color.pink['20'],
         backdropFilter: 'blur(6px)',
     },
 ]);

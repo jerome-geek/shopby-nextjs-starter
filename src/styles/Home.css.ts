@@ -1,4 +1,5 @@
 import { style, globalStyle, createVar } from '@vanilla-extract/css';
+import { vars } from '@/styles/theme.css';
 
 const background = createVar();
 const foreground = createVar();
@@ -9,15 +10,15 @@ const buttonSecondaryHover = createVar();
 const buttonSecondaryBorder = createVar();
 
 export const page = style({
-    vars: {
-        [background]: '#ffffff',
-        [foreground]: '#fff',
-        [textPrimary]: '#000',
-        [textSecondary]: '#666',
-        [buttonPrimaryHover]: '#383838',
-        [buttonSecondaryHover]: '#f2f2f2',
-        [buttonSecondaryBorder]: '#ebebeb',
-    },
+    // vars: {
+    //     [background]: vars.color.white,
+    //     [foreground]: vars.color.white,
+    //     [textPrimary]: vars.color.black,
+    //     [textSecondary]: vars.color.gray['500'],
+    //     [buttonPrimaryHover]: vars.color.gray['800'],
+    //     [buttonSecondaryHover]: vars.color.gray['20'],
+    //     [buttonSecondaryBorder]: vars.color.gray['30'],
+    // },
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
@@ -26,19 +27,19 @@ export const page = style({
     maxWidth: '1200px',
     margin: '0 auto',
     width: '100%',
-    '@media': {
-        '(prefers-color-scheme: dark)': {
-            vars: {
-                [background]: '#000',
-                [foreground]: '#000',
-                [textPrimary]: '#ededed',
-                [textSecondary]: '#999',
-                [buttonPrimaryHover]: '#ccc',
-                [buttonSecondaryHover]: '#1a1a1a',
-                [buttonSecondaryBorder]: '#1a1a1a',
-            },
-        },
-    },
+    // '@media': {
+    //     '(prefers-color-scheme: dark)': {
+    //         vars: {
+    //             [background]: vars.color.black,
+    //             [foreground]: vars.color.black,
+    //             [textPrimary]: vars.color.gray['20'],
+    //             [textSecondary]: vars.color.gray['500'],
+    //             [buttonPrimaryHover]: vars.color.gray['300'],
+    //             [buttonSecondaryHover]: vars.color.gray['900'],
+    //             [buttonSecondaryBorder]: vars.color.gray['900'],
+    //         },
+    //     },
+    // },
 });
 
 export const main = style({

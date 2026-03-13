@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-import { deviceDetect, isAndroid, isIOS } from 'react-device-detect';
+import { UAParser } from 'ua-parser-js';
 import { ClientPlatformType } from '@/models';
 import { env } from '@/configs/env';
 
@@ -7,14 +7,25 @@ export const DEFAULT_API_RETRY_BACKOFF_LIMIT = 3 * 1000;
 export const DEFAULT_API_RETRY_LIMIT = 4;
 export const DEFAULT_API_TIMEOUT = 10 * 1000;
 
-export const getPlatform = (): ClientPlatformType => {
-    const device = deviceDetect(navigator.userAgent);
+export const getPlatform = (userAgent?: string): ClientPlatformType => {
+    const ua =
+        userAgent ||
+        (typeof window !== 'undefined' ? window.navigator.userAgent : '');
 
-    if (device.isMobile) {
-        if (isIOS) {
+    if (!ua) {
+        return 'PC';
+    }
+
+    const parser = new UAParser(ua);
+    const result = parser.getResult();
+    const deviceType = result.device.type;
+    const osName = result.os.name;
+
+    if (deviceType === 'mobile' || deviceType === 'tablet') {
+        if (osName === 'iOS') {
             return 'IOS';
         }
-        if (isAndroid) {
+        if (osName === 'Android') {
             return 'AOS';
         }
         return 'MOBILE_WEB';

@@ -1,4 +1,4 @@
-const OVERLAY_ID = {
+export const OVERLAY_ID = {
     OPTION_BOTTOM_SHEET: 'option-bottom-sheet',
     BOTTOM_NAV_DRAWER: 'bottom-nav-drawer',
     MENU_DRAWER: 'menu-drawer',
@@ -13,5 +13,3 @@ const OVERLAY_ID = {
     TOAST: 'toast',
     LOADING: 'loading',
 };
-
-export { OVERLAY_ID };

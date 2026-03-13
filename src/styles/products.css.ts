@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { vars } from '@/styles/theme.css';
 
 export const container = style({
     padding: '40px 20px',
@@ -10,7 +11,7 @@ export const title = style({
     fontSize: '2rem',
     fontWeight: 'bold',
     marginBottom: '24px',
-    color: '#111827',
+    color: vars.color.gray['100'],
 });
 
 export const grid = style({
@@ -20,19 +21,19 @@ export const grid = style({
 });
 
 export const card = style({
-    border: '1px solid #e5e7eb',
+    border: `1px solid ${vars.color.gray['200']}`,
     borderRadius: '8px',
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
-    backgroundColor: 'white',
+    backgroundColor: vars.color.white,
 });
 
 export const backLink = style({
     display: 'inline-block',
     marginBottom: '20px',
-    color: '#2563eb',
+    color: vars.color.primary, // Using primary pink/red for links
     textDecoration: 'none',
     ':hover': {
         textDecoration: 'underline',

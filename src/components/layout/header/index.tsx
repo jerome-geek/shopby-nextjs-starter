@@ -1,5 +1,4 @@
-import Link from 'next/link';
-
+import Image from 'next/image';
 import { PATHS } from '@/const/paths';
 import * as styles from './Header.css';
 import {
@@ -8,16 +7,18 @@ import {
 } from '@/hooks/query/display/category';
 import { Menu } from './Menu';
 import {
-    BigBellIcon,
     BigCartIcon,
-    BigHeartIcon,
     BigSearchIcon,
     UserIcon,
+    BookmarkIcon,
 } from '@/components/icons';
 import { vars } from '@/styles/theme.css';
+import logoImage from '@/assets/logo.png';
+import Link from 'next/link';
+import { CirclePlusIcon } from 'lucide-react';
 
 export function Header() {
-    const cartCount = 13;
+    const cartCount = 2; // 이미지와 동일하게 2로 설정
 
     const { data: categoriesByCodeData } = useCategoriesByCode({
         data: { codes: ['MAIN'] },
@@ -28,56 +29,72 @@ export function Header() {
         categoryNo,
     });
 
-    const iconList = [
-        {
-            id: 'user',
-            href: PATHS.MYPAGE.MAIN,
-            Icon: <UserIcon currentColor={vars.color.black} />,
-        },
-        { id: 'heart', href: PATHS.MYPAGE.WISH, Icon: <BigHeartIcon /> },
-        { id: 'cart', href: PATHS.ORDER.CART, Icon: <BigCartIcon /> },
-    ];
-
     return (
         <header className={styles.header}>
             <div className={styles.headerInner}>
-                {/* 로고 & 네비게이션 */}
                 <div className={styles.logoSection}>
                     <Link href={PATHS.MAIN} className={styles.logo}>
-                        WannaMake
+                        <Image
+                            src={logoImage}
+                            alt="Jolly pot"
+                            width={107}
+                            height={40}
+                            priority
+                        />
                     </Link>
                     <Menu categoryData={categoryData} />
                 </div>
 
-                {/* 유틸리티 아이콘들 */}
                 <div className={styles.utilitySection}>
-                    {iconList.map((icon) => {
-                        return (
+                    <button className={styles.recipeButton}>
+                        <CirclePlusIcon
+                            width={24}
+                            height={24}
+                            color={vars.color.white}
+                        />
+                        <span>레시피 만들기</span>
+                    </button>
+
+                    <ul className={styles.iconList}>
+                        <li>
+                            <button className={styles.searchIcon}>
+                                <BigSearchIcon width={24} height={24} />
+                            </button>
+                        </li>
+                        <li>
                             <Link
-                                key={icon.href}
-                                href={icon.href}
-                                prefetch={false}
+                                href={PATHS.MYPAGE.WISH}
                                 className={styles.iconLink}
                             >
-                                {icon.Icon}
-                                {icon.id === 'cart' && cartCount > 0 && (
+                                <BookmarkIcon width={24} height={24} />
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                href={PATHS.ORDER.CART}
+                                className={styles.iconLink}
+                            >
+                                <BigCartIcon width={24} height={24} />
+                                {cartCount > 0 && (
                                     <span className={styles.cartBadge}>
                                         {cartCount > 99 ? '99+' : cartCount}
                                     </span>
                                 )}
                             </Link>
-                        );
-                    })}
-
-                    {/* 검색 아이콘 */}
-                    <button className={styles.searchIcon}>
-                        <BigSearchIcon />
-                    </button>
-
-                    {/* 알림 아이콘 */}
-                    <button className={styles.alarmIcon}>
-                        <BigBellIcon />
-                    </button>
+                        </li>
+                        <li>
+                            <Link
+                                href={PATHS.MYPAGE.MAIN}
+                                className={styles.iconLink}
+                            >
+                                <UserIcon
+                                    width={24}
+                                    height={24}
+                                    currentColor={vars.color.black}
+                                />
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </header>
