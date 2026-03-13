@@ -1,4 +1,9 @@
-import { globalKeyframes, globalStyle, style } from '@vanilla-extract/css';
+import {
+    createGlobalTheme,
+    globalKeyframes,
+    globalStyle,
+    style,
+} from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const visuallyHidden = style({
@@ -158,5 +163,12 @@ globalKeyframes('slideDownFade', {
     to: {
         opacity: 1,
         transform: 'translateY(0)',
+    },
+});
+
+export const globalVars = createGlobalTheme(':root', {
+    header: {
+        height: '90px',
+        mobileHeight: '56px',
     },
 });

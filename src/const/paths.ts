@@ -1,6 +1,12 @@
 export const PATHS = {
     MAIN: '/',
 
+    SHOP: {
+        DISCOVERY: '/shop',
+        KIDS: '/shop/kids',
+        LIFE: '/shop/life',
+    },
+
     AUTH: {
         LOGIN: '/login',
         TERMS: {

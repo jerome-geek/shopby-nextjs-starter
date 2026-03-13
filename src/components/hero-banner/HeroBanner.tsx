@@ -37,9 +37,8 @@ function HeroBannerContent() {
     });
     const isMobile = useMediaQuery(`(max-width: ${BREAKPOINTS.SM - 1}px)`);
     const swiperRef = useRef<SwiperType | null>(null);
-
     const hasMultipleBanners = banners.length > 1;
-    const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
     const swiperOptions: SwiperProps = useMemo(
         () => ({
@@ -56,20 +55,22 @@ function HeroBannerContent() {
                   }
                 : undefined,
             spaceBetween: isMobile ? 12 : 24,
-            slidesPerView: isMobile ? 'auto' : 3,
+            slidesPerView: isMobile ? 1.2 : 3,
             centeredSlides: true,
             loop: hasMultipleBanners,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
+            loopedSlides: isMobile ? 2 : 4,
+            watchSlidesProgress: true,
+            autoplay: isAutoPlaying
+                ? {
+                      delay: 3000,
+                      disableOnInteraction: false,
+                      pauseOnMouseEnter: true,
+                  }
+                : false,
             grabCursor: true,
             pagination: {
-                type: 'progressbar',
                 el: `.${styles.swiperPagination}`,
-                renderProgressbar: (progressbarFillClass: string) => {
-                    return '<span class="' + progressbarFillClass + '"></span>';
-                },
+                type: 'progressbar',
             },
             navigation: {
                 prevEl: `.${styles.navPrev}`,
@@ -78,7 +79,7 @@ function HeroBannerContent() {
             style: { overflow: 'visible' },
             onSwiper: (swiper) => (swiperRef.current = swiper),
         }),
-        [isMobile, hasMultipleBanners],
+        [isMobile, hasMultipleBanners, isAutoPlaying],
     );
 
     const onAutoPlayButtonClick = () => {
@@ -103,96 +104,106 @@ function HeroBannerContent() {
     }
 
     return (
-        <section className={styles.heroBanner}>
-            <div className={styles.swiperContainer}>
-                <Swiper
-                    key={`${banners.length}-${isMobile}`}
-                    {...swiperOptions}
-                >
-                    {banners.map((banner) => (
-                        <SwiperSlide
-                            key={banner.bannerNo}
-                            className={styles.slide}
-                        >
-                            <Link
-                                href={getLandingUrl({
-                                    landingUrl: banner.landingUrlType,
-                                    landingUrlType: banner.landingUrlType,
-                                })}
-                                target={getLinkTarget(banner.browerTargetType)}
-                                rel={
-                                    banner.browerTargetType === 'NEW'
-                                        ? 'noopener noreferrer'
-                                        : undefined
+        <section className={styles.container}>
+            <div className={styles.heroBanner}>
+                <div className={styles.swiperContainer}>
+                    <Swiper
+                        key={`${banners.length}-${isMobile}`}
+                        {...swiperOptions}
+                    >
+                        {banners.map((banner, index) => (
+                            <SwiperSlide
+                                key={
+                                    banner.bannerNo || banner.imageUrl || index
                                 }
-                                className={styles.card}
+                                className={styles.slide}
                             >
-                                <img
-                                    src={normalizeImageUrl(banner.imageUrl)}
-                                    alt={banner.name || '배너 이미지'}
-                                    className={styles.cardImage}
-                                />
-                                <div className={styles.cardContent}>
-                                    <h3
-                                        className={styles.cardTitle}
-                                        style={{
-                                            color:
-                                                banner.nameColor || '#ffffff',
-                                        }}
-                                    >
-                                        {banner.name}
-                                    </h3>
-                                    {banner.description && (
-                                        <p
-                                            className={styles.cardDescription}
+                                <Link
+                                    href={getLandingUrl({
+                                        landingUrl: banner.landingUrlType,
+                                        landingUrlType: banner.landingUrlType,
+                                    })}
+                                    target={getLinkTarget(
+                                        banner.browerTargetType,
+                                    )}
+                                    rel={
+                                        banner.browerTargetType === 'NEW'
+                                            ? 'noopener noreferrer'
+                                            : undefined
+                                    }
+                                    className={styles.card}
+                                >
+                                    <img
+                                        src={normalizeImageUrl(banner.imageUrl)}
+                                        alt={banner.name || '배너 이미지'}
+                                        className={styles.cardImage}
+                                        loading="lazy"
+                                    />
+                                    <div className={styles.cardContent}>
+                                        <h3
+                                            className={styles.cardTitle}
                                             style={{
                                                 color:
-                                                    banner.descriptionColor ||
+                                                    banner.nameColor ||
                                                     '#ffffff',
                                             }}
                                         >
-                                            {banner.description}
-                                        </p>
-                                    )}
-                                </div>
-                            </Link>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-            </div>
-
-            {/* Pagination & Controls - Only visible on PC */}
-            <div className={styles.controls}>
-                <div className={styles.progressBox}>
-                    <div className={styles.swiperPagination}></div>
+                                            {banner.name}
+                                        </h3>
+                                        {banner.description && (
+                                            <p
+                                                className={
+                                                    styles.cardDescription
+                                                }
+                                                style={{
+                                                    color:
+                                                        banner.descriptionColor ||
+                                                        '#ffffff',
+                                                }}
+                                            >
+                                                {banner.description}
+                                            </p>
+                                        )}
+                                    </div>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
                 </div>
 
-                <div className={styles.arrowBox}>
-                    <button
-                        className={`${styles.navButton} ${styles.navPrev}`}
-                        onClick={() => swiperRef.current?.slidePrev()}
-                        aria-label="이전 배너"
-                    >
-                        <ChevronLeft />
-                    </button>
+                {/* Pagination & Controls - Only visible on PC */}
+                <div className={styles.controls}>
+                    <div className={styles.progressBox}>
+                        <div className={styles.swiperPagination}></div>
+                    </div>
 
-                    <button
-                        className={`${styles.navButton} ${styles.navNext}`}
-                        onClick={() => swiperRef.current?.slideNext()}
-                        aria-label="다음 배너"
-                    >
-                        <ChevronRight />
-                    </button>
+                    <div className={styles.arrowBox}>
+                        <button
+                            className={`${styles.navButton} ${styles.navPrev}`}
+                            onClick={() => swiperRef.current?.slidePrev()}
+                            aria-label="이전 배너"
+                        >
+                            <ChevronLeft />
+                        </button>
 
-                    <div className={styles.separator} />
+                        <button
+                            className={`${styles.navButton} ${styles.navNext}`}
+                            onClick={() => swiperRef.current?.slideNext()}
+                            aria-label="다음 배너"
+                        >
+                            <ChevronRight />
+                        </button>
 
-                    <button
-                        className={styles.controlButton}
-                        onClick={onAutoPlayButtonClick}
-                        aria-label={isAutoPlaying ? '일시정지' : '재생'}
-                    >
-                        {isAutoPlaying ? <Pause /> : <Play />}
-                    </button>
+                        <div className={styles.separator} />
+
+                        <button
+                            className={styles.controlButton}
+                            onClick={onAutoPlayButtonClick}
+                            aria-label={isAutoPlaying ? '일시정지' : '재생'}
+                        >
+                            {isAutoPlaying ? <Pause /> : <Play />}
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

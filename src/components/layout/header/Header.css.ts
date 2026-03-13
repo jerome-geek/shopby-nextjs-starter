@@ -2,20 +2,21 @@ import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 import { media } from '@/styles/media';
 import { textStyles } from '@/styles/typography.css';
+import { globalVars } from '@/styles/global.css';
 
 export const header = style({
     position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
-    height: '90px',
+    height: globalVars.header.height,
     zIndex: 1000,
     backgroundColor: vars.color.white,
     borderBottom: `1px solid ${vars.color.gray['30']}`,
 
     '@media': {
         [media.mobile]: {
-            height: '56px',
+            height: globalVars.header.mobileHeight,
         },
     },
 });
@@ -27,12 +28,10 @@ export const headerInner = style({
     maxWidth: '1200px',
     height: '100%', // 부모 높이에 맞춤
     margin: '0 auto',
-    padding: '0 24px', // 상하 패딩 제거 (height로 조절)
     gap: '32px',
 
     '@media': {
         '(max-width: 768px)': {
-            padding: '12px 16px',
             gap: '16px',
         },
     },

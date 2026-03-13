@@ -37,24 +37,24 @@ export const TimeSale = memo(
             });
 
         const filteredProducts = useMemo(() => {
-            return (
-                productSectionProductListData?.products
-                    // ?.filter((product) => (product.additionDiscountAmt || 0) > 0)
-                    .map((product) => ({
-                        ...product,
-                        imageUrlInfo: product.imageUrlInfo?.map((img) => ({
-                            url: img.url,
-                            type: 'IMAGE_URL',
-                        })),
-                        stickerInfos:
-                            product.stickerInfos?.map((sticker) => ({
-                                type: sticker.type,
-                                label: sticker.label,
-                                name: sticker.label,
-                            })) || [],
-                    })) || []
-            );
-        }, [productSectionProductListData?.products]);
+            return productSectionProductListData
+                ? productSectionProductListData.products
+                      // ?.filter((product) => (product.additionDiscountAmt || 0) > 0)
+                      .map((product) => ({
+                          ...product,
+                          imageUrlInfo: product.imageUrlInfo?.map((img) => ({
+                              url: img.url,
+                              type: 'IMAGE_URL',
+                          })),
+                          stickerInfos:
+                              product.stickerInfos?.map((sticker) => ({
+                                  type: sticker.type,
+                                  label: sticker.label,
+                                  name: sticker.label,
+                              })) || [],
+                      }))
+                : [];
+        }, [productSectionProductListData]);
 
         // const { data: additionalDiscountData } = useAdditionalDiscountByProductNos({
         //     searchParams: {

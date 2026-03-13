@@ -42,7 +42,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <section
+            <div
                 className={`${styles.main} ${geistSans.variable} ${geistMono.variable}`}
             >
                 {/* Full-width HeroBanner */}
@@ -93,7 +93,7 @@ export default function Home() {
                 </LazyRender>
 
                 {/* <ProductSection /> */}
-            </section>
+            </div>
         </>
     );
 }

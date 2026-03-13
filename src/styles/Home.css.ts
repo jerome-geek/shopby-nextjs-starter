@@ -47,7 +47,7 @@ export const main = style({
 
     '@media': {
         [media.desktop]: {
-            padding: '0px',
+            padding: '24px 0px',
             gap: '96px',
         },
     },

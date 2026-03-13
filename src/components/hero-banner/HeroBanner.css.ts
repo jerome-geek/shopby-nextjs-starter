@@ -8,26 +8,40 @@ const shimmer = keyframes({
     '0%': { backgroundPosition: '200% 0' },
     '100%': { backgroundPosition: '-200% 0' },
 });
-
-export const heroBanner = style({
+export const container = style({
     position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '32px',
-    overflow: 'visible',
+    width: '100vw',
+    maxWidth: '1440px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    overflow: 'hidden',
+    padding: '0 20px',
 
     '@media': {
-        '(max-width: 768px)': {
-            padding: '16px 0',
+        [media.desktop]: {
+            padding: 0,
+        },
+    },
+});
+
+export const heroBanner = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+    width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '32px',
         },
     },
 });
 
 export const swiperContainer = style({
     width: '100%',
+    position: 'relative',
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '24px 0',
     overflow: 'visible',
 });
 
@@ -39,9 +53,7 @@ export const swiper = style({
 
 export const slide = style({
     // width: 'calc(100% - 48px)',
-    width: '100%',
     aspectRatio: '320 / 427',
-    maxWidth: '360px',
     height: 'auto',
     borderRadius: '24px',
     overflow: 'hidden',
@@ -54,12 +66,12 @@ export const slide = style({
         },
     },
 
-    '@media': {
-        [media.desktop]: {
-            width: '100%',
-            maxWidth: '384px',
-        },
-    },
+    // '@media': {
+    //     [media.desktop]: {
+    //         width: '100%',
+    //         maxWidth: '384px',
+    //     },
+    // },
 });
 
 export const card = style({

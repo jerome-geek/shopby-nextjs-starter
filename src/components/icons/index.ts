@@ -21,4 +21,3 @@ export { SortIcon } from '@/components/icons/SortIcon';
 export { StarIcon } from '@/components/icons/StarIcon';
 export { StarMiniIcon } from '@/components/icons/StarMiniIcon';
 export { UserIcon } from '@/components/icons/UserIcon';
-export { BookmarkIcon } from '@/components/icons/BookmarkIcon';

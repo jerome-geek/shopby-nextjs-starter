@@ -6,16 +6,11 @@ import {
     useCategory,
 } from '@/hooks/query/display/category';
 import { Menu } from './Menu';
-import {
-    BigCartIcon,
-    BigSearchIcon,
-    UserIcon,
-    BookmarkIcon,
-} from '@/components/icons';
+import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
 import { vars } from '@/styles/theme.css';
 import logoImage from '@/assets/logo.png';
 import Link from 'next/link';
-import { CirclePlusIcon } from 'lucide-react';
+import { BookmarkIcon, CirclePlusIcon } from 'lucide-react';
 
 export function Header() {
     const cartCount = 2; // 이미지와 동일하게 2로 설정

@@ -3,7 +3,6 @@ import React from 'react';
 import Link from 'next/link';
 
 const SHOP_TYPES = {
-    DISCOVERY: 'discovery',
     LIFE: 'life',
     KIDS: 'kids',
 } as const;
@@ -32,8 +31,7 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
                 <Link
                     href="/shop"
                     style={{
-                        color: type === 'discovery' ? 'blue' : 'black',
-                        fontWeight: type === 'discovery' ? 'bold' : 'normal',
+                        color: 'black',
                         textDecoration: 'none'
                     }}
                 >
@@ -65,9 +63,6 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
                     padding: '100px',
                 }}
             >
-                {type === 'discovery' && (
-                    <div>✨ 발견 탭 전용 콘텐츠 (기획전, 추천 상품 등)</div>
-                )}
                 {type === 'life' && (
                     <div>🌿 라이프 탭 전용 콘텐츠 (인테리어, 주방용품 등)</div>
                 )}
@@ -80,14 +75,13 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-    const slug = params?.slug as string[] | undefined;
-    const path = slug?.[0];
+    const slug = params?.slug as string | undefined;
 
     // 허용된 경로 목록
-    const validPaths = [undefined, 'life', 'kids'];
+    const validPaths = ['life', 'kids'];
 
-    // 3가지 외 다른 경로로 들어왔을 경우 /shop으로 리다이렉트
-    if (path && !validPaths.includes(path)) {
+    // life, kids 외의 경로로 들어오거나 slug가 없을 경우 /shop으로 리다이렉트
+    if (!slug || !validPaths.includes(slug)) {
         return {
             redirect: {
                 destination: '/shop',
@@ -96,12 +90,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         };
     }
 
-    const type =
-        path === 'life'
-            ? SHOP_TYPES.LIFE
-            : path === 'kids'
-              ? SHOP_TYPES.KIDS
-              : SHOP_TYPES.DISCOVERY;
+    const type = slug === 'life' ? SHOP_TYPES.LIFE : SHOP_TYPES.KIDS;
 
     return {
         props: {

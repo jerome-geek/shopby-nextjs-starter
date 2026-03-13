@@ -140,17 +140,26 @@ export function Menu({ categoryData }: MenuProps) {
 
                 <ul className={styles.menuList}>
                     <li>
-                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                        <Link
+                            href={PATHS.SHOP.DISCOVERY}
+                            className={styles.menuItem}
+                        >
                             <span>발견</span>
                         </Link>
                     </li>
                     <li>
-                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                        <Link
+                            href={PATHS.SHOP.KIDS}
+                            className={styles.menuItem}
+                        >
                             <span>키즈</span>
                         </Link>
                     </li>
                     <li>
-                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                        <Link
+                            href={PATHS.SHOP.LIFE}
+                            className={styles.menuItem}
+                        >
                             <span>라이프</span>
                         </Link>
                     </li>
@@ -163,7 +172,10 @@ export function Menu({ categoryData }: MenuProps) {
                         </Link>
                     </li>
                     <li>
-                        <Link href={PATHS.MAIN} className={styles.menuItem}>
+                        <Link
+                            href={PATHS.EVENTS.MAIN}
+                            className={styles.menuItem}
+                        >
                             <span>기획전</span>
                         </Link>
                     </li>
