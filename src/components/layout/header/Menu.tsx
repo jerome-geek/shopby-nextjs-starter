@@ -36,7 +36,7 @@ const ArrowRightIcon = () => (
 
 export function Menu({ categoryData }: MenuProps) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [activeCategoryNo, setActiveCategoryNo] = useState<number | null>(
+    const [selectedCategoryNo, setSelectedCategoryNo] = useState<number | null>(
         null,
     );
     const [canScrollRight, setCanScrollRight] = useState(false);
@@ -48,18 +48,14 @@ export function Menu({ categoryData }: MenuProps) {
         return categoryData?.multiLevelCategories?.[0]?.children ?? [];
     }, [categoryData]);
 
+    const activeCategoryNo =
+        selectedCategoryNo ?? rootCategories[0]?.categoryNo;
+
     const activeCategory = useMemo(() => {
         return rootCategories.find(
             (cat) => cat.categoryNo === activeCategoryNo,
         );
     }, [rootCategories, activeCategoryNo]);
-
-    // Drawer 열릴 때 첫 번째 자동 선택
-    useEffect(() => {
-        if (isDrawerOpen && rootCategories.length > 0 && !activeCategoryNo) {
-            setActiveCategoryNo(rootCategories[0].categoryNo);
-        }
-    }, [isDrawerOpen, rootCategories, activeCategoryNo]);
 
     const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
@@ -204,12 +200,12 @@ export function Menu({ categoryData }: MenuProps) {
                                         key={category.categoryNo}
                                         className={styles.sidebarItem}
                                         onClick={() =>
-                                            setActiveCategoryNo(
+                                            setSelectedCategoryNo(
                                                 category.categoryNo,
                                             )
                                         }
                                         onMouseEnter={() =>
-                                            setActiveCategoryNo(
+                                            setSelectedCategoryNo(
                                                 category.categoryNo,
                                             )
                                         }

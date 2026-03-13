@@ -1,6 +1,8 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
 import { vars } from '@/styles/theme.css';
+import { media } from '@/styles/media';
+import { textStyles } from '@/styles/typography.css';
 
 const shimmer = keyframes({
     '0%': { backgroundPosition: '200% 0' },
@@ -36,7 +38,10 @@ export const swiper = style({
 });
 
 export const slide = style({
+    // width: 'calc(100% - 48px)',
+    width: '100%',
     aspectRatio: '320 / 427',
+    maxWidth: '360px',
     height: 'auto',
     borderRadius: '24px',
     overflow: 'hidden',
@@ -48,9 +53,11 @@ export const slide = style({
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
         },
     },
+
     '@media': {
-        '(max-width: 768px)': {
-            width: '280px !important',
+        [media.desktop]: {
+            width: '100%',
+            maxWidth: '384px',
         },
     },
 });
@@ -76,46 +83,33 @@ export const cardContent = style({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: '32px 24px',
+    padding: '36px 24px',
     background:
         'linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%)',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    gap: '6px',
+
     '@media': {
-        '(max-width: 768px)': {
-            padding: '24px 16px',
+        '(min-width: 768px)': {
+            padding: '48px 28px',
         },
     },
 });
 
-export const cardTitle = style({
-    fontSize: '1.75rem',
-    fontWeight: 700,
-    margin: '0 0 4px',
-    lineHeight: 1.2,
-    color: vars.color.white,
-    letterSpacing: '-0.02em',
-    '@media': {
-        '(max-width: 768px)': {
-            fontSize: '1.5rem',
-        },
+export const cardTitle = style([
+    textStyles.display2Bold,
+    {
+        color: vars.color.white,
     },
-});
+]);
 
-export const cardDescription = style({
-    fontSize: '1rem',
-    margin: 0,
-    lineHeight: 1.4,
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: 400,
-    opacity: 0.8,
-    '@media': {
-        '(max-width: 768px)': {
-            fontSize: '0.9375rem',
-        },
+export const cardDescription = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.white,
     },
-});
+]);
 
 export const controls = style({
     display: 'flex',

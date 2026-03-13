@@ -1,3 +1,4 @@
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 import { style } from '@vanilla-extract/css';
@@ -12,29 +13,35 @@ export const container = style({
 export const categoryButton = style([
     textStyles.headlineSemibold,
     {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '7.5px 10px',
-        backgroundColor: vars.color.white,
-        color: vars.color.black,
-        border: `1px solid ${vars.color.gray['60']}`,
-        borderRadius: '4px',
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        zIndex: 101,
+        display: 'none',
 
-        ':hover': {
-            backgroundColor: vars.color.gray['80'],
-            borderColor: vars.color.gray['80'],
-            color: vars.color.white,
-        },
+        '@media': {
+            [media.desktop]: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '7.5px 10px',
+                backgroundColor: vars.color.white,
+                color: vars.color.black,
+                border: `1px solid ${vars.color.gray['60']}`,
+                borderRadius: '4px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                zIndex: 101,
 
-        selectors: {
-            '&[aria-expanded="true"]': {
-                backgroundColor: vars.color.gray['80'],
-                borderColor: vars.color.gray['80'],
-                color: vars.color.white,
+                ':hover': {
+                    backgroundColor: vars.color.gray['80'],
+                    borderColor: vars.color.gray['80'],
+                    color: vars.color.white,
+                },
+
+                selectors: {
+                    '&[aria-expanded="true"]': {
+                        backgroundColor: vars.color.gray['80'],
+                        borderColor: vars.color.gray['80'],
+                        color: vars.color.white,
+                    },
+                },
             },
         },
     },

@@ -1,27 +1,29 @@
 'use client';
 
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
-import { Suspense, useState, useCallback, useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import Link from 'next/link';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import {
     Autoplay,
-    Navigation,
     EffectCoverflow,
+    Navigation,
     Pagination,
 } from 'swiper/modules';
-import Link from 'next/link';
+import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
+import { useMediaQuery } from 'usehooks-ts';
 
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 import type { Banner } from '@/models/display/banner';
-import * as styles from './HeroBanner.css';
-import { normalizeImageUrl, extractBannerContents } from '@/utils/shopby';
+import { BREAKPOINTS } from '@/styles/media';
 import { getLandingUrl, getLinkTarget } from '@/utils/banner';
+import { extractBannerContents, normalizeImageUrl } from '@/utils/shopby';
+import * as styles from './HeroBanner.css';
 
 import 'swiper/css';
+import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
 
 const BANNER_ID = 'HERO-BANNER';
 
@@ -33,15 +35,54 @@ function HeroBannerContent() {
             select: extractBannerContents,
         },
     });
+    const isMobile = useMediaQuery(`(max-width: ${BREAKPOINTS.SM - 1}px)`);
     const swiperRef = useRef<SwiperType | null>(null);
 
     const hasMultipleBanners = banners.length > 1;
-    const [currentIndex, setCurrentIndex] = useState(1);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
-    const handleSlideChange = useCallback((swiper: SwiperType) => {
-        setCurrentIndex(swiper.realIndex + 1);
-    }, []);
+    const swiperOptions: SwiperProps = useMemo(
+        () => ({
+            modules: [Autoplay, Navigation, Pagination, EffectCoverflow],
+            effect: isMobile ? 'coverflow' : 'slide',
+            coverflowEffect: isMobile
+                ? {
+                      rotate: 0,
+                      stretch: 0,
+                      depth: 60,
+                      scale: 0.95,
+                      modifier: 1,
+                      slideShadows: false,
+                  }
+                : undefined,
+            spaceBetween: isMobile ? 12 : 24,
+            slidesPerView: isMobile ? 'auto' : 3,
+            centeredSlides: true,
+            loop: hasMultipleBanners,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            grabCursor: true,
+            pagination: {
+                type: 'progressbar',
+                el: `.${styles.swiperPagination}`,
+                renderProgressbar: (progressbarFillClass: string) => {
+                    return '<span class="' + progressbarFillClass + '"></span>';
+                },
+            },
+            navigation: {
+                prevEl: `.${styles.navPrev}`,
+                nextEl: `.${styles.navNext}`,
+            },
+            style: { overflow: 'visible' },
+            onSwiper: (swiper) => (swiperRef.current = swiper),
+            onSlideChange: (swiper: SwiperType) => {
+                console.log('🚀 ~ HeroBannerContent ~ swiper1111:', swiper);
+            },
+        }),
+        [isMobile, hasMultipleBanners],
+    );
 
     const onAutoPlayButtonClick = () => {
         const swiper = swiperRef.current;
@@ -68,41 +109,8 @@ function HeroBannerContent() {
         <section className={styles.heroBanner}>
             <div className={styles.swiperContainer}>
                 <Swiper
-                    key={banners.length}
-                    modules={[
-                        Autoplay,
-                        Navigation,
-                        Pagination,
-                        // EffectCoverflow
-                    ]}
-                    effect="slide"
-                    spaceBetween={24}
-                    slidesPerView={3}
-                    centeredSlides
-                    loop={hasMultipleBanners}
-                    autoplay={{
-                        delay: 5000,
-                        disableOnInteraction: false,
-                    }}
-                    grabCursor
-                    pagination={{
-                        type: 'progressbar',
-                        el: `.${styles.swiperPagination}`,
-                        renderProgressbar: (progressbarFillClass) => {
-                            return (
-                                '<span class="' +
-                                progressbarFillClass +
-                                '"></span>'
-                            );
-                        },
-                    }}
-                    navigation={{
-                        prevEl: `.${styles.navPrev}`,
-                        nextEl: `.${styles.navNext}`,
-                    }}
-                    onSwiper={(swiper) => (swiperRef.current = swiper)}
-                    onSlideChange={handleSlideChange}
-                    style={{ overflow: 'visible' }}
+                    key={`${banners.length}-${isMobile}`}
+                    {...swiperOptions}
                 >
                     {banners.map((banner) => (
                         <SwiperSlide
