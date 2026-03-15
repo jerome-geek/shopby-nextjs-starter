@@ -9,14 +9,16 @@ export const header = style({
     top: 0,
     left: 0,
     right: 0,
-    height: globalVars.header.height,
+    height: globalVars.header.mobileHeight,
     zIndex: 1000,
     backgroundColor: vars.color.white,
     borderBottom: `1px solid ${vars.color.gray['30']}`,
+    padding: '0 20px',
 
     '@media': {
-        [media.mobile]: {
-            height: globalVars.header.mobileHeight,
+        [media.desktop]: {
+            padding: 0,
+            height: globalVars.header.height,
         },
     },
 });
@@ -26,13 +28,16 @@ export const headerInner = style({
     alignItems: 'center',
     justifyContent: 'space-between',
     maxWidth: '1200px',
-    height: '100%', // 부모 높이에 맞춤
+    height: '100%',
     margin: '0 auto',
-    gap: '32px',
+    gap: '16px',
 
     '@media': {
-        '(max-width: 768px)': {
-            gap: '16px',
+        [media.tablet]: {
+            gap: '32px',
+        },
+        [media.desktop]: {
+            gap: '32px',
         },
     },
 });
@@ -40,11 +45,14 @@ export const headerInner = style({
 export const logoSection = style({
     display: 'flex',
     alignItems: 'center',
-    gap: '24px',
+    gap: '12px',
 
     '@media': {
-        '(max-width: 768px)': {
-            gap: '12px',
+        [media.tablet]: {
+            gap: '24px',
+        },
+        [media.desktop]: {
+            gap: '24px',
         },
     },
 });
@@ -60,11 +68,11 @@ export const logo = style({
 export const recipeButton = style([
     textStyles.headlineSemibold,
     {
-        display: 'flex',
+        display: 'none',
         alignItems: 'center',
         gap: '6px',
         padding: '6px 10px',
-        backgroundColor: vars.color.green['100'], // 이미지의 짙은 녹색
+        backgroundColor: vars.color.green['100'],
         color: vars.color.white,
         border: 'none',
         borderRadius: '4px',
@@ -73,25 +81,28 @@ export const recipeButton = style([
         whiteSpace: 'nowrap',
 
         ':hover': {
-            backgroundColor: vars.color.gray['90'], // Approximate dark green hover
+            backgroundColor: vars.color.gray['90'],
         },
 
         '@media': {
-            '(max-width: 1024px)': {
-                display: 'none',
+            [media.desktop]: {
+                display: 'flex',
             },
         },
     },
 ]);
 
 export const nav = style({
-    display: 'flex',
+    display: 'none',
     alignItems: 'center',
     gap: '24px',
 
     '@media': {
-        '(max-width: 768px)': {
-            display: 'none',
+        [media.tablet]: {
+            display: 'flex',
+        },
+        [media.desktop]: {
+            display: 'flex',
         },
     },
 });
@@ -152,19 +163,22 @@ export const iconButton = style({
 });
 
 export const mobileMenuButton = style({
-    display: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '40px',
+    height: '40px',
+    border: 'none',
+    background: 'transparent',
+    borderRadius: '50%',
+    cursor: 'pointer',
 
     '@media': {
-        '(max-width: 768px)': {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '40px',
-            height: '40px',
-            border: 'none',
-            background: 'transparent',
-            borderRadius: '50%',
-            cursor: 'pointer',
+        [media.tablet]: {
+            display: 'none',
+        },
+        [media.desktop]: {
+            display: 'none',
         },
     },
 });
@@ -194,7 +208,6 @@ export const cartBadge = style({
     backgroundColor: vars.color.red,
     borderRadius: '50%',
 
-    fontFamily: 'Pretendard',
     fontWeight: 600,
     fontSize: '1rem',
     lineHeight: '150%',
@@ -217,7 +230,10 @@ export const searchIcon = style({
     },
 
     '@media': {
-        '(min-width: 768px)': {
+        [media.tablet]: {
+            order: 2,
+        },
+        [media.desktop]: {
             order: 2,
         },
     },
@@ -238,7 +254,10 @@ export const alarmIcon = style({
     },
 
     '@media': {
-        '(min-width: 768px)': {
+        [media.tablet]: {
+            display: 'none',
+        },
+        [media.desktop]: {
             display: 'none',
         },
     },

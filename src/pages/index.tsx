@@ -1,6 +1,5 @@
-import { Geist, Geist_Mono } from 'next/font/google';
-import Head from 'next/head';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 
 import { LazyRender } from '@/components/common/LazyRender';
 import { HeroBanner } from '@/components/hero-banner';
@@ -14,16 +13,6 @@ const Best = dynamic(() => import('@/components/section/best'), {
 });
 const RecipeSection = dynamic(() => import('@/components/section/recipe'), {
     ssr: false,
-});
-
-const geistSans = Geist({
-    variable: '--font-geist-sans',
-    subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-    variable: '--font-geist-mono',
-    subsets: ['latin'],
 });
 
 export default function Home() {
@@ -42,9 +31,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div
-                className={`${styles.main} ${geistSans.variable} ${geistMono.variable}`}
-            >
+            <div className={`${styles.main}`}>
                 {/* Full-width HeroBanner */}
                 <HeroBanner />
 

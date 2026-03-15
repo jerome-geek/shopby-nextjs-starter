@@ -38,11 +38,17 @@ globalStyle('html', {
     padding: 0,
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
+    colorScheme: 'light dark',
+});
+
+globalStyle('html, body', {
+    maxWidth: '100vw',
+    overflowX: 'hidden',
 });
 
 globalStyle('body', {
     fontFamily:
-        'Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
+        '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
     color: vars.color.black,
     backgroundColor: vars.color.white,
     minHeight: '100vh',

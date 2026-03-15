@@ -1,7 +1,10 @@
+import { HeroBanner } from '@/components/hero-banner';
+import * as styles from '@/styles/Home.css';
 export default function ShopMain() {
     return (
-        <>
-            <h1>샵 메인 페이지</h1>
-        </>
+        <div className={styles.main}>
+            {/* Full-width HeroBanner */}
+            <HeroBanner />
+        </div>
     );
 }

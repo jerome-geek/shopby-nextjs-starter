@@ -10,7 +10,6 @@ import { ReactLenis } from 'lenis/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { generateDefaultSeo } from 'next-seo/pages';
 import type { AppProps } from 'next/app';
-import { Noto_Sans_KR } from 'next/font/google';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { OverlayProvider } from 'overlay-kit';
@@ -21,13 +20,6 @@ import { Layout } from '@/components/layout';
 
 import '@/styles/global.css';
 import '@/i18n/config';
-import '@/styles/globals.css';
-
-const notoSansKr = Noto_Sans_KR({
-    subsets: ['latin'],
-    weight: ['100', '300', '400', '500', '700', '900'],
-    variable: '--font-noto-sans-kr',
-});
 
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
@@ -57,7 +49,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <HydrationBoundary state={pageProps.dehydratedState}>
                     <OverlayProvider>
                         <Head>{defaultSeo}</Head>
-                        <Layout className={notoSansKr.className}>
+                        <Layout>
                             <AnimatePresence mode="wait">
                                 {/* TODO: router.route를 사용할 경우 slug페이지에서 애니메이션이 미동작하는 경우가 있어 router.asPath 사용, 이 경우 queryParameter가 변경되는 경우에도 페이지 transition이 동작함 */}
                                 <motion.div

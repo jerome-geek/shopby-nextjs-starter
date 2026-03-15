@@ -22,7 +22,6 @@ export const main = style({
     // },
 
     minHeight: '100vh',
-    fontFamily: 'var(--font-geist-sans)',
     backgroundColor: background,
     maxWidth: '1200px',
     padding: '0 20px',
