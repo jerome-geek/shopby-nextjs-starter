@@ -74,7 +74,7 @@ export function BottomNav() {
         },
         {
             label: t('쇼핑'),
-            href: '/products',
+            href: PATHS.SHOP.DISCOVERY,
             icon: ShoppingIcon,
         },
         {

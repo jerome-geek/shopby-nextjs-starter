@@ -65,74 +65,85 @@ function FooterContent() {
 
     return (
         <footer className={styles.footerContainer} id="footer">
-            <div className={styles.footerSection}>
-                <h3 className={styles.footerSectionTitle}>
-                    {companyInfo.companyName}
-                </h3>
+            <div className={styles.footerInner}>
+                <div className={styles.footerSection}>
+                    <h3 className={styles.footerSectionTitle}>
+                        {companyInfo.companyName}
+                    </h3>
 
-                <dl className={styles.infoList}>
-                    <div className={styles.infoItem}>
-                        <dt>{t('대표이사')}:</dt>
-                        <dd>{companyInfo.representativeName}</dd>
-                    </div>
-                    <div className={styles.infoItem}>
-                        <dt>{t('사업자등록번호')}:</dt>
-                        <dd>{companyInfo.businessRegistrationNo}</dd>
-                    </div>
-                    <div className={styles.infoItem}>
-                        <dt>{t('통신판매업신고')}:</dt>
-                        <dd>
-                            {companyInfo.onlineMarketingBusinessDeclarationNo}
-                        </dd>
-                    </div>
-                    <div className={styles.infoItem}>
-                        <dt className={visuallyHidden}>{t('주소')}:</dt>
-                        <dd>{companyInfo.address}</dd>
-                    </div>
-                </dl>
-            </div>
+                    <dl className={styles.infoList}>
+                        <div className={styles.infoItem}>
+                            <dt>{t('대표이사')}:</dt>
+                            <dd>{companyInfo.representativeName}</dd>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <dt>{t('사업자등록번호')}:</dt>
+                            <dd>{companyInfo.businessRegistrationNo}</dd>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <dt>{t('통신판매업신고')}:</dt>
+                            <dd>
+                                {
+                                    companyInfo.onlineMarketingBusinessDeclarationNo
+                                }
+                            </dd>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <dt className={visuallyHidden}>{t('주소')}:</dt>
+                            <dd>{companyInfo.address}</dd>
+                        </div>
+                    </dl>
+                </div>
 
-            <div className={styles.footerSection}>
-                <h3 className={styles.footerSectionTitle}>{t('고객센터')}</h3>
+                <div className={styles.rightGroup}>
+                    <div className={styles.footerSection}>
+                        <h3 className={styles.footerSectionTitle}>
+                            {t('고객센터')}
+                        </h3>
 
-                <dl className={styles.infoList}>
-                    <div className={styles.infoItem}>
-                        <dt>{t('전화')}:</dt>
-                        <dd>{companyInfo.representPhoneNo}</dd>
+                        <dl className={styles.infoList}>
+                            <div className={styles.infoItem}>
+                                <dt>{t('전화')}:</dt>
+                                <dd>{companyInfo.representPhoneNo}</dd>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <dt>{t('이메일')}:</dt>
+                                <dd>{companyInfo.email}</dd>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <dt>{t('운영시간')}:</dt>
+                                <dd>
+                                    {t(
+                                        '운영시간: 평일 09:00 - 18:00 (주말 및 공휴일 휴무)',
+                                    )}
+                                </dd>
+                            </div>
+                        </dl>
                     </div>
-                    <div className={styles.infoItem}>
-                        <dt>{t('이메일')}:</dt>
-                        <dd>{companyInfo.email}</dd>
-                    </div>
-                    <div className={styles.infoItem}>
-                        <dt>{t('운영시간')}:</dt>
-                        <dd>{t('평일 09:00 - 18:00 (주말 및 공휴일 휴무)')}</dd>
-                    </div>
-                </dl>
-            </div>
 
-            <div>
-                <nav className={styles.bottomLinks}>
-                    {menuLinks.map((link) => (
-                        <Link
-                            key={link.label}
-                            href={link.href}
-                            className={clsx(
-                                styles.bottomLink,
-                                link.isHighlight && styles.bottomLinkHighlight,
-                            )}
-                            target={link.target}
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
-                </nav>
-            </div>
+                    <nav className={styles.bottomLinks}>
+                        {menuLinks.map((link) => (
+                            <Link
+                                key={link.label}
+                                href={link.href}
+                                className={clsx(
+                                    styles.bottomLink,
+                                    link.isHighlight &&
+                                        styles.bottomLinkHighlight,
+                                ) || undefined}
+                                target={link.target}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </nav>
+                </div>
 
-            <div>
-                <p className={styles.copyright}>
-                    © 2024 Jollypot Inc. All rights reserved.
-                </p>
+                <div className={styles.copyrightSection}>
+                    <p className={styles.copyright}>
+                        © 2024 Jollypot Inc. All rights reserved.
+                    </p>
+                </div>
             </div>
         </footer>
     );

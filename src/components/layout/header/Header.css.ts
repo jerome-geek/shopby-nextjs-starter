@@ -24,20 +24,25 @@ export const header = style({
 });
 
 export const headerInner = style({
-    display: 'flex',
+    display: 'grid',
+    gridTemplateColumns: '1fr auto 1fr',
     alignItems: 'center',
-    justifyContent: 'space-between',
     maxWidth: '1200px',
     height: '100%',
     margin: '0 auto',
-    gap: '16px',
 
     '@media': {
         [media.tablet]: {
+            display: 'flex',
+            justifyContent: 'space-between',
             gap: '32px',
+            gridTemplateColumns: 'none',
         },
         [media.desktop]: {
+            display: 'flex',
+            justifyContent: 'space-between',
             gap: '32px',
+            gridTemplateColumns: 'none',
         },
     },
 });
@@ -60,9 +65,23 @@ export const logoSection = style({
 export const logo = style({
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     width: '107px',
     height: '40px',
     flexShrink: 0,
+
+    '@media': {
+        [media.tablet]: {
+            order: 1,
+            justifyContent: 'flex-start',
+            marginRight: '32px',
+        },
+        [media.desktop]: {
+            order: 1,
+            justifyContent: 'flex-start',
+            marginRight: '32px',
+        },
+    },
 });
 
 export const recipeButton = style([
@@ -136,12 +155,28 @@ export const utilitySection = style({
     display: 'flex',
     alignItems: 'center',
     gap: '24px',
+    justifyContent: 'flex-end',
+
+    '@media': {
+        [media.tablet]: {
+            order: 3,
+        },
+        [media.desktop]: {
+            order: 3,
+        },
+    },
 });
 
 export const iconList = style({
     display: 'flex',
     alignItems: 'center',
-    gap: '16px',
+    gap: '12px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '16px',
+        },
+    },
 });
 
 export const iconButton = style({
@@ -185,7 +220,7 @@ export const mobileMenuButton = style({
 
 export const iconLink = style({
     position: 'relative',
-    display: 'flex',
+    display: 'none',
     alignItems: 'center',
     justifyContent: 'center',
     width: '24px',
@@ -196,24 +231,50 @@ export const iconLink = style({
     ':hover': {
         opacity: 0.7,
     },
+
+    '@media': {
+        [media.tablet]: {
+            display: 'flex',
+        },
+        [media.desktop]: {
+            display: 'flex',
+        },
+    },
 });
 
-export const cartBadge = style({
-    position: 'absolute',
-    top: '-6px',
-    right: '-6px',
-    width: '20px',
-    height: '20px',
-    color: vars.color.white,
-    backgroundColor: vars.color.red,
-    borderRadius: '50%',
-
-    fontWeight: 600,
-    fontSize: '1rem',
-    lineHeight: '150%',
-    letterSpacing: '-2%',
-    textAlign: 'center',
+export const mobileVisibleIcon = style({
+    display: 'flex !important',
 });
+
+export const mobileHiddenItem = style({
+    display: 'none',
+
+    '@media': {
+        [media.tablet]: {
+            display: 'list-item',
+        },
+        [media.desktop]: {
+            display: 'list-item',
+        },
+    },
+});
+
+export const cartBadge = style([
+    textStyles.caption2Semibold,
+    {
+        position: 'absolute',
+        top: '-4px',
+        right: '-4px',
+        width: '15px',
+        height: '15px',
+        color: vars.color.white,
+        backgroundColor: vars.color.pink['100'],
+        borderRadius: '50%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+]);
 
 export const searchIcon = style({
     display: 'flex',

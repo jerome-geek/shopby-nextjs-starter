@@ -5,20 +5,32 @@ import { textStyles } from '@/styles/typography.css';
 
 export const footerContainer = style({
     width: '100%',
-    padding: '48px 20px calc(70px + 90px)', // Bottom padding increased for BottomNav
-    backgroundColor: vars.color.white,
+    padding: '48px 20px calc(48px + 70px)', // Mobile padding
+    backgroundColor: '#F8F8F8', // Light background matching image
     borderTop: `1px solid ${vars.color.gray[20]}`,
     color: vars.color.black,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
 
     '@media': {
-        [media.tablet]: {
-            padding: '60px 24px 60px',
-        },
         [media.desktop]: {
-            padding: '60px 0 60px',
+            padding: '60px 0',
+        },
+    },
+});
+
+export const footerInner = style({
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '40px',
+
+    '@media': {
+        [media.desktop]: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            columnGap: '60px',
+            rowGap: '60px',
         },
     },
 });
@@ -32,8 +44,9 @@ export const footerSection = style({
 export const footerSectionTitle = style([
     textStyles.body1Bold,
     {
-        color: vars.color.gray[80],
-        margin: 0,
+        color: vars.color.black, // Darker for title
+        margin: '0 0 12px 0',
+        fontSize: '1.4rem',
     },
 ]);
 
@@ -43,7 +56,8 @@ export const infoList = style([
         display: 'flex',
         flexDirection: 'column',
         gap: '4px',
-        color: vars.color.gray[60],
+        color: '#888888', // Lighter gray for info
+        fontSize: '1.2rem',
     },
 ]);
 
@@ -52,50 +66,62 @@ export const infoItem = style({
     gap: '4px',
 });
 
+export const rightGroup = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '40px',
+});
+
 export const bottomLinks = style({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: '20px',
+    gap: '12px', // Specific gap for separators
 });
 
 export const bottomLink = style([
-    textStyles.body1Medium,
+    textStyles.body2Semibold,
     {
-        color: vars.color.gray[80],
+        color: vars.color.black,
         textDecoration: 'none',
         display: 'flex',
         alignItems: 'center',
+        fontSize: '1.2rem',
 
         selectors: {
             '&:not(:last-child)::after': {
-                content: '""',
+                content: '"|"',
                 display: 'inline-block',
-                width: '1px',
-                height: '10px',
-                backgroundColor: vars.color.gray[30],
+                color: '#E0E0E0',
                 marginLeft: '12px',
+                fontWeight: 'normal',
             },
         },
     },
 ]);
 
 export const bottomLinkHighlight = style([
-    textStyles.body1Semibold,
+    textStyles.body2Semibold,
     {
-        color: vars.color.gray[90],
+        color: vars.color.black,
+        fontWeight: 700,
     },
 ]);
 
 // ===== 저작권 섹션 =====
 export const copyrightSection = style({
-    paddingTop: '12px',
-    borderTop: `1px solid ${vars.color.gray[60]}`,
+    gridColumn: '1 / -1',
+    marginTop: '40px',
+    paddingTop: '20px',
+    borderTop: '1px solid #E0E0E0',
 });
 
 export const copyright = style([
     textStyles.caption1Regular,
-    { color: vars.color.gray[60] },
+    { 
+        color: '#AAAAAA',
+        fontSize: '1.1rem',
+    },
 ]);
 
 // 기존 스타일 유지를 위한 stub (필요 시 수정/삭제 가능)

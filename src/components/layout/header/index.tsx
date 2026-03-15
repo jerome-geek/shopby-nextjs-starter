@@ -12,9 +12,10 @@ import { Menu } from '@/components/layout/header/Menu';
 import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
 import { vars } from '@/styles/theme.css';
 import logoImage from '@/assets/logo.png';
+import useCart from '@/hooks/order/useCart';
 
 export function Header() {
-    const cartCount = 2; // 이미지와 동일하게 2로 설정
+    const { cartCount } = useCart();
 
     const { data: categoriesByCodeData } = useCategoriesByCode({
         data: { codes: ['MAIN'] },
@@ -28,18 +29,17 @@ export function Header() {
     return (
         <header className={styles.header}>
             <div className={styles.headerInner}>
-                <div className={styles.logoSection}>
-                    <Link href={PATHS.MAIN} className={styles.logo}>
-                        <Image
-                            src={logoImage}
-                            alt="Jolly pot"
-                            width={107}
-                            height={40}
-                            priority
-                        />
-                    </Link>
-                    <Menu categoryData={categoryData} />
-                </div>
+                <Menu categoryData={categoryData} />
+
+                <Link href={PATHS.MAIN} className={styles.logo}>
+                    <Image
+                        src={logoImage}
+                        alt="Jolly pot"
+                        width={107}
+                        height={40}
+                        priority
+                    />
+                </Link>
 
                 <div className={styles.utilitySection}>
                     <button className={styles.recipeButton}>
@@ -57,7 +57,7 @@ export function Header() {
                                 <BigSearchIcon width={24} height={24} />
                             </button>
                         </li>
-                        <li>
+                        <li className={styles.mobileHiddenItem}>
                             <Link
                                 href={PATHS.MYPAGE.WISH}
                                 className={styles.iconLink}
@@ -68,7 +68,7 @@ export function Header() {
                         <li>
                             <Link
                                 href={PATHS.ORDER.CART}
-                                className={styles.iconLink}
+                                className={`${styles.iconLink} ${styles.mobileVisibleIcon}`}
                             >
                                 <BigCartIcon width={24} height={24} />
                                 {cartCount > 0 && (
@@ -78,7 +78,7 @@ export function Header() {
                                 )}
                             </Link>
                         </li>
-                        <li>
+                        <li className={styles.mobileHiddenItem}>
                             <Link
                                 href={PATHS.MYPAGE.MAIN}
                                 className={styles.iconLink}

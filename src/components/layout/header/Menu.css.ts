@@ -1,3 +1,4 @@
+import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
@@ -8,44 +9,75 @@ export const container = style({
     display: 'flex',
     alignItems: 'center',
     gap: '24px',
+
+    '@media': {
+        [media.mobile]: {
+            gap: 0,
+        },
+        [media.tablet]: {
+            order: 2,
+            flex: 1,
+        },
+        [media.desktop]: {
+            order: 2,
+            flex: 1,
+        },
+    },
 });
 
-export const categoryButton = style([
-    textStyles.headlineSemibold,
-    {
-        display: 'none',
+export const categoryButton = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    padding: 0,
 
-        '@media': {
-            [media.desktop]: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '7.5px 10px',
-                backgroundColor: vars.color.white,
-                color: vars.color.black,
-                border: `1px solid ${vars.color.gray['60']}`,
-                borderRadius: '4px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                zIndex: 101,
+    '@media': {
+        [media.desktop]: {
+            gap: '8px',
+            padding: '7.5px 10px',
+            backgroundColor: vars.color.white,
+            color: vars.color.black,
+            border: `1px solid ${vars.color.gray['60']}`,
+            borderRadius: '4px',
+            transition: 'all 0.2s ease',
+            zIndex: 101,
 
-                ':hover': {
+            ':hover': {
+                backgroundColor: vars.color.gray['80'],
+                borderColor: vars.color.gray['80'],
+                color: vars.color.white,
+            },
+
+            selectors: {
+                '&[aria-expanded="true"]': {
                     backgroundColor: vars.color.gray['80'],
                     borderColor: vars.color.gray['80'],
                     color: vars.color.white,
                 },
-
-                selectors: {
-                    '&[aria-expanded="true"]': {
-                        backgroundColor: vars.color.gray['80'],
-                        borderColor: vars.color.gray['80'],
-                        color: vars.color.white,
-                    },
+                // headlineSemibold properties manually added here to avoid spread error
+                '&': {
+                    fontSize: '1.5rem',
+                    fontWeight: 600,
+                    lineHeight: '1.399999976158142',
+                    letterSpacing: '-0.20000000298023224%',
                 },
             },
         },
     },
-]);
+});
+
+export const categoryText = style({
+    display: 'none',
+
+    '@media': {
+        [media.desktop]: {
+            display: 'inline',
+        },
+    },
+});
 
 export const menuListContainer = style({
     display: 'flex',
@@ -89,16 +121,23 @@ export const homeItem = style([menuItem, { color: vars.color.black }]);
 
 export const drawerContainer = style({
     position: 'fixed',
-    top: '80px', // Header height
+    top: globalVars.header.mobileHeight,
     left: 0,
     width: '100%',
     backgroundColor: vars.color.white,
     borderBottom: `1px solid ${vars.color.gray['20']}`,
     zIndex: 100,
     padding: '30px 0 50px',
-    maxHeight: 'calc(100vh - 80px)',
+    maxHeight: `calc(100vh - ${globalVars.header.mobileHeight})`,
     overflow: 'hidden',
     boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+
+    '@media': {
+        [media.desktop]: {
+            top: globalVars.header.height,
+            maxHeight: `calc(100vh - ${globalVars.header.height})`,
+        },
+    },
 });
 
 export const drawerInner = style({

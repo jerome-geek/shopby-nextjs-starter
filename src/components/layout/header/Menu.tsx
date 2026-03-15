@@ -128,7 +128,7 @@ export function Menu({ categoryData }: MenuProps) {
                 aria-expanded={isDrawerOpen}
             >
                 <MenuIcon />
-                <span>카테고리</span>
+                <span className={styles.categoryText}>카테고리</span>
             </button>
 
             <div className={styles.menuListContainer}>
