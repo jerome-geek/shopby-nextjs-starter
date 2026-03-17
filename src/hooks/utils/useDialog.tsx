@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
-import * as styles from '@/hooks/useDialog.css';
+import * as styles from '@/hooks/utils/useDialog.css';
 
 interface UseDialogProps {
     message: string;
@@ -74,7 +74,7 @@ const useDialog = () => {
                 );
             }, options);
         },
-        [t]
+        [t],
     );
 
     const openAsyncDialog = useCallback(
@@ -121,7 +121,7 @@ const useDialog = () => {
                 );
             }, options);
         },
-        [t]
+        [t],
     );
 
     const openLoginDialog = useCallback(() => {
@@ -129,7 +129,7 @@ const useDialog = () => {
             return (
                 <ConfirmDialog
                     {...props}
-                    iconType='auth'
+                    iconType="auth"
                     Title={
                         <p className={styles.title}>
                             {t('로그인 후 이용하실 수 있습니다.')}

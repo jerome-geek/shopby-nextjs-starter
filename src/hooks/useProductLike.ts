@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useProductProfileMutation } from '@/hooks/mutations';
 import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
-import useDialog from '@/hooks/useDialog';
+import useDialog from '@/hooks/utils/useDialog';
 
 const useProductLike = () => {
     const { t } = useTranslation();

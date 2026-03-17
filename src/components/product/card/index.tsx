@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { PATHS } from '@/const/paths';
 import { useProductProfileMutation } from '@/hooks/mutations';
 import { useAuth } from '@/hooks/useAuth';
-import useDialog from '@/hooks/useDialog';
+import useDialog from '@/hooks/utils/useDialog';
 import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
@@ -13,7 +13,6 @@ import { normalizeImageUrl } from '@/utils/shopby';
 import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 import * as styles from './index.css';
 import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
-import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 
 interface ProductCardProps {
     productNo: number;

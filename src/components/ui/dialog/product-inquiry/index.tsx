@@ -16,7 +16,7 @@ import Select from '@/components/ui/Select';
 import { PATHS } from '@/const/paths';
 import { useProductInquiryMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';
-import useDialog from '@/hooks/useDialog';
+import useDialog from '@/hooks/utils/useDialog';
 import { GetMallResponse } from '@/models/admin/mall';
 import { WriteProductInquiryData } from '@/models/display/productInquiry';
 import * as styles from '@/components/ui/dialog/product-inquiry/index.css';
@@ -132,21 +132,20 @@ export default function ProductInquiryDialog({
                 <form className={styles.form} onSubmit={onSubmit}>
                     <div className={styles.container}>
                         <div className={styles.section}>
-                            <p className={styles.headline}>
-                                {t('문의 유형')}
-                            </p>
+                            <p className={styles.headline}>{t('문의 유형')}</p>
                             <Controller
                                 control={control}
-                                name='type'
+                                name="type"
                                 rules={{
-                                    required: t('상품 문의 유형을 선택해 주세요.'),
+                                    required:
+                                        t('상품 문의 유형을 선택해 주세요.'),
                                 }}
                                 render={({
                                     field: { onChange, value, ...rest },
                                 }) => (
                                     <Select
                                         {...rest}
-                                        name='type'
+                                        name="type"
                                         placeholder={t('유형을 선택해 주세요.')}
                                         options={inquiryTypeList}
                                         value={inquiryTypeList.find(
@@ -160,18 +159,18 @@ export default function ProductInquiryDialog({
                                     />
                                 )}
                             />
-                            <ErrorMessage name='type' />
+                            <ErrorMessage name="type" />
                         </div>
 
                         <div className={styles.section}>
                             <InputLabel
-                                htmlFor='title'
+                                htmlFor="title"
                                 className={styles.headline}
                             >
                                 {t('문의 제목')}
                             </InputLabel>
                             <InputField
-                                id='title'
+                                id="title"
                                 placeholder={t('문의의 제목을 작성해 주세요.')}
                                 {...register('title', {
                                     required: t('문의의 제목을 작성해 주세요.'),
@@ -181,13 +180,13 @@ export default function ProductInquiryDialog({
 
                         <div className={styles.section}>
                             <InputLabel
-                                htmlFor='content'
+                                htmlFor="content"
                                 className={styles.headline}
                             >
                                 {t('문의 내용')}
                             </InputLabel>
                             <TextArea
-                                id='content'
+                                id="content"
                                 placeholder={t('문의의 내용을 작성해 주세요.')}
                                 {...register('content', {
                                     required: t('문의의 내용을 작성해 주세요.'),
@@ -198,18 +197,18 @@ export default function ProductInquiryDialog({
                         <div className={styles.checkboxContainer}>
                             <Controller
                                 control={control}
-                                name='secreted'
+                                name="secreted"
                                 render={({ field }) => {
                                     return (
                                         <InputCheckbox
-                                            id='secreted'
+                                            id="secreted"
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
                                         />
                                     );
                                 }}
                             />
-                            <InputLabel isCheckbox htmlFor='secreted'>
+                            <InputLabel isCheckbox htmlFor="secreted">
                                 {t('비밀글로 등록하기')}
                             </InputLabel>
                         </div>
@@ -223,11 +222,11 @@ export default function ProductInquiryDialog({
                             <ul className={styles.warningList}>
                                 <li>
                                     <Trans
-                                        i18nKey='결제 및 교환, 취소, 환불 문의는 <0>1:1문의</0>를 이용해 주세요.'
-                                        defaults='결제 및 교환, 취소, 환불 문의는 <0>1:1문의</0>를 이용해 주세요.'
+                                        i18nKey="결제 및 교환, 취소, 환불 문의는 <0>1:1문의</0>를 이용해 주세요."
+                                        defaults="결제 및 교환, 취소, 환불 문의는 <0>1:1문의</0>를 이용해 주세요."
                                         components={[
                                             <Link
-                                                key='inquiry-link'
+                                                key="inquiry-link"
                                                 prefetch={false}
                                                 className={styles.link}
                                                 href={
@@ -251,7 +250,7 @@ export default function ProductInquiryDialog({
                         </div>
                     </div>
 
-                    <Button type='submit' frame='solid' variant='primary'>
+                    <Button type="submit" frame="solid" variant="primary">
                         {t('문의하기')}
                     </Button>
                 </form>

@@ -9,7 +9,7 @@ import InputContainer from '@/components/ui/input/InputContainer';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { useMall } from '@/hooks/suspenseQuery/admin/mall';
-import useDialog from '@/hooks/useDialog';
+import useDialog from '@/hooks/utils/useDialog';
 import { useTimer } from '@/hooks/useTimer';
 import * as styles from '@/components/ui/form/EmailAuthentication.css';
 import { profile } from '@/api/member';

@@ -3,7 +3,7 @@
 import { AxiosError, isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-import useDialog from '@/hooks/useDialog';
+import useDialog from '@/hooks/utils/useDialog';
 
 /**
  * API 에러 핸들링을 위한 설정 인터페이스

@@ -24,5 +24,16 @@ import type { CookieCtx } from '@/utils/cookie';
  * };
  */
 export function isLoggedIn(ctx?: CookieCtx): boolean {
-    return !!(accessTokenCookie.get(ctx) || refreshTokenCookie.get(ctx));
+    const access = accessTokenCookie.get(ctx);
+    console.log('🚀 ~ isLoggedIn ~ access:', access);
+    const refresh = refreshTokenCookie.get(ctx);
+    console.log('🚀 ~ isLoggedIn ~ refresh:', refresh);
+
+    if (access || refresh) {
+        console.log(
+            `[Auth] Logged in detected. Access: ${!!access}, Refresh: ${!!refresh}`,
+        );
+    }
+
+    return !!(access || refresh);
 }

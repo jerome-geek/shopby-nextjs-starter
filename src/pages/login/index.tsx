@@ -5,19 +5,21 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { oauth2 } from '@/api/auth';
-import { cookieTokenManager } from '@/api/core/cookie';
+import SocialLoginList from '@/components/auth/social-login-list';
+import { Layout } from '@/components/layout';
+import { AuthLayout } from '@/components/layout/AuthLayout';
 import { Button } from '@/components/ui/button';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { PATHS } from '@/const/paths';
-import useSnsLogin from '@/hooks/useSnsLogin';
 import useApiError from '@/hooks/useApiError';
+import { NextPageWithLayout } from '@/pages/_app';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import * as styles from '@/styles/pages/login.css';
 
-export default function LoginPage() {
+const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const returnUrl = (router.query.returnUrl as string) || '';
@@ -45,12 +47,6 @@ export default function LoginPage() {
         formState: { isSubmitting },
     } = methods;
 
-    const { socialLoginList } = useSnsLogin();
-    const availableSocialLoginList = socialLoginList.filter(
-        ({ isAvailable }) => isAvailable,
-    );
-    const isSocialLoginVisible = availableSocialLoginList.length > 0;
-
     const onSubmit = handleSubmit(async ({ memberId, password, isSaved }) => {
         try {
             const data = await oauth2.issueAccessToken({
@@ -58,13 +54,6 @@ export default function LoginPage() {
                 password,
                 keepLogin: true,
             });
-            // TODO: 30분 더 길게 추가
-            // await cookieTokenManager.setToken({
-            //     accessToken: data.accessToken,
-            //     refreshToken: data.refreshToken,
-            //     expiresIn: data.expiresIn + 1800,
-            //     refreshTokenExpiresIn: data.refreshTokenExpiresIn,
-            // });
 
             router.push(returnUrl || PATHS.MAIN);
         } catch (error) {
@@ -74,13 +63,13 @@ export default function LoginPage() {
 
     return (
         <FormProvider {...methods}>
-            <div className={styles.container}>
-                {/* 로그인 폼 */}
-                <div className={styles.loginFormSection}>
-                    <form className={styles.form} onSubmit={onSubmit}>
-                        {/* 로그인 헤더 */}
-                        <h1 className={styles.heading}>{t('로그인')}</h1>
+            {/* 로그인 폼 */}
+            <div className={styles.loginFormSection}>
+                <form className={styles.form} onSubmit={onSubmit}>
+                    {/* 로그인 헤더 */}
+                    <h1 className={styles.heading}>{t('로그인')}</h1>
 
+                    <div>
                         {/* 아이디 입력 */}
                         <div className={styles.inputGroup}>
                             <InputLabel htmlFor="memberId">
@@ -128,75 +117,58 @@ export default function LoginPage() {
                                 {t('아이디 저장')}
                             </InputLabel>
                         </div>
+                    </div>
 
-                        {/* 버튼 컨테이너 */}
-                        <div className={styles.buttonContainer}>
-                            <Button
-                                type="submit"
-                                frame="solid"
-                                variant="primary"
-                                disabled={isSubmitting}
+                    {/* 버튼 컨테이너 */}
+                    <div className={styles.buttonContainer}>
+                        <Button
+                            type="submit"
+                            frame="solid"
+                            variant="primary"
+                            disabled={isSubmitting}
+                        >
+                            <span>
+                                {isSubmitting ? t('로그인 중...') : t('로그인')}
+                            </span>
+                        </Button>
+
+                        <Button
+                            type="button"
+                            frame="outlined"
+                            variant="primary"
+                            onClick={() =>
+                                router.push(PATHS.SIGNUP.REGISTER_METHOD)
+                            }
+                        >
+                            <span>{t('회원가입')}</span>
+                        </Button>
+                    </div>
+                </form>
+
+                <ul className={styles.linkList}>
+                    {links.map(({ href, label }) => (
+                        <li key={href} className={styles.linkItem}>
+                            <Link
+                                href={href}
+                                prefetch={false}
+                                className={styles.link}
                             >
-                                <span>
-                                    {isSubmitting
-                                        ? t('로그인 중...')
-                                        : t('로그인')}
-                                </span>
-                            </Button>
-
-                            <Button
-                                type="button"
-                                frame="outlined"
-                                variant="primary"
-                                onClick={() =>
-                                    router.push(PATHS.SIGNUP.REGISTER_METHOD)
-                                }
-                            >
-                                <span>{t('회원가입')}</span>
-                            </Button>
-                        </div>
-                    </form>
-
-                    <ul className={styles.linkList}>
-                        {links.map(({ href, label }) => (
-                            <li key={href} className={styles.linkItem}>
-                                <Link
-                                    href={href}
-                                    prefetch={false}
-                                    className={styles.link}
-                                >
-                                    {t(label)}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                {/* 간편로그인 섹션 */}
-                {isSocialLoginVisible && (
-                    <ul className={styles.socialLoginList}>
-                        {availableSocialLoginList.map(
-                            ({ label, provider, onClick, Icon }) => {
-                                return (
-                                    <li key={`social-login-button-${provider}`}>
-                                        <Button
-                                            type="button"
-                                            frame="solid"
-                                            variant={provider}
-                                            onClick={() =>
-                                                onClick({ returnUrl })
-                                            }
-                                        >
-                                            {Icon && <Icon />}
-                                            <span>{label}</span>
-                                        </Button>
-                                    </li>
-                                );
-                            },
-                        )}
-                    </ul>
-                )}
+                                {t(label)}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
             </div>
+
+            <SocialLoginList />
         </FormProvider>
     );
-}
+};
+
+LoginPage.getLayout = (page) => (
+    <Layout>
+        <AuthLayout>{page}</AuthLayout>
+    </Layout>
+);
+
+export default LoginPage;

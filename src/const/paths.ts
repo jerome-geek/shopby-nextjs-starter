@@ -46,7 +46,7 @@ export const PATHS = {
         /** 약관동의 페이지 */
         TERMS: '/signup/terms',
         /** 회원가입 정보 입력 페이지 */
-        FORM: '/signup/form',
+        REGISTER: '/signup/register',
         /** 회원가입 완료 페이지 */
         COMPLETE: '/signup/complete',
     },

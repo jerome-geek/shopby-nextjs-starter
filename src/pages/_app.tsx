@@ -1,3 +1,5 @@
+import { NextPage } from 'next';
+import { ReactElement, ReactNode } from 'react';
 import {
     HydrationBoundary,
     QueryClient,
@@ -18,10 +20,18 @@ import { Toaster } from 'sonner';
 
 import { Layout } from '@/components/layout';
 
-import '@/styles/global.css';
+import '@/styles/global.css.ts';
 import '@/i18n/config';
 
-export default function App({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+    getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+    Component: NextPageWithLayout;
+};
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
     const router = useRouter();
     const [queryClient] = useState(
         () =>
@@ -37,6 +47,10 @@ export default function App({ Component, pageProps }: AppProps) {
             }),
     );
 
+    // 페이지별 레이아웃 정의가 있으면 사용, 없으면 기본 Layout 사용
+    const getLayout =
+        Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+
     const defaultSeo = generateDefaultSeo({
         titleTemplate: '%s | JollyPot',
         defaultTitle: 'JollyPot',
@@ -49,9 +63,8 @@ export default function App({ Component, pageProps }: AppProps) {
                 <HydrationBoundary state={pageProps.dehydratedState}>
                     <OverlayProvider>
                         <Head>{defaultSeo}</Head>
-                        <Layout>
+                        {getLayout(
                             <AnimatePresence mode="wait">
-                                {/* TODO: router.route를 사용할 경우 slug페이지에서 애니메이션이 미동작하는 경우가 있어 router.asPath 사용, 이 경우 queryParameter가 변경되는 경우에도 페이지 transition이 동작함 */}
                                 <motion.div
                                     key={router.asPath}
                                     initial={{ opacity: 0, y: 20 }}
@@ -61,8 +74,8 @@ export default function App({ Component, pageProps }: AppProps) {
                                 >
                                     <Component {...pageProps} />
                                 </motion.div>
-                            </AnimatePresence>
-                        </Layout>
+                            </AnimatePresence>,
+                        )}
                         <Toaster />
                         <ReactQueryDevtools initialIsOpen={false} />
                         <Analytics />

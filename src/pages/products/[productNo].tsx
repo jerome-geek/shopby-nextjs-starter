@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { product } from '@/api/product';
 // import OptionSelectBottomSheet from '@/components/bottom-sheet/OptionSelect';
-import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
+// import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 import PhotoReview from '@/components/product/photoReview';
 import ProductTabs from '@/components/product/productTabs';
@@ -216,7 +216,7 @@ function ProductDetailView({
                                 productDetailData.liked,
                             )}
                         >
-                            <BookmarkIcon isActive={productDetailData.liked} />
+                            {/* <BookmarkIcon isActive={productDetailData.liked} /> */}
                         </button>
                     </div>
 

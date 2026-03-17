@@ -5,10 +5,9 @@ const bannerKeys = {
 
     /** 배너 목록 조회 */
     lists: () => [...bannerKeys.all, 'list'] as const,
-    list: (bannerSectionCodes: string[], memberNo?: number) => [
+    list: (bannerSectionCodes: string[]) => [
         ...bannerKeys.lists(),
         bannerSectionCodes,
-        memberNo,
     ],
 
     /** 배너 추가 */

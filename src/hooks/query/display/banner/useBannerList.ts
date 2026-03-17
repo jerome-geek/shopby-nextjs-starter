@@ -8,7 +8,6 @@ import { GetBannersResponse } from '@/models/display/banner';
 interface UseBannerListParams<T = GetBannersResponse> {
     type: 'code' | 'id';
     banners: string[];
-    memberNo?: number;
     options?: Omit<
         UseQueryOptions<
             GetBannersResponse,
@@ -37,11 +36,10 @@ const createQueryFn = (type: 'code' | 'id', banners: string[]) => {
 const useBannerList = <T = GetBannersResponse>({
     type = 'code',
     banners,
-    memberNo = 0,
     options,
 }: UseBannerListParams<T>) => {
     return useQuery({
-        queryKey: bannerKeys.list(banners, memberNo),
+        queryKey: bannerKeys.list(banners),
         queryFn: createQueryFn(type, banners),
         staleTime: 1000 * 60 * 60,
         gcTime: 1000 * 60 * 60,

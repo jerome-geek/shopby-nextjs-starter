@@ -11,7 +11,6 @@ import { GetBannersResponse } from '@/models/display/banner';
 interface UseBannerListParams<T = GetBannersResponse> {
     type?: 'code' | 'id';
     banners: string[];
-    memberNo?: number;
     options?: Omit<
         UseSuspenseQueryOptions<
             GetBannersResponse,
@@ -40,11 +39,10 @@ const createQueryFn = (type: 'code' | 'id', banners: string[]) => {
 const useBannerList = <T = GetBannersResponse>({
     type = 'id',
     banners,
-    memberNo = 0,
     options,
 }: UseBannerListParams<T>) => {
     return useSuspenseQuery({
-        queryKey: bannerKeys.list(banners, memberNo),
+        queryKey: bannerKeys.list(banners),
         queryFn: createQueryFn(type, banners),
         staleTime: 1000 * 60 * 60,
         gcTime: 1000 * 60 * 60,

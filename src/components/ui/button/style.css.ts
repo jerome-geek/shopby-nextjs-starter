@@ -16,7 +16,12 @@ export const button = recipe({
             cursor: 'pointer',
             height: '52px',
             width: '100%',
-            transition: 'all 0.3s ease',
+            transition: 'all 0.2s ease-in-out',
+            selectors: {
+                '&:hover:not(:disabled)': {
+                    opacity: 0.85,
+                },
+            },
             ':disabled': {
                 backgroundColor: vars.color.gray['20'],
                 color: vars.color.gray['500'],
@@ -29,18 +34,10 @@ export const button = recipe({
             primary: {
                 color: vars.color.white,
                 backgroundColor: vars.color.primary,
-                ':hover:not(:disabled)': {
-                    color: vars.color.gray['60'],
-                    backgroundColor: vars.color.gray['20'],
-                },
             },
             secondary: {
                 color: vars.color.white,
                 backgroundColor: vars.color.secondary,
-                ':hover:not(:disabled)': {
-                    color: vars.color.gray['60'],
-                    backgroundColor: vars.color.gray['20'],
-                },
             },
             kakao: {
                 color: vars.color.black,
@@ -87,7 +84,13 @@ export const outlinedButton = recipe({
         cursor: 'pointer',
         height: '52px',
         width: '100%',
-        transition: 'all 0.3s ease',
+        transition: 'all 0.2s ease-in-out',
+        selectors: {
+            '&:hover:not(:disabled)': {
+                opacity: 0.7,
+                backgroundColor: vars.color.gray[10],
+            },
+        },
         ':disabled': {
             backgroundColor: vars.color.gray['20'],
             color: vars.color.gray['500'],
@@ -128,6 +131,11 @@ export const textButtonStyle = recipe({
         background: 'none',
         border: 'none',
         padding: 0,
+        selectors: {
+            '&:hover:not(:disabled)': {
+                opacity: 0.6,
+            },
+        },
     },
     variants: {
         visual: {

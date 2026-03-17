@@ -1,21 +1,19 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
+import { media } from '@/styles/media';
+import { authContainer } from '@/styles/layout.css';
 
-export const container = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '60px',
-});
+export const container = authContainer;
 
 export const loginFormSection = style({
     backgroundColor: vars.color.white,
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
+
     '@media': {
-        'screen and (min-width: 768px)': {
-            gap: '32px',
-        },
+        [media.desktop]: { gap: '32px' },
     },
 });
 
@@ -23,18 +21,34 @@ export const form = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
+
     '@media': {
-        'screen and (min-width: 768px)': {
-            gap: '20px',
+        [media.desktop]: {
+            gap: '32px',
         },
     },
 });
 
-export const heading = style({
-    fontSize: '1.875rem', // 3xl
-    fontWeight: 'bold',
-    color: vars.color.black,
-});
+export const heading = style([
+    textStyles.display2Bold,
+    {
+        color: vars.color.black,
+    },
+]);
+
+export const inputGroupContainer = style([
+    {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+
+        '@media': {
+            [media.desktop]: {
+                gap: '20px',
+            },
+        },
+    },
+]);
 
 export const inputGroup = style({
     display: 'flex',
@@ -54,16 +68,19 @@ export const buttonContainer = style({
     gap: '8px',
 });
 
-export const linkList = style({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '16px',
-    fontSize: '0.875rem', // sm
-    padding: 0,
-    margin: 0,
-    listStyle: 'none',
-});
+export const linkList = style([
+    textStyles.caption1Regular,
+    {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 'calc(16px + 1px)',
+        // fontSize: '0.875rem', // sm
+        padding: 0,
+        margin: 0,
+        listStyle: 'none',
+    },
+]);
 
 export const linkItem = style({
     position: 'relative',

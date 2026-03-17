@@ -9,7 +9,7 @@ import { authentication } from '@/api/auth';
 import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 // import { useMyApp } from '@/hooks/myapp';
-import useDialog from '@/hooks/useDialog';
+import useDialog from '@/hooks/utils/useDialog';
 import { NcpOpenIdProviderType } from '@/models';
 // import { shopbyTokenStorage } from '@/utils/storage';
 import {
@@ -322,6 +322,10 @@ const useSnsLogin = () => {
         },
     ];
 
+    const availableSocialLoginList = socialLoginList.filter(
+        ({ isAvailable }) => isAvailable,
+    );
+
     return {
         openNaverRegister,
         openKakaoRegister,
@@ -332,6 +336,7 @@ const useSnsLogin = () => {
         openGoogleRegister,
         openLineRegister,
         socialLoginList,
+        availableSocialLoginList,
     };
 };
 

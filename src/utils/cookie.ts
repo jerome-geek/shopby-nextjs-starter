@@ -45,11 +45,12 @@ export type CookieClearOptions = Pick<
 // ─── Internal ─────────────────────────────────────────────────────────────────
 
 const PREFIX = 'SHOPBY';
+const MALL_ID = 'JOLLYPOT';
 const DEFAULT_PATH = '/';
 const DEFAULT_SAME_SITE = 'lax' as const;
 
 function prefixed(key: string) {
-    return `${PREFIX}_${key}`;
+    return `${PREFIX}_${MALL_ID}_${key}`;
 }
 
 function toDate(expires: number | string): Date {
@@ -74,7 +75,10 @@ function toOptions(
 }
 
 function read(key: string, ctx?: CookieCtx): string | undefined {
-    const val = getCookie(key, { req: ctx?.req, res: ctx?.res });
+    if (ctx?.req) {
+        return (ctx.req.cookies as Record<string, string>)[key];
+    }
+    const val = getCookie(key);
     return val ? String(val) : undefined;
 }
 
