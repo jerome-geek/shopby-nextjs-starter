@@ -154,7 +154,7 @@ export default function Best() {
                 )}
             </div>
 
-            <Link href="/best" className={styles.moreButton}>
+            <Link href="/best" className={styles.moreLink}>
                 {t('베스트 랭킹 더보기')}
                 <ArrowIcon direction="right" />
             </Link>

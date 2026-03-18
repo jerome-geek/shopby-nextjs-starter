@@ -21,12 +21,12 @@ export const main = style({
     //     [buttonSecondaryBorder]: vars.color.gray['30'],
     // },
 
-    minHeight: '100vh',
+    // minHeight: '100vh',
     backgroundColor: background,
-    maxWidth: '1200px',
-    padding: '0 20px',
-    margin: '0 auto',
-    width: '100%',
+    // maxWidth: '1200px',
+    // padding: '0 20px',
+    // margin: '0 auto',
+    // width: '100%',
     // '@media': {
     //     '(prefers-color-scheme: dark)': {
     //         vars: {

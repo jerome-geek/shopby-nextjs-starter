@@ -94,3 +94,26 @@ export const timerBadge = style({
 export const productItem = style({
     position: 'relative',
 });
+
+export const moreLink = style([
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+        backgroundColor: vars.color.green['20'],
+        borderRadius: '8px',
+        width: '100%',
+        maxWidth: '588px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '16px 0',
+        margin: '0 auto',
+        transition: 'opacity 0.2s ease-in-out',
+        selectors: {
+            '&:hover': {
+                opacity: 0.8,
+            },
+        },
+    },
+]);

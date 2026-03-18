@@ -21,3 +21,16 @@ export const main = style({
         },
     },
 });
+
+export const container = style({
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 20px', // 모바일 여백
+    width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '24px 0px',
+        },
+    },
+});

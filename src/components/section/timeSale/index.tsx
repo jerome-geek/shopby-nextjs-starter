@@ -1,11 +1,12 @@
-import { memo, useMemo } from 'react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { memo, useMemo } from 'react';
+
 import ProductCard from '@/components/product/card';
-import * as styles from './index.css';
-import { useProductSectionProductList } from '@/hooks/query/display/productSection';
-import { Button } from '@/components/ui/button';
-import { ImageUrlType } from '@/models/product';
 import { CountdownTimer } from '@/components/product/countdown-timer';
+import { useProductSectionProductList } from '@/hooks/query/display/productSection';
+import { ImageUrlType } from '@/models/product';
+import * as styles from '@/components/section/timeSale/index.css';
 
 interface TimeSaleProps {
     sectionId?: string;
@@ -82,7 +83,7 @@ export const TimeSale = memo(
                     </div>
                     <Link
                         prefetch={false}
-                        href="/products"
+                        href="/timeSale"
                         className={styles.viewAll}
                     >
                         전체보기
@@ -135,9 +136,9 @@ export const TimeSale = memo(
                     ))}
                 </ul>
 
-                <Button type="button" frame="solid" variant="primary">
-                    <span>{buttonLabel}</span>
-                </Button>
+                <Link href="/timesale" className={styles.moreLink}>
+                    <span>{buttonLabel}</span> <ArrowRight />
+                </Link>
             </section>
         );
     },

@@ -66,7 +66,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                         {getLayout(
                             <AnimatePresence mode="wait">
                                 <motion.div
-                                    key={router.asPath}
+                                    // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
+                                    key={router.pathname}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}

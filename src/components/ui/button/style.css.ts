@@ -24,7 +24,7 @@ export const button = recipe({
             },
             ':disabled': {
                 backgroundColor: vars.color.gray['20'],
-                color: vars.color.gray['500'],
+                color: vars.color.gray['50'],
                 cursor: 'not-allowed',
             },
         },
@@ -38,6 +38,10 @@ export const button = recipe({
             secondary: {
                 color: vars.color.white,
                 backgroundColor: vars.color.secondary,
+            },
+            tertiary: {
+                color: vars.color.black,
+                backgroundColor: vars.color.green['20'],
             },
             kakao: {
                 color: vars.color.black,
@@ -93,7 +97,7 @@ export const outlinedButton = recipe({
         },
         ':disabled': {
             backgroundColor: vars.color.gray['20'],
-            color: vars.color.gray['500'],
+            color: vars.color.gray['50'],
             cursor: 'not-allowed',
         },
         border: `1px solid ${vars.color.gray[50]}`,

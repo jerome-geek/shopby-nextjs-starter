@@ -8,6 +8,8 @@ export type SolidButtonProps = BaseButtonProps & {
     frame: 'solid'; // 🔑 타입 구분을 위한 discriminator!
     variant:
         | 'primary'
+        | 'secondary'
+        | 'tertiary'
         | 'kakao'
         | 'kakao-sync'
         | 'naver'
