@@ -1,5 +1,3 @@
-import { NextPage } from 'next';
-import { ReactElement, ReactNode } from 'react';
 import {
     HydrationBoundary,
     QueryClient,
@@ -10,18 +8,20 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ReactLenis } from 'lenis/react';
 import { AnimatePresence, motion } from 'motion/react';
+import { NextPage } from 'next';
 import { generateDefaultSeo } from 'next-seo/pages';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { OverlayProvider } from 'overlay-kit';
-import { useState } from 'react';
+import { ReactElement, ReactNode, useState } from 'react';
 import { Toaster } from 'sonner';
 
 import { Layout } from '@/components/layout';
+import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 
-import '@/styles/global.css.ts';
 import '@/i18n/config';
+import '@/styles/global.css.ts';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -56,6 +56,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         defaultTitle: 'JollyPot',
         description: 'Headless Commerce Example',
     });
+
+    useSbInit();
+    useShopbyStatistics();
 
     return (
         <ReactLenis root>
