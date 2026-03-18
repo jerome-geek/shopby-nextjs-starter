@@ -18,7 +18,6 @@ import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
 import { useSearchParams } from 'next/navigation';
 
-import { Layout } from '@/components/layout';
 import { AuthLayout } from '@/components/layout/AuthLayout';
 import { NextPageWithLayout } from '@/pages/_app';
 import {
@@ -186,12 +185,6 @@ const SignupRegister: NextPageWithLayout = () => {
     );
 };
 
-SignupRegister.getLayout = (page) => {
-    return (
-        <Layout>
-            <AuthLayout>{page}</AuthLayout>
-        </Layout>
-    );
-};
+SignupRegister.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export default SignupRegister;

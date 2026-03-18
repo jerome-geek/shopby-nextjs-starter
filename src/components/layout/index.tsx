@@ -1,11 +1,12 @@
 import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 
+import { BottomNav } from '@/components/layout/bottom-navigation';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
-import { BottomNav } from '@/components/layout/bottom-navigation';
 import * as styles from '@/components/layout/index.css';
 import ScrollToTop from '@/components/ui/scroll-to-top';
+import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 
 interface LayoutProps {
     children: ReactNode;
@@ -13,6 +14,9 @@ interface LayoutProps {
 }
 
 export function Layout({ children, className }: LayoutProps) {
+    useSbInit();
+    useShopbyStatistics();
+
     return (
         <div className={clsx(styles.layout, className)}>
             <Header />

@@ -12,7 +12,6 @@ import { overlay } from 'overlay-kit';
 import { ReactElement, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Layout } from '@/components/layout';
 import { AuthLayout } from '@/components/layout/AuthLayout';
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
@@ -277,12 +276,6 @@ const SignupTerms: NextPageWithLayout = () => {
     );
 };
 
-SignupTerms.getLayout = (page: ReactElement) => {
-    return (
-        <Layout>
-            <AuthLayout>{page}</AuthLayout>
-        </Layout>
-    );
-};
+SignupTerms.getLayout = (page: ReactElement) => <AuthLayout>{page}</AuthLayout>;
 
 export default SignupTerms;

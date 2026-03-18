@@ -1,6 +1,6 @@
 import { some } from '@fxts/core';
 import { useEffect } from 'react';
-import { matchPath, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import { PATHS } from '@/const/paths';
 import { isMatchPathListIncludeProductDetail } from '@/const/route';
@@ -10,7 +10,8 @@ import { GetOrderSheetResponse } from '@/models/order/orderSheet';
 import {
     ProductDetailResponse,
     ProductsSearchResponse,
-} from '@/models/product';
+} from '@/models/product/product';
+import { matchPath } from '@/utils/shopby';
 
 interface UseSbProps {
     product?: ProductDetailResponse;
@@ -31,10 +32,11 @@ const useSb = ({
     currentCategory,
     keyword,
 }: UseSbProps = {}) => {
-    const location = useLocation();
+    const router = useRouter();
+    const pathname = router.asPath.split('?')[0];
 
     useEffect(() => {
-        const isProductDetailPage = isMatchPathListIncludeProductDetail([]);
+        const isProductDetailPage = !!router.query.productNo;
 
         if (isProductDetailPage && product) {
             window.ShopbyExternalScript.setGlobalObjectSb({
@@ -43,7 +45,7 @@ const useSb = ({
             return;
         }
 
-        const isSearchPage = matchPath(PATHS.SEARCH, location.pathname);
+        const isSearchPage = matchPath(PATHS.SEARCH, pathname);
         if (isSearchPage && searchedProduct) {
             window.ShopbyExternalScript.setGlobalObjectSb({
                 searchedProduct,
@@ -51,10 +53,7 @@ const useSb = ({
 
             return;
         }
-        const isProductListPage = matchPath(
-            PATHS.PRODUCTS.LIST,
-            location.pathname,
-        );
+        const isProductListPage = matchPath(PATHS.PRODUCTS.LIST, pathname);
         if (isProductListPage && searchedProduct && currentCategory) {
             window.ShopbyExternalScript.setGlobalObjectSb({
                 searchedProduct,
@@ -63,7 +62,7 @@ const useSb = ({
             return;
         }
 
-        const isCartPage = matchPath(PATHS.ORDER.CART, location.pathname);
+        const isCartPage = matchPath(PATHS.ORDER.CART, pathname);
         if (isCartPage && cart) {
             window.ShopbyExternalScript.setGlobalObjectSb({
                 cart,
@@ -72,7 +71,7 @@ const useSb = ({
         }
 
         const isOrderPage = some(
-            (a) => matchPath(a, location.pathname),
+            (a) => matchPath(a, pathname),
             [
                 PATHS.ORDER.SHEET,
                 PATHS.MYPAGE.ORDERS.DETAIL,
@@ -86,10 +85,7 @@ const useSb = ({
             return;
         }
 
-        const isOrderCompletePage = matchPath(
-            PATHS.ORDER.COMPLETE,
-            location.pathname,
-        );
+        const isOrderCompletePage = matchPath(PATHS.ORDER.COMPLETE, pathname);
         if (isOrderCompletePage && order) {
             window.ShopbyExternalScript.setGlobalObjectSb({
                 order,
@@ -97,15 +93,12 @@ const useSb = ({
             return;
         }
 
-        const isSignupCompletePage = matchPath(
-            PATHS.SIGNUP.COMPLETE,
-            location.pathname,
-        );
+        const isSignupCompletePage = matchPath(PATHS.SIGNUP.COMPLETE, pathname);
         if (isSignupCompletePage) {
             return;
         }
     }, [
-        location.pathname,
+        pathname,
         product,
         currentCategory,
         searchedProduct,
@@ -113,6 +106,7 @@ const useSb = ({
         orderSheet,
         order,
         keyword,
+        router.query,
     ]);
 };
 

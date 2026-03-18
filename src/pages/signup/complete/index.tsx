@@ -1,4 +1,3 @@
-import { Layout } from '@/components/layout';
 import { AuthLayout } from '@/components/layout/AuthLayout';
 import { NextPageWithLayout } from '@/pages/_app';
 
@@ -6,12 +5,6 @@ const SignupComplete: NextPageWithLayout = () => {
     return <div>SignupComplete</div>;
 };
 
-SignupComplete.getLayout = (page) => {
-    return (
-        <Layout>
-            <AuthLayout>{page}</AuthLayout>
-        </Layout>
-    );
-};
+SignupComplete.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export default SignupComplete;

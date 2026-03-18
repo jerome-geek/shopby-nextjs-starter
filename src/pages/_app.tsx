@@ -18,7 +18,6 @@ import { ReactElement, ReactNode, useState } from 'react';
 import { Toaster } from 'sonner';
 
 import { Layout } from '@/components/layout';
-import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
@@ -47,9 +46,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
             }),
     );
 
-    // 페이지별 레이아웃 정의가 있으면 사용, 없으면 기본 Layout 사용
-    const getLayout =
-        Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+    // 부모 레이아웃(Layout)은 무조건 적용하고, 페이지별 중첩 레이아웃은 선택적으로 적용
+    const getLayout = Component.getLayout ?? ((page) => page);
 
     const defaultSeo = generateDefaultSeo({
         titleTemplate: '%s | JollyPot',
@@ -57,29 +55,28 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         description: 'Headless Commerce Example',
     });
 
-    useSbInit();
-    useShopbyStatistics();
-
     return (
         <ReactLenis root>
             <QueryClientProvider client={queryClient}>
                 <HydrationBoundary state={pageProps.dehydratedState}>
                     <OverlayProvider>
                         <Head>{defaultSeo}</Head>
-                        {getLayout(
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
-                                    key={router.pathname}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <Component {...pageProps} />
-                                </motion.div>
-                            </AnimatePresence>,
-                        )}
+                        <Layout>
+                            {getLayout(
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
+                                        key={router.pathname}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <Component {...pageProps} />
+                                    </motion.div>
+                                </AnimatePresence>,
+                            )}
+                        </Layout>
                         <Toaster />
                         <ReactQueryDevtools initialIsOpen={false} />
                         <Analytics />

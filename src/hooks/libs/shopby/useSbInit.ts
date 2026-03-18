@@ -1,17 +1,27 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 import { useProfile } from '@/hooks/query/member/profile';
-import { determinePageScriptType, getPlatform } from '@/utils';
-import { checkLogin } from '@/utils/users';
+// import { determinePageScriptType } from '@/utils';
+// import { checkLogin } from '@/utils/users';
+import { getPlatform } from '@/api/core/utils';
+import { determinePageScriptType } from '@/utils/shopby';
+import { isLoggedIn } from '@/utils/auth';
 
 const useSbInit = () => {
-    const location = useLocation();
+    const router = useRouter();
+    const location = useMemo(() => {
+        const [pathname, search] = router.asPath.split('?');
+        return {
+            pathname: pathname || '/',
+            search: search ? `?${search}` : '',
+        };
+    }, [router.asPath]);
 
     useEffect(() => {
         window.ShopbyExternalScript.initialize({
             apiOption: {
-                clientId: import.meta.env.VITE_CLIENT_ID,
+                clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
                 profile: 'real',
                 platform: getPlatform(),
             },
@@ -19,7 +29,7 @@ const useSbInit = () => {
     }, []);
 
     useEffect(() => {
-        const pageScriptType = determinePageScriptType(location);
+        const pageScriptType = determinePageScriptType(location.pathname);
 
         // location 을 변경할 때마다 `setPageScriptType` 메소드로 페이지 스크립트 타입을 설정합니다
         window.ShopbyExternalScript?.setPageScriptType(pageScriptType);
@@ -30,7 +40,7 @@ const useSbInit = () => {
         };
     }, [location]);
 
-    const isLogin = checkLogin();
+    const isLogin = isLoggedIn();
 
     const { data: profileData } = useProfile();
     useEffect(() => {

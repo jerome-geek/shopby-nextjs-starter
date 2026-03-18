@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
-import { Layout } from '@/components/layout';
 import { AuthLayout } from '@/components/layout/AuthLayout';
 import { Button } from '@/components/ui/button';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
@@ -165,10 +164,6 @@ const LoginPage: NextPageWithLayout = () => {
     );
 };
 
-LoginPage.getLayout = (page) => (
-    <Layout>
-        <AuthLayout>{page}</AuthLayout>
-    </Layout>
-);
+LoginPage.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export default LoginPage;

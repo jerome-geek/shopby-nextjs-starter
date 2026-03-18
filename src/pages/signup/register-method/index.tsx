@@ -4,7 +4,6 @@ import { GetStaticProps } from 'next';
 import { banner } from '@/api/display';
 import SocialLoginList from '@/components/auth/social-login-list';
 import FetchBoundary from '@/components/common/FetchBoundary';
-import { Layout } from '@/components/layout';
 import { AuthLayout } from '@/components/layout/AuthLayout';
 import { BANNER_ID } from '@/const/banner';
 import { bannerKeys } from '@/hooks/queryKeys';
@@ -38,11 +37,7 @@ const SignupRegisterMethod: NextPageWithLayout = () => {
     );
 };
 
-SignupRegisterMethod.getLayout = (page) => (
-    <Layout>
-        <AuthLayout>{page}</AuthLayout>
-    </Layout>
-);
+SignupRegisterMethod.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 const SignupBannerList = () => {
     const { data } = useBannerList({
