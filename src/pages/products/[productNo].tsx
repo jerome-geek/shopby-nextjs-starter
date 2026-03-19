@@ -22,6 +22,7 @@ import { CURRENCY } from '@/utils/currency';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { useSb } from '@/hooks/libs/shopby';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -90,6 +91,10 @@ function ProductDetailView({
             },
         );
     };
+
+    useSb({
+        product: productDetailData,
+    });
 
     return (
         <div className={styles.container}>

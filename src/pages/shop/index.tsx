@@ -1,4 +1,4 @@
-import LazyRender from '@/components/common/LazyRender';
+import { LazyRender } from '@/components/common';
 import { HeroBanner } from '@/components/hero-banner';
 import Best from '@/components/section/best';
 import TimeSale from '@/components/section/timeSale';

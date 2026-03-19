@@ -1,3 +1,4 @@
+import { PATHS } from '@/const/paths';
 import type {
     Banner,
     BannerAccount,
@@ -45,16 +46,19 @@ export function extractBannerContents(data: GetBannersResponse): Banner[] {
 }
 
 const PATH_MAP = {
-    '/': 'MAIN',
-    '/products/:productNo': 'PRODUCT',
-    '/order/cart': 'CART',
-    '/signup/complete': 'MEMBER_JOIN_COMPLETE',
-    '/mypage': 'MY_PAGE',
-    '/categories/:categoryNo/products': 'PRODUCT_LIST',
-    '/search': 'PRODUCT_SEARCH',
-    '/order/complete': 'ORDER_COMPLETE',
-    '/order/:orderSheetNo': 'ORDER',
-    '/mypage/orders/:orderNo': 'ORDER_DETAIL',
+    [PATHS.MAIN]: 'MAIN',
+    [PATHS.SHOP.DISCOVERY]: 'MAIN',
+    [PATHS.SHOP.KIDS]: 'MAIN',
+    [PATHS.SHOP.LIFE]: 'MAIN',
+    [PATHS.PRODUCTS.DETAIL]: 'PRODUCT',
+    [PATHS.ORDER.CART]: 'CART',
+    [PATHS.SIGNUP.COMPLETE]: 'MEMBER_JOIN_COMPLETE',
+    [PATHS.MYPAGE.MAIN]: 'MY_PAGE',
+    [PATHS.PRODUCTS.LIST]: 'PRODUCT_LIST',
+    [PATHS.SEARCH]: 'PRODUCT_SEARCH',
+    [PATHS.ORDER.COMPLETE]: 'ORDER_COMPLETE',
+    [PATHS.ORDER.SHEET]: 'ORDER',
+    [PATHS.MYPAGE.ORDERS.DETAIL]: 'ORDER_DETAIL',
 };
 
 export function matchPath(pattern: string, pathname: string) {
@@ -76,7 +80,9 @@ export const determinePageScriptType = (pathname: string) => {
     return pipe(
         PATH_MAP,
         keys,
-        find((a) => (matchPath(a, pathname) ? PATH_MAP[a as keyof typeof PATH_MAP] : null)),
+        find((a) =>
+            a === pathname ? PATH_MAP[a as keyof typeof PATH_MAP] : null,
+        ),
         (b) => (b ? PATH_MAP[b as keyof typeof PATH_MAP] : null),
     );
 };

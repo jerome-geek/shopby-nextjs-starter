@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
-import { LazyRender } from '@/components/common/LazyRender';
+import { LazyRender } from '@/components/common';
 import { HeroBanner } from '@/components/hero-banner';
 import * as styles from '@/styles/Home.css';
 

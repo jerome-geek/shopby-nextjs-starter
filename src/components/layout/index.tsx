@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import * as styles from '@/components/layout/index.css';
 import ScrollToTop from '@/components/ui/scroll-to-top';
-import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
+import { useSb, useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 
 interface LayoutProps {
     children: ReactNode;

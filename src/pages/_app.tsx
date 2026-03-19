@@ -17,6 +17,7 @@ import { OverlayProvider } from 'overlay-kit';
 import { ReactElement, ReactNode, useState } from 'react';
 import { Toaster } from 'sonner';
 
+import { ExternalScripts } from '@/components/common';
 import { Layout } from '@/components/layout';
 
 import '@/i18n/config';
@@ -56,34 +57,38 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     });
 
     return (
-        <ReactLenis root>
-            <QueryClientProvider client={queryClient}>
-                <HydrationBoundary state={pageProps.dehydratedState}>
-                    <OverlayProvider>
-                        <Head>{defaultSeo}</Head>
-                        <Layout>
-                            {getLayout(
-                                <AnimatePresence mode="wait">
-                                    <motion.div
-                                        // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
-                                        key={router.pathname}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.3 }}
-                                    >
-                                        <Component {...pageProps} />
-                                    </motion.div>
-                                </AnimatePresence>,
-                            )}
-                        </Layout>
-                        <Toaster />
-                        <ReactQueryDevtools initialIsOpen={false} />
-                        <Analytics />
-                        <SpeedInsights />
-                    </OverlayProvider>
-                </HydrationBoundary>
-            </QueryClientProvider>
-        </ReactLenis>
+        <>
+            <ExternalScripts />
+
+            <ReactLenis root>
+                <QueryClientProvider client={queryClient}>
+                    <HydrationBoundary state={pageProps.dehydratedState}>
+                        <OverlayProvider>
+                            <Head>{defaultSeo}</Head>
+                            <Layout>
+                                {getLayout(
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
+                                            key={router.pathname}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <Component {...pageProps} />
+                                        </motion.div>
+                                    </AnimatePresence>,
+                                )}
+                            </Layout>
+                            <Toaster />
+                            <ReactQueryDevtools initialIsOpen={false} />
+                            <Analytics />
+                            <SpeedInsights />
+                        </OverlayProvider>
+                    </HydrationBoundary>
+                </QueryClientProvider>
+            </ReactLenis>
+        </>
     );
 }

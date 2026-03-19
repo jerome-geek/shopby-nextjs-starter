@@ -25,9 +25,7 @@ import type { CookieCtx } from '@/utils/cookie';
  */
 export function isLoggedIn(ctx?: CookieCtx): boolean {
     const access = accessTokenCookie.get(ctx);
-    console.log('🚀 ~ isLoggedIn ~ access:', access);
     const refresh = refreshTokenCookie.get(ctx);
-    console.log('🚀 ~ isLoggedIn ~ refresh:', refresh);
 
     if (access || refresh) {
         console.log(

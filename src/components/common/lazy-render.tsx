@@ -17,7 +17,7 @@ interface LazyRenderProps {
  * 컴포넌트가 뷰포트(화면)에 들어올 때 비로소 렌더링을 시작하는 유틸리티 컴포넌트입니다.
  * motion/react의 useInView를 사용하여 성능 최적화가 되어 있습니다.
  */
-export function LazyRender({
+function LazyRender({
     children,
     minHeight = 1,
     margin = '200px 0px 200px 0px',
