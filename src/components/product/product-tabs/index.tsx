@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import * as styles from '@/components/product/productTabs/index.css';
+import * as styles from '@/components/product/product-tabs/index.css';
 
 interface ProductTabsProps {
     reviewCount?: number;

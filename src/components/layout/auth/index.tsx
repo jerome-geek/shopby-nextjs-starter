@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { authContainer } from '@/styles/layout.css';
+import * as styles from '@/components/layout/auth/index.css';
 
 interface AuthLayoutProps {
     children: ReactNode;
@@ -10,9 +10,5 @@ interface AuthLayoutProps {
  * (상위 Layout 내부에 위치하여 스타일만 지정)
  */
 export function AuthLayout({ children }: AuthLayoutProps) {
-    return (
-        <div className={authContainer}>
-            {children}
-        </div>
-    );
+    return <div className={styles.container}>{children}</div>;
 }

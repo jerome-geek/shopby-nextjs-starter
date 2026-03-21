@@ -1,24 +1,41 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { media } from '@/styles/media';
 
 export const photoReviewSection = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
-    marginTop: '16px',
+    width: '100%',
+    minWidth: 0,
+    overflow: 'hidden',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
+});
+
+export const photoReviewList = style({
+    width: '100%',
+    minWidth: 0,
+    margin: '0 -20px',
+
+    '@media': {
+        [media.desktop]: {
+            margin: 0,
+        },
+    },
 });
 
 export const photoReviewTitle = style([
     textStyles.headingSemibold,
     {
-        color: vars.color.black,
+        color: vars.color.gray['90'],
     },
 ]);
-
-export const photoReviewList = style({
-    margin: '0 -20px',
-});
 
 export const photoReviewItem = style({
     display: 'flex',

@@ -1,42 +1,33 @@
 import { filter, join, pipe } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import {
-    BookmarkCheckIcon,
-    BookMarked,
-    BookMarkedIcon,
-    BookmarkIcon,
-    Gift,
-    Star,
-    Truck,
-} from 'lucide-react';
+import { HttpStatusCode, isAxiosError } from 'axios';
+import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useMemo, useState } from 'react';
-import { Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { product } from '@/api/product';
 // import OptionSelectBottomSheet from '@/components/bottom-sheet/OptionSelect';
 // import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import ShopbyApiErrorBoundary from '@/components/ErrorBoundary/Shopby';
-import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
-import PhotoReview from '@/components/product/photoReview';
-import ProductTabs from '@/components/product/productTabs';
+import ProductAdditionalDiscount from '@/components/product/additional-discount';
+import ProductMainImage from '@/components/product/main-image';
+import PhotoReview from '@/components/product/photo-review';
+import ProductTabs from '@/components/product/product-tabs';
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useSb } from '@/hooks/libs/shopby';
+import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
 import { productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product';
 import useProductLike from '@/hooks/useProductLike';
 import { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo].css';
+import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
-
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { vars } from '@/styles/theme.css';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -64,6 +55,11 @@ function ProductDetailView({
     console.log('🚀 ~ ProductDetailView ~ baseInfo:', baseInfo);
 
     const liked = !!productDetailData.liked;
+
+    const { data: additionalDiscountData } = useAdditionalDiscount({
+        searchParams: { productNo },
+    });
+    console.log('🚀 ~ ProductDetailView ~ data:', additionalDiscountData);
 
     const productContent = useMemo(() => {
         if (!productDetailData) {
@@ -117,139 +113,29 @@ function ProductDetailView({
         <div className={styles.container}>
             <div className={styles.mainSection}>
                 <div className={styles.thumbnailContainer}>
-                    <div className={styles.imageWrapper}>
-                        <Swiper
-                            modules={[Pagination]}
-                            pagination={{
-                                clickable: true,
-                                el: paginationEl,
-                                renderBullet: (index, className) => {
-                                    return `<span class="${className} ${styles.bullet}"></span>`;
-                                },
-                            }}
-                            observer={true}
-                            observeParents={true}
-                            className={styles.swiperContainer}
-                        >
-                            {baseInfo.imageUrlInfo?.map((image, index) => (
-                                <SwiperSlide key={index}>
-                                    <img
-                                        src={image.url}
-                                        alt={`${baseInfo.productName} - ${index + 1}`}
-                                        className={styles.thumbnail}
-                                    />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-
-                        {isTimeSale && (
-                            <div
-                                style={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    zIndex: 10,
-                                    width: '100%',
-                                }}
-                            >
-                                <ProductAdditionalDiscount
-                                    type="detail"
-                                    productNo={productNo}
-                                />
-                            </div>
-                        )}
-                    </div>
-
-                    <div
-                        ref={setPaginationEl}
-                        className={styles.paginationContainer}
+                    <ProductMainImage
+                        productNo={productNo}
+                        searchParams={searchParams}
                     />
                 </div>
 
                 <div className={styles.content}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'flex-start',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                width: '100%',
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    border: '1px solid red',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '4px',
-                                    }}
-                                >
-                                    {brand && (
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'flex-start',
-                                            }}
-                                        >
-                                            <span className={styles.brand}>
-                                                {brand.name}
-                                            </span>
-                                        </div>
-                                    )}
+                    <header className={styles.header}>
+                        <div className={styles.titleInfo}>
+                            {brand && (
+                                <span className={styles.brand}>
+                                    {brand.name}
+                                </span>
+                            )}
 
-                                    <h1 className={styles.productName}>
-                                        {baseInfo.productName}
-                                    </h1>
-                                    {baseInfo.promotionText && (
-                                        <p className={styles.promotionText}>
-                                            {baseInfo.promotionText}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <button
-                                    className={styles.likeButton}
-                                    onClick={() =>
-                                        onLikeButtonClick(productNo, liked)
-                                    }
-                                >
-                                    <BookmarkIcon
-                                        width={36}
-                                        height={36}
-                                        // 채우기 색상 (좋아요 상태면 테마의 그린 색상, 아니면 투명)
-                                        fill={
-                                            liked
-                                                ? vars.color.green['100']
-                                                : 'none'
-                                        }
-                                        // 외곽선 색상
-                                        stroke={
-                                            liked
-                                                ? vars.color.green['100']
-                                                : 'currentColor'
-                                        }
-                                    />
-
-                                    <span className={styles.likeCount}>
-                                        {counter.likeCnt}
-                                    </span>
-                                </button>
-                            </div>
+                            <h1 className={styles.productName}>
+                                {baseInfo.productName}
+                            </h1>
+                            {baseInfo.promotionText && (
+                                <p className={styles.promotionText}>
+                                    {baseInfo.promotionText}
+                                </p>
+                            )}
 
                             <div className={styles.ratingContainer}>
                                 <Star
@@ -267,30 +153,28 @@ function ProductDetailView({
                         </div>
 
                         <button
-                            type="button"
-                            onClick={onLikeButtonClick(
-                                productNo,
-                                productDetailData.liked,
-                            )}
+                            className={styles.likeButton}
+                            onClick={() => onLikeButtonClick(productNo, liked)}
                         >
-                            {/* <BookmarkIcon isActive={productDetailData.liked} /> */}
-                        </button>
-                    </div>
+                            <BookmarkIcon
+                                width={36}
+                                height={36}
+                                fill={liked ? vars.color.green['100'] : 'none'}
+                                stroke={
+                                    liked
+                                        ? vars.color.green['100']
+                                        : 'currentColor'
+                                }
+                            />
 
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'flex-end',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '2px',
-                            }}
-                        >
+                            <span className={styles.likeCount}>
+                                {counter.likeCnt}
+                            </span>
+                        </button>
+                    </header>
+
+                    <div className={styles.priceSection}>
+                        <div className={styles.priceInfo}>
                             {discountRate > 0 && (
                                 <span className={styles.originalPrice}>
                                     {CURRENCY(price.salePrice).format()}
@@ -312,31 +196,56 @@ function ProductDetailView({
                         </button>
                     </div>
 
-                    <div className={styles.deliveryBox}>
-                        <div className={styles.deliveryTitle}>
-                            <Truck size={18} />
-                            지금 주문하면 내일 받을 수 있어요
-                        </div>
-                        <div className={styles.badgeList}>
-                            <span
-                                className={`${styles.badge} ${styles.badgeActive}`}
-                            >
-                                무료배송
-                            </span>
-                            <span
-                                className={`${styles.badge} ${styles.badgeActive}`}
-                            >
-                                빠른배송
-                            </span>
+                    <div className={styles.additionalInfoContainer}>
+                        {additionalDiscountData && (
+                            // <div>
+                            //     <Clock3Icon />
+                            //     <p>{`타임특가 ${}남음`}</p>
+                            // </div>
+                            <ProductAdditionalDiscount
+                                type="detail"
+                                productNo={productNo}
+                            />
+                        )}
+
+                        <div className={styles.deliveryBox}>
+                            <div className={styles.deliveryTitle}>
+                                <Truck size={18} />
+                                지금 주문하면 내일 받을 수 있어요
+                            </div>
+                            <div className={styles.badgeList}>
+                                <span
+                                    className={`${styles.badge} ${styles.badgeActive}`}
+                                >
+                                    무료배송
+                                </span>
+                                <span
+                                    className={`${styles.badge} ${styles.badgeActive}`}
+                                >
+                                    빠른배송
+                                </span>
+                            </div>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <PhotoReview images={baseInfo.imageUrlInfo} />
+
+                    <hr className={styles.optionDivider} />
+
+                    <div>{/* TODO: option */}</div>
+
+                    <div className={styles.actionButtons}>
                         <button className={styles.giftButtonDesktop}>
                             <Gift size={24} color="#333" />
                         </button>
-                        <Button frame="outlined">장바구니</Button>
-                        <Button frame="solid" variant="primary">
+                        <Button frame="outlined" className={styles.cartButton}>
+                            장바구니
+                        </Button>
+                        <Button
+                            frame="solid"
+                            variant="primary"
+                            className={styles.buyButton}
+                        >
                             구매하기
                         </Button>
                     </div>
@@ -445,7 +354,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         });
     } catch (error) {
         if (isAxiosError(error)) {
-            const status = error.response?.status || 500;
+            const status =
+                error.response?.status || HttpStatusCode.InternalServerError;
 
             // ⚠️ [비즈니스 에러]: 4xx 에러 (권한 없음, 존재하지 않음 등) 처리
             if (status >= 400 && status < 500) {

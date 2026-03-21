@@ -10,7 +10,7 @@ import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
-import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
+import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import * as styles from './index.css';
 import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
 

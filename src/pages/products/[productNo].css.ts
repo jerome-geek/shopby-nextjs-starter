@@ -6,7 +6,6 @@ import { media } from '@/styles/media';
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
-    padding: '0 20px',
     paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
     maxWidth: '1200px',
     margin: '0 auto',
@@ -26,7 +25,7 @@ export const mainSection = style({
     '@media': {
         [media.desktop]: {
             flexDirection: 'row',
-            gap: '40px',
+            gap: '48px',
             alignItems: 'flex-start',
         },
     },
@@ -38,10 +37,10 @@ export const thumbnailContainer = style({
     '@media': {
         [media.desktop]: {
             margin: 0,
-            flex: 1,
+            flex: '0 0 650px', // 좌측 이미지 영역 고정
             position: 'sticky',
             top: '40px',
-            minWidth: 0, // Flex child size calculation stabilization
+            minWidth: 0,
         },
     },
 });
@@ -92,30 +91,63 @@ export const thumbnail = style({
 });
 
 export const content = style({
-    // padding: '20px',
-    display: 'none',
-    border: '1px solid red',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    minWidth: 0,
+    gap: '20px',
 
     '@media': {
         [media.desktop]: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-            flex: 1,
-            minWidth: 0, // Flex child size calculation stabilization
+            gap: '32px',
         },
     },
 });
 
+export const header = style({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    width: '100%',
+});
+
+export const titleInfo = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+});
+
+export const priceSection = style({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+});
+
+export const priceInfo = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+});
+
+export const actionButtons = style({
+    display: 'flex',
+    gap: '12px',
+    marginTop: '40px',
+});
+
+export const cartButton = style({
+    flex: 1,
+});
+
 export const brand = style([
-    textStyles.body1Regular,
+    textStyles.headlineMedium,
     {
         color: vars.color.gray[60],
     },
 ]);
 
 export const productName = style([
-    textStyles.headingSemibold,
+    textStyles.title1Semibold,
     {
         color: vars.color.black,
     },
@@ -217,7 +249,6 @@ export const deliveryBox = style({
     backgroundColor: vars.color.gray['10'],
     padding: '16px',
     borderRadius: '8px',
-    marginTop: '20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
@@ -325,3 +356,24 @@ export const giftButtonDesktop = style([
         },
     },
 ]);
+
+export const additionalInfoContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+});
+
+export const timeSaleContainer = style([
+    textStyles.body1Semibold,
+    {
+        display: 'flex',
+        gap: '12px',
+        color: vars.color.gray['90'],
+        background: vars.color.pink['20'],
+    },
+]);
+
+export const optionDivider = style({
+    width: '100%',
+    border: `1px solid ${vars.color.gray['20']}`,
+});

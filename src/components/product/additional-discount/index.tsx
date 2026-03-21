@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
+import { Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import * as styles from '@/components/product/additionalDiscount/index.css';
+import * as styles from '@/components/product/additional-discount/index.css';
 import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
-import { Clock } from 'lucide-react';
 
 interface ProductAdditionalDiscountProps {
     type: 'thumbnail' | 'detail';

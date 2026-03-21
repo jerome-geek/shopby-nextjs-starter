@@ -10,9 +10,9 @@ import {
 } from '@/hooks/query/display/category';
 import { Menu } from '@/components/layout/header/Menu';
 import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
+import useCart from '@/hooks/cart/useCart';
 import { vars } from '@/styles/theme.css';
 import logoImage from '@/assets/logo.png';
-import useCart from '@/hooks/order/useCart';
 
 export function Header() {
     const { cartCount } = useCart();

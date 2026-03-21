@@ -54,9 +54,15 @@ export default function PhotoReview({ images }: PhotoReviewProps) {
             <h2 className={styles.photoReviewTitle}>사진 리뷰</h2>
             <div className={styles.photoReviewList}>
                 <Swiper
-                    slidesPerView={3.5}
+                    slidesPerView={3.2}
                     spaceBetween={12}
                     style={{ padding: '0 20px' }}
+                    breakpoints={{
+                        1024: {
+                            slidesPerView: 5,
+                            spaceBetween: 12,
+                        },
+                    }}
                 >
                     {reviews.map((review) => (
                         <SwiperSlide
