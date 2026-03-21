@@ -22,6 +22,7 @@ import { Layout } from '@/components/layout';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
+import { HttpStatusCode, isAxiosError } from 'axios';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -42,7 +43,32 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                         refetchOnWindowFocus:
                             process.env.NODE_ENV === 'production',
                         refetchOnMount: process.env.NODE_ENV === 'production',
+                        refetchOnReconnect: true,
+                        retry: (failureCount, error) => {
+                            if (process.env.NODE_ENV === 'development') {
+                                return false;
+                            }
+
+                            if (
+                                isAxiosError(error) &&
+                                error.response?.status ===
+                                    HttpStatusCode.BadRequest
+                            ) {
+                                return false;
+                            }
+
+                            // AbortError는 재시도하지 않음
+                            if (
+                                error.name === 'AbortError' ||
+                                error.name === 'CanceledError'
+                            ) {
+                                return false;
+                            }
+
+                            return failureCount < 3;
+                        },
                     },
+                    mutations: { throwOnError: false },
                 },
             }),
     );

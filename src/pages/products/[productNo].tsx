@@ -1,19 +1,33 @@
 import { filter, join, pipe } from '@fxts/core';
-import { QueryClient } from '@tanstack/react-query';
-import { Gift, Star, Truck } from 'lucide-react';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import {
+    BookmarkCheckIcon,
+    BookMarked,
+    BookMarkedIcon,
+    BookmarkIcon,
+    Gift,
+    Star,
+    Truck,
+} from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
-import { Suspense, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { product } from '@/api/product';
 // import OptionSelectBottomSheet from '@/components/bottom-sheet/OptionSelect';
 // import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
+import ShopbyApiErrorBoundary from '@/components/ErrorBoundary/Shopby';
 import ProductAdditionalDiscount from '@/components/product/additionalDiscount';
 import PhotoReview from '@/components/product/photoReview';
 import ProductTabs from '@/components/product/productTabs';
+import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
+import { useSb } from '@/hooks/libs/shopby';
+import { productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product';
 import useProductLike from '@/hooks/useProductLike';
 import { ChannelType } from '@/models';
@@ -22,7 +36,7 @@ import { CURRENCY } from '@/utils/currency';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { useSb } from '@/hooks/libs/shopby';
+import { vars } from '@/styles/theme.css';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -47,6 +61,9 @@ function ProductDetailView({
     const isTimeSale = true;
 
     const { baseInfo, price, counter, brand } = productDetailData;
+    console.log('🚀 ~ ProductDetailView ~ baseInfo:', baseInfo);
+
+    const liked = !!productDetailData.liked;
 
     const productContent = useMemo(() => {
         if (!productDetailData) {
@@ -98,13 +115,7 @@ function ProductDetailView({
 
     return (
         <div className={styles.container}>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '24px',
-                }}
-            >
+            <div className={styles.mainSection}>
                 <div className={styles.thumbnailContainer}>
                     <div className={styles.imageWrapper}>
                         <Swiper
@@ -116,6 +127,8 @@ function ProductDetailView({
                                     return `<span class="${className} ${styles.bullet}"></span>`;
                                 },
                             }}
+                            observer={true}
+                            observeParents={true}
                             className={styles.swiperContainer}
                         >
                             {baseInfo.imageUrlInfo?.map((image, index) => (
@@ -166,37 +179,76 @@ function ProductDetailView({
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '10px',
+                                width: '100%',
                             }}
                         >
                             <div
                                 style={{
                                     display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '4px',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    border: '1px solid red',
                                 }}
                             >
-                                {brand && (
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'flex-start',
-                                        }}
-                                    >
-                                        <span className={styles.brand}>
-                                            {brand.name}
-                                        </span>
-                                    </div>
-                                )}
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '4px',
+                                    }}
+                                >
+                                    {brand && (
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'flex-start',
+                                            }}
+                                        >
+                                            <span className={styles.brand}>
+                                                {brand.name}
+                                            </span>
+                                        </div>
+                                    )}
 
-                                <h1 className={styles.productName}>
-                                    {baseInfo.productName}
-                                </h1>
-                                {baseInfo.promotionText && (
-                                    <p className={styles.promotionText}>
-                                        {baseInfo.promotionText}
-                                    </p>
-                                )}
+                                    <h1 className={styles.productName}>
+                                        {baseInfo.productName}
+                                    </h1>
+                                    {baseInfo.promotionText && (
+                                        <p className={styles.promotionText}>
+                                            {baseInfo.promotionText}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <button
+                                    className={styles.likeButton}
+                                    onClick={() =>
+                                        onLikeButtonClick(productNo, liked)
+                                    }
+                                >
+                                    <BookmarkIcon
+                                        width={36}
+                                        height={36}
+                                        // 채우기 색상 (좋아요 상태면 테마의 그린 색상, 아니면 투명)
+                                        fill={
+                                            liked
+                                                ? vars.color.green['100']
+                                                : 'none'
+                                        }
+                                        // 외곽선 색상
+                                        stroke={
+                                            liked
+                                                ? vars.color.green['100']
+                                                : 'currentColor'
+                                        }
+                                    />
+
+                                    <span className={styles.likeCount}>
+                                        {counter.likeCnt}
+                                    </span>
+                                </button>
                             </div>
 
                             <div className={styles.ratingContainer}>
@@ -279,21 +331,36 @@ function ProductDetailView({
                         </div>
                     </div>
 
-                    <PhotoReview images={baseInfo.imageUrlInfo} />
-
-                    <ProductTabs
-                        reviewCount={counter.reviewCnt || 0}
-                        inquiryCount={counter.inquiryCnt || 0}
-                        productContent={productContent}
-                    />
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <button className={styles.giftButtonDesktop}>
+                            <Gift size={24} color="#333" />
+                        </button>
+                        <Button frame="outlined">장바구니</Button>
+                        <Button frame="solid" variant="primary">
+                            구매하기
+                        </Button>
+                    </div>
                 </div>
+            </div>
+
+            <div style={{ marginTop: '40px' }}>
+                <PhotoReview images={baseInfo.imageUrlInfo} />
+
+                <ProductTabs
+                    reviewCount={counter.reviewCnt || 0}
+                    inquiryCount={counter.inquiryCnt || 0}
+                    productContent={productContent}
+                />
             </div>
 
             <div className={styles.bottomBar}>
                 <button className={styles.giftButton}>
                     <Gift size={24} color="#333" />
                 </button>
-                <button className={styles.buyButton}>구매하기</button>
+                <Button frame="outlined">장바구니</Button>
+                <Button frame="solid" variant="primary">
+                    구매하기
+                </Button>
             </div>
         </div>
     );
@@ -302,9 +369,40 @@ function ProductDetailView({
 export default function ProductDetailPage({
     productNo,
     searchParams,
+    errorStatusCode,
+    errorMessage,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+    const router = useRouter();
+    // 1단계 [비즈니스 에러]: API에서 받은 메시지를 그대로 사용자에게 노출
+    if (errorStatusCode) {
+        return (
+            <div
+                style={{
+                    width: '60vw',
+                    margin: '0 auto',
+                    padding: '100px 20px',
+                    textAlign: 'center',
+                }}
+            >
+                <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                    안내드립니다
+                </h1>
+                <p style={{ margin: '16px 0', color: '#666' }}>
+                    {errorMessage}
+                </p>
+                <Button
+                    frame="solid"
+                    variant="primary"
+                    onClick={() => router.push('/')}
+                >
+                    홈으로 돌아가기
+                </Button>
+            </div>
+        );
+    }
+
     return (
-        <Suspense
+        <ShopbyApiErrorBoundary
             fallback={
                 <div style={{ padding: '100px', textAlign: 'center' }}>
                     상품 정보를 불러오는 중입니다...
@@ -315,11 +413,12 @@ export default function ProductDetailPage({
                 productNo={productNo}
                 searchParams={searchParams}
             />
-        </Suspense>
+        </ShopbyApiErrorBoundary>
     );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    const { res } = context;
     const queryClient = new QueryClient();
 
     const productNo = Number(context.params?.productNo) || 0;
@@ -332,35 +431,48 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         preview: context.query.preview === 'true',
     };
 
-    // await queryClient.prefetchQuery({
-    //     queryKey: productKeys.detail(productNo, searchParams),
-    //     queryFn: async () => {
-    //         try {
-    //             const response = await product
-    //                 .getProductDetail(productNo, searchParams)
-    //                 ;
-
-    //             return response;
-    //         } catch (error) {
-    //             console.log('🚀 ~ getServerSideProps ~ error:', error);
-    //         }
-    //     },
-    // });
     try {
-        const response = await product.getProductDetail(
-            productNo,
-            searchParams,
-        );
-        console.log('🚀 ~ getServerSideProps ~ response:', response);
+        await queryClient.fetchQuery({
+            queryKey: productKeys.detail(productNo, searchParams),
+            queryFn: async () => {
+                const { data } = await product.getProductDetail(
+                    productNo,
+                    searchParams,
+                );
+
+                return data;
+            },
+        });
     } catch (error) {
-        console.log('🚀 ~ getServerSideProps ~ error:', error);
+        if (isAxiosError(error)) {
+            const status = error.response?.status || 500;
+
+            // ⚠️ [비즈니스 에러]: 4xx 에러 (권한 없음, 존재하지 않음 등) 처리
+            if (status >= 400 && status < 500) {
+                res.statusCode = status; // SEO 대응
+
+                return {
+                    props: {
+                        productNo,
+                        searchParams,
+                        errorStatusCode: status,
+                        errorMessage:
+                            error.response?.data?.message ||
+                            '상품을 불러올 수 없습니다.',
+                    },
+                };
+            }
+
+            // [시스템 에러]: 5xx 에러는 그대로 두어 클라이언트 ErrorBoundary 유도
+            console.warn('🚀 getServerSideProps fetch failure:', error);
+        }
     }
 
     return {
         props: {
             productNo,
             searchParams,
-            // dehydratedState: dehydrate(queryClient),
+            dehydratedState: dehydrate(queryClient),
         },
     };
 };

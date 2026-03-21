@@ -1,16 +1,49 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { media } from '@/styles/media';
 
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
     padding: '0 20px',
     paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
+    maxWidth: '1200px',
+    margin: '0 auto',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '40px 20px',
+        },
+    },
+});
+
+export const mainSection = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+
+    '@media': {
+        [media.desktop]: {
+            flexDirection: 'row',
+            gap: '40px',
+            alignItems: 'flex-start',
+        },
+    },
 });
 
 export const thumbnailContainer = style({
     margin: '0 -20px',
+
+    '@media': {
+        [media.desktop]: {
+            margin: 0,
+            flex: 1,
+            position: 'sticky',
+            top: '40px',
+            minWidth: 0, // Flex child size calculation stabilization
+        },
+    },
 });
 
 export const imageWrapper = style({
@@ -53,14 +86,25 @@ export const bullet = style({
 export const thumbnail = style({
     width: '100%',
     height: '100%',
+    maxWidth: '564px',
+    aspectRatio: 1 / 1,
     objectFit: 'cover',
 });
 
 export const content = style({
     // padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
+    display: 'none',
+    border: '1px solid red',
+
+    '@media': {
+        [media.desktop]: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
+            flex: 1,
+            minWidth: 0, // Flex child size calculation stabilization
+        },
+    },
 });
 
 export const brand = style([
@@ -81,6 +125,20 @@ export const promotionText = style([
     textStyles.caption1Regular,
     {
         color: vars.color.gray['60'],
+    },
+]);
+
+export const likeButton = style({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '4px',
+});
+
+export const likeCount = style([
+    textStyles.body1Medium,
+    {
+        color: vars.color.green['100'],
     },
 ]);
 
@@ -204,6 +262,12 @@ export const bottomBar = style({
     gap: '12px',
     zIndex: 100,
     paddingBottom: 'max(12px, env(safe-area-inset-bottom))', // For iOS Home Indicator
+
+    '@media': {
+        [media.desktop]: {
+            display: 'none',
+        },
+    },
 });
 
 export const giftButton = style({
@@ -222,7 +286,7 @@ export const buyButton = style([
     textStyles.body1Semibold,
     {
         flex: 1,
-        backgroundColor: vars.color.primary, // Color matched from image broadly
+        backgroundColor: vars.color.primary,
         color: vars.color.white,
         border: 'none',
         borderRadius: '4px',
@@ -231,5 +295,33 @@ export const buyButton = style([
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
+    },
+]);
+
+export const purchaseButtonDesktop = style([
+    buyButton,
+    {
+        display: 'none',
+        '@media': {
+            [media.desktop]: {
+                display: 'flex',
+                width: '100%',
+                marginTop: '16px',
+            },
+        },
+    },
+]);
+
+export const giftButtonDesktop = style([
+    giftButton,
+    {
+        display: 'none',
+        '@media': {
+            [media.desktop]: {
+                display: 'flex',
+                width: '56px',
+                height: '56px',
+            },
+        },
     },
 ]);

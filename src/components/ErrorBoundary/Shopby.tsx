@@ -1,17 +1,30 @@
-import { ErrorBoundary, ErrorBoundaryFallbackProps } from '@suspensive/react';
+import {
+    ErrorBoundary,
+    ErrorBoundaryFallbackProps,
+    Suspense,
+} from '@suspensive/react';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
+
+import { Button } from '@/components/ui/button';
+
+import * as styles from './Shopby.css';
 
 interface ShopbyApiErrorBoundaryProps {
     children: ReactNode;
+
+    fallback?: ReactNode;
     /**
      * 에러 발생 시 렌더할 fallback 컴포넌트
      * - ReactNode: 정적 fallback
      * - Function: ErrorBoundaryFallbackProps를 받아 동적으로 렌더
-     * - 미지정 시 빈 fragment 렌더 (에러 무시)
+     * - 미지정 시 DefaultErrorFallback 사용
      */
-    fallback?: ReactNode | ((props: ErrorBoundaryFallbackProps) => ReactNode);
+    errorFallback?:
+        | ReactNode
+        | ((props: ErrorBoundaryFallbackProps) => ReactNode);
     /**
      * 에러 리셋 시 호출될 콜백
      */
@@ -34,9 +47,52 @@ const isServiceUnavailable = (error: Error): boolean => {
     );
 };
 
+/**
+ * 기본 에러 Fallback 컴포넌트 (404 페이지 스타일)
+ */
+const DefaultErrorFallback = ({
+    error,
+    reset,
+}: ErrorBoundaryFallbackProps) => {
+    const router = useRouter();
+    const message = isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : error.message || '알 수 없는 에러가 발생했습니다.';
+
+    return (
+        <div className={styles.container}>
+            <h1 className={styles.title}>데이터를 불러오지 못했습니다.</h1>
+            <p className={styles.description}>{message}</p>
+            <div className={styles.buttonGroup}>
+                <div className={styles.buttonWrapper}>
+                    <Button
+                        frame="solid"
+                        variant="primary"
+                        onClick={reset}
+                        style={{ width: '100%' }}
+                    >
+                        다시 시도
+                    </Button>
+                </div>
+                <div className={styles.buttonWrapper}>
+                    <Button
+                        frame="outlined"
+                        variant="secondary"
+                        onClick={() => router.push('/')}
+                        style={{ width: '100%' }}
+                    >
+                        홈으로 돌아가기
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const ShopbyApiErrorBoundary = ({
     children,
     fallback,
+    errorFallback,
     onReset,
     shouldThrow,
 }: ShopbyApiErrorBoundaryProps) => {
@@ -59,21 +115,19 @@ const ShopbyApiErrorBoundary = ({
                             throw props.error;
                         }
 
-                        // fallback 미지정 시 빈 fragment (에러 무시)
-                        if (fallback === undefined) {
-                            return <></>;
+                        // 사용자 지정 fallback 처리
+                        if (typeof errorFallback === 'function') {
+                            return <>{errorFallback(props)}</>;
+                        }
+                        if (errorFallback) {
+                            return <>{errorFallback}</>;
                         }
 
-                        // 함수형 fallback
-                        if (typeof fallback === 'function') {
-                            return <>{fallback(props)}</>;
-                        }
-
-                        // 정적 fallback
-                        return <>{fallback}</>;
+                        // 기본 fallback
+                        return <DefaultErrorFallback {...props} />;
                     }}
                 >
-                    {children}
+                    <Suspense fallback={fallback}>{children}</Suspense>
                 </ErrorBoundary>
             )}
         </QueryErrorResetBoundary>
