@@ -1,5 +1,6 @@
 import { BookmarkIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from './index.css';
@@ -8,14 +9,21 @@ import { vars } from '@/styles/theme.css';
 import { PATHS } from '@/const/paths';
 
 interface RelatedProductListProps {
-    productNo: number;
+    productNo?: number;
 }
 
 export default function RelatedProductList({
-    productNo,
+    productNo: productNoProps,
 }: RelatedProductListProps) {
+    const router = useRouter();
+
+    const productNo = productNoProps ?? (Number(router.query.productNo) || 0);
+
     const { data: relatedProducts, isLoading } = useRelatedProductList({
         productNo,
+        options: {
+            enabled: !!productNo && productNo !== 0,
+        },
     });
 
     if (isLoading || !relatedProducts || relatedProducts.length === 0) {

@@ -77,32 +77,32 @@ export const button = recipe({
 });
 
 export const outlinedButton = recipe({
-    base: {
-        borderRadius: '8px',
-        fontSize: '1.6rem',
-        fontWeight: '700',
-        lineHeight: '1.5',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-        height: '52px',
-        width: '100%',
-        transition: 'all 0.2s ease-in-out',
-        selectors: {
-            '&:hover:not(:disabled)': {
-                opacity: 0.7,
-                backgroundColor: vars.color.gray[10],
+    base: [
+        textStyles.headingSemibold,
+        {
+            borderRadius: '4px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+            height: '52px',
+            width: '100%',
+            transition: 'all 0.2s ease-in-out',
+            selectors: {
+                '&:hover:not(:disabled)': {
+                    opacity: 0.7,
+                    backgroundColor: vars.color.gray[10],
+                },
             },
+            ':disabled': {
+                backgroundColor: vars.color.gray['20'],
+                color: vars.color.gray['50'],
+                cursor: 'not-allowed',
+            },
+            border: `1px solid ${vars.color.gray[50]}`,
+            color: vars.color.black,
         },
-        ':disabled': {
-            backgroundColor: vars.color.gray['20'],
-            color: vars.color.gray['50'],
-            cursor: 'not-allowed',
-        },
-        border: `1px solid ${vars.color.gray[50]}`,
-        color: vars.color.black,
-    },
+    ],
     variants: {
         visual: {
             primary: {

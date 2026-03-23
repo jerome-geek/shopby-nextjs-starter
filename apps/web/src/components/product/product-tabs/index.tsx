@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import * as styles from '@/components/product/product-tabs/index.css';
+import RelatedProductList from '@/components/product/related-product-list';
 
 interface ProductTabsProps {
     reviewCount?: number;
@@ -67,6 +68,8 @@ export default function ProductTabs({
                     </div>
                 )}
             </div>
+
+            <RelatedProductList />
         </div>
     );
 }

@@ -21,7 +21,7 @@ import { OVERLAY_ID } from '@/const/overlay';
 import { useSb } from '@/hooks/libs/shopby';
 import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
 import { productKeys } from '@/hooks/queryKeys';
-import { useProductDetail } from '@/hooks/suspenseQuery/product';
+import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import useProductLike from '@/hooks/useProductLike';
 import { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo].css';
@@ -133,8 +133,6 @@ function ProductDetailView({
                             productContent={productContent}
                         />
                     </div>
-
-                    <RelatedProductList productNo={productNo} />
                 </div>
 
                 <div className={styles.content}>
