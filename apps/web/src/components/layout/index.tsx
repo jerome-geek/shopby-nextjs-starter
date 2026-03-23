@@ -6,7 +6,8 @@ import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import * as styles from '@/components/layout/index.css';
 import ScrollToTop from '@/components/ui/scroll-to-top';
-import { useSb, useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
+import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
+import { useHeaderHeight } from '@/hooks/ui';
 
 interface LayoutProps {
     children: ReactNode;
@@ -16,6 +17,8 @@ interface LayoutProps {
 export function Layout({ children, className }: LayoutProps) {
     useSbInit();
     useShopbyStatistics();
+
+    useHeaderHeight();
 
     return (
         <div className={clsx(styles.layout, className)}>

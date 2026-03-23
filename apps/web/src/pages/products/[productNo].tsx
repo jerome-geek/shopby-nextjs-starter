@@ -14,6 +14,7 @@ import ShopbyApiErrorBoundary from '@/components/ErrorBoundary/Shopby';
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import ProductMainImage from '@/components/product/main-image';
 import PhotoReview from '@/components/product/photo-review';
+import RelatedProductList from '@/components/product/related-product-list';
 import ProductTabs from '@/components/product/product-tabs';
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
@@ -47,9 +48,10 @@ function ProductDetailView({
         productNo,
         searchParams,
     });
-
-    // 임시 타임세일 변수
-    const isTimeSale = true;
+    console.log(
+        '🚀 ~ ProductDetailView ~ productDetailData:',
+        productDetailData,
+    );
 
     const { baseInfo, price, counter, brand } = productDetailData;
     console.log('🚀 ~ ProductDetailView ~ baseInfo:', baseInfo);
@@ -105,6 +107,10 @@ function ProductDetailView({
         );
     };
 
+    const onGiftButtonClick = () => {};
+    const onCartButtonClick = () => {};
+    const onOrderButtonClick = () => {};
+
     useSb({
         product: productDetailData,
     });
@@ -112,11 +118,23 @@ function ProductDetailView({
     return (
         <div className={styles.container}>
             <div className={styles.mainSection}>
-                <div className={styles.thumbnailContainer}>
-                    <ProductMainImage
-                        productNo={productNo}
-                        searchParams={searchParams}
-                    />
+                <div className={styles.leftColumn}>
+                    <div className={styles.thumbnailContainer}>
+                        <ProductMainImage
+                            productNo={productNo}
+                            searchParams={searchParams}
+                        />
+                    </div>
+
+                    <div style={{ marginTop: '40px' }}>
+                        <ProductTabs
+                            reviewCount={counter.reviewCnt || 0}
+                            inquiryCount={counter.inquiryCnt || 0}
+                            productContent={productContent}
+                        />
+                    </div>
+
+                    <RelatedProductList productNo={productNo} />
                 </div>
 
                 <div className={styles.content}>
@@ -198,10 +216,6 @@ function ProductDetailView({
 
                     <div className={styles.additionalInfoContainer}>
                         {additionalDiscountData && (
-                            // <div>
-                            //     <Clock3Icon />
-                            //     <p>{`타임특가 ${}남음`}</p>
-                            // </div>
                             <ProductAdditionalDiscount
                                 type="detail"
                                 productNo={productNo}
@@ -234,40 +248,58 @@ function ProductDetailView({
 
                     <div>{/* TODO: option */}</div>
 
-                    <div className={styles.actionButtons}>
-                        <button className={styles.giftButtonDesktop}>
-                            <Gift size={24} color="#333" />
-                        </button>
-                        <Button frame="outlined" className={styles.cartButton}>
-                            장바구니
-                        </Button>
-                        <Button
-                            frame="solid"
-                            variant="primary"
-                            className={styles.buyButton}
-                        >
-                            구매하기
-                        </Button>
+                    <div className={styles.orderContainer}>
+                        <hr className={styles.buttonDivider} />
+
+                        <div className={styles.totalPriceContainer}>
+                            <p className={styles.totalPriceTitle}>
+                                총 상품금액
+                            </p>
+                            <p className={styles.totalPrice}>0원</p>
+                        </div>
+
+                        <div className={styles.actionButtons}>
+                            <button
+                                className={styles.giftButtonDesktop}
+                                onClick={onGiftButtonClick}
+                            >
+                                <Gift size={24} color="#333" />
+                            </button>
+                            <Button
+                                frame="outlined"
+                                className={styles.cartButton}
+                                onClick={onCartButtonClick}
+                            >
+                                장바구니
+                            </Button>
+                            <Button
+                                frame="solid"
+                                variant="primary"
+                                className={styles.buyButton}
+                                onClick={onOrderButtonClick}
+                            >
+                                구매하기
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div style={{ marginTop: '40px' }}>
-                <PhotoReview images={baseInfo.imageUrlInfo} />
-
-                <ProductTabs
-                    reviewCount={counter.reviewCnt || 0}
-                    inquiryCount={counter.inquiryCnt || 0}
-                    productContent={productContent}
-                />
-            </div>
-
             <div className={styles.bottomBar}>
-                <button className={styles.giftButton}>
+                <button
+                    className={styles.giftButton}
+                    onClick={onGiftButtonClick}
+                >
                     <Gift size={24} color="#333" />
                 </button>
-                <Button frame="outlined">장바구니</Button>
-                <Button frame="solid" variant="primary">
+                <Button frame="outlined" onClick={onCartButtonClick}>
+                    장바구니
+                </Button>
+                <Button
+                    frame="solid"
+                    variant="primary"
+                    onClick={onOrderButtonClick}
+                >
                     구매하기
                 </Button>
             </div>

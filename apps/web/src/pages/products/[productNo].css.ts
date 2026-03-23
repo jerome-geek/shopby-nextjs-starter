@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { globalVars } from '@/styles/global.css';
 
 export const container = style({
     backgroundColor: vars.color.white,
@@ -25,8 +26,21 @@ export const mainSection = style({
     '@media': {
         [media.desktop]: {
             flexDirection: 'row',
-            gap: '48px',
+            gap: '60px',
             alignItems: 'flex-start',
+        },
+    },
+});
+
+export const leftColumn = style({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    minWidth: 0,
+
+    '@media': {
+        [media.desktop]: {
+            flex: 1,
         },
     },
 });
@@ -37,10 +51,7 @@ export const thumbnailContainer = style({
     '@media': {
         [media.desktop]: {
             margin: 0,
-            flex: '0 0 650px', // 좌측 이미지 영역 고정
-            position: 'sticky',
-            top: '40px',
-            minWidth: 0,
+            width: '100%',
         },
     },
 });
@@ -100,6 +111,9 @@ export const content = style({
     '@media': {
         [media.desktop]: {
             gap: '32px',
+            position: 'sticky',
+            top: `calc(var(--header-height, ${globalVars.header.height}) + 20px)`,
+            flex: '0 0 450px', // 우측 영역 너비 고정
         },
     },
 });
@@ -132,7 +146,6 @@ export const priceInfo = style({
 export const actionButtons = style({
     display: 'flex',
     gap: '12px',
-    marginTop: '40px',
 });
 
 export const cartButton = style({
@@ -376,4 +389,37 @@ export const timeSaleContainer = style([
 export const optionDivider = style({
     width: '100%',
     border: `1px solid ${vars.color.gray['20']}`,
+});
+
+export const buttonDivider = style({
+    width: '100%',
+    border: `2px solid ${vars.color.green['80']}`,
+});
+
+export const totalPriceContainer = style({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+});
+
+export const totalPriceTitle = style([
+    textStyles.headingSemibold,
+    { color: vars.color.black },
+]);
+
+export const totalPrice = style([
+    textStyles.title1Bold,
+    {
+        color: vars.color.pink['100'],
+    },
+]);
+
+export const orderContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });

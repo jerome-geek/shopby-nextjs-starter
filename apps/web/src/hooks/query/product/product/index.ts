@@ -8,6 +8,7 @@ import useProductOptionList from '@/hooks/query/product/product/useProductOption
 import useProductSearchSummary from '@/hooks/query/product/product/useProductSearchSummary';
 import useProductShippingInfo from '@/hooks/query/product/product/useProductShippingInfo';
 import useProductsInfoByProductNos from '@/hooks/query/product/product/useProductsInfoByProductNos';
+import useRelatedProductList from '@/hooks/query/product/product/useRelatedProductList';
 
 export {
     useBestSellerProductList,
@@ -20,4 +21,5 @@ export {
     useProductSearchSummary,
     useProductShippingInfo,
     useProductsInfoByProductNos,
+    useRelatedProductList,
 };

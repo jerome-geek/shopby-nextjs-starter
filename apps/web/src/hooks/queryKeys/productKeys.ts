@@ -88,6 +88,9 @@ const productKeys = {
 
     keywords: (productNos: number[]) =>
         [...productKeys.all, 'keywords', productNos] as const,
+
+    relatedProducts: (productNo: number) =>
+        [...productKeys.all, 'relatedProducts', productNo] as const,
 };
 
 export default productKeys;
