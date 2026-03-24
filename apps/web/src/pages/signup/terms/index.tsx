@@ -9,7 +9,7 @@ import {
 } from '@fxts/core';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
-import { ReactElement, useMemo, useState } from 'react';
+import { ReactElement, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AuthLayout } from '@/components/layout/auth';
@@ -22,6 +22,8 @@ import { useTermList } from '@/hooks/query/manage/terms';
 import useDialog from '@/hooks/utils/useDialog';
 import { useResponsive } from '@/hooks/utils/useResponsive';
 import { NextPageWithLayout } from '@/pages/_app';
+import { CertificationCheckContext } from '@/context/certificationCheck';
+
 import * as styles from './index.css';
 
 // 회원가입 약관 리스트 정의
@@ -56,6 +58,12 @@ const SignupTerms: NextPageWithLayout = () => {
     const { isMobile } = useResponsive();
 
     const { openDialog } = useDialog();
+
+    const value = useContext(CertificationCheckContext);
+
+    const isAuthenticationByPhone = value?.isAuthenticationByPhone;
+
+    console.log(value);
 
     // 체크된 약관 타입들을 관리 (Anti-pattern: 객체 배열 상태 관리 지양)
     const [checkedTypes, setCheckedTypes] = useState<string[]>([]);
@@ -154,7 +162,7 @@ const SignupTerms: NextPageWithLayout = () => {
         );
 
         router.push({
-            pathname: PATHS.SIGNUP.FORM,
+            pathname: PATHS.SIGNUP.REGISTER,
             query: {
                 terms: agreedJoinTerms.join(','),
                 smsAgreed: includes('smsAgreed', checkedTypes),
@@ -197,8 +205,6 @@ const SignupTerms: NextPageWithLayout = () => {
     return (
         <div className={styles.container}>
             <div className={styles.titleContainer}>
-                {!isMobile && <h2 className={styles.title}>{t('회원가입')}</h2>}
-
                 <div className={styles.contentsContainer}>
                     {/* 전체 동의 섹션 */}
                     <div className={styles.allAgreeContainer}>
@@ -270,12 +276,14 @@ const SignupTerms: NextPageWithLayout = () => {
                 onClick={onNextClick}
                 className={styles.nextButton}
             >
-                {t('동의하고 본인 인증하기')}
+                {t(isAuthenticationByPhone ? '본인 인증하기' : '다음으로')}
             </Button>
         </div>
     );
 };
 
-SignupTerms.getLayout = (page: ReactElement) => <AuthLayout>{page}</AuthLayout>;
+SignupTerms.getLayout = (page: ReactElement) => (
+    <AuthLayout title='약관동의'>{page}</AuthLayout>
+);
 
 export default SignupTerms;

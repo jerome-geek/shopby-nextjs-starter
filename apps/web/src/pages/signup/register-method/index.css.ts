@@ -1,12 +1,14 @@
+import { style } from '@vanilla-extract/css';
+
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { style } from '@vanilla-extract/css';
 
 export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '60px',
+    marginTop: '-20px',
 
     '@media': {
         [media.desktop]: {
@@ -26,13 +28,6 @@ export const titleContainer = style({
         },
     },
 });
-
-export const title = style([
-    textStyles.display2Bold,
-    {
-        color: vars.color.black,
-    },
-]);
 
 export const description = style([
     textStyles.caption1Regular,

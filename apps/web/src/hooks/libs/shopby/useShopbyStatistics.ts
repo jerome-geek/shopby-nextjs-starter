@@ -9,7 +9,11 @@ const useShopbyStatistics = () => {
     const router = useRouter();
     const pathname = router.asPath.split('?')[0];
 
-    const { data: profileData } = useProfile();
+    const { data: profileData } = useProfile({
+        options: {
+            enabled: isLoggedIn(),
+        },
+    });
 
     const isScriptUsable =
         process.env.NODE_ENV === 'production' &&

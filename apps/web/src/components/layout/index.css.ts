@@ -25,12 +25,12 @@ export const main = style({
 export const container = style({
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '0 20px', // 모바일 여백
+    padding: '24px 20px 40px',
     width: '100%',
 
     '@media': {
-        [media.desktop]: {
-            padding: '24px 0px',
+        [media.mobile]: {
+            padding: '0 20px 40px',
         },
     },
 });

@@ -7,14 +7,10 @@ export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '32px',
-    padding: '40px 20px',
 
     '@media': {
         [media.desktop]: {
             gap: '40px',
-            padding: '80px 0',
-            maxWidth: '500px',
-            margin: '0 auto',
         },
     },
 });

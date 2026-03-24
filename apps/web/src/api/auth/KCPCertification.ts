@@ -35,7 +35,7 @@ const KCPCertification = {
      *  - KCP 본인인증을 위한 form을 생성하기 위한 API 입니다
      */
     getKCPForm: (params: GetKCPFormParams, options?: AxiosRequestConfig) => {
-        return shopbyRequest<GetKCPCertificationResultResponse>({
+        return shopbyRequest<GetKCPFormResponse>({
             method: 'GET',
             url: '/kcp/id-verification/form',
             params,
@@ -51,7 +51,7 @@ const KCPCertification = {
         params: GetKCPCertificationResultParams,
         options?: AxiosRequestConfig,
     ) => {
-        return shopbyRequest<GetKCPFormResponse>({
+        return shopbyRequest<GetKCPCertificationResultResponse>({
             method: 'GET',
             url: '/kcp/id-verification/response',
             params,

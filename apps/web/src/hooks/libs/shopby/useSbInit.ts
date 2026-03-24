@@ -54,7 +54,12 @@ const useSbInit = () => {
 
     const isLogin = isLoggedIn();
 
-    const { data: profileData } = useProfile();
+    const { data: profileData } = useProfile({
+        options: {
+            enabled: isLogin,
+        },
+    });
+
     useEffect(() => {
         if (!isExternalScriptUsable) {
             return;

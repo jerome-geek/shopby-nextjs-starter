@@ -23,6 +23,7 @@ import { Layout } from '@/components/layout';
 import '@/i18n/config';
 import '@/styles/global.css.ts';
 import { HttpStatusCode, isAxiosError } from 'axios';
+import { CertificationCheckProvider } from '@/context/certificationCheck';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -90,27 +91,29 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                 <QueryClientProvider client={queryClient}>
                     <HydrationBoundary state={pageProps.dehydratedState}>
                         <OverlayProvider>
-                            <Head>{defaultSeo}</Head>
-                            <Layout>
-                                {getLayout(
-                                    <AnimatePresence mode="wait">
-                                        <motion.div
-                                            // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
-                                            key={router.pathname}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -20 }}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            <Component {...pageProps} />
-                                        </motion.div>
-                                    </AnimatePresence>,
-                                )}
-                            </Layout>
-                            <Toaster />
-                            <ReactQueryDevtools initialIsOpen={false} />
-                            <Analytics />
-                            <SpeedInsights />
+                            <CertificationCheckProvider>
+                                <Head>{defaultSeo}</Head>
+                                <Layout>
+                                    {getLayout(
+                                        <AnimatePresence mode='wait'>
+                                            <motion.div
+                                                // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
+                                                key={router.pathname}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -20 }}
+                                                transition={{ duration: 0.3 }}
+                                            >
+                                                <Component {...pageProps} />
+                                            </motion.div>
+                                        </AnimatePresence>,
+                                    )}
+                                </Layout>
+                                <Toaster />
+                                <ReactQueryDevtools initialIsOpen={false} />
+                                <Analytics />
+                                <SpeedInsights />
+                            </CertificationCheckProvider>
                         </OverlayProvider>
                     </HydrationBoundary>
                 </QueryClientProvider>

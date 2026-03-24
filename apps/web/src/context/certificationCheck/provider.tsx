@@ -2,17 +2,17 @@ import { includes } from '@fxts/core';
 import { overlay } from 'overlay-kit';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
-import ConfirmDialog from '@/components/Common/Dialog/Confirm';
-import Typography from '@/components/Common/Typography';
+import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useLocale, useKcpCertification, useSnsLogin } from '@/hooks/utils';
+import useSnsLogin from '@/hooks/useSnsLogin';
+import { useKcpCertification, useLocale } from '@/hooks/utils';
 import useUpdateProfile from '@/hooks/utils/useUpdateProfile';
-import { checkLogin } from '@/utils/users';
+import { isLoggedIn } from '@/utils/auth';
 
 function CertificationCheckProvider({
     children,
@@ -23,9 +23,14 @@ function CertificationCheckProvider({
 
     const { isKorean } = useLocale();
 
-    const { data: profileData, isFetched: isProfileFetched } = useProfile();
+    const { data: profileData } = useProfile({
+        options: {
+            enabled: isLoggedIn(),
+        },
+    });
 
-    const { pathname } = useLocation();
+    const router = useRouter();
+    const pathname = router.pathname;
 
     const { openKcpAuthRegister } = useSnsLogin();
 
@@ -45,11 +50,7 @@ function CertificationCheckProvider({
             <ConfirmDialog
                 {...props}
                 iconType='warning'
-                Title={
-                    <Typography type='t7' as='p'>
-                        {t('서비스 이용을 위해 본인인증이 필요합니다.')}
-                    </Typography>
-                }
+                Title={t('서비스 이용을 위해 본인인증이 필요합니다.')}
                 confirm={() => {
                     openKcpAuthRegister();
                     props.close();
@@ -81,17 +82,13 @@ function CertificationCheckProvider({
             PATHS.GUEST.ORDER.DETAIL,
             PATHS.GUEST.CLAIMS.REQUEST,
             PATHS.GUEST.CLAIMS.CHANGE_ADDRESS,
-            PATHS.SIGNUP.MAIN,
+            PATHS.SIGNUP.TERMS,
             PATHS.SIGNUP.REGISTER_METHOD,
             PATHS.SIGNUP.REGISTER,
             PATHS.SIGNUP.COMPLETE,
         ];
 
-        return (
-            // mallData?.mallJoinConfig.authenticationType ===
-            //     'AUTHENTICATION_BY_PHONE' &&
-            !includes(pathname, CERTIFICATION_FREE_ROUTES)
-        );
+        return !includes(pathname, CERTIFICATION_FREE_ROUTES);
     }, [mallData?.mallJoinConfig.authenticationType, pathname]);
 
     useEffect(() => {
@@ -103,11 +100,11 @@ function CertificationCheckProvider({
             return;
         }
 
-        if (!checkLogin()) {
+        if (!isLoggedIn()) {
             return;
         }
 
-        if (!isProfileFetched) {
+        if (!profileData) {
             return;
         }
 
@@ -124,15 +121,14 @@ function CertificationCheckProvider({
         isCertified,
         isAuthenticationByPhone,
         showCertificationDialog,
-        isProfileFetched,
         isCertificationNeeded,
-        profileData?.memberId,
+        profileData,
         isKorean,
     ]);
 
     useKcpCertification({
         onNext: (data: { key?: string }) => {
-            if (checkLogin() && isCertificationNeeded && data?.key) {
+            if (isLoggedIn() && isCertificationNeeded && data?.key) {
                 updateProfile(data.key);
             }
         },

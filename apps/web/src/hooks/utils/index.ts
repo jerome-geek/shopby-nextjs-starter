@@ -4,5 +4,14 @@ import useDragScroll from '@/hooks/utils/useDragScroll';
 import useResponsive from '@/hooks/utils/useResponsive';
 import useDialog from '@/hooks/utils/useDialog';
 import useLocale from '@/hooks/utils/useLocale';
+import useKcpCertification from '@/hooks/utils/useKcpCertification';
 
-export { useKeyDown, useRouteChange, useDragScroll, useResponsive, useDialog, useLocale };
+export {
+    useKeyDown,
+    useRouteChange,
+    useDragScroll,
+    useResponsive,
+    useDialog,
+    useLocale,
+    useKcpCertification,
+};

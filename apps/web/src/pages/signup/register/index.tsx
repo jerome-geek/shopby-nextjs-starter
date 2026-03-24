@@ -1,16 +1,18 @@
-import { includes, isEmpty, join, map, pipe, prop } from '@fxts/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { isEmpty, join, map, pipe, prop } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useContext } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
+import { useRouter } from 'next/router';
 
 import { profile } from '@/api/member';
 import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
+import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useProfileMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useDialog } from '@/hooks/utils';
@@ -23,27 +25,31 @@ const SignupRegister: NextPageWithLayout = () => {
 
     const { openDialog } = useDialog();
 
-    const searchParams = useSearchParams();
+    const router = useRouter();
+    const query = router.query;
 
-    const accessToken = searchParams.get('accessToken');
-    const provider = searchParams.get('provider') as NcpOpenIdProviderType;
-    const expiry = Number(searchParams.get('expiry')) || 0;
+    const accessToken = query?.accessToken as string;
+    const provider = query?.provider as NcpOpenIdProviderType;
+    const expiry = Number(query?.expiry) || 0;
 
-    const termsStr = searchParams.get('terms');
+    const termsStr = query?.terms as string;
     const terms = (termsStr ? termsStr.split(',') : []) as any;
-    const smsAgreed = searchParams.get('smsAgreed') === 'true';
-    const directMailAgreed = searchParams.get('directMailAgreed') === 'true';
+    const smsAgreed = query?.smsAgreed === 'true';
+    const directMailAgreed = query?.directMailAgreed === 'true';
 
     const isSocialLogin = !!provider;
+
+    const value = useContext(CertificationCheckContext);
+
+    const isAuthenticationByPhone = value?.isAuthenticationByPhone;
 
     const methods = useForm<z.infer<typeof signupFormSchema>>({
         resolver: zodResolver(signupFormSchema),
         defaultValues: {
             type: 'personal',
-            isRegistrationNoChecked: false,
             joinTermsAgreements: terms,
-            smsAgreed: smsAgreed,
-            directMailAgreed: directMailAgreed,
+            isRegistrationNoChecked: false,
+            isDuplicateMemberId: true,
             openIdAccessToken: accessToken ?? undefined,
             providerType: provider
                 ? (provider
@@ -51,6 +57,15 @@ const SignupRegister: NextPageWithLayout = () => {
                       .replace('-', '_')
                       .toUpperCase() as any)
                 : undefined,
+            smsAgreed,
+            directMailAgreed,
+            // countryCd,
+            isBirthdayRequired: false,
+            isNicknameRequired: false,
+            isMobileNoRequired: false,
+            isTelephoneNoRequired: false,
+            isAddressRequired: false,
+            isSexRequired: false,
         },
     });
 
@@ -74,37 +89,6 @@ const SignupRegister: NextPageWithLayout = () => {
             enabled: isSocialLogin && !isEmpty(accessToken),
         },
     });
-
-    const isBusiness =
-        useWatch({
-            control,
-            name: 'type',
-        }) === 'business';
-
-    useEffect(() => {
-        if (!getSocialData) {
-            return;
-        }
-
-        const birthday = getSocialData.birthday?.replace(/-/g, '') ?? '';
-
-        reset((prev) => {
-            return {
-                ...prev,
-                providerType: getSocialData.providerType,
-                memberName: getSocialData.memberName || '',
-                mobileNo: getSocialData.mobileNo ?? '',
-                // NOTE: 애플,라인은 메일정보가 없으며, 구글은 마스킹되서 옴
-                email: includes(provider, ['ncp_apple', 'ncp_line'])
-                    ? ''
-                    : getSocialData.email ?? '',
-                sex: getSocialData.sex === 'X' ? undefined : getSocialData.sex,
-                birthYear: birthday.slice(0, 4),
-                birthMonth: birthday.slice(4, 6),
-                birthDay: birthday.slice(6, 8),
-            };
-        });
-    }, [getSocialData, provider, reset]);
 
     const {
         register: { mutateAsync: registerMutate },

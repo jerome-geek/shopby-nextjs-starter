@@ -18,11 +18,6 @@ const SignupRegisterMethod: NextPageWithLayout = () => {
     return (
         <div className={styles.container}>
             <div className={styles.titleContainer}>
-                <h1 className={styles.title}>
-                    JollyPot에
-                    <br />
-                    오신 것을 환영해요!
-                </h1>
                 <p className={styles.description}>
                     회원가입하면 특별한 혜택을 받을 수 있어요.
                 </p>
@@ -37,7 +32,9 @@ const SignupRegisterMethod: NextPageWithLayout = () => {
     );
 };
 
-SignupRegisterMethod.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+SignupRegisterMethod.getLayout = (page) => (
+    <AuthLayout title='회원가입'>{page}</AuthLayout>
+);
 
 const SignupBannerList = () => {
     const { data } = useBannerList({

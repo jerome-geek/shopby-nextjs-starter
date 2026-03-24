@@ -55,7 +55,7 @@ const signupFormSchema = z
             .string()
             .regex(
                 /^(?:(?=.*[a-zA-Z])(?=.*[0-9])|(?=.*[a-zA-Z])(?=.*[!@#$%^&*])|(?=.*[0-9])(?=.*[!@#$%^&*]))(?=.{10,})|(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,9}).*$/,
-                '10자리 이상은 2종류 조합, 8~9자리는 3종류 모두 조합이 필요합니다.'
+                '10자리 이상은 2종류 조합, 8~9자리는 3종류 모두 조합이 필요합니다.',
             )
             .min(8, '비밀번호는 최소 8자 이상이어야 합니다')
             .max(20, '비밀번호는 최대 20자까지 가능합니다')
@@ -83,7 +83,7 @@ const signupFormSchema = z
             },
             {
                 message: '국가코드를 선택해 주세요.',
-            }
+            },
         ),
         certificated: z.boolean().optional(),
         // TODO: 몰에서 본인인증을 사용하는지 여부에 따라서 달라짐
@@ -92,7 +92,10 @@ const signupFormSchema = z
         sex: z.enum(['M', 'F']).optional(),
         jibunAddress: z.string().optional(),
         openIdAccessToken: z.string().optional(),
-        mobileNo: z.string().min(1, '휴대폰번호를 입력해 주세요.'),
+        mobileNo: z
+            .string()
+            .min(1, '휴대폰번호를 입력해 주세요.')
+            .regex(/^[0-9]+$/, '휴대폰번호는 숫자만 입력 가능합니다.'),
         firstName: isGlobalMall
             ? z.string().nonempty('이름을 입력해주세요.')
             : z.string().optional(),
@@ -107,7 +110,7 @@ const signupFormSchema = z
                 'PI_PROCESS_CONSIGNMENT',
                 'PI_THIRD_PARTY_PROVISION',
                 'PI_14_AGE',
-            ])
+            ]),
         ),
         detailAddress: z.string().optional(),
         extraInfo: z
@@ -116,10 +119,10 @@ const signupFormSchema = z
                     extraInfoNo: z.number(),
                     extraInfoName: z.string(),
                     extraInfoOptionNos: z.array(
-                        z.boolean().or(z.number()).or(z.string())
+                        z.boolean().or(z.number()).or(z.string()),
                     ),
                     extraInfoOptionTextContent: z.string(),
-                })
+                }),
             )
             .optional(),
         // 실제 회원가입에는 없는 항목
@@ -150,6 +153,13 @@ const signupFormSchema = z
                 return file instanceof FileList; // 브라우저에서만 체크
             }, '파일 형식이 올바르지 않습니다.')
             .optional(),
+        isDuplicateMemberId: z.boolean(),
+        isNicknameRequired: z.boolean(),
+        isMobileNoRequired: z.boolean(),
+        isTelephoneNoRequired: z.boolean(),
+        isAddressRequired: z.boolean(),
+        isBirthdayRequired: z.boolean(),
+        isSexRequired: z.boolean(),
     })
     .refine((data) => (isGlobalMall ? true : !!data?.memberName), {
         message: '이름을 입력해 주세요.',
@@ -168,7 +178,7 @@ const signupFormSchema = z
         {
             message: '사업자 번호 중복을 체크해주세요.',
             path: ['isRegistrationNoChecked'],
-        }
+        },
     )
     .refine(
         (data) => {
@@ -177,7 +187,7 @@ const signupFormSchema = z
             }
             return true;
         },
-        { message: '아이디를 입력해주세요.', path: ['memberId'] }
+        { message: '아이디를 입력해주세요.', path: ['memberId'] },
     )
     .refine(
         (data) => {
@@ -189,11 +199,34 @@ const signupFormSchema = z
         {
             message: '비밀번호를 입력해주세요.',
             path: ['password'],
-        }
+        },
     )
     .refine((data) => data.password === data.passwordConfirm, {
         message: '비밀번호가 일치하지 않습니다.',
         path: ['passwordConfirm'],
+    })
+    .refine((data) => (data.isNicknameRequired ? !!data.nickname : true), {
+        message: '닉네임을 입력해 주세요.',
+        path: ['nickname'],
+    })
+    .refine((data) => (data.isMobileNoRequired ? !!data.mobileNo : true), {
+        message: '휴대폰번호를 입력해 주세요.',
+        path: ['mobileNo'],
+    })
+    .refine(
+        (data) => (data.isTelephoneNoRequired ? !!data.telephoneNo : true),
+        {
+            message: '전화번호를 입력해 주세요.',
+            path: ['telephoneNo'],
+        },
+    )
+    .refine((data) => (data.isAddressRequired ? !!data.address : true), {
+        message: '주소를 입력해 주세요.',
+        path: ['address'],
+    })
+    .refine((data) => (data.isSexRequired ? !!data.sex : true), {
+        message: '성별을 선택해 주세요.',
+        path: ['sex'],
     });
 type SignupFormType = z.infer<typeof signupFormSchema>;
 
@@ -213,7 +246,7 @@ const createSignupSubmitSchema = (options?: {
                     'PI_PROCESS_CONSIGNMENT',
                     'PI_THIRD_PARTY_PROVISION',
                     'PI_14_AGE',
-                ])
+                ]),
             ),
             memberId: z.string().min(1, '아이디를 입력해 주세요.'),
             password: z
@@ -222,7 +255,7 @@ const createSignupSubmitSchema = (options?: {
                 .max(20, '비밀번호는 최대 20자까지 가능합니다.')
                 .regex(
                     /^(?:(?=.*[a-zA-Z])(?=.*[0-9])|(?=.*[a-zA-Z])(?=.*[!@#$%^&*])|(?=.*[0-9])(?=.*[!@#$%^&*]))(?=.{10,})|(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,9}).*$/,
-                    '10자리 이상은 2종류 조합, 8~9자리는 3종류 모두 조합이 필요합니다.'
+                    '10자리 이상은 2종류 조합, 8~9자리는 3종류 모두 조합이 필요합니다.',
                 ),
             memberName: z.string({ error: '이름을 입력해 주세요.' }),
             pushNotificationAgreed: z.boolean().optional(),
@@ -245,10 +278,10 @@ const createSignupSubmitSchema = (options?: {
                     z.object({
                         extraInfoNo: z.number(),
                         extraInfoOptionNos: z.array(
-                            z.boolean().or(z.number()).or(z.string())
+                            z.boolean().or(z.number()).or(z.string()),
                         ),
                         extraInfoOptionTextContent: z.string(),
-                    })
+                    }),
                 )
                 .optional(),
             // NOTE: 해외 회원인 경우 필수값
@@ -297,7 +330,7 @@ const openIdSignupSubmitSchema = z.object({
             'PI_PROCESS_CONSIGNMENT',
             'PI_THIRD_PARTY_PROVISION',
             'PI_14_AGE',
-        ])
+        ]),
     ),
     directMailAgreed: z.boolean().optional(),
     nickname: z.string().optional(),
@@ -319,10 +352,10 @@ const openIdSignupSubmitSchema = z.object({
                 extraInfoNo: z.number(),
                 extraInfoName: z.string(),
                 extraInfoOptionNos: z.array(
-                    z.boolean().or(z.number()).or(z.string())
+                    z.boolean().or(z.number()).or(z.string()),
                 ),
                 extraInfoOptionTextContent: z.string(),
-            })
+            }),
         )
         .optional(),
 });

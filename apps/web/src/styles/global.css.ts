@@ -140,6 +140,7 @@ globalStyle('input::-ms-clear', {
 // Chrome autofill background
 globalStyle('input:-webkit-autofill', {
     WebkitBoxShadow: '0 0 0 1000px transparent inset',
+    WebkitTextFillColor: `${vars.color.black} !important`,
 });
 
 globalStyle(

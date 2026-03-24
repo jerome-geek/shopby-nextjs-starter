@@ -18,6 +18,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import * as styles from '@/styles/pages/login.css';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
+import InputContainer from '@/components/ui/input/InputContainer';
 
 const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
@@ -77,107 +78,108 @@ const LoginPage: NextPageWithLayout = () => {
     return (
         <FormProvider {...methods}>
             {/* 로그인 폼 */}
-            <div className={styles.loginFormSection}>
-                <form className={styles.form} onSubmit={onSubmit}>
-                    {/* 로그인 헤더 */}
-                    <h1 className={styles.heading}>{t('로그인')}</h1>
+            <div className={styles.container}>
+                <div className={styles.loginFormSection}>
+                    <form className={styles.form} onSubmit={onSubmit}>
+                        <div className={styles.inputGroupContainer}>
+                            {/* 아이디 입력 */}
+                            <InputContainer>
+                                <InputLabel htmlFor='memberId'>
+                                    {t('아이디')}
+                                </InputLabel>
+                                <InputField
+                                    {...register('memberId')}
+                                    type='text'
+                                    id='memberId'
+                                    placeholder={t('아이디를 입력해 주세요')}
+                                />
+                                <ErrorMessage name='memberId' />
+                            </InputContainer>
 
-                    <div>
-                        {/* 아이디 입력 */}
-                        <div className={styles.inputGroup}>
-                            <InputLabel htmlFor='memberId'>
-                                {t('아이디')}
-                            </InputLabel>
-                            <InputField
-                                {...register('memberId')}
-                                type='text'
-                                id='memberId'
-                                placeholder={t('아이디를 입력해 주세요')}
-                            />
-                            <ErrorMessage name='memberId' />
+                            {/* 비밀번호 입력 */}
+                            <InputContainer>
+                                <InputLabel htmlFor='password'>
+                                    {t('비밀번호')}
+                                </InputLabel>
+                                <InputField
+                                    {...register('password')}
+                                    type='password'
+                                    id='password'
+                                    placeholder={t('비밀번호를 입력해 주세요')}
+                                />
+                                <ErrorMessage name='password' />
+                            </InputContainer>
+
+                            {/* 아이디 저장 체크박스 */}
+                            <div className={styles.checkboxGroup}>
+                                <Controller
+                                    control={control}
+                                    name='isSaved'
+                                    render={({ field }) => {
+                                        return (
+                                            <InputCheckbox
+                                                id='isSaved'
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        );
+                                    }}
+                                />
+                                <InputLabel isCheckbox htmlFor='isSaved'>
+                                    {t('아이디 저장')}
+                                </InputLabel>
+                            </div>
                         </div>
 
-                        {/* 비밀번호 입력 */}
-                        <div className={styles.inputGroup}>
-                            <InputLabel htmlFor='password'>
-                                {t('비밀번호')}
-                            </InputLabel>
-                            <InputField
-                                {...register('password')}
-                                type='password'
-                                id='password'
-                                placeholder={t('비밀번호를 입력해 주세요')}
-                            />
-                            <ErrorMessage name='password' />
-                        </div>
-
-                        {/* 아이디 저장 체크박스 */}
-                        <div className={styles.checkboxGroup}>
-                            <Controller
-                                control={control}
-                                name='isSaved'
-                                render={({ field }) => {
-                                    return (
-                                        <InputCheckbox
-                                            id='isSaved'
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    );
-                                }}
-                            />
-                            <InputLabel isCheckbox htmlFor='isSaved'>
-                                {t('아이디 저장')}
-                            </InputLabel>
-                        </div>
-                    </div>
-
-                    {/* 버튼 컨테이너 */}
-                    <div className={styles.buttonContainer}>
-                        <Button
-                            type='submit'
-                            frame='solid'
-                            variant='primary'
-                            disabled={isSubmitting}
-                        >
-                            <span>
-                                {isSubmitting ? t('로그인 중...') : t('로그인')}
-                            </span>
-                        </Button>
-
-                        <Button
-                            type='button'
-                            frame='outlined'
-                            variant='primary'
-                            onClick={() =>
-                                router.push(PATHS.SIGNUP.REGISTER_METHOD)
-                            }
-                        >
-                            <span>{t('회원가입')}</span>
-                        </Button>
-                    </div>
-                </form>
-
-                <ul className={styles.linkList}>
-                    {links.map(({ href, label }) => (
-                        <li key={href} className={styles.linkItem}>
-                            <Link
-                                href={href}
-                                prefetch={false}
-                                className={styles.link}
+                        {/* 버튼 컨테이너 */}
+                        <div className={styles.buttonContainer}>
+                            <Button
+                                type='submit'
+                                frame='solid'
+                                variant='primary'
+                                disabled={isSubmitting}
                             >
-                                {t(label)}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                                <span>
+                                    {isSubmitting
+                                        ? t('로그인 중...')
+                                        : t('로그인')}
+                                </span>
+                            </Button>
 
-            <SocialLoginList />
+                            <Button
+                                type='button'
+                                frame='outlined'
+                                variant='primary'
+                                onClick={() =>
+                                    router.push(PATHS.SIGNUP.REGISTER_METHOD)
+                                }
+                            >
+                                <span>{t('회원가입')}</span>
+                            </Button>
+                        </div>
+                    </form>
+
+                    <ul className={styles.linkList}>
+                        {links.map(({ href, label }) => (
+                            <li key={href} className={styles.linkItem}>
+                                <Link
+                                    href={href}
+                                    prefetch={false}
+                                    className={styles.link}
+                                >
+                                    {t(label)}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <SocialLoginList />
+            </div>
         </FormProvider>
     );
 };
 
-LoginPage.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+LoginPage.getLayout = (page) => <AuthLayout title='로그인'>{page}</AuthLayout>;
 
 export default LoginPage;
