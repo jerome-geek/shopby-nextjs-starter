@@ -4,18 +4,14 @@ import {
     flatMap,
     groupBy,
     head,
-    join,
     map,
     pipe,
-    prop,
     some,
     sortBy,
-    split,
-    toArray,
+    toArray
 } from '@fxts/core';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { sortRequiredFirst } from '@/helpers/product';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -26,7 +22,7 @@ import {
     MultiLevelOption,
     ProductOptionResponse,
 } from '@/models/product/productOption';
-// import { useTypedSelector } from '@/state/store';
+import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { addPriceString } from '@/utils/currency';
 
 interface UseOptionProps {
@@ -84,7 +80,7 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
     );
 
     // TODO: zustand로 변경
-    const selectedOptionList = [];
+    const { selectedOptions: selectedOptionList } = useProductOptionStore();
     // const selectedOptionList = useTypedSelector(
     //     (state) => state.productOption.selected,
     // );
@@ -141,7 +137,9 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
     const isSomeOptionSoldOut = some((a) => a.stockCnt === 0, flatOptions);
 
     const textOptionInputs = () => {
-        if (inputs.length === 0) return { PRODUCT: [], OPTION: [], AMOUNT: [] };
+        if (inputs.length === 0) {
+            return { PRODUCT: [], OPTION: [], AMOUNT: [] };
+        }
 
         return pipe(
             inputs,
