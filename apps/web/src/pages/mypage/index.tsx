@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { isLoggedIn } from '@/utils/auth';
 import { PATHS } from '@/const/paths';
+import { MypageLayout } from '@/components/layout/mypage';
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const loggedIn = isLoggedIn(ctx);
@@ -27,3 +28,7 @@ export default function MypageMain() {
         </div>
     );
 }
+
+MypageMain.getLayout = (page: React.ReactNode) => {
+    return <MypageLayout>{page}</MypageLayout>;
+};
