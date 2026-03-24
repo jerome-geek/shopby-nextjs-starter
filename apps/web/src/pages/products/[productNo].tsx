@@ -29,6 +29,9 @@ import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import FlatProductOption from '@/components/product/option/flat';
+import useProductOption from '@/hooks/product/useProductOption';
+import { MultiProductOption } from '@/components/product/option';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -48,15 +51,19 @@ function ProductDetailView({
         productNo,
         searchParams,
     });
-    console.log(
-        '🚀 ~ ProductDetailView ~ productDetailData:',
-        productDetailData,
-    );
 
     const { baseInfo, price, counter, brand } = productDetailData;
-    console.log('🚀 ~ ProductDetailView ~ baseInfo:', baseInfo);
 
     const liked = !!productDetailData.liked;
+
+    const { isFlatOptionUsed, isMultiLevelOptionUsed } = useProductOption({
+        productNo,
+    });
+    console.log(
+        '🚀 ~ ProductDetailView ~ isMultiLevelOptionUsed:',
+        isMultiLevelOptionUsed,
+    );
+    console.log('🚀 ~ ProductDetailView ~ isFlatOptionUsed:', isFlatOptionUsed);
 
     const { data: additionalDiscountData } = useAdditionalDiscount({
         searchParams: { productNo },
@@ -107,6 +114,9 @@ function ProductDetailView({
         );
     };
 
+    const onFlatOptionChange = () => {};
+    const onMultiOptionChange = () => {};
+
     const onGiftButtonClick = () => {};
     const onCartButtonClick = () => {};
     const onOrderButtonClick = () => {};
@@ -156,8 +166,8 @@ function ProductDetailView({
                             <div className={styles.ratingContainer}>
                                 <Star
                                     size={14}
-                                    fill="#E2808F"
-                                    stroke="#E2808F"
+                                    fill='#E2808F'
+                                    stroke='#E2808F'
                                 />
                                 <strong className={styles.reviewRate}>
                                     {productDetailData.reviewRate || 0}
@@ -215,7 +225,7 @@ function ProductDetailView({
                     <div className={styles.additionalInfoContainer}>
                         {additionalDiscountData && (
                             <ProductAdditionalDiscount
-                                type="detail"
+                                type='detail'
                                 productNo={productNo}
                             />
                         )}
@@ -244,7 +254,21 @@ function ProductDetailView({
 
                     <hr className={styles.optionDivider} />
 
-                    <div>{/* TODO: option */}</div>
+                    <div>
+                        {isFlatOptionUsed && (
+                            <FlatProductOption
+                                productNo={productNo}
+                                onChange={onFlatOptionChange}
+                            />
+                        )}
+
+                        {isMultiLevelOptionUsed && (
+                            <MultiProductOption
+                                productNo={productNo}
+                                onChange={onMultiOptionChange}
+                            />
+                        )}
+                    </div>
 
                     <div className={styles.orderContainer}>
                         <hr className={styles.buttonDivider} />
@@ -261,18 +285,18 @@ function ProductDetailView({
                                 className={styles.giftButtonDesktop}
                                 onClick={onGiftButtonClick}
                             >
-                                <Gift size={24} color="#333" />
+                                <Gift size={24} color='#333' />
                             </button>
                             <Button
-                                frame="outlined"
+                                frame='outlined'
                                 className={styles.cartButton}
                                 onClick={onCartButtonClick}
                             >
                                 장바구니
                             </Button>
                             <Button
-                                frame="solid"
-                                variant="primary"
+                                frame='solid'
+                                variant='primary'
                                 className={styles.buyButton}
                                 onClick={onOrderButtonClick}
                             >
@@ -288,14 +312,14 @@ function ProductDetailView({
                     className={styles.giftButton}
                     onClick={onGiftButtonClick}
                 >
-                    <Gift size={24} color="#333" />
+                    <Gift size={24} color='#333' />
                 </button>
-                <Button frame="outlined" onClick={onCartButtonClick}>
+                <Button frame='outlined' onClick={onCartButtonClick}>
                     장바구니
                 </Button>
                 <Button
-                    frame="solid"
-                    variant="primary"
+                    frame='solid'
+                    variant='primary'
                     onClick={onOrderButtonClick}
                 >
                     구매하기
@@ -330,8 +354,8 @@ export default function ProductDetailPage({
                     {errorMessage}
                 </p>
                 <Button
-                    frame="solid"
-                    variant="primary"
+                    frame='solid'
+                    variant='primary'
                     onClick={() => router.push('/')}
                 >
                     홈으로 돌아가기

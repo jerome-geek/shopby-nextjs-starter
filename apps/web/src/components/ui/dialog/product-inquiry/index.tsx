@@ -12,7 +12,7 @@ import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import TextArea from '@/components/ui/input/TextArea';
-import Select from '@/components/ui/Select';
+import Select from '@/components/ui/select';
 import { PATHS } from '@/const/paths';
 import { useProductInquiryMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';

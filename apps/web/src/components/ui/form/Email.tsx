@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import InputField from '@/components/ui/input/field';
-import Select from '@/components/ui/Select';
+import Select from '@/components/ui/select';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 import * as styles from '@/components/ui/form/Email.css';
 
