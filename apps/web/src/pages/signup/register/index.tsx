@@ -1,36 +1,22 @@
-import {
-    filter,
-    includes,
-    isEmpty,
-    join,
-    map,
-    pipe,
-    prop,
-    toArray,
-} from '@fxts/core';
+import { includes, isEmpty, join, map, pipe, prop } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import { RadioGroup } from 'radix-ui';
-import { ReactElement, useEffect, useRef } from 'react';
-import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
-import { useSearchParams } from 'next/navigation';
 
-import { AuthLayout } from '@/components/layout/AuthLayout';
-import { NextPageWithLayout } from '@/pages/_app';
-import {
-    openIdSignupSubmitSchema,
-    signupFormSchema,
-    signupSubmitSchema,
-} from '@/schema';
-import { NcpOpenIdProviderType } from '@/models';
-import { useProfile } from '@/hooks/query/member/profile';
-import { useProfileMutation } from '@/hooks/mutations';
 import { profile } from '@/api/member';
-import { useDialog } from '@/hooks/utils';
+import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
+import { useProfileMutation } from '@/hooks/mutations';
+import { useProfile } from '@/hooks/query/member/profile';
+import { useDialog } from '@/hooks/utils';
+import { NcpOpenIdProviderType } from '@/models';
+import { NextPageWithLayout } from '@/pages/_app';
+import { signupFormSchema } from '@/schema';
 
 const SignupRegister: NextPageWithLayout = () => {
     const { t } = useTranslation();
@@ -111,7 +97,7 @@ const SignupRegister: NextPageWithLayout = () => {
                 // NOTE: 애플,라인은 메일정보가 없으며, 구글은 마스킹되서 옴
                 email: includes(provider, ['ncp_apple', 'ncp_line'])
                     ? ''
-                    : (getSocialData.email ?? ''),
+                    : getSocialData.email ?? '',
                 sex: getSocialData.sex === 'X' ? undefined : getSocialData.sex,
                 birthYear: birthday.slice(0, 4),
                 birthMonth: birthday.slice(4, 6),
@@ -170,12 +156,12 @@ const SignupRegister: NextPageWithLayout = () => {
     return (
         <FormProvider {...methods}>
             <form onSubmit={onSubmit}>
-                <input type="submit" />
+                <input type='submit' />
 
                 <Button
-                    type="submit"
-                    frame="solid"
-                    variant="primary"
+                    type='submit'
+                    frame='solid'
+                    variant='primary'
                     disabled={isSubmitting}
                 >
                     <span>{t('회원가입하기')}</span>

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
-import { AuthLayout } from '@/components/layout/AuthLayout';
+import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import InputCheckbox from '@/components/ui/input/Checkbox';
@@ -17,6 +17,7 @@ import useApiError from '@/hooks/useApiError';
 import { NextPageWithLayout } from '@/pages/_app';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import * as styles from '@/styles/pages/login.css';
+import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 
 const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
@@ -54,7 +55,20 @@ const LoginPage: NextPageWithLayout = () => {
                 keepLogin: true,
             });
 
-            router.push(returnUrl || PATHS.MAIN);
+            const accessToken = data.data?.accessToken;
+            const accessTokenExpiresIn = data.data?.expiresIn;
+            const refreshToken = data.data?.refreshToken;
+            const refreshTokenExpiresIn = data.data?.refreshTokenExpiresIn;
+
+            if (accessToken && refreshToken) {
+                accessTokenCookie.set(accessToken, accessTokenExpiresIn);
+                refreshTokenCookie.set(refreshToken, refreshTokenExpiresIn);
+
+                location.replace(returnUrl || PATHS.MAIN);
+                return;
+            }
+
+            throw new Error(t('로그인 실패하였습니다.'));
         } catch (error) {
             handleError(error);
         }
@@ -71,48 +85,48 @@ const LoginPage: NextPageWithLayout = () => {
                     <div>
                         {/* 아이디 입력 */}
                         <div className={styles.inputGroup}>
-                            <InputLabel htmlFor="memberId">
+                            <InputLabel htmlFor='memberId'>
                                 {t('아이디')}
                             </InputLabel>
                             <InputField
                                 {...register('memberId')}
-                                type="text"
-                                id="memberId"
+                                type='text'
+                                id='memberId'
                                 placeholder={t('아이디를 입력해 주세요')}
                             />
-                            <ErrorMessage name="memberId" />
+                            <ErrorMessage name='memberId' />
                         </div>
 
                         {/* 비밀번호 입력 */}
                         <div className={styles.inputGroup}>
-                            <InputLabel htmlFor="password">
+                            <InputLabel htmlFor='password'>
                                 {t('비밀번호')}
                             </InputLabel>
                             <InputField
                                 {...register('password')}
-                                type="password"
-                                id="password"
+                                type='password'
+                                id='password'
                                 placeholder={t('비밀번호를 입력해 주세요')}
                             />
-                            <ErrorMessage name="password" />
+                            <ErrorMessage name='password' />
                         </div>
 
                         {/* 아이디 저장 체크박스 */}
                         <div className={styles.checkboxGroup}>
                             <Controller
                                 control={control}
-                                name="isSaved"
+                                name='isSaved'
                                 render={({ field }) => {
                                     return (
                                         <InputCheckbox
-                                            id="isSaved"
+                                            id='isSaved'
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
                                         />
                                     );
                                 }}
                             />
-                            <InputLabel isCheckbox htmlFor="isSaved">
+                            <InputLabel isCheckbox htmlFor='isSaved'>
                                 {t('아이디 저장')}
                             </InputLabel>
                         </div>
@@ -121,9 +135,9 @@ const LoginPage: NextPageWithLayout = () => {
                     {/* 버튼 컨테이너 */}
                     <div className={styles.buttonContainer}>
                         <Button
-                            type="submit"
-                            frame="solid"
-                            variant="primary"
+                            type='submit'
+                            frame='solid'
+                            variant='primary'
                             disabled={isSubmitting}
                         >
                             <span>
@@ -132,9 +146,9 @@ const LoginPage: NextPageWithLayout = () => {
                         </Button>
 
                         <Button
-                            type="button"
-                            frame="outlined"
-                            variant="primary"
+                            type='button'
+                            frame='outlined'
+                            variant='primary'
                             onClick={() =>
                                 router.push(PATHS.SIGNUP.REGISTER_METHOD)
                             }

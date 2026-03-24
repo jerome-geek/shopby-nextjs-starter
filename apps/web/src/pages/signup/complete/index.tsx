@@ -1,4 +1,4 @@
-import { AuthLayout } from '@/components/layout/AuthLayout';
+import { AuthLayout } from '@/components/layout/auth';
 import { NextPageWithLayout } from '@/pages/_app';
 
 const SignupComplete: NextPageWithLayout = () => {

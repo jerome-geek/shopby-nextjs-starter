@@ -12,7 +12,7 @@ import { overlay } from 'overlay-kit';
 import { ReactElement, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AuthLayout } from '@/components/layout/AuthLayout';
+import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
 import InputCheckbox from '@/components/ui/input/Checkbox';
@@ -236,7 +236,7 @@ const SignupTerms: NextPageWithLayout = () => {
                                     }] ${t(label)}`}</span>
                                 </label>
                                 <button
-                                    type="button"
+                                    type='button'
                                     className={styles.detailButton}
                                     onClick={() => onDetailClick(type)}
                                 >
@@ -265,8 +265,8 @@ const SignupTerms: NextPageWithLayout = () => {
             </div>
 
             <Button
-                variant="primary"
-                frame="solid"
+                variant='primary'
+                frame='solid'
                 onClick={onNextClick}
                 className={styles.nextButton}
             >
