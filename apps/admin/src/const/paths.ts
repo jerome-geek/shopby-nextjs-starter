@@ -6,20 +6,20 @@ export const PATHS = {
     },
     APP: {
         COLLECTION_GROUP: {
-            LIST: '/collection-group',
-            DETAIL: '/collection-group/:sno',
+            LIST: '/collection-groups',
+            DETAIL: '/collection-groups/:sno',
         },
         RECIPE_GROUP: {
-            LIST: '/recipe-group',
-            DETAIL: '/recipe-group/:sno',
+            LIST: '/recipe-groups',
+            DETAIL: '/recipe-groups/:sno',
         },
         USER_COLLECTION: {
-            LIST: '/user-collection',
-            DETAIL: '/user-collection/:sno',
+            LIST: '/user-collections',
+            DETAIL: '/user-collections/:sno',
         },
         USER_RECIPE: {
-            LIST: '/user-recipe',
-            DETAIL: '/user-recipe/:sno',
+            LIST: '/user-recipes',
+            DETAIL: '/user-recipes/:sno',
         },
     },
 };

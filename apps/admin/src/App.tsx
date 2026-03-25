@@ -5,6 +5,7 @@ import { PATHS } from '@/const/paths';
 import AppLayout from '@/layout/AppLayout';
 import SignIn from '@/pages/AuthPages/SignIn';
 import Home from '@/pages/Dashboard/Home';
+import CollectionGroupList from '@/pages/CollectionGroup/CollectionGroupList';
 import NotFound from '@/pages/OtherPage/NotFound';
 
 export default function App() {
@@ -19,6 +20,10 @@ export default function App() {
                             index
                             path={PATHS.DASHBOARD}
                             element={<Home />}
+                        />
+                        <Route
+                            path={PATHS.APP.COLLECTION_GROUP.LIST}
+                            element={<CollectionGroupList />}
                         />
                     </Route>
 
