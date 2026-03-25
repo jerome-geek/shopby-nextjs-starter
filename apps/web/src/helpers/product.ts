@@ -19,6 +19,7 @@ export const toSelectedOption = <T extends FlatOption>(
         price: option.buyPrice,
         orderCnt,
         label: option.label,
+        value: option.value,
         buyPrice: option.buyPrice,
         addPrice: option.addPrice,
         isRequiredOption: option.isRequiredOption,

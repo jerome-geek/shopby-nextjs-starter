@@ -1,20 +1,12 @@
+import { append, filter, map, pipe, some, toArray } from '@fxts/core';
 import { create } from 'zustand';
 
-export interface SelectedOption {
-    productNo: number;
-    optionNo: number;
-    label: string;
-    orderCnt: number;
-    price: number;
-    stockCnt: number;
-    optionInputs?: {
-        inputNo: number;
-        inputValue: string;
-    }[];
-}
+import { toSelectedOption } from '@/helpers/product';
+
+export type SelectedOption = ReturnType<typeof toSelectedOption>;
 
 interface ProductOptionState {
-    selectedOptions: SelectedOption[];
+    selectedOptionList: SelectedOption[];
     addOption: (option: SelectedOption) => void;
     removeOption: (optionNo: number) => void;
     updateOptionCnt: (optionNo: number, orderCnt: number) => void;
@@ -22,42 +14,45 @@ interface ProductOptionState {
 }
 
 export const useProductOptionStore = create<ProductOptionState>((set) => ({
-    selectedOptions: [],
+    selectedOptionList: [],
 
     addOption: (option) =>
-        set((state) => {
-            const isExist = state.selectedOptions.some(
-                (item) => item.optionNo === option.optionNo,
-            );
-
-            if (isExist) {
-                return {
-                    selectedOptions: state.selectedOptions.map((item) =>
-                        item.optionNo === option.optionNo
-                            ? { ...item, orderCnt: item.orderCnt + 1 }
-                            : item,
-                    ),
-                };
-            }
-
-            return {
-                selectedOptions: [...state.selectedOptions, option],
-            };
-        }),
+        set((state) => ({
+            selectedOptionList: pipe(
+                state.selectedOptionList,
+                (list) =>
+                    some((item) => item.optionNo === option.optionNo, list)
+                        ? map(
+                              (item) =>
+                                  item.optionNo === option.optionNo
+                                      ? { ...item, orderCnt: item.orderCnt + 1 }
+                                      : item,
+                              list,
+                          )
+                        : append(option, list),
+                toArray,
+            ),
+        })),
 
     removeOption: (optionNo) =>
         set((state) => ({
-            selectedOptions: state.selectedOptions.filter(
-                (item) => item.optionNo !== optionNo,
+            selectedOptionList: pipe(
+                state.selectedOptionList,
+                filter((item) => item.optionNo !== optionNo),
+                toArray,
             ),
         })),
 
     updateOptionCnt: (optionNo, orderCnt) =>
         set((state) => ({
-            selectedOptions: state.selectedOptions.map((item) =>
-                item.optionNo === optionNo ? { ...item, orderCnt } : item,
+            selectedOptionList: pipe(
+                state.selectedOptionList,
+                map((item) =>
+                    item.optionNo === optionNo ? { ...item, orderCnt } : item,
+                ),
+                toArray,
             ),
         })),
 
-    clearOptions: () => set({ selectedOptions: [] }),
+    clearOptions: () => set({ selectedOptionList: [] }),
 }));

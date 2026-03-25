@@ -1,4 +1,4 @@
-import { filter, join, pipe } from '@fxts/core';
+import { filter, join, map, pipe, sum } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
@@ -26,12 +26,17 @@ import useProductLike from '@/hooks/useProductLike';
 import { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo].css';
 import { vars } from '@/styles/theme.css';
-import { CURRENCY } from '@/utils/currency';
+import { CURRENCY, formatPrice, KRW } from '@/utils/currency';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import FlatProductOption from '@/components/product/option/flat';
 import useProductOption from '@/hooks/product/useProductOption';
-import { MultiProductOption } from '@/components/product/option';
+import {
+    MultiProductOption,
+    SelectedProductOption,
+} from '@/components/product/option';
+import useProductOptionChange from '@/hooks/product/useProductOptionChange';
+import { useProductOptionStore } from '@/store/useProductOptionStore';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -114,8 +119,17 @@ function ProductDetailView({
         );
     };
 
-    const onFlatOptionChange = () => {};
-    const onMultiOptionChange = () => {};
+    const { onFlatOptionChange, onMultiOptionChange } = useProductOptionChange({
+        productNo,
+    });
+
+    const { selectedOptionList } = useProductOptionStore();
+
+    const totalPrice = pipe(
+        selectedOptionList,
+        map((option) => option.buyPrice * option.orderCnt),
+        sum,
+    );
 
     const onGiftButtonClick = () => {};
     const onCartButtonClick = () => {};
@@ -203,7 +217,7 @@ function ProductDetailView({
                         <div className={styles.priceInfo}>
                             {discountRate > 0 && (
                                 <span className={styles.originalPrice}>
-                                    {CURRENCY(price.salePrice).format()}
+                                    {formatPrice(price.salePrice)}
                                 </span>
                             )}
                             <div className={styles.priceContainer}>
@@ -213,7 +227,7 @@ function ProductDetailView({
                                     </span>
                                 )}
                                 <span className={styles.finalPrice}>
-                                    {CURRENCY(finalPrice).format()}
+                                    {formatPrice(finalPrice)}
                                 </span>
                             </div>
                         </div>
@@ -261,13 +275,25 @@ function ProductDetailView({
                                 onChange={onFlatOptionChange}
                             />
                         )}
-
                         {isMultiLevelOptionUsed && (
                             <MultiProductOption
                                 productNo={productNo}
                                 onChange={onMultiOptionChange}
                             />
                         )}
+
+                        <SelectedProductOption />
+
+                        {/* <SelectedProductOption
+                            selectedOptionList={filteredSelectedOptionList}
+                            onOptionDeleteClick={onOptionDeleteClickV2}
+                            onPlusClick={onPlusClick}
+                            onMinusClick={onMinusClick}
+                            onChangeProductCount={onChangeProductCount}
+                            getSelectedOptionValue={getSelectedOptionValue}
+                            textOptionList={textOptionInputs['OPTION'] ?? []}
+                            onInputOptionChange={onInputOptionChange}
+                        /> */}
                     </div>
 
                     <div className={styles.orderContainer}>
@@ -277,7 +303,9 @@ function ProductDetailView({
                             <p className={styles.totalPriceTitle}>
                                 총 상품금액
                             </p>
-                            <p className={styles.totalPrice}>0원</p>
+                            <p className={styles.totalPrice}>
+                                {formatPrice(totalPrice)}
+                            </p>
                         </div>
 
                         <div className={styles.actionButtons}>
@@ -285,11 +313,10 @@ function ProductDetailView({
                                 className={styles.giftButtonDesktop}
                                 onClick={onGiftButtonClick}
                             >
-                                <Gift size={24} color='#333' />
+                                <Gift size={24} />
                             </button>
                             <Button
                                 frame='outlined'
-                                className={styles.cartButton}
                                 onClick={onCartButtonClick}
                             >
                                 장바구니
@@ -297,7 +324,6 @@ function ProductDetailView({
                             <Button
                                 frame='solid'
                                 variant='primary'
-                                className={styles.buyButton}
                                 onClick={onOrderButtonClick}
                             >
                                 구매하기

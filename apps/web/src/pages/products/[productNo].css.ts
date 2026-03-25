@@ -318,9 +318,9 @@ export const giftButton = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '56px',
-    height: '56px',
-    border: `1px solid ${vars.color.gray[30]}`,
+    width: '63px',
+    height: '63px',
+    border: `1px solid ${vars.color.gray['50']}`,
     borderRadius: '4px',
     backgroundColor: vars.color.white,
     flexShrink: 0,
@@ -360,11 +360,12 @@ export const giftButtonDesktop = style([
     giftButton,
     {
         display: 'none',
+
         '@media': {
             [media.desktop]: {
                 display: 'flex',
-                width: '56px',
-                height: '56px',
+                width: '63px',
+                height: '63px',
             },
         },
     },

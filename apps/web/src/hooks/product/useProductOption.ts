@@ -8,7 +8,7 @@ import {
     pipe,
     some,
     sortBy,
-    toArray
+    toArray,
 } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -79,11 +79,7 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
         toArray,
     );
 
-    // TODO: zustand로 변경
-    const { selectedOptions: selectedOptionList } = useProductOptionStore();
-    // const selectedOptionList = useTypedSelector(
-    //     (state) => state.productOption.selected,
-    // );
+    const { selectedOptionList } = useProductOptionStore();
 
     if (!productOptionListData) {
         return {
