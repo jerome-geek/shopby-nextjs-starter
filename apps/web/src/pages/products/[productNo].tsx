@@ -37,6 +37,7 @@ import {
 } from '@/components/product/option';
 import useProductOptionChange from '@/hooks/product/useProductOptionChange';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useToast } from '@/hooks/ui';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -131,7 +132,25 @@ function ProductDetailView({
         sum,
     );
 
-    const onGiftButtonClick = () => {};
+    // const { ensureAddToCart, ensureOrder } = useOrderActionValidation({
+    //     productNo,
+    // });
+
+    // const {
+    //     register: {
+    //         mutate: registerCartMutate,
+    //         mutateAsync: registerCartMutateAsync,
+    //     },
+    //     modify: { mutate: modifyCartMutate },
+    //     delete: { mutateAsync: deleteCartMutateAsync },
+    // } = useCartMutation();
+    const { showToast } = useToast();
+
+    const onGiftButtonClick = () => {
+        showToast('장바구니에 상품을 담았습니다', {
+            link: { label: '바로가기', href: '/cart' },
+        });
+    };
     const onCartButtonClick = () => {};
     const onOrderButtonClick = () => {};
 

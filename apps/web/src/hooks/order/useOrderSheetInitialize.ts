@@ -11,12 +11,13 @@ import {
 import { useEffect } from 'react';
 import { UseFormReset, UseFormSetValue } from 'react-hook-form';
 
-import { PHONE_FIRST_NUMBER_LIST } from '@/const/form';
+// import { PHONE_FIRST_NUMBER_LIST } from '@/const/form';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
-import { useOrderSheet } from '@/hooks/query/orderSheet';
-import { useGlobal, usePG } from '@/hooks/utils';
-import { PaymentReserveSchemaType } from '@/schema/order.schema';
+import { useOrderSheet } from '@/hooks/query/order/orderSheet';
+// import { useGlobal } from '@/hooks/utils';
+import { PaymentReserveSchemaType } from '@/schema';
+import { usePG } from '@/hooks/order';
 
 const useOrderSheetInitialize = ({
     orderSheetNo,
@@ -27,7 +28,9 @@ const useOrderSheetInitialize = ({
     setValue: UseFormSetValue<PaymentReserveSchemaType>;
     reset: UseFormReset<PaymentReserveSchemaType>;
 }) => {
-    const { isKorean, defaultMobileCountryCode } = useGlobal();
+    const isKorean = process.env.NEXT_PUBLIC_LANG === 'ko';
+    const defaultMobileCountryCode = 'US';
+    // const { isKorean, defaultMobileCountryCode } = useGlobal();
 
     const { data: profileData } = useProfile();
     const { data: orderConfigurationData } = useOrderConfiguration();
@@ -95,22 +98,22 @@ const useOrderSheetInitialize = ({
                 profileData.mobileCountryCode ?? defaultMobileCountryCode,
             );
 
-            if (isKorean) {
-                setValue('orderer.ordererName', profileData.memberName);
-                setValue('orderer.ordererContact1', {
-                    prefix:
-                        profileData.mobileNo?.slice(0, 3) ??
-                        PHONE_FIRST_NUMBER_LIST[0].value,
-                    middle: profileData.mobileNo?.slice(3, 7) ?? '',
-                    suffix: profileData.mobileNo?.slice(7) ?? '',
-                });
-            } else {
-                setValue('orderer.ordererLastName', profileData.lastName);
-                setValue('orderer.ordererFirstName', profileData.firstName);
-                setValue('orderer.ordererContact1', {
-                    prefix: profileData.mobileNo ?? '',
-                });
-            }
+            // if (isKorean) {
+            //     setValue('orderer.ordererName', profileData.memberName);
+            //     setValue('orderer.ordererContact1', {
+            //         prefix:
+            //             profileData.mobileNo?.slice(0, 3) ??
+            //             PHONE_FIRST_NUMBER_LIST[0].value,
+            //         middle: profileData.mobileNo?.slice(3, 7) ?? '',
+            //         suffix: profileData.mobileNo?.slice(7) ?? '',
+            //     });
+            // } else {
+            //     setValue('orderer.ordererLastName', profileData.lastName);
+            //     setValue('orderer.ordererFirstName', profileData.firstName);
+            //     setValue('orderer.ordererContact1', {
+            //         prefix: profileData.mobileNo ?? '',
+            //     });
+            // }
         }
     }, [profileData, setValue, isKorean, defaultMobileCountryCode]);
 };

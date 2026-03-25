@@ -109,7 +109,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                                         </AnimatePresence>,
                                     )}
                                 </Layout>
-                                <Toaster />
+                                <Toaster
+                                    richColors
+                                    position='bottom-center'
+                                    duration={1500}
+                                />
                                 <ReactQueryDevtools initialIsOpen={false} />
                                 <Analytics />
                                 <SpeedInsights />
