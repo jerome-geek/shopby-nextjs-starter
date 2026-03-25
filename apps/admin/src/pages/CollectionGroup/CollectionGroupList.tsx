@@ -1,5 +1,7 @@
 import { useState } from 'react';
+
 import PageMeta from '@/components/common/PageMeta';
+import OrderManagementModal from './OrderManagementModal';
 
 type CollectionGroupStatus = '노출' | '숨김';
 
@@ -97,6 +99,7 @@ function StatusBadge({ status }: { status: CollectionGroupStatus }) {
 
 const CollectionGroupList = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
     const filteredData = MOCK_DATA.filter(
         (item) =>
@@ -126,7 +129,10 @@ const CollectionGroupList = () => {
                     {/* 액션 버튼 영역 */}
                     <div className='flex items-center gap-3'>
                         {/* 순서 관리 버튼 */}
-                        <button className='flex items-center gap-2 h-9 px-3 rounded-lg border border-[#ff6900] bg-white text-[#ff6900] text-sm font-medium transition-colors hover:bg-orange-50'>
+                        <button
+                            onClick={() => setIsOrderModalOpen(true)}
+                            className='flex items-center gap-2 h-9 px-3 rounded-lg border border-[#ff6900] bg-white text-[#ff6900] text-sm font-medium transition-colors hover:bg-orange-50'
+                        >
                             {/* Grid dots icon */}
                             <svg
                                 width='16'
@@ -382,6 +388,13 @@ const CollectionGroupList = () => {
                     </div>
                 </div>
             </div>
+
+            {/* 순서 관리 모달 */}
+            <OrderManagementModal
+                isOpen={isOrderModalOpen}
+                close={() => setIsOrderModalOpen(false)}
+                unmount={() => setIsOrderModalOpen(false)}
+            />
         </>
     );
 };
