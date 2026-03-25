@@ -4,7 +4,7 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { overlay } from 'overlay-kit';
+import { overlay, useOverlayData } from 'overlay-kit';
 import { useMemo, useState } from 'react';
 
 import { product } from '@/api/product';
@@ -38,6 +38,7 @@ import {
 import useProductOptionChange from '@/hooks/product/useProductOptionChange';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { useToast } from '@/hooks/ui';
+import { useResponsive } from '@/hooks/utils';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -51,7 +52,7 @@ function ProductDetailView({
     productNo,
     searchParams,
 }: ProductDetailViewProps) {
-    const [paginationEl, setPaginationEl] = useState<HTMLElement | null>(null);
+    const { isMobile } = useResponsive();
 
     const { data: productDetailData } = useProductDetail({
         productNo,
@@ -108,6 +109,9 @@ function ProductDetailView({
 
     const { onLikeButtonClick } = useProductLike();
 
+    const overlayData = useOverlayData();
+    const isOptionBottomSheetOpen =
+        overlayData[OVERLAY_ID.OPTION_BOTTOM_SHEET]?.isOpen;
     const openOptionBottomSheet = () => {
         overlay.open(
             (props) => (
@@ -144,15 +148,33 @@ function ProductDetailView({
     //     modify: { mutate: modifyCartMutate },
     //     delete: { mutateAsync: deleteCartMutateAsync },
     // } = useCartMutation();
-    const { showToast } = useToast();
+    const { addToast } = useToast();
 
     const onGiftButtonClick = () => {
-        showToast('장바구니에 상품을 담았습니다', {
+        addToast({
+            message: '장바구니에 상품을 담았습니다',
             link: { label: '바로가기', href: '/cart' },
         });
+
+        if (isMobile && !isOptionBottomSheetOpen) {
+            openOptionBottomSheet();
+            return;
+        }
     };
-    const onCartButtonClick = () => {};
-    const onOrderButtonClick = () => {};
+
+    const onCartButtonClick = () => {
+        if (isMobile && !isOptionBottomSheetOpen) {
+            openOptionBottomSheet();
+            return;
+        }
+    };
+
+    const onOrderButtonClick = () => {
+        if (isMobile && !isOptionBottomSheetOpen) {
+            openOptionBottomSheet();
+            return;
+        }
+    };
 
     useSb({
         product: productDetailData,

@@ -1,26 +1,28 @@
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 import * as styles from '@/components/ui/Toast/Toast.css';
-import { ChevronRight } from 'lucide-react';
 
 interface ToastLink {
     label: string;
     href: string;
 }
 
-interface ToastOptions {
+type ToastVariant = 'default' | 'success' | 'error';
+
+interface AddToastParams {
+    message: string;
+    variant?: ToastVariant;
     link?: ToastLink;
 }
 
 export const useToast = () => {
-    const showToast = useCallback((message: string, options?: ToastOptions) => {
-        const { link } = options || {};
-
+    const addToast = useCallback(({ message, variant = 'default', link }: AddToastParams) => {
         if (link) {
             toast.custom((t) => (
-                <div className={styles.toastWrapper}>
+                <div className={styles.toastWrapper[variant]}>
                     <div className={styles.toastMessageWithLink}>{message}</div>
                     <Link href={link.href} className={styles.toastLink} onClick={() => toast.dismiss(t)}>
                         {link.label}
@@ -32,11 +34,11 @@ export const useToast = () => {
         }
 
         toast.custom(() => (
-            <div className={styles.toastWrapper}>
+            <div className={styles.toastWrapper[variant]}>
                 <div className={styles.toastMessage}>{message}</div>
             </div>
         ));
     }, []);
 
-    return { showToast };
+    return { addToast };
 };

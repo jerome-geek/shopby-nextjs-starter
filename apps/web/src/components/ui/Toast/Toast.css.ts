@@ -1,19 +1,25 @@
-import { style } from '@vanilla-extract/css';
+import { style, styleVariants } from '@vanilla-extract/css';
+import { vars } from '@/styles/theme.css';
 
-export const toastWrapper = style({
+export const toastWrapperBase = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: '12px',
-    backgroundColor: '#666666',
-    color: '#ffffff',
+    color: vars.color.white,
     padding: '16px 24px',
     borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '400',
+    fontSize: vars.typography.fontSize['body-2'],
+    fontWeight: vars.typography.fontWeight.regular,
     minWidth: '320px',
     maxWidth: 'calc(100vw - 40px)',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    boxShadow: vars.shadow.md,
+});
+
+export const toastWrapper = styleVariants({
+    default: [toastWrapperBase, { backgroundColor: vars.color.gray['60'] }],
+    success: [toastWrapperBase, { backgroundColor: vars.color.green['100'] }],
+    error: [toastWrapperBase, { backgroundColor: vars.color.red }],
 });
 
 export const toastMessage = style({
@@ -32,9 +38,9 @@ export const toastLink = style({
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
-    color: '#ffffff',
+    color: vars.color.white,
     textDecoration: 'none',
-    fontWeight: '500',
+    fontWeight: vars.typography.fontWeight.medium,
     whiteSpace: 'nowrap',
     ':hover': {
         opacity: 0.8,
