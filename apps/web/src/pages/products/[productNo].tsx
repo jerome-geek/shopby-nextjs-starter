@@ -1,5 +1,5 @@
-import { filter, join, map, pipe, sum } from '@fxts/core';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { filter, includes, join, map, pipe, sum, toArray } from '@fxts/core';
+import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -23,7 +23,7 @@ import { useSb } from '@/hooks/libs/shopby';
 import useProductOption from '@/hooks/product/useProductOption';
 import useProductOptionChange from '@/hooks/product/useProductOptionChange';
 import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
-import { productKeys } from '@/hooks/queryKeys';
+import { cartKeys, productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import { useToast } from '@/hooks/ui';
 import useProductLike from '@/hooks/useProductLike';
@@ -36,6 +36,9 @@ import { CURRENCY } from '@/utils/currency';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { useAuth } from '@/hooks/useAuth';
+import { toOrderSheetOption } from '@/helpers/product';
+import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -49,7 +52,11 @@ function ProductDetailView({
     productNo,
     searchParams,
 }: ProductDetailViewProps) {
+    const isLogin = useAuth();
+
     const { isMobile } = useResponsive();
+
+    const queryClient = useQueryClient();
 
     const { data: productDetailData } = useProductDetail({
         productNo,
@@ -60,9 +67,10 @@ function ProductDetailView({
 
     const liked = !!productDetailData.liked;
 
-    const { isFlatOptionUsed, isMultiLevelOptionUsed } = useProductOption({
-        productNo,
-    });
+    const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
+        useProductOption({
+            productNo,
+        });
     console.log(
         '🚀 ~ ProductDetailView ~ isMultiLevelOptionUsed:',
         isMultiLevelOptionUsed,
@@ -125,7 +133,8 @@ function ProductDetailView({
         productNo,
     });
 
-    const { selectedOptionList } = useProductOptionStore();
+    const { selectedOptionList, addOption, clearOptions } =
+        useProductOptionStore();
 
     const totalPrice = pipe(
         selectedOptionList,
@@ -137,14 +146,14 @@ function ProductDetailView({
     //     productNo,
     // });
 
-    // const {
-    //     register: {
-    //         mutate: registerCartMutate,
-    //         mutateAsync: registerCartMutateAsync,
-    //     },
-    //     modify: { mutate: modifyCartMutate },
-    //     delete: { mutateAsync: deleteCartMutateAsync },
-    // } = useCartMutation();
+    const {
+        register: {
+            mutate: registerCartMutate,
+            mutateAsync: registerCartMutateAsync,
+        },
+        // modify: { mutate: modifyCartMutate },
+        // delete: { mutateAsync: deleteCartMutateAsync },
+    } = useCartMutation();
     const { addToast } = useToast();
 
     const onGiftButtonClick = () => {
@@ -160,17 +169,82 @@ function ProductDetailView({
     };
 
     const onCartButtonClick = () => {
+        console.log('onCartButtonClick');
         if (isMobile && !isOptionBottomSheetOpen) {
             openOptionBottomSheet();
             return;
         }
+
+        if (isLogin) {
+            registerCartMutate(
+                {
+                    data: pipe(
+                        selectedOptionList,
+                        map((a) =>
+                            toOrderSheetOption(a, searchParams.channelType),
+                        ),
+                        toArray,
+                    ),
+                },
+                {
+                    onSuccess: () => {
+                        // openAddCartDialog();
+
+                        queryClient.invalidateQueries({
+                            predicate: (query) => {
+                                return includes(query.queryKey[0], [
+                                    ...cartKeys.all,
+                                ]);
+                            },
+                        });
+
+                        if (!isDefaultOptionUsed) {
+                            clearOptions();
+                        }
+                    },
+                },
+            );
+        } else {
+            // dispatch(
+            //     setCart(
+            //         pipe(
+            //             selectedOptionList,
+            //             map((a) => toOrderSheetOption(a, channelType)),
+            //             toArray,
+            //         ),
+            //     ),
+            // );
+            // openAddCartDialog();
+            // if (!isDefaultOptionUsed) {
+            //     dispatch(clearOptions());
+            // }
+        }
     };
+
+    const {
+        write: { mutate: writeOrderSheetMutate },
+    } = useOrderSheetMutation();
 
     const onOrderButtonClick = () => {
         if (isMobile && !isOptionBottomSheetOpen) {
             openOptionBottomSheet();
             return;
         }
+
+        // if (!ensureOrder()) {
+        //     return;
+        // }
+
+        writeOrderSheetMutate({
+            data: {
+                products: pipe(
+                    selectedOptionList,
+                    map((a) => toOrderSheetOption(a, searchParams.channelType)),
+                    toArray,
+                ),
+                productCoupons: [],
+            },
+        });
     };
 
     useSb({

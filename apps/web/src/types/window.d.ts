@@ -112,11 +112,11 @@ declare global {
                 getShopScheme: () => string;
             };
             banner: {
-                create: (config: GetBannerConfigResponse) => HTMLElement | null;
+                create: (config: any) => HTMLElement | null;
                 getBannerCloseHandler: (banner: HTMLElement) => () => void;
             };
             handler?: {
-                send: (data: { key: key; option?: any }) => void;
+                send: (data: { key: string; option?: any; meta?: any }) => void;
             };
             init: () => void;
             utils: {

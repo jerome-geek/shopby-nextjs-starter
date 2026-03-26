@@ -1,5 +1,7 @@
+import { ChannelType } from '@/models';
 import { OptionInputs } from '@/models/order';
 import { FlatOption, TextOptionInput } from '@/models/product/productOption';
+import { SelectedOption } from '@/store/useProductOptionStore';
 // import { SelectedOption } from '@/state/slices/productOption';
 
 type TextOptionInputWithInputValue = TextOptionInput & { inputValue?: string };
@@ -32,29 +34,29 @@ export const toSelectedOption = <T extends FlatOption>(
     };
 };
 
-// export const toOrderSheetOption = (
-//     option: SelectedOption,
-//     channelType?: string,
-// ) => {
-//     return {
-//         ...option,
-//         channelType,
-//     };
-// };
+export const toOrderSheetOption = (
+    option: SelectedOption,
+    channelType?: ChannelType,
+) => {
+    return {
+        ...option,
+        channelType,
+    };
+};
 
-// export const toModifiableOption = (
-//     option: SelectedOption,
-//     productNo: number,
-//     channelType?: string,
-//     cartNo: number = 0,
-// ) => {
-//     return {
-//         ...option,
-//         productNo,
-//         cartNo,
-//         channelType,
-//     };
-// };
+export const toModifiableOption = (
+    option: SelectedOption,
+    productNo: number,
+    channelType?: ChannelType,
+    cartNo: number = 0,
+) => {
+    return {
+        ...option,
+        productNo,
+        cartNo,
+        channelType,
+    };
+};
 
 export const sortRequiredFirst = <T extends { required: boolean }>(a: T) => {
     return !a.required;

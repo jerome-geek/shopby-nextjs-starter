@@ -411,7 +411,7 @@ const paymentReserveSchema = z
                     usesShippingInfoLaterInput: z.boolean().optional(),
                     useDefaultAddress: z.boolean().optional(),
                     shippingAddress: registerShippingAddressSchema
-                        .omit({ receiverContact1: true })
+                        // .omit({ receiverContact1: true })
                         .safeExtend({
                             receiverContact1: z.string(),
                         }),

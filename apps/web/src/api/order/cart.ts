@@ -37,7 +37,7 @@ const cart = {
      *  - 옵션 종류는 변경할 수 없습니다
      *  - 옵션변경은 변경할 옵션을 삭제한 후 신규등록하는 방법으로 수정합니다
      */
-    updateCart: (data: UpdateCartData, options?: AxiosRequestConfig) => {
+    updateCart: (data: UpdateCartData[], options?: AxiosRequestConfig) => {
         return shopbyRequest({
             method: 'PUT',
             url: '/cart',
@@ -50,7 +50,7 @@ const cart = {
      * 장바구니 등록하기
      *  - 로그인된 유저의 장바구니에 상품(옵션)을 추가하는 API 입니다
      */
-    registerCart: (data: RegisterCartData, options?: AxiosRequestConfig) => {
+    registerCart: (data: RegisterCartData[], options?: AxiosRequestConfig) => {
         return shopbyRequest<GetCartCountResponse>({
             method: 'POST',
             url: '/cart',

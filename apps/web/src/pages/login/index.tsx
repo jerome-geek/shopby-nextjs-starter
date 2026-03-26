@@ -24,6 +24,7 @@ const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const returnUrl = (router.query.returnUrl as string) || '';
+    const isGuestOrder = router.query.type === 'guestOrder';
 
     const links = [
         { href: PATHS.MEMBER.FIND_ID, label: '아이디 찾기' },
@@ -175,6 +176,30 @@ const LoginPage: NextPageWithLayout = () => {
                 </div>
 
                 <SocialLoginList />
+
+                {isGuestOrder ? (
+                    <div className={styles.buttonContainer}>
+                        <Button
+                            type='button'
+                            frame='outlined'
+                            variant='primary'
+                            onClick={() => router.push(returnUrl)}
+                        >
+                            <span>{t('비회원 주문하기')}</span>
+                        </Button>
+                    </div>
+                ) : (
+                    <div className={styles.linkList}>
+                        <Link
+                            href={PATHS.GUEST.LOGIN}
+                            prefetch={false}
+                            className={styles.link}
+                            style={{ fontSize: '14px' }}
+                        >
+                            {t('비회원 주문조회')}
+                        </Link>
+                    </div>
+                )}
             </div>
         </FormProvider>
     );

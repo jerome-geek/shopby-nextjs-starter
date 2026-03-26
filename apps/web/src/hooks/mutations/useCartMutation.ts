@@ -3,19 +3,20 @@ import { isAxiosError } from 'axios';
 
 import { cart, guestOrder } from '@/api/order';
 import { cartKeys } from '@/hooks/queryKeys';
-import { useDialog, useResponsive, useToast } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import {
     DeleteCartParams,
     RegisterCartData,
     UpdateCartData,
 } from '@/models/order/cart';
 import { GetCartData, GetCartParams } from '@/models/order/guestOrder';
+import { useToast } from '@/hooks/ui';
 
 const useCartMutation = () => {
     const queryClient = useQueryClient();
 
     const { openDialog } = useDialog();
-    const { openToast } = useToast();
+    const { addToast } = useToast();
 
     const { isMobile } = useResponsive();
 
@@ -32,7 +33,7 @@ const useCartMutation = () => {
             : '알 수 없는 오류가 발생했습니다.';
 
         if (isMobile) {
-            openToast({ message, variant: 'error' });
+            addToast({ message, variant: 'error' });
         } else {
             openDialog({ message });
         }

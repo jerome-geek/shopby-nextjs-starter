@@ -27,14 +27,14 @@ export function Header() {
     });
 
     return (
-        <header className={styles.header}>
+        <header id='header' className={styles.header}>
             <div className={styles.headerInner}>
                 <Menu categoryData={categoryData} />
 
                 <Link href={PATHS.MAIN} className={styles.logo}>
                     <Image
                         src={logoImage}
-                        alt="Jolly pot"
+                        alt='Jolly pot'
                         width={107}
                         height={40}
                         priority
