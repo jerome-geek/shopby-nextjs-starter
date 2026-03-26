@@ -124,9 +124,6 @@ function ArrowDownIcon() {
     );
 }
 
-// ─────────────────────────────────────────────
-// 개별 드래그 아이템
-// ─────────────────────────────────────────────
 interface ReorderItemProps {
     item: OrderItem;
     index: number;
@@ -168,7 +165,6 @@ function ReorderItem({
                 <DragHandleIcon />
             </span>
 
-            {/* 번호 - 이동 시 숫자가 교차 페이드 */}
             <motion.span
                 key={index}
                 initial={{ opacity: 0, scale: 0.7 }}
@@ -266,7 +262,7 @@ export default function OrderManagementModal({
             close={close}
             unmount={unmount}
             showCloseButton={false}
-            className='max-w-[340px] w-full mx-4 shadow-xl rounded-2xl overflow-hidden'
+            className='max-w-[520px] w-full mx-4 shadow-xl rounded-2xl overflow-hidden'
         >
             <div className='flex flex-col'>
                 {/* 헤더 */}
@@ -353,7 +349,6 @@ export default function OrderManagementModal({
                                 </span>
                             </div>
 
-                            {/* Reorder 리스트 - layout 애니메이션 자동 적용 */}
                             <Reorder.Group
                                 axis='y'
                                 values={group.items}

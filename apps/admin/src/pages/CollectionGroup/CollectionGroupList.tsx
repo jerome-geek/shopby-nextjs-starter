@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
-import OrderManagementModal from './OrderManagementModal';
+import AddCollectionGroupModal from '@/components/modal/AddCollectionGroupModal';
+import OrderManagementModal from '@/components/modal/OrderManagementModal';
 
 type CollectionGroupStatus = '노출' | '숨김';
 
@@ -100,6 +102,7 @@ function StatusBadge({ status }: { status: CollectionGroupStatus }) {
 const CollectionGroupList = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const filteredData = MOCK_DATA.filter(
         (item) =>
@@ -178,7 +181,10 @@ const CollectionGroupList = () => {
                         </button>
 
                         {/* 그룹 추가 버튼 */}
-                        <button className='flex items-center gap-2 h-9 px-3 rounded-lg bg-[#ff6900] text-white text-sm font-medium transition-colors hover:bg-orange-600'>
+                        <button
+                            onClick={() => setIsAddModalOpen(true)}
+                            className='flex items-center gap-2 h-9 px-3 rounded-lg bg-[#ff6900] text-white text-sm font-medium transition-colors hover:bg-orange-600'
+                        >
                             {/* Plus icon */}
                             <svg
                                 width='16'
@@ -297,11 +303,14 @@ const CollectionGroupList = () => {
                                                 </span>
                                             </td>
 
-                                            {/* 컬렉션명 */}
+                                            {/* 컬렉션명 - 상세 페이지 링크 */}
                                             <td className='px-6 py-4'>
-                                                <span className='text-sm font-medium text-[#f54900]'>
+                                                <Link
+                                                    to={`/collection-groups/${item.id}`}
+                                                    className='text-sm font-medium text-[#f54900] hover:text-orange-600 hover:underline transition-colors'
+                                                >
                                                     {item.collectionName}
-                                                </span>
+                                                </Link>
                                             </td>
 
                                             {/* 작성자 */}
@@ -394,6 +403,13 @@ const CollectionGroupList = () => {
                 isOpen={isOrderModalOpen}
                 close={() => setIsOrderModalOpen(false)}
                 unmount={() => setIsOrderModalOpen(false)}
+            />
+
+            {/* 그룹 추가 모달 */}
+            <AddCollectionGroupModal
+                isOpen={isAddModalOpen}
+                close={() => setIsAddModalOpen(false)}
+                unmount={() => setIsAddModalOpen(false)}
             />
         </>
     );
