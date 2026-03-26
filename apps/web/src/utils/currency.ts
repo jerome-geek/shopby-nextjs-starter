@@ -1,109 +1,96 @@
 import currency from 'currency.js';
 
-const getLocale = () => process.env.NEXT_PUBLIC_LOCALE || 'ko';
-
-const getIntlLocale = () => {
-    const locale = getLocale();
-    if (locale === 'ja') return 'ja-JP';
-    if (locale === 'en') return 'en-US';
-    return 'ko-KR';
-};
-
-/**
- * 설정된 로케일에 따른 기본 통화 코드 반환
- */
-const getDefaultCurrencyCode = () => {
-    const locale = getLocale();
-    if (locale === 'ja') return 'JPY';
-    if (locale === 'en') return 'USD';
-    return 'KRW';
-};
-
-/**
- * Intl 기반 금액 포맷팅 유틸리티
- */
-const formatIntl = (
-    value: currency.Any,
-    type: 'KRW' | 'USD' | 'JPY' | 'EURO' | 'POINT' | 'RATE' = 'KRW',
-    options?: Intl.NumberFormatOptions,
-) => {
-    const amount = currency(value).value;
-    const locale = getIntlLocale();
-
-    switch (type) {
-        case 'KRW':
-            return (
-                new Intl.NumberFormat(locale, options).format(amount) + '원'
-            );
-        case 'USD':
-            return new Intl.NumberFormat(locale, {
-                style: 'currency',
-                currency: 'USD',
-                ...options,
-            }).format(amount);
-        case 'JPY':
-            return new Intl.NumberFormat(locale, {
-                style: 'currency',
-                currency: 'JPY',
-                ...options,
-            }).format(amount);
-        case 'EURO':
-            return new Intl.NumberFormat(locale, {
-                style: 'currency',
-                currency: 'EUR',
-                ...options,
-            }).format(amount);
-        case 'POINT':
-            return (
-                new Intl.NumberFormat(locale, options).format(amount) + ' P'
-            );
-        case 'RATE':
-            return (
-                new Intl.NumberFormat(locale, options).format(amount) + '%'
-            );
-        default:
-            return new Intl.NumberFormat(locale, options).format(amount);
+const CURRENCY = (value: currency.Any, options?: currency.Options) => {
+    if (process.env.NEXT_PUBLIC_LOCALE === 'en') {
+        return currency(value, {
+            pattern: '!#',
+            negativePattern: value === 0 ? '!#' : '-!#',
+            ...options,
+        });
     }
+
+    if (process.env.NEXT_PUBLIC_LOCALE === 'ja') {
+        return currency(value, {
+            symbol: '¥',
+            precision: 0,
+            pattern: '!#',
+            negativePattern: value === 0 ? '!#' : '-!#',
+            ...options,
+        });
+    }
+
+    return currency(value, {
+        symbol: '원',
+        precision: 0,
+        pattern: '#!',
+        negativePattern: value === 0 ? '#!' : '-#!',
+        ...options,
+    });
+};
+
+const KRW = (
+    value: currency.Any,
+    options: currency.Options = {
+        symbol: '원',
+        precision: 0,
+        pattern: `#!`,
+        negativePattern: `- # !`,
+    },
+) => currency(value, { ...options });
+
+const USD = (value: currency.Any) => currency(value);
+
+const JPY = (value: currency.Any) =>
+    currency(value, { precision: 0, symbol: '¥' });
+
+const EURO = (value: currency.Any) =>
+    currency(value, { symbol: '€', decimal: ',', separator: '.' });
+
+const POINT = (value: currency.Any) =>
+    currency(value, {
+        symbol: 'P',
+        precision: 0,
+        pattern: `# !`,
+    });
+
+/**
+ * 할인율
+ * - 반올림하여 정수로 표현
+ */
+const RATE = (value: currency.Any) => {
+    return currency(value, {
+        symbol: '%',
+        precision: 0,
+        pattern: value === 0 ? '' : `#!`,
+    });
 };
 
 /**
- * 🚀 로케일 설정을 기반으로 자동 통화 포맷팅 (권장 사용)
- * 사용 예: formatPrice(1000) -> ko라면 '1,000원', en이라면 '$1.00'
+ * 판매가 대비 실제 판매가(판매가 - 즉시할인 - 추가할인) 할인율
+ * TODO: NaN처리 필요
+ *
+ * @param salePrice 상품판매가
+ * @param immediateDiscountAmt  즉시할인가(즉시할인은 기간에 따라 계산해주어야한다)
+ * @param additionDiscountAmt  추가상품할인가
+ * @returns
  */
-const formatPrice = (
-    value: currency.Any,
-    options?: Intl.NumberFormatOptions,
-) => {
-    const type = getDefaultCurrencyCode() as any;
-    return formatIntl(value, type, options);
-};
-
-const format = {
-    krw: (value: currency.Any) => formatIntl(value, 'KRW'),
-    usd: (value: currency.Any) => formatIntl(value, 'USD'),
-    jpy: (value: currency.Any) => formatIntl(value, 'JPY'),
-    euro: (value: currency.Any) => formatIntl(value, 'EURO'),
-    point: (value: currency.Any) => formatIntl(value, 'POINT'),
-    rate: (value: currency.Any) => formatIntl(value, 'RATE'),
-};
-
-const CURRENCY = (value: currency.Any, options?: currency.Options) =>
-    currency(value, options);
-const KRW = (value: currency.Any, options?: currency.Options) =>
-    currency(value, { precision: 0, ...options });
-const USD = (value: currency.Any) => currency(value);
-const JPY = (value: currency.Any) => currency(value, { precision: 0 });
-const EURO = (value: currency.Any) =>
-    currency(value, { decimal: ',', separator: '.' });
-const POINT = (value: currency.Any) => currency(value, { precision: 0 });
-const RATE = (value: currency.Any) => currency(value, { precision: 0 });
-
 const discountRate = (
     salePrice: number = 0,
     immediateDiscountAmt: number = 0,
     additionDiscountAmt: number = 0,
 ) => {
-    return currency(salePrice)
+    // const result = currency(salePrice, { precision: 0, pattern: `#%` })
+    //     .subtract(salePrice - immediateDiscountAmt - additionDiscountAmt)
+    //     .multiply(100)
+    //     .divide(salePrice);
+
+    // TODO: 위시리스트 확인
+    // return !isFinite(result.intValue) ||
+    //     isNaN(result.intValue) ||
+    //     result.intValue === 0
+    //     ? ''
+    //     : result.format();
+    return currency(salePrice, { precision: 0, pattern: `# %` })
         .subtract(salePrice - immediateDiscountAmt - additionDiscountAmt)
         .multiply(100)
         .divide(salePrice);
@@ -120,7 +107,7 @@ const myDiscountRate = ({
     additionDiscountAmt: number;
     couponDiscountAmt: number;
 }) => {
-    return currency(salePrice)
+    return currency(salePrice, { precision: 0, pattern: `# %` })
         .subtract(
             salePrice -
                 immediateDiscountAmt -
@@ -144,11 +131,10 @@ const isZeroPercent = ({
 };
 
 const addPriceString = (addPrice: number) => {
-    const amount = currency(addPrice).multiply(-1).value;
-    const formatted = new Intl.NumberFormat(getIntlLocale()).format(
-        Math.abs(amount),
-    );
-    return amount >= 0 ? `(${formatted}원)` : `(+${formatted}원)`;
+    return KRW(addPrice).multiply(-1).format({
+        pattern: '',
+        negativePattern: '(+#!)',
+    });
 };
 
 export {
@@ -159,8 +145,6 @@ export {
     EURO,
     POINT,
     RATE,
-    format,
-    formatPrice,
     discountRate,
     myDiscountRate,
     isZeroPercent,

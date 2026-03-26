@@ -10,7 +10,7 @@ import { ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 
-import * as styles from './Shopby.css';
+import * as styles from './index.css';
 
 interface ShopbyApiErrorBoundaryProps {
     children: ReactNode;
@@ -50,10 +50,7 @@ const isServiceUnavailable = (error: Error): boolean => {
 /**
  * 기본 에러 Fallback 컴포넌트 (404 페이지 스타일)
  */
-const DefaultErrorFallback = ({
-    error,
-    reset,
-}: ErrorBoundaryFallbackProps) => {
+const DefaultErrorFallback = ({ error, reset }: ErrorBoundaryFallbackProps) => {
     const router = useRouter();
     const message = isAxiosError(error)
         ? error.response?.data?.message || error.message
@@ -66,8 +63,8 @@ const DefaultErrorFallback = ({
             <div className={styles.buttonGroup}>
                 <div className={styles.buttonWrapper}>
                     <Button
-                        frame="solid"
-                        variant="primary"
+                        frame='solid'
+                        variant='primary'
                         onClick={reset}
                         style={{ width: '100%' }}
                     >
@@ -76,8 +73,8 @@ const DefaultErrorFallback = ({
                 </div>
                 <div className={styles.buttonWrapper}>
                     <Button
-                        frame="outlined"
-                        variant="secondary"
+                        frame='outlined'
+                        variant='secondary'
                         onClick={() => router.push('/')}
                         style={{ width: '100%' }}
                     >
