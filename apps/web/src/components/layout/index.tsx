@@ -8,6 +8,8 @@ import * as styles from '@/components/layout/index.css';
 import ScrollToTop from '@/components/ui/scroll-to-top';
 import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 import { useHeaderHeight } from '@/hooks/ui';
+import { useScrollLock } from '@/hooks/utils';
+import RouteChangeOverlay from '@/components/ui/route-change-overlay';
 
 interface LayoutProps {
     children: ReactNode;
@@ -18,6 +20,7 @@ export function Layout({ children, className }: LayoutProps) {
     useSbInit();
     useShopbyStatistics();
 
+    useScrollLock();
     useHeaderHeight();
 
     return (
@@ -30,6 +33,7 @@ export function Layout({ children, className }: LayoutProps) {
 
             <Footer />
             <ScrollToTop />
+            <RouteChangeOverlay />
             <BottomNav />
         </div>
     );
