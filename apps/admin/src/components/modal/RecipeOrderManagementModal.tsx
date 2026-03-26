@@ -3,55 +3,55 @@ import { motion, Reorder, useDragControls } from 'motion/react';
 
 import { Modal } from '@/components/ui/modal';
 
-interface OrderItem {
+interface RecipeOrderItem {
     id: string;
     groupName: string;
-    collectionName: string;
+    recipeName: string;
 }
 
-interface GroupOrderData {
+interface RecipeGroupOrderData {
     groupId: string;
-    items: OrderItem[];
+    items: RecipeOrderItem[];
 }
 
-const GROUP_ORDER_DATA: GroupOrderData[] = [
+const RECIPE_GROUP_ORDER_DATA: RecipeGroupOrderData[] = [
     {
-        groupId: 'collection_group_1',
+        groupId: 'recipe_group_1',
         items: [
             {
-                id: 'cg1-1',
-                groupName: '인기 컬렉션',
-                collectionName: '간편한 한끼 레시피',
+                id: 'rg1-1',
+                groupName: '인기 레시피',
+                recipeName: '김치찌개 황금레시피',
             },
             {
-                id: 'cg1-2',
-                groupName: '인기 컬렉션 2',
-                collectionName: '주말 브런치',
+                id: 'rg1-2',
+                groupName: '인기 레시피 2',
+                recipeName: '크림 파스타',
             },
             {
-                id: 'cg1-3',
-                groupName: '인기 컬렉션 3',
-                collectionName: '집들이 요리',
+                id: 'rg1-3',
+                groupName: '인기 레시피 3',
+                recipeName: '김밥 만들기',
             },
         ],
     },
     {
-        groupId: 'collection_group_2',
+        groupId: 'recipe_group_2',
         items: [
             {
-                id: 'cg2-1',
+                id: 'rg2-1',
                 groupName: '계절 특집',
-                collectionName: '봄나물 요리',
+                recipeName: '봄나물 비빔밥',
             },
         ],
     },
     {
-        groupId: 'collection_group_3',
+        groupId: 'recipe_group_3',
         items: [
             {
-                id: 'cg3-1',
-                groupName: '건강식',
-                collectionName: '다이어트 식단',
+                id: 'rg3-1',
+                groupName: '다이어트',
+                recipeName: '닭가슴살 샐러드',
             },
         ],
     },
@@ -59,12 +59,12 @@ const GROUP_ORDER_DATA: GroupOrderData[] = [
 
 const SELECT_OPTIONS = [
     { value: 'all', label: '전체 보기' },
-    ...GROUP_ORDER_DATA.map((g) => ({ value: g.groupId, label: g.groupId })),
+    ...RECIPE_GROUP_ORDER_DATA.map((g) => ({
+        value: g.groupId,
+        label: g.groupId,
+    })),
 ];
 
-// ─────────────────────────────────────────────
-// 아이콘
-// ─────────────────────────────────────────────
 function DragHandleIcon() {
     return (
         <svg
@@ -125,7 +125,7 @@ function ArrowDownIcon() {
 }
 
 interface ReorderItemProps {
-    item: OrderItem;
+    item: RecipeOrderItem;
     index: number;
     total: number;
     groupId: string;
@@ -146,7 +146,7 @@ function ReorderItem({
             value={item}
             dragListener={false}
             dragControls={dragControls}
-            className='flex items-center gap-2 bg-white border border-[#e5e7eb] rounded-lg px-3 py-2.5 cursor-default'
+            className='flex items-center gap-2 bg-white border border-[#e5e7eb] rounded-lg px-3 py-2.5 cursor-default mt-2'
             style={{ listStyle: 'none' }}
             animate={{
                 scale: 1,
@@ -180,13 +180,13 @@ function ReorderItem({
                 {index + 1}
             </motion.span>
 
-            {/* 그룹명 + 컬렉션명 */}
+            {/* 그룹명 + 레시피명 */}
             <div className='flex-1 min-w-0'>
                 <p className='text-sm font-medium text-[#101828] truncate leading-5'>
                     {item.groupName}
                 </p>
                 <p className='text-xs font-normal text-[#6a7282] truncate leading-4'>
-                    {item.collectionName}
+                    {item.recipeName}
                 </p>
             </div>
 
@@ -219,20 +219,21 @@ function ReorderItem({
     );
 }
 
-interface OrderManagementModalProps {
+interface RecipeOrderManagementModalProps {
     isOpen: boolean;
     close: () => void;
     unmount: () => void;
 }
 
-export default function OrderManagementModal({
+export default function RecipeOrderManagementModal({
     isOpen,
     close,
     unmount,
-}: OrderManagementModalProps) {
+}: RecipeOrderManagementModalProps) {
     const [selectedGroupId, setSelectedGroupId] = useState<string>('all');
-    const [orderData, setOrderData] =
-        useState<GroupOrderData[]>(GROUP_ORDER_DATA);
+    const [orderData, setOrderData] = useState<RecipeGroupOrderData[]>(
+        RECIPE_GROUP_ORDER_DATA,
+    );
 
     const displayedGroups =
         selectedGroupId === 'all'
@@ -251,7 +252,7 @@ export default function OrderManagementModal({
         );
     };
 
-    const reorderGroup = (groupId: string, newItems: OrderItem[]) => {
+    const reorderGroup = (groupId: string, newItems: RecipeOrderItem[]) => {
         setOrderData((prev) =>
             prev.map((group) =>
                 group.groupId === groupId
@@ -277,7 +278,7 @@ export default function OrderManagementModal({
                             노출 순서 관리
                         </h3>
                         <p className='text-xs font-normal text-[#6a7282] leading-5'>
-                            같은 그룹 아이디 내에서 컬렉션의 노출 순서를 변경할
+                            같은 그룹 아이디 내에서 레시피의 노출 순서를 변경할
                             수 있습니다.
                         </p>
                     </div>
@@ -341,9 +342,12 @@ export default function OrderManagementModal({
                 </div>
 
                 {/* 그룹 목록 */}
-                <div className='px-6 pb-4 flex flex-col gap-4 max-h-[320px] overflow-y-auto'>
+                <div className='px-6 pb-6 pt-2 flex flex-col gap-6 max-h-[400px] overflow-y-auto'>
                     {displayedGroups.map((group) => (
-                        <div key={group.groupId}>
+                        <div
+                            key={group.groupId}
+                            className='border border-[#e5e7eb] rounded-xl p-4'
+                        >
                             {/* 그룹 아이디 헤더 */}
                             <div className='flex items-center gap-2 mb-2'>
                                 <span className='font-mono text-xs font-medium text-[#364153] bg-[#f3f4f6] px-2 py-0.5 rounded'>
@@ -360,7 +364,7 @@ export default function OrderManagementModal({
                                 onReorder={(newItems) =>
                                     reorderGroup(group.groupId, newItems)
                                 }
-                                className='flex flex-col gap-2'
+                                className='flex flex-col'
                                 style={{
                                     listStyle: 'none',
                                     padding: 0,

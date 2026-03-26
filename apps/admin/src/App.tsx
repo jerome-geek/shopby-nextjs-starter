@@ -7,6 +7,10 @@ import SignIn from '@/pages/AuthPages/SignIn';
 import Home from '@/pages/Dashboard/Home';
 import CollectionGroupList from '@/pages/CollectionGroup/CollectionGroupList';
 import CollectionGroupDetail from '@/pages/CollectionGroup/CollectionGroupDetail';
+import RecipeGroupList from '@/pages/RecipeGroup/RecipeGroupList';
+import RecipeGroupDetail from '@/pages/RecipeGroup/RecipeGroupDetail';
+import UserCollections from '@/pages/UserCollection/UserCollections';
+import UserCollectionDetail from '@/pages/UserCollection/UserCollectionDetail';
 import NotFound from '@/pages/OtherPage/NotFound';
 
 export default function App() {
@@ -29,6 +33,22 @@ export default function App() {
                         <Route
                             path={PATHS.APP.COLLECTION_GROUP.DETAIL}
                             element={<CollectionGroupDetail />}
+                        />
+                        <Route
+                            path={PATHS.APP.RECIPE_GROUP.LIST}
+                            element={<RecipeGroupList />}
+                        />
+                        <Route
+                            path={PATHS.APP.RECIPE_GROUP.DETAIL}
+                            element={<RecipeGroupDetail />}
+                        />
+                        <Route
+                            path={PATHS.APP.USER_COLLECTION.LIST}
+                            element={<UserCollections />}
+                        />
+                        <Route
+                            path={PATHS.APP.USER_COLLECTION.DETAIL}
+                            element={<UserCollectionDetail />}
                         />
                     </Route>
 
