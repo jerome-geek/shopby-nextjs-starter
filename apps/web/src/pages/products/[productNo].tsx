@@ -5,40 +5,37 @@ import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { product } from '@/api/product';
-// import OptionSelectBottomSheet from '@/components/bottom-sheet/OptionSelect';
-// import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
-import ShopbyApiErrorBoundary from '@/components/ErrorBoundary/Shopby';
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import ProductMainImage from '@/components/product/main-image';
-import PhotoReview from '@/components/product/photo-review';
-import RelatedProductList from '@/components/product/related-product-list';
-import ProductTabs from '@/components/product/product-tabs';
-import { Button } from '@/components/ui/button';
-import { OVERLAY_ID } from '@/const/overlay';
-import { useSb } from '@/hooks/libs/shopby';
-import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
-import { productKeys } from '@/hooks/queryKeys';
-import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
-import useProductLike from '@/hooks/useProductLike';
-import { ChannelType } from '@/models';
-import * as styles from '@/pages/products/[productNo].css';
-import { vars } from '@/styles/theme.css';
-import { CURRENCY, formatPrice, KRW } from '@/utils/currency';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import FlatProductOption from '@/components/product/option/flat';
-import useProductOption from '@/hooks/product/useProductOption';
 import {
     MultiProductOption,
     SelectedProductOption,
 } from '@/components/product/option';
+import FlatProductOption from '@/components/product/option/flat';
+import PhotoReview from '@/components/product/photo-review';
+import ProductTabs from '@/components/product/product-tabs';
+import { Button } from '@/components/ui/button';
+import { OVERLAY_ID } from '@/const/overlay';
+import { useSb } from '@/hooks/libs/shopby';
+import useProductOption from '@/hooks/product/useProductOption';
 import useProductOptionChange from '@/hooks/product/useProductOptionChange';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
+import { productKeys } from '@/hooks/queryKeys';
+import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import { useToast } from '@/hooks/ui';
+import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
+import { ChannelType } from '@/models';
+import * as styles from '@/pages/products/[productNo].css';
+import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { vars } from '@/styles/theme.css';
+import { CURRENCY } from '@/utils/currency';
+import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -258,7 +255,7 @@ function ProductDetailView({
                         <div className={styles.priceInfo}>
                             {discountRate > 0 && (
                                 <span className={styles.originalPrice}>
-                                    {formatPrice(price.salePrice)}
+                                    {CURRENCY(price.salePrice).format()}
                                 </span>
                             )}
                             <div className={styles.priceContainer}>
@@ -268,7 +265,7 @@ function ProductDetailView({
                                     </span>
                                 )}
                                 <span className={styles.finalPrice}>
-                                    {formatPrice(finalPrice)}
+                                    {CURRENCY(finalPrice).format()}
                                 </span>
                             </div>
                         </div>
@@ -345,7 +342,7 @@ function ProductDetailView({
                                 총 상품금액
                             </p>
                             <p className={styles.totalPrice}>
-                                {formatPrice(totalPrice)}
+                                {CURRENCY(totalPrice).format()}
                             </p>
                         </div>
 

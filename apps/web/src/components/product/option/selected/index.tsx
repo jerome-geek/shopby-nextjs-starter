@@ -1,8 +1,8 @@
 import { Minus, Plus, X } from 'lucide-react';
 
-import { useProductOptionStore } from '@/store/useProductOptionStore';
 import * as styles from '@/components/product/option/selected/index.css';
-import { formatPrice } from '@/utils/currency';
+import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { CURRENCY } from '@/utils/currency';
 
 const SelectedProductOption = () => {
     const { selectedOptionList, updateOptionCnt, removeOption } =
@@ -91,7 +91,9 @@ const SelectedProductOption = () => {
                                 </button>
                             </div>
                             <div className={styles.priceValue}>
-                                {formatPrice(option.price * option.orderCnt)}
+                                {CURRENCY(
+                                    option.price * option.orderCnt,
+                                ).format()}
                             </div>
                         </div>
                     </li>
