@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useMemo } from 'react';
 
+import Seo from '@/components/common/seo';
+
 import { product } from '@/api/product';
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import ProductMainImage from '@/components/product/main-image';
@@ -20,8 +22,7 @@ import ProductTabs from '@/components/product/product-tabs';
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useSb } from '@/hooks/libs/shopby';
-import useProductOption from '@/hooks/product/useProductOption';
-import useProductOptionChange from '@/hooks/product/useProductOptionChange';
+import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
 import { cartKeys, productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
@@ -472,6 +473,7 @@ export default function ProductDetailPage({
     searchParams,
     errorStatusCode,
     errorMessage,
+    seoData,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter();
     // 1단계 [비즈니스 에러]: API에서 받은 메시지를 그대로 사용자에게 노출
@@ -503,37 +505,57 @@ export default function ProductDetailPage({
     }
 
     return (
-        <ShopbyApiErrorBoundary
-            fallback={
-                <div style={{ padding: '100px', textAlign: 'center' }}>
-                    상품 정보를 불러오는 중입니다...
-                </div>
-            }
-        >
-            <ProductDetailView
-                productNo={productNo}
-                searchParams={searchParams}
-            />
-        </ShopbyApiErrorBoundary>
+        <>
+            {seoData && (
+                <Seo
+                    type='product'
+                    title={seoData.title}
+                    description={seoData.description}
+                    image={seoData.image}
+                    url={seoData.url}
+                    priceAmount={seoData.priceAmount}
+                    brandName={seoData.brandName}
+                    jsonLd={seoData.jsonLd}
+                />
+            )}
+
+            <ShopbyApiErrorBoundary
+                fallback={
+                    <div style={{ padding: '100px', textAlign: 'center' }}>
+                        상품 정보를 불러오는 중입니다...
+                    </div>
+                }
+            >
+                <ProductDetailView
+                    productNo={productNo}
+                    searchParams={searchParams}
+                />
+            </ShopbyApiErrorBoundary>
+        </>
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { res } = context;
+export const getServerSideProps: GetServerSideProps = async ({
+    res,
+    params,
+    query,
+}) => {
     const queryClient = new QueryClient();
 
-    const productNo = Number(context.params?.productNo) || 0;
+    const productNo = Number(params?.productNo) || 0;
     if (!productNo) {
         return { notFound: true };
     }
 
     const searchParams = {
-        channelType: (context.query.channelType as ChannelType) || null,
-        preview: context.query.preview === 'true',
+        channelType: (query.channelType as ChannelType) || null,
+        preview: query.preview === 'true',
     };
 
+    let seoData = null;
+
     try {
-        await queryClient.fetchQuery({
+        const productData = await queryClient.fetchQuery({
             queryKey: productKeys.detail(productNo, searchParams),
             queryFn: async () => {
                 const { data } = await product.getProductDetail(
@@ -544,6 +566,66 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 return data;
             },
         });
+
+        // ── SEO 데이터 추출 ──
+        if (productData?.baseInfo) {
+            const { baseInfo, brand, price, reviewRate, counter } = productData;
+
+            const title = brand?.name
+                ? `[${brand.name}] ${baseInfo.productName}`
+                : baseInfo.productName;
+
+            const description =
+                baseInfo.promotionText || baseInfo.productName || '';
+
+            const image =
+                baseInfo.imageUrls?.[0] ||
+                baseInfo.imageUrlInfo?.[0]?.url ||
+                '';
+
+            const finalPrice =
+                price.salePrice -
+                (price.immediateDiscountAmt || 0) -
+                (price.additionDiscountAmt || 0);
+
+            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/products/${productNo}`;
+
+            seoData = {
+                title,
+                description,
+                image,
+                url,
+                priceAmount: finalPrice,
+                brandName: brand?.name || '',
+                jsonLd: {
+                    '@context': 'https://schema.org',
+                    '@type': 'Product',
+                    name: baseInfo.productName,
+                    image,
+                    description,
+                    ...(brand?.name && {
+                        brand: {
+                            '@type': 'Brand',
+                            name: brand.name,
+                        },
+                    }),
+                    ...(reviewRate && {
+                        aggregateRating: {
+                            '@type': 'AggregateRating',
+                            ratingValue: reviewRate,
+                            reviewCount: counter?.reviewCnt || 0,
+                        },
+                    }),
+                    offers: {
+                        '@type': 'Offer',
+                        price: finalPrice,
+                        priceCurrency: 'KRW',
+                        availability: 'https://schema.org/InStock',
+                        url,
+                    },
+                },
+            };
+        }
     } catch (error) {
         if (isAxiosError(error)) {
             const status =
@@ -574,6 +656,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             productNo,
             searchParams,
+            seoData,
             dehydratedState: dehydrate(queryClient),
         },
     };

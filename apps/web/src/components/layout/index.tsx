@@ -1,15 +1,18 @@
+import { includes } from '@fxts/core';
 import { clsx } from 'clsx';
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
-import { BottomNav } from '@/components/layout/bottom-navigation';
+import BottomNavigation from '@/components/layout/bottom-navigation';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import * as styles from '@/components/layout/index.css';
+import RouteChangeOverlay from '@/components/ui/route-change-overlay';
 import ScrollToTop from '@/components/ui/scroll-to-top';
+import { PATHS } from '@/const/paths';
 import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 import { useHeaderHeight } from '@/hooks/ui';
 import { useScrollLock } from '@/hooks/utils';
-import RouteChangeOverlay from '@/components/ui/route-change-overlay';
 
 interface LayoutProps {
     children: ReactNode;
@@ -23,6 +26,11 @@ export function Layout({ children, className }: LayoutProps) {
     useScrollLock();
     useHeaderHeight();
 
+    const router = useRouter();
+    const isBottomNavigationVisible = !includes(router.pathname, [
+        PATHS.ORDER.SHEET,
+    ]);
+
     return (
         <div className={clsx(styles.layout, className)}>
             <Header />
@@ -34,7 +42,7 @@ export function Layout({ children, className }: LayoutProps) {
             <Footer />
             <ScrollToTop />
             <RouteChangeOverlay />
-            <BottomNav />
+            {isBottomNavigationVisible && <BottomNavigation />}
         </div>
     );
 }

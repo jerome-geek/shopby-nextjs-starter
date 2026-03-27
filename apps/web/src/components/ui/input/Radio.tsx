@@ -8,8 +8,10 @@ interface RadioFieldProps {
     value?: string;
     options: {
         value: string;
-        label: string;
+        label: React.ReactNode;
     }[];
+    className?: string; // 전체 컨테이너용 클래스
+    itemClassName?: string; // 개별 아이템용 클래스
 }
 
 const InputRadio = ({
@@ -18,17 +20,22 @@ const InputRadio = ({
     options,
     defaultValue,
     value,
+    className,
+    itemClassName,
 }: RadioFieldProps) => {
     return (
         <RadioGroup.Root
             defaultValue={defaultValue}
-            name="radio-group"
+            name='radio-group'
             onValueChange={onChange}
             value={value}
-            className={styles.radioGroupRoot}
+            className={className || styles.radioGroupRoot}
         >
             {options.map((option) => (
-                <div key={option.value} className={styles.radioItemContainer}>
+                <div
+                    key={option.value}
+                    className={itemClassName || styles.radioItemContainer}
+                >
                     <RadioGroup.Item
                         value={option.value}
                         id={option.value}
@@ -39,7 +46,7 @@ const InputRadio = ({
                         />
                     </RadioGroup.Item>
 
-                    <label className="Label" htmlFor={option.value}>
+                    <label className='Label' htmlFor={option.value}>
                         <span className={styles.radioLabel}>
                             {option.label}
                         </span>

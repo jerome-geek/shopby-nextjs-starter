@@ -12,7 +12,7 @@ import {
     ScrapIcon,
     ShoppingIcon,
 } from '@/components/icons/footer';
-import * as styles from '@/components/layout/bottom-navigation/BottomNavigation.css';
+import * as styles from '@/components/layout/bottom-navigation/index.css';
 import { PATHS } from '@/const/paths';
 
 // UX 설정을 위한 상수값
@@ -25,7 +25,7 @@ const IDLE_DETECTION_DELAY_MS = 600;
 const ANIMATION_DURATION_SEC = 0.2;
 const ICON_SIZE_PX = 24;
 
-export function BottomNav() {
+export default function BottomNavigation() {
     const { t } = useTranslation();
     const router = useRouter();
     const { scrollY } = useScroll();
@@ -96,7 +96,7 @@ export function BottomNav() {
 
     return (
         <motion.nav
-            className={styles.bottomNavContainer}
+            className={styles.bottomNavigationContainer}
             variants={{
                 visible: { y: 0 },
                 hidden: { y: '100%' },

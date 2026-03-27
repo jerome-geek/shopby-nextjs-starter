@@ -1,11 +1,15 @@
 import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+
 export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '32px',
-    width: '360px',
+    width: '100%',
+    maxWidth: '486px',
     position: 'sticky',
     top: 'calc(var(--header-height, 0px) + 20px)',
     border: '1px solid #e1e1e1',
@@ -13,7 +17,35 @@ export const container = style({
     padding: '30px',
     backgroundColor: '#fff',
     transition: 'top 0.3s ease',
+
+    '@media': {
+        [media.mobile]: {
+            maxWidth: '100%',
+            position: 'static',
+            border: 'none',
+            borderRadius: '0',
+            padding: '24px 20px 0',
+            gap: '24px',
+        },
+    },
 });
+
+export const buttonWrapper = style({
+    '@media': {
+        [media.mobile]: {
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 100,
+            backgroundColor: '#fff',
+            padding: '12px 20px calc(12px + env(safe-area-inset-bottom, 0px))',
+            borderTop: `1px solid ${vars.color.gray['20']}`,
+            boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.06)',
+        },
+    },
+});
+
 export const title = style([
     textStyles.title1Bold,
     {
@@ -25,37 +57,50 @@ export const title = style([
 export const priceContent = style({
     display: 'flex',
     flexDirection: 'column',
+    gap: '12px',
 });
+
 /* 일반 정보 (상품금액, 배송비 등) */
 export const priceList = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '8px',
 });
+
 export const priceRow = style([
-    textStyles.body1Medium,
+    textStyles.headlineRegular,
     {
         display: 'flex',
         justifyContent: 'space-between',
-        color: vars.color.black,
-        // selectors: {
-        //     '& dt': { color: vars.color.black },
-        //     '& dd': { color: vars.color.black },
-        // },
+        color: vars.color.gray['80'],
     },
 ]);
+
 export const divider = style({
     width: '100%',
     border: 'none',
     borderTop: `1px solid ${vars.color.gray['20']}`,
-    margin: '24px 0',
 });
-/* 총 결제 금액 강조 */
-export const totalPriceRow = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-});
+
+// export const totalPriceRow = style({
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+// });
+
+export const totalPriceTitle = style([
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+    },
+]);
+
+export const totalPrice = style([
+    textStyles.title1Bold,
+    {
+        color: vars.color.pink['100'],
+    },
+]);
 
 /* 하단 버튼 및 기타 */
 export const footer = style({

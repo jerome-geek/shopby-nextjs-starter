@@ -1,9 +1,10 @@
 import { style } from '@vanilla-extract/css';
+
 import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
 import { textStyles } from '@/styles/typography.css';
 
-export const bottomNavContainer = style({
+export const bottomNavigationContainer = style({
     position: 'fixed',
     bottom: 0,
     left: 0,

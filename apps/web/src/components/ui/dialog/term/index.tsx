@@ -1,12 +1,9 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-// import { useTranslation } from 'react-i18next';
+import { X } from 'lucide-react';
 
-// import { TermDialogStyle as S } from '@/components/Common/Dialog/Term/index.styled';
-// import Typography from '@/components/Common/Typography';
 import DialogLayout, { DefaultDialogProps } from '@/components/layout/dialog';
-
 import * as styles from '@/components/ui/dialog/term/index.css';
 
 interface TermDialogProps extends DefaultDialogProps {
@@ -20,16 +17,15 @@ const TermDialog = ({ title, contents, ...props }: TermDialogProps) => {
     return (
         <DialogLayout {...props}>
             <button
-                type="button"
+                type='button'
                 onClick={props.close}
                 className={styles.closeButton}
             >
-                {/* <DialogCloseIcon /> */}
-                닫기
+                <X />
             </button>
 
             <div className={styles.titleContainer}>
-                <h2 id="dialog-title">{t(title)}</h2>
+                <h2 id='dialog-title'>{t(title)}</h2>
             </div>
 
             <div
