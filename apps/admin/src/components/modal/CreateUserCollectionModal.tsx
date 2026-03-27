@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 import { Modal } from '@/components/ui/modal';
+import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
+import { ReactComponent as CloseThickIcon } from '@/icons/close-thick.svg?react';
 
 // ─────────────────────────────────────────────
 // 더미 데이터
@@ -20,28 +22,6 @@ const RECIPES: RecipeItem[] = [
 ];
 
 // ─────────────────────────────────────────────
-// 아이콘
-// ─────────────────────────────────────────────
-function SearchIcon() {
-    return (
-        <svg
-            width='14'
-            height='14'
-            viewBox='0 0 14 14'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <path
-                fillRule='evenodd'
-                clipRule='evenodd'
-                d='M5.833 2a3.833 3.833 0 1 0 0 7.667 3.833 3.833 0 0 0 0-7.667ZM1 5.833a4.833 4.833 0 1 1 8.66 2.98l2.764 2.763a.5.5 0 0 1-.707.707L8.953 9.52A4.833 4.833 0 0 1 1 5.833Z'
-                fill='#99a1af'
-            />
-        </svg>
-    );
-}
-
-// ─────────────────────────────────────────────
 // 모달 Props
 // ─────────────────────────────────────────────
 interface CreateUserCollectionModalProps {
@@ -50,11 +30,11 @@ interface CreateUserCollectionModalProps {
     unmount: () => void;
 }
 
-export default function CreateUserCollectionModal({
+const CreateUserCollectionModal = ({
     isOpen,
     close,
     unmount,
-}: CreateUserCollectionModalProps) {
+}: CreateUserCollectionModalProps) => {
     const [userId, setUserId] = useState('');
     const [collectionName, setCollectionName] = useState('');
     const [recipeSearch, setRecipeSearch] = useState('');
@@ -104,20 +84,7 @@ export default function CreateUserCollectionModal({
                         className='ml-4 shrink-0 flex items-center justify-center w-6 h-6 text-[#6a7282] hover:text-[#101828] transition-colors'
                         aria-label='닫기'
                     >
-                        <svg
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M3.36 3.36a.75.75 0 0 1 1.06 0L8 6.94l3.58-3.58a.75.75 0 1 1 1.06 1.06L9.06 8l3.58 3.58a.75.75 0 1 1-1.06 1.06L8 9.06l-3.58 3.58a.75.75 0 0 1-1.06-1.06L6.94 8 3.36 4.42a.75.75 0 0 1 0-1.06Z'
-                                fill='currentColor'
-                            />
-                        </svg>
+                        <CloseThickIcon className="w-4 h-4 text-inherit" />
                     </button>
                 </div>
 
@@ -137,7 +104,7 @@ export default function CreateUserCollectionModal({
                                 className='flex-1 h-9 px-3 bg-white border border-[#e5e7eb] rounded-lg text-sm text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:border-[#ff6900] transition-colors'
                             />
                             <button className='h-9 px-4 rounded-lg border border-[#e5e7eb] bg-white text-sm font-medium text-[#364153] hover:bg-gray-50 transition-colors flex items-center gap-1.5'>
-                                <SearchIcon />
+                                <SearchIcon className="w-[14px] h-[14px] text-[#99a1af]" />
                                 검색
                             </button>
                         </div>
@@ -166,7 +133,7 @@ export default function CreateUserCollectionModal({
                         {/* 검색 인풋 */}
                         <div className='relative'>
                             <span className='absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none'>
-                                <SearchIcon />
+                                <SearchIcon className="w-[14px] h-[14px] text-[#99a1af]" />
                             </span>
                             <input
                                 type='text'
@@ -248,3 +215,5 @@ export default function CreateUserCollectionModal({
         </Modal>
     );
 }
+
+export default CreateUserCollectionModal;

@@ -4,6 +4,12 @@ import { Link } from 'react-router';
 import PageMeta from '@/components/common/PageMeta';
 import AddCollectionGroupModal from '@/components/modal/AddCollectionGroupModal';
 import OrderManagementModal from '@/components/modal/OrderManagementModal';
+import { ReactComponent as EyeSmallIcon } from '@/icons/eye-small.svg?react';
+import { ReactComponent as GridDotsIcon } from '@/icons/grid-dots.svg?react';
+import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
+import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
+import { ReactComponent as PencilSimpleIcon } from '@/icons/pencil-simple.svg?react';
+import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 type CollectionGroupStatus = '노출' | '숨김';
 
@@ -68,26 +74,11 @@ const MOCK_DATA: CollectionGroup[] = [
 // ─────────────────────────────────────────────
 // 상태 배지 컴포넌트
 // ─────────────────────────────────────────────
-function StatusBadge({ status }: { status: CollectionGroupStatus }) {
+const StatusBadge = ({ status }: { status: CollectionGroupStatus }) => {
     if (status === '노출') {
         return (
             <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#dcfce7] text-[#016630] text-xs font-medium whitespace-nowrap'>
-                {/* Eye icon */}
-                <svg
-                    width='12'
-                    height='12'
-                    viewBox='0 0 16 16'
-                    fill='none'
-                    xmlns='http://www.w3.org/2000/svg'
-                >
-                    <path
-                        d='M8 3C4.5 3 1.5 8 1.5 8C1.5 8 4.5 13 8 13C11.5 13 14.5 8 14.5 8C14.5 8 11.5 3 8 3Z'
-                        stroke='#016630'
-                        strokeWidth='1.2'
-                        fill='none'
-                    />
-                    <circle cx='8' cy='8' r='2' fill='#016630' />
-                </svg>
+                <EyeSmallIcon className='w-3 h-3 text-[#016630]' />
                 노출
             </span>
         );
@@ -136,47 +127,7 @@ const CollectionGroupList = () => {
                             onClick={() => setIsOrderModalOpen(true)}
                             className='flex items-center gap-2 h-9 px-3 rounded-lg border border-[#ff6900] bg-white text-[#ff6900] text-sm font-medium transition-colors hover:bg-orange-50'
                         >
-                            {/* Grid dots icon */}
-                            <svg
-                                width='16'
-                                height='16'
-                                viewBox='0 0 16 16'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <rect
-                                    x='2'
-                                    y='2'
-                                    width='5'
-                                    height='5'
-                                    rx='1'
-                                    fill='#ff6900'
-                                />
-                                <rect
-                                    x='9'
-                                    y='2'
-                                    width='5'
-                                    height='5'
-                                    rx='1'
-                                    fill='#ff6900'
-                                />
-                                <rect
-                                    x='2'
-                                    y='9'
-                                    width='5'
-                                    height='5'
-                                    rx='1'
-                                    fill='#ff6900'
-                                />
-                                <rect
-                                    x='9'
-                                    y='9'
-                                    width='5'
-                                    height='5'
-                                    rx='1'
-                                    fill='#ff6900'
-                                />
-                            </svg>
+                            <GridDotsIcon className='w-4 h-4 text-[#ff6900]' />
                             순서 관리
                         </button>
 
@@ -185,21 +136,7 @@ const CollectionGroupList = () => {
                             onClick={() => setIsAddModalOpen(true)}
                             className='flex items-center gap-2 h-9 px-3 rounded-lg bg-[#ff6900] text-white text-sm font-medium transition-colors hover:bg-orange-600'
                         >
-                            {/* Plus icon */}
-                            <svg
-                                width='16'
-                                height='16'
-                                viewBox='0 0 16 16'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path
-                                    d='M8 3V13M3 8H13'
-                                    stroke='white'
-                                    strokeWidth='1.5'
-                                    strokeLinecap='round'
-                                />
-                            </svg>
+                            <PlusSimpleIcon className='w-4 h-4 text-white' />
                             그룹 추가
                         </button>
                     </div>
@@ -210,27 +147,8 @@ const CollectionGroupList = () => {
                     {/* 검색 영역 */}
                     <div className='px-4 py-4 border-b border-[#e5e7eb]'>
                         <div className='relative'>
-                            <span className='absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none'>
-                                <svg
-                                    width='16'
-                                    height='16'
-                                    viewBox='0 0 16 16'
-                                    fill='none'
-                                    xmlns='http://www.w3.org/2000/svg'
-                                >
-                                    <path
-                                        fillRule='evenodd'
-                                        clipRule='evenodd'
-                                        d='M6.5 2C4.01472 2 2 4.01472 2 6.5C2 8.98528 4.01472 11 6.5 11C8.98528 11 11 8.98528 11 6.5C11 4.01472 8.98528 2 6.5 2ZM1 6.5C1 3.46243 3.46243 1 6.5 1C9.53757 1 12 3.46243 12 6.5C12 7.74835 11.5841 8.89804 10.8833 9.81596L14.8536 13.7864C15.0488 13.9817 15.0488 14.2983 14.8536 14.4935C14.6583 14.6888 14.3417 14.6888 14.1464 14.4935L10.176 10.5231C9.25804 11.2239 8.10835 11.6399 6.86 11.6399C6.74 11.6399 6.62 11.6361 6.5 11.6286V11C6.5 10.7239 6.72386 10.5 7 10.5C7.27614 10.5 7.5 10.7239 7.5 11V11C9.98528 11 12 8.98528 12 6.5'
-                                        fill='#717182'
-                                    />
-                                    <path
-                                        fillRule='evenodd'
-                                        clipRule='evenodd'
-                                        d='M6.5 2C4.01472 2 2 4.01472 2 6.5C2 8.98528 4.01472 11 6.5 11C8.98528 11 11 8.98528 11 6.5C11 4.01472 8.98528 2 6.5 2ZM1 6.5C1 3.46243 3.46243 1 6.5 1C9.53757 1 12 3.46243 12 6.5C12 7.74835 11.5841 8.89804 10.8833 9.81596L14.8536 13.7864C15.0488 13.9817 15.0488 14.2983 14.8536 14.4935C14.6583 14.6888 14.3417 14.6888 14.1464 14.4935L10.176 10.5231C9.25804 11.2239 8.10835 11.6399 6.86 11.6399C6.74 11.6399 6.62 11.6361 6.5 11.6286'
-                                        fill='#717182'
-                                    />
-                                </svg>
+                            <span className='absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#717182] flex items-center justify-center w-4 h-4'>
+                                <SearchIcon className='w-full h-full' />
                             </span>
                             <input
                                 type='text'
@@ -349,21 +267,7 @@ const CollectionGroupList = () => {
                                                         className='flex items-center justify-center w-9 h-8 rounded-lg text-[#6a7282] hover:bg-gray-100 transition-colors'
                                                         aria-label='수정'
                                                     >
-                                                        <svg
-                                                            width='16'
-                                                            height='16'
-                                                            viewBox='0 0 16 16'
-                                                            fill='none'
-                                                            xmlns='http://www.w3.org/2000/svg'
-                                                        >
-                                                            <path
-                                                                d='M11.333 2A1.886 1.886 0 0 1 14 4.667L5.333 13.333 2 14l.667-3.333L11.333 2Z'
-                                                                stroke='#6a7282'
-                                                                strokeWidth='1.2'
-                                                                strokeLinecap='round'
-                                                                strokeLinejoin='round'
-                                                            />
-                                                        </svg>
+                                                        <PencilSimpleIcon className='w-4 h-4 text-[#6a7282]' />
                                                     </button>
 
                                                     {/* 삭제 버튼 */}
@@ -371,21 +275,7 @@ const CollectionGroupList = () => {
                                                         className='flex items-center justify-center w-9 h-8 rounded-lg text-[#f54900] hover:bg-red-50 transition-colors'
                                                         aria-label='삭제'
                                                     >
-                                                        <svg
-                                                            width='16'
-                                                            height='16'
-                                                            viewBox='0 0 16 16'
-                                                            fill='none'
-                                                            xmlns='http://www.w3.org/2000/svg'
-                                                        >
-                                                            <path
-                                                                d='M2 4h12M5.333 4V2.667a1.333 1.333 0 0 1 1.334-1.334h2.666a1.333 1.333 0 0 1 1.334 1.334V4M6.667 7.333v4M9.333 7.333v4M3.333 4l.667 9.333A1.333 1.333 0 0 0 5.333 14.667h5.334a1.333 1.333 0 0 0 1.333-1.334L12.667 4'
-                                                                stroke='#f54900'
-                                                                strokeWidth='1.2'
-                                                                strokeLinecap='round'
-                                                                strokeLinejoin='round'
-                                                            />
-                                                        </svg>
+                                                        <TrashSimpleIcon className='w-4 h-4 text-[#f54900]' />
                                                     </button>
                                                 </div>
                                             </td>

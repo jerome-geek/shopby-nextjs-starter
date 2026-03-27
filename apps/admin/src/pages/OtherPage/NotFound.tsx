@@ -2,7 +2,7 @@ import GridShape from "../../components/common/GridShape";
 import { Link } from "react-router";
 import PageMeta from "../../components/common/PageMeta";
 
-export default function NotFound() {
+const NotFound = () => {
   return (
     <>
       <PageMeta
@@ -42,3 +42,5 @@ export default function NotFound() {
     </>
   );
 }
+
+export default NotFound;

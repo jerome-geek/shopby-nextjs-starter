@@ -2,6 +2,11 @@ import { Link, useParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
 import { PATHS } from '@/const/paths';
+import { ReactComponent as YoutubeIcon } from '@/icons/youtube.svg?react';
+import { ReactComponent as InstagramIcon } from '@/icons/instagram.svg?react';
+import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
+import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
+import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
 
 // ─────────────────────────────────────────────
 // 더미 데이터
@@ -71,39 +76,11 @@ const MOCK_DETAIL: Record<string, UserCollectionDetailData> = {
 // ─────────────────────────────────────────────
 // 플랫폼 아이콘
 // ─────────────────────────────────────────────
-function PlatformIcon({ platform }: { platform: 'YouTube' | 'Instagram' }) {
+const PlatformIcon = ({ platform }: { platform: 'YouTube' | 'Instagram' }) => {
     if (platform === 'YouTube') {
-        return (
-            <svg
-                width='20'
-                height='20'
-                viewBox='0 0 24 24'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-            >
-                <path
-                    d='M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1.13 8.12 1.13 12 1.13 12s0 3.88.27 5.58a2.78 2.78 0 0 0 1.94 2c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2c0-1.7.27-5.58.27-5.58s0-3.88-.27-5.58Z'
-                    fill='#FF0000'
-                />
-                <path d='m10 15 5-3-5-3v6z' fill='#FFF' />
-            </svg>
-        );
+        return <YoutubeIcon className='w-5 h-5' />;
     }
-    return (
-        <svg
-            width='20'
-            height='20'
-            viewBox='0 0 24 24'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <rect x='2' y='2' width='20' height='20' rx='5' fill='#E1306C' />
-            <path
-                d='M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm5.5-8.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z'
-                fill='#FFF'
-            />
-        </svg>
-    );
+    return <InstagramIcon className='w-5 h-5' />;
 }
 
 // ─────────────────────────────────────────────
@@ -126,21 +103,7 @@ const UserCollectionDetail = () => {
                     to={PATHS.APP.USER_COLLECTION.LIST}
                     className='flex items-center gap-1.5 text-[13px] font-medium text-[#6a7282] hover:text-[#101828] transition-colors w-fit'
                 >
-                    <svg
-                        width='14'
-                        height='14'
-                        viewBox='0 0 16 16'
-                        fill='none'
-                        xmlns='http://www.w3.org/2000/svg'
-                    >
-                        <path
-                            d='M10 13L5 8L10 3'
-                            stroke='currentColor'
-                            strokeWidth='1.3'
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                        />
-                    </svg>
+                    <ChevronLeftSmallIcon className='w-3.5 h-3.5' />
                     목록으로
                 </Link>
 
@@ -162,20 +125,7 @@ const UserCollectionDetail = () => {
                     </p>
 
                     <div className='flex items-center gap-2 text-[#6a7282] mt-2'>
-                        <svg
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                d='M3 3V13.5L8 10L13 13.5V3C13 2.44772 12.5523 2 12 2H4C3.44772 2 3 2.44772 3 3Z'
-                                stroke='currentColor'
-                                strokeWidth='1.2'
-                                strokeLinejoin='round'
-                            />
-                        </svg>
+                        <BookmarkIcon className='w-4 h-4 text-[#6a7282]' />
                         <span className='text-[14px] font-semibold'>북마크 {detail.bookmarks}</span>
                     </div>
                 </div>
@@ -212,19 +162,7 @@ const UserCollectionDetail = () => {
                                             <span>조회 {recipe.views.toLocaleString()}</span>
                                         </div>
                                         <div className='flex items-center gap-1.5 text-[12px] text-[#6a7282]'>
-                                            <svg
-                                                width='14'
-                                                height='14'
-                                                viewBox='0 0 24 24'
-                                                fill='none'
-                                                xmlns='http://www.w3.org/2000/svg'
-                                            >
-                                                <path
-                                                    d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'
-                                                    stroke='currentColor'
-                                                    strokeWidth='1.5'
-                                                />
-                                            </svg>
+                                            <HeartIcon className='w-3.5 h-3.5 text-[#6a7282]' />
                                             {recipe.likes.toLocaleString()}
                                         </div>
                                     </div>

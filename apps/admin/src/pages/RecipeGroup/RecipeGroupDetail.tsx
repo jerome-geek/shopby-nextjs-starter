@@ -2,6 +2,11 @@ import { Link, useParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
 import { PATHS } from '@/const/paths';
+import { ReactComponent as YoutubeSimpleIcon } from '@/icons/youtube-simple.svg?react';
+import { ReactComponent as InstagramSimpleIcon } from '@/icons/instagram-simple.svg?react';
+import { ReactComponent as EyeSmallIcon } from '@/icons/eye-small.svg?react';
+import { ReactComponent as ExternalLinkIcon } from '@/icons/external-link.svg?react';
+import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
 
 // ─────────────────────────────────────────────
 // 더미 데이터
@@ -102,54 +107,18 @@ const MOCK_DETAIL: Record<string, RecipeGroupDetailData> = {
     },
 };
 
-function SourceBadge({ source }: { source: RecipeSource }) {
+const SourceBadge = ({ source }: { source: RecipeSource }) => {
     if (source === 'YouTube') {
         return (
             <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#ffe2e2] text-[#9f0712]'>
-                <svg
-                    width='12'
-                    height='12'
-                    viewBox='0 0 12 12'
-                    fill='none'
-                    xmlns='http://www.w3.org/2000/svg'
-                >
-                    <path
-                        d='M11.12 3.24a1.34 1.34 0 0 0-.94-.94C9.27 2 6 2 6 2s-3.27 0-4.18.3a1.34 1.34 0 0 0-.94.94C.6 4.15.6 6 .6 6s0 1.85.28 2.76c.16.57.57.98 1 1.13.82.3 4.19.3 4.19.3s3.27 0 4.18-.3a1.34 1.34 0 0 0 .94-.94c.27-.91.27-2.76.27-2.76s0-1.85-.28-2.75Z'
-                        fill='currentColor'
-                    />
-                    <path d='M4.8 7.8 8.4 6 4.8 4.2v3.6Z' fill='white' />
-                </svg>
+                <YoutubeSimpleIcon className='w-3 h-3' />
                 YouTube
             </span>
         );
     }
     return (
         <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#fce7f3] text-[#a3004c]'>
-            <svg
-                width='12'
-                height='12'
-                viewBox='0 0 12 12'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-            >
-                <rect
-                    x='1'
-                    y='1'
-                    width='10'
-                    height='10'
-                    rx='3'
-                    stroke='currentColor'
-                    strokeWidth='1.2'
-                />
-                <circle
-                    cx='6'
-                    cy='6'
-                    r='2'
-                    stroke='currentColor'
-                    strokeWidth='1.2'
-                />
-                <circle cx='8.75' cy='3.25' r='0.75' fill='currentColor' />
-            </svg>
+            <InstagramSimpleIcon className='w-3 h-3' />
             Instagram
         </span>
     );
@@ -158,22 +127,11 @@ function SourceBadge({ source }: { source: RecipeSource }) {
 // ─────────────────────────────────────────────
 // 노출 상태 배지
 // ─────────────────────────────────────────────
-function VisibilityBadge({ isVisible }: { isVisible: boolean }) {
+const VisibilityBadge = ({ isVisible }: { isVisible: boolean }) => {
     if (isVisible) {
         return (
             <span className='inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#dcfce7] text-[#016630]'>
-                <svg
-                    width='12'
-                    height='12'
-                    viewBox='0 0 12 12'
-                    fill='none'
-                    xmlns='http://www.w3.org/2000/svg'
-                >
-                    <path
-                        d='M6 2C3.6 2 1.6 3.76 1 6c.6 2.24 2.6 4 5 4s4.4-1.76 5-4c-.6-2.24-2.6-4-5-4Zm0 6.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Zm0-4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z'
-                        fill='currentColor'
-                    />
-                </svg>
+                <EyeSmallIcon className='w-3 h-3' />
                 노출
             </span>
         );
@@ -188,24 +146,10 @@ function VisibilityBadge({ isVisible }: { isVisible: boolean }) {
 // ─────────────────────────────────────────────
 // 외부 링크 버튼
 // ─────────────────────────────────────────────
-function ExternalLinkButton() {
+const ExternalLinkButton = () => {
     return (
         <button className='flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f3f4f6] transition-colors text-[#6a7282] hover:text-[#101828]'>
-            <svg
-                width='16'
-                height='16'
-                viewBox='0 0 16 16'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-            >
-                <path
-                    d='M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3M9 2h5m0 0v5m0-5L7 10'
-                    stroke='currentColor'
-                    strokeWidth='1.3'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                />
-            </svg>
+            <ExternalLinkIcon className='w-4 h-4' />
         </button>
     );
 }
@@ -241,21 +185,7 @@ const RecipeGroupDetail = () => {
                         to={PATHS.APP.RECIPE_GROUP.LIST}
                         className='inline-flex items-center gap-1.5 text-sm font-medium text-[#0a0a0a] hover:text-[#ff6900] transition-colors w-fit'
                     >
-                        <svg
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                d='M10 3L5 8L10 13'
-                                stroke='currentColor'
-                                strokeWidth='1.3'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                            />
-                        </svg>
+                        <ChevronLeftSmallIcon className='w-4 h-4' />
                         목록으로
                     </Link>
                     <h1 className='text-2xl font-bold text-[#101828] tracking-tight'>

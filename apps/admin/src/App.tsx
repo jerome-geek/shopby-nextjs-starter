@@ -11,6 +11,8 @@ import RecipeGroupList from '@/pages/RecipeGroup/RecipeGroupList';
 import RecipeGroupDetail from '@/pages/RecipeGroup/RecipeGroupDetail';
 import UserCollections from '@/pages/UserCollection/UserCollections';
 import UserCollectionDetail from '@/pages/UserCollection/UserCollectionDetail';
+import UserRecipeList from '@/pages/UserRecipe/UserRecipeList';
+import UserRecipeDetail from '@/pages/UserRecipe/UserRecipeDetail';
 import NotFound from '@/pages/OtherPage/NotFound';
 
 export default function App() {
@@ -49,6 +51,14 @@ export default function App() {
                         <Route
                             path={PATHS.APP.USER_COLLECTION.DETAIL}
                             element={<UserCollectionDetail />}
+                        />
+                        <Route
+                            path={PATHS.APP.USER_RECIPE.LIST}
+                            element={<UserRecipeList />}
+                        />
+                        <Route
+                            path={PATHS.APP.USER_RECIPE.DETAIL}
+                            element={<UserRecipeDetail />}
                         />
                     </Route>
 

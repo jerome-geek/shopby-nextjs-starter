@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { motion, Reorder, useDragControls } from 'motion/react';
 
 import { Modal } from '@/components/ui/modal';
+import { ReactComponent as DragHandleIcon } from '@/icons/drag-handle.svg?react';
+import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
+import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
+import { ReactComponent as CloseThickIcon } from '@/icons/close-thick.svg?react';
+import { ReactComponent as ChevronDownSimpleIcon } from '@/icons/chevron-down-simple.svg?react';
 
 interface OrderItem {
     id: string;
@@ -65,64 +70,6 @@ const SELECT_OPTIONS = [
 // ─────────────────────────────────────────────
 // 아이콘
 // ─────────────────────────────────────────────
-function DragHandleIcon() {
-    return (
-        <svg
-            width='16'
-            height='16'
-            viewBox='0 0 16 16'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <circle cx='5.5' cy='4' r='1.5' fill='#99a1af' />
-            <circle cx='5.5' cy='8' r='1.5' fill='#99a1af' />
-            <circle cx='5.5' cy='12' r='1.5' fill='#99a1af' />
-            <circle cx='10.5' cy='4' r='1.5' fill='#99a1af' />
-            <circle cx='10.5' cy='8' r='1.5' fill='#99a1af' />
-            <circle cx='10.5' cy='12' r='1.5' fill='#99a1af' />
-        </svg>
-    );
-}
-
-function ArrowUpIcon() {
-    return (
-        <svg
-            width='16'
-            height='16'
-            viewBox='0 0 16 16'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <path
-                d='M8 12V4M4.5 7.5L8 4L11.5 7.5'
-                stroke='#6a7282'
-                strokeWidth='1.2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-            />
-        </svg>
-    );
-}
-
-function ArrowDownIcon() {
-    return (
-        <svg
-            width='16'
-            height='16'
-            viewBox='0 0 16 16'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <path
-                d='M8 4V12M11.5 8.5L8 12L4.5 8.5'
-                stroke='#6a7282'
-                strokeWidth='1.2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-            />
-        </svg>
-    );
-}
 
 interface ReorderItemProps {
     item: OrderItem;
@@ -132,13 +79,13 @@ interface ReorderItemProps {
     onMove: (groupId: string, fromIdx: number, toIdx: number) => void;
 }
 
-function ReorderItem({
+const ReorderItem = ({
     item,
     index,
     total,
     groupId,
     onMove,
-}: ReorderItemProps) {
+}: ReorderItemProps) => {
     const dragControls = useDragControls();
 
     return (
@@ -167,7 +114,7 @@ function ReorderItem({
                 className='shrink-0 cursor-grab active:cursor-grabbing text-[#99a1af] touch-none'
                 onPointerDown={(e) => dragControls.start(e)}
             >
-                <DragHandleIcon />
+                <DragHandleIcon className='w-4 h-4' />
             </span>
 
             <motion.span
@@ -201,7 +148,7 @@ function ReorderItem({
                     aria-label='위로'
                     whileTap={index > 0 ? { scale: 0.85 } : {}}
                 >
-                    <ArrowUpIcon />
+                    <ArrowUpSimpleIcon className='w-4 h-4' />
                 </motion.button>
                 <motion.button
                     onClick={() =>
@@ -212,7 +159,7 @@ function ReorderItem({
                     aria-label='아래로'
                     whileTap={index < total - 1 ? { scale: 0.85 } : {}}
                 >
-                    <ArrowDownIcon />
+                    <ArrowDownSimpleIcon className='w-4 h-4' />
                 </motion.button>
             </div>
         </Reorder.Item>
@@ -225,11 +172,11 @@ interface OrderManagementModalProps {
     unmount: () => void;
 }
 
-export default function OrderManagementModal({
+const OrderManagementModal = ({
     isOpen,
     close,
     unmount,
-}: OrderManagementModalProps) {
+}: OrderManagementModalProps) => {
     const [selectedGroupId, setSelectedGroupId] = useState<string>('all');
     const [orderData, setOrderData] =
         useState<GroupOrderData[]>(GROUP_ORDER_DATA);
@@ -286,20 +233,7 @@ export default function OrderManagementModal({
                         className='ml-4 shrink-0 flex items-center justify-center w-6 h-6 text-[#6a7282] hover:text-[#101828] transition-colors'
                         aria-label='닫기'
                     >
-                        <svg
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M3.36 3.36a.75.75 0 0 1 1.06 0L8 6.94l3.58-3.58a.75.75 0 1 1 1.06 1.06L9.06 8l3.58 3.58a.75.75 0 1 1-1.06 1.06L8 9.06l-3.58 3.58a.75.75 0 0 1-1.06-1.06L6.94 8 3.36 4.42a.75.75 0 0 1 0-1.06Z'
-                                fill='currentColor'
-                            />
-                        </svg>
+                        <CloseThickIcon className='w-4 h-4 text-inherit' />
                     </button>
                 </div>
 
@@ -321,21 +255,7 @@ export default function OrderManagementModal({
                             ))}
                         </select>
                         <span className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6a7282]'>
-                            <svg
-                                width='14'
-                                height='14'
-                                viewBox='0 0 14 14'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path
-                                    d='M3.5 5.25L7 8.75L10.5 5.25'
-                                    stroke='currentColor'
-                                    strokeWidth='1.2'
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                />
-                            </svg>
+                            <ChevronDownSimpleIcon className='w-3.5 h-3.5' />
                         </span>
                     </div>
                 </div>
@@ -401,3 +321,5 @@ export default function OrderManagementModal({
         </Modal>
     );
 }
+
+export default OrderManagementModal;

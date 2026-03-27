@@ -1,6 +1,9 @@
 import { useState } from 'react';
 
 import { Modal } from '@/components/ui/modal';
+import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
+import { ReactComponent as ChevronDownSimpleIcon } from '@/icons/chevron-down-simple.svg?react';
+import { ReactComponent as CloseThickIcon } from '@/icons/close-thick.svg?react';
 
 // ─────────────────────────────────────────────
 // 더미 레시피 데이터
@@ -26,48 +29,6 @@ const GROUP_ID_OPTIONS = [
     { value: 'recipe_group_3', label: 'recipe_group_3' },
     { value: 'new', label: '+ 새 그룹 아이디 생성' },
 ];
-
-// ─────────────────────────────────────────────
-// 아이콘
-// ─────────────────────────────────────────────
-function SearchIcon() {
-    return (
-        <svg
-            width='14'
-            height='14'
-            viewBox='0 0 14 14'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <path
-                fillRule='evenodd'
-                clipRule='evenodd'
-                d='M5.833 2a3.833 3.833 0 1 0 0 7.667 3.833 3.833 0 0 0 0-7.667ZM1 5.833a4.833 4.833 0 1 1 8.66 2.98l2.764 2.763a.5.5 0 0 1-.707.707L8.953 9.52A4.833 4.833 0 0 1 1 5.833Z'
-                fill='#99a1af'
-            />
-        </svg>
-    );
-}
-
-function ChevronDownIcon() {
-    return (
-        <svg
-            width='14'
-            height='14'
-            viewBox='0 0 14 14'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-        >
-            <path
-                d='M3.5 5.25L7 8.75L10.5 5.25'
-                stroke='#6a7282'
-                strokeWidth='1.2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-            />
-        </svg>
-    );
-}
 
 // ─────────────────────────────────────────────
 // Toggle 컴포넌트
@@ -107,11 +68,11 @@ interface CreateRecipeGroupModalProps {
     unmount: () => void;
 }
 
-export default function CreateRecipeGroupModal({
+const CreateRecipeGroupModal = ({
     isOpen,
     close,
     unmount,
-}: CreateRecipeGroupModalProps) {
+}: CreateRecipeGroupModalProps) => {
     const [groupId, setGroupId] = useState('');
     const [groupName, setGroupName] = useState('');
     const [isVisible, setIsVisible] = useState(true);
@@ -164,20 +125,7 @@ export default function CreateRecipeGroupModal({
                         className='ml-4 shrink-0 flex items-center justify-center w-6 h-6 text-[#6a7282] hover:text-[#101828] transition-colors'
                         aria-label='닫기'
                     >
-                        <svg
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                        >
-                            <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M3.36 3.36a.75.75 0 0 1 1.06 0L8 6.94l3.58-3.58a.75.75 0 1 1 1.06 1.06L9.06 8l3.58 3.58a.75.75 0 1 1-1.06 1.06L8 9.06l-3.58 3.58a.75.75 0 0 1-1.06-1.06L6.94 8 3.36 4.42a.75.75 0 0 1 0-1.06Z'
-                                fill='currentColor'
-                            />
-                        </svg>
+                        <CloseThickIcon className="w-4 h-4 text-inherit" />
                     </button>
                 </div>
 
@@ -206,7 +154,7 @@ export default function CreateRecipeGroupModal({
                                 ))}
                             </select>
                             <span className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2'>
-                                <ChevronDownIcon />
+                                <ChevronDownSimpleIcon className="w-3.5 h-3.5 text-[#6a7282]" />
                             </span>
                         </div>
                     </div>
@@ -258,7 +206,7 @@ export default function CreateRecipeGroupModal({
                         {/* 검색 인풋 */}
                         <div className='relative'>
                             <span className='absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none'>
-                                <SearchIcon />
+                                <SearchIcon className="w-[14px] h-[14px] text-[#99a1af]" />
                             </span>
                             <input
                                 type='text'
@@ -346,3 +294,5 @@ export default function CreateRecipeGroupModal({
         </Modal>
     );
 }
+
+export default CreateRecipeGroupModal;
