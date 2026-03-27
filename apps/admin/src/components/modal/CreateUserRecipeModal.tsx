@@ -24,7 +24,7 @@ const CreateUserRecipeModal = ({
     const [recipeUrl, setRecipeUrl] = useState('');
     const [description, setDescription] = useState('');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [thumbnail, setThumbnail] = useState<File | null>(null);
+    const [_, setThumbnail] = useState<File | null>(null);
 
     const handleClose = () => {
         setUserId('');
@@ -61,7 +61,7 @@ const CreateUserRecipeModal = ({
                         className='ml-4 shrink-0 flex items-center justify-center w-6 h-6 text-[#6a7282] hover:text-[#101828] transition-colors'
                         aria-label='닫기'
                     >
-                        <CloseThickIcon className="w-4 h-4 text-inherit" />
+                        <CloseThickIcon className='w-4 h-4 text-inherit' />
                     </button>
                 </div>
 
@@ -82,7 +82,7 @@ const CreateUserRecipeModal = ({
                                 className='flex-1 h-9 px-3 bg-white border border-[#e5e7eb] rounded-lg text-sm text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:border-[#ff6900] transition-colors'
                             />
                             <button className='h-9 px-4 rounded-lg border border-[#e5e7eb] bg-white text-sm font-medium text-[#364153] hover:bg-gray-50 transition-colors flex items-center gap-1.5'>
-                                <SearchIcon className="w-[14px] h-[14px] text-[#99a1af]" />
+                                <SearchIcon className='w-[14px] h-[14px] text-[#99a1af]' />
                                 검색
                             </button>
                         </div>
@@ -164,6 +164,6 @@ const CreateUserRecipeModal = ({
             </div>
         </Modal>
     );
-}
+};
 
 export default CreateUserRecipeModal;
