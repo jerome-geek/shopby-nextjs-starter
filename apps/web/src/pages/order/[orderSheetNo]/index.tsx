@@ -1,12 +1,5 @@
-import { Suspense } from 'react';
 import { useRouter } from 'next/router';
-import {
-    FormProvider,
-    useForm,
-    useWatch,
-    UseFormReturn,
-    useFormContext,
-} from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { paymentReserveSchema, PaymentReserveSchemaType } from '@/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -15,10 +8,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { useMyApp } from '@/hooks/myapp';
 import { useOrderSheetInitialize } from '@/hooks/order';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
-import { GetOrderSheetResponse } from '@/models/order/orderSheet';
 import { GetServerSideProps } from 'next';
 import OrderPaymentSummary from '@/components/order/payment-summary';
 import PaymentMethod from '@/components/order/payment-method';
+import Accumulation from '@/components/order/accumulation';
+import Coupon from '@/components/order/coupon';
+import OrderProducts from '@/components/order/order-products';
+import OrdererInfo from '@/components/order/orderer-info';
+import ShippingAddress from '@/components/order/shipping-address';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 
 const OrderSheetPage = () => {
@@ -73,8 +70,6 @@ const OrderSheetPage = () => {
 };
 
 const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
-    const methods = useFormContext<PaymentReserveSchemaType>();
-
     const { data: orderSheetData } = useOrderSheet({
         orderSheetNo,
         searchParams: { includeMemberAddress: true },
@@ -87,109 +82,27 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
             <div className={styles.contentWrapper}>
                 {/* 좌측: 컨텐츠 영역 (article 또는 section 권장) */}
                 <article className={styles.articleContent}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '30px',
-                        }}
-                    >
-                        <div
-                            style={{
-                                height: '400px',
-                                border: '1px dashed #ccc',
-                                borderRadius: '8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#999',
-                            }}
-                        >
-                            주문 상품 영역
-                        </div>
+                    <OrderProducts />
 
-                        <hr className={styles.contentDivider} />
+                    <hr className={styles.contentDivider} />
 
-                        <div
-                            style={{
-                                height: '300px',
-                                border: '1px dashed #ccc',
-                                borderRadius: '8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#999',
-                            }}
-                        >
-                            주문자 정보 영역
-                        </div>
+                    <OrdererInfo />
 
-                        <hr className={styles.contentDivider} />
+                    <hr className={styles.contentDivider} />
 
-                        <div
-                            style={{
-                                height: '500px',
-                                border: '1px dashed #ccc',
-                                borderRadius: '8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#999',
-                            }}
-                        >
-                            배송지 정보 영역
-                        </div>
+                    <ShippingAddress />
 
-                        <hr className={styles.contentDivider} />
+                    <hr className={styles.contentDivider} />
 
-                        <div
-                            style={{
-                                height: '500px',
-                                border: '1px dashed #ccc',
-                                borderRadius: '8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#999',
-                            }}
-                        >
-                            쿠폰 영역
-                        </div>
+                    <Coupon />
 
-                        <hr className={styles.contentDivider} />
+                    <hr className={styles.contentDivider} />
 
-                        <div
-                            style={{
-                                height: '500px',
-                                border: '1px dashed #ccc',
-                                borderRadius: '8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#999',
-                            }}
-                        >
-                            적립금 영역
-                        </div>
+                    <Accumulation />
 
-                        <hr className={styles.contentDivider} />
+                    <hr className={styles.contentDivider} />
 
-                        <PaymentMethod />
-                    </div>
-                    <details style={{ marginTop: '40px' }}>
-                        <summary style={{ cursor: 'pointer', color: '#666' }}>
-                            Raw Data 확인
-                        </summary>
-                        <pre
-                            style={{
-                                fontSize: '11px',
-                                background: '#f5f5f5',
-                                padding: '10px',
-                            }}
-                        >
-                            {JSON.stringify(orderSheetData, null, 2)}
-                        </pre>
-                    </details>
+                    <PaymentMethod />
                 </article>
 
                 {/* 우측: 사이드바 (aside 사용) */}

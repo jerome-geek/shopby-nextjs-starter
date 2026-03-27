@@ -12,9 +12,6 @@ export const container = style({
     maxWidth: '486px',
     position: 'sticky',
     top: 'calc(var(--header-height, 0px) + 20px)',
-    border: '1px solid #e1e1e1',
-    borderRadius: '12px',
-    padding: '30px',
     backgroundColor: '#fff',
     transition: 'top 0.3s ease',
 

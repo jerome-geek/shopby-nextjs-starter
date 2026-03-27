@@ -9,7 +9,7 @@ export const container = style({
 });
 
 export const title = style([
-    textStyles.title1Bold,
+    textStyles.headingBold,
     {
         color: vars.color.black,
     },

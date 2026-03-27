@@ -40,10 +40,9 @@ export const contentWrapper = style({
 
 export const articleContent = style({
     flex: 1,
-    minHeight: '2000px',
-    border: '1px solid #e1e1e1',
-    borderRadius: '12px',
-    padding: '40px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '30px',
 
     '@media': {
         [media.mobile]: {
