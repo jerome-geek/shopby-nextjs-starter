@@ -1,53 +1,69 @@
-// TODO: useFormContext로 react-hook-form 연결
-// TODO: 로그인 회원의 경우 기본값으로 회원 정보 자동 입력
-// TODO: 비회원의 경우 직접 입력 필드 제공
-// TODO: CSS 모듈 적용
+import { useFormContext } from 'react-hook-form';
+
+import * as styles from '@/components/order/orderer-info/index.css';
+import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import InputField from '@/components/ui/input/field';
+import InputFieldContainer from '@/components/ui/input/FieldContainer';
+import { InputLabel } from '@/components/ui/input/label';
+import { PaymentReserveSchemaType } from '@/schema';
+
+const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
 
 const OrdererInfo = () => {
+    const { register } = useFormContext<PaymentReserveSchemaType>();
+
     return (
-        <section>
-            <h3>주문자 정보</h3>
+        <section className={styles.container}>
+            <h3 className={styles.title}>주문자 정보</h3>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
-                <div>
-                    <label style={{ display: 'block', fontSize: '14px', marginBottom: '8px' }}>
-                        이름
-                    </label>
-                    {/* TODO: register('ordererName') 연결 */}
-                    <input
-                        type='text'
-                        placeholder='홍길동'
-                        style={{
-                            width: '100%',
-                            height: '48px',
-                            border: '1px solid #ddd',
-                            borderRadius: '6px',
-                            padding: '0 12px',
-                            fontSize: '14px',
-                            boxSizing: 'border-box',
-                        }}
+            <div className={styles.ordererForm}>
+                {isGlobalMall ? (
+                    <>
+                        <InputFieldContainer>
+                            <InputLabel isRequired>성</InputLabel>
+                            <InputField
+                                placeholder='Last Name'
+                                {...register('orderer.ordererLastName')}
+                            />
+                            <ErrorMessage name='orderer.ordererLastName' />
+                        </InputFieldContainer>
+                        <InputFieldContainer>
+                            <InputLabel isRequired>이름</InputLabel>
+                            <InputField
+                                placeholder='First Name'
+                                {...register('orderer.ordererFirstName')}
+                            />
+                            <ErrorMessage name='orderer.ordererFirstName' />
+                        </InputFieldContainer>
+                    </>
+                ) : (
+                    <InputFieldContainer>
+                        <InputLabel isRequired>이름</InputLabel>
+                        <InputField
+                            placeholder='주문자 성함'
+                            {...register('orderer.ordererName')}
+                        />
+                        <ErrorMessage name='orderer.ordererName' />
+                    </InputFieldContainer>
+                )}
+
+                <InputFieldContainer>
+                    <InputLabel isRequired>이메일</InputLabel>
+                    <InputField
+                        placeholder='example@email.com'
+                        {...register('orderer.ordererEmail')}
                     />
-                </div>
+                    <ErrorMessage name='orderer.ordererEmail' />
+                </InputFieldContainer>
 
-                <div>
-                    <label style={{ display: 'block', fontSize: '14px', marginBottom: '8px' }}>
-                        전화번호
-                    </label>
-                    {/* TODO: register('ordererContact1') 연결 */}
-                    <input
-                        type='tel'
+                <InputFieldContainer>
+                    <InputLabel isRequired>전화번호</InputLabel>
+                    <InputField
                         placeholder='010-1234-5678'
-                        style={{
-                            width: '100%',
-                            height: '48px',
-                            border: '1px solid #ddd',
-                            borderRadius: '6px',
-                            padding: '0 12px',
-                            fontSize: '14px',
-                            boxSizing: 'border-box',
-                        }}
+                        {...register('orderer.ordererContact1')}
                     />
-                </div>
+                    <ErrorMessage name='orderer.ordererContact1' />
+                </InputFieldContainer>
             </div>
         </section>
     );
