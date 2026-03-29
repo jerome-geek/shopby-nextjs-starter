@@ -18,7 +18,7 @@ import type { Banner } from '@/models/display/banner';
 import { BREAKPOINTS } from '@/styles/media';
 import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 import { extractBannerContents, normalizeImageUrl } from '@/utils/shopby';
-import * as styles from './HeroBanner.css';
+import * as styles from '@/components/banner/hero/index.css';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -137,7 +137,7 @@ function HeroBannerContent() {
                                         src={normalizeImageUrl(banner.imageUrl)}
                                         alt={banner.name || '배너 이미지'}
                                         className={styles.cardImage}
-                                        loading="lazy"
+                                        loading='lazy'
                                     />
                                     <div className={styles.cardContent}>
                                         <h3
@@ -181,7 +181,7 @@ function HeroBannerContent() {
                         <button
                             className={`${styles.navButton} ${styles.navPrev}`}
                             onClick={() => swiperRef.current?.slidePrev()}
-                            aria-label="이전 배너"
+                            aria-label='이전 배너'
                         >
                             <ChevronLeft />
                         </button>
@@ -189,7 +189,7 @@ function HeroBannerContent() {
                         <button
                             className={`${styles.navButton} ${styles.navNext}`}
                             onClick={() => swiperRef.current?.slideNext()}
-                            aria-label="다음 배너"
+                            aria-label='다음 배너'
                         >
                             <ChevronRight />
                         </button>

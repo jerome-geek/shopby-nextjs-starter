@@ -124,17 +124,17 @@ export const cardDescription = style([
 ]);
 
 export const controls = style({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '24px',
-    width: '100%',
-    maxWidth: '1200px',
-    margin: '0 auto',
+    display: 'none',
 
     '@media': {
-        '(max-width: 768px)': {
-            display: 'none',
+        [media.desktop]: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '24px',
+            width: '100%',
+            maxWidth: '1200px',
+            margin: '0 auto',
         },
     },
 });
@@ -155,7 +155,7 @@ export const progressBox = style({
 
 export const swiperPagination = style({
     width: '100%',
-    backgroundColor: vars.color.gray['200'],
+    backgroundColor: vars.color.gray['20'],
     top: '50% !important',
     transform: 'translateY(-50%) !important',
 });

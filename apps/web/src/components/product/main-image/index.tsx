@@ -58,16 +58,12 @@ const ProductMainImage = ({
             observeParents: true,
             onSlideChange: (swiper: SwiperClass) => {
                 setActiveThumbIndex(swiper.activeIndex);
-                // 💡 메인이 바뀌면 썸네일 스와이퍼도 해당 위치로 강제 이동
-                if (thumbsSwiper && !thumbsSwiper.destroyed) {
-                    thumbsSwiper.slideTo(swiper.activeIndex);
-                }
             },
             style: {
                 width: '100%',
             },
         }),
-        [thumbsSwiper],
+        [],
     );
 
     const thumbsSwiperSettings = useMemo<SwiperProps>(
@@ -108,7 +104,7 @@ const ProductMainImage = ({
                                     <div className={styles.imageWrapper}>
                                         <img
                                             src={url}
-                                            alt=""
+                                            alt=''
                                             className={styles.thumbnail}
                                         />
                                     </div>
@@ -131,7 +127,7 @@ const ProductMainImage = ({
                     <Swiper
                         {...thumbsSwiperSettings}
                         onSwiper={setThumbsSwiper}
-                        direction="vertical"
+                        direction='vertical'
                         className={styles.thumbsSwiper}
                     >
                         {imageUrls.map((url, index) => {
@@ -152,7 +148,7 @@ const ProductMainImage = ({
                                     >
                                         <img
                                             src={url}
-                                            alt=""
+                                            alt=''
                                             className={styles.thumbImage}
                                         />
                                     </div>

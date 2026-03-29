@@ -8,7 +8,6 @@ import { overlay, useOverlayData } from 'overlay-kit';
 import { useMemo } from 'react';
 
 import Seo from '@/components/common/seo';
-
 import { product } from '@/api/product';
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import ProductMainImage from '@/components/product/main-image';
@@ -30,7 +29,7 @@ import { useToast } from '@/hooks/ui';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import { ChannelType } from '@/models';
-import * as styles from '@/pages/products/[productNo].css';
+import * as styles from '@/pages/products/[productNo]/index.css';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
