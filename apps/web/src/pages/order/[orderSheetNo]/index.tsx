@@ -80,11 +80,10 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
             <h1 className={styles.title}>주문하기</h1>
 
             <div className={styles.contentWrapper}>
-                {/* 좌측: 컨텐츠 영역 (article 또는 section 권장) */}
                 <article className={styles.articleContent}>
                     <OrderProducts
-                                deliveryGroups={orderSheetData.deliveryGroups}
-                            />
+                        deliveryGroups={orderSheetData.deliveryGroups}
+                    />
 
                     <hr className={styles.contentDivider} />
 

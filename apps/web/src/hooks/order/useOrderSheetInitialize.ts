@@ -62,7 +62,7 @@ const useOrderSheetInitialize = ({
             head,
         );
 
-        if (includes(lastPayType, orderSheetData.availablePayTypes)) {
+        if (includes(lastPayType, pipe(orderSheetData.availablePayTypes, map(prop('payType'))))) {
             setValue('payType', lastPayType);
         }
         if (pgType) {

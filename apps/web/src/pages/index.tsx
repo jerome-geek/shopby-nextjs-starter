@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
+import { HeroBanner } from '@/components/banner/hero';
 import { LazyRender } from '@/components/common';
-import { HeroBanner } from '@/components/hero-banner';
 import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
@@ -21,14 +21,14 @@ export default function Home() {
             <Head>
                 <title>JollyPot</title>
                 <meta
-                    name="description"
-                    content="Welcome to our online store"
+                    name='description'
+                    content='Welcome to our online store'
                 />
                 <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1"
+                    name='viewport'
+                    content='width=device-width, initial-scale=1'
                 />
-                <link rel="icon" href="/favicon.ico" />
+                <link rel='icon' href='/favicon.ico' />
             </Head>
 
             <div className={`${styles.main}`}>
@@ -45,9 +45,9 @@ export default function Home() {
                 {/* 라이프 타임특가 */}
                 <LazyRender minHeight={400}>
                     <TimeSale
-                        sectionId="TIMESALE-LIFE"
-                        title="오늘만 특가"
-                        buttonLabel="라이프 타임특가 더보기"
+                        sectionId='TIMESALE-LIFE'
+                        title='오늘만 특가'
+                        buttonLabel='라이프 타임특가 더보기'
                     />
                 </LazyRender>
 
@@ -61,9 +61,9 @@ export default function Home() {
                 {/* 키즈 타임특가 */}
                 <LazyRender minHeight={400}>
                     <TimeSale
-                        sectionId="TIMESALE-KIDS"
-                        title="키즈 타임특가"
-                        buttonLabel="키즈 타임특가 더보기"
+                        sectionId='TIMESALE-KIDS'
+                        title='키즈 타임특가'
+                        buttonLabel='키즈 타임특가 더보기'
                     />
                 </LazyRender>
 

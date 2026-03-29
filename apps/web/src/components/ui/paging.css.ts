@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, globalStyle } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const pagingContainer = style({
@@ -7,21 +7,20 @@ export const pagingContainer = style({
     justifyContent: 'center',
     width: '100%',
     gap: '0',
-    selectors: {
-        '& svg': {
-            width: '13px',
-            height: '13px',
-        },
-    },
     '@media': {
         'screen and (min-width: 640px)': {
             gap: '20px',
-            selectors: {
-                '& svg': {
-                    width: 'auto',
-                    height: 'auto',
-                },
-            },
+        },
+    },
+});
+
+globalStyle(`${pagingContainer} svg`, {
+    width: '13px',
+    height: '13px',
+    '@media': {
+        'screen and (min-width: 640px)': {
+            width: 'auto',
+            height: 'auto',
         },
     },
 });
@@ -107,11 +106,10 @@ export const buttonContents = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    selectors: {
-        '&:hover svg path': {
-            stroke: vars.color.black,
-        },
-    },
+});
+
+globalStyle(`${buttonContents}:hover svg path`, {
+    stroke: vars.color.black,
 });
 
 export const doubleCaretContainer = style({
