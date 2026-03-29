@@ -1,47 +1,64 @@
-// TODO: orderSheetData에서 주문 상품 목록을 가져와 렌더링
-// TODO: useOrderSheet hook으로 상품 데이터 조회
-// TODO: 상품 이미지, 브랜드명, 상품명, 수량, 가격 표시
-// TODO: CSS 모듈 적용
+import { DeliveryGroup } from '@/models/order/orderSheet';
+import { CURRENCY } from '@/utils/currency';
+import * as styles from '@/components/order/order-products/index.css';
 
-const OrderProducts = () => {
+interface OrderProductsProps {
+    deliveryGroups: DeliveryGroup[];
+}
+
+const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
     return (
-        <section>
-            <h3>주문 상품</h3>
+        <section className={styles.container}>
+            <h3 className={styles.title}>주문 상품</h3>
 
-            {/* TODO: 상품 목록 렌더링 */}
-            {/* orderSheetData.orderSheetProducts 또는 유사한 필드 사용 */}
-            <ul>
-                <li
-                    style={{
-                        display: 'flex',
-                        gap: '12px',
-                        padding: '16px 0',
-                        borderBottom: '1px solid #eee',
-                    }}
-                >
-                    {/* TODO: 상품 썸네일 이미지 */}
-                    <div
-                        style={{
-                            width: '80px',
-                            height: '80px',
-                            background: '#f5f5f5',
-                            borderRadius: '4px',
-                            flexShrink: 0,
-                        }}
-                    />
-                    <div style={{ flex: 1 }}>
-                        {/* TODO: 브랜드명 */}
-                        <p style={{ fontSize: '12px', color: '#999' }}>브랜드명</p>
-                        {/* TODO: 상품명 */}
-                        <p style={{ fontSize: '14px', fontWeight: 500 }}>상품명</p>
-                        {/* TODO: 수량 */}
-                        <p style={{ fontSize: '13px', color: '#666', marginTop: '8px' }}>
-                            수량 1개
-                        </p>
-                    </div>
-                    {/* TODO: 상품 금액 */}
-                    <p style={{ fontSize: '15px', fontWeight: 700 }}>0원</p>
-                </li>
+            <ul className={styles.productList}>
+                {deliveryGroups.map((group) =>
+                    group.orderProducts.map((product) =>
+                        product.orderProductOptions.map((option) => (
+                            <li
+                                key={`${product.productNo}-${option.optionNo}`}
+                                className={styles.productItem}
+                            >
+                                <img
+                                    src={option.imageUrl || product.imageUrl}
+                                    alt={product.productName}
+                                    className={styles.thumbnail}
+                                />
+                                <div className={styles.productInfo}>
+                                    <div
+                                        className={styles.productTextContainer}
+                                    >
+                                        {product.brandName && (
+                                            <p className={styles.brandName}>
+                                                {product.brandName}
+                                            </p>
+                                        )}
+                                        <p className={styles.productName}>
+                                            {product.productName}
+                                        </p>
+                                        {option.optionTitle && (
+                                            <p className={styles.optionText}>
+                                                {option.optionTitle}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className={styles.priceContainer}>
+                                        <p className={styles.orderCnt}>
+                                            {`수량 ${option.orderCnt}개`}
+                                        </p>
+
+                                        <p className={styles.buyAmt}>
+                                            {CURRENCY(
+                                                option.price.buyAmt,
+                                            ).format()}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        )),
+                    ),
+                )}
             </ul>
         </section>
     );
