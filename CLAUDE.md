@@ -4,24 +4,10 @@ Shopby 기반 headless 커머스 모노레포. API 문서: https://docs.shopby.c
 
 ## 구조
 
-```
-apps/
-  web/     → Next.js 16 (Pages Router) — 고객 쇼핑몰
-  admin/   → Vite + React 19 — 관리자 대시보드
-```
-
-- 패키지 매니저: **pnpm** (workspace)
-- 빌드 오케스트레이션: **Turborepo**
+- `apps/web`: Next.js 16 (Pages Router) — 고객 쇼핑몰
+- `apps/admin`: Vite + React 19 — 관리자 대시보드
 - `@/*` → `./src/*` (path alias)
-
-## 커맨드
-
-```bash
-pnpm dev:web        # web 앱 개발서버
-pnpm dev:admin      # admin 앱 개발서버
-pnpm build          # 전체 빌드
-pnpm lint           # 전체 lint
-```
+- 패키지 매니저: **pnpm** (workspace)
 
 ## 기술 스택
 
@@ -82,10 +68,12 @@ src/
 
 ### 패턴
 
+- 모든 import 경로는 `@/`를 포함한 절대 경로(Path Alias)를 사용함.
 - 페이지별 레이아웃: `getLayout` 패턴 사용 (`NextPageWithLayout` 타입)
 - 페이지 전환 애니메이션: AnimatePresence + motion.div (opacity/y)
 - API 에러 핸들링: Axios isAxiosError로 체크, 400은 retry 안함
 - env 변수: `NEXT_PUBLIC_` 접두사 필수 (클라이언트)
+- **Lenis (스무스 스크롤)**: 모달, 팝업, 바텀시트 등 내부에서 별도 스크롤이 필요한 영역에는 반드시 **`data-lenis-prevent`** 속성을 추가하여 메인 스크롤과의 간섭을 방지
 
 ### 절대 하지 말 것
 
@@ -93,14 +81,5 @@ src/
 - admin 앱에서 Vanilla Extract 사용 금지
 - `next/image` 대신 `<img>` 사용 (CDN 이미지, ESLint에서 no-img-element off)
 - pageExtensions: `['tsx', 'api.ts']` — 페이지는 .tsx, API 라우트는 .api.ts
-
-## 환경변수
-
-```
-NEXT_PUBLIC_CLIENT_ID    # Shopby 클라이언트 ID
-NEXT_PUBLIC_LOCALE       # 기본 로케일 (ko)
-NEXT_PUBLIC_CURRENCY     # 기본 통화 (KRW)
-NEXT_PUBLIC_SHOPBY_BASE_URL  # API 베이스 URL
-```
 
 ## 한국어로 응답
