@@ -1,38 +1,31 @@
-import { Ref } from 'react';
+import { clsx } from 'clsx';
+import { ChevronDown } from 'lucide-react';
+import { ForwardedRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactSelect, {
-    ActionMeta,
     GroupBase,
-    OnChangeValue,
     Props,
     SelectInstance,
     components,
 } from 'react-select';
-import { clsx } from 'clsx';
 
 import * as s from '@/components/ui/select/index.css';
-import { ChevronDown } from 'lucide-react';
 
-interface SelectProps<
+type SelectProps<
     Option,
     IsMulti extends boolean = false,
     Group extends GroupBase<Option> = GroupBase<Option>,
-> extends Omit<Props<Option, IsMulti, Group>, 'value' | 'onChange' | 'styles'> {
-    ref?: Ref<SelectInstance<Option, IsMulti, Group>>;
-    value?: OnChangeValue<Option, IsMulti> | null;
-    onChange?: (
-        newValue: OnChangeValue<Option, IsMulti>,
-        actionMeta: ActionMeta<Option>,
-    ) => void;
-}
+> = Omit<Props<Option, IsMulti, Group>, 'styles'> & {
+    ref?: ForwardedRef<SelectInstance<Option, IsMulti, Group>>;
+};
 
 const Select = <
-    Option = unknown,
+    Option,
     IsMulti extends boolean = false,
     Group extends GroupBase<Option> = GroupBase<Option>,
 >({
-    ref,
     classNames: overridenClassNames,
+    ref,
     ...props
 }: SelectProps<Option, IsMulti, Group>) => {
     const { t } = useTranslation();
