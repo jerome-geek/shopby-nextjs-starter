@@ -1,0 +1,108 @@
+import { useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
+import { z } from 'zod';
+
+import { profile } from '@/api/member';
+import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import { Button } from '@/components/ui/button';
+import { ErrorMessage } from '@/components/ui/form';
+import InputField from '@/components/ui/input/field';
+import FieldContainer from '@/components/ui/input/FieldContainer';
+import { useToast } from '@/hooks/ui';
+import { signupDuplicateCheckMemberIdSchema } from '@/schema';
+import { useEffect, useState } from 'react';
+
+const SignupFormId = () => {
+    const { t } = useTranslation();
+
+    const { register, getValues, setError, setValue, clearErrors, setFocus } =
+        useFormContext();
+
+    const { errors } = useFormState({
+        name: ['memberId', 'isDuplicateMemberId'],
+    });
+
+    const [isDuplicated, setIsDuplicated] = useState(false);
+
+    useEffect(() => {
+        if (!isDuplicated) {
+            setValue('isDuplicateMemberId', true, { shouldValidate: true });
+        }
+    }, [isDuplicated, setValue]);
+
+    const checkDuplicateMemberIdMutate = useMutation({
+        mutationFn: async (memberId: string) =>
+            await profile.checkDuplicateId({ memberId }),
+    });
+
+    const { addToast } = useToast();
+
+    const checkDuplicateMemberId = async () => {
+        const memberId = getValues('memberId');
+
+        console.log('memberId', memberId);
+
+        try {
+            signupDuplicateCheckMemberIdSchema.parse(memberId);
+            console.log('memberId is valid');
+        } catch (error) {
+            console.log('memberId is invalid', error);
+            if (error instanceof z.ZodError) {
+                setError('memberId', { message: error.issues[0].message });
+            }
+            return;
+        }
+
+        const { data: checkDuplicateMemberIdData } =
+            await checkDuplicateMemberIdMutate.mutateAsync(memberId);
+
+        if (checkDuplicateMemberIdData.exist) {
+            setError('memberId', {
+                message: t('이미 사용중인 아이디입니다.'),
+            });
+            setFocus('memberId');
+            setValue('isDuplicateMemberId', true, { shouldValidate: true });
+            setIsDuplicated(false);
+            return;
+        }
+
+        addToast({
+            message: t('사용 가능한 아이디입니다.'),
+        });
+        setValue('isDuplicateMemberId', false, { shouldValidate: true });
+        clearErrors('memberId');
+        setIsDuplicated(true);
+    };
+
+    return (
+        <WithMemberJoinConfig name='memberId' label={t('아이디')}>
+            <FieldContainer gridRatio={[3, 1]}>
+                <InputField
+                    {...register('memberId')}
+                    type='text'
+                    autoComplete='off'
+                    placeholder={t(
+                        '아이디를 입력해 주세요. (5자 이상의 영문, 숫자)',
+                    )}
+                    isError={!!errors.memberId || !!errors.isDuplicateMemberId}
+                />
+                <Button
+                    frame='solid'
+                    variant='apple'
+                    style={{
+                        height: '100%',
+                    }}
+                    onClick={checkDuplicateMemberId}
+                    disabled={checkDuplicateMemberIdMutate.isPending}
+                >
+                    {t('중복확인')}
+                </Button>
+            </FieldContainer>
+            <ErrorMessage name='memberId' />
+            <ErrorMessage name='isDuplicateMemberId' />
+        </WithMemberJoinConfig>
+    );
+};
+
+export default SignupFormId;

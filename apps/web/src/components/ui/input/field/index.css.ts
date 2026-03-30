@@ -35,6 +35,9 @@ export const inputField = style([
                 backgroundColor: vars.color.gray['20'],
                 pointerEvents: 'none',
             },
+            '&[data-error=true]': {
+                borderColor: vars.color.pink[80],
+            },
         },
 
         '@media': {

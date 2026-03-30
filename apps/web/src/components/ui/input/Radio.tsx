@@ -12,6 +12,7 @@ interface RadioFieldProps {
     }[];
     className?: string; // 전체 컨테이너용 클래스
     itemClassName?: string; // 개별 아이템용 클래스
+    disabled?: boolean;
 }
 
 const InputRadio = ({
@@ -22,6 +23,7 @@ const InputRadio = ({
     value,
     className,
     itemClassName,
+    disabled,
 }: RadioFieldProps) => {
     return (
         <RadioGroup.Root
@@ -30,6 +32,7 @@ const InputRadio = ({
             onValueChange={onChange}
             value={value}
             className={className || styles.radioGroupRoot}
+            disabled={disabled}
         >
             {options.map((option) => (
                 <div

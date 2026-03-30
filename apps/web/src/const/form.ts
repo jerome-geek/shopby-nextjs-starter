@@ -2053,7 +2053,7 @@ export const COUNTRY_CODE_LIST: { label: string; value: CountryCdType }[] = [
     },
 ];
 
-const STATE_LIST = [
+export const STATE_LIST = [
     {
         label: 'New York',
         value: 'NY',

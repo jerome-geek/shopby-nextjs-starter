@@ -1,57 +1,82 @@
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useContext } from 'react';
 
-import { Column, Row } from '@/components/ui/layout/flex';
-import * as Input from '@/components/Common/Input';
-import { WithMemberJoinConfig } from '@/components/HOC';
-import { useLocale } from '@/hooks/utils';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
+import InputField from '@/components/ui/input/field';
+import FieldContainer from '@/components/ui/input/FieldContainer';
+import { useLocale } from '@/hooks/utils';
 
-const SignupFormName = () => {
+const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
     const { t } = useTranslation();
 
-    const value = useContext(CertificationCheckContext);
+    const { register } = useFormContext();
 
-    const isAuthenticationByPhone = value?.isAuthenticationByPhone;
+    const { errors } = useFormState({
+        name: ['memberName', 'lastName', 'firstName'],
+    });
 
-    const {
-        register,
-        getValues,
-        formState: { errors },
-    } = useFormContext();
-
-    const { isKorean } = useLocale();
+    const { isKorean, isJapan } = useLocale();
 
     return (
-        <WithMemberJoinConfig name="memberName" label={t('이름')}>
-            {isKorean ? (
-                <Input.FieldContainer>
-                    <Input.Field
+        <WithMemberJoinConfig name='memberName' label={t('이름')}>
+            {isKorean && (
+                <>
+                    <InputField
                         {...register('memberName')}
                         placeholder={t('이름을 입력해 주세요.')}
-                        readOnly={
-                            !!getValues('memberName') && isAuthenticationByPhone
-                        }
+                        type='text'
+                        readOnly={disabled}
+                        isError={!!errors.memberName}
                     />
-                    <ErrorMessage name="memberName" />
-                </Input.FieldContainer>
-            ) : (
-                <Column gap="6px" style={{ width: '100%' }}>
-                    <Row gap="8px">
-                        <Input.Field
-                            {...register('firstName')}
-                            placeholder={t('이름을 입력해주세요.')}
-                        />
-                        <Input.Field
+                    <ErrorMessage name='memberName' />
+                </>
+            )}
+            {isJapan && (
+                <>
+                    <FieldContainer gridRatio={[1, 1]}>
+                        <InputField
                             {...register('lastName')}
-                            placeholder={t('성을 입력해주세요.')}
+                            placeholder={t('성을 입력해 주세요.')}
+                            type='text'
+                            readOnly={disabled}
+                            isError={!!errors.lastName}
                         />
-                    </Row>
-                    <ErrorMessage name="firstName" />
-                    <ErrorMessage name="lastName" />
-                </Column>
+                        <InputField
+                            {...register('firstName')}
+                            placeholder={t('이름을 입력해 주세요.')}
+                            type='text'
+                            readOnly={disabled}
+                            isError={!!errors.firstName}
+                        />
+                    </FieldContainer>
+
+                    <ErrorMessage name='lastName' />
+                    <ErrorMessage name='firstName' />
+                </>
+            )}
+            {!isKorean && !isJapan && (
+                <>
+                    <FieldContainer gridRatio={[1, 1]}>
+                        <InputField
+                            {...register('firstName')}
+                            placeholder={t('이름을 입력해 주세요.')}
+                            type='text'
+                            readOnly={disabled}
+                            isError={!!errors.firstName}
+                        />
+                        <InputField
+                            {...register('lastName')}
+                            placeholder={t('성을 입력해 주세요.')}
+                            type='text'
+                            readOnly={disabled}
+                            isError={!!errors.lastName}
+                        />
+                    </FieldContainer>
+
+                    <ErrorMessage name='firstName' />
+                    <ErrorMessage name='lastName' />
+                </>
             )}
         </WithMemberJoinConfig>
     );

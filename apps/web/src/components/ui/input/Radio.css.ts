@@ -3,9 +3,17 @@ import { vars } from '@/styles/theme.css';
 
 export const radioGroupRoot = style({
     display: 'flex',
-    flexDirection: 'column',
+    flexWrap: 'wrap',
     alignItems: 'flex-start',
-    gap: '8px',
+    gap: '24px',
+
+    selectors: {
+        '&[data-disabled]': {
+            opacity: 0.5,
+            pointerEvents: 'none',
+            cursor: 'not-allowed',
+        },
+    },
 });
 
 export const radioItemContainer = style({

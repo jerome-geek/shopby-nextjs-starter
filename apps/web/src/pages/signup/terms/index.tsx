@@ -12,19 +12,21 @@ import { overlay } from 'overlay-kit';
 import { ReactElement, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { shopbyRequest } from '@/api/core/request';
 import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
 import InputCheckbox from '@/components/ui/input/Checkbox';
 import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
-import { useTermList } from '@/hooks/query/manage/terms';
-import useDialog from '@/hooks/utils/useDialog';
-import { useResponsive } from '@/hooks/utils/useResponsive';
-import { NextPageWithLayout } from '@/pages/_app';
 import { CertificationCheckContext } from '@/context/certificationCheck';
+import { useTermList } from '@/hooks/query/manage/terms';
+import useSnsLogin from '@/hooks/useSnsLogin';
+import { useKcpCertification } from '@/hooks/utils';
+import useDialog from '@/hooks/utils/useDialog';
+import { NextPageWithLayout } from '@/pages/_app';
 
-import * as styles from './index.css';
+import * as styles from '@/pages/signup/terms/index.css';
 
 // 회원가입 약관 리스트 정의
 const SIGN_UP_TERM_LIST = [
@@ -50,20 +52,20 @@ type ExtraJoinData = {
     code?: string | string[];
     expiry?: string | string[];
     returnUrl?: string | string[];
+    key?: string;
 };
 
 const SignupTerms: NextPageWithLayout = () => {
     const { t } = useTranslation();
+
     const router = useRouter();
-    const { isMobile } = useResponsive();
 
     const { openDialog } = useDialog();
 
     const value = useContext(CertificationCheckContext);
-
     const isAuthenticationByPhone = value?.isAuthenticationByPhone;
 
-    console.log(value);
+    const { openKcpAuthRegister } = useSnsLogin();
 
     // 체크된 약관 타입들을 관리 (Anti-pattern: 객체 배열 상태 관리 지양)
     const [checkedTypes, setCheckedTypes] = useState<string[]>([]);
@@ -78,11 +80,12 @@ const SignupTerms: NextPageWithLayout = () => {
             ),
         },
     });
-    console.log('🚀 ~ SignupTerms ~ termListData:', termListData);
 
     // 화면에 노출할 약관 리스트 (Anti-pattern: Effect를 통한 상태 동기화 대신 useMemo 사용)
     const visibleTerms = useMemo(() => {
-        if (!termListData) return [];
+        if (!termListData) {
+            return [];
+        }
 
         const usedTerms = pipe(
             termListData,
@@ -101,7 +104,10 @@ const SignupTerms: NextPageWithLayout = () => {
 
     const isAllAgreed = useMemo(() => {
         const totalCount = visibleTerms.length + OPT_IN_LIST.length;
-        if (totalCount === 0) return false;
+        if (totalCount === 0) {
+            return false;
+        }
+
         return (
             checkedTypes.length === totalCount &&
             every(
@@ -189,6 +195,11 @@ const SignupTerms: NextPageWithLayout = () => {
             return;
         }
 
+        if (isAuthenticationByPhone) {
+            openKcpAuthRegister();
+            return;
+        }
+
         const { provider, accessToken, refreshToken, code, expiry, returnUrl } =
             router.query;
 
@@ -201,6 +212,38 @@ const SignupTerms: NextPageWithLayout = () => {
             returnUrl,
         });
     };
+
+    useKcpCertification({
+        onNext: async (data: {
+            key?: string;
+            accessToken?: string;
+            provider?: string;
+            code?: string;
+            expiry?: string;
+            returnUrl?: string;
+        }) => {
+            try {
+                if (data.provider && data.accessToken && data.key) {
+                    await shopbyRequest({
+                        method: 'POST',
+                        url: '/profile/rename',
+                        data: {
+                            key: data.key,
+                        },
+                        headers: {
+                            'Shop-By-Authorization': `Bearer ${data.accessToken}`,
+                        },
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+            }
+
+            moveNextPage({
+                ...data,
+            });
+        },
+    });
 
     return (
         <div className={styles.container}>
