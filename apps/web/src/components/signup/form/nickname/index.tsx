@@ -22,7 +22,7 @@ const SignupFormNickname = () => {
         name: ['nickname', 'isDuplicateNickname'],
     });
 
-    const [isDuplicated, setIsDuplicated] = useState(false);
+    const [isDuplicated, setIsDuplicated] = useState(true);
 
     const { data: mallData } = useMall();
 
@@ -38,8 +38,8 @@ const SignupFormNickname = () => {
             return;
         }
 
-        if (!isDuplicated) {
-            setValue('isDuplicateNickname', true, { shouldValidate: true });
+        if (isDuplicated) {
+            setValue('isDuplicateNickname', true);
         }
     }, [isDuplicated, isNicknameNotUsed, mallData, setValue]);
 
@@ -66,7 +66,7 @@ const SignupFormNickname = () => {
             });
             setFocus('nickname');
             setValue('isDuplicateNickname', true, { shouldValidate: true });
-            setIsDuplicated(false);
+            setIsDuplicated(true);
             return;
         }
 
@@ -75,7 +75,7 @@ const SignupFormNickname = () => {
         });
         setValue('isDuplicateNickname', false, { shouldValidate: true });
         clearErrors('nickname');
-        setIsDuplicated(true);
+        setIsDuplicated(false);
     };
 
     return (
@@ -84,7 +84,7 @@ const SignupFormNickname = () => {
                 <InputField
                     {...register('nickname', {
                         onChange: () => {
-                            setIsDuplicated(false);
+                            setIsDuplicated(true);
                         },
                     })}
                     type='text'

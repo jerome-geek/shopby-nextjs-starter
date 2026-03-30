@@ -2,63 +2,89 @@
 import { includes, join, map, pipe, prop } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 
 import { AuthLayout } from '@/components/layout/auth';
 import {
     SignupFormAddress,
+    SignupFormBirthday,
     SignupFormEmail,
     SignupFormId,
     SignupFormMobile,
     SignupFormName,
     SignupFormNickname,
     SignupFormPassword,
-    SignupFormTelephone,
-    SignupFormBirthday,
     SignupFormSex,
+    SignupFormTelephone,
 } from '@/components/signup/form';
 import { Button } from '@/components/ui/button';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useProfileMutation } from '@/hooks/mutations';
+import { useMall } from '@/hooks/query/admin/mall';
 import { useSignupInitialize } from '@/hooks/signup';
 import { useDialog, useGlobal } from '@/hooks/utils';
 import { NcpOpenIdProviderType } from '@/models';
 import { NextPageWithLayout } from '@/pages/_app';
 import { createSignupFormSchema, SignupFormSchemaType } from '@/schema';
-import { useMall } from '@/hooks/query/admin/mall';
+import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
+import { oauth2 } from '@/api/auth';
+import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
 
 import * as styles from '@/pages/signup/register/index.css';
 
-const SignupRegister: NextPageWithLayout = () => {
+type SignupRegisterProps = {
+    accessToken: string;
+    refreshToken: string;
+    provider: NcpOpenIdProviderType | '';
+    expiry: number;
+    terms: any;
+    smsAgreed: boolean;
+    directMailAgreed: boolean;
+    isSocialLogin: boolean;
+    certificationKey: string;
+};
+
+const firstQueryString = (
+    value: string | string[] | undefined | null,
+): string => {
+    if (typeof value === 'string') {
+        return value;
+    }
+    if (Array.isArray(value)) {
+        return value[0] ?? '';
+    }
+    return '';
+};
+
+const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
+    accessToken,
+    provider,
+    refreshToken,
+    terms,
+    smsAgreed,
+    directMailAgreed,
+    isSocialLogin,
+    certificationKey,
+    expiry,
+}) => {
     const { t } = useTranslation();
 
     const { openDialog } = useDialog();
 
-    const { countryCd } = useGlobal();
+    const router = useRouter();
+
+    const { countryCd, isKorean, isJapan } = useGlobal();
+
+    const { isMyApp } = useMyApp();
 
     const { data: mallData } = useMall();
-    const router = useRouter();
-    const query = router.query;
-
-    const key = query?.key as string;
-    const accessToken = query?.accessToken as string;
-    const provider = query?.provider as NcpOpenIdProviderType;
-    const expiry = Number(query?.expiry) || 0;
-
-    const termsStr = query?.terms as string;
-    const terms = (termsStr ? termsStr.split(',') : []) as any;
-    const smsAgreed = query?.smsAgreed === 'true';
-    const directMailAgreed = query?.directMailAgreed === 'true';
-
-    const isSocialLogin = !!provider;
-
-    console.log('directMailAgreed', directMailAgreed);
-    console.log('smsAgreed', smsAgreed);
 
     const value = useContext(CertificationCheckContext);
 
@@ -100,17 +126,14 @@ const SignupRegister: NextPageWithLayout = () => {
         reset,
         formState: { isSubmitting },
         handleSubmit,
-        watch,
     } = methods;
-
-    console.log(watch());
 
     const { getSocialData, kcpCertificationResultData } = useSignupInitialize({
         reset,
         accessToken,
         isSocialLogin,
-        key,
-        provider,
+        key: certificationKey,
+        provider: provider as NcpOpenIdProviderType,
     });
 
     const formValueDisabled = {
@@ -147,7 +170,74 @@ const SignupRegister: NextPageWithLayout = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            console.log('data', data);
+            const submitData = schema.parse({
+                ...data,
+                memberName: isKorean
+                    ? data.memberName
+                    : isJapan
+                    ? `${data.lastName}${data.firstName}`
+                    : `${data.firstName}${data.lastName}`,
+                passwordConfirm: isSocialLogin
+                    ? undefined
+                    : data.passwordConfirm,
+                extraInfo: data.extraInfo,
+            });
+
+            if (isSocialLogin) {
+                await openIdRegisterMutate({
+                    data: submitData,
+                    accessToken,
+                });
+
+                if (isMyApp) {
+                    router.replace(PATHS.SIGNUP.COMPLETE);
+                    return;
+                }
+
+                accessTokenCookie.set(accessToken, expiry);
+                refreshTokenCookie.set(refreshToken, expiry * 1000);
+
+                window.location.replace(PATHS.SIGNUP.COMPLETE);
+                return;
+            }
+
+            const memberId = submitData.memberId ?? '';
+            const password = submitData.password ?? '';
+
+            await registerMutate(
+                {
+                    data: {
+                        ...submitData,
+                        memberId,
+                        password,
+                    },
+                },
+                {
+                    onSuccess: async () => {
+                        if (isMyApp) {
+                            router.replace(PATHS.SIGNUP.COMPLETE);
+                            return;
+                        }
+
+                        const { data } = await oauth2.issueAccessToken({
+                            memberId,
+                            password,
+                            keepLogin: true,
+                        });
+
+                        accessTokenCookie.set(
+                            data.accessToken || '',
+                            data.expiresIn,
+                        );
+                        refreshTokenCookie.set(
+                            data.refreshToken || '',
+                            data.refreshTokenExpiresIn,
+                        );
+
+                        window.location.replace(PATHS.SIGNUP.COMPLETE);
+                    },
+                },
+            );
         } catch (error) {
             if (isAxiosError(error)) {
                 const message = isAxiosError(error)
@@ -224,3 +314,38 @@ SignupRegister.getLayout = (page) => (
 );
 
 export default SignupRegister;
+
+export const getServerSideProps: GetServerSideProps<
+    SignupRegisterProps
+> = async (context) => {
+    const query = context.query;
+
+    const certificationKey = firstQueryString(query.key);
+    const accessToken = firstQueryString(query.accessToken);
+    const provider = firstQueryString(query.provider) as
+        | NcpOpenIdProviderType
+        | '';
+    const refreshToken = firstQueryString(query.refreshToken);
+    const expiry = Number(firstQueryString(query.expiry)) || 0;
+
+    const termsStr = firstQueryString(query.terms);
+    const terms = (termsStr ? termsStr.split(',') : []) as any;
+    const smsAgreed = query?.smsAgreed === 'true';
+    const directMailAgreed = query?.directMailAgreed === 'true';
+
+    const isSocialLogin = !!provider;
+
+    return {
+        props: {
+            accessToken,
+            refreshToken,
+            provider,
+            expiry,
+            terms,
+            smsAgreed,
+            directMailAgreed,
+            isSocialLogin,
+            certificationKey,
+        },
+    };
+};

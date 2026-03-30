@@ -16,6 +16,7 @@ import {
 
 type JoinTermsAgreement =
     | 'USE'
+    | 'PI_PROCESS'
     | 'PI_COLLECTION_AND_USE_REQUIRED'
     | 'PI_COLLECTION_AND_USE_OPTIONAL'
     | 'PI_PROCESS_CONSIGNMENT'
@@ -395,19 +396,20 @@ export interface CreateBrandMemberProfileData {
     pushNotificationAgreed?: boolean;
 }
 
-export interface CreateBrandMemberProfileResponse extends Omit<
-    CreateProfileResponse,
-    | 'extraInfo'
-    | 'memberGradeNo'
-    | 'pushNotificationDisagreeYmdt'
-    | 'smsDisagreeYmdt'
-    | 'memberGradeImageUrl'
-    | 'certificationType'
-    | 'recommender'
-    | 'registrationNo'
-    | 'customTermsAgreement'
-    | 'directMailDisagreeYmdt'
-> {}
+export interface CreateBrandMemberProfileResponse
+    extends Omit<
+        CreateProfileResponse,
+        | 'extraInfo'
+        | 'memberGradeNo'
+        | 'pushNotificationDisagreeYmdt'
+        | 'smsDisagreeYmdt'
+        | 'memberGradeImageUrl'
+        | 'certificationType'
+        | 'recommender'
+        | 'registrationNo'
+        | 'customTermsAgreement'
+        | 'directMailDisagreeYmdt'
+    > {}
 
 export interface UpdatePasswordByCertificationNoData {
     /** 비밀번호 찾기 방법 */
@@ -687,7 +689,7 @@ export interface SignUpByOpenIdData {
     /** 도로명주소 상세 (nullable) */
     detailAddress?: string;
     /** 추가 선택 동의 항목 (nullable) */
-    customTermsNos?: number[];
+    customTermsNos?: (boolean | string | number)[];
     /** (국내, 해외 겸용) 국내: 군/구, 해외: 주 (nullable) */
     state?: string;
     /** 이메일 (nullable) */

@@ -39,10 +39,10 @@ const useProfileMutation = () => {
                 }),
             onError: (error) => {
                 const errorMessage = isAxiosError(error)
-                    ? (error.response?.data.message ??
+                    ? error.response?.data.message ??
                       t(
                           '회원가입에 실패했습니다.<br />관리자에게 문의해주세요.',
-                      ))
+                      )
                     : t(
                           '회원가입에 실패했습니다.<br />관리자에게 문의해주세요.',
                       );
@@ -53,8 +53,18 @@ const useProfileMutation = () => {
         }),
 
         update: useMutation({
-            mutationFn: async ({ data }: { data: UpdateProfileData }) =>
-                await profile.updateProfile(data),
+            mutationFn: async ({
+                data,
+                accessToken,
+            }: {
+                data: UpdateProfileData;
+                accessToken?: string;
+            }) =>
+                await profile.updateProfile(data, {
+                    headers: {
+                        'Shop-By-Authorization': `Bearer ${accessToken}`,
+                    },
+                }),
         }),
 
         delete: useMutation({

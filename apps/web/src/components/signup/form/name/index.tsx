@@ -12,7 +12,13 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
 
     const { register } = useFormContext();
 
-    const { errors } = useFormState({
+    const {
+        errors: {
+            memberName: memberNameError,
+            lastName: lastNameError,
+            firstName: firstNameError,
+        },
+    } = useFormState({
         name: ['memberName', 'lastName', 'firstName'],
     });
 
@@ -27,7 +33,7 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                         placeholder={t('이름을 입력해 주세요.')}
                         type='text'
                         readOnly={disabled}
-                        isError={!!errors.memberName}
+                        isError={!!memberNameError}
                     />
                     <ErrorMessage name='memberName' />
                 </>
@@ -40,14 +46,14 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                             placeholder={t('성을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!errors.lastName}
+                            isError={!!lastNameError}
                         />
                         <InputField
                             {...register('firstName')}
                             placeholder={t('이름을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!errors.firstName}
+                            isError={!!firstNameError}
                         />
                     </FieldContainer>
 
@@ -63,14 +69,14 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                             placeholder={t('이름을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!errors.firstName}
+                            isError={!!firstNameError}
                         />
                         <InputField
                             {...register('lastName')}
                             placeholder={t('성을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!errors.lastName}
+                            isError={!!lastNameError}
                         />
                     </FieldContainer>
 

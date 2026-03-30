@@ -15,15 +15,17 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
 
     const { control, setValue } = useFormContext();
 
-    const { errors } = useFormState({
+    const {
+        errors: { email: emailError, isDuplicateEmail: isDuplicateEmailError },
+    } = useFormState({
         name: ['email', 'isDuplicateEmail'],
     });
 
-    const [isDuplicated, setIsDuplicated] = useState(false);
+    const [isDuplicated, setIsDuplicated] = useState(true);
 
     useEffect(() => {
-        if (!isDuplicated) {
-            setValue('isDuplicateEmail', true, { shouldValidate: true });
+        if (isDuplicated) {
+            setValue('isDuplicateEmail', true);
         }
     }, [isDuplicated, setValue]);
 
@@ -53,13 +55,12 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                         onChange(
                                             `${e.target.value}@${emailDomain}`,
                                         );
-                                        setIsDuplicated(false);
+                                        setIsDuplicated(true);
                                     }}
                                     placeholder={t('이메일을 입력해 주세요.')}
                                     readOnly={disabled}
                                     isError={
-                                        !!errors.email ||
-                                        !!errors.isDuplicateEmail
+                                        !!emailError || !!isDuplicateEmailError
                                     }
                                 />
                                 <span
@@ -80,11 +81,10 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                         onChange(
                                             `${emailId}@${e.target.value}`,
                                         );
-                                        setIsDuplicated(false);
+                                        setIsDuplicated(true);
                                     }}
                                     isError={
-                                        !!errors.email ||
-                                        !!errors.isDuplicateEmail
+                                        !!emailError || !!isDuplicateEmailError
                                     }
                                 />
                             </FieldContainer>
@@ -107,7 +107,7 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                         }
 
                                         onChange(`${emailId}@${item.value}`);
-                                        setIsDuplicated(false);
+                                        setIsDuplicated(true);
                                     }}
                                 />
                             )}

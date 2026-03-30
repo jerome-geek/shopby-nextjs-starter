@@ -1,7 +1,8 @@
-import { useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
+import { useEffect, useState } from 'react';
 
 import { profile } from '@/api/member';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
@@ -11,7 +12,6 @@ import InputField from '@/components/ui/input/field';
 import FieldContainer from '@/components/ui/input/FieldContainer';
 import { useToast } from '@/hooks/ui';
 import { signupDuplicateCheckMemberIdSchema } from '@/schema';
-import { useEffect, useState } from 'react';
 
 const SignupFormId = () => {
     const { t } = useTranslation();
@@ -19,15 +19,20 @@ const SignupFormId = () => {
     const { register, getValues, setError, setValue, clearErrors, setFocus } =
         useFormContext();
 
-    const { errors } = useFormState({
+    const {
+        errors: {
+            memberId: memberIdError,
+            isDuplicateMemberId: isDuplicateMemberIdError,
+        },
+    } = useFormState({
         name: ['memberId', 'isDuplicateMemberId'],
     });
 
-    const [isDuplicated, setIsDuplicated] = useState(false);
+    const [isDuplicated, setIsDuplicated] = useState(true);
 
     useEffect(() => {
-        if (!isDuplicated) {
-            setValue('isDuplicateMemberId', true, { shouldValidate: true });
+        if (isDuplicated) {
+            setValue('isDuplicateMemberId', true);
         }
     }, [isDuplicated, setValue]);
 
@@ -63,7 +68,7 @@ const SignupFormId = () => {
             });
             setFocus('memberId');
             setValue('isDuplicateMemberId', true, { shouldValidate: true });
-            setIsDuplicated(false);
+            setIsDuplicated(true);
             return;
         }
 
@@ -72,20 +77,24 @@ const SignupFormId = () => {
         });
         setValue('isDuplicateMemberId', false, { shouldValidate: true });
         clearErrors('memberId');
-        setIsDuplicated(true);
+        setIsDuplicated(false);
     };
 
     return (
         <WithMemberJoinConfig name='memberId' label={t('아이디')}>
             <FieldContainer gridRatio={[3, 1]}>
                 <InputField
-                    {...register('memberId')}
+                    {...register('memberId', {
+                        onChange: () => {
+                            setIsDuplicated(true);
+                        },
+                    })}
                     type='text'
                     autoComplete='off'
                     placeholder={t(
                         '아이디를 입력해 주세요. (5자 이상의 영문, 숫자)',
                     )}
-                    isError={!!errors.memberId || !!errors.isDuplicateMemberId}
+                    isError={!!memberIdError || !!isDuplicateMemberIdError}
                 />
                 <Button
                     frame='solid'

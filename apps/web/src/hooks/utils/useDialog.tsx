@@ -17,6 +17,7 @@ interface UseDialogProps {
     confirm?: () => void;
     confirmText?: string;
     cancelText?: string;
+    cancel?: () => void;
     options?: {
         overlayId?: string | undefined;
     };
@@ -43,6 +44,7 @@ const useDialog = () => {
             confirm,
             confirmText,
             cancelText,
+            cancel,
             options,
         }: UseDialogProps) => {
             overlay.open((props) => {
@@ -67,6 +69,10 @@ const useDialog = () => {
                                 />
                             )
                         }
+                        close={() => {
+                            cancel?.();
+                            props.close();
+                        }}
                         confirm={confirm}
                         confirmText={confirmText}
                         cancelText={cancelText}
@@ -129,7 +135,7 @@ const useDialog = () => {
             return (
                 <ConfirmDialog
                     {...props}
-                    iconType="auth"
+                    iconType='auth'
                     Title={
                         <p className={styles.title}>
                             {t('로그인 후 이용하실 수 있습니다.')}
@@ -143,7 +149,11 @@ const useDialog = () => {
                     confirm={() => {
                         overlay.closeAll();
 
-                        const currentUrl = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+                        const currentUrl = `${pathname}${
+                            searchParams.toString()
+                                ? `?${searchParams.toString()}`
+                                : ''
+                        }`;
                         const params = new URLSearchParams({
                             returnUrl: currentUrl,
                         });

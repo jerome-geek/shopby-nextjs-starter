@@ -44,21 +44,27 @@ const useSignupInitialize = ({
             return;
         }
 
-        reset((prev) => ({
-            ...prev,
-            isNicknameRequired:
-                mallData.memberJoinConfig.nickname === 'REQUIRED',
-            isDuplicateNickname:
-                mallData.memberJoinConfig.nickname !== 'NOT_USED',
-            isMobileNoRequired:
-                mallData.memberJoinConfig.mobileNo === 'REQUIRED',
-            isTelephoneNoRequired:
-                mallData.memberJoinConfig.phoneNo === 'REQUIRED',
-            isAddressRequired: mallData.memberJoinConfig.address === 'REQUIRED',
-            isBirthdayRequired:
-                mallData.memberJoinConfig.birthday === 'REQUIRED',
-            isSexRequired: mallData.memberJoinConfig.sex === 'REQUIRED',
-        }));
+        reset(
+            (prev) => ({
+                ...prev,
+                isNicknameRequired:
+                    mallData.memberJoinConfig.nickname === 'REQUIRED',
+                isDuplicateNickname:
+                    mallData.memberJoinConfig.nickname !== 'NOT_USED',
+                isMobileNoRequired:
+                    mallData.memberJoinConfig.mobileNo === 'REQUIRED',
+                isTelephoneNoRequired:
+                    mallData.memberJoinConfig.phoneNo === 'REQUIRED',
+                isAddressRequired:
+                    mallData.memberJoinConfig.address === 'REQUIRED',
+                isBirthdayRequired:
+                    mallData.memberJoinConfig.birthday === 'REQUIRED',
+                isSexRequired: mallData.memberJoinConfig.sex === 'REQUIRED',
+            }),
+            {
+                keepFieldsRef: true,
+            },
+        );
     }, [mallData, reset]);
 
     useEffect(() => {
@@ -68,25 +74,28 @@ const useSignupInitialize = ({
 
         const birthday = getSocialData.birthday?.replace(/-/g, '') ?? '';
 
-        reset((prev) => {
-            return {
-                ...prev,
-                providerType: getSocialData.providerType ?? undefined,
-                memberName: getSocialData.memberName || '',
-                mobileNo: getSocialData.mobileNo ?? '',
-                // NOTE: 애플,라인은 메일정보가 없으며, 구글은 마스킹되서 옴
-                email: includes(provider, ['ncp_apple', 'ncp_line'])
-                    ? ''
-                    : getSocialData.email ?? '',
-                sex:
-                    getSocialData.sex && getSocialData.sex !== 'X'
-                        ? getSocialData.sex
-                        : undefined,
-                birthYear: birthday.slice(0, 4),
-                birthMonth: birthday.slice(4, 6),
-                birthDay: birthday.slice(6, 8),
-            };
-        });
+        reset(
+            (prev) => {
+                return {
+                    ...prev,
+                    providerType: getSocialData.providerType ?? undefined,
+                    memberName: getSocialData.memberName || '',
+                    mobileNo: getSocialData.mobileNo ?? '',
+                    // NOTE: 애플,라인은 메일정보가 없으며, 구글은 마스킹되서 옴
+                    email: includes(provider, ['ncp_apple', 'ncp_line'])
+                        ? ''
+                        : getSocialData.email ?? '',
+                    sex:
+                        getSocialData.sex && getSocialData.sex !== 'X'
+                            ? getSocialData.sex
+                            : undefined,
+                    birthday: birthday?.length === 8 ? birthday : '',
+                };
+            },
+            {
+                keepFieldsRef: true,
+            },
+        );
     }, [getSocialData, provider, reset]);
 
     useEffect(() => {
@@ -97,22 +106,25 @@ const useSignupInitialize = ({
         const birthday =
             kcpCertificationResultData.birthday?.replace(/-/g, '') ?? '';
 
-        reset((prev) => {
-            return {
-                ...prev,
-                memberName: kcpCertificationResultData.name || '',
-                mobileNo: kcpCertificationResultData.phone ?? '',
-                sex: kcpCertificationResultData.sexCode
-                    ? kcpCertificationResultData.sexCode === '01'
-                        ? 'M'
-                        : 'F'
-                    : undefined,
-                birthYear: birthday.slice(0, 4),
-                birthMonth: birthday.slice(4, 6),
-                birthDay: birthday.slice(6, 8),
-                ci: kcpCertificationResultData.ci ?? '',
-            };
-        });
+        reset(
+            (prev) => {
+                return {
+                    ...prev,
+                    memberName: kcpCertificationResultData.name || '',
+                    mobileNo: kcpCertificationResultData.phone ?? '',
+                    sex: kcpCertificationResultData.sexCode
+                        ? kcpCertificationResultData.sexCode === '01'
+                            ? 'M'
+                            : 'F'
+                        : undefined,
+                    birthday: birthday?.length === 8 ? birthday : '',
+                    ci: kcpCertificationResultData.ci ?? '',
+                };
+            },
+            {
+                keepFieldsRef: true,
+            },
+        );
     }, [kcpCertificationResultData, reset]);
 
     return {

@@ -126,6 +126,7 @@ export const SHOPBY_TERM_HISTORY_MAP = {
 
 export const SHOPBY_JOIN_AGREEMENT_TYPE_MAP = {
     USE: '이용약관',
+    PI_PROCESS: '개인정보처리방침',
     PI_COLLECTION_AND_USE_REQUIRED: '회원가입시 개인정보 수집/이용(필수)',
     PI_COLLECTION_AND_USE_OPTIONAL: '회원가입 시 개인정보 수집/이용(선택)',
     PI_PROCESS_CONSIGNMENT: '개인정보 처리/위탁',

@@ -144,7 +144,7 @@ const EmailAuthentication = ({
             });
             setFocus('email');
             setValue('isDuplicateEmail', true, { shouldValidate: true });
-            setIsDuplicated(false);
+            setIsDuplicated(true);
             return;
         }
 
@@ -153,7 +153,7 @@ const EmailAuthentication = ({
         });
         setValue('isDuplicateEmail', false, { shouldValidate: true });
         clearErrors('email');
-        setIsDuplicated(true);
+        setIsDuplicated(false);
     };
 
     const onSendButtonClick = async () => {
