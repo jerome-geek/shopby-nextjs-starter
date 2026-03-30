@@ -1,5 +1,5 @@
 import { LazyRender } from '@/components/common';
-import { HeroBanner } from '@/components/hero-banner';
+import { HeroBanner } from '@/components/banner/hero';
 import Best from '@/components/section/best';
 import TimeSale from '@/components/section/timeSale';
 import * as styles from '@/styles/Home.css';
@@ -14,9 +14,9 @@ export default function ShopMain() {
             {/* 라이프 타임특가 */}
             <LazyRender minHeight={400}>
                 <TimeSale
-                    sectionId="TIMESALE-LIFE"
-                    title="오늘만 특가"
-                    buttonLabel="라이프 타임특가 더보기"
+                    sectionId='TIMESALE-LIFE'
+                    title='오늘만 특가'
+                    buttonLabel='라이프 타임특가 더보기'
                 />
             </LazyRender>
 
@@ -25,9 +25,9 @@ export default function ShopMain() {
             {/* 키즈 타임특가 */}
             <LazyRender minHeight={400}>
                 <TimeSale
-                    sectionId="TIMESALE-KIDS"
-                    title="오늘만 특가"
-                    buttonLabel="키즈 타임특가 더보기"
+                    sectionId='TIMESALE-KIDS'
+                    title='오늘만 특가'
+                    buttonLabel='키즈 타임특가 더보기'
                 />
             </LazyRender>
 
