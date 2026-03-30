@@ -191,7 +191,8 @@ const createSignupFormSchema = ({ isSocialLogin }: SignupSchemaOptions) =>
                 ]),
             ),
             extraInfo: z
-                .array(
+                .record(
+                    z.string(),
                     z.object({
                         extraInfoNo: z.number(),
                         extraInfoName: z.string(),

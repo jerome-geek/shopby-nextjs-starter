@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { join, map, pipe, prop } from '@fxts/core';
+import { filter, find, join, map, pipe, prop, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
 import { GetServerSideProps } from 'next';
@@ -37,6 +37,8 @@ import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 import { getSafeQueryString } from '@/utils/query';
 
 import * as styles from '@/pages/signup/register/index.css';
+import { useMemberExtraInfo } from '@/hooks/query/member/memberConfig';
+import MemberConfig from '@/components/signup/member-config';
 
 type SignupRegisterProps = {
     accessToken: string;
@@ -73,6 +75,8 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
 
     const { data: mallData } = useMall();
 
+    const { data: memberExtraInfoData } = useMemberExtraInfo();
+
     const schema = createSignupFormSchema({ isSocialLogin });
 
     const methods = useForm<SignupFormSchemaType>({
@@ -108,6 +112,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
     const {
         reset,
         formState: { isSubmitting },
+        setError,
         handleSubmit,
     } = methods;
 
@@ -157,13 +162,71 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 return;
             }
 
+            // NOTE: 추가 정보 필수 항목 여부 체크
+            const missingRequiredExtraInfo = pipe(
+                memberExtraInfoData?.extraInfoContents ?? [],
+                filter((item) => {
+                    if (item.status !== 'REQUIRED') {
+                        return false;
+                    }
+
+                    const filledExtraInfo = find(
+                        (e) => e.extraInfoNo === item.extraInfoNo,
+                        Object.values(submitData.extraInfo ?? {}),
+                    );
+
+                    if (!filledExtraInfo) {
+                        return true;
+                    }
+
+                    if (
+                        item.extraInfoType === 'TEXTBOX' ||
+                        item.extraInfoType === 'IMAGE'
+                    ) {
+                        return !filledExtraInfo.extraInfoOptionTextContent;
+                    }
+
+                    if (
+                        item.extraInfoType === 'CHECKBOX' ||
+                        item.extraInfoType === 'DROPDOWN' ||
+                        item.extraInfoType === 'RADIOBUTTON'
+                    ) {
+                        return !filledExtraInfo.extraInfoOptionNos?.length;
+                    }
+
+                    return false;
+                }),
+                toArray,
+            );
+
+            if (missingRequiredExtraInfo.length) {
+                missingRequiredExtraInfo.forEach((item) => {
+                    setError(`extraInfo.no_${item.extraInfoNo}`, {
+                        type: 'required',
+                        message: t('{{extraInfoName}}을(를) 입력해 주세요.', {
+                            extraInfoName: item.extraInfoName,
+                        }),
+                    });
+                });
+                return;
+            }
+
             const memberId = submitData.memberId ?? '';
             const password = submitData.password ?? '';
+
+            const extraInfoList = submitData.extraInfo
+                ? Object.values(submitData.extraInfo).map((v) => ({
+                      extraInfoNo: v.extraInfoNo,
+                      extraInfoOptionNos: v.extraInfoOptionNos,
+                      extraInfoOptionTextContent: v.extraInfoOptionTextContent,
+                  }))
+                : undefined;
 
             await registerMutate(
                 {
                     data: {
                         ...submitData,
+                        extraInfo: extraInfoList,
                         memberId,
                         password,
                     },
@@ -251,6 +314,14 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 <SignupFormBirthday disabled={formValueDisabled.birthday} />
 
                 <SignupFormSex disabled={formValueDisabled.sex} />
+
+                {!isSocialLogin &&
+                    memberExtraInfoData?.extraInfoContents?.map((extraInfo) => (
+                        <MemberConfig
+                            key={extraInfo.extraInfoNo}
+                            {...extraInfo}
+                        />
+                    ))}
 
                 <Button
                     type='submit'

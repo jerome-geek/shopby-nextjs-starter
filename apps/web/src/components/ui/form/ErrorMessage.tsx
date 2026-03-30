@@ -1,4 +1,4 @@
-import { useFormState } from 'react-hook-form';
+import { get, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from './ErrorMessage.css';
@@ -12,7 +12,7 @@ export default function ErrorMessage({ name }: ErrorMessageProps) {
 
     const { errors } = useFormState({ name });
 
-    const errorMessage = errors[name]?.message ?? '';
+    const errorMessage = get(errors, name)?.message ?? '';
 
     return (
         !!errorMessage && (
