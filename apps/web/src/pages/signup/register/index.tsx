@@ -1,33 +1,51 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isEmpty, join, map, pipe, prop } from '@fxts/core';
+import { includes, join, map, pipe, prop } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
-import { useRouter } from 'next/router';
 
-import { profile } from '@/api/member';
 import { AuthLayout } from '@/components/layout/auth';
+import {
+    SignupFormAddress,
+    SignupFormEmail,
+    SignupFormId,
+    SignupFormMobile,
+    SignupFormName,
+    SignupFormNickname,
+    SignupFormPassword,
+    SignupFormTelephone,
+    SignupFormBirthday,
+    SignupFormSex,
+} from '@/components/signup/form';
 import { Button } from '@/components/ui/button';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useProfileMutation } from '@/hooks/mutations';
-import { useProfile } from '@/hooks/query/member/profile';
-import { useDialog } from '@/hooks/utils';
+import { useSignupInitialize } from '@/hooks/signup';
+import { useDialog, useGlobal } from '@/hooks/utils';
 import { NcpOpenIdProviderType } from '@/models';
 import { NextPageWithLayout } from '@/pages/_app';
-import { signupFormSchema } from '@/schema';
+import { createSignupFormSchema, SignupFormSchemaType } from '@/schema';
+import { useMall } from '@/hooks/query/admin/mall';
+
+import * as styles from '@/pages/signup/register/index.css';
 
 const SignupRegister: NextPageWithLayout = () => {
     const { t } = useTranslation();
 
     const { openDialog } = useDialog();
 
+    const { countryCd } = useGlobal();
+
+    const { data: mallData } = useMall();
     const router = useRouter();
     const query = router.query;
 
+    const key = query?.key as string;
     const accessToken = query?.accessToken as string;
     const provider = query?.provider as NcpOpenIdProviderType;
     const expiry = Number(query?.expiry) || 0;
@@ -39,17 +57,26 @@ const SignupRegister: NextPageWithLayout = () => {
 
     const isSocialLogin = !!provider;
 
+    console.log('directMailAgreed', directMailAgreed);
+    console.log('smsAgreed', smsAgreed);
+
     const value = useContext(CertificationCheckContext);
 
     const isAuthenticationByPhone = value?.isAuthenticationByPhone;
 
-    const methods = useForm<z.infer<typeof signupFormSchema>>({
-        resolver: zodResolver(signupFormSchema),
+    const schema = createSignupFormSchema({ isSocialLogin });
+
+    const methods = useForm<SignupFormSchemaType>({
+        resolver: zodResolver(schema),
+        mode: 'onSubmit',
+        reValidateMode: 'onChange',
         defaultValues: {
             type: 'personal',
             joinTermsAgreements: terms,
             isRegistrationNoChecked: false,
             isDuplicateMemberId: true,
+            isDuplicateEmail: true,
+            isDuplicateNickname: true,
             openIdAccessToken: accessToken ?? undefined,
             providerType: provider
                 ? (provider
@@ -59,7 +86,7 @@ const SignupRegister: NextPageWithLayout = () => {
                 : undefined,
             smsAgreed,
             directMailAgreed,
-            // countryCd,
+            countryCd,
             isBirthdayRequired: false,
             isNicknameRequired: false,
             isMobileNoRequired: false,
@@ -70,25 +97,48 @@ const SignupRegister: NextPageWithLayout = () => {
     });
 
     const {
-        register,
         reset,
-        setError,
-        setFocus,
-        watch,
-        getValues,
-        control,
         formState: { isSubmitting },
         handleSubmit,
+        watch,
     } = methods;
 
-    const { data: getSocialData } = useProfile({
-        headers: {
-            'Shop-By-Authorization': `Bearer ${accessToken}`,
-        },
-        options: {
-            enabled: isSocialLogin && !isEmpty(accessToken),
-        },
+    console.log(watch());
+
+    const { getSocialData, kcpCertificationResultData } = useSignupInitialize({
+        reset,
+        accessToken,
+        isSocialLogin,
+        key,
+        provider,
     });
+
+    const formValueDisabled = {
+        name: isSocialLogin
+            ? !!getSocialData?.memberName
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.name
+            : false,
+        email: isSocialLogin
+            ? !includes(provider, ['ncp_apple', 'ncp_google', 'ncp_line']) &&
+              !!getSocialData?.email
+            : false,
+        sex: isSocialLogin
+            ? getSocialData?.sex === 'F' || getSocialData?.sex === 'M'
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.ci
+            : false,
+        birthday: isSocialLogin
+            ? !!getSocialData?.birthday
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.birthday
+            : false,
+        mobileNo: isSocialLogin
+            ? !!getSocialData?.mobileNo
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.phone
+            : false,
+    };
 
     const {
         register: { mutateAsync: registerMutate },
@@ -97,19 +147,7 @@ const SignupRegister: NextPageWithLayout = () => {
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            // TODO: 이메일이 필수값이 되어야함
-            const { data: emailCheckData } = await profile.checkDuplicateEmail({
-                email: data.email || '',
-                memberTypes: 'OPEN_ID',
-            });
-
-            if (emailCheckData.exist) {
-                setError('email', {
-                    message: t('이미 사용중인 이메일입니다.'),
-                });
-                setFocus('email');
-                return;
-            }
+            console.log('data', data);
         } catch (error) {
             if (isAxiosError(error)) {
                 const message = isAxiosError(error)
@@ -137,10 +175,36 @@ const SignupRegister: NextPageWithLayout = () => {
         }
     });
 
+    if (!mallData) {
+        return null;
+    }
+
     return (
         <FormProvider {...methods}>
-            <form onSubmit={onSubmit}>
-                <input type='submit' />
+            <form onSubmit={onSubmit} className={styles.form}>
+                {!isSocialLogin && (
+                    <>
+                        <SignupFormId />
+
+                        <SignupFormPassword />
+                    </>
+                )}
+
+                <SignupFormName disabled={formValueDisabled.name} />
+
+                <SignupFormEmail disabled={formValueDisabled.email} />
+
+                <SignupFormMobile disabled={formValueDisabled.mobileNo} />
+
+                <SignupFormTelephone />
+
+                <SignupFormAddress />
+
+                <SignupFormNickname />
+
+                <SignupFormBirthday disabled={formValueDisabled.birthday} />
+
+                <SignupFormSex disabled={formValueDisabled.sex} />
 
                 <Button
                     type='submit'
@@ -155,6 +219,8 @@ const SignupRegister: NextPageWithLayout = () => {
     );
 };
 
-SignupRegister.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+SignupRegister.getLayout = (page) => (
+    <AuthLayout title='회원 정보 입력'>{page}</AuthLayout>
+);
 
 export default SignupRegister;

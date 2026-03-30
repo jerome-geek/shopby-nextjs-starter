@@ -6,6 +6,7 @@ import useDialog from '@/hooks/utils/useDialog';
 import useLocale from '@/hooks/utils/useLocale';
 import useKcpCertification from '@/hooks/utils/useKcpCertification';
 import useScrollLock from '@/hooks/utils/useScrollLock';
+import useGlobal from '@/hooks/utils/useGlobal';
 
 export {
     useKeyDown,
@@ -16,4 +17,5 @@ export {
     useLocale,
     useKcpCertification,
     useScrollLock,
+    useGlobal,
 };

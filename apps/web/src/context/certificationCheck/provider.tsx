@@ -68,8 +68,14 @@ function CertificationCheckProvider({
             isAuthenticationByPhone,
             isCertified,
             showCertificationDialog,
+            authenticationType,
         };
-    }, [isCertified, isAuthenticationByPhone, showCertificationDialog]);
+    }, [
+        isCertified,
+        isAuthenticationByPhone,
+        showCertificationDialog,
+        authenticationType,
+    ]);
 
     // 본인인증 페이지나 로그인 등 예외 페이지는 제외
     const isCertificationNeeded = useMemo(() => {

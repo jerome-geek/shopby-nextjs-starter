@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { authentication } from '@/api/auth';
 import { PATHS } from '@/const/paths';
-import { useMall } from '@/hooks/suspenseQuery/admin/mall';
+import { useMall } from '@/hooks/query/admin/mall';
 // import { useMyApp } from '@/hooks/myapp';
 import useDialog from '@/hooks/utils/useDialog';
 import { NcpOpenIdProviderType } from '@/models';
@@ -20,11 +20,14 @@ import {
     LineIcon,
     NaverIcon,
 } from '@/components/icons/login';
+import { includes } from '@fxts/core';
 
 const useSnsLogin = () => {
     const { t } = useTranslation();
 
     const { openDialog } = useDialog();
+
+    const { data: mallData } = useMall();
 
     // const { isInAppBrowser, isMyApp } = useMyApp();
     const searchParams = useSearchParams();
@@ -240,11 +243,10 @@ const useSnsLogin = () => {
             provider: 'kakao' as const,
             label: t('카카오로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
-            // isAvailable: includes(
-            //     'kakao',
-            //     mallData?.openIdJoinConfig.providers || []
-            // ),
-            isAvailable: true,
+            isAvailable: includes(
+                'kakao',
+                mallData?.openIdJoinConfig.providers || [],
+            ),
             onClick: openKakaoRegister,
             Icon: KakaoIcon,
         },
@@ -252,11 +254,10 @@ const useSnsLogin = () => {
             provider: 'kakao-sync' as const,
             label: t('카카오로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
-            // isAvailable: includes(
-            //     'kakao-sync',
-            //     mallData?.openIdJoinConfig.providers || []
-            // ),
-            isAvailable: true,
+            isAvailable: includes(
+                'kakao-sync',
+                mallData?.openIdJoinConfig.providers || [],
+            ),
             onClick: openKakaoSync,
             Icon: KakaoIcon,
         },
@@ -264,11 +265,10 @@ const useSnsLogin = () => {
             provider: 'naver' as const,
             label: t('네이버로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
-            // isAvailable: includes(
-            //     'naver',
-            //     mallData?.openIdJoinConfig.providers || []
-            // ),
-            isAvailable: true,
+            isAvailable: includes(
+                'naver',
+                mallData?.openIdJoinConfig.providers || [],
+            ),
             onClick: openNaverRegister,
             Icon: NaverIcon,
         },
@@ -276,11 +276,10 @@ const useSnsLogin = () => {
             provider: 'apple' as const,
             label: t('Apple로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
-            // isAvailable: includes(
-            //     'apple',
-            //     mallData?.openIdJoinConfig.providers || []
-            // ),
-            isAvailable: true,
+            isAvailable: includes(
+                'apple',
+                mallData?.openIdJoinConfig.providers || [],
+            ),
             onClick: openAppleRegister,
             Icon: AppleIcon,
         },
@@ -288,11 +287,10 @@ const useSnsLogin = () => {
             provider: 'facebook' as const,
             label: t('페이스북으로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
-            // isAvailable: includes(
-            //     'facebook',
-            //     mallData?.openIdJoinConfig.providers || []
-            // ),
-            isAvailable: true,
+            isAvailable: includes(
+                'facebook',
+                mallData?.openIdJoinConfig.providers || [],
+            ),
             onClick: openFacebookRegister,
             Icon: FacebookIcon,
         },
@@ -300,11 +298,10 @@ const useSnsLogin = () => {
             provider: 'google' as const,
             label: t('구글로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
-            // isAvailable: includes(
-            //     'google',
-            //     mallData?.openIdJoinConfig.providers || []
-            // ),
-            isAvailable: true,
+            isAvailable: includes(
+                'google',
+                mallData?.openIdJoinConfig.providers || [],
+            ),
             onClick: openGoogleRegister,
             Icon: GoogleIcon,
         },
@@ -312,11 +309,10 @@ const useSnsLogin = () => {
             provider: 'line' as const,
             label: t('라인으로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
-            // isAvailable: includes(
-            //     'line',
-            //     mallData?.openIdJoinConfig.providers || []
-            // ),
-            isAvailable: true,
+            isAvailable: includes(
+                'line',
+                mallData?.openIdJoinConfig.providers || [],
+            ),
             onClick: openLineRegister,
             Icon: LineIcon,
         },
