@@ -13,11 +13,11 @@ const image = {
         return shopbyRequest<UploadImageResponse>({
             method: 'POST',
             url: '/storage/temporary-images',
-            headers: {
-                ...options?.headers,
-                'Content-Type': 'multipart/form-data',
-            },
             ...options,
+            headers: {
+                'Content-Type': undefined,
+                ...options?.headers,
+            },
         });
     },
 };

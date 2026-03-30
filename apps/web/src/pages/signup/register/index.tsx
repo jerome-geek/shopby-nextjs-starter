@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { filter, find, join, map, pipe, prop, toArray } from '@fxts/core';
+import {
+    filter,
+    find,
+    isEmpty,
+    join,
+    map,
+    pipe,
+    prop,
+    toArray,
+} from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
 import { GetServerSideProps } from 'next';
@@ -10,6 +19,7 @@ import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
 
 import { oauth2 } from '@/api/auth';
+import upload from '@/api/storage/image';
 import { AuthLayout } from '@/components/layout/auth';
 import {
     SignupFormAddress,
@@ -35,10 +45,9 @@ import { NextPageWithLayout } from '@/pages/_app';
 import { createSignupFormSchema, SignupFormSchemaType } from '@/schema';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 import { getSafeQueryString } from '@/utils/query';
-
-import * as styles from '@/pages/signup/register/index.css';
 import { useMemberExtraInfo } from '@/hooks/query/member/memberConfig';
 import MemberConfig from '@/components/signup/member-config';
+import * as styles from '@/pages/signup/register/index.css';
 
 type SignupRegisterProps = {
     accessToken: string;
@@ -125,8 +134,11 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
     });
 
     const {
-        register: { mutateAsync: registerMutate },
-        openIdRegister: { mutateAsync: openIdRegisterMutate },
+        register: { mutateAsync: registerMutate, isPending: isRegisterPending },
+        openIdRegister: {
+            mutateAsync: openIdRegisterMutate,
+            isPending: isOpenIdRegisterPending,
+        },
     } = useProfileMutation();
 
     const onSubmit = handleSubmit(async (data) => {
@@ -179,11 +191,12 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                         return true;
                     }
 
-                    if (
-                        item.extraInfoType === 'TEXTBOX' ||
-                        item.extraInfoType === 'IMAGE'
-                    ) {
+                    if (item.extraInfoType === 'TEXTBOX') {
                         return !filledExtraInfo.extraInfoOptionTextContent;
+                    }
+
+                    if (item.extraInfoType === 'IMAGE') {
+                        return !filledExtraInfo.extraFileInfo;
                     }
 
                     if (
@@ -215,11 +228,40 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
             const password = submitData.password ?? '';
 
             const extraInfoList = submitData.extraInfo
-                ? Object.values(submitData.extraInfo).map((v) => ({
-                      extraInfoNo: v.extraInfoNo,
-                      extraInfoOptionNos: v.extraInfoOptionNos,
-                      extraInfoOptionTextContent: v.extraInfoOptionTextContent,
-                  }))
+                ? (
+                      await Promise.all(
+                          Object.values(submitData.extraInfo).map(async (v) => {
+                              if (v.extraFileInfo) {
+                                  try {
+                                      const formData = new FormData();
+                                      formData.append('file', v.extraFileInfo);
+
+                                      const { data: imageData } =
+                                          await upload.uploadImage({
+                                              data: formData,
+                                          });
+
+                                      return {
+                                          extraInfoNo: v.extraInfoNo,
+                                          extraInfoOptionNos:
+                                              v.extraInfoOptionNos,
+                                          extraInfoOptionTextContent:
+                                              imageData.imageUrl,
+                                      };
+                                  } catch (error) {
+                                      return null;
+                                  }
+                              }
+
+                              return {
+                                  extraInfoNo: v.extraInfoNo,
+                                  extraInfoOptionNos: v.extraInfoOptionNos,
+                                  extraInfoOptionTextContent:
+                                      v.extraInfoOptionTextContent,
+                              };
+                          }),
+                      )
+                  ).filter((v) => v !== null)
                 : undefined;
 
             await registerMutate(
@@ -316,18 +358,35 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 <SignupFormSex disabled={formValueDisabled.sex} />
 
                 {!isSocialLogin &&
-                    memberExtraInfoData?.extraInfoContents?.map((extraInfo) => (
-                        <MemberConfig
-                            key={extraInfo.extraInfoNo}
-                            {...extraInfo}
-                        />
-                    ))}
+                    !isEmpty(memberExtraInfoData?.extraInfoContents) && (
+                        <div className={styles.memberConfigContainer}>
+                            <h2 className={styles.memberConfigTitle}>
+                                {t('추가항목 입력')}
+                            </h2>
+
+                            {memberExtraInfoData?.extraInfoContents?.map(
+                                (extraInfo) => (
+                                    <MemberConfig
+                                        key={extraInfo.extraInfoNo}
+                                        {...extraInfo}
+                                    />
+                                ),
+                            )}
+                        </div>
+                    )}
 
                 <Button
                     type='submit'
                     frame='solid'
                     variant='primary'
-                    disabled={isSubmitting}
+                    disabled={
+                        isSubmitting ||
+                        isRegisterPending ||
+                        isOpenIdRegisterPending
+                    }
+                    style={{
+                        marginTop: '32px',
+                    }}
                 >
                     <span>{t('회원가입하기')}</span>
                 </Button>

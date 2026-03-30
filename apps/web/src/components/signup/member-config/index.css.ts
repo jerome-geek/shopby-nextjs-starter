@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 import { textStyles } from '@/styles/typography.css';
+import { vars } from '@/styles/theme.css';
 
 export const checkboxList = style({
     display: 'flex',
@@ -20,5 +21,12 @@ export const checkboxLabel = style([
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
+    },
+]);
+
+export const fileUploadDescription = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray[60],
     },
 ]);

@@ -24,7 +24,7 @@ const SignupFormPassword = () => {
                     placeholder={t(
                         '비밀번호를 입력해 주세요. (최소 8자 ~ 최대 20자)',
                     )}
-                    isError={!!errors.password}
+                    data-error={!!errors.password}
                 />
                 <ErrorMessage name='password' />
             </WithMemberJoinConfig>
@@ -35,7 +35,7 @@ const SignupFormPassword = () => {
                     type='password'
                     autoComplete='new-password'
                     placeholder={t('비밀번호를 다시 입력해 주세요.')}
-                    isError={!!errors.passwordConfirm}
+                    data-error={!!errors.passwordConfirm}
                 />
                 <ErrorMessage name='passwordConfirm' />
             </WithMemberJoinConfig>

@@ -200,6 +200,7 @@ const createSignupFormSchema = ({ isSocialLogin }: SignupSchemaOptions) =>
                             z.boolean().or(z.number()).or(z.string()),
                         ),
                         extraInfoOptionTextContent: z.string(),
+                        extraFileInfo: z.file().optional(),
                     }),
                 )
                 .optional(),

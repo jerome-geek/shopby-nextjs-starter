@@ -1,23 +1,33 @@
-import { get, useFormState } from 'react-hook-form';
+import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import * as styles from './ErrorMessage.css';
+import * as styles from '@/components/ui/form/ErrorMessage.css';
 
 interface ErrorMessageProps {
     name: string;
+    errorMessage?: string;
 }
 
-export default function ErrorMessage({ name }: ErrorMessageProps) {
+export default function ErrorMessage({
+    name,
+    errorMessage: errorMessageProps,
+}: ErrorMessageProps) {
     const { t } = useTranslation();
 
-    const { errors } = useFormState({ name });
+    const { control } = useFormContext();
+    const { errors } = useFormState({ control, name });
 
-    const errorMessage = get(errors, name)?.message ?? '';
+    const errorMessage = errors?.[name]?.message ?? '';
+
+    const isError = !!errorMessage || !!errorMessageProps;
 
     return (
-        !!errorMessage && (
+        isError && (
             <p className={styles.errorMessage}>
-                {t(typeof errorMessage === 'string' ? errorMessage : '')}
+                {t(
+                    errorMessageProps ||
+                        (typeof errorMessage === 'string' ? errorMessage : ''),
+                )}
             </p>
         )
     );
