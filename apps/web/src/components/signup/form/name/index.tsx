@@ -33,7 +33,7 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                         placeholder={t('이름을 입력해 주세요.')}
                         type='text'
                         readOnly={disabled}
-                        isError={!!memberNameError}
+                        data-error={!!memberNameError}
                     />
                     <ErrorMessage name='memberName' />
                 </>
@@ -46,14 +46,14 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                             placeholder={t('성을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!lastNameError}
+                            data-error={!!lastNameError}
                         />
                         <InputField
                             {...register('firstName')}
                             placeholder={t('이름을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!firstNameError}
+                            data-error={!!firstNameError}
                         />
                     </FieldContainer>
 
@@ -69,14 +69,14 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                             placeholder={t('이름을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!firstNameError}
+                            data-error={!!firstNameError}
                         />
                         <InputField
                             {...register('lastName')}
                             placeholder={t('성을 입력해 주세요.')}
                             type='text'
                             readOnly={disabled}
-                            isError={!!lastNameError}
+                            data-error={!!lastNameError}
                         />
                     </FieldContainer>
 

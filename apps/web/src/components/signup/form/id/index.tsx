@@ -94,7 +94,7 @@ const SignupFormId = () => {
                     placeholder={t(
                         '아이디를 입력해 주세요. (5자 이상의 영문, 숫자)',
                     )}
-                    isError={!!memberIdError || !!isDuplicateMemberIdError}
+                    data-error={!!memberIdError || !!isDuplicateMemberIdError}
                 />
                 <Button
                     frame='solid'

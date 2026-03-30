@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { includes, join, map, pipe, prop } from '@fxts/core';
+import { join, map, pipe, prop } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import { useContext } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
-import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 
+import { oauth2 } from '@/api/auth';
 import { AuthLayout } from '@/components/layout/auth';
 import {
     SignupFormAddress,
@@ -24,8 +24,9 @@ import {
     SignupFormTelephone,
 } from '@/components/signup/form';
 import { Button } from '@/components/ui/button';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { PATHS } from '@/const/paths';
 import { useProfileMutation } from '@/hooks/mutations';
+import { useMyApp } from '@/hooks/myapp';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useSignupInitialize } from '@/hooks/signup';
 import { useDialog, useGlobal } from '@/hooks/utils';
@@ -33,9 +34,7 @@ import { NcpOpenIdProviderType } from '@/models';
 import { NextPageWithLayout } from '@/pages/_app';
 import { createSignupFormSchema, SignupFormSchemaType } from '@/schema';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
-import { oauth2 } from '@/api/auth';
-import { PATHS } from '@/const/paths';
-import { useMyApp } from '@/hooks/myapp';
+import { getSafeQueryString } from '@/utils/query';
 
 import * as styles from '@/pages/signup/register/index.css';
 
@@ -49,18 +48,6 @@ type SignupRegisterProps = {
     directMailAgreed: boolean;
     isSocialLogin: boolean;
     certificationKey: string;
-};
-
-const firstQueryString = (
-    value: string | string[] | undefined | null,
-): string => {
-    if (typeof value === 'string') {
-        return value;
-    }
-    if (Array.isArray(value)) {
-        return value[0] ?? '';
-    }
-    return '';
 };
 
 const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
@@ -85,10 +72,6 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
     const { isMyApp } = useMyApp();
 
     const { data: mallData } = useMall();
-
-    const value = useContext(CertificationCheckContext);
-
-    const isAuthenticationByPhone = value?.isAuthenticationByPhone;
 
     const schema = createSignupFormSchema({ isSocialLogin });
 
@@ -128,40 +111,13 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
         handleSubmit,
     } = methods;
 
-    const { getSocialData, kcpCertificationResultData } = useSignupInitialize({
+    const { formValueDisabled } = useSignupInitialize({
         reset,
         accessToken,
         isSocialLogin,
         key: certificationKey,
         provider: provider as NcpOpenIdProviderType,
     });
-
-    const formValueDisabled = {
-        name: isSocialLogin
-            ? !!getSocialData?.memberName
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.name
-            : false,
-        email: isSocialLogin
-            ? !includes(provider, ['ncp_apple', 'ncp_google', 'ncp_line']) &&
-              !!getSocialData?.email
-            : false,
-        sex: isSocialLogin
-            ? getSocialData?.sex === 'F' || getSocialData?.sex === 'M'
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.ci
-            : false,
-        birthday: isSocialLogin
-            ? !!getSocialData?.birthday
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.birthday
-            : false,
-        mobileNo: isSocialLogin
-            ? !!getSocialData?.mobileNo
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.phone
-            : false,
-    };
 
     const {
         register: { mutateAsync: registerMutate },
@@ -320,15 +276,15 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
     const query = context.query;
 
-    const certificationKey = firstQueryString(query.key);
-    const accessToken = firstQueryString(query.accessToken);
-    const provider = firstQueryString(query.provider) as
+    const certificationKey = getSafeQueryString(query.key);
+    const accessToken = getSafeQueryString(query.accessToken);
+    const provider = getSafeQueryString(query.provider) as
         | NcpOpenIdProviderType
         | '';
-    const refreshToken = firstQueryString(query.refreshToken);
-    const expiry = Number(firstQueryString(query.expiry)) || 0;
+    const refreshToken = getSafeQueryString(query.refreshToken);
+    const expiry = Number(getSafeQueryString(query.expiry)) || 0;
 
-    const termsStr = firstQueryString(query.terms);
+    const termsStr = getSafeQueryString(query.terms);
     const terms = (termsStr ? termsStr.split(',') : []) as any;
     const smsAgreed = query?.smsAgreed === 'true';
     const directMailAgreed = query?.directMailAgreed === 'true';

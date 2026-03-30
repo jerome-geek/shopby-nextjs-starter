@@ -38,7 +38,7 @@ const SignupFormMobile = ({ disabled }: { disabled?: boolean }) => {
                         type='number'
                         onWheel={(e) => e.currentTarget.blur()}
                         readOnly={disabled}
-                        isError={!!errors.mobileNo}
+                        data-error={!!errors.mobileNo}
                     />
                     <ErrorMessage name='mobileNo' />
                 </>
@@ -73,7 +73,7 @@ const SignupFormMobile = ({ disabled }: { disabled?: boolean }) => {
 
                         <InputField
                             {...register('mobileNo')}
-                            isError={!!errors.mobileNo}
+                            data-error={!!errors.mobileNo}
                         />
                     </FieldContainer>
 
