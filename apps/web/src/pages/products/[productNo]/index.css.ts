@@ -25,9 +25,13 @@ export const mainSection = style({
 
     '@media': {
         [media.desktop]: {
-            flexDirection: 'row',
-            gap: '60px',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) 450px',
+            gap: '40px',
             alignItems: 'flex-start',
+        },
+        'screen and (min-width: 1280px)': {
+            gap: '60px',
         },
     },
 });
@@ -113,7 +117,7 @@ export const content = style({
             gap: '32px',
             position: 'sticky',
             top: `calc(var(--header-height, ${globalVars.header.height}) + 20px)`,
-            flex: '0 0 450px', // 우측 영역 너비 고정
+            width: '100%', // 고정 너비는 부모 Grid에서 관리
         },
     },
 });

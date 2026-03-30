@@ -35,7 +35,7 @@ export const swiperWrapper = style({
 export const mainSwiperContainer = style({
     width: '100%',
     maxWidth: 'none',
-    flexShrink: 0,
+    minWidth: 0,
 
     '@media': {
         [media.desktop]: {

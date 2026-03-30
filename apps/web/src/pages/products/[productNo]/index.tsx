@@ -71,16 +71,10 @@ function ProductDetailView({
         useProductOption({
             productNo,
         });
-    console.log(
-        '🚀 ~ ProductDetailView ~ isMultiLevelOptionUsed:',
-        isMultiLevelOptionUsed,
-    );
-    console.log('🚀 ~ ProductDetailView ~ isFlatOptionUsed:', isFlatOptionUsed);
 
     const { data: additionalDiscountData } = useAdditionalDiscount({
         searchParams: { productNo },
     });
-    console.log('🚀 ~ ProductDetailView ~ data:', additionalDiscountData);
 
     const productContent = useMemo(() => {
         if (!productDetailData) {
