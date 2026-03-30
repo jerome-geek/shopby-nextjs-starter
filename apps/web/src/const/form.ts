@@ -27,14 +27,14 @@ export const EMAIL_DOMAIN_LIST = [
     },
 ];
 
-export const PHONE_FIRST_NUMBER_LIST = [
+export const PHONE_PREFIX_NUMBER_LIST = [
     { label: '010', value: '010' },
     { label: '011', value: '011' },
     { label: '016', value: '016' },
     { label: '017', value: '017' },
     { label: '018', value: '018' },
     { label: '019', value: '019' },
-];
+] as const;
 
 export const TEL_FIRST_NUMBER_LIST = [
     { label: '02', value: '02' }, // 서울

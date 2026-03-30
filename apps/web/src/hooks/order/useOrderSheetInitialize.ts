@@ -62,7 +62,12 @@ const useOrderSheetInitialize = ({
             head,
         );
 
-        if (includes(lastPayType, pipe(orderSheetData.availablePayTypes, map(prop('payType'))))) {
+        if (
+            includes(
+                lastPayType,
+                pipe(orderSheetData.availablePayTypes, map(prop('payType'))),
+            )
+        ) {
             setValue('payType', lastPayType);
         }
         if (pgType) {
@@ -93,10 +98,10 @@ const useOrderSheetInitialize = ({
         if (profileData) {
             setValue('orderer.ordererEmail', profileData.email ?? '');
             setValue('orderer.ordererContact2', profileData.telephoneNo);
-            setValue(
-                'orderer.ordererMobileCountryCd',
-                profileData.mobileCountryCode ?? defaultMobileCountryCode,
-            );
+            // setValue(
+            //     'orderer.ordererMobileCountryCd',
+            //     profileData.mobileCountryCode ?? defaultMobileCountryCode,
+            // );
 
             // if (isKorean) {
             //     setValue('orderer.ordererName', profileData.memberName);

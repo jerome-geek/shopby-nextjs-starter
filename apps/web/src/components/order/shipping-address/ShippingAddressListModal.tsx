@@ -5,48 +5,16 @@ import { overlay } from 'overlay-kit';
 import * as styles from './ShippingAddressListModal.css';
 import ShippingAddressCreateModal from './ShippingAddressCreateModal';
 import ModalLayout from '@/components/layout/modal';
-
-interface ShippingAddress {
-    addressNo: number;
-    addressName: string;
-    receiverName: string;
-    receiverZipCd: string;
-    receiverAddress: string;
-    receiverDetailAddress: string;
-    receiverContact1: string;
-    defaultYn: 'Y' | 'N';
-}
+import { Address } from '@/models/order/shippingAddress';
 
 interface ShippingAddressListModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelect: (address: ShippingAddress) => void;
+    onSelect: (address: Address) => void;
     currentAddressNo?: number;
     unmount: () => void;
+    addresses: Address[];
 }
-
-const dummyAddresses: ShippingAddress[] = [
-    {
-        addressNo: 1,
-        addressName: '집',
-        receiverName: '김졸리',
-        receiverZipCd: '00000',
-        receiverAddress: '서울시 강남구 테헤란로 123',
-        receiverDetailAddress: '@@건물 201호',
-        receiverContact1: '010-1234-5678',
-        defaultYn: 'Y',
-    },
-    {
-        addressNo: 2,
-        addressName: '집',
-        receiverName: '김졸리',
-        receiverZipCd: '00000',
-        receiverAddress: '경기도 안양시 동안구 시민대로 235',
-        receiverDetailAddress: '3층 사무실',
-        receiverContact1: '010-1234-5678',
-        defaultYn: 'N',
-    },
-];
 
 const ShippingAddressListModal = ({
     isOpen,
@@ -54,8 +22,26 @@ const ShippingAddressListModal = ({
     onSelect,
     currentAddressNo,
     unmount,
+    addresses,
 }: ShippingAddressListModalProps) => {
     const { t } = useTranslation();
+
+    const openCreateModal = (initialData?: Address) => {
+        overlay.open(
+            ({
+                isOpen: isCreateOpen,
+                close: closeCreate,
+                unmount: unmountCreate,
+            }) => (
+                <ShippingAddressCreateModal
+                    isOpen={isCreateOpen}
+                    onClose={closeCreate}
+                    unmount={unmountCreate}
+                    initialData={initialData}
+                />
+            ),
+        );
+    };
 
     return (
         <ModalLayout
@@ -63,34 +49,23 @@ const ShippingAddressListModal = ({
             close={onClose}
             unmount={unmount}
             title={t('배송지 선택')}
-            size="medium"
+            size='medium'
             footerButtonList={[
                 <button
-                    key="register-btn"
-                    type="button"
+                    key='register-btn'
+                    type='button'
                     className={styles.registerButton}
-                    onClick={() => {
-                        overlay.open(({ isOpen: isCreateOpen, close: closeCreate, unmount: unmountCreate }) => (
-                            <ShippingAddressCreateModal
-                                isOpen={isCreateOpen}
-                                onClose={closeCreate}
-                                unmount={unmountCreate}
-                                onSubmit={(data) => {
-                                    console.log('New Address:', data);
-                                    closeCreate();
-                                }}
-                            />
-                        ));
-                    }}
+                    onClick={() => openCreateModal()}
                 >
                     <Plus size={20} />
                     <span>{t('신규 배송지 등록하기')}</span>
-                </button>
+                </button>,
             ]}
         >
             <div className={styles.addressList}>
-                {dummyAddresses.map((address) => {
-                    const isActive = currentAddressNo === address.addressNo;
+                {addresses.map((address) => {
+                    const isActive =
+                        currentAddressNo === address.addressNo;
                     return (
                         <div
                             key={address.addressNo}
@@ -111,11 +86,26 @@ const ShippingAddressListModal = ({
                                 )}
                             </div>
                             <p className={styles.addressText}>
-                                {address.receiverAddress}, {address.receiverDetailAddress} ({address.receiverZipCd})
+                                {address.receiverAddress},{' '}
+                                {address.receiverDetailAddress} (
+                                {address.receiverZipCd})
                             </p>
                             <p className={styles.recipientText}>
-                                {address.receiverName} ({address.receiverContact1})
+                                {address.receiverName} (
+                                {address.receiverContact1})
                             </p>
+                            <div
+                                className={styles.cardActions}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button
+                                    type='button'
+                                    className={styles.editButton}
+                                    onClick={() => openCreateModal(address)}
+                                >
+                                    {t('수정')}
+                                </button>
+                            </div>
                         </div>
                     );
                 })}

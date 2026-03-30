@@ -3,6 +3,7 @@ import useOrderSheetMutation from '@/hooks/mutations/useOrderSheetMutation';
 import useProductInquiryMutation from '@/hooks/mutations/useProductInquiryMutation';
 import useProductProfileMutation from '@/hooks/mutations/useProductProfileMutation';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
+import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 
 export {
     useCartMutation,
@@ -10,4 +11,5 @@ export {
     useProductInquiryMutation,
     useProductProfileMutation,
     useProfileMutation,
+    useShippingAddressMutation,
 };

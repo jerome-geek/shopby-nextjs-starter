@@ -9,14 +9,14 @@ import {
 import { regEx } from '@/utils/validation';
 // import { checkLogin } from '@/utils/users';
 
-const isGlobalMall = process.env.NEXT_PUBLIC_LANG !== 'ko';
+const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
 
 // TODO: useAuth가 hooks가 되었으므로 다시 체크해볼것
 const checkLogin = () => {
     return true;
 };
 
-const registerShippingAddressSchema_base = z.object({
+export const registerShippingAddressSchema_base = z.object({
     // NOTE: (해외배송 / 글로벌결제 시 필수) 수령인 LastName (nullable)
     receiverLastName: isGlobalMall
         ? z.string().nonempty('성을 입력해 주세요.')
@@ -62,7 +62,18 @@ const registerShippingAddressSchema_base = z.object({
             ? z.string().optional()
             : z.string().nonempty('연락처를 입력해주세요.'),
     }),
-    receiverContact2: z.string().optional(),
+    receiverContact2: z
+        .object({
+            prefix: z.string().nonempty('연락처를 입력해주세요.'),
+            middle: isGlobalMall
+                ? z.string().optional()
+                : z.string().nonempty('연락처를 입력해주세요.'),
+            suffix: isGlobalMall
+                ? z.string().optional()
+                : z.string().nonempty('연락처를 입력해주세요.'),
+        })
+        .optional()
+        .nullable(),
 });
 
 const registerShippingAddressSchema = registerShippingAddressSchema_base.refine(
@@ -112,11 +123,31 @@ const baseShippingAddressSchema = z.object({
         ? z.string().nonempty('이름을 입력해주세요.')
         : z.string().optional(),
     shippingInfoLaterInputContact: z.string().optional(),
-    receiverContact1: z.string().optional(),
-    receiverContact2: z.string().optional(),
+    receiverContact1: z
+        .object({
+            prefix: z.enum(['010', '011', '016', '017', '018', '019']),
+            middle: z
+                .string()
+                .min(3, '올바른 번호를 입력해주세요')
+                .max(4, '올바른 번호를 입력해주세요'),
+            last: z.string().length(4, '번호는 4자리여야 합니다'),
+        })
+        .nullable()
+        .optional(),
+    receiverContact2: z
+        .object({
+            prefix: z.enum(['010', '011', '016', '017', '019']),
+            middle: z
+                .string()
+                .min(3, '올바른 번호를 입력해주세요')
+                .max(4, '올바른 번호를 입력해주세요'),
+            last: z.string().length(4, '번호는 4자리여야 합니다'),
+        })
+        .nullable()
+        .optional(),
 });
 
-const shippingAddressSchema = baseShippingAddressSchema.superRefine(
+export const shippingAddressSchema = baseShippingAddressSchema.superRefine(
     (value, context) => {
         if (value.usesShippingInfoLaterInput) {
             if (!value.shippingInfoLaterInputContact) {
@@ -312,25 +343,27 @@ const paymentReserveSchema = z
                     return '이메일을 입력해주세요.';
                 },
             }),
-            ordererContact1: z
-                .string()
-                .nonempty('휴대폰번호를 입력해 주세요.')
-                .regex(regEx.phoneNumberIncludeSafeNumber, {
-                    message: '형식에 맞게 입력해 주세요.',
-                }),
+            ordererContact1: z.object({
+                prefix: z.enum(['010', '011', '016', '017', '018', '019']),
+                middle: z
+                    .string()
+                    .min(3, '올바른 번호를 입력해주세요')
+                    .max(4, '올바른 번호를 입력해주세요'),
+                last: z.string().length(4, '번호는 4자리여야 합니다'),
+            }),
             ordererContact2: z.string().optional().nullable(),
             ordererName: isGlobalMall
                 ? z.string().optional()
                 : z.string().nonempty('주문자명을 입력해주세요.'),
-            ordererLastName: isGlobalMall
-                ? z.string().nonempty('성을 입력해주세요.')
-                : z.string().optional(),
-            ordererFirstName: isGlobalMall
-                ? z.string().nonempty('이름을 입력해주세요.')
-                : z.string().optional(),
-            ordererMobileCountryCd: isGlobalMall
-                ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
-                : z.string().optional(),
+            // ordererLastName: isGlobalMall
+            //     ? z.string().nonempty('성을 입력해주세요.')
+            //     : z.string().optional(),
+            // ordererFirstName: isGlobalMall
+            //     ? z.string().nonempty('이름을 입력해주세요.')
+            //     : z.string().optional(),
+            // ordererMobileCountryCd: isGlobalMall
+            //     ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
+            //     : z.string().optional(),
         }),
         paymentAmtForVerification: z.number().optional(),
         shippingAddress: shippingAddressSchema,
@@ -758,13 +791,31 @@ const paymentReserveSchemaV2 = z
                     return '이메일을 입력해주세요.';
                 },
             }),
-            ordererContact1: z
-                .string()
-                .nonempty('휴대폰번호를 입력해 주세요.')
-                .regex(regEx.phoneNumberIncludeSafeNumber, {
-                    message: '형식에 맞게 입력해 주세요.',
-                }),
-            ordererContact2: z.string().nullable().optional(),
+            // ordererContact1: z
+            //     .string()
+            //     .nonempty('휴대폰번호를 입력해 주세요.')
+            //     .regex(regEx.phoneNumberIncludeSafeNumber, {
+            //         message: '형식에 맞게 입력해 주세요.',
+            //     }),
+            ordererContact1: z.object({
+                prefix: z.enum(['010', '011', '016', '017', '019']),
+                middle: z
+                    .string()
+                    .min(3, '올바른 번호를 입력해주세요')
+                    .max(4, '올바른 번호를 입력해주세요'),
+                last: z.string().length(4, '번호는 4자리여야 합니다'),
+            }),
+            ordererContact2: z
+                .object({
+                    prefix: z.enum(['010', '011', '016', '017', '019']),
+                    middle: z
+                        .string()
+                        .min(3, '올바른 번호를 입력해주세요')
+                        .max(4, '올바른 번호를 입력해주세요'),
+                    last: z.string().length(4, '번호는 4자리여야 합니다'),
+                })
+                .nullable()
+                .optional(),
             ordererMobileCountryCd: isGlobalMall
                 ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
                 : z.string().nullable().optional(),

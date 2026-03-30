@@ -1,3 +1,7 @@
+import { every, find, map, pipe, toArray } from '@fxts/core';
+import { overlay } from 'overlay-kit';
+import { useFormContext, useWatch } from 'react-hook-form';
+
 import * as styles from '@/components/order/payment-summary/index.css';
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
@@ -6,28 +10,13 @@ import { useOrderSheetCalculate } from '@/hooks/order';
 import { OrderTermsType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';
 import { CURRENCY } from '@/utils/currency';
-import { every, find, map, pipe, prop, toArray } from '@fxts/core';
-import { overlay } from 'overlay-kit';
-import { useMemo } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 
 const OrderPaymentSummary = ({ orderSheetNo }: { orderSheetNo: string }) => {
     const { orderSheetData, calculateOrderSheetData } = useOrderSheetCalculate({
         orderSheetNo,
     });
-    console.log(
-        '🚀 ~ OrderPaymentSummary ~ calculateOrderSheetData:',
-        calculateOrderSheetData,
-    );
-    console.log('🚀 ~ OrderPaymentSummary ~ orderSheetData:', orderSheetData);
 
     const orderTermList = orderSheetData?.termsInfos || [];
-    console.log('🚀 ~ OrderPaymentSummary ~ orderTermList:', orderTermList);
-
-    console.log(
-        '🚀 ~ OrderPaymentSummary ~ calculateOrderSheetData?.paymentInfo:',
-        calculateOrderSheetData?.paymentInfo,
-    );
     const paymentAmt = calculateOrderSheetData?.paymentInfo.paymentAmt || 0;
 
     // 총 상품 금액
@@ -51,8 +40,11 @@ const OrderPaymentSummary = ({ orderSheetNo }: { orderSheetNo: string }) => {
     const accumulationAmtWhenBuyConfirm =
         calculateOrderSheetData?.paymentInfo.accumulationAmtWhenBuyConfirm || 0;
 
-    const { control, setValue, watch } =
-        useFormContext<PaymentReserveSchemaType>();
+    const {
+        control,
+        setValue,
+        formState: { isSubmitting },
+    } = useFormContext<PaymentReserveSchemaType>();
     const agreementTermsTypesWatch = useWatch({
         control,
         name: 'agreementTermsAgrees',
@@ -257,7 +249,12 @@ const OrderPaymentSummary = ({ orderSheetNo }: { orderSheetNo: string }) => {
             </div>
 
             <div className={styles.buttonWrapper}>
-                <Button type='submit' frame='solid' variant='primary' disabled>
+                <Button
+                    type='submit'
+                    frame='solid'
+                    variant='primary'
+                    disabled={isSubmitting}
+                >
                     {`${CURRENCY(paymentAmt).format()} 결제하기`}
                 </Button>
             </div>
