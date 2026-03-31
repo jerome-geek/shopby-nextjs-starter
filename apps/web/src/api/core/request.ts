@@ -2,12 +2,12 @@ import axios from 'axios';
 import qs from 'qs'; // 추가
 
 import { DEFAULT_API_TIMEOUT, defaultHeaders } from '@/api/core/utils';
-// import { controller } from '@/api/core/controller';
+import { controller } from '@/api/core/controller';
 
 export const shopbyRequest = axios.create({
     baseURL: process.env.NEXT_PUBLIC_SHOPBY_BASE_URL,
     headers: defaultHeaders(),
-    // signal: controller.signal,
+    signal: controller.signal,
     paramsSerializer: (params) => {
         return qs.stringify(params, {
             arrayFormat: 'comma',

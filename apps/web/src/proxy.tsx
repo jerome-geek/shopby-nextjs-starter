@@ -19,9 +19,8 @@ export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const accessToken = request.cookies.get(COOKIE_KEYS.ACCESS_TOKEN)?.value;
-    const refreshToken = request.cookies.get(COOKIE_KEYS.REFRESH_TOKEN)?.value;
 
-    const isLoggedIn = !!(accessToken || refreshToken);
+    const isLoggedIn = !!accessToken;
 
     const isGuestOnlyRoute = GUEST_ONLY_ROUTES.includes(pathname);
 
