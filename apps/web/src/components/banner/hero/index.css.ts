@@ -45,6 +45,16 @@ export const swiperContainer = style({
     overflow: 'visible',
 });
 
+export const loadingOverlay = style({
+    position: 'absolute',
+    inset: 0,
+    zIndex: 1,
+});
+
+export const swiperHiddenWhileLoading = style({
+    visibility: 'hidden',
+});
+
 export const swiper = style({
     width: '100%',
     height: '100%',
@@ -52,7 +62,6 @@ export const swiper = style({
 });
 
 export const slide = style({
-    // width: 'calc(100% - 48px)',
     aspectRatio: '320 / 427',
     height: 'auto',
     borderRadius: '24px',
@@ -65,13 +74,6 @@ export const slide = style({
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
         },
     },
-
-    // '@media': {
-    //     [media.desktop]: {
-    //         width: '100%',
-    //         maxWidth: '384px',
-    //     },
-    // },
 });
 
 export const card = style({
@@ -232,32 +234,62 @@ export const pageIndicator = style({
 
 export const skeletonWrapper = style({
     display: 'flex',
-    gap: '16px',
-    overflow: 'hidden',
+    justifyContent: 'center',
+    gap: '12px',
+    perspective: '1000px',
+
+    '@media': {
+        '(min-width: 768px)': {
+            gap: '24px',
+            perspective: 'none',
+        },
+    },
 });
 
 export const skeletonCard = style({
     flexShrink: 0,
-    width: '320px',
+    width: 'calc(100% / 1.2 - 2px)',
     aspectRatio: '320 / 427',
-    height: 'auto',
-    borderRadius: '16px',
+    borderRadius: '24px',
     backgroundColor: vars.color.gray['40'],
     position: 'relative',
     overflow: 'hidden',
-    '@media': {
-        '(max-width: 768px)': {
-            width: '280px',
+
+    transformOrigin: 'center center',
+    willChange: 'transform',
+    selectors: {
+        [`${skeletonWrapper} &:nth-child(1), ${skeletonWrapper} &:nth-child(3)`]:
+            {
+                transform:
+                    'translate3d(0px, 0px, -61.4736px) rotateX(0deg) rotateY(0deg) scale(0.948772)',
+            },
+        [`${skeletonWrapper} &:nth-child(2)`]: {
+            transform:
+                'translate3d(0px, 0px, -0.0597411px) rotateX(0deg) rotateY(0deg) scale(0.99995)',
         },
-        '(max-width: 480px)': {
-            width: '240px',
+    },
+
+    '@media': {
+        '(min-width: 768px)': {
+            width: 'calc((100% - 48px) / 3)',
+            transform: 'none',
+
+            selectors: {
+                [`${skeletonWrapper} &:nth-child(1), ${skeletonWrapper} &:nth-child(3)`]:
+                    {
+                        transform: 'none',
+                    },
+                [`${skeletonWrapper} &:nth-child(2)`]: {
+                    transform: 'none',
+                },
+            },
         },
     },
 });
 
 export const skeletonImage = style({
-    width: '100%',
-    height: '100%',
+    position: 'absolute',
+    inset: 0,
     background:
         'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%)',
     backgroundSize: '200% 100%',
@@ -270,6 +302,9 @@ export const skeletonContent = style({
     left: 0,
     right: 0,
     padding: '24px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
 });
 
 export const skeletonTitle = style({
@@ -277,7 +312,6 @@ export const skeletonTitle = style({
     height: '24px',
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: '4px',
-    marginBottom: '8px',
 });
 
 export const skeletonDescription = style({
@@ -285,4 +319,18 @@ export const skeletonDescription = style({
     height: '16px',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: '4px',
+});
+
+export const skeletonControls = style({
+    display: 'none',
+
+    '@media': {
+        [media.desktop]: {
+            display: 'block',
+            width: '100%',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            height: '40px',
+        },
+    },
 });
