@@ -11,6 +11,7 @@ import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/register-method/index.css';
 import { extractBannerContents } from '@/utils/shopby';
+import ImageWrapper from '@/components/ui/image';
 
 const BANNER_LIST = [BANNER_ID.REGISTER_METHOD];
 
@@ -53,9 +54,14 @@ const SignupBannerList = () => {
                         key={`signup-banner-${bannerNo}`}
                         className={styles.bannerListItem}
                     >
-                        <div>
-                            <img src={imageUrl} alt={name} />
+                        <div className={styles.bannerImageContainer}>
+                            <ImageWrapper
+                                src={imageUrl}
+                                alt={name}
+                                loading='eager'
+                            />
                         </div>
+
                         <span
                             style={{ color: nameColor }}
                             dangerouslySetInnerHTML={{ __html: name }}
