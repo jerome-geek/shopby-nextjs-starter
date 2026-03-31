@@ -1,24 +1,4 @@
-import { GetServerSideProps } from 'next';
-import { isLoggedIn } from '@/utils/auth';
-import { PATHS } from '@/const/paths';
 import { MypageLayout } from '@/components/layout/mypage';
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const loggedIn = isLoggedIn(ctx);
-    console.log('🚀 ~ getServerSideProps ~ isLoggedIn:', loggedIn);
-    if (!loggedIn) {
-        return {
-            redirect: {
-                destination: PATHS.AUTH.LOGIN,
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: {},
-    };
-};
 
 export default function MypageMain() {
     return (

@@ -421,6 +421,21 @@ export const getServerSideProps: GetServerSideProps<
 
     const isSocialLogin = !!provider;
 
+    // NOTE : 정상 진입 경로 체크:
+    // - 일반 가입: /signup/terms에서 terms query param을 전달
+    // - 소셜 가입: provider query param이 존재
+    // 두 경우 모두 없으면 URL 직접 접근으로 판단 → 진입점으로 리다이렉트
+    const isValidEntry = 'terms' in query || isSocialLogin;
+
+    if (!isValidEntry) {
+        return {
+            redirect: {
+                destination: PATHS.SIGNUP.REGISTER_METHOD,
+                permanent: false,
+            },
+        };
+    }
+
     return {
         props: {
             accessToken,
