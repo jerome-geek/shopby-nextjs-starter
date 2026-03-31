@@ -885,7 +885,7 @@ export const termsType = z.enum([
     'PI_GIFT_ACCEPT_COLLECTION_AND_USE',
 ]);
 
-export const PhonePrefixType = z.enum([
+export const phonePrefixType = z.enum([
     '010',
     '011',
     '016',

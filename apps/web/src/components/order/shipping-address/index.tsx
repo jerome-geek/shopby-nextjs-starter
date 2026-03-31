@@ -1,53 +1,22 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { ChevronRightIcon } from 'lucide-react';
 import { overlay } from 'overlay-kit';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/shipping-address/index.css';
-import ShippingAddressListModal from './ShippingAddressListModal';
-import GuestShippingAddressForm from './GuestShippingAddressForm';
 import { useAuth } from '@/hooks/useAuth';
-import { Address } from '@/models/order/shippingAddress';
-
-// NOTE: 현재는 더미 데이터를 사용 (나중엔 API 쿼리로 교체)
-const dummyAddresses: Address[] = [
-    {
-        addressNo: 1,
-        addressName: '집',
-        receiverName: '김졸리',
-        receiverZipCd: '00000',
-        receiverAddress: '서울시 강남구 테헤란로 123',
-        receiverDetailAddress: '@@건물 201호',
-        receiverJibunAddress: '',
-        receiverContact1: '010-1234-5678',
-        defaultYn: 'Y',
-        addressType: 'BOOK',
-        memberNo: 0,
-        mallNo: 0,
-    },
-    {
-        addressNo: 2,
-        addressName: '회사',
-        receiverName: '김졸리',
-        receiverZipCd: '00000',
-        receiverAddress: '경기도 안양시 동안구 시민대로 235',
-        receiverDetailAddress: '3층 사무실',
-        receiverJibunAddress: '',
-        receiverContact1: '010-1234-5678',
-        defaultYn: 'N',
-        addressType: 'BOOK',
-        memberNo: 0,
-        mallNo: 0,
-    },
-];
+import { PaymentReserveSchemaType } from '@/schema';
+import GuestShippingAddressForm from './GuestShippingAddressForm';
+import ShippingAddressListModal from './ShippingAddressListModal';
 
 const ShippingAddress = () => {
     const { t } = useTranslation();
+
     const isLogin = useAuth();
 
-    const [selectedAddress, setSelectedAddress] = useState<Address>(
-        dummyAddresses[0],
-    );
+    const { control } = useFormContext<PaymentReserveSchemaType>();
+    const shippingAddress = useWatch({ control, name: 'shippingAddress' });
+    console.log('🚀 ~ ShippingAddress ~ shippingAddress:', shippingAddress);
 
     const handleSelectAddress = () => {
         overlay.open(({ isOpen, close, unmount }) => (
@@ -55,14 +24,14 @@ const ShippingAddress = () => {
                 isOpen={isOpen}
                 onClose={close}
                 unmount={unmount}
-                currentAddressNo={selectedAddress.addressNo}
-                onSelect={(address) => {
-                    setSelectedAddress(address);
-                }}
-                addresses={dummyAddresses}
+                currentAddressNo={shippingAddress.addressNo}
             />
         ));
     };
+
+    if (isLogin === null) {
+        return null;
+    }
 
     return (
         <section className={styles.container}>
@@ -74,67 +43,44 @@ const ShippingAddress = () => {
                         className={styles.selectAddressButton}
                         onClick={handleSelectAddress}
                     >
-                        <span>배송지 선택하기</span>
+                        <span>{t('배송지 선택하기')}</span>
                         <ChevronRightIcon width='16px' />
                     </button>
                 )}
             </div>
 
-            {isLogin === null && null}
-
             {isLogin === false && <GuestShippingAddressForm />}
 
-            {isLogin === true && (
-                <div
-                    style={{
-                        border: '1px solid #ddd',
-                        borderRadius: '8px',
-                        padding: '16px',
-                        marginTop: '12px',
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            gap: '8px',
-                            alignItems: 'center',
-                            marginBottom: '8px',
-                        }}
-                    >
-                        <span style={{ fontWeight: 600 }}>
-                            {selectedAddress.addressName}
-                        </span>
-                        {selectedAddress.defaultYn === 'Y' && (
-                            <span
-                                style={{
-                                    fontSize: '11px',
-                                    background: '#333',
-                                    color: '#fff',
-                                    padding: '2px 6px',
-                                    borderRadius: '4px',
-                                }}
-                            >
+            {isLogin === true &&
+                shippingAddress &&
+                shippingAddress.receiverAddress && (
+                    <div className={styles.shippingAddressContainer}>
+                        <div className={styles.addressNameContainer}>
+                            <span className={styles.addressName}>
+                                {shippingAddress.addressName || '배송지'}
+                            </span>
+                            {/* TODO: 조건에 맞게 배송지 뱃지 노출 필요 */}
+                            <span className={styles.defaultAddressBadge}>
                                 {t('기본배송지')}
                             </span>
-                        )}
+                        </div>
+
+                        <div className={styles.addressContainer}>
+                            <p className={styles.address}>
+                                {`${shippingAddress.receiverAddress}, ${shippingAddress.receiverDetailAddress} (${shippingAddress.receiverZipCd})`}
+                            </p>
+                            <p className={styles.addressContact}>
+                                {shippingAddress.receiverName} (
+                                {shippingAddress.receiverContact1 &&
+                                typeof shippingAddress.receiverContact1 ===
+                                    'object'
+                                    ? `${shippingAddress.receiverContact1.prefix}-${shippingAddress.receiverContact1.middle}-${shippingAddress.receiverContact1.last}`
+                                    : shippingAddress.receiverContact1}
+                                )
+                            </p>
+                        </div>
                     </div>
-                    <p
-                        style={{
-                            fontSize: '14px',
-                            color: '#333',
-                            marginBottom: '4px',
-                        }}
-                    >
-                        {selectedAddress.receiverAddress},{' '}
-                        {selectedAddress.receiverDetailAddress} (
-                        {selectedAddress.receiverZipCd})
-                    </p>
-                    <p style={{ fontSize: '13px', color: '#666' }}>
-                        {selectedAddress.receiverName} (
-                        {selectedAddress.receiverContact1})
-                    </p>
-                </div>
-            )}
+                )}
         </section>
     );
 };

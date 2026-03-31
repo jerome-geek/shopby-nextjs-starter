@@ -36,6 +36,11 @@ export const PHONE_PREFIX_NUMBER_LIST = [
     { label: '019', value: '019' },
 ] as const;
 
+export type PhonePrefixValue = (typeof PHONE_PREFIX_NUMBER_LIST)[number]['value'];
+export const PHONE_PREFIX_VALUES = PHONE_PREFIX_NUMBER_LIST.map(
+    ({ value }) => value,
+) as [PhonePrefixValue, ...PhonePrefixValue[]];
+
 export const TEL_FIRST_NUMBER_LIST = [
     { label: '02', value: '02' }, // 서울
     { label: '031', value: '031' }, // 경기도 (수원, 성남 등)

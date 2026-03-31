@@ -34,7 +34,7 @@ const OrderSheetPage = () => {
                 ordererName: '',
                 // ordererLastName: '',
                 // ordererFirstName: '',
-                ordererContact1: { prefix: '010', middle: '', last: '' },
+                ordererContact1: { prefix: '010', middle: '', suffix: '' },
                 ordererEmail: '',
             },
             shippingAddress: {
@@ -60,24 +60,28 @@ const OrderSheetPage = () => {
         },
     });
 
-    const { setValue, reset } = methods;
-
-    useOrderSheetInitialize({
-        orderSheetNo,
-        setValue,
-        reset,
-    });
-
     return (
         <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
             <FormProvider {...methods}>
-                <OrderSheetContent orderSheetNo={orderSheetNo} />
+                {isLogin !== null && (
+                    <OrderSheetContent orderSheetNo={orderSheetNo} isLogin={isLogin} />
+                )}
             </FormProvider>
         </ShopbyApiErrorBoundary>
     );
 };
 
-const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
+const OrderSheetContent = ({ 
+    orderSheetNo, 
+    isLogin 
+}: { 
+    orderSheetNo: string;
+    isLogin: boolean | null;
+}) => {
+    useOrderSheetInitialize({
+        orderSheetNo,
+        isLogin,
+    });
     const { data: orderSheetData } = useOrderSheet({
         orderSheetNo,
         searchParams: { includeMemberAddress: true },
@@ -100,7 +104,7 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
                     ...data,
                     orderer: {
                         ...data.orderer,
-                        orderContact1: `${data.orderer.ordererContact1.prefix}${data.orderer.ordererContact1.middle}${data.orderer.ordererContact1.last}`,
+                        orderContact1: `${data.orderer.ordererContact1.prefix}${data.orderer.ordererContact1.middle}${data.orderer.ordererContact1.suffix}`,
                     },
                 };
             } catch (error) {}

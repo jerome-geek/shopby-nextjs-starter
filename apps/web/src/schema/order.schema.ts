@@ -6,6 +6,7 @@ import {
     pgType,
     termsType,
 } from '@/schema/common.schema';
+import { PHONE_PREFIX_VALUES } from '@/const/form';
 import { regEx } from '@/utils/validation';
 // import { checkLogin } from '@/utils/users';
 
@@ -18,9 +19,7 @@ const checkLogin = () => {
 
 export const registerShippingAddressSchema_base = z.object({
     // NOTE: (해외배송 / 글로벌결제 시 필수) 수령인 LastName (nullable)
-    receiverLastName: isGlobalMall
-        ? z.string().nonempty('성을 입력해 주세요.')
-        : z.string().optional(),
+    receiverLastName: z.string().nullable().optional(),
     receiverJibunAddress: z.string(),
     defaultYn: z.enum(['Y', 'N']),
     receiverName: isGlobalMall
@@ -50,9 +49,7 @@ export const registerShippingAddressSchema_base = z.object({
     receiverState: z.string().optional(),
     addressName: z.string().nonempty('배송지명을 입력해주세요.'),
     // NOTE: (해외배송 / 글로벌결제 시 필수) 수령인 FirstName (nullable)
-    receiverFirstName: isGlobalMall
-        ? z.string().nonempty('이름을 입력해주세요.')
-        : z.string().optional(),
+    receiverFirstName: z.string().nullable().optional(),
     receiverContact1: z.object({
         prefix: z.string().nonempty('연락처를 입력해주세요.'),
         middle: isGlobalMall
@@ -94,9 +91,7 @@ type RegisterShippingAddressSchemaType = z.infer<
 >;
 
 const baseShippingAddressSchema = z.object({
-    receiverLastName: isGlobalMall
-        ? z.string().nonempty('성을 입력해주세요.')
-        : z.string().optional(),
+    receiverLastName: z.string().nullable().optional(),
     receiverJibunAddress: z.string().optional(),
     requestShippingDate: z.string().optional(),
     orderAdditionalInfo: z.string().optional(),
@@ -119,13 +114,11 @@ const baseShippingAddressSchema = z.object({
     // ]) (nullable)
     receiverState: z.string().optional(),
     addressName: z.string().optional(),
-    receiverFirstName: isGlobalMall
-        ? z.string().nonempty('이름을 입력해주세요.')
-        : z.string().optional(),
+    receiverFirstName: z.string().nullable().optional(),
     shippingInfoLaterInputContact: z.string().optional(),
     receiverContact1: z
         .object({
-            prefix: z.enum(['010', '011', '016', '017', '018', '019']),
+            prefix: z.enum(PHONE_PREFIX_VALUES),
             middle: z
                 .string()
                 .min(3, '올바른 번호를 입력해주세요')
@@ -136,7 +129,7 @@ const baseShippingAddressSchema = z.object({
         .optional(),
     receiverContact2: z
         .object({
-            prefix: z.enum(['010', '011', '016', '017', '019']),
+            prefix: z.enum(PHONE_PREFIX_VALUES),
             middle: z
                 .string()
                 .min(3, '올바른 번호를 입력해주세요')
@@ -159,20 +152,7 @@ export const shippingAddressSchema = baseShippingAddressSchema.superRefine(
             }
 
             if (isGlobalMall) {
-                if (!value.receiverLastName) {
-                    context.addIssue({
-                        path: ['receiverLastName'],
-                        message: '성을 입력해주세요.',
-                        code: 'custom',
-                    });
-                }
-                if (!value.receiverFirstName) {
-                    context.addIssue({
-                        path: ['receiverFirstName'],
-                        message: '이름을 입력해주세요.',
-                        code: 'custom',
-                    });
-                }
+                // NOTE: 글로벌 몰이어도 성/이름 필수 해제
             } else {
                 if (!value.receiverName) {
                     context.addIssue({
@@ -344,12 +324,12 @@ const paymentReserveSchema = z
                 },
             }),
             ordererContact1: z.object({
-                prefix: z.enum(['010', '011', '016', '017', '018', '019']),
+                prefix: z.enum(PHONE_PREFIX_VALUES),
                 middle: z
                     .string()
                     .min(3, '올바른 번호를 입력해주세요')
                     .max(4, '올바른 번호를 입력해주세요'),
-                last: z.string().length(4, '번호는 4자리여야 합니다'),
+                suffix: z.string().length(4, '번호는 4자리여야 합니다'),
             }),
             ordererContact2: z.string().optional().nullable(),
             ordererName: isGlobalMall
@@ -798,21 +778,21 @@ const paymentReserveSchemaV2 = z
             //         message: '형식에 맞게 입력해 주세요.',
             //     }),
             ordererContact1: z.object({
-                prefix: z.enum(['010', '011', '016', '017', '019']),
+                prefix: z.enum(PHONE_PREFIX_VALUES),
                 middle: z
                     .string()
                     .min(3, '올바른 번호를 입력해주세요')
                     .max(4, '올바른 번호를 입력해주세요'),
-                last: z.string().length(4, '번호는 4자리여야 합니다'),
+                suffix: z.string().length(4, '번호는 4자리여야 합니다'),
             }),
             ordererContact2: z
                 .object({
-                    prefix: z.enum(['010', '011', '016', '017', '019']),
+                    prefix: z.enum(PHONE_PREFIX_VALUES),
                     middle: z
                         .string()
                         .min(3, '올바른 번호를 입력해주세요')
                         .max(4, '올바른 번호를 입력해주세요'),
-                    last: z.string().length(4, '번호는 4자리여야 합니다'),
+                    suffix: z.string().length(4, '번호는 4자리여야 합니다'),
                 })
                 .nullable()
                 .optional(),

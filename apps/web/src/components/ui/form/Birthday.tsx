@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/form';
 import Select from '@/components/ui/select';
 import { DAY_LIST, MONTH_LIST, YEAR_LIST } from '@/const/date';
 import * as styles from '@/components/ui/form/Birthday.css';
@@ -15,7 +15,7 @@ export default function Birthday() {
             <div className={styles.inputRow}>
                 <Controller
                     control={control}
-                    name="birthday"
+                    name='birthday'
                     render={({ field: { value = '', onChange } }) => {
                         // 1. Normalize: 값이 없거나 짧으면 '_'로 채워 8자리 확보
                         // 예: "1990" -> "1990____", "" -> "________"
@@ -35,7 +35,7 @@ export default function Birthday() {
                         // Helper: 자리수 고정을 유지하며 값 업데이트 (설정 기반)
                         const updateDate = (
                             type: 'year' | 'month' | 'day',
-                            newVal: string
+                            newVal: string,
                         ) => {
                             const config = {
                                 year: { start: 0, end: 4 },
@@ -59,13 +59,13 @@ export default function Birthday() {
                                     options={YEAR_LIST}
                                     value={
                                         YEAR_LIST.find(
-                                            (opt) => opt.value === year
+                                            (opt) => opt.value === year,
                                         ) || null
                                     }
                                     onChange={(option) =>
                                         updateDate(
                                             'year',
-                                            option?.value || '____'
+                                            option?.value || '____',
                                         )
                                     }
                                 />
@@ -74,13 +74,13 @@ export default function Birthday() {
                                     options={MONTH_LIST}
                                     value={
                                         MONTH_LIST.find(
-                                            (opt) => opt.value === month
+                                            (opt) => opt.value === month,
                                         ) || null
                                     }
                                     onChange={(option) =>
                                         updateDate(
                                             'month',
-                                            option?.value || '__'
+                                            option?.value || '__',
                                         )
                                     }
                                 />
@@ -89,13 +89,13 @@ export default function Birthday() {
                                     options={DAY_LIST}
                                     value={
                                         DAY_LIST.find(
-                                            (opt) => opt.value === day
+                                            (opt) => opt.value === day,
                                         ) || null
                                     }
                                     onChange={(option) => {
                                         updateDate(
                                             'day',
-                                            option?.value || '__'
+                                            option?.value || '__',
                                         );
                                     }}
                                 />
@@ -104,7 +104,7 @@ export default function Birthday() {
                     }}
                 />
             </div>
-            <ErrorMessage name="birthday" />
+            <ErrorMessage name='birthday' />
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/form';
 import InputField from '@/components/ui/input/field';
 import Select from '@/components/ui/select';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
@@ -16,19 +16,19 @@ export default function Email() {
     return (
         <Controller
             control={control}
-            name="email"
+            name='email'
             render={({ field: { value = '', onChange, onBlur, ref } }) => {
                 const [emailId = '', emailDomain = ''] = value.split('@');
 
                 const handleIdChange = (
-                    e: React.ChangeEvent<HTMLInputElement>
+                    e: React.ChangeEvent<HTMLInputElement>,
                 ) => {
                     const newId = e.target.value;
                     onChange(`${newId}@${emailDomain}`);
                 };
 
                 const handleDomainChange = (
-                    e: React.ChangeEvent<HTMLInputElement>
+                    e: React.ChangeEvent<HTMLInputElement>,
                 ) => {
                     const newDomain = e.target.value;
                     onChange(`${emailId}@${newDomain}`);
@@ -63,7 +63,7 @@ export default function Email() {
                             formatOptionLabel={(option) => t(option.label)}
                             value={
                                 EMAIL_DOMAIN_LIST.find(
-                                    (opt) => opt.value === emailDomain
+                                    (opt) => opt.value === emailDomain,
                                 ) || null
                             }
                             onChange={(item) => {
@@ -78,7 +78,7 @@ export default function Email() {
                             }}
                         />
 
-                        <ErrorMessage name="email" />
+                        <ErrorMessage name='email' />
                     </div>
                 );
             }}

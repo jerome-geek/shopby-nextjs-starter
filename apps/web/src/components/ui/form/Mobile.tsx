@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/form';
 import InputField from '@/components/ui/input/field';
 import * as styles from '@/components/ui/form/Mobile.css';
 
@@ -27,19 +27,19 @@ export default function Mobile() {
                     <>
                         <InputField
                             // readOnly
-                            inputMode="numeric"
+                            inputMode='numeric'
                             value={mobileNo?.slice(0, 3) ?? ''}
                             tabIndex={-1}
                         />
                         <InputField
                             // readOnly
-                            inputMode="numeric"
+                            inputMode='numeric'
                             value={mobileNo?.slice(3, 7) ?? ''}
                             tabIndex={-1}
                         />
                         <InputField
                             // readOnly
-                            inputMode="numeric"
+                            inputMode='numeric'
                             value={mobileNo?.slice(7, 11) ?? ''}
                             tabIndex={-1}
                         />
@@ -47,15 +47,15 @@ export default function Mobile() {
                 ) : (
                     <div>
                         <InputField
-                            inputMode="numeric"
+                            inputMode='numeric'
                             {...register('mobileNo')}
                         />
-                        <ErrorMessage name="mobileCountryCode" />
-                        <ErrorMessage name="mobileNo" />
+                        <ErrorMessage name='mobileCountryCode' />
+                        <ErrorMessage name='mobileNo' />
                     </div>
                 )}
             </div>
-            <ErrorMessage name="mobileNo" />
+            <ErrorMessage name='mobileNo' />
         </div>
     );
 }

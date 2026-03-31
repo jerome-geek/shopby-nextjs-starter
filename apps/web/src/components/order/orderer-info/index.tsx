@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import * as styles from '@/components/order/orderer-info/index.css';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import ErrorMessage from '@/components/ui/form/error-message';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import { InputLabel } from '@/components/ui/input/label';
@@ -96,7 +96,7 @@ const OrdererInfo = () => {
                             placeholder='0000'
                             maxLength={4}
                             inputMode='numeric'
-                            {...register('orderer.ordererContact1.last')}
+                            {...register('orderer.ordererContact1.suffix')}
                         />
                     </div>
                 </InputFieldContainer>

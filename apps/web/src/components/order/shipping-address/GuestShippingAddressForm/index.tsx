@@ -34,9 +34,9 @@ const GuestShippingAddressForm = () => {
         control,
         name: 'orderer.ordererContact1.middle',
     });
-    const ordererContact1Last = useWatch({
+    const ordererContact1Suffix = useWatch({
         control,
-        name: 'orderer.ordererContact1.last',
+        name: 'orderer.ordererContact1.suffix',
     });
 
     // 개별 필드가 바뀔 때마다 receiverContact1에 하이픈 없이 합침
@@ -76,7 +76,7 @@ const GuestShippingAddressForm = () => {
             setValue('shippingAddress.receiverContact1', {
                 prefix: '010',
                 middle: '',
-                last: '',
+                suffix: '',
             });
         } else {
             setValue('shippingAddress.receiverName', ordererName);
@@ -89,8 +89,8 @@ const GuestShippingAddressForm = () => {
                 ordererContact1Middle,
             );
             setValue(
-                'shippingAddress.receiverContact1.last',
-                ordererContact1Last,
+                'shippingAddress.receiverContact1.suffix',
+                ordererContact1Suffix,
             );
         }
 
