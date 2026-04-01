@@ -1,5 +1,5 @@
 import axios, { HttpStatusCode, type InternalAxiosRequestConfig } from 'axios';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { controller } from '@/api/core/controller';
 import { shopbyRequest } from '@/api/core/request';
@@ -26,6 +26,8 @@ type RetryableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 const TOKEN_REFRESH_TIMEOUT = 10_000;
 
 const useAxiosInterceptor = () => {
+    const [isReady, setIsReady] = useState(false);
+
     const { openAsyncDialog } = useDialog();
     const { handleSendRefreshTokenExpired } = useMyApp();
 
@@ -99,8 +101,9 @@ const useAxiosInterceptor = () => {
                 if (isGuestRequest(url, method)) {
                     const guestToken = guestTokenCookie.get();
                     if (guestToken) {
-                        config.headers['Shop-By-Authorization'] =
-                            `Bearer ${guestToken}`;
+                        config.headers[
+                            'Shop-By-Authorization'
+                        ] = `Bearer ${guestToken}`;
                     }
                     return config;
                 }
@@ -108,8 +111,9 @@ const useAxiosInterceptor = () => {
                 // 일반 요청: 액세스 토큰 사용
                 const accessToken = accessTokenCookie.get();
                 if (accessToken) {
-                    config.headers['Shop-By-Authorization'] =
-                        `Bearer ${accessToken}`;
+                    config.headers[
+                        'Shop-By-Authorization'
+                    ] = `Bearer ${accessToken}`;
                 }
 
                 // 토큰 갱신 요청: Refresh-Token 헤더 추가
@@ -179,8 +183,9 @@ const useAxiosInterceptor = () => {
                                 reject(error);
                                 return;
                             }
-                            originalRequest.headers['Shop-By-Authorization'] =
-                                `Bearer ${newToken}`;
+                            originalRequest.headers[
+                                'Shop-By-Authorization'
+                            ] = `Bearer ${newToken}`;
                             resolve(shopbyRequest(originalRequest));
                         });
                     });
@@ -206,8 +211,9 @@ const useAxiosInterceptor = () => {
                     accessTokenCookie.set(data.accessToken, data.expiresIn);
                     notifySuccess(data.accessToken);
 
-                    originalRequest.headers['Shop-By-Authorization'] =
-                        `Bearer ${data.accessToken}`;
+                    originalRequest.headers[
+                        'Shop-By-Authorization'
+                    ] = `Bearer ${data.accessToken}`;
 
                     return shopbyRequest(originalRequest);
                 } catch {
@@ -219,6 +225,8 @@ const useAxiosInterceptor = () => {
                 }
             },
         );
+
+        setIsReady(true);
 
         return () => {
             shopbyRequest.interceptors.request.eject(requestInterceptor);
@@ -233,6 +241,10 @@ const useAxiosInterceptor = () => {
             accessTokenCookie.update();
         }
     });
+
+    return {
+        isReady,
+    };
 };
 
 export default useAxiosInterceptor;

@@ -1,18 +1,8 @@
-import axios, { InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import qs from 'qs';
 
-import {
-    DEFAULT_API_TIMEOUT,
-    defaultHeaders,
-    isUpdateOauth2Request,
-    logOnDev,
-} from '@/api/core/utils';
-import {
-    accessTokenCookie,
-    memberCookie,
-    refreshTokenCookie,
-} from '@/utils/cookie';
 import { controller } from '@/api/core/controller';
+import { DEFAULT_API_TIMEOUT, defaultHeaders } from '@/api/core/utils';
 
 const shopbyRequest = axios.create({
     baseURL: process.env.NEXT_PUBLIC_SHOPBY_BASE_URL,

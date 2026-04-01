@@ -38,7 +38,7 @@ globalStyle('html', {
     padding: 0,
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
-    colorScheme: 'light dark',
+    colorScheme: 'light',
 });
 
 globalStyle('html, body', {
