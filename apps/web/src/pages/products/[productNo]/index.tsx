@@ -1,14 +1,26 @@
-import { filter, includes, join, map, pipe, sum, toArray } from '@fxts/core';
+import {
+    each,
+    filter,
+    includes,
+    join,
+    map,
+    pipe,
+    prop,
+    sum,
+    take,
+    toArray,
+} from '@fxts/core';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import Seo from '@/components/common/seo';
 import { product } from '@/api/product';
+import Seo from '@/components/common/seo';
+import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import ProductMainImage from '@/components/product/main-image';
 import {
@@ -20,12 +32,15 @@ import PhotoReview from '@/components/product/photo-review';
 import ProductTabs from '@/components/product/product-tabs';
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
+import { toOrderSheetOption, toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
+import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
 import { cartKeys, productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import { useToast } from '@/hooks/ui';
+import { useAuth } from '@/hooks/useAuth';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import { ChannelType } from '@/models';
@@ -33,12 +48,8 @@ import * as styles from '@/pages/products/[productNo]/index.css';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
-import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { useAuth } from '@/hooks/useAuth';
-import { toOrderSheetOption } from '@/helpers/product';
-import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -67,10 +78,14 @@ function ProductDetailView({
 
     const liked = !!productDetailData.liked;
 
-    const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
-        useProductOption({
-            productNo,
-        });
+    const {
+        isDefaultOptionUsed,
+        isFlatOptionUsed,
+        isMultiLevelOptionUsed,
+        productOptionListData,
+    } = useProductOption({
+        productNo,
+    });
 
     const { data: additionalDiscountData } = useAdditionalDiscount({
         searchParams: { productNo },
@@ -130,6 +145,45 @@ function ProductDetailView({
     const { selectedOptionList, addOption, clearOptions } =
         useProductOptionStore();
 
+    useEffect(() => {
+        if (!productDetailData) {
+            return;
+        }
+        if (!productOptionListData) {
+            return;
+        }
+
+        if (isDefaultOptionUsed) {
+            const minBuyCnt = productDetailData.limitations?.minBuyCnt || 1;
+            pipe(
+                productOptionListData,
+                prop('flatOptions'),
+                map((option) =>
+                    toSelectedOption(
+                        option,
+                        productNo,
+                        undefined,
+                        // TODO: 무한루프로 인하여 일단 제거
+                        // [
+                        //     ...textOptionInputsRef.current['OPTION'],
+                        //     ...textOptionInputsRef.current['PRODUCT'],
+                        // ],
+                        [],
+                        minBuyCnt,
+                    ),
+                ),
+                take(1),
+                each((option) => addOption(option)),
+            );
+        }
+    }, [
+        productDetailData,
+        productOptionListData,
+        isDefaultOptionUsed,
+        productNo,
+        addOption,
+    ]);
+
     const totalPrice = pipe(
         selectedOptionList,
         map((option) => option.buyPrice * option.orderCnt),
@@ -178,7 +232,7 @@ function ProductDetailView({
                             toOrderSheetOption(a, searchParams.channelType),
                         ),
                         toArray,
-                    ) as any,
+                    ),
                 },
                 {
                     onSuccess: () => {

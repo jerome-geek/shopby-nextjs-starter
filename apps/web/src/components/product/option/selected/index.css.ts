@@ -1,12 +1,12 @@
+import { style } from '@vanilla-extract/css';
+
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { style } from '@vanilla-extract/css';
 
 export const optionList = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
-    padding: '16px 0',
 });
 
 export const optionListItem = style({

@@ -11,12 +11,14 @@ import {
     toArray,
 } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { sortRequiredFirst } from '@/helpers/product';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useProductOptionList } from '@/hooks/query/product/product';
 import { productKeys } from '@/hooks/queryKeys';
+import { useAuth } from '@/hooks/useAuth';
 import {
     FlatOption,
     MultiLevelOption,
@@ -32,7 +34,15 @@ interface UseOptionProps {
 const useProductOption = ({ productNo }: UseOptionProps) => {
     const { t } = useTranslation();
 
-    const { data: profileData } = useProfile();
+    const queryClient = useQueryClient();
+
+    const isLogin = useAuth();
+
+    const { data: profileData } = useProfile({
+        options: {
+            enabled: !!isLogin,
+        },
+    });
     const {
         data: productOptionListData,
         isFetched: isProductOptionListFetched,
@@ -44,97 +54,101 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
         },
     });
 
-    const queryClient = useQueryClient();
+    // NOTE: queryCache는 외부 시스템이라 useMemo 의존성으로 안정적으로 추적하기 어려움
+    // 따라서 isProductOptionListFetched를 트리거로 사용
+    const textOptionRequiredInfoList = useMemo(
+        () =>
+            pipe(
+                queryClient.getQueryCache().findAll({
+                    queryKey: productKeys.options(),
+                }),
+                filter((query) => query.getObserversCount() > 0),
+                map((query) => {
+                    const queryKey = query.queryKey as [string, string, number];
+                    const data = query.state.data as
+                        | ProductOptionResponse
+                        | undefined;
 
-    const textOptionRequiredInfoList = pipe(
-        // NOTE : 옵션 쿼리키를 가진 캐싱 데이터 조회
-        queryClient.getQueryCache().findAll({
-            queryKey: productKeys.options(),
-        }),
-        // NOTE : 현재 페이지에서 사용하지 않는 캐싱 데이터는 필터링 처리
-        filter((query) => query.getObserversCount() > 0),
-        map((query) => {
-            const queryKey = query.queryKey as [string, string, number];
-            const data = query.state.data as ProductOptionResponse | undefined;
+                    if (!data) {
+                        return undefined;
+                    }
 
-            if (!data) {
-                return undefined;
-            }
-
-            return {
-                queryKey,
-                data,
-            };
-        }),
-        compact,
-        map(({ queryKey, data }) => {
-            return {
-                productNo: queryKey[2],
-                isTextOptionRequired: some(
-                    (input) => input.required,
-                    data.inputs,
-                ),
-            };
-        }),
-        toArray,
+                    return { queryKey, data };
+                }),
+                compact,
+                map(({ queryKey, data }) => ({
+                    productNo: queryKey[2],
+                    isTextOptionRequired: some(
+                        (input) => input.required,
+                        data.inputs,
+                    ),
+                })),
+                toArray,
+            ),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [isProductOptionListFetched, queryClient],
     );
 
     const { selectedOptionList } = useProductOptionStore();
 
-    if (!productOptionListData) {
-        return {
-            productOptionListData,
-            textOptionInputs: { PRODUCT: [], OPTION: [], AMOUNT: [] },
-            productTextOptionInputs: [],
-            getMultiLevelOptionLabel: (option: MultiLevelOption) =>
-                option.value,
-            getFlatOptionLabel: (option: FlatOption) => option.value,
-            isDefaultOptionUsed: false,
-            isFlatOptionUsed: false,
-            isFlatOption: (
-                opt: MultiLevelOption | FlatOption,
-            ): opt is FlatOption => !!opt && 'optionNo' in opt,
-            isMultiLevelOption: (
-                opt: MultiLevelOption | FlatOption,
-            ): opt is MultiLevelOption => !!opt && !('optionNo' in opt),
-            isMultiLevelOptionUsed: false,
-            isRequiredOptionUsed: false,
-            isTextOptionUsed: false,
-            isTextOptionRequired: false,
-            textOptionRequiredInfoList,
-            isSomeOptionSoldOut: false,
-            getSelectedOptionValue: () => '',
-            isOptionDisabled: () => false,
-            isProductOptionListFetched,
-            selectedOptionList,
-            filteredSelectedOptionList: [],
-        };
-    }
+    // ── 타입 가드 (순수 함수 → useCallback으로 안정화) ──────────────────────
 
-    const { type, selectType, inputs, flatOptions, multiLevelOptions } =
-        productOptionListData;
+    const isFlatOption = useCallback(
+        (option: MultiLevelOption | FlatOption): option is FlatOption =>
+            !!option && 'optionNo' in option,
+        [],
+    );
 
-    const isDefaultOptionUsed = type === 'DEFAULT';
+    const isMultiLevelOption = useCallback(
+        (option: MultiLevelOption | FlatOption): option is MultiLevelOption =>
+            !('optionNo' in option),
+        [],
+    );
+
+    // ── 파생 플래그 ─────────────────────────────────────────────────────────
+
+    const isDefaultOptionUsed = productOptionListData?.type === 'DEFAULT';
     const isFlatOptionUsed =
-        selectType === 'FLAT' &&
-        type === 'COMBINATION' &&
-        flatOptions.length > 0;
+        productOptionListData?.selectType === 'FLAT' &&
+        productOptionListData?.type === 'COMBINATION' &&
+        (productOptionListData?.flatOptions.length ?? 0) > 0;
     const isMultiLevelOptionUsed =
-        selectType === 'MULTI' &&
-        type === 'COMBINATION' &&
-        multiLevelOptions.length > 0;
+        productOptionListData?.selectType === 'MULTI' &&
+        productOptionListData?.type === 'COMBINATION' &&
+        (productOptionListData?.multiLevelOptions.length ?? 0) > 0;
     const isRequiredOptionUsed =
-        selectType === 'MULTI' &&
-        type === 'REQUIRED' &&
-        multiLevelOptions.length > 0;
+        productOptionListData?.selectType === 'MULTI' &&
+        productOptionListData?.type === 'REQUIRED' &&
+        (productOptionListData?.multiLevelOptions.length ?? 0) > 0;
+
+    const inputs = useMemo(
+        () => productOptionListData?.inputs ?? [],
+        [productOptionListData],
+    );
+    const flatOptions = useMemo(
+        () => productOptionListData?.flatOptions ?? [],
+        [productOptionListData],
+    );
 
     const isTextOptionUsed = inputs.length > 0;
-    const isTextOptionRequired = some((input) => input.required, inputs);
-    const isSomeOptionSoldOut = some((a) => a.stockCnt === 0, flatOptions);
+    const isTextOptionRequired = useMemo(
+        () => some((input) => input.required, inputs),
+        [inputs],
+    );
+    const isSomeOptionSoldOut = useMemo(
+        () => some((a) => a.stockCnt === 0, flatOptions),
+        [flatOptions],
+    );
 
-    const textOptionInputs = () => {
+    // ── 텍스트 옵션 가공 (selectedOptionList 포함, useMemo 필수) ─────────────
+
+    const textOptionInputs = useMemo(() => {
         if (inputs.length === 0) {
-            return { PRODUCT: [], OPTION: [], AMOUNT: [] };
+            return {
+                PRODUCT: [] as typeof inputs,
+                OPTION: [] as typeof inputs,
+                AMOUNT: [] as typeof inputs,
+            };
         }
 
         return pipe(
@@ -150,105 +164,116 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
                     )?.inputValue || '';
 
                 if (a.inputMatchingType === 'PRODUCT') {
-                    return {
-                        ...a,
-                        inputValue,
-                    };
+                    return { ...a, inputValue };
                 }
 
                 return a;
             }),
             groupBy((a) => a.inputMatchingType),
-        );
-    };
+        ) as {
+            PRODUCT: typeof inputs;
+            OPTION: typeof inputs;
+            AMOUNT: typeof inputs;
+        };
+    }, [inputs, selectedOptionList]);
 
-    const productTextOptionInputs = () => {
-        return pipe(
-            textOptionInputs()['PRODUCT'],
-            filter((a) => {
-                return some(
-                    (b) => b.optionInputs?.some((c) => c.inputNo === a.inputNo),
-                    selectedOptionList,
-                );
-            }),
-            toArray,
-        );
-    };
+    const productTextOptionInputs = useMemo(
+        () =>
+            pipe(
+                textOptionInputs['PRODUCT'] ?? [],
+                filter((a) =>
+                    some(
+                        (b) =>
+                            b.optionInputs?.some(
+                                (c) => c.inputNo === a.inputNo,
+                            ),
+                        selectedOptionList,
+                    ),
+                ),
+                toArray,
+            ),
+        [textOptionInputs, selectedOptionList],
+    );
 
-    const isFlatOption = (
-        option: MultiLevelOption | FlatOption,
-    ): option is FlatOption => {
-        return !!option && 'optionNo' in option;
-    };
+    // ── 레이블 생성 함수 (useCallback으로 안정화) ───────────────────────────
 
-    const isMultiLevelOption = (
-        option: MultiLevelOption | FlatOption,
-    ): option is MultiLevelOption => {
-        return !('optionNo' in option);
-    };
+    const getMultiLevelOptionLabel = useCallback(
+        (option: MultiLevelOption) => {
+            if (isFlatOption(option)) {
+                if (
+                    option.saleType === 'SOLDOUT' ||
+                    option.stockCnt === 0 ||
+                    option.forcedSoldOut
+                ) {
+                    return `${option.value} - ${t('품절')}`;
+                }
 
-    const getMultiLevelOptionLabel = (option: MultiLevelOption) => {
-        if (isFlatOption(option)) {
-            if (
-                option.saleType === 'SOLDOUT' ||
-                option.stockCnt === 0 ||
-                option.forcedSoldOut
-            ) {
-                return `${option.value} - ${t('품절')}`;
+                if (option.addPrice > 0) {
+                    return `${option.value} ${addPriceString(option.addPrice)}`;
+                }
             }
+
+            return option.value;
+        },
+        [isFlatOption, t],
+    );
+
+    const getFlatOptionLabel = useCallback(
+        (option: FlatOption) => {
+            const value = option.value.split('|').join(' / ');
+
+            if (option.saleType === 'SOLDOUT') {
+                return `${value} - ${t('품절')}`;
+            }
+
+            if (option.addPrice > 0) {
+                return `${value} ${addPriceString(option.addPrice)}`;
+            }
+
+            return value;
+        },
+        [t],
+    );
+
+    const getSelectedOptionValue = useCallback(
+        (optionNo: number) => {
+            const option = flatOptions.find((opt) => opt.optionNo === optionNo);
+
+            if (!option) return '';
 
             if (option.addPrice > 0) {
                 return `${option.value} ${addPriceString(option.addPrice)}`;
             }
-        }
 
-        return option.value;
-    };
+            return option.value;
+        },
+        [flatOptions],
+    );
 
-    const getFlatOptionLabel = (option: FlatOption) => {
-        const value = option.value.split('|').join(' / ');
-
-        if (option.saleType === 'SOLDOUT') {
-            return `${value} - ${t('품절')}`;
-        }
-
-        if (option.addPrice > 0) {
-            return `${value} ${addPriceString(option.addPrice)}`;
-        }
-
-        return value;
-    };
-
-    const getSelectedOptionValue = (optionNo: number) => {
-        const option = flatOptions.find((opt) => opt.optionNo === optionNo);
-
-        if (!option) {
-            return '';
-        }
-
-        if (option.addPrice > 0) {
-            return `${option.value} ${addPriceString(option.addPrice)}`;
-        }
-
-        return option.value;
-    };
-
-    const isOptionDisabled = (option: MultiLevelOption | FlatOption) => {
-        return 'optionNo' in option
-            ? option.saleType === 'SOLDOUT' ||
+    const isOptionDisabled = useCallback(
+        (option: MultiLevelOption | FlatOption) =>
+            'optionNo' in option
+                ? option.saleType === 'SOLDOUT' ||
                   option.stockCnt === 0 ||
                   option.forcedSoldOut
-            : false;
-    };
+                : false,
+        [],
+    );
 
-    const filteredSelectedOptionList = selectedOptionList.filter(
-        (option) => option.productNo === productNo,
+    // ── 필터링된 선택 옵션 목록 ─────────────────────────────────────────────
+
+    const filteredSelectedOptionList = useMemo(
+        () =>
+            selectedOptionList.filter(
+                (option) => option.productNo === productNo,
+            ),
+        [selectedOptionList, productNo],
     );
 
     return {
         productOptionListData,
-        textOptionInputs: textOptionInputs(),
-        productTextOptionInputs: productTextOptionInputs(),
+        textOptionInputs,
+        productTextOptionInputs,
         getMultiLevelOptionLabel,
         getFlatOptionLabel,
         isDefaultOptionUsed,
