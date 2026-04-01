@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
-const deliveryCompanyType = z.enum([
+export const deliveryCompanyType = z.enum([
     'CJ',
     'POST',
     'HANJIN',
     'GTX',
-    'LOOTTE',
+    'LOTTE',
     'KGB',
     'LOGEN',
     'GSI',
@@ -47,7 +47,7 @@ const deliveryCompanyType = z.enum([
     'ETC',
 ]);
 
-const claimReasonType = z.enum(
+export const claimReasonType = z.enum(
     [
         'CHANGE_MIND',
         'DEFECTIVE_PRODUCT',
@@ -62,10 +62,10 @@ const claimReasonType = z.enum(
         'LATER_INPUT_ORDER',
         'LATER_INPUT_ORDER_RECEIVER_CANCEL',
     ],
-    { error: '사유를 선택해주세요.' }
+    { error: '사유를 선택해주세요.' },
 );
 
-const CountryCdType = z.enum([
+export const CountryCdType = z.enum([
     'AX',
     'AD',
     'AU',
@@ -153,7 +153,7 @@ const CountryCdType = z.enum([
     'SE',
 ]);
 
-const bankType = z.enum([
+export const bankType = z.enum([
     'ANONYMOUS',
     'KDB',
     'IBK',
@@ -209,7 +209,7 @@ const bankType = z.enum([
     'SHINYOUNG',
 ]);
 
-const orderStatusType = z.enum([
+export const orderStatusType = z.enum([
     'DEPOSIT_WAIT',
     'PAY_DONE',
     'PRODUCT_PREPARE',
@@ -226,7 +226,7 @@ const orderStatusType = z.enum([
     'EXCHANGE_WAITING',
 ]);
 
-const mobileCountryCodeType = z.enum([
+export const mobileCountryCodeType = z.enum([
     'AD',
     'AE',
     'AF',
@@ -472,7 +472,7 @@ const mobileCountryCodeType = z.enum([
     'ZW',
 ]);
 
-const countryCodeType = z.enum([
+export const countryCodeType = z.enum([
     'AF',
     'AL',
     'DZ',
@@ -725,7 +725,7 @@ const countryCodeType = z.enum([
     'XK',
 ]);
 
-const stateType = z.enum([
+export const stateType = z.enum([
     'NY',
     'PA',
     'TN',
@@ -785,7 +785,7 @@ const stateType = z.enum([
     'CT',
 ]);
 
-const payType = z.enum(
+export const payType = z.enum(
     [
         'CREDIT_CARD',
         'ACCOUNT',
@@ -826,14 +826,17 @@ const payType = z.enum(
         'EXTERNAL_PAY',
         'HMG_PAY',
         'APP_CARD',
+        'PAY_PAY',
+        'E_CONTEXT',
+        'HAPPY_VOUCHER',
         'ETC',
     ],
     {
         error: '결제수단을 선택해주세요.',
-    }
+    },
 );
 
-const pgType = z.enum([
+export const pgType = z.enum([
     'DUMMY',
     'PAYCO',
     'PAYPAL',
@@ -868,7 +871,7 @@ const pgType = z.enum([
     'TOSS_EASY_PAY',
 ]);
 
-const termsType = z.enum([
+export const termsType = z.enum([
     'USE',
     'PI_COLLECTION_AND_USE_ON_ORDER',
     'PI_SELLER_PROVISION',
@@ -882,16 +885,11 @@ const termsType = z.enum([
     'PI_GIFT_ACCEPT_COLLECTION_AND_USE',
 ]);
 
-export {
-    CountryCdType,
-    claimReasonType,
-    deliveryCompanyType,
-    bankType,
-    orderStatusType,
-    mobileCountryCodeType,
-    countryCodeType,
-    stateType,
-    payType,
-    pgType,
-    termsType,
-};
+export const phonePrefixType = z.enum([
+    '010',
+    '011',
+    '016',
+    '017',
+    '018',
+    '019',
+]);

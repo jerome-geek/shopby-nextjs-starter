@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { paymentReserveSchema, PaymentReserveSchemaType } from '@/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -17,6 +17,7 @@ import OrderProducts from '@/components/order/order-products';
 import OrdererInfo from '@/components/order/orderer-info';
 import ShippingAddress from '@/components/order/shipping-address';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
+import { useSb } from '@/hooks/libs/shopby';
 
 const OrderSheetPage = () => {
     const router = useRouter();
@@ -29,6 +30,13 @@ const OrderSheetPage = () => {
         resolver: zodResolver(paymentReserveSchema),
         defaultValues: {
             orderSheetNo,
+            orderer: {
+                ordererName: '',
+                // ordererLastName: '',
+                // ordererFirstName: '',
+                ordererContact1: { prefix: '010', middle: '', suffix: '' },
+                ordererEmail: '',
+            },
             shippingAddress: {
                 addressNo: 0,
                 countryCd: 'KR',
@@ -52,31 +60,66 @@ const OrderSheetPage = () => {
         },
     });
 
-    const { setValue, reset } = methods;
-
-    useOrderSheetInitialize({
-        orderSheetNo,
-        setValue,
-        reset,
-    });
-
     return (
         <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
             <FormProvider {...methods}>
-                <OrderSheetContent orderSheetNo={orderSheetNo} />
+                {isLogin !== null && (
+                    <OrderSheetContent orderSheetNo={orderSheetNo} isLogin={isLogin} />
+                )}
             </FormProvider>
         </ShopbyApiErrorBoundary>
     );
 };
 
-const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
+const OrderSheetContent = ({ 
+    orderSheetNo, 
+    isLogin 
+}: { 
+    orderSheetNo: string;
+    isLogin: boolean | null;
+}) => {
+    useOrderSheetInitialize({
+        orderSheetNo,
+        isLogin,
+    });
     const { data: orderSheetData } = useOrderSheet({
         orderSheetNo,
         searchParams: { includeMemberAddress: true },
     });
+    useSb({ orderSheet: orderSheetData });
+
+    const {
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useFormContext<PaymentReserveSchemaType>();
+    console.log('🚀 ~ OrderSheetContent ~ watch:', watch());
+    console.log('🚀 ~ OrderSheetContent ~ errors:', errors);
+
+    const onSubmit = handleSubmit(
+        async (data) => {
+            try {
+                console.log('🚀 ~ onSubmit ~ data:', data);
+                const submitData = {
+                    ...data,
+                    orderer: {
+                        ...data.orderer,
+                        orderContact1: `${data.orderer.ordererContact1.prefix}${data.orderer.ordererContact1.middle}${data.orderer.ordererContact1.suffix}`,
+                    },
+                };
+            } catch (error) {}
+        },
+        (error) => {
+            console.log('🚀 ~ OrderSheetContent ~ error:', error);
+        },
+    );
 
     return (
-        <div id='order-sheet-container' className={styles.container}>
+        <form
+            id='order-sheet-container'
+            className={styles.container}
+            onSubmit={onSubmit}
+        >
             <h1 className={styles.title}>주문하기</h1>
 
             <div className={styles.contentWrapper}>
@@ -109,7 +152,7 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
                 {/* 우측: 사이드바 (aside 사용) */}
                 <OrderPaymentSummary orderSheetNo={orderSheetNo} />
             </div>
-        </div>
+        </form>
     );
 };
 

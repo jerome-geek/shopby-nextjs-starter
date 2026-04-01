@@ -9,37 +9,55 @@ import {
     toArray,
 } from '@fxts/core';
 import { useEffect } from 'react';
-import { UseFormReset, UseFormSetValue } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-// import { PHONE_FIRST_NUMBER_LIST } from '@/const/form';
+import { type PhonePrefixValue } from '@/const/form';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
 import { useOrderSheet } from '@/hooks/query/order/orderSheet';
 // import { useGlobal } from '@/hooks/utils';
-import { PaymentReserveSchemaType } from '@/schema';
 import { usePG } from '@/hooks/order';
+import { PaymentReserveSchemaType } from '@/schema';
+
+const parsePhoneString = (phone: string | null | undefined) => {
+    if (!phone) return null;
+    return {
+        prefix: phone.slice(0, 3) as PhonePrefixValue,
+        middle: phone.slice(3, -4),
+        last: phone.slice(-4),
+    };
+};
+
+interface UseOrderSheetInitializeProps {
+    orderSheetNo: string;
+    isLogin: boolean | null;
+}
 
 const useOrderSheetInitialize = ({
     orderSheetNo,
-    setValue,
-    reset,
-}: {
-    orderSheetNo: string;
-    setValue: UseFormSetValue<PaymentReserveSchemaType>;
-    reset: UseFormReset<PaymentReserveSchemaType>;
-}) => {
-    const isKorean = process.env.NEXT_PUBLIC_LANG === 'ko';
+    isLogin,
+}: UseOrderSheetInitializeProps) => {
+    const isKorean = process.env.NEXT_PUBLIC_LOCALE === 'ko';
     const defaultMobileCountryCode = 'US';
     // const { isKorean, defaultMobileCountryCode } = useGlobal();
 
-    const { data: profileData } = useProfile();
+    const { setValue, reset } = useFormContext<PaymentReserveSchemaType>();
+
+    const { data: profileData } = useProfile({
+        options: { enabled: isLogin !== null },
+    });
     const { data: orderConfigurationData } = useOrderConfiguration();
     const { data: orderSheetData } = useOrderSheet({
         orderSheetNo,
         searchParams: {
             includeMemberAddress: true,
         },
+        options: { enabled: isLogin !== null },
     });
+    console.log(
+        '🚀 ~ useOrderSheetInitialize ~ orderSheetData:',
+        orderSheetData,
+    );
 
     // NOTE: PG 스크립트 세팅 (네이버페이는 별도로 설정)
     usePG({ pgType: 'NAVER_EASY_PAY' });
@@ -54,6 +72,10 @@ const useOrderSheetInitialize = ({
         }
 
         const lastPayType = orderSheetData.lastPayType;
+        const availablePayTypes = orderSheetData.availablePayTypes;
+        const mainAddress = orderSheetData.orderSheetAddress.mainAddress;
+        const tradeBankAccountInfos = orderSheetData.tradeBankAccountInfos;
+
         const pgType = pipe(
             orderSheetData,
             prop('availablePayTypes'),
@@ -62,7 +84,10 @@ const useOrderSheetInitialize = ({
             head,
         );
 
-        if (includes(lastPayType, pipe(orderSheetData.availablePayTypes, map(prop('payType'))))) {
+        if (
+            lastPayType &&
+            includes(lastPayType, pipe(availablePayTypes, map(prop('payType'))))
+        ) {
             setValue('payType', lastPayType);
         }
         if (pgType) {
@@ -71,49 +96,62 @@ const useOrderSheetInitialize = ({
 
         reset((prev) => ({
             ...prev,
+            // TODO: 기존에 등록된 주소가 있다면 세팅 필요
+            shippingAddress: {
+                addressNo: mainAddress.addressNo || 0,
+                receiverName: mainAddress.receiverName || '',
+                receiverContact1: parsePhoneString(
+                    mainAddress.receiverContact1,
+                ),
+                receiverAddress: mainAddress.receiverAddress || '',
+                receiverDetailAddress: mainAddress.receiverDetailAddress || '',
+                receiverZipCd: mainAddress.receiverZipCd || '',
+            },
             agreementTermsAgrees: pipe(
                 orderSheetData,
                 prop('termsInfos'),
                 map((a) => ({ isAgree: false, termsType: a.termsType })),
                 toArray,
             ),
-            bankAccountToDeposit: {
-                bankAccount:
-                    orderSheetData.tradeBankAccountInfos[0].bankAccount,
-                bankCode: orderSheetData.tradeBankAccountInfos[0].bankCode,
-                bankDepositorName:
-                    orderSheetData.tradeBankAccountInfos[0].bankDepositorName,
-            },
+            bankAccountToDeposit: tradeBankAccountInfos[0]
+                ? {
+                      bankAccount: tradeBankAccountInfos[0].bankAccount,
+                      bankCode: tradeBankAccountInfos[0].bankCode,
+                      bankDepositorName:
+                          tradeBankAccountInfos[0].bankDepositorName,
+                  }
+                : undefined,
             applyCashReceipt: orderSheetData.applyCashReceiptForAccount,
         }));
     }, [orderSheetData, setValue, orderConfigurationData, reset]);
 
     // NOTE: 주문자 정보 세팅
     useEffect(() => {
-        if (profileData) {
-            setValue('orderer.ordererEmail', profileData.email ?? '');
-            setValue('orderer.ordererContact2', profileData.telephoneNo);
-            setValue(
-                'orderer.ordererMobileCountryCd',
-                profileData.mobileCountryCode ?? defaultMobileCountryCode,
-            );
+        if (!profileData) {
+            return;
+        }
 
-            // if (isKorean) {
-            //     setValue('orderer.ordererName', profileData.memberName);
-            //     setValue('orderer.ordererContact1', {
-            //         prefix:
-            //             profileData.mobileNo?.slice(0, 3) ??
-            //             PHONE_FIRST_NUMBER_LIST[0].value,
-            //         middle: profileData.mobileNo?.slice(3, 7) ?? '',
-            //         suffix: profileData.mobileNo?.slice(7) ?? '',
-            //     });
-            // } else {
-            //     setValue('orderer.ordererLastName', profileData.lastName);
-            //     setValue('orderer.ordererFirstName', profileData.firstName);
-            //     setValue('orderer.ordererContact1', {
-            //         prefix: profileData.mobileNo ?? '',
-            //     });
-            // }
+        setValue('orderer.ordererEmail', profileData.email ?? '');
+        // setValue('orderer.ordererContact2', profileData.telephoneNo);
+        // setValue(
+        //     'orderer.ordererMobileCountryCd',
+        //     profileData.mobileCountryCode ?? defaultMobileCountryCode,
+        // );
+
+        if (isKorean) {
+            setValue('orderer.ordererName', profileData.memberName ?? '');
+            setValue('orderer.ordererContact1', {
+                prefix: (profileData.mobileNo?.slice(0, 3) ??
+                    '010') as PhonePrefixValue,
+                middle: profileData.mobileNo?.slice(3, 7) ?? '',
+                suffix: profileData.mobileNo?.slice(7) ?? '',
+            });
+        } else {
+            // setValue('orderer.ordererLastName', profileData.lastName);
+            // setValue('orderer.ordererFirstName', profileData.firstName);
+            // setValue('orderer.ordererContact1', {
+            //     prefix: profileData.mobileNo ?? '',
+            // });
         }
     }, [profileData, setValue, isKorean, defaultMobileCountryCode]);
 };

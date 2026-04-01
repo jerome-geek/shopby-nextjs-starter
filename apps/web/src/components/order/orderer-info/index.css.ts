@@ -20,3 +20,9 @@ export const ordererForm = style({
     flexDirection: 'column',
     gap: '24px',
 });
+
+export const phoneInputGroup = style({
+    display: 'flex',
+    gap: '8px',
+    width: '100%',
+});

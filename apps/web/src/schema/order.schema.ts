@@ -6,185 +6,17 @@ import {
     pgType,
     termsType,
 } from '@/schema/common.schema';
+import { PHONE_PREFIX_VALUES } from '@/const/form';
 import { regEx } from '@/utils/validation';
+import { shippingAddressSchema } from '@/schema/shippingAddress.schema';
 // import { checkLogin } from '@/utils/users';
 
-const isGlobalMall = process.env.NEXT_PUBLIC_LANG !== 'ko';
+const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
 
 // TODO: useAuth가 hooks가 되었으므로 다시 체크해볼것
 const checkLogin = () => {
     return true;
 };
-
-const registerShippingAddressSchema_base = z.object({
-    // NOTE: (해외배송 / 글로벌결제 시 필수) 수령인 LastName (nullable)
-    receiverLastName: isGlobalMall
-        ? z.string().nonempty('성을 입력해 주세요.')
-        : z.string().optional(),
-    receiverJibunAddress: z.string(),
-    defaultYn: z.enum(['Y', 'N']),
-    receiverName: isGlobalMall
-        ? z.string().optional()
-        : z.string().nonempty('받으시는 분을 입력해주세요.'),
-    addressType: z.enum([
-        'BOOK',
-        'RECENT',
-        'RECURRING_PAYMENT',
-        'RECURRING_PAYMENT_PRESENT',
-    ]),
-    customsIdNumber: z.string().optional(),
-    countryCd: z.enum(CountryCdType.options).nullable().optional(),
-    receiverZipCd: z
-        .string({
-            error: '우편번호를 입력해주세요.',
-        })
-        .nonempty('우편번호를 입력해주세요.'),
-    addressMemo: z.string().optional(),
-    receiverDetailAddress: z.string().nonempty('상세 주소를 입력해주세요.'),
-    receiverCity: z.string().optional(),
-    city: z.string().optional(),
-    receiverMobileCountryCd: isGlobalMall
-        ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
-        : z.string().nullable().optional(),
-    receiverAddress: z.string().nonempty('주소를 입력해주세요.'),
-    receiverState: z.string().optional(),
-    addressName: z.string().nonempty('배송지명을 입력해주세요.'),
-    // NOTE: (해외배송 / 글로벌결제 시 필수) 수령인 FirstName (nullable)
-    receiverFirstName: isGlobalMall
-        ? z.string().nonempty('이름을 입력해주세요.')
-        : z.string().optional(),
-    receiverContact1: z.object({
-        prefix: z.string().nonempty('연락처를 입력해주세요.'),
-        middle: isGlobalMall
-            ? z.string().optional()
-            : z.string().nonempty('연락처를 입력해주세요.'),
-        suffix: isGlobalMall
-            ? z.string().optional()
-            : z.string().nonempty('연락처를 입력해주세요.'),
-    }),
-    receiverContact2: z.string().optional(),
-});
-
-const registerShippingAddressSchema = registerShippingAddressSchema_base.refine(
-    (data) => {
-        if (data.countryCd === 'KR') {
-            return true;
-        }
-        return !!data.receiverState;
-    },
-    {
-        message: 'Receiver State is required',
-        path: ['receiverState'],
-    },
-);
-
-type RegisterShippingAddressSchemaType = z.infer<
-    typeof registerShippingAddressSchema
->;
-
-const baseShippingAddressSchema = z.object({
-    receiverLastName: isGlobalMall
-        ? z.string().nonempty('성을 입력해주세요.')
-        : z.string().optional(),
-    receiverJibunAddress: z.string().optional(),
-    requestShippingDate: z.string().optional(),
-    orderAdditionalInfo: z.string().optional(),
-    usesShippingInfoLaterInput: z.boolean().optional(),
-    receiverName: isGlobalMall
-        ? z.string().optional()
-        : z.string().nonempty('받으시는 분을 입력해주세요.'),
-    customsIdNumber: z.string().optional(),
-    countryCd: z.string().optional(),
-    receiverZipCd: z.string().optional(),
-    receiverDetailAddress: z.string().optional(),
-    receiverCity: z.string().optional(),
-    receiverMobileCountryCd: z.string().nullable().optional(),
-    receiverAddress: z.string().optional(),
-    addressNo: z.number(),
-    // (해외) 주 (엑심베이 페이팔 해외결제의 경우 다음 state 코드로 요청하셔야 합니다. [
-    //  미국,
-    //  중국: https://developer.paypal.com/api/rest/reference/state-codes/
-    //  일본(숫자 01~47만 입력) [개발중]: https://www.post.japanpost.jp/zipcode/dl/readme.html
-    // ]) (nullable)
-    receiverState: z.string().optional(),
-    addressName: z.string().optional(),
-    receiverFirstName: isGlobalMall
-        ? z.string().nonempty('이름을 입력해주세요.')
-        : z.string().optional(),
-    shippingInfoLaterInputContact: z.string().optional(),
-    receiverContact1: z.string().optional(),
-    receiverContact2: z.string().optional(),
-});
-
-const shippingAddressSchema = baseShippingAddressSchema.superRefine(
-    (value, context) => {
-        if (value.usesShippingInfoLaterInput) {
-            if (!value.shippingInfoLaterInputContact) {
-                context.addIssue({
-                    path: ['shippingInfoLaterInputContact'],
-                    message: '연락처를 입력해주세요.',
-                    code: 'custom',
-                });
-            }
-
-            if (isGlobalMall) {
-                if (!value.receiverLastName) {
-                    context.addIssue({
-                        path: ['receiverLastName'],
-                        message: '성을 입력해주세요.',
-                        code: 'custom',
-                    });
-                }
-                if (!value.receiverFirstName) {
-                    context.addIssue({
-                        path: ['receiverFirstName'],
-                        message: '이름을 입력해주세요.',
-                        code: 'custom',
-                    });
-                }
-            } else {
-                if (!value.receiverName) {
-                    context.addIssue({
-                        path: ['receiverName'],
-                        message: '수령자명을 입력해주세요.',
-                        code: 'custom',
-                    });
-                }
-            }
-
-            return;
-        }
-
-        if (!value.receiverContact1) {
-            context.addIssue({
-                path: ['receiverContact1'],
-                message: '연락처를 입력해주세요.',
-                code: 'custom',
-            });
-        }
-        if (!value.receiverZipCd) {
-            context.addIssue({
-                path: ['receiverZipCd'],
-                message: '우편번호를 입력해주세요.',
-                code: 'custom',
-            });
-        }
-        if (!value.receiverAddress) {
-            context.addIssue({
-                path: ['receiverAddress'],
-                message: '주소를 입력해주세요.',
-                code: 'custom',
-            });
-        }
-        if (!value.receiverDetailAddress) {
-            context.addIssue({
-                path: ['receiverDetailAddress'],
-                message: '상세주소를 입력해주세요.',
-                code: 'custom',
-            });
-        }
-    },
-);
 
 const paymentReserveSchema = z
     .object({
@@ -312,25 +144,27 @@ const paymentReserveSchema = z
                     return '이메일을 입력해주세요.';
                 },
             }),
-            ordererContact1: z
-                .string()
-                .nonempty('휴대폰번호를 입력해 주세요.')
-                .regex(regEx.phoneNumberIncludeSafeNumber, {
-                    message: '형식에 맞게 입력해 주세요.',
-                }),
+            ordererContact1: z.object({
+                prefix: z.enum(PHONE_PREFIX_VALUES),
+                middle: z
+                    .string()
+                    .min(3, '올바른 번호를 입력해주세요')
+                    .max(4, '올바른 번호를 입력해주세요'),
+                suffix: z.string().length(4, '번호는 4자리여야 합니다'),
+            }),
             ordererContact2: z.string().optional().nullable(),
             ordererName: isGlobalMall
                 ? z.string().optional()
                 : z.string().nonempty('주문자명을 입력해주세요.'),
-            ordererLastName: isGlobalMall
-                ? z.string().nonempty('성을 입력해주세요.')
-                : z.string().optional(),
-            ordererFirstName: isGlobalMall
-                ? z.string().nonempty('이름을 입력해주세요.')
-                : z.string().optional(),
-            ordererMobileCountryCd: isGlobalMall
-                ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
-                : z.string().optional(),
+            // ordererLastName: isGlobalMall
+            //     ? z.string().nonempty('성을 입력해주세요.')
+            //     : z.string().optional(),
+            // ordererFirstName: isGlobalMall
+            //     ? z.string().nonempty('이름을 입력해주세요.')
+            //     : z.string().optional(),
+            // ordererMobileCountryCd: isGlobalMall
+            //     ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
+            //     : z.string().optional(),
         }),
         paymentAmtForVerification: z.number().optional(),
         shippingAddress: shippingAddressSchema,
@@ -410,7 +244,7 @@ const paymentReserveSchema = z
                     addressNo: z.number().optional(),
                     usesShippingInfoLaterInput: z.boolean().optional(),
                     useDefaultAddress: z.boolean().optional(),
-                    shippingAddress: registerShippingAddressSchema_base
+                    shippingAddress: baseRegisterShippingAddressSchema
                         // .omit({ receiverContact1: true })
                         .safeExtend({
                             receiverContact1: z.string(),
@@ -758,13 +592,31 @@ const paymentReserveSchemaV2 = z
                     return '이메일을 입력해주세요.';
                 },
             }),
-            ordererContact1: z
-                .string()
-                .nonempty('휴대폰번호를 입력해 주세요.')
-                .regex(regEx.phoneNumberIncludeSafeNumber, {
-                    message: '형식에 맞게 입력해 주세요.',
-                }),
-            ordererContact2: z.string().nullable().optional(),
+            // ordererContact1: z
+            //     .string()
+            //     .nonempty('휴대폰번호를 입력해 주세요.')
+            //     .regex(regEx.phoneNumberIncludeSafeNumber, {
+            //         message: '형식에 맞게 입력해 주세요.',
+            //     }),
+            ordererContact1: z.object({
+                prefix: z.enum(PHONE_PREFIX_VALUES),
+                middle: z
+                    .string()
+                    .min(3, '올바른 번호를 입력해주세요')
+                    .max(4, '올바른 번호를 입력해주세요'),
+                suffix: z.string().length(4, '번호는 4자리여야 합니다'),
+            }),
+            ordererContact2: z
+                .object({
+                    prefix: z.enum(PHONE_PREFIX_VALUES),
+                    middle: z
+                        .string()
+                        .min(3, '올바른 번호를 입력해주세요')
+                        .max(4, '올바른 번호를 입력해주세요'),
+                    suffix: z.string().length(4, '번호는 4자리여야 합니다'),
+                })
+                .nullable()
+                .optional(),
             ordererMobileCountryCd: isGlobalMall
                 ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
                 : z.string().nullable().optional(),
@@ -890,7 +742,7 @@ const paymentReserveSchemaV2 = z
                 addressNo: z.number(),
                 usesShippingInfoLaterInput: z.boolean().nullable().optional(),
                 useDefaultAddress: z.boolean().nullable(),
-                shippingAddress: registerShippingAddressSchema_base
+                shippingAddress: baseRegisterShippingAddressSchema
                     .omit({ receiverContact1: true })
                     .safeExtend({
                         receiverContact1: z.string(),
@@ -988,9 +840,7 @@ export {
     paymentReserveSchema,
     paymentReserveSchemaV2,
     registerCashReceiptSchema,
-    registerShippingAddressSchema,
     type PaymentReserveSchemaType,
     type PaymentReserveSchemaV2Type,
     type RegisterCashReceiptSchemaType,
-    type RegisterShippingAddressSchemaType,
 };

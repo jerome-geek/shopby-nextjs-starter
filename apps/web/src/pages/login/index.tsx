@@ -8,7 +8,7 @@ import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
 import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/form';
 import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';

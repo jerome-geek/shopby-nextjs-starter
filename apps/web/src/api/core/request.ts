@@ -1,10 +1,20 @@
-import axios from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 import qs from 'qs'; // 추가
 
-import { DEFAULT_API_TIMEOUT, defaultHeaders } from '@/api/core/utils';
+import {
+    DEFAULT_API_TIMEOUT,
+    defaultHeaders,
+    isUpdateOauth2Request,
+    logOnDev,
+} from '@/api/core/utils';
+import {
+    accessTokenCookie,
+    memberCookie,
+    refreshTokenCookie,
+} from '@/utils/cookie';
 import { controller } from '@/api/core/controller';
 
-export const shopbyRequest = axios.create({
+const shopbyRequest = axios.create({
     baseURL: process.env.NEXT_PUBLIC_SHOPBY_BASE_URL,
     headers: defaultHeaders(),
     signal: controller.signal,
@@ -15,7 +25,37 @@ export const shopbyRequest = axios.create({
         });
     },
 });
+
 shopbyRequest.defaults.timeout = DEFAULT_API_TIMEOUT;
+
+shopbyRequest.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
+        logOnDev(
+            `[API] ${config.method?.toUpperCase()} ${config.url} | Request`,
+        );
+
+        config.headers = config.headers ?? {};
+
+        const refreshToken = refreshTokenCookie.get();
+        if (refreshToken && isUpdateOauth2Request(config.url, config.method)) {
+            config.headers['Refresh-Token'] = refreshToken;
+        }
+
+        const accessToken = accessTokenCookie.get();
+        if (accessToken) {
+            config.headers['Shop-By-Authorization'] = `Bearer ${accessToken}`;
+        } else {
+            memberCookie.clearAll();
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
+
+export { shopbyRequest };
 
 // import ky from 'ky';
 
