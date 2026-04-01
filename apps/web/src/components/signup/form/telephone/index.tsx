@@ -37,7 +37,7 @@ const SignupFormTelephone = () => {
                         inputMode='numeric'
                         type='number'
                         onWheel={(e) => e.currentTarget.blur()}
-                        isError={!!errors.telephoneNo}
+                        data-error={!!errors.telephoneNo}
                     />
                     <ErrorMessage name='telephoneNo' />
                 </>
@@ -72,7 +72,7 @@ const SignupFormTelephone = () => {
 
                         <InputField
                             {...register('telephoneNo')}
-                            isError={!!errors.telephoneNo}
+                            data-error={!!errors.telephoneNo}
                         />
                     </FieldContainer>
 

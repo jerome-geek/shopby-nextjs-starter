@@ -7,6 +7,7 @@ import useLocale from '@/hooks/utils/useLocale';
 import useKcpCertification from '@/hooks/utils/useKcpCertification';
 import useScrollLock from '@/hooks/utils/useScrollLock';
 import useGlobal from '@/hooks/utils/useGlobal';
+import useFileUpload from '@/hooks/utils/useFileUpload';
 
 export {
     useKeyDown,
@@ -18,4 +19,5 @@ export {
     useKcpCertification,
     useScrollLock,
     useGlobal,
+    useFileUpload,
 };

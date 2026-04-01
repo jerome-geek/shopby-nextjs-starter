@@ -167,7 +167,7 @@ const SignupTerms: NextPageWithLayout = () => {
             toArray,
         );
 
-        router.push({
+        router.replace({
             pathname: PATHS.SIGNUP.REGISTER,
             query: {
                 terms: agreedJoinTerms.join(','),

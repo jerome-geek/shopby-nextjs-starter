@@ -19,6 +19,7 @@ import { Toaster } from 'sonner';
 
 import { ExternalScripts } from '@/components/common';
 import { Layout } from '@/components/layout';
+import useAxiosInterceptor from '@/hooks/useAxiosInterceptor';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
@@ -32,6 +33,12 @@ export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
     Component: NextPageWithLayout;
 };
+
+// OverlayProvider 내부에 위치해야 overlay.openAsync가 정상 동작합니다.
+function AxiosInterceptorSetup() {
+    useAxiosInterceptor();
+    return null;
+}
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
     const router = useRouter();
@@ -83,6 +90,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         description: 'Headless Commerce Example',
     });
 
+    
+
     return (
         <>
             <ExternalScripts />
@@ -92,6 +101,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                     <HydrationBoundary state={pageProps.dehydratedState}>
                         <OverlayProvider>
                             <CertificationCheckProvider>
+                                <AxiosInterceptorSetup />
                                 <Head>{defaultSeo}</Head>
                                 <Layout>
                                     {getLayout(

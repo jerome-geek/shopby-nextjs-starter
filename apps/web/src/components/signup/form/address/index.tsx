@@ -115,7 +115,7 @@ const SignupFormAddress = () => {
                         <FieldContainer gridRatio={[3, 1]}>
                             <InputField
                                 {...register('zipCd')}
-                                isError={!!errors.zipCd}
+                                data-error={!!errors.zipCd}
                             />
                             <Button
                                 frame='solid'
@@ -132,14 +132,14 @@ const SignupFormAddress = () => {
                             <InputField
                                 placeholder={t('주소')}
                                 {...register('address')}
-                                isError={!!errors.address}
+                                data-error={!!errors.address}
                             />
                         </FieldContainer>
                         <FieldContainer>
                             <InputField
                                 placeholder={t('상세 주소')}
                                 {...register('detailAddress')}
-                                isError={!!errors.detailAddress}
+                                data-error={!!errors.detailAddress}
                             />
                         </FieldContainer>
                         <ErrorMessage name='zipCd' />
@@ -155,7 +155,7 @@ const SignupFormAddress = () => {
                                 inputMode='numeric'
                                 type='number'
                                 readOnly
-                                isError={!!errors.zipCd}
+                                data-error={!!errors.zipCd}
                             />
                             <Button
                                 frame='solid'
@@ -173,13 +173,13 @@ const SignupFormAddress = () => {
                             placeholder={t('주소를 입력해 주세요.')}
                             type='text'
                             readOnly
-                            isError={!!errors.address}
+                            data-error={!!errors.address}
                         />
                         <InputField
                             {...register('detailAddress')}
                             placeholder={t('상세주소를 입력해 주세요.')}
                             type='text'
-                            isError={!!errors.detailAddress}
+                            data-error={!!errors.detailAddress}
                         />
                         <ErrorMessage name='zipCd' />
                         <ErrorMessage name='address' />
@@ -191,14 +191,14 @@ const SignupFormAddress = () => {
                             <InputField
                                 placeholder='Address'
                                 {...register('address')}
-                                isError={!!errors.address}
+                                data-error={!!errors.address}
                             />
                         </FieldContainer>
                         <FieldContainer>
                             <InputField
                                 placeholder='DetailAddress'
                                 {...register('detailAddress')}
-                                isError={!!errors.detailAddress}
+                                data-error={!!errors.detailAddress}
                             />
                         </FieldContainer>
 
@@ -208,14 +208,14 @@ const SignupFormAddress = () => {
                             <InputField
                                 placeholder='City'
                                 {...register('city')}
-                                isError={!!errors.city}
+                                data-error={!!errors.city}
                             />
                         </FieldContainer>
                         <FieldContainer>
                             <InputField
                                 placeholder='Zip/Postal Code'
                                 {...register('zipCd')}
-                                isError={!!errors.zipCd}
+                                data-error={!!errors.zipCd}
                             />
                         </FieldContainer>
 

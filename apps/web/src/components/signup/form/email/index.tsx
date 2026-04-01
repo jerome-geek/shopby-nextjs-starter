@@ -59,7 +59,7 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                     }}
                                     placeholder={t('이메일을 입력해 주세요.')}
                                     readOnly={disabled}
-                                    isError={
+                                    data-error={
                                         !!emailError || !!isDuplicateEmailError
                                     }
                                 />
@@ -83,7 +83,7 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                         );
                                         setIsDuplicated(true);
                                     }}
-                                    isError={
+                                    data-error={
                                         !!emailError || !!isDuplicateEmailError
                                     }
                                 />

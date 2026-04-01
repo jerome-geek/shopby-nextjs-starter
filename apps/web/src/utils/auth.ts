@@ -1,5 +1,5 @@
-import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 import type { CookieCtx } from '@/utils/cookie';
+import { accessTokenCookie } from '@/utils/cookie';
 
 /**
  * 로그인 여부를 쿠키 기반으로 판단합니다.
@@ -25,13 +25,6 @@ import type { CookieCtx } from '@/utils/cookie';
  */
 export function isLoggedIn(ctx?: CookieCtx): boolean {
     const access = accessTokenCookie.get(ctx);
-    const refresh = refreshTokenCookie.get(ctx);
 
-    if (access || refresh) {
-        console.log(
-            `[Auth] Logged in detected. Access: ${!!access}, Refresh: ${!!refresh}`,
-        );
-    }
-
-    return !!(access || refresh);
+    return !!access;
 }

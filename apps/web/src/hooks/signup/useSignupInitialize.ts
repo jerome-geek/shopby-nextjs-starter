@@ -1,5 +1,5 @@
 import { includes, isEmpty } from '@fxts/core';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { UseFormReset } from 'react-hook-form';
 
 import { useMall } from '@/hooks/query/admin/mall';
@@ -7,6 +7,7 @@ import { useKCPCertificationResult } from '@/hooks/query/auth';
 import { useProfile } from '@/hooks/query/member/profile';
 import { NcpOpenIdProviderType } from '@/models';
 import { SignupFormSchemaType } from '@/schema';
+import { CertificationCheckContext } from '@/context/certificationCheck';
 
 const useSignupInitialize = ({
     reset,
@@ -22,6 +23,10 @@ const useSignupInitialize = ({
     provider: NcpOpenIdProviderType;
 }) => {
     const { data: mallData } = useMall();
+
+    const value = useContext(CertificationCheckContext);
+
+    const isAuthenticationByPhone = value?.isAuthenticationByPhone;
 
     const { data: getSocialData } = useProfile({
         headers: {
@@ -127,9 +132,35 @@ const useSignupInitialize = ({
         );
     }, [kcpCertificationResultData, reset]);
 
+    const formValueDisabled = {
+        name: isSocialLogin
+            ? !!getSocialData?.memberName
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.name
+            : false,
+        email: isSocialLogin
+            ? !includes(provider, ['ncp_apple', 'ncp_google', 'ncp_line']) &&
+              !!getSocialData?.email
+            : false,
+        sex: isSocialLogin
+            ? getSocialData?.sex === 'F' || getSocialData?.sex === 'M'
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.ci
+            : false,
+        birthday: isSocialLogin
+            ? !!getSocialData?.birthday
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.birthday
+            : false,
+        mobileNo: isSocialLogin
+            ? !!getSocialData?.mobileNo
+            : isAuthenticationByPhone
+            ? !!kcpCertificationResultData?.phone
+            : false,
+    };
+
     return {
-        getSocialData,
-        kcpCertificationResultData,
+        formValueDisabled,
     };
 };
 

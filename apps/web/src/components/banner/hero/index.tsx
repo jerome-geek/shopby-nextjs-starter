@@ -11,14 +11,12 @@ import {
     Pagination,
 } from 'swiper/modules';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
-import { useMediaQuery } from 'usehooks-ts';
-
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 import type { Banner } from '@/models/display/banner';
-import { BREAKPOINTS } from '@/styles/media';
 import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 import { extractBannerContents, normalizeImageUrl } from '@/utils/shopby';
 import * as styles from '@/components/banner/hero/index.css';
+import { useResponsive } from '@/hooks/utils';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -35,10 +33,12 @@ function HeroBannerContent() {
             select: extractBannerContents,
         },
     });
-    const isMobile = useMediaQuery(`(max-width: ${BREAKPOINTS.SM - 1}px)`);
+
+    const { isMobile } = useResponsive();
     const swiperRef = useRef<SwiperType | null>(null);
     const hasMultipleBanners = banners.length > 1;
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [isSwiperReady, setIsSwiperReady] = useState(false);
 
     const swiperOptions: SwiperProps = useMemo(
         () => ({
@@ -58,7 +58,6 @@ function HeroBannerContent() {
             slidesPerView: isMobile ? 1.2 : 3,
             centeredSlides: true,
             loop: hasMultipleBanners,
-            loopedSlides: isMobile ? 2 : 4,
             watchSlidesProgress: true,
             autoplay: isAutoPlaying
                 ? {
@@ -77,7 +76,10 @@ function HeroBannerContent() {
                 nextEl: `.${styles.navNext}`,
             },
             style: { overflow: 'visible' },
-            onSwiper: (swiper) => (swiperRef.current = swiper),
+            onSwiper: (swiper) => {
+                swiperRef.current = swiper;
+                setIsSwiperReady(true);
+            },
         }),
         [isMobile, hasMultipleBanners, isAutoPlaying],
     );
@@ -107,9 +109,26 @@ function HeroBannerContent() {
         <section className={styles.container}>
             <div className={styles.heroBanner}>
                 <div className={styles.swiperContainer}>
+                    {/* NOTE : 스와이퍼 준비 전 스켈레톤 노출 */}
+                    {!isSwiperReady && (
+                        <div
+                            style={{
+                                position: 'absolute',
+                                inset: 0,
+                                zIndex: 1,
+                            }}
+                        >
+                            <HeroBannerSkeletonCards />
+                        </div>
+                    )}
+
                     <Swiper
                         key={`${banners.length}-${isMobile}`}
                         {...swiperOptions}
+                        style={{
+                            ...swiperOptions.style,
+                            visibility: isSwiperReady ? 'visible' : 'hidden',
+                        }}
                     >
                         {banners.map((banner, index) => (
                             <SwiperSlide
@@ -210,21 +229,30 @@ function HeroBannerContent() {
     );
 }
 
+function HeroBannerSkeletonCards() {
+    return (
+        <div className={styles.skeletonWrapper}>
+            {[0, 1, 2].map((i) => (
+                <div key={i} className={styles.skeletonCard}>
+                    <div className={styles.skeletonImage} />
+                    <div className={styles.skeletonContent}>
+                        <div className={styles.skeletonTitle} />
+                        <div className={styles.skeletonDescription} />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
 function HeroBannerSkeleton() {
     return (
-        <section className={styles.heroBanner}>
-            <div className={styles.swiperContainer}>
-                <div className={styles.skeletonWrapper}>
-                    {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className={styles.skeletonCard}>
-                            <div className={styles.skeletonImage} />
-                            <div className={styles.skeletonContent}>
-                                <div className={styles.skeletonTitle} />
-                                <div className={styles.skeletonDescription} />
-                            </div>
-                        </div>
-                    ))}
+        <section className={styles.container}>
+            <div className={styles.heroBanner}>
+                <div className={styles.swiperContainer}>
+                    <HeroBannerSkeletonCards />
                 </div>
+                <div className={styles.skeletonControls} />
             </div>
         </section>
     );

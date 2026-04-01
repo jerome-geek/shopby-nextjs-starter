@@ -191,7 +191,8 @@ const createSignupFormSchema = ({ isSocialLogin }: SignupSchemaOptions) =>
                 ]),
             ),
             extraInfo: z
-                .array(
+                .record(
+                    z.string(),
                     z.object({
                         extraInfoNo: z.number(),
                         extraInfoName: z.string(),
@@ -199,6 +200,7 @@ const createSignupFormSchema = ({ isSocialLogin }: SignupSchemaOptions) =>
                             z.boolean().or(z.number()).or(z.string()),
                         ),
                         extraInfoOptionTextContent: z.string(),
+                        extraFileInfo: z.file().optional(),
                     }),
                 )
                 .optional(),

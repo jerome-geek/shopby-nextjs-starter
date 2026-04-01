@@ -1,15 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { includes, join, map, pipe, prop } from '@fxts/core';
+import {
+    filter,
+    find,
+    isEmpty,
+    join,
+    map,
+    pipe,
+    prop,
+    toArray,
+} from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import { useContext } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
-import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 
+import { oauth2 } from '@/api/auth';
+import upload from '@/api/storage/image';
 import { AuthLayout } from '@/components/layout/auth';
 import {
     SignupFormAddress,
@@ -24,8 +34,9 @@ import {
     SignupFormTelephone,
 } from '@/components/signup/form';
 import { Button } from '@/components/ui/button';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { PATHS } from '@/const/paths';
 import { useProfileMutation } from '@/hooks/mutations';
+import { useMyApp } from '@/hooks/myapp';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useSignupInitialize } from '@/hooks/signup';
 import { useDialog, useGlobal } from '@/hooks/utils';
@@ -33,10 +44,9 @@ import { NcpOpenIdProviderType } from '@/models';
 import { NextPageWithLayout } from '@/pages/_app';
 import { createSignupFormSchema, SignupFormSchemaType } from '@/schema';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
-import { oauth2 } from '@/api/auth';
-import { PATHS } from '@/const/paths';
-import { useMyApp } from '@/hooks/myapp';
-
+import { getSafeQueryString } from '@/utils/query';
+import { useMemberExtraInfo } from '@/hooks/query/member/memberConfig';
+import MemberConfig from '@/components/signup/member-config';
 import * as styles from '@/pages/signup/register/index.css';
 
 type SignupRegisterProps = {
@@ -49,18 +59,6 @@ type SignupRegisterProps = {
     directMailAgreed: boolean;
     isSocialLogin: boolean;
     certificationKey: string;
-};
-
-const firstQueryString = (
-    value: string | string[] | undefined | null,
-): string => {
-    if (typeof value === 'string') {
-        return value;
-    }
-    if (Array.isArray(value)) {
-        return value[0] ?? '';
-    }
-    return '';
 };
 
 const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
@@ -86,9 +84,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
 
     const { data: mallData } = useMall();
 
-    const value = useContext(CertificationCheckContext);
-
-    const isAuthenticationByPhone = value?.isAuthenticationByPhone;
+    const { data: memberExtraInfoData } = useMemberExtraInfo();
 
     const schema = createSignupFormSchema({ isSocialLogin });
 
@@ -125,10 +121,11 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
     const {
         reset,
         formState: { isSubmitting },
+        setError,
         handleSubmit,
     } = methods;
 
-    const { getSocialData, kcpCertificationResultData } = useSignupInitialize({
+    const { formValueDisabled } = useSignupInitialize({
         reset,
         accessToken,
         isSocialLogin,
@@ -136,36 +133,12 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
         provider: provider as NcpOpenIdProviderType,
     });
 
-    const formValueDisabled = {
-        name: isSocialLogin
-            ? !!getSocialData?.memberName
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.name
-            : false,
-        email: isSocialLogin
-            ? !includes(provider, ['ncp_apple', 'ncp_google', 'ncp_line']) &&
-              !!getSocialData?.email
-            : false,
-        sex: isSocialLogin
-            ? getSocialData?.sex === 'F' || getSocialData?.sex === 'M'
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.ci
-            : false,
-        birthday: isSocialLogin
-            ? !!getSocialData?.birthday
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.birthday
-            : false,
-        mobileNo: isSocialLogin
-            ? !!getSocialData?.mobileNo
-            : isAuthenticationByPhone
-            ? !!kcpCertificationResultData?.phone
-            : false,
-    };
-
     const {
-        register: { mutateAsync: registerMutate },
-        openIdRegister: { mutateAsync: openIdRegisterMutate },
+        register: { mutateAsync: registerMutate, isPending: isRegisterPending },
+        openIdRegister: {
+            mutateAsync: openIdRegisterMutate,
+            isPending: isOpenIdRegisterPending,
+        },
     } = useProfileMutation();
 
     const onSubmit = handleSubmit(async (data) => {
@@ -201,13 +174,101 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 return;
             }
 
+            // NOTE: 추가 정보 필수 항목 여부 체크
+            const missingRequiredExtraInfo = pipe(
+                memberExtraInfoData?.extraInfoContents ?? [],
+                filter((item) => {
+                    if (item.status !== 'REQUIRED') {
+                        return false;
+                    }
+
+                    const filledExtraInfo = find(
+                        (e) => e.extraInfoNo === item.extraInfoNo,
+                        Object.values(submitData.extraInfo ?? {}),
+                    );
+
+                    if (!filledExtraInfo) {
+                        return true;
+                    }
+
+                    if (item.extraInfoType === 'TEXTBOX') {
+                        return !filledExtraInfo.extraInfoOptionTextContent;
+                    }
+
+                    if (item.extraInfoType === 'IMAGE') {
+                        return !filledExtraInfo.extraFileInfo;
+                    }
+
+                    if (
+                        item.extraInfoType === 'CHECKBOX' ||
+                        item.extraInfoType === 'DROPDOWN' ||
+                        item.extraInfoType === 'RADIOBUTTON'
+                    ) {
+                        return !filledExtraInfo.extraInfoOptionNos?.length;
+                    }
+
+                    return false;
+                }),
+                toArray,
+            );
+
+            if (missingRequiredExtraInfo.length) {
+                missingRequiredExtraInfo.forEach((item) => {
+                    setError(`extraInfo.no_${item.extraInfoNo}`, {
+                        type: 'required',
+                        message: t('{{extraInfoName}}을(를) 입력해 주세요.', {
+                            extraInfoName: item.extraInfoName,
+                        }),
+                    });
+                });
+                return;
+            }
+
             const memberId = submitData.memberId ?? '';
             const password = submitData.password ?? '';
+
+            const extraInfoList = submitData.extraInfo
+                ? (
+                      await Promise.all(
+                          Object.values(submitData.extraInfo).map(async (v) => {
+                              if (v.extraFileInfo) {
+                                  try {
+                                      const formData = new FormData();
+                                      formData.append('file', v.extraFileInfo);
+
+                                      const { data: imageData } =
+                                          await upload.uploadImage({
+                                              data: formData,
+                                          });
+
+                                      return {
+                                          extraInfoNo: v.extraInfoNo,
+                                          extraInfoOptionNos:
+                                              v.extraInfoOptionNos,
+                                          extraInfoOptionTextContent:
+                                              imageData.imageUrl,
+                                      };
+                                  } catch (error) {
+                                      return null;
+                                  }
+                              }
+
+                              return {
+                                  extraInfoNo: v.extraInfoNo,
+                                  extraInfoOptionNos: v.extraInfoOptionNos,
+                                  extraInfoOptionTextContent:
+                                      v.extraInfoOptionTextContent,
+                              };
+                          }),
+                      )
+                  ).filter((v) => v !== null)
+                : undefined;
 
             await registerMutate(
                 {
                     data: {
                         ...submitData,
+                        extraInfo: extraInfoList,
                         memberId,
                         password,
                     },
@@ -296,11 +357,36 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
 
                 <SignupFormSex disabled={formValueDisabled.sex} />
 
+                {!isSocialLogin &&
+                    !isEmpty(memberExtraInfoData?.extraInfoContents) && (
+                        <div className={styles.memberConfigContainer}>
+                            <h2 className={styles.memberConfigTitle}>
+                                {t('추가항목 입력')}
+                            </h2>
+
+                            {memberExtraInfoData?.extraInfoContents?.map(
+                                (extraInfo) => (
+                                    <MemberConfig
+                                        key={extraInfo.extraInfoNo}
+                                        {...extraInfo}
+                                    />
+                                ),
+                            )}
+                        </div>
+                    )}
+
                 <Button
                     type='submit'
                     frame='solid'
                     variant='primary'
-                    disabled={isSubmitting}
+                    disabled={
+                        isSubmitting ||
+                        isRegisterPending ||
+                        isOpenIdRegisterPending
+                    }
+                    style={{
+                        marginTop: '32px',
+                    }}
                 >
                     <span>{t('회원가입하기')}</span>
                 </Button>
@@ -320,20 +406,35 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
     const query = context.query;
 
-    const certificationKey = firstQueryString(query.key);
-    const accessToken = firstQueryString(query.accessToken);
-    const provider = firstQueryString(query.provider) as
+    const certificationKey = getSafeQueryString(query.key);
+    const accessToken = getSafeQueryString(query.accessToken);
+    const provider = getSafeQueryString(query.provider) as
         | NcpOpenIdProviderType
         | '';
-    const refreshToken = firstQueryString(query.refreshToken);
-    const expiry = Number(firstQueryString(query.expiry)) || 0;
+    const refreshToken = getSafeQueryString(query.refreshToken);
+    const expiry = Number(getSafeQueryString(query.expiry)) || 0;
 
-    const termsStr = firstQueryString(query.terms);
+    const termsStr = getSafeQueryString(query.terms);
     const terms = (termsStr ? termsStr.split(',') : []) as any;
     const smsAgreed = query?.smsAgreed === 'true';
     const directMailAgreed = query?.directMailAgreed === 'true';
 
     const isSocialLogin = !!provider;
+
+    // NOTE : 정상 진입 경로 체크:
+    // - 일반 가입: /signup/terms에서 terms query param을 전달
+    // - 소셜 가입: provider query param이 존재
+    // 두 경우 모두 없으면 URL 직접 접근으로 판단 → 진입점으로 리다이렉트
+    const isValidEntry = 'terms' in query || isSocialLogin;
+
+    if (!isValidEntry) {
+        return {
+            redirect: {
+                destination: PATHS.SIGNUP.REGISTER_METHOD,
+                permanent: false,
+            },
+        };
+    }
 
     return {
         props: {

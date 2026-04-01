@@ -14,9 +14,9 @@ const InputField = ({ onKeyDown, ref, ...props }: InputFieldProps) => {
     return (
         <input
             ref={ref}
+            autoComplete='off'
             {...props}
             className={styles.inputField}
-            autoComplete='off'
             onKeyDown={(e) => {
                 const isAllowedKey = includes(e.key, ALLOWED_KEYS);
 

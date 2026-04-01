@@ -22,6 +22,8 @@ import {
 } from 'cookies-next';
 import type { GetServerSidePropsContext } from 'next';
 
+import { COOKIE_KEYS } from '@/const/cookieKeys';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 /** getServerSideProps의 ctx에서 req/res 부분만 추출한 타입 */
@@ -44,14 +46,8 @@ export type CookieClearOptions = Pick<
 
 // ─── Internal ─────────────────────────────────────────────────────────────────
 
-const PREFIX = 'SHOPBY';
-const MALL_ID = 'JOLLYPOT';
 const DEFAULT_PATH = '/';
 const DEFAULT_SAME_SITE = 'lax' as const;
-
-function prefixed(key: string) {
-    return `${PREFIX}_${MALL_ID}_${key}`;
-}
 
 function toDate(expires: number | string): Date {
     return typeof expires === 'string'
@@ -111,20 +107,20 @@ function remove(key: string, opts?: CookieClearOptions) {
  * accessTokenCookie.clear()
  */
 export const accessTokenCookie = {
-    get: (ctx?: CookieCtx) => read(prefixed('ACCESS_TOKEN'), ctx),
+    get: (ctx?: CookieCtx) => read(COOKIE_KEYS.ACCESS_TOKEN, ctx),
 
     set: (token: string, expires: number, opts?: CookieSetOptions) =>
-        write(prefixed('ACCESS_TOKEN'), token, expires, opts),
+        write(COOKIE_KEYS.ACCESS_TOKEN, token, expires, opts),
 
     /** 토큰 값을 유지한 채 만료 시간만 30분으로 갱신합니다 */
     update: (ctx?: CookieCtx) => {
-        const token = read(prefixed('ACCESS_TOKEN'), ctx);
+        const token = read(COOKIE_KEYS.ACCESS_TOKEN, ctx);
         if (!token) return;
-        write(prefixed('ACCESS_TOKEN'), token, 1800);
+        write(COOKIE_KEYS.ACCESS_TOKEN, token, 1800);
     },
 
     clear: (opts?: CookieClearOptions) =>
-        remove(prefixed('ACCESS_TOKEN'), opts),
+        remove(COOKIE_KEYS.ACCESS_TOKEN, opts),
 } as const;
 
 /**
@@ -135,13 +131,13 @@ export const accessTokenCookie = {
  * refreshTokenCookie.clear()
  */
 export const refreshTokenCookie = {
-    get: (ctx?: CookieCtx) => read(prefixed('REFRESH_TOKEN'), ctx),
+    get: (ctx?: CookieCtx) => read(COOKIE_KEYS.REFRESH_TOKEN, ctx),
 
     set: (token: string, expires: number, opts?: CookieSetOptions) =>
-        write(prefixed('REFRESH_TOKEN'), token, expires, opts),
+        write(COOKIE_KEYS.REFRESH_TOKEN, token, expires, opts),
 
     clear: (opts?: CookieClearOptions) =>
-        remove(prefixed('REFRESH_TOKEN'), opts),
+        remove(COOKIE_KEYS.REFRESH_TOKEN, opts),
 } as const;
 
 /**
@@ -152,16 +148,17 @@ export const refreshTokenCookie = {
  * guestTokenCookie.clear()
  */
 export const guestTokenCookie = {
-    get: (ctx?: CookieCtx) => read(prefixed('GUEST_TOKEN'), ctx),
+    get: (ctx?: CookieCtx) => read(COOKIE_KEYS.GUEST_TOKEN, ctx),
 
     /**
      * @param token 게스트 토큰
      * @param opts 만료 시간이 없으면 세션 쿠키로 저장됩니다
      */
     set: (token: string, opts?: CookieSetOptions) =>
-        write(prefixed('GUEST_TOKEN'), token, undefined, opts),
+        write(COOKIE_KEYS.GUEST_TOKEN, token, undefined, opts),
 
-    clear: (opts?: CookieClearOptions) => remove(prefixed('GUEST_TOKEN'), opts),
+    clear: (opts?: CookieClearOptions) =>
+        remove(COOKIE_KEYS.GUEST_TOKEN, opts),
 } as const;
 
 /**

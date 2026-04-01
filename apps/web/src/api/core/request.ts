@@ -12,12 +12,12 @@ import {
     memberCookie,
     refreshTokenCookie,
 } from '@/utils/cookie';
-// import { controller } from '@/api/core/controller';
+import { controller } from '@/api/core/controller';
 
 const shopbyRequest = axios.create({
     baseURL: process.env.NEXT_PUBLIC_SHOPBY_BASE_URL,
     headers: defaultHeaders(),
-    // signal: controller.signal,
+    signal: controller.signal,
     paramsSerializer: (params) => {
         return qs.stringify(params, {
             arrayFormat: 'comma',

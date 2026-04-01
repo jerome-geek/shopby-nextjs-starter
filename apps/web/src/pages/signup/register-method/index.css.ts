@@ -134,3 +134,12 @@ export const bannerListItem = style([
         },
     },
 ]);
+
+export const bannerImageContainer = style({
+    width: '70px',
+    height: '70px',
+    aspectRatio: '1/1',
+    objectFit: 'cover',
+    overflow: 'hidden',
+    borderRadius: '50%',
+});

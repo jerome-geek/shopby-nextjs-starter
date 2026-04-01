@@ -90,7 +90,9 @@ const SignupFormNickname = () => {
                     type='text'
                     autoComplete='off'
                     placeholder={t('닉네임을 입력해 주세요')}
-                    isError={!!errors.nickname || !!errors.isDuplicateNickname}
+                    data-error={
+                        !!errors.nickname || !!errors.isDuplicateNickname
+                    }
                 />
                 <Button
                     frame='solid'
