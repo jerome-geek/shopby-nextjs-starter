@@ -20,6 +20,6 @@ export const textArea = style({
     },
     ':focus': {
         outline: 'none',
-        borderColor: vars.color.gray[400],
+        borderColor: vars.color.gray[60],
     },
 });

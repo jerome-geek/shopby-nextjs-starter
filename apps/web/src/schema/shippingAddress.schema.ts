@@ -26,7 +26,7 @@ export const getBaseRegisterShippingAddressSchema = ({
             'RECURRING_PAYMENT_PRESENT',
         ]),
         customsIdNumber: z.string().nullish(),
-        countryCd: z.enum(CountryCdType.options),
+        countryCd: CountryCdType,
         receiverZipCd: z
             .string({
                 error: '우편번호를 입력해주세요.',
@@ -72,7 +72,7 @@ export type BaseRegisterShippingAddressSchemaType = z.infer<
     ReturnType<typeof getBaseRegisterShippingAddressSchema>
 >;
 
-const baseRegisterShippingAddressSchema = z.object({
+export const baseRegisterShippingAddressSchema = z.object({
     // NOTE: (해외배송 / 글로벌결제 시 필수) 수령인 LastName (nullable)
     receiverLastName: z.string().nullish(),
     receiverJibunAddress: z.string(),
@@ -88,7 +88,7 @@ const baseRegisterShippingAddressSchema = z.object({
         'RECURRING_PAYMENT_PRESENT',
     ]),
     customsIdNumber: z.string().nullish(),
-    countryCd: z.enum(CountryCdType.options),
+    countryCd: CountryCdType,
     receiverZipCd: z
         .string({
             error: '우편번호를 입력해주세요.',
@@ -156,7 +156,7 @@ const baseShippingAddressSchema = z.object({
         ? z.string().optional()
         : z.string().nonempty('받으시는 분을 입력해주세요.'),
     customsIdNumber: z.string().optional(),
-    countryCd: z.string().optional(),
+    countryCd: z.string().nullish(),
     receiverZipCd: z.string().optional(),
     receiverDetailAddress: z.string().optional(),
     receiverCity: z.string().optional(),
@@ -252,6 +252,62 @@ export const shippingAddressSchema = baseShippingAddressSchema.superRefine(
         }
     },
 );
+
+// 배송지 등록/수정 API 요청 스키마 (POST/PUT /profile/shipping-addresses)
+// receiverContact1은 API에서 string으로 받음 (prefix+middle+suffix 조합)
+export const registerShippingAddressRequestSchema = z.object({
+    /** (해외배송 / 글로벌결제 시 필수) 수령인 LastName */
+    receiverLastName: z.string().nullish(),
+    /** 배송지 지번 */
+    receiverJibunAddress: z.string(),
+    /** 기본배송지 여부 */
+    defaultYn: z.enum(['Y', 'N']),
+    /** 수령자 명 */
+    receiverName: z.string().nonempty('받으시는 분을 입력해주세요.'),
+    /** 배송지타입 */
+    addressType: z.enum([
+        'BOOK',
+        'RECENT',
+        'RECURRING_PAYMENT',
+        'RECURRING_PAYMENT_PRESENT',
+    ]),
+    /** 개인고유통관부호 */
+    customsIdNumber: z.string().nullish(),
+    /** 국가코드 */
+    countryCd: CountryCdType.nullish(),
+    /** 배송지 우편 번호 */
+    receiverZipCd: z.string().nonempty('우편번호를 입력해주세요.'),
+    /** 배송지 메모 */
+    addressMemo: z.string().nullish(),
+    /** 배송지 상세 주소 */
+    receiverDetailAddress: z.string().nonempty('상세 주소를 입력해주세요.'),
+    /** (해외) 도시 */
+    receiverCity: z.string().nullish(),
+    /** 연락처 국가코드 */
+    receiverMobileCountryCd: z.string().nullish(),
+    /** 배송지 주소 */
+    receiverAddress: z.string().nonempty('주소를 입력해주세요.'),
+    /** (해외) 주 */
+    receiverState: z.string().nullish(),
+    /** 주소록명 */
+    addressName: z.string().nullish(),
+    /** (해외배송 / 글로벌결제 시 필수) 수령인 FirstName */
+    receiverFirstName: z.string().nullish(),
+    /** 연락처1 (하이픈 없이 숫자만, e.g. "01012345678") */
+    receiverContact1: z.string().nonempty('연락처를 입력해주세요.'),
+    /** 연락처2 */
+    receiverContact2: z.string().nullish(),
+});
+
+export type RegisterShippingAddressRequestSchemaType = z.infer<
+    typeof registerShippingAddressRequestSchema
+>;
+
+// 수정 스키마는 등록과 동일한 구조
+export const updateShippingAddressRequestSchema =
+    registerShippingAddressRequestSchema;
+export type UpdateShippingAddressRequestSchemaType =
+    RegisterShippingAddressRequestSchemaType;
 
 export {
     registerShippingAddressSchema,

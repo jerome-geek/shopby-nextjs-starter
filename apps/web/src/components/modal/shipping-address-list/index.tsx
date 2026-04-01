@@ -16,6 +16,7 @@ import { Address } from '@/models/order/shippingAddress';
 import { PaymentReserveSchemaType } from '@/schema';
 import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
 import * as styles from '@/components/modal/shipping-address-list/index.css';
+import { PhonePrefixType } from '@/const/form';
 
 interface ShippingAddressListModalProps {
     isOpen: boolean;
@@ -23,37 +24,6 @@ interface ShippingAddressListModalProps {
     currentAddressNo?: number;
     unmount: () => void;
 }
-
-const addresses: Address[] = [
-    {
-        addressNo: 1,
-        addressName: '집',
-        receiverName: '김졸리',
-        receiverZipCd: '00000',
-        receiverAddress: '서울시 강남구 테헤란로 123',
-        receiverDetailAddress: '@@건물 201호',
-        receiverJibunAddress: '',
-        receiverContact1: '010-1234-5678',
-        defaultYn: 'Y',
-        addressType: 'BOOK',
-        memberNo: 0,
-        mallNo: 0,
-    },
-    {
-        addressNo: 2,
-        addressName: '회사',
-        receiverName: '김졸리',
-        receiverZipCd: '00000',
-        receiverAddress: '경기도 안양시 동안구 시민대로 235',
-        receiverDetailAddress: '3층 사무실',
-        receiverJibunAddress: '',
-        receiverContact1: '010-1234-5678',
-        defaultYn: 'N',
-        addressType: 'BOOK',
-        memberNo: 0,
-        mallNo: 0,
-    },
-];
 
 const ShippingAddressListModal = ({
     isOpen,
@@ -149,6 +119,7 @@ const ShippingAddressListModal = ({
     const onSelectAddress = (address: Address) => {
         console.log('🚀 ~ onSelectAddress ~ address:', address);
         const contact = address.receiverContact1 || '';
+        console.log('🚀 ~ onSelectAddress ~ contact:', contact);
         const numbers = contact.replace(/[^0-9]/g, '');
 
         let prefix = '010';
@@ -173,11 +144,26 @@ const ShippingAddressListModal = ({
         setValue(
             'shippingAddress',
             {
-                ...address,
-
+                addressNo: address.addressNo,
+                addressName: address.addressName,
+                receiverName: address.receiverName,
+                receiverZipCd: address.receiverZipCd,
+                receiverAddress: address.receiverAddress,
+                receiverDetailAddress:
+                    address.receiverDetailAddress ?? undefined,
                 receiverJibunAddress: address.receiverAddress || '',
+                countryCd: address.countryCd ?? undefined,
+                receiverCity: address.city ?? undefined,
+                receiverState: address.state ?? undefined,
+                customsIdNumber: address.customsIdNumber ?? undefined,
+                receiverMobileCountryCd:
+                    address.receiverMobileCountryCd ?? undefined,
+                receiverLastName:
+                    address.shippingEtcInfo?.receiverLastName ?? undefined,
+                receiverFirstName:
+                    address.shippingEtcInfo?.receiverFirstName ?? undefined,
                 receiverContact1: {
-                    prefix: prefix as any,
+                    prefix: prefix as PhonePrefixType,
                     middle: middle || '',
                     last: last || '',
                 },
@@ -212,51 +198,6 @@ const ShippingAddressListModal = ({
             ]}
         >
             <div className={styles.addressList} data-lenis-prevent>
-                {addresses.map((address) => {
-                    const isActive = currentAddressNo === address.addressNo;
-                    return (
-                        <div
-                            key={address.addressNo}
-                            className={`${styles.addressCard} ${isActive ? styles.activeCard : ''}`}
-                            onClick={() => {
-                                onSelectAddress(address);
-                            }}
-                        >
-                            <div className={styles.cardHeader}>
-                                <span className={styles.addressAlias}>
-                                    {address.addressName}
-                                </span>
-                                {address.defaultYn === 'Y' && (
-                                    <span className={styles.defaultBadge}>
-                                        {t('기본배송지')}
-                                    </span>
-                                )}
-                            </div>
-                            <p className={styles.addressText}>
-                                {address.receiverAddress},{' '}
-                                {address.receiverDetailAddress} (
-                                {address.receiverZipCd})
-                            </p>
-                            <p className={styles.recipientText}>
-                                {address.receiverName} (
-                                {address.receiverContact1})
-                            </p>
-                            <div
-                                className={styles.cardActions}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <button
-                                    type='button'
-                                    className={styles.editButton}
-                                    onClick={() => openCreateModal(address)}
-                                >
-                                    {t('수정')}
-                                </button>
-                            </div>
-                        </div>
-                    );
-                })}
-
                 {addressList.map((address) => {
                     const isActive = currentAddressNo === address.addressNo;
                     return (

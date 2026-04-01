@@ -6,9 +6,9 @@ interface ShareDialogProps extends DefaultDialogProps {
     // contents: string;
 }
 
-const ShareDialog = ({ title, contents, ...props }: ShareDialogProps) => {
+const ShareDialog = ({ ...props }: ShareDialogProps) => {
     return (
-        <DialogLayout title={'공유하기'} {...props}>
+        <DialogLayout {...props}>
             <ul className={styles.list}>
                 <li>
                     <button type="button">

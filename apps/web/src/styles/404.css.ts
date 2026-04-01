@@ -24,7 +24,7 @@ export const title = style([
 export const description = style([
     textStyles.body1Regular,
     {
-        color: vars.color.gray[600],
+        color: vars.color.gray[60],
         marginBottom: vars.spacing.xl,
         whiteSpace: 'pre-wrap',
     },

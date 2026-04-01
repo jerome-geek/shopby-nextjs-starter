@@ -2,7 +2,7 @@ import { Control, useFormContext, useWatch } from 'react-hook-form';
 import { useMemo } from 'react';
 import { filter, includes, pipe, toArray } from '@fxts/core';
 
-import { COUNTRY_CODE_LIST } from '@/const/form';
+import { useCountryList } from '@/hooks/queries/useCountryList';
 import {
     useCalculateOrderSheet,
     useOrderSheet,
@@ -20,8 +20,7 @@ const useOrderSheetCalculate = ({
 
     const control = controlProp ?? method?.control;
 
-    // const { isKorean } = useGlobal();
-    const isKorean = true;
+    const { data: countryList = [] } = useCountryList();
 
     const countryCdWatch = useWatch({
         control,
@@ -52,7 +51,10 @@ const useOrderSheetCalculate = ({
         control,
         name: 'coupons.productCoupons',
     });
-    const subPayAmtWatch = useWatch({ control, name: 'subPayAmt' });
+    const subPayAmtWatch = useWatch({
+        control,
+        name: 'subPayAmt',
+    });
 
     const { data: orderSheetData, isFetched: isOrderSheetFetched } =
         useOrderSheet({
@@ -80,6 +82,7 @@ const useOrderSheetCalculate = ({
                 productCoupons: productCouponWatch,
             },
             accumulationUseAmt: subPayAmtWatch,
+            shippingAddresses: [],
         },
         options: {
             enabled: isOrderSheetFetched,
@@ -91,19 +94,19 @@ const useOrderSheetCalculate = ({
     );
 
     const countryCodeList = useMemo(() => {
-        if (isKorean || !orderSheetData) {
+        if (!orderSheetData) {
             return [];
         }
 
         return pipe(
-            COUNTRY_CODE_LIST,
+            countryList,
             filter(
                 (a) =>
                     !includes(a.value, orderSheetData.undeliverableCountries),
             ),
             toArray,
         );
-    }, [orderSheetData, isKorean]);
+    }, [orderSheetData, countryList]);
 
     return {
         orderSheetNo,

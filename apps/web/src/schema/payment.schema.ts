@@ -7,7 +7,7 @@ import {
 import {
     baseRegisterShippingAddressSchema,
     shippingAddressSchema,
-} from '@/schema/order.schema';
+} from '@/schema/shippingAddress.schema';
 import { regEx } from '@/utils/validation';
 import z from 'zod';
 

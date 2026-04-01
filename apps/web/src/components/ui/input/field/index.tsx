@@ -1,4 +1,5 @@
 import { includes } from '@fxts/core';
+import clsx from 'clsx';
 
 import * as styles from '@/components/ui/input/field/index.css';
 
@@ -8,7 +9,12 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const ALLOWED_KEYS = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
 
-const InputField = ({ onKeyDown, ref, ...props }: InputFieldProps) => {
+const InputField = ({
+    onKeyDown,
+    ref,
+    className,
+    ...props
+}: InputFieldProps) => {
     const { inputMode, maxLength } = props;
 
     return (
@@ -16,7 +22,7 @@ const InputField = ({ onKeyDown, ref, ...props }: InputFieldProps) => {
             ref={ref}
             autoComplete='off'
             {...props}
-            className={styles.inputField}
+            className={clsx(styles.inputField, className)}
             onKeyDown={(e) => {
                 const isAllowedKey = includes(e.key, ALLOWED_KEYS);
 

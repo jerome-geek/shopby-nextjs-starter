@@ -11,7 +11,7 @@ export const title = style({
     fontSize: '2rem',
     fontWeight: 'bold',
     marginBottom: '24px',
-    color: vars.color.gray['100'],
+    color: vars.color.gray['10'],
 });
 
 export const grid = style({
@@ -21,7 +21,7 @@ export const grid = style({
 });
 
 export const card = style({
-    border: `1px solid ${vars.color.gray['200']}`,
+    border: `1px solid ${vars.color.gray['20']}`,
     borderRadius: '8px',
     padding: '16px',
     display: 'flex',

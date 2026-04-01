@@ -178,7 +178,7 @@ function ProductDetailView({
                             toOrderSheetOption(a, searchParams.channelType),
                         ),
                         toArray,
-                    ),
+                    ) as any,
                 },
                 {
                     onSuccess: () => {

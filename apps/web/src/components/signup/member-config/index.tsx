@@ -267,7 +267,6 @@ const MemberConfig = ({
 
             <ErrorMessage
                 name={`extraInfo.${extraInfoKey}`}
-                errorMessage={errorMessage}
             />
         </InputContainer>
     );

@@ -46,6 +46,7 @@ const useOrderSheetInitialize = ({
     const { data: profileData } = useProfile({
         options: { enabled: isLogin !== null },
     });
+    console.log('🚀 ~ useOrderSheetInitialize ~ profileData:', profileData);
     const { data: orderConfigurationData } = useOrderConfiguration();
     const { data: orderSheetData } = useOrderSheet({
         orderSheetNo,
@@ -94,35 +95,39 @@ const useOrderSheetInitialize = ({
             setValue('pgType', pgType);
         }
 
-        reset((prev) => ({
-            ...prev,
-            // TODO: 기존에 등록된 주소가 있다면 세팅 필요
-            shippingAddress: {
-                addressNo: mainAddress.addressNo || 0,
-                receiverName: mainAddress.receiverName || '',
-                receiverContact1: parsePhoneString(
-                    mainAddress.receiverContact1,
+        reset(
+            (prev) => ({
+                ...prev,
+                // TODO: 기존에 등록된 주소가 있다면 세팅 필요
+                shippingAddress: {
+                    addressNo: mainAddress.addressNo || 0,
+                    receiverName: mainAddress.receiverName || '',
+                    receiverContact1: parsePhoneString(
+                        mainAddress.receiverContact1,
+                    ),
+                    receiverAddress: mainAddress.receiverAddress || '',
+                    receiverDetailAddress:
+                        mainAddress.receiverDetailAddress || '',
+                    receiverZipCd: mainAddress.receiverZipCd || '',
+                },
+                agreementTermsAgrees: pipe(
+                    orderSheetData,
+                    prop('termsInfos'),
+                    map((a) => ({ isAgree: false, termsType: a.termsType })),
+                    toArray,
                 ),
-                receiverAddress: mainAddress.receiverAddress || '',
-                receiverDetailAddress: mainAddress.receiverDetailAddress || '',
-                receiverZipCd: mainAddress.receiverZipCd || '',
-            },
-            agreementTermsAgrees: pipe(
-                orderSheetData,
-                prop('termsInfos'),
-                map((a) => ({ isAgree: false, termsType: a.termsType })),
-                toArray,
-            ),
-            bankAccountToDeposit: tradeBankAccountInfos[0]
-                ? {
-                      bankAccount: tradeBankAccountInfos[0].bankAccount,
-                      bankCode: tradeBankAccountInfos[0].bankCode,
-                      bankDepositorName:
-                          tradeBankAccountInfos[0].bankDepositorName,
-                  }
-                : undefined,
-            applyCashReceipt: orderSheetData.applyCashReceiptForAccount,
-        }));
+                bankAccountToDeposit: tradeBankAccountInfos[0]
+                    ? {
+                          bankAccount: tradeBankAccountInfos[0].bankAccount,
+                          bankCode: tradeBankAccountInfos[0].bankCode,
+                          bankDepositorName:
+                              tradeBankAccountInfos[0].bankDepositorName,
+                      }
+                    : undefined,
+                applyCashReceipt: orderSheetData.applyCashReceiptForAccount,
+            }),
+            // { keepFieldsRef: true },
+        );
     }, [orderSheetData, setValue, orderConfigurationData, reset]);
 
     // NOTE: 주문자 정보 세팅

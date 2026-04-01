@@ -162,7 +162,7 @@ export interface AddressRequest {
     /** 개인고유통관부호 */
     customsIdNumber?: Nullable<string>;
     /** 국가코드 */
-    countryCd?: Nullable<CountryCdType>;
+    countryCd?: Nullable<string>;
     /** 배송지 우편 번호 */
     receiverZipCd: string;
     /** 배송지 상세 주소 */

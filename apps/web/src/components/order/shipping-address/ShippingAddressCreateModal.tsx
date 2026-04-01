@@ -6,7 +6,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import ModalLayout from '@/components/layout/modal';
-import AddressSearchModal from '@/components/modal/AddressSearch';
+import AddressSearchModal from '@/components/modal/address-search';
 import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
 import { ErrorMessage } from '@/components/ui/form';
 import InputCheckbox from '@/components/ui/input/Checkbox';
@@ -124,7 +124,7 @@ const ShippingAddressCreateModal = ({
         (values) => {
             const data = {
                 addressName: values.addressName || '',
-                receiverName: values.receiverName,
+                receiverName: values.receiverName || '',
                 receiverContact1: `${values.receiverContact1.prefix}${values.receiverContact1.middle}${values.receiverContact1.suffix}`,
                 receiverZipCd: values.receiverZipCd,
                 receiverAddress: values.receiverAddress,

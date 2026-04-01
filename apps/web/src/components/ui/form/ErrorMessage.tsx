@@ -1,7 +1,7 @@
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/ui/form/ErrorMessage.css';
+import * as styles from '@/components/ui/form/error-message/index.css';
 
 interface ErrorMessageProps {
     name: string;
