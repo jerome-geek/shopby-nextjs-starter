@@ -21,7 +21,7 @@ interface LayoutProps {
     className?: string;
 }
 
-export function Layout({ children, className }: LayoutProps) {
+export const DefaultLayout = ({ children, className }: LayoutProps) => {
     useSbInit();
     useShopbyStatistics();
 

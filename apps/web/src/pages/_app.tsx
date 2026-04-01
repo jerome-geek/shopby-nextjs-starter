@@ -18,7 +18,7 @@ import { Toaster } from 'sonner';
 import { HttpStatusCode, isAxiosError } from 'axios';
 
 import { ExternalScripts } from '@/components/common';
-import { Layout } from '@/components/layout';
+import { DefaultLayout } from '@/components/layout';
 import { AppProviders } from '@/providers';
 
 import '@/i18n/config';
@@ -91,7 +91,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                     <HydrationBoundary state={pageProps.dehydratedState}>
                         <AppProviders>
                             <Head>{defaultSeo}</Head>
-                            <Layout>
+                            <DefaultLayout>
                                 {getLayout(
                                     <AnimatePresence mode='wait'>
                                         <motion.div
@@ -106,7 +106,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                                         </motion.div>
                                     </AnimatePresence>,
                                 )}
-                            </Layout>
+                            </DefaultLayout>
                             <Toaster
                                 richColors
                                 position='bottom-center'

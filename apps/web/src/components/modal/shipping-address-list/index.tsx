@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import ModalLayout from '@/components/layout/modal';
+import { ModalLayout } from '@/components/layout/modal';
 import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
@@ -25,7 +25,7 @@ interface ShippingAddressListModalProps {
     unmount: () => void;
 }
 
-const ShippingAddressListModal = ({
+export const ShippingAddressListModal = ({
     isOpen,
     onClose,
     currentAddressNo,
@@ -256,4 +256,3 @@ const ShippingAddressListModal = ({
     );
 };
 
-export default ShippingAddressListModal;

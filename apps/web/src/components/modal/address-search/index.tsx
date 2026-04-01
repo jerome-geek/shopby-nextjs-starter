@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Search } from 'lucide-react';
 
 import Paging from '@/components/ui/paging';
-import ModalLayout from '@/components/layout/modal';
+import { ModalLayout } from '@/components/layout/modal';
 import InputField from '@/components/ui/input/field';
 import { useAddressList } from '@/hooks/query/manage/address';
 import * as styles from './index.css';
@@ -23,7 +23,7 @@ interface AddressSearchModalProps {
     onSelect: (address: AddressRegister) => void;
 }
 
-const AddressSearchModal = ({
+export const AddressSearchModal = ({
     isOpen,
     close,
     unmount,
@@ -168,4 +168,3 @@ const AddressSearchModal = ({
     );
 };
 
-export default AddressSearchModal;

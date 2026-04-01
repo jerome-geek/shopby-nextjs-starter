@@ -7,7 +7,7 @@ import * as styles from '@/components/order/shipping-address/index.css';
 import { useAuth } from '@/hooks/useAuth';
 import { PaymentReserveSchemaType } from '@/schema';
 import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
-import ShippingAddressListModal from '@/components/modal/shipping-address-list';
+import { ShippingAddressListModal } from '@/components/modal';
 
 const ShippingAddress = () => {
     const { t } = useTranslation();

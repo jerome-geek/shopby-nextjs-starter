@@ -9,7 +9,7 @@ import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import { InputLabel } from '@/components/ui/input/label';
 import Select from '@/components/ui/select';
 import InputCheckbox from '@/components/ui/input/Checkbox';
-import AddressSearchModal from '@/components/modal/address-search';
+import { AddressSearchModal } from '@/components/modal';
 import { PaymentReserveSchemaType } from '@/schema';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 

@@ -21,7 +21,7 @@ interface ModalLayoutProps extends DefaultModalLayoutProps {
     height?: string;
 }
 
-const ModalLayout = ({
+export const ModalLayout = ({
     title,
     children,
     footerButtonList,
@@ -113,4 +113,3 @@ const ModalLayout = ({
     );
 };
 
-export default ModalLayout;

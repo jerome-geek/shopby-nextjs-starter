@@ -5,8 +5,8 @@ import { overlay } from 'overlay-kit';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import ModalLayout from '@/components/layout/modal';
-import AddressSearchModal from '@/components/modal/address-search';
+import { ModalLayout } from '@/components/layout/modal';
+import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
 import { ErrorMessage } from '@/components/ui/form';
 import InputCheckbox from '@/components/ui/input/Checkbox';
