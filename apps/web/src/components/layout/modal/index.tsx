@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useEffect, Fragment } from 'react';
 import { X } from 'lucide-react';
-import * as styles from './index.css';
+
+import * as styles from '@/components/layout/modal/index.css';
 import { useKeyDown } from '@/hooks/utils';
 
 export interface DefaultModalLayoutProps {
@@ -31,7 +32,6 @@ const ModalLayout = ({
     width,
     height,
 }: ModalLayoutProps) => {
-    
     // ESC 키로 모달 닫기 지원
     useKeyDown({
         key: 'Escape',
@@ -55,7 +55,7 @@ const ModalLayout = ({
     return (
         <AnimatePresence onExitComplete={unmount}>
             {isOpen && (
-                <div key="modal-portal">
+                <div key='modal-portal'>
                     {/* 오버레이 딤드 */}
                     <motion.div
                         className={styles.dimmed}
@@ -67,11 +67,16 @@ const ModalLayout = ({
 
                     {/* 모달 컨테이너 */}
                     <motion.div
-                        role="dialog"
-                        aria-modal="true"
+                        role='dialog'
+                        aria-modal='true'
                         className={styles.modalContainer({ size })}
                         style={{ width, height }}
-                        initial={{ opacity: 0, scale: 0.95, x: '-50%', y: '-52%' }}
+                        initial={{
+                            opacity: 0,
+                            scale: 0.95,
+                            x: '-50%',
+                            y: '-52%',
+                        }}
                         animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
                         exit={{ opacity: 0, scale: 0.95, x: '-50%', y: '-52%' }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
@@ -80,16 +85,18 @@ const ModalLayout = ({
                         {title && (
                             <div className={styles.modalHeader}>
                                 <h2 className={styles.modalTitle}>{title}</h2>
-                                <button type="button" className={styles.closeButton} onClick={close}>
+                                <button
+                                    type='button'
+                                    className={styles.closeButton}
+                                    onClick={close}
+                                >
                                     <X size={24} />
                                 </button>
                             </div>
                         )}
 
                         {/* 컨텐츠 영역 */}
-                        <div className={styles.modalContent}>
-                            {children}
-                        </div>
+                        <div className={styles.modalContent}>{children}</div>
 
                         {/* 푸터 영역 (선택 사항) */}
                         {footerButtonList && footerButtonList.length > 0 && (

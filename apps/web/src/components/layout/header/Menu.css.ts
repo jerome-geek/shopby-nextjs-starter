@@ -167,7 +167,7 @@ export const sidebarItem = style({
     padding: '10px 0',
     fontSize: '15px',
     fontWeight: 500,
-    color: vars.color.gray['500'],
+    color: vars.color.gray['80'],
     cursor: 'pointer',
     background: 'none',
     border: 'none',
@@ -175,15 +175,15 @@ export const sidebarItem = style({
     transition: 'color 0.2s ease',
 
     ':hover': {
-        color: vars.color.gray['600'],
+        color: vars.color.gray['80'],
     },
 });
 
 export const sidebarItemActive = style({
-    color: vars.color.gray['100'],
+    color: vars.color.gray['80'],
     fontWeight: 700,
     ':hover': {
-        color: vars.color.gray['100'],
+        color: vars.color.gray['80'],
     },
 });
 
@@ -237,7 +237,7 @@ export const subCategoryTitle = style({
 
 export const leafCategoryLink = style({
     fontSize: '13px',
-    color: vars.color.gray['500'],
+    color: vars.color.gray['80'],
     textDecoration: 'none',
     transition: 'color 0.2s',
 
@@ -257,7 +257,7 @@ export const scrollButton = style({
     borderRadius: '50%',
     backgroundColor: vars.color.white,
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-    border: `1px solid ${vars.color.gray['200']}`,
+    border: `1px solid ${vars.color.gray['80']}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

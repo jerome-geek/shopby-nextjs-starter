@@ -142,7 +142,7 @@ export const navLink = style({
 });
 
 export const navLinkActive = style({
-    backgroundColor: vars.color.gray['100'],
+    backgroundColor: vars.color.gray['80'],
     color: vars.color.white,
 
     ':hover': {

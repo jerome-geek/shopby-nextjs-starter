@@ -174,7 +174,7 @@ const ShippingAddressListModal = ({
             'shippingAddress',
             {
                 ...address,
-                customsIdNumber: address.customsIdNumber,
+
                 receiverJibunAddress: address.receiverAddress || '',
                 receiverContact1: {
                     prefix: prefix as any,
