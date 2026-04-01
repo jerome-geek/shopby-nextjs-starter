@@ -13,18 +13,16 @@ import { generateDefaultSeo } from 'next-seo/pages';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { OverlayProvider } from 'overlay-kit';
 import { ReactElement, ReactNode, useState } from 'react';
 import { Toaster } from 'sonner';
+import { HttpStatusCode, isAxiosError } from 'axios';
 
 import { ExternalScripts } from '@/components/common';
 import { Layout } from '@/components/layout';
-import useAxiosInterceptor from '@/hooks/useAxiosInterceptor';
+import { AppProviders } from '@/providers';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
-import { HttpStatusCode, isAxiosError } from 'axios';
-import { CertificationCheckProvider } from '@/context/certificationCheck';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -33,12 +31,6 @@ export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
     Component: NextPageWithLayout;
 };
-
-// OverlayProvider 내부에 위치해야 overlay.openAsync가 정상 동작합니다.
-function AxiosInterceptorSetup() {
-    useAxiosInterceptor();
-    return null;
-}
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
     const router = useRouter();
@@ -90,8 +82,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         description: 'Headless Commerce Example',
     });
 
-    
-
     return (
         <>
             <ExternalScripts />
@@ -99,36 +89,33 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
             <ReactLenis root>
                 <QueryClientProvider client={queryClient}>
                     <HydrationBoundary state={pageProps.dehydratedState}>
-                        <OverlayProvider>
-                            <CertificationCheckProvider>
-                                <AxiosInterceptorSetup />
-                                <Head>{defaultSeo}</Head>
-                                <Layout>
-                                    {getLayout(
-                                        <AnimatePresence mode='wait'>
-                                            <motion.div
-                                                // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
-                                                key={router.pathname}
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -20 }}
-                                                transition={{ duration: 0.3 }}
-                                            >
-                                                <Component {...pageProps} />
-                                            </motion.div>
-                                        </AnimatePresence>,
-                                    )}
-                                </Layout>
-                                <Toaster
-                                    richColors
-                                    position='bottom-center'
-                                    duration={1500}
-                                />
-                                <ReactQueryDevtools initialIsOpen={false} />
-                                <Analytics />
-                                <SpeedInsights />
-                            </CertificationCheckProvider>
-                        </OverlayProvider>
+                        <AppProviders>
+                            <Head>{defaultSeo}</Head>
+                            <Layout>
+                                {getLayout(
+                                    <AnimatePresence mode='wait'>
+                                        <motion.div
+                                            // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
+                                            key={router.pathname}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -20 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <Component {...pageProps} />
+                                        </motion.div>
+                                    </AnimatePresence>,
+                                )}
+                            </Layout>
+                            <Toaster
+                                richColors
+                                position='bottom-center'
+                                duration={1500}
+                            />
+                            <ReactQueryDevtools initialIsOpen={false} />
+                            <Analytics />
+                            <SpeedInsights />
+                        </AppProviders>
                     </HydrationBoundary>
                 </QueryClientProvider>
             </ReactLenis>

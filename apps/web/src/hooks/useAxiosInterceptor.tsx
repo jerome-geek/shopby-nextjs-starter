@@ -90,15 +90,17 @@ const useAxiosInterceptor = () => {
         const requestInterceptor = shopbyRequest.interceptors.request.use(
             (config) => {
                 const { url, method } = config;
-                logOnDev(`[API] ${method?.toUpperCase()} ${url} | Request`);
+                logOnDev(
+                    `[API] ${method?.toUpperCase()} ${url} | Request`,
+                    '#FF9F0A',
+                );
 
                 // 게스트 엔드포인트: 게스트 토큰 사용
                 if (isGuestRequest(url, method)) {
                     const guestToken = guestTokenCookie.get();
                     if (guestToken) {
-                        config.headers[
-                            'Shop-By-Authorization'
-                        ] = `Bearer ${guestToken}`;
+                        config.headers['Shop-By-Authorization'] =
+                            `Bearer ${guestToken}`;
                     }
                     return config;
                 }
@@ -106,9 +108,8 @@ const useAxiosInterceptor = () => {
                 // 일반 요청: 액세스 토큰 사용
                 const accessToken = accessTokenCookie.get();
                 if (accessToken) {
-                    config.headers[
-                        'Shop-By-Authorization'
-                    ] = `Bearer ${accessToken}`;
+                    config.headers['Shop-By-Authorization'] =
+                        `Bearer ${accessToken}`;
                 }
 
                 // 토큰 갱신 요청: Refresh-Token 헤더 추가
@@ -178,9 +179,8 @@ const useAxiosInterceptor = () => {
                                 reject(error);
                                 return;
                             }
-                            originalRequest.headers[
-                                'Shop-By-Authorization'
-                            ] = `Bearer ${newToken}`;
+                            originalRequest.headers['Shop-By-Authorization'] =
+                                `Bearer ${newToken}`;
                             resolve(shopbyRequest(originalRequest));
                         });
                     });
@@ -206,9 +206,8 @@ const useAxiosInterceptor = () => {
                     accessTokenCookie.set(data.accessToken, data.expiresIn);
                     notifySuccess(data.accessToken);
 
-                    originalRequest.headers[
-                        'Shop-By-Authorization'
-                    ] = `Bearer ${data.accessToken}`;
+                    originalRequest.headers['Shop-By-Authorization'] =
+                        `Bearer ${data.accessToken}`;
 
                     return shopbyRequest(originalRequest);
                 } catch {
