@@ -12,7 +12,9 @@ import ScrollToTop from '@/components/ui/scroll-to-top';
 import { PATHS } from '@/const/paths';
 import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 import { useHeaderHeight } from '@/hooks/ui';
-import { useScrollLock } from '@/hooks/utils';
+import { useRouteChange, useScrollLock } from '@/hooks/utils';
+import { isLoggedIn } from '@/utils/auth';
+import { accessTokenCookie } from '@/utils/cookie';
 
 interface LayoutProps {
     children: ReactNode;
@@ -25,6 +27,14 @@ export function Layout({ children, className }: LayoutProps) {
 
     useScrollLock();
     useHeaderHeight();
+
+    // NOTE : 페이지 이동 시 액세스토큰 만료 시간을 30분 연장하여 세션 유지 (로그인 상태 유지)
+    // 페이지 이동 동작이 30분 동안 없을 경우 액세스토큰 쿠키 만료되어 자동 삭제 (로그아웃)
+    useRouteChange(() => {
+        if (isLoggedIn()) {
+            accessTokenCookie.update();
+        }
+    });
 
     const router = useRouter();
     const isBottomNavigationVisible = !includes(router.pathname, [

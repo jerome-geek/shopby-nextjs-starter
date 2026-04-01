@@ -10,9 +10,8 @@ import {
 } from '@/api/core/utils';
 import { PATHS } from '@/const/paths';
 import useMyApp from '@/hooks/myapp/useMyApp';
-import { useDialog, useRouteChange } from '@/hooks/utils';
+import { useDialog } from '@/hooks/utils';
 import type { UpdateAccessTokenResponse } from '@/models/auth/oauth2';
-import { isLoggedIn } from '@/utils/auth';
 import {
     accessTokenCookie,
     guestTokenCookie,
@@ -233,14 +232,6 @@ const useAxiosInterceptor = () => {
             shopbyRequest.interceptors.response.eject(responseInterceptor);
         };
     }, []);
-
-    // NOTE : 페이지 이동 시 액세스토큰 만료 시간을 30분 연장하여 세션 유지 (로그인 상태 유지)
-    // 페이지 이동 동작이 30분 동안 없을 경우 액세스토큰 쿠키 만료되어 자동 삭제 (로그아웃)
-    useRouteChange(() => {
-        if (isLoggedIn()) {
-            accessTokenCookie.update();
-        }
-    });
 
     return {
         isReady,
