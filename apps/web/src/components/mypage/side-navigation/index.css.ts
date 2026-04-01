@@ -91,10 +91,11 @@ export const link = style([
         padding: '4px 0',
         color: vars.color.gray['80'],
         textDecoration: 'none',
-        transition: 'color 0.2s ease',
+        transition: 'color 0.2s ease, transform 0.2s ease',
 
         ':hover': {
             color: vars.color.black,
+            transform: 'translateX(2px)',
         },
     },
 ]);

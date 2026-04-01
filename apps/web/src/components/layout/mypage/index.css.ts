@@ -41,19 +41,10 @@ export const sectionContainer = style({
     },
 });
 
-export const titleContainer = style({
-    paddingBottom: '12px',
-    borderBottom: `2px solid ${vars.color.gray['50']}`,
-
-    '@media': {
-        [media.mobile]: {
-            padding: '0 0 20px',
-        },
-    },
-});
+export const titleContainer = style({});
 
 export const title = style([
-    textStyles.caption1Semibold,
+    textStyles.headingBold,
     {
         color: vars.color.black,
     },

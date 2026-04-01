@@ -13,7 +13,6 @@ export default function MypageMain() {
 
     return (
         <div className={styles.container}>
-            {/* NOTE: MypageLayout에서 FetchBoundary(Suspense)를 처리하고 있으므로 ErrorBoundary만 추가 */}
             <ShopbyApiErrorBoundary>
                 <Summary />
             </ShopbyApiErrorBoundary>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/mypage/main/summary/index.css';
 import { PATHS } from '@/const/paths';
@@ -8,8 +9,11 @@ import useLikeProductCount from '@/hooks/query/product/profile/useLikeProductCou
 import { useCouponSummary } from '@/hooks/query/promotion/coupon';
 import useLogout from '@/hooks/useLogout';
 import { POINT } from '@/utils/currency';
+import { useReviewableProductList } from '@/hooks/query/display/review';
 
 const Summary = () => {
+    const { t } = useTranslation();
+
     const { data: profileData } = useProfile();
 
     const memberNo = profileData?.memberNo ?? 0;
@@ -28,6 +32,15 @@ const Summary = () => {
     });
 
     const { data: accumulationSummaryData } = useAccumulationSummary({
+        options: { enabled: memberNo > 0 },
+    });
+
+    const { data: reviewableProductListData } = useReviewableProductList({
+        searchParams: {
+            pageNumber: 1,
+            pageSize: 5,
+            hasTotalCount: true,
+        },
         options: { enabled: memberNo > 0 },
     });
 
@@ -55,7 +68,7 @@ const Summary = () => {
         {
             id: 'review',
             title: '작성 가능 리뷰',
-            content: '-',
+            content: reviewableProductListData?.totalCount ?? 0,
             url: PATHS.MYPAGE.REVIEWS.MAIN,
         },
     ] as const;
@@ -65,9 +78,9 @@ const Summary = () => {
             <div className={styles.header}>
                 <p className={styles.welcome}>
                     <span className={styles.badge}>
-                        {profileData?.memberGradeName ?? '일반'}
+                        {profileData?.memberGradeName ?? t('일반')}
                     </span>
-                    <b>{profileData?.memberName ?? '회원'}</b> 님
+                    <b>{profileData?.memberName ?? t('회원')}</b> {t('님')}
                 </p>
 
                 <button
@@ -75,7 +88,7 @@ const Summary = () => {
                     className={styles.logoutButton}
                     onClick={logout}
                 >
-                    로그아웃
+                    {t('로그아웃')}
                 </button>
             </div>
 
@@ -83,7 +96,7 @@ const Summary = () => {
                 {summaryList.map(({ id, title, content, url }) => (
                     <li key={id} className={styles.item}>
                         <Link href={url}>
-                            <span className={styles.title}>{title}</span>
+                            <span className={styles.title}>{t(title)}</span>
                             <span className={styles.value}>{content}</span>
                         </Link>
                     </li>

@@ -38,6 +38,7 @@ interface SearchDateTime {
 interface Paging {
     pageNumber?: number;
     pageSize?: number;
+    hasTotalCount?: boolean;
 }
 
 /** 페이징 응답 */

@@ -23,6 +23,7 @@ import { AppProviders } from '@/providers';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
+import 'react-day-picker/dist/style.css';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;

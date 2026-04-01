@@ -1,9 +1,9 @@
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import { PATHS } from '@/const/paths';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useOrderStatusSummary } from '@/hooks/query/order/myOrder';
-
 import * as styles from '@/components/mypage/main/order-status-summary/index.css';
 
 type OrderStatusSummaryItem = {
@@ -17,6 +17,8 @@ type OrderStatusSummaryItem = {
 const OrderStatusSummary = () => {
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo ?? 0;
+
+    const { t } = useTranslation();
 
     const { data } = useOrderStatusSummary({
         memberNo,
@@ -64,8 +66,10 @@ const OrderStatusSummary = () => {
     return (
         <section className={styles.section}>
             <div className={styles.titleRow}>
-                <h2 className={styles.title}>나의 주문처리 현황</h2>
-                <span className={styles.subtitle}>(최근 3개월 기준)</span>
+                <h2 className={styles.title}>{t('나의 주문처리 현황')}</h2>
+                <span className={styles.subtitle}>
+                    ({t('최근 3개월 기준')})
+                </span>
             </div>
 
             <div className={styles.list}>
@@ -81,7 +85,9 @@ const OrderStatusSummary = () => {
                             >
                                 {item.content}
                             </div>
-                            <span className={styles.label}>{item.title}</span>
+                            <span className={styles.label}>
+                                {t(item.title)}
+                            </span>
                         </Link>
                     </div>
                 ))}

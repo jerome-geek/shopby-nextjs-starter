@@ -84,7 +84,7 @@ export const MypageLayout = memo(function MypageLayout({
             {
                 title: t('쇼핑활동'),
                 children: [
-                    { title: t('찜'), url: PATHS.MYPAGE.WISH },
+                    { title: t('스크랩북'), url: PATHS.MYPAGE.WISH },
                     {
                         title: t('최근 본 상품'),
                         url: PATHS.MYPAGE.RECENT_PRODUCTS,
