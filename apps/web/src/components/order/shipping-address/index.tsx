@@ -1,31 +1,34 @@
 import { ChevronRightIcon } from 'lucide-react';
 import { overlay } from 'overlay-kit';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/shipping-address/index.css';
 import { useAuth } from '@/hooks/useAuth';
 import { PaymentReserveSchemaType } from '@/schema';
-import GuestShippingAddressForm from './GuestShippingAddressForm';
-import ShippingAddressListModal from './ShippingAddressListModal';
+import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
+import ShippingAddressListModal from '@/components/modal/shipping-address-list';
 
 const ShippingAddress = () => {
     const { t } = useTranslation();
 
     const isLogin = useAuth();
 
-    const { control } = useFormContext<PaymentReserveSchemaType>();
+    const methods = useFormContext<PaymentReserveSchemaType>();
+    const { control } = methods;
     const shippingAddress = useWatch({ control, name: 'shippingAddress' });
     console.log('🚀 ~ ShippingAddress ~ shippingAddress:', shippingAddress);
 
     const handleSelectAddress = () => {
         overlay.open(({ isOpen, close, unmount }) => (
-            <ShippingAddressListModal
-                isOpen={isOpen}
-                onClose={close}
-                unmount={unmount}
-                currentAddressNo={shippingAddress.addressNo}
-            />
+            <FormProvider {...methods}>
+                <ShippingAddressListModal
+                    isOpen={isOpen}
+                    onClose={close}
+                    unmount={unmount}
+                    currentAddressNo={shippingAddress.addressNo}
+                />
+            </FormProvider>
         ));
     };
 

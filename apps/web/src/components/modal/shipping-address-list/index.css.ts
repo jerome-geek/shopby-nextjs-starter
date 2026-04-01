@@ -6,6 +6,17 @@ export const addressList = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
+    maxHeight: '65vh',
+    overflowY: 'auto',
+    padding: '4px', // 카드 그림자나 테두리가 잘리지 않도록 여백 추가
+    paddingRight: '8px', // 스크롤바 영역 확보
+    '::-webkit-scrollbar': {
+        width: '4px',
+    },
+    '::-webkit-scrollbar-thumb': {
+        backgroundColor: vars.color.gray['30'],
+        borderRadius: '10px',
+    },
 });
 
 export const addressCard = style({

@@ -1,21 +1,27 @@
-import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { includes } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { overlay } from 'overlay-kit';
-import * as styles from './ShippingAddressListModal.css';
-import ShippingAddressCreateModal from './ShippingAddressCreateModal';
+import { useMemo } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
 import ModalLayout from '@/components/layout/modal';
-import { Address } from '@/models/order/shippingAddress';
-import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
+import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
+import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
+import { addressKeys } from '@/hooks/queryKeys';
+import { useDialog } from '@/hooks/utils';
+import { Address } from '@/models/order/shippingAddress';
+import { PaymentReserveSchemaType } from '@/schema';
+import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
+import * as styles from '@/components/modal/shipping-address-list/index.css';
 
 interface ShippingAddressListModalProps {
     isOpen: boolean;
     onClose: () => void;
-    // onSelect: (address: Address) => void;
     currentAddressNo?: number;
     unmount: () => void;
-    // addresses: Address[];
 }
 
 const addresses: Address[] = [
@@ -52,12 +58,20 @@ const addresses: Address[] = [
 const ShippingAddressListModal = ({
     isOpen,
     onClose,
-    // onSelect,
     currentAddressNo,
     unmount,
-    // addresses,
 }: ShippingAddressListModalProps) => {
     const { t } = useTranslation();
+
+    const { setValue } = useFormContext<PaymentReserveSchemaType>();
+
+    const queryClient = useQueryClient();
+
+    const { openAsyncDialog } = useDialog();
+
+    const {
+        delete: { mutate: deleteMutate },
+    } = useShippingAddressMutation();
 
     const openCreateModal = (initialData?: Address) => {
         overlay.open(
@@ -73,6 +87,36 @@ const ShippingAddressListModal = ({
                     initialData={initialData}
                 />
             ),
+        );
+    };
+    const onDeleteButtonClick = async (addressNo: number) => {
+        const isAgree = await openAsyncDialog({
+            message: t('배송지를 삭제하시겠습니까?'),
+            iconType: 'warning',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (!isAgree) {
+            return;
+        }
+
+        deleteMutate(
+            { addressNo },
+            {
+                onSuccess: async () => {
+                    await openAsyncDialog({
+                        message: t('배송지가 삭제되었습니다.'),
+                    });
+
+                    queryClient.invalidateQueries({
+                        predicate: (query) =>
+                            includes(query.queryKey[0], [...addressKeys.all]),
+                    });
+
+                    onClose();
+                },
+            },
         );
     };
 
@@ -101,6 +145,47 @@ const ShippingAddressListModal = ({
               ]
             : (shippingAddressListData?.bookedAddresses ?? []);
     }, [shippingAddressListData]);
+
+    const onSelectAddress = (address: Address) => {
+        console.log('🚀 ~ onSelectAddress ~ address:', address);
+        const contact = address.receiverContact1 || '';
+        const numbers = contact.replace(/[^0-9]/g, '');
+
+        let prefix = '010';
+        let middle = '';
+        let last = '';
+
+        if (numbers.length === 11) {
+            prefix = numbers.slice(0, 3);
+            middle = numbers.slice(3, 7);
+            last = numbers.slice(7);
+        } else if (numbers.length === 10) {
+            prefix = numbers.slice(0, 3);
+            middle = numbers.slice(3, 6);
+            last = numbers.slice(6);
+        } else {
+            const parts = contact.split('-');
+            if (parts.length === 3) {
+                [prefix, middle, last] = parts;
+            }
+        }
+
+        setValue(
+            'shippingAddress',
+            {
+                ...address,
+                customsIdNumber: address.customsIdNumber,
+                receiverJibunAddress: address.receiverAddress || '',
+                receiverContact1: {
+                    prefix: prefix as any,
+                    middle: middle || '',
+                    last: last || '',
+                },
+            },
+            { shouldValidate: true },
+        );
+        onClose();
+    };
     console.log('🚀 ~ ShippingAddressListModal ~ addressList:', addressList);
 
     // const activeAddress = useMemo(() => {
@@ -126,7 +211,7 @@ const ShippingAddressListModal = ({
                 </button>,
             ]}
         >
-            <div className={styles.addressList}>
+            <div className={styles.addressList} data-lenis-prevent>
                 {addresses.map((address) => {
                     const isActive = currentAddressNo === address.addressNo;
                     return (
@@ -134,8 +219,7 @@ const ShippingAddressListModal = ({
                             key={address.addressNo}
                             className={`${styles.addressCard} ${isActive ? styles.activeCard : ''}`}
                             onClick={() => {
-                                onSelect(address);
-                                onClose();
+                                onSelectAddress(address);
                             }}
                         >
                             <div className={styles.cardHeader}>
@@ -180,8 +264,7 @@ const ShippingAddressListModal = ({
                             key={address.addressNo}
                             className={`${styles.addressCard} ${isActive ? styles.activeCard : ''}`}
                             onClick={() => {
-                                onSelect(address);
-                                onClose();
+                                onSelectAddress(address);
                             }}
                         >
                             <div className={styles.cardHeader}>
@@ -213,6 +296,15 @@ const ShippingAddressListModal = ({
                                     onClick={() => openCreateModal(address)}
                                 >
                                     {t('수정')}
+                                </button>
+                                <button
+                                    type='button'
+                                    className={styles.editButton}
+                                    onClick={() =>
+                                        onDeleteButtonClick(address.addressNo)
+                                    }
+                                >
+                                    {t('삭제')}
                                 </button>
                             </div>
                         </div>

@@ -1,118 +1,34 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useForm, Controller, FormProvider } from 'react-hook-form';
+import { includes } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import * as styles from './ShippingAddressCreateModal.css';
+import ModalLayout from '@/components/layout/modal';
+import AddressSearchModal from '@/components/modal/AddressSearch';
+import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
+import { ErrorMessage } from '@/components/ui/form';
+import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import { InputLabel } from '@/components/ui/input/label';
-import InputCheckbox from '@/components/ui/input/Checkbox';
 import Select from '@/components/ui/select';
-import ModalLayout from '@/components/layout/modal';
-import AddressSearchModal from '@/components/modal/AddressSearch';
+import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
-import { Address } from '@/models/order/shippingAddress';
-import { useDialog } from '@/hooks/utils';
-import { phonePrefixType, PhonePrefixType } from '@/schema';
-import { PHONE_PREFIX_NUMBER_LIST, ADDRESS_MEMO_LIST } from '@/const/form';
-import { useQueryClient } from '@tanstack/react-query';
-import { ErrorMessage } from '@/components/ui/form';
 import { addressKeys } from '@/hooks/queryKeys';
-import { includes } from '@fxts/core';
-
-const schema = z.object({
-    addressName: z.string().optional(),
-    receiverName: z.string().min(1, '받으시는 분을 입력해주세요'),
-    phonePrefix: z.string(),
-    phoneMiddle: z
-        .string()
-        .min(3, '올바른 번호를 입력해주세요')
-        .max(4, '올바른 번호를 입력해주세요'),
-    phoneLast: z.string().length(4, '올바른 번호를 입력해주세요'),
-    receiverZipCd: z.string().min(1, '주소를 검색해주세요'),
-    receiverAddress: z.string().min(1),
-    receiverJibunAddress: z.string(),
-    receiverDetailAddress: z.string().min(1, '상세 주소를 입력해주세요'),
-    deliveryRequest: z.string(),
-    addressMemo: z.string().optional(),
-    defaultYn: z.enum(['Y', 'N']),
-});
-
-const getShippingAddressFormSchema = ({
-    isGlobalMall,
-}: {
-    isGlobalMall?: boolean;
-} = {}) => {
-    return z.object({
-        receiverLastName: isGlobalMall ? z.string() : z.string().optional(),
-        receiverJibunAddress: z.string(),
-        defaultYn: z.enum(['Y', 'N']),
-        receiverName: z.string({ error: '받으시는 분 이름을 입력해주세요.' }),
-        addressType: z.enum([
-            'BOOK',
-            'RECENT',
-            'RECURRING_PAYMENT',
-            'RECURRING_PAYMENT_PRESENT',
-        ]),
-        customsIdNumber: z.string().nullable().optional(),
-        countryCd: z.string().nullable().optional(),
-        receiverZipCd: z
-            .string({
-                error: '우편번호를 입력해주세요.',
-            })
-            .nonempty('우편번호를 입력해주세요.'),
-        addressMemo: z.string().optional(),
-        receiverDetailAddress: z.string().nonempty('상세 주소를 입력해주세요.'),
-        receiverCity: z.string().optional(),
-        city: z.string().optional(),
-        receiverMobileCountryCd: isGlobalMall
-            ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
-            : z.string().nullable().optional(),
-        receiverAddress: z.string().nonempty('주소를 입력해주세요.'),
-        receiverState: z.string().optional(),
-        addressName: z.string().nonempty('배송지명을 입력해주세요.'),
-        // NOTE: (해외배송 / 글로벌결제 시 필수) 수령인 FirstName (nullable)
-        receiverFirstName: isGlobalMall
-            ? z.string().nonempty('이름을 입력해주세요.')
-            : z.string().optional(),
-        receiverContact1: z.object({
-            prefix: z.string().nonempty('연락처를 입력해주세요.'),
-            middle: isGlobalMall
-                ? z.string().optional()
-                : z.string().nonempty('연락처를 입력해주세요.'),
-            suffix: isGlobalMall
-                ? z.string().optional()
-                : z.string().nonempty('연락처를 입력해주세요.'),
-        }),
-        receiverContact2: z
-            .object({
-                prefix: z.string().nonempty('연락처를 입력해주세요.'),
-                middle: isGlobalMall
-                    ? z.string().optional()
-                    : z.string().nonempty('연락처를 입력해주세요.'),
-                suffix: isGlobalMall
-                    ? z.string().optional()
-                    : z.string().nonempty('연락처를 입력해주세요.'),
-            })
-            .optional()
-            .nullable(),
-    });
-};
-
-type ShippingAddressSchemaTypes = z.infer<
-    ReturnType<typeof getShippingAddressFormSchema>
->;
-type ShippingAddressFormValues = z.infer<typeof schema>;
+import { useDialog } from '@/hooks/utils';
+import { Address } from '@/models/order/shippingAddress';
+import {
+    BaseRegisterShippingAddressSchemaType,
+    getBaseRegisterShippingAddressSchema,
+} from '@/schema/shippingAddress.schema';
 
 interface ShippingAddressCreateModalProps {
     isOpen: boolean;
     onClose: () => void;
     unmount: () => void;
     initialData?: Address;
-    onSuccess?: () => void;
 }
 
 const ShippingAddressCreateModal = ({
@@ -120,7 +36,6 @@ const ShippingAddressCreateModal = ({
     onClose,
     unmount,
     initialData,
-    onSuccess,
 }: ShippingAddressCreateModalProps) => {
     const queryClient = useQueryClient();
 
@@ -130,9 +45,9 @@ const ShippingAddressCreateModal = ({
 
     const isEditMode = !!initialData;
 
-    const shippingAddressSchema = getShippingAddressFormSchema();
+    const shippingAddressSchema = getBaseRegisterShippingAddressSchema();
 
-    const methods = useForm<ShippingAddressSchemaTypes>({
+    const methods = useForm<BaseRegisterShippingAddressSchemaType>({
         resolver: zodResolver(shippingAddressSchema),
         defaultValues: {
             addressType: 'BOOK',
@@ -161,14 +76,7 @@ const ShippingAddressCreateModal = ({
         },
     });
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        setValue,
-        watch,
-        formState: { errors },
-    } = methods;
+    const { register, handleSubmit, control, setValue, watch } = methods;
 
     const addressMemoWatch = watch('addressMemo');
     const receiverZipCd = watch('receiverZipCd');
@@ -232,7 +140,6 @@ const ShippingAddressCreateModal = ({
                     { addressNo: initialData.addressNo, data },
                     {
                         onSuccess: () => {
-                            onSuccess?.();
                             onClose();
                         },
                     },
@@ -248,7 +155,8 @@ const ShippingAddressCreateModal = ({
                                         ...addressKeys.all,
                                     ]),
                             });
-                            onSuccess?.();
+
+                            openDialog({ message: '배송지가 등록되었습니다.' });
                             onClose();
                         },
                     },

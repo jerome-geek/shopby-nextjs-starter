@@ -5,7 +5,7 @@ import {
     termsType,
 } from '@/schema/common.schema';
 import {
-    registerShippingAddressSchema_base,
+    baseRegisterShippingAddressSchema,
     shippingAddressSchema,
 } from '@/schema/order.schema';
 import { regEx } from '@/utils/validation';
@@ -252,7 +252,7 @@ export const getPaymentSchema = ({
                         addressNo: z.number().optional(),
                         usesShippingInfoLaterInput: z.boolean().optional(),
                         useDefaultAddress: z.boolean().optional(),
-                        shippingAddress: registerShippingAddressSchema_base
+                        shippingAddress: baseRegisterShippingAddressSchema
                             .omit({ receiverContact1: true })
                             .safeExtend({
                                 receiverContact1: z.string(),
