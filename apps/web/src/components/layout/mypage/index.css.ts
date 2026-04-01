@@ -8,19 +8,20 @@ export const container = style({
     display: 'flex',
     width: '100%',
     position: 'relative',
-    padding: '20px 0',
+    gap: 'clamp(40px, 8vw, 60px)',
+    margin: '0 auto',
+    padding: '80px 0 0',
 
     '@media': {
-        [media.desktop]: {
-            gap: 'clamp(40px, 8vw, 120px)',
-            margin: '0 auto',
-            padding: '80px 0 0',
+        [media.tablet]: {
+            padding: '20px 0 0',
         },
 
-        [media.tablet]: {
-            gap: 'clamp(40px, 8vw, 120px)',
-            margin: '0 auto',
-            padding: '20px 0 0',
+        [media.mobile]: {
+            display: 'flex',
+            width: '100%',
+            position: 'relative',
+            padding: '20px 0',
         },
     },
 });
