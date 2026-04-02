@@ -4,7 +4,13 @@ import * as styles from '@/components/product/option/selected/index.css';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
-const SelectedProductOption = () => {
+interface SelectedProductOptionProps {
+    isRemovable?: boolean;
+}
+
+const SelectedProductOption = ({
+    isRemovable = true,
+}: SelectedProductOptionProps) => {
     const { selectedOptionList, updateOptionCnt, removeOption } =
         useProductOptionStore();
     console.log(
@@ -43,15 +49,17 @@ const SelectedProductOption = () => {
                     <li key={option.optionNo} className={styles.optionListItem}>
                         <div className={styles.optionHeader}>
                             <p className={styles.optionLabel}>{option.value}</p>
-                            <button
-                                className={styles.deleteButton}
-                                onClick={() =>
-                                    handleRemoveClick(option.optionNo)
-                                }
-                                aria-label='옵션 삭제'
-                            >
-                                <X size={20} />
-                            </button>
+                            {isRemovable && (
+                                <button
+                                    className={styles.deleteButton}
+                                    onClick={() =>
+                                        handleRemoveClick(option.optionNo)
+                                    }
+                                    aria-label='옵션 삭제'
+                                >
+                                    <X size={20} />
+                                </button>
+                            )}
                         </div>
 
                         <div className={styles.optionFooter}>

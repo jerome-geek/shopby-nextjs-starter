@@ -442,7 +442,9 @@ function ProductDetailView({
                             />
                         )}
 
-                        <SelectedProductOption />
+                        <SelectedProductOption
+                            isRemovable={!isDefaultOptionUsed}
+                        />
 
                         {/* <SelectedProductOption
                             selectedOptionList={filteredSelectedOptionList}
