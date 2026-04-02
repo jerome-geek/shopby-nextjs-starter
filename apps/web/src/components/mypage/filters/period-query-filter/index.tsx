@@ -9,6 +9,8 @@ import { overlay } from 'overlay-kit';
 import Select from '@/components/ui/select';
 import { PeriodRangePickerModal } from '@/components/modal/period-range-picker';
 import * as styles from '@/components/mypage/filters/period-query-filter/index.css';
+import { useResponsive } from '@/hooks/utils';
+import { PeriodRangePickerBottomSheet } from '@/components/bottom-sheet/period-range-picker';
 
 export type PeriodPreset = '7d' | '3m' | '6m' | '1y' | 'custom';
 export type PeriodPresetOption = { value: PeriodPreset; label: string };
@@ -74,6 +76,8 @@ export const PeriodQueryFilter = ({
     const { t } = useTranslation();
     const router = useRouter();
 
+    const { isMobile } = useResponsive();
+
     const startYmd = String(router.query[startKey] ?? '');
     const endYmd = String(router.query[endKey] ?? '');
 
@@ -122,24 +126,43 @@ export const PeriodQueryFilter = ({
                       to: new Date(),
                   };
 
-        overlay.open((props) => (
-            <PeriodRangePickerModal
-                {...props}
-                initialRange={initialRange}
-                onApply={(range) => {
-                    const start = range.from;
-                    const end = range.to;
-                    if (!start || !end) {
-                        return;
-                    }
+        overlay.open((props) =>
+            isMobile ? (
+                <PeriodRangePickerBottomSheet
+                    {...props}
+                    initialRange={initialRange}
+                    onApply={(range) => {
+                        const start = range.from;
+                        const end = range.to;
+                        if (!start || !end) {
+                            return;
+                        }
 
-                    setQuery({
-                        [startKey]: formatYmd(start),
-                        [endKey]: formatYmd(end),
-                    });
-                }}
-            />
-        ));
+                        setQuery({
+                            [startKey]: formatYmd(start),
+                            [endKey]: formatYmd(end),
+                        });
+                    }}
+                />
+            ) : (
+                <PeriodRangePickerModal
+                    {...props}
+                    initialRange={initialRange}
+                    onApply={(range) => {
+                        const start = range.from;
+                        const end = range.to;
+                        if (!start || !end) {
+                            return;
+                        }
+
+                        setQuery({
+                            [startKey]: formatYmd(start),
+                            [endKey]: formatYmd(end),
+                        });
+                    }}
+                />
+            ),
+        );
     };
 
     const onChangePreset = (preset: PeriodPreset) => {

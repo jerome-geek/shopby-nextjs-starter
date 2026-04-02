@@ -1,4 +1,5 @@
 import { clsx } from 'clsx';
+import { motion } from 'motion/react';
 
 import * as styles from '@/components/mypage/filters/segmented-toggle/index.css';
 
@@ -47,13 +48,21 @@ export const SegmentedToggle = <T extends string>({
                     key={option.value}
                     type='button'
                     className={clsx(styles.button, buttonClassName)}
-                    data-selected={
-                        option.value === activeSegment ? true : undefined
-                    }
+                    data-selected={option.value === activeSegment}
                     aria-pressed={option.value === activeSegment}
                     onClick={() => onChange(option.value)}
                 >
-                    {option.label}
+                    <span className={styles.label}>{option.label}</span>
+
+                    {option.value === activeSegment && (
+                        <motion.div
+                            className={styles.indicator}
+                            layoutId='tab-indicator'
+                            animate={{
+                                y: 'none',
+                            }}
+                        />
+                    )}
                 </button>
             ))}
         </div>

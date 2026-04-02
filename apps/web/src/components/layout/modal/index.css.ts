@@ -24,7 +24,7 @@ export const modalContainer = recipe({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        zIndex: 1001,
+        zIndex: 1000,
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
     },
     variants: {

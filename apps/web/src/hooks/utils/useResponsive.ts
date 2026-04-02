@@ -15,12 +15,8 @@ export const mediaQuery = {
 
 export const useResponsive = () => {
     // 정의된 mediaQuery 상수를 훅에서도 재활용
-    const isMiniMobile = useMediaQuery(mediaQuery.miniMobile, {
-        initializeWithValue: false,
-    });
-    const isMobile = useMediaQuery(mediaQuery.mobile, {
-        initializeWithValue: false,
-    });
+    const isMiniMobile = useMediaQuery(mediaQuery.miniMobile);
+    const isMobile = useMediaQuery(mediaQuery.mobile);
     const isTablet = useMediaQuery(mediaQuery.tablet, {
         initializeWithValue: false,
     });

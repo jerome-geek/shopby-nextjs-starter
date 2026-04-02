@@ -16,23 +16,21 @@ export const group = style({
 export const button = style([
     textStyles.body2Semibold,
     {
+        position: 'relative',
         border: 0,
         background: 'transparent',
         padding: '0 14px',
         borderRadius: '4px',
         cursor: 'pointer',
         color: vars.color.gray['80'],
-        transition: 'background-color 0.15s ease, color 0.15s ease',
+        transition:
+            'background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease',
         selectors: {
             '&:hover': {
                 backgroundColor: vars.color.gray['20'],
             },
-            '&[data-selected]': {
-                backgroundColor: vars.color.white,
-                color: vars.color.black,
-            },
-            '&[data-selected]:hover': {
-                backgroundColor: vars.color.white,
+            '&[data-selected=true]': {
+                color: vars.color.white,
             },
             '&:focus-visible': {
                 outline: `2px solid ${vars.color.primary}`,
@@ -56,3 +54,18 @@ export const button = style([
     },
 ]);
 
+export const label = style({
+    position: 'relative',
+    zIndex: 2,
+});
+
+export const indicator = style({
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: vars.color.black,
+    borderRadius: '4px',
+    zIndex: 1,
+});

@@ -21,13 +21,11 @@ export const section = style({
     border: `1px solid ${vars.color.gray['30']}`,
     borderRadius: '4px',
     padding: '20px',
-    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
 
     '@media': {
         [media.mobile]: {
             padding: '16px',
             borderRadius: '4px',
-            boxShadow: '0 8px 18px rgba(0, 0, 0, 0.04)',
         },
     },
 });
@@ -148,8 +146,9 @@ export const metaRowLeft = style({
 export const registerCouponButton = style({
     flexShrink: 0,
     width: 'auto',
-    minWidth: '96px',
-    height: '40px',
+    minWidth: '86px',
+    height: '30px',
+    fontSize: '1.4rem',
 });
 
 export const periodSelectRow = style({
@@ -186,20 +185,7 @@ export const selectedRangeText = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['70'],
-        '@media': {
-            [media.tablet]: {
-                fontSize: '1.4rem', // 최소 14px
-                fontWeight: 400,
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
-            },
-            [media.desktop]: {
-                fontSize: '1.4rem', // 최소 14px
-                fontWeight: 400,
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
-            },
-        },
+        fontSize: '1.4rem',
     },
 ]);
 
@@ -227,14 +213,7 @@ export const count = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
-        '@media': {
-            '(min-width: 768px)': {
-                fontSize: '1.4rem', // 최소 14px
-                fontWeight: 400,
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
-            },
-        },
+        fontSize: '1.4rem',
     },
 ]);
 
@@ -257,7 +236,13 @@ export const listItem = style({
     },
 
     '@media': {
-        '(min-width: 768px)': {
+        [media.tablet]: {
+            gridTemplateColumns: '1.3fr 1fr 1fr 0.8fr 0.9fr',
+            alignItems: 'center',
+            gap: '16px',
+            padding: '16px 12px',
+        },
+        [media.desktop]: {
             gridTemplateColumns: '1.3fr 1fr 1fr 0.8fr 0.9fr',
             alignItems: 'center',
             gap: '16px',
@@ -269,22 +254,22 @@ export const listItem = style({
 export const headerRow = style([
     textStyles.caption1Semibold,
     {
-        display: 'none',
+        display: 'grid',
+        gridTemplateColumns: '1.3fr 1fr 1fr 0.8fr 0.9fr',
+        alignItems: 'center',
+        gap: '16px',
+        padding: '12px 0',
+        borderTop: `1px solid ${vars.color.black}`,
+        borderBottom: `1px solid ${vars.color.gray['20']}`,
+        color: vars.color.gray['80'],
+        fontSize: '1.4rem',
+        fontWeight: 600,
+        lineHeight: '1.4',
+        letterSpacing: '-1.3%',
 
         '@media': {
-            '(min-width: 768px)': {
-                display: 'grid',
-                gridTemplateColumns: '1.3fr 1fr 1fr 0.8fr 0.9fr',
-                alignItems: 'center',
-                gap: '16px',
-                padding: '12px 0',
-                borderTop: `1px solid ${vars.color.black}`,
-                borderBottom: `1px solid ${vars.color.gray['20']}`,
-                color: vars.color.gray['80'],
-                fontSize: '1.4rem', // 데스크탑 최소 14px
-                fontWeight: 600,
-                lineHeight: '1.4',
-                letterSpacing: '-1.3%',
+            [media.mobile]: {
+                display: 'none',
             },
         },
     },
@@ -303,11 +288,12 @@ export const cell = style({
     flexDirection: 'column',
     gap: '4px',
     minWidth: 0,
+    textAlign: 'center',
+    alignItems: 'center',
 
     '@media': {
-        '(min-width: 768px)': {
-            textAlign: 'center',
-            alignItems: 'center',
+        [media.mobile]: {
+            flexDirection: 'row',
         },
     },
 });
@@ -336,7 +322,12 @@ export const name = style([
         },
 
         '@media': {
-            '(min-width: 768px)': {
+            [media.tablet]: {
+                paddingLeft: 0,
+                width: '100%',
+                textAlign: 'left',
+            },
+            [media.desktop]: {
                 paddingLeft: 0,
                 width: '100%',
                 textAlign: 'left',
@@ -350,7 +341,13 @@ export const subText = style([
     {
         color: vars.color.gray['70'],
         '@media': {
-            '(min-width: 768px)': {
+            [media.tablet]: {
+                fontSize: '1.4rem', // 데스크탑 최소 14px
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+            [media.desktop]: {
                 fontSize: '1.4rem', // 데스크탑 최소 14px
                 fontWeight: 400,
                 lineHeight: '1.4',
@@ -375,20 +372,6 @@ export const mobileDateLabel = style([
     },
 ]);
 
-export const benefitContainer = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-    minWidth: 0,
-
-    '@media': {
-        [media.mobile]: {
-            flexDirection: 'row',
-            gap: '8px',
-        },
-    },
-});
-
 export const benefitText = style([
     textStyles.body1Bold,
     {
@@ -403,16 +386,8 @@ export const benefitCouponType = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['70'],
-        fontSize: '13px',
+        fontSize: '1.4rem',
         lineHeight: 1.4,
-        '@media': {
-            [media.tablet]: {
-                fontSize: '1.4rem',
-            },
-            [media.desktop]: {
-                fontSize: '1.4rem',
-            },
-        },
     },
 ]);
 
@@ -514,33 +489,9 @@ export const empty = style([
     },
 ]);
 
-export const pagination = style({
+export const paging = style({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: '10px',
-    paddingTop: '12px',
-});
-
-export const pageButton = style([
-    textStyles.caption1Semibold,
-    {
-        border: `1px solid ${vars.color.gray['30']}`,
-        backgroundColor: vars.color.white,
-        borderRadius: '4px',
-        padding: '10px 12px',
-        cursor: 'pointer',
-        color: vars.color.black,
-        selectors: {
-            '&:focus-visible': {
-                outline: `2px solid ${vars.color.primary}`,
-                outlineOffset: 2,
-            },
-        },
-    },
-]);
-
-export const pageButtonDisabled = style({
-    opacity: 0.5,
-    cursor: 'not-allowed',
+    margin: '40px 0 20px',
 });

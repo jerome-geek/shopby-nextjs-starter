@@ -7,6 +7,8 @@ import {
 const couponKeys = {
     all: ['coupons'] as const,
 
+    issueByProductNo: () => [...couponKeys.all, 'issueByProductNo'] as const,
+
     lists: () => [...couponKeys.all, 'list'] as const,
 
     list: (searchParams: GetUserCouponsParams, memberNo?: number) =>

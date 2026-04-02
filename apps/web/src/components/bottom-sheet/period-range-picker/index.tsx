@@ -2,33 +2,30 @@ import { type DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
 
 import { PeriodRangePicker } from '@/components/layer-contents/period-range-picker';
-import {
-    ModalLayout,
-    type DefaultModalLayoutProps,
-} from '@/components/layout/modal';
+import BottomSheetLayout from '@/components/layout/bottom-sheet';
+import { type DefaultModalLayoutProps } from '@/components/layout/modal';
 import { Button } from '@/components/ui/button';
 
-interface PeriodRangePickerModalProps extends DefaultModalLayoutProps {
+interface PeriodRangePickerBottomSheetProps extends DefaultModalLayoutProps {
     initialRange?: DateRange;
     onApply: (range: DateRange) => void;
 }
 
-export const PeriodRangePickerModal = ({
+export const PeriodRangePickerBottomSheet = ({
     isOpen,
     close,
     unmount,
     initialRange,
     onApply,
-}: PeriodRangePickerModalProps) => {
+}: PeriodRangePickerBottomSheetProps) => {
     const { t } = useTranslation();
 
     return (
-        <ModalLayout
+        <BottomSheetLayout
             isOpen={isOpen}
             close={close}
             unmount={unmount}
             title={t('기간 선택')}
-            size='medium'
             footerButtonList={[
                 <Button
                     key='period-range-picker-submit-button'
@@ -47,6 +44,6 @@ export const PeriodRangePickerModal = ({
                 unmount={unmount}
                 isOpen={isOpen}
             />
-        </ModalLayout>
+        </BottomSheetLayout>
     );
 };

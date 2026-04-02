@@ -36,7 +36,8 @@ export const PHONE_PREFIX_NUMBER_LIST = [
     { label: '019', value: '019' },
 ] as const;
 
-export type PhonePrefixType = (typeof PHONE_PREFIX_NUMBER_LIST)[number]['value'];
+export type PhonePrefixType =
+    (typeof PHONE_PREFIX_NUMBER_LIST)[number]['value'];
 export const PHONE_PREFIX_VALUES = PHONE_PREFIX_NUMBER_LIST.map(
     ({ value }) => value,
 ) as [PhonePrefixType, ...PhonePrefixType[]];
@@ -1056,7 +1057,6 @@ export const MOBILE_COUNTRY_CODE_LIST = [
 ];
 
 export * from './country';
-
 
 export const STATE_LIST = [
     {

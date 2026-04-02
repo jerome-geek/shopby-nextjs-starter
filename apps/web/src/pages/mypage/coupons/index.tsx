@@ -1,16 +1,20 @@
 import dayjs from 'dayjs';
-import { clsx } from 'clsx';
+import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
+import { overlay } from 'overlay-kit';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AnimatePresence, motion } from 'motion/react';
 
+import { CouponRegisterBottomSheet } from '@/components/bottom-sheet/coupon-register';
 import LoadingWrapper from '@/components/common/loading-wrapper';
+import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout/mypage';
+import { CouponRegisterModal } from '@/components/modal/coupon-register';
 import { CouponConstraintDetailContent } from '@/components/mypage/coupons/constraint-detail-content';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import { Button } from '@/components/ui/button';
+import Paging from '@/components/ui/paging';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useUserCoupons } from '@/hooks/query/promotion/coupon';
 import { useCoupons } from '@/hooks/utils/useCoupons';
@@ -59,7 +63,6 @@ export const MypageCoupons = () => {
 
     const couponList = data?.items ?? [];
     const totalCount = data?.totalCount ?? 0;
-    const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
     const [openConstraintIssueNo, setOpenConstraintIssueNo] = useState(0);
     const constraintPopupRef = useRef<HTMLDivElement>(null);
@@ -90,7 +93,7 @@ export const MypageCoupons = () => {
     }, [openConstraintIssueNo]);
 
     const setQuery = (next: Record<string, string | number | undefined>) => {
-        void router.replace(
+        router.replace(
             {
                 pathname: router.pathname,
                 query: {
@@ -108,6 +111,16 @@ export const MypageCoupons = () => {
         setOpenConstraintIssueNo((previous) =>
             previous === coupon.couponIssueNo ? 0 : coupon.couponIssueNo,
         );
+    };
+
+    const openCouponRegister = () => {
+        overlay.open((props) => {
+            return isMobile ? (
+                <CouponRegisterBottomSheet {...props} />
+            ) : (
+                <CouponRegisterModal {...props} />
+            );
+        });
     };
 
     return (
@@ -169,9 +182,7 @@ export const MypageCoupons = () => {
                                         frame='solid'
                                         variant='primary'
                                         className={styles.registerCouponButton}
-                                        onClick={() => {
-                                            /* 쿠폰 등록 플로우 연결 예정 */
-                                        }}
+                                        onClick={openCouponRegister}
                                     >
                                         {t('쿠폰 등록')}
                                     </Button>
@@ -204,9 +215,7 @@ export const MypageCoupons = () => {
 
                     <LoadingWrapper isLoading={isLoading}>
                         {couponList.length === 0 ? (
-                            <div className={styles.empty}>
-                                {t('현재 보유한 쿠폰이 없습니다.')}
-                            </div>
+                            <NoResult text={t('보유한 쿠폰이 없습니다.')} />
                         ) : (
                             couponList.map((coupon) => (
                                 <div
@@ -220,22 +229,12 @@ export const MypageCoupons = () => {
                                     </div>
 
                                     <div className={styles.cell}>
-                                        <div
-                                            className={styles.benefitContainer}
-                                        >
-                                            <p className={styles.benefitText}>
-                                                {getBenefitAmt(coupon)}
-                                            </p>
-                                            <p
-                                                className={
-                                                    styles.benefitCouponType
-                                                }
-                                            >
-                                                {getCouponType(
-                                                    coupon.couponType,
-                                                )}
-                                            </p>
-                                        </div>
+                                        <p className={styles.benefitText}>
+                                            {getBenefitAmt(coupon)}
+                                        </p>
+                                        <p className={styles.benefitCouponType}>
+                                            {getCouponType(coupon.couponType)}
+                                        </p>
                                     </div>
 
                                     <div className={styles.cell}>
@@ -348,47 +347,16 @@ export const MypageCoupons = () => {
                     </LoadingWrapper>
                 </div>
 
-                {totalPages > 1 && (
-                    <div className={styles.pagination}>
-                        <button
-                            type='button'
-                            className={clsx(
-                                styles.pageButton,
-                                pageNumber <= 1 && styles.pageButtonDisabled,
-                            )}
-                            onClick={() =>
-                                setQuery({
-                                    pageNumber: Math.max(1, pageNumber - 1),
-                                })
-                            }
-                            disabled={pageNumber <= 1}
-                        >
-                            {t('이전')}
-                        </button>
-                        <span className={styles.subText}>
-                            {pageNumber} / {totalPages}
-                        </span>
-                        <button
-                            type='button'
-                            className={clsx(
-                                styles.pageButton,
-                                pageNumber >= totalPages &&
-                                    styles.pageButtonDisabled,
-                            )}
-                            onClick={() =>
-                                setQuery({
-                                    pageNumber: Math.min(
-                                        totalPages,
-                                        pageNumber + 1,
-                                    ),
-                                })
-                            }
-                            disabled={pageNumber >= totalPages}
-                        >
-                            {t('다음')}
-                        </button>
-                    </div>
-                )}
+                <div className={styles.paging}>
+                    <Paging
+                        currentPage={pageNumber}
+                        totalCount={totalCount}
+                        pageSize={PAGE_SIZE}
+                        onPageClick={(page) => {
+                            setQuery({ pageNumber: page });
+                        }}
+                    />
+                </div>
             </section>
         </div>
     );

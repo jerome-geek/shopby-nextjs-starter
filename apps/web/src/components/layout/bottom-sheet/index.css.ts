@@ -1,104 +1,119 @@
-// import { motion } from 'motion/react';
-// import styled from 'styled-components';
+import { globalStyle, style } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
-// import { fontSize, fontWeight } from '@/styles/mixin';
+import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
-// const Dimmed = styled(motion.div)`
-//     position: fixed;
-//     top: 0;
-//     left: 0;
-//     width: 100%;
-//     height: 100%;
-//     background-color: ${(props) => props.theme.black};
-// `;
-// const BottomSheetContainer = styled(motion.div)<{
-//     $type: 'partial' | 'fullscreen';
-// }>`
-//     position: fixed;
-//     bottom: 0;
-//     left: 0;
-//     right: 0;
-//     display: flex;
-//     flex-direction: column;
-//     background-color: white;
-//     height: ${({ $type }) =>
-//         $type === 'fullscreen' ? 'calc(var(--vh, 1vh) * 100)' : 'auto'};
-//     border-radius: ${({ $type }) =>
-//         $type === 'fullscreen' ? '0' : 'var(--radius-12) var(--radius-12) 0 0'};
-//     padding: 0;
+export const dimmed = style({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: vars.color.black,
+    zIndex: 1000,
+});
 
-//     ::-webkit-scrollbar {
-//         width: 6px;
-//     }
+export const bottomSheetContainer = recipe({
+    base: {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: vars.color.white,
+        padding: 0,
+        zIndex: 1000,
+    },
+    variants: {
+        type: {
+            partial: {
+                height: 'auto',
+                borderRadius: '12px 12px 0 0',
+            },
+            fullscreen: {
+                height: 'calc(var(--vh, 1vh) * 100)',
+                borderRadius: 0,
+            },
+        },
+    },
+    defaultVariants: {
+        type: 'partial',
+    },
+});
 
-//     ::-webkit-scrollbar-thumb {
-//         background-color: ${(props) => props.theme.tailwindGray300};
-//         border-radius: var(--spacing-999);
-//     }
+export const bottomSheetHeaderContainer = style({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '24px 20px',
+});
 
-//     ::-webkit-scrollbar-track {
-//         background-color: ${(props) => props.theme.tailwindGray100};
-//     }
-// `;
+export const bottomSheetHeader = style([textStyles.headingSemibold]);
 
-// const BottomSheetHeader = styled.div`
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     padding: 24px 20px 24px;
+export const noTitleCloseButton = style({
+    width: '100%',
+    margin: '8px auto 12px',
+    background: 'transparent',
+    border: 'none',
+    padding: 0,
+});
 
-//     h4 {
-//         ${fontSize(18)};
-//         ${fontWeight.medium};
-//     }
-// `;
+globalStyle(`${noTitleCloseButton} > span`, {
+    display: 'block',
+    width: '56px',
+    height: '4px',
+    borderRadius: '999px',
+    backgroundColor: vars.color.gray['40'],
+    margin: '0 auto',
+});
 
-// const NoTitleCloseButton = styled.button`
-//     width: 100%;
-//     margin: 8px auto 12px;
+export const bottomSheetContent = recipe({
+    base: {
+        flex: 1,
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        padding: '0 20px 20px',
+    },
+    variants: {
+        isHeader: {
+            true: {},
+            false: {},
+        },
+        isFooter: {
+            true: {},
+            false: {},
+        },
+    },
+    compoundVariants: [
+        {
+            variants: { isHeader: true, isFooter: true },
+            style: { maxHeight: 'calc(100% - 116px)' },
+        },
+        {
+            variants: { isHeader: true, isFooter: false },
+            style: { maxHeight: 'calc(100% - 44px)' },
+        },
+        {
+            variants: { isHeader: false, isFooter: true },
+            style: { maxHeight: 'calc(100% - 72px)' },
+        },
+        {
+            variants: { isHeader: false, isFooter: false },
+            style: { maxHeight: '100%' },
+        },
+    ],
+});
 
-//     > span {
-//         width: 56px;
-//         height: 4px;
-//         border-radius: 999px;
-//         background-color: #dddddd;
-//     }
-// `;
+export const bottomSheetFooter = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    padding: '12px 20px 20px',
+    borderTop: `1px solid ${vars.color.gray['20']}`,
+});
 
-// const BottomSheetContent = styled.div<{
-//     $isHeader: boolean;
-//     $isFooter: boolean;
-// }>`
-//     flex: 1;
-//     overflow-y: auto;
-//     overflow-x: hidden;
-//     max-height: ${({ $isHeader, $isFooter }) =>
-//         $isHeader && $isFooter
-//             ? 'calc(100% - 116px)'
-//             : $isHeader
-//               ? 'calc(100% - 44px)'
-//               : '100%'};
-//     padding: 0 20px 20px;
-// `;
-
-// const BottomSheetFooter = styled.div`
-//     display: flex;
-//     align-items: center;
-//     gap: 8px;
-//     padding: 12px 20px 20px;
-//     border-top: 1px solid ${(props) => props.theme.tailwindGray100};
-
-//     button {
-//         flex: 1;
-//         ${fontSize(14)};
-//     }
-// `;
-
-// export const BottomSheetStyle = {
-//     Dimmed,
-//     BottomSheetContainer,
-//     BottomSheetHeader,
-//     NoTitleCloseButton,
-//     BottomSheetContent,
-//     BottomSheetFooter,
-// };
+globalStyle(`${bottomSheetFooter} button`, {
+    flex: 1,
+});
