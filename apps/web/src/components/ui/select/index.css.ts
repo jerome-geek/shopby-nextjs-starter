@@ -176,3 +176,7 @@ export const noOptionsMessage = style([
         padding: '16px',
     },
 ]);
+
+export const menuPortal = style({
+    zIndex: 9999,
+});

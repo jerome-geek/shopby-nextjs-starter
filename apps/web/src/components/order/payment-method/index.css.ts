@@ -38,6 +38,9 @@ export const radioGroupItem = style({
         '&:hover': {
             borderColor: vars.color.green['80'],
         },
+        '&:active': {
+            transform: 'scale(0.98)',
+        },
         // 선택됐을 때: 테두리 Green 80, 배경 Green 20
         '&[data-state="checked"]': {
             borderColor: vars.color.green['80'],
@@ -66,21 +69,17 @@ export const radioCircle = style({
     height: '18px',
     borderRadius: '50%',
     border: `1px solid ${vars.color.gray['50']}`,
-    display: 'flex', // 사실 absolute를 쓰면 flex는 빼도 무방합니다
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
     backgroundColor: '#fff',
     position: 'relative',
-    boxSizing: 'border-box', // 명시적으로 추가
+    boxSizing: 'border-box',
 });
 
 export const radioIndicator = style({
     position: 'absolute',
-    // 부모의 1px border를 덮어버리려면 -1px을 사용합니다.
-    // 만약 테두리 안쪽에 딱 맞추고 싶다면 inset: 0을 사용하세요.
-    // top: -1,
-    // left: -1,
     top: -1,
     left: -1,
     width: '18px',
@@ -92,8 +91,103 @@ export const radioIndicator = style({
         height: '100%',
         borderRadius: '50%',
         backgroundColor: vars.color.white,
-        // 테두리 두께를 조절해서 원하는 비주얼을 만드세요
         border: `5px solid ${vars.color.green['80']}`,
         boxSizing: 'border-box',
     },
+});
+
+export const bankTransferContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+    padding: '24px 20px',
+    backgroundColor: vars.color.gray['10'],
+    borderRadius: '12px',
+    marginTop: '12px',
+    overflow: 'hidden',
+});
+
+export const fieldRow = style({
+    display: 'grid',
+    gridTemplateColumns: '80px 1fr',
+    alignItems: 'center',
+    gap: '16px',
+});
+
+export const fieldLabel = style([
+    textStyles.body2Medium,
+    {
+        color: vars.color.black,
+        display: 'flex',
+        alignItems: 'center',
+    },
+]);
+
+export const requiredDot = style({
+    width: '4px',
+    height: '4px',
+    borderRadius: '50%',
+    backgroundColor: '#FF4D00',
+    marginLeft: '4px',
+    marginTop: '-4px', // 텍스트 상단에 위치하도록 살짝 조정
+});
+
+export const divider = style({
+    height: '1px',
+    backgroundColor: vars.color.gray['20'],
+    width: '100%',
+});
+
+export const cashReceiptSection = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    paddingTop: '20px',
+    borderTop: `1px solid ${vars.color.black}`,
+    marginTop: '40px',
+});
+
+export const cashReceiptTitle = style([
+    textStyles.headingBold,
+    {
+        color: vars.color.black,
+    },
+]);
+
+export const cashReceiptDescription = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.gray['60'],
+        marginBottom: '4px',
+    },
+]);
+
+export const cashReceiptRadioGroup = style({
+    display: 'flex',
+    gap: '20px',
+    alignItems: 'center',
+    marginBottom: '8px',
+});
+
+export const cashReceiptRadioItem = style([
+    textStyles.body2Regular,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        cursor: 'pointer',
+    },
+]);
+
+export const phoneNumberRow = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+    marginTop: '16px',
+});
+
+export const inputGroup = style({
+    display: 'grid',
+    gridTemplateColumns: '120px 1fr',
+    gap: '8px',
 });

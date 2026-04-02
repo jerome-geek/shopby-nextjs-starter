@@ -172,17 +172,14 @@ const baseShippingAddressSchema = z.object({
     addressName: z.string().optional(),
     receiverFirstName: z.string().nullish(),
     shippingInfoLaterInputContact: z.string().optional(),
-    receiverContact1: z
-        .object({
-            prefix: z.enum(PHONE_PREFIX_VALUES),
-            middle: z
-                .string()
-                .min(3, '올바른 번호를 입력해주세요')
-                .max(4, '올바른 번호를 입력해주세요'),
-            last: z.string().length(4, '번호는 4자리여야 합니다'),
-        })
-        .nullable()
-        .optional(),
+    receiverContact1: z.object({
+        prefix: z.enum(PHONE_PREFIX_VALUES),
+        middle: z
+            .string()
+            .min(3, '올바른 번호를 입력해주세요')
+            .max(4, '올바른 번호를 입력해주세요'),
+        suffix: z.string().length(4, '번호는 4자리여야 합니다'),
+    }),
     receiverContact2: z
         .object({
             prefix: z.enum(PHONE_PREFIX_VALUES),
@@ -190,7 +187,7 @@ const baseShippingAddressSchema = z.object({
                 .string()
                 .min(3, '올바른 번호를 입력해주세요')
                 .max(4, '올바른 번호를 입력해주세요'),
-            last: z.string().length(4, '번호는 4자리여야 합니다'),
+            suffix: z.string().length(4, '번호는 4자리여야 합니다'),
         })
         .nullable()
         .optional(),

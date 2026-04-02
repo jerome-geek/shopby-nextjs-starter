@@ -5,15 +5,17 @@
 
 /** ShopBy API 에러 응답 */
 interface ShopByErrorResponse {
-    /** 에러 코드 */
     code: string;
-    /** 에러 메시지 */
+    error: string;
     message: string;
-    /** 상세 에러 정보 */
-    details?: {
-        field?: string;
-        reason?: string;
-    }[];
+    path: string;
+    result: {
+        code: string;
+        detail: {};
+        message: string;
+        time: string;
+    };
+    status: number;
 }
 
 /** Nullable 유틸리티 타입 */

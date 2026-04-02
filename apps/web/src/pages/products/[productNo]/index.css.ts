@@ -428,3 +428,15 @@ export const orderContainer = style({
         },
     },
 });
+
+export const optionContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
+});

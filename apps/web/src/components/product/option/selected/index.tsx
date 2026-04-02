@@ -48,7 +48,7 @@ const SelectedProductOption = ({
                 return (
                     <li key={option.optionNo} className={styles.optionListItem}>
                         <div className={styles.optionHeader}>
-                            <p className={styles.optionLabel}>{option.value}</p>
+                            <p className={styles.optionLabel}>{option.label}</p>
                             {isRemovable && (
                                 <button
                                     className={styles.deleteButton}

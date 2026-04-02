@@ -260,20 +260,20 @@ const paymentReserveSchema = z
         tempPasswordCheck: checkLogin()
             ? z.string().nullable().optional()
             : z.string().nonempty('임시 비밀번호 확인을 입력해주세요.'),
-        selectAddress: checkLogin()
-            ? z
-                  .boolean({
-                      error: (issue) => {
-                          if (issue.input) {
-                              return;
-                          }
-                          return '배송지를 선택해주세요.';
-                      },
-                  })
-                  .refine((val) => val, {
-                      message: '배송지를 선택해주세요.',
-                  })
-            : z.boolean().optional(),
+        // selectAddress: checkLogin()
+        //     ? z
+        //           .boolean({
+        //               error: (issue) => {
+        //                   if (issue.input) {
+        //                       return;
+        //                   }
+        //                   return '배송지를 선택해주세요.';
+        //               },
+        //           })
+        //           .refine((val) => val, {
+        //               message: '배송지를 선택해주세요.',
+        //           })
+        //     : z.boolean().optional(),
     })
     .refine(
         (data) => {

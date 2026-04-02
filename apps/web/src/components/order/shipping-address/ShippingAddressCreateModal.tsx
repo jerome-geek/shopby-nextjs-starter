@@ -50,6 +50,7 @@ const ShippingAddressCreateModal = ({
     const methods = useForm<BaseRegisterShippingAddressSchemaType>({
         resolver: zodResolver(shippingAddressSchema),
         defaultValues: {
+            countryCd: 'KR',
             addressType: 'BOOK',
             defaultYn: initialData?.defaultYn ?? 'N',
             addressName: initialData?.addressName ?? '',

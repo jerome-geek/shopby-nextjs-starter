@@ -11,7 +11,7 @@ import {
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { type PhonePrefixValue } from '@/const/form';
+import { type PhonePrefixType } from '@/const/form';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
 import { useOrderSheet } from '@/hooks/query/order/orderSheet';
@@ -19,13 +19,30 @@ import { useOrderSheet } from '@/hooks/query/order/orderSheet';
 import { usePG } from '@/hooks/order';
 import { PaymentReserveSchemaType } from '@/schema';
 
-const parsePhoneString = (phone: string | null | undefined) => {
-    if (!phone) return null;
+const parsePhoneString = (phone: string) => {
     return {
-        prefix: phone.slice(0, 3) as PhonePrefixValue,
+        prefix: phone.slice(0, 3) as PhonePrefixType,
         middle: phone.slice(3, -4),
-        last: phone.slice(-4),
+        suffix: phone.slice(-4),
     };
+};
+
+const parsePhoneStringByHyphen = (phone: string | null | undefined) => {
+    if (!phone)
+        return { prefix: '010' as PhonePrefixType, middle: '', suffix: '' };
+
+    // 하이픈이 포함된 경우 split 처리
+    if (phone.includes('-')) {
+        const [prefix, middle, suffix] = phone.split('-');
+        return {
+            prefix: (prefix || '010') as PhonePrefixType,
+            middle: middle || '',
+            suffix: suffix || '',
+        };
+    }
+
+    // 하이픈이 없는 경우 기존 slice 방식 활용
+    return parsePhoneString(phone);
 };
 
 interface UseOrderSheetInitializeProps {
@@ -100,9 +117,10 @@ const useOrderSheetInitialize = ({
                 ...prev,
                 // TODO: 기존에 등록된 주소가 있다면 세팅 필요
                 shippingAddress: {
+                    countryCd: mainAddress.countryCd || 'KR',
                     addressNo: mainAddress.addressNo || 0,
                     receiverName: mainAddress.receiverName || '',
-                    receiverContact1: parsePhoneString(
+                    receiverContact1: parsePhoneStringByHyphen(
                         mainAddress.receiverContact1,
                     ),
                     receiverAddress: mainAddress.receiverAddress || '',
@@ -147,7 +165,7 @@ const useOrderSheetInitialize = ({
             setValue('orderer.ordererName', profileData.memberName ?? '');
             setValue('orderer.ordererContact1', {
                 prefix: (profileData.mobileNo?.slice(0, 3) ??
-                    '010') as PhonePrefixValue,
+                    '010') as PhonePrefixType,
                 middle: profileData.mobileNo?.slice(3, 7) ?? '',
                 suffix: profileData.mobileNo?.slice(7) ?? '',
             });

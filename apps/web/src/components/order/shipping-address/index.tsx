@@ -77,7 +77,7 @@ const ShippingAddress = () => {
                                 {shippingAddress.receiverContact1 &&
                                 typeof shippingAddress.receiverContact1 ===
                                     'object'
-                                    ? `${shippingAddress.receiverContact1.prefix}-${shippingAddress.receiverContact1.middle}-${shippingAddress.receiverContact1.last}`
+                                    ? `${shippingAddress.receiverContact1.prefix}-${shippingAddress.receiverContact1.middle}-${shippingAddress.receiverContact1.suffix}`
                                     : shippingAddress.receiverContact1}
                                 )
                             </p>

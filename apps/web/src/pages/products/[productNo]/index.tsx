@@ -428,13 +428,14 @@ function ProductDetailView({
 
                     <hr className={styles.optionDivider} />
 
-                    <div>
+                    <div className={styles.optionContainer}>
                         {isFlatOptionUsed && (
                             <FlatProductOption
                                 productNo={productNo}
                                 onChange={onFlatOptionChange}
                             />
                         )}
+
                         {isMultiLevelOptionUsed && (
                             <MultiProductOption
                                 productNo={productNo}

@@ -18,6 +18,9 @@ import OrdererInfo from '@/components/order/orderer-info';
 import ShippingAddress from '@/components/order/shipping-address';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 import { useSb } from '@/hooks/libs/shopby';
+import payment from '@/utils/order/payment';
+import { useDialog } from '@/hooks/utils';
+import { HttpStatusCode } from 'axios';
 
 const OrderSheetPage = () => {
     const router = useRouter();
@@ -37,12 +40,12 @@ const OrderSheetPage = () => {
                 ordererContact1: { prefix: '010', middle: '', suffix: '' },
                 ordererEmail: '',
             },
-            shippingAddress: {
-                addressNo: 0,
-                countryCd: 'KR',
-                receiverZipCd: '',
-            },
-            selectAddress: !isLogin,
+            // shippingAddress: {
+            //     addressNo: 0,
+            //     countryCd: 'KR',
+            //     receiverZipCd: '',
+            // },
+            // selectAddress: !isLogin,
             inAppYn: isMyApp ? 'Y' : 'N',
             member: !!isLogin,
             orderMemo: '',
@@ -64,20 +67,24 @@ const OrderSheetPage = () => {
         <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
             <FormProvider {...methods}>
                 {isLogin !== null && (
-                    <OrderSheetContent orderSheetNo={orderSheetNo} isLogin={isLogin} />
+                    <OrderSheetContent
+                        orderSheetNo={orderSheetNo}
+                        isLogin={isLogin}
+                    />
                 )}
             </FormProvider>
         </ShopbyApiErrorBoundary>
     );
 };
 
-const OrderSheetContent = ({ 
-    orderSheetNo, 
-    isLogin 
-}: { 
+const OrderSheetContent = ({
+    orderSheetNo,
+    isLogin,
+}: {
     orderSheetNo: string;
     isLogin: boolean | null;
 }) => {
+    const { openAsyncDialog } = useDialog();
     useOrderSheetInitialize({
         orderSheetNo,
         isLogin,
@@ -93,20 +100,58 @@ const OrderSheetContent = ({
         watch,
         formState: { errors },
     } = useFormContext<PaymentReserveSchemaType>();
-    console.log('🚀 ~ OrderSheetContent ~ watch:', watch());
-    console.log('🚀 ~ OrderSheetContent ~ errors:', errors);
 
     const onSubmit = handleSubmit(
         async (data) => {
+            console.log('🚀 ~ OrderSheetContent ~ data:', data);
             try {
                 console.log('🚀 ~ onSubmit ~ data:', data);
+                const { orderer, shippingAddress } = data;
                 const submitData = {
                     ...data,
                     orderer: {
-                        ...data.orderer,
-                        orderContact1: `${data.orderer.ordererContact1.prefix}${data.orderer.ordererContact1.middle}${data.orderer.ordererContact1.suffix}`,
+                        ...orderer,
+                        ordererContact1: `${orderer.ordererContact1.prefix}${orderer.ordererContact1.middle}${orderer.ordererContact1.suffix}`,
+                    },
+                    shippingAddress: {
+                        ...shippingAddress,
+                        receiverContact1: `${shippingAddress.receiverContact1.prefix}${shippingAddress.receiverContact1.middle}${shippingAddress.receiverContact1.suffix}`,
                     },
                 };
+                console.log('🚀 ~ OrderSheetContent ~ submitData:', submitData);
+
+                const originalAlert = window.alert;
+
+                // eslint-disable-next-line
+                window.alert = () => {
+                    return;
+                };
+
+                const successCallback = () => {
+                    window.alert = originalAlert;
+                };
+
+                const errorCallback = async (error: ShopByErrorResponse) => {
+                    console.log('에러 발생', error);
+
+                    if (error.status === HttpStatusCode.Unauthorized) {
+                        // NOTE : 401에러 떨어지면 주문 정보를 다시 조회하여 토큰 재발급 로직 실행 or 로그인 만료 처리
+                        // orderSheetRefetch();
+                        return;
+                    }
+
+                    await openAsyncDialog({
+                        message: error.message,
+                        onConfirmReturnValue: false,
+                        onCloseReturnValue: false,
+                    });
+
+                    window.alert = originalAlert;
+                };
+
+                payment.setConfiguration();
+
+                payment.reservation(submitData, successCallback, errorCallback);
             } catch (error) {}
         },
         (error) => {

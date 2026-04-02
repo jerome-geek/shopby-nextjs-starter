@@ -1,5 +1,4 @@
 import type { AxiosRequestConfig } from 'axios';
-import qs from 'qs';
 
 import { shopbyRequest } from '@/api/core/request';
 import { ClaimType, OrderRequestType } from '@/models';
@@ -8,11 +7,11 @@ import {
     GetCartData,
     GetCartParams,
     GetCartResponse,
-    SendPasswordByEmailParams,
-    UpdateDeliveryInfoData,
     RequestCashReceiptResponse,
-    UpdateDeliveryInfoParams,
+    SendPasswordByEmailParams,
     UpdateCashReceiptResponse,
+    UpdateDeliveryInfoData,
+    UpdateDeliveryInfoParams,
 } from '@/models/order/guestOrder';
 import {
     GetOrderDetailParams,

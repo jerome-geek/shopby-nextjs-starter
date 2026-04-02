@@ -105,7 +105,10 @@ const Select = <
                 menuList: (state) =>
                     clsx(s.menuList, overridenClassNames?.menuList?.(state)),
                 menuPortal: (state) =>
-                    clsx(overridenClassNames?.menuPortal?.(state)),
+                    clsx(
+                        s.menuPortal,
+                        overridenClassNames?.menuPortal?.(state),
+                    ),
                 loadingIndicator: (state) =>
                     clsx(overridenClassNames?.loadingIndicator?.(state)),
                 loadingMessage: (state) =>
