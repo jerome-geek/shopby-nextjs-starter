@@ -1,12 +1,11 @@
 import { isEmpty } from '@fxts/core';
+import { Plus, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import * as styles from '@/components/ui/file-upload/index.css';
 import { useFileUpload } from '@/hooks/utils';
 import { UploadFileBlob } from '@/hooks/utils/useFileUpload';
-import * as styles from '@/components/ui/file-upload/index.css';
 import { vars } from '@/styles/theme.css';
-
-import { CloseIcon, PlusIcon } from '@/components/icons';
 
 interface FileUploadProps {
     initialFileList: string[];
@@ -44,56 +43,6 @@ const FileUpload = ({
 
     return (
         <div className={styles.imageContainer}>
-            {!isEmpty(fileList) && (
-                <ul className={styles.imageList}>
-                    {fileList.map((image, index) => {
-                        return (
-                            <li key={index} className={styles.imageListItem}>
-                                {typeof image === 'string' ? (
-                                    <img
-                                        src={image}
-                                        alt={image}
-                                        className={styles.imageListItemImage}
-                                    />
-                                ) : (
-                                    <img
-                                        src={URL.createObjectURL(image)}
-                                        alt={image.name ?? ''}
-                                        className={styles.imageListItemImage}
-                                    />
-                                )}
-                                <button
-                                    className={styles.imageListItemCloseButton}
-                                    type='button'
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setFileList((prev) =>
-                                            prev.filter(
-                                                (_, prevIndex) =>
-                                                    prevIndex !== index,
-                                            ),
-                                        );
-
-                                        if (typeof image !== 'string') {
-                                            deleteUploadFileImage(
-                                                image.name ?? '',
-                                            );
-                                        }
-                                    }}
-                                >
-                                    <CloseIcon
-                                        width={18}
-                                        height={18}
-                                        currentColor={vars.color.white}
-                                        strokeWidth={2}
-                                    />
-                                </button>
-                            </li>
-                        );
-                    })}
-                </ul>
-            )}
-
             {fileList.length < maxLength && (
                 <button
                     type='button'
@@ -113,17 +62,72 @@ const FileUpload = ({
                         style={{ display: 'none' }}
                     />
 
-                    <PlusIcon
-                        className={styles.plusIcon}
-                        width={20}
-                        height={20}
-                        currentColor={vars.color.gray['80']}
+                    <Plus
+                        size={40}
+                        strokeWidth={1.5}
+                        color={vars.color.gray['50']}
                     />
 
                     <span
                         className={styles.uploadButtonText}
                     >{`${fileList.length} / ${maxLength}`}</span>
                 </button>
+            )}
+
+            {!isEmpty(fileList) && (
+                <ul className={styles.imageList}>
+                    {fileList.map((image, index) => {
+                        return (
+                            <li key={index} className={styles.imageListItem}>
+                                <div className={styles.imageListItemImageWrap}>
+                                    {typeof image === 'string' ? (
+                                        <img
+                                            src={image}
+                                            alt={image}
+                                            className={
+                                                styles.imageListItemImage
+                                            }
+                                        />
+                                    ) : (
+                                        <img
+                                            src={URL.createObjectURL(image)}
+                                            alt={image.name ?? ''}
+                                            className={
+                                                styles.imageListItemImage
+                                            }
+                                        />
+                                    )}
+                                </div>
+                                <button
+                                    className={styles.imageListItemCloseButton}
+                                    type='button'
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setFileList((prev) =>
+                                            prev.filter(
+                                                (_, prevIndex) =>
+                                                    prevIndex !== index,
+                                            ),
+                                        );
+
+                                        if (typeof image !== 'string') {
+                                            deleteUploadFileImage(
+                                                image.name ?? '',
+                                            );
+                                        }
+                                    }}
+                                >
+                                    <X
+                                        width={15}
+                                        height={15}
+                                        color={vars.color.white}
+                                        strokeWidth={2}
+                                    />
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
             )}
         </div>
     );

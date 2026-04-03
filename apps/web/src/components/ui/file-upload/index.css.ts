@@ -1,5 +1,6 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
+import { style } from '@vanilla-extract/css';
 
 export const imageContainer = style({
     position: 'relative',
@@ -16,22 +17,43 @@ export const imageList = style({
 
 export const imageListItem = style({
     position: 'relative',
-    width: '100px',
-    height: '100px',
+    width: '88px',
+    height: '88px',
+    aspectRatio: '1 / 1',
+
+    '@media': {
+        [media.desktop]: {
+            width: '130px',
+            height: '130px',
+        },
+    },
+});
+
+export const imageListItemImageWrap = style({
+    width: '100%',
+    height: '100%',
     borderRadius: '4px',
     overflow: 'hidden',
-    border: `1px solid ${vars.color.gray['50']}`,
-    aspectRatio: '1 / 1',
 });
 
 export const uploadButton = style({
     position: 'relative',
-    width: '100px',
-    height: '100px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '88px',
+    height: '88px',
     borderRadius: '4px',
     overflow: 'hidden',
-    border: `1px solid ${vars.color.gray['50']}`,
+    border: `1px dashed ${vars.color.gray['50']}`,
     aspectRatio: '1 / 1',
+    backgroundColor: vars.color.gray['10'],
+    '@media': {
+        [media.desktop]: {
+            width: '130px',
+            height: '130px',
+        },
+    },
 });
 
 export const imageListItemImage = style({
@@ -41,12 +63,25 @@ export const imageListItemImage = style({
 });
 
 export const imageListItemCloseButton = style({
-    backgroundColor: vars.color.black,
     position: 'absolute',
-    top: '0',
-    right: '0',
+    top: '-10px',
+    right: '-10px',
+    width: '24px',
+    height: '24px',
     padding: '2px',
-    borderBottomLeftRadius: '4px',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: vars.color.gray['50'],
+    border: `4px solid ${vars.color.white}`,
+
+    '@media': {
+        [media.desktop]: {
+            width: '28px',
+            height: '28px',
+        },
+    },
 });
 
 export const plusIcon = style({
