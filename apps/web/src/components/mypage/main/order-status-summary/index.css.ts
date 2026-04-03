@@ -12,7 +12,6 @@ export const section = style({
     border: `1px solid ${vars.color.gray['30']}`,
     borderRadius: '4px',
     padding: '20px',
-    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
 });
 
 export const titleRow = style({

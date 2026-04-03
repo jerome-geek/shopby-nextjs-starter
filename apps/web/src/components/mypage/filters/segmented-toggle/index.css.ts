@@ -5,12 +5,11 @@ import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
 export const group = style({
-    display: 'inline-flex',
     backgroundColor: vars.color.gray['10'],
     border: `1px solid ${vars.color.gray['30']}`,
     borderRadius: '4px',
     padding: '2px',
-    gap: '2px',
+    maxWidth: '100%',
 });
 
 export const button = style([
@@ -57,6 +56,7 @@ export const button = style([
 export const label = style({
     position: 'relative',
     zIndex: 2,
+    whiteSpace: 'nowrap',
 });
 
 export const indicator = style({

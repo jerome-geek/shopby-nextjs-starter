@@ -9,6 +9,8 @@ export const ACCUMULATION_RESERVE_REASON_MAP = {
     CANCEL: '취소',
     USE: '사용',
     EXPIRATION: '만료',
+    ADD_MANUAL: '지급 수동',
+    SUB_MANUAL: '차감 수동',
 } as const;
 
 // 현금영수증 발급 목적 타입 맵

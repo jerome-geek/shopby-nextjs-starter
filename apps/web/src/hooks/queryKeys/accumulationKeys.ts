@@ -8,8 +8,8 @@ const accumulationKeys = {
     all: ['accumulation'] as const,
 
     lists: () => [...accumulationKeys.all, 'list'] as const,
-    list: (memberNo?: number, searchParams?: GetAccumulationsParams) =>
-        [...accumulationKeys.lists(), memberNo, searchParams] as const,
+    list: (searchParams?: GetAccumulationsParams) =>
+        [...accumulationKeys.lists(), searchParams] as const,
     infiniteList: (memberNo?: number, searchParams?: GetAccumulationsParams) =>
         [
             ...accumulationKeys.lists(),

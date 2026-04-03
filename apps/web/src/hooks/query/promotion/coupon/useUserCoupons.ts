@@ -13,7 +13,6 @@ import type {
 } from '@/models/promotion/coupon';
 
 interface UseUserCouponsParams<T = GetUserCouponsResponse> {
-    memberNo: number;
     params: GetUserCouponsParams;
     options?: Omit<
         UseQueryOptions<GetUserCouponsResponse, AxiosError, T>,
@@ -22,12 +21,11 @@ interface UseUserCouponsParams<T = GetUserCouponsResponse> {
 }
 
 const useUserCoupons = <T = GetUserCouponsResponse>({
-    memberNo,
     params,
     options,
 }: UseUserCouponsParams<T>) => {
     return useQuery({
-        queryKey: couponKeys.list(params, memberNo),
+        queryKey: couponKeys.list(params),
         queryFn: async () => {
             const { data } = await coupon.getUserCoupons(params);
             return data;

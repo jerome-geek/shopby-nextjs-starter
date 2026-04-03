@@ -14,7 +14,7 @@ export const nav = style({
     top: 0,
     padding: '80px 20px 0',
     borderRight: `1px solid ${vars.color.gray['40']}`,
-    zIndex: 2,
+    zIndex: 3,
 
     '@media': {
         [media.desktop]: {

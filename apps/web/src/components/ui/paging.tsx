@@ -72,6 +72,10 @@ const Paging = ({
         );
     }, [parseCurrentPage, parseTotalPage]);
 
+    if (totalCount === 0) {
+        return null;
+    }
+
     return (
         <div
             className={`${styles.pagingContainer} ${className || ''}`}
@@ -82,22 +86,22 @@ const Paging = ({
                     <>
                         <button
                             disabled={isFirstPage}
-                            type="button"
+                            type='button'
                             onClick={() => onPageClick(1)}
                             className={styles.arrowButton}
                         >
                             <span className={styles.buttonContents}>
-                                <DoubleCaret direction="left" />
+                                <DoubleCaret direction='left' />
                             </span>
                         </button>
                         <button
                             disabled={isFirstPage}
-                            type="button"
+                            type='button'
                             onClick={() => onPageClick(parseCurrentPage - 1)}
                             className={styles.arrowButton}
                         >
                             <span className={styles.buttonContents}>
-                                <SmallCaretIcon direction="left" />
+                                <SmallCaretIcon direction='left' />
                             </span>
                         </button>
                     </>
@@ -108,7 +112,7 @@ const Paging = ({
                 {currentPageList.map(({ page, isSelected }) => (
                     <button
                         key={page}
-                        type="button"
+                        type='button'
                         aria-selected={isSelected}
                         onClick={() => {
                             if (parseCurrentPage === page) {
@@ -128,22 +132,22 @@ const Paging = ({
                 {!isLastPage && (
                     <>
                         <button
-                            type="button"
+                            type='button'
                             onClick={() => onPageClick(parseCurrentPage + 1)}
                             className={styles.arrowButton}
                         >
                             <span className={styles.buttonContents}>
-                                <SmallCaretIcon direction="right" />
+                                <SmallCaretIcon direction='right' />
                             </span>
                         </button>
 
                         <button
-                            type="button"
+                            type='button'
                             onClick={() => onPageClick(maxTotalPage)}
                             className={styles.arrowButton}
                         >
                             <span className={styles.buttonContents}>
-                                <DoubleCaret direction="right" />
+                                <DoubleCaret direction='right' />
                             </span>
                         </button>
                     </>

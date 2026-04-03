@@ -19,7 +19,7 @@ interface UseWaitingAccumulationParams<T = GetExpectAccumulationResponse> {
 
 const useWaitingAccumulation = <T = GetExpectAccumulationResponse>({
     options,
-}: UseWaitingAccumulationParams<T>) => {
+}: UseWaitingAccumulationParams<T> = {}) => {
     return useQuery({
         queryKey: accumulationKeys.waitingDetail(),
         queryFn: async () => {

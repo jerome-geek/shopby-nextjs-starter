@@ -5,6 +5,7 @@ import { PATHS } from '@/const/paths';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useRecentOrders } from '@/hooks/query/order/myOrder';
 import * as styles from '@/components/mypage/main/recent-order-products/index.css';
+import { NoResult } from '@/components/common/no-result';
 
 const RecentOrderProducts = () => {
     const { data: profileData } = useProfile();
@@ -28,7 +29,13 @@ const RecentOrderProducts = () => {
             <h2 className={styles.title}>{t('최근 주문')}</h2>
 
             {items.length === 0 ? (
-                <p className={styles.empty}>{t('최근 주문이 없습니다.')}</p>
+                <NoResult
+                    text={t('최근 주문이 없습니다.')}
+                    style={{
+                        height: '40px',
+                        justifyContent: 'start',
+                    }}
+                />
             ) : (
                 <ul className={styles.list}>
                     {items.map((order) => (

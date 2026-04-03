@@ -20,7 +20,7 @@ export const control = recipe({
         justifyContent: 'space-between',
         width: '100%',
         height: '44px',
-        padding: '0 16px',
+        padding: '0 2px 0 12px',
         backgroundColor: vars.color.white,
         transition: 'all 0.2s',
         cursor: 'pointer',

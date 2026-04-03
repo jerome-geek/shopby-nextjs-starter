@@ -13,7 +13,6 @@ import {
 } from '@/models/manage/accumulation';
 
 interface UseAccumulationListParams<T = GetAccumulationsResponse> {
-    memberNo?: number;
     searchParams?: GetAccumulationsParams;
     options?: Omit<
         UseQueryOptions<
@@ -27,12 +26,11 @@ interface UseAccumulationListParams<T = GetAccumulationsResponse> {
 }
 
 const useAccumulationList = <T = GetAccumulationsResponse>({
-    memberNo = 0,
     searchParams,
     options,
 }: UseAccumulationListParams<T>) => {
     return useQuery({
-        queryKey: accumulationKeys.list(memberNo, searchParams),
+        queryKey: accumulationKeys.list(searchParams),
         queryFn: async () => {
             const { data } = await accumulation.getAccumulations(searchParams);
 
@@ -40,7 +38,7 @@ const useAccumulationList = <T = GetAccumulationsResponse>({
         },
         placeholderData: keepPreviousData,
         ...options,
-        enabled: (options?.enabled ?? true) && memberNo !== 0,
+        enabled: options?.enabled ?? true,
     });
 };
 

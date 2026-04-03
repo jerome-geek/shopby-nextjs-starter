@@ -1,7 +1,10 @@
 import { clsx } from 'clsx';
 import { motion } from 'motion/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/mypage/filters/segmented-toggle/index.css';
+
+import 'swiper/css';
 
 export type SegmentedToggleOption<T extends string> = {
     value: T;
@@ -24,6 +27,7 @@ const isOptionValue = <T extends string>(
     if (candidate == null) {
         return false;
     }
+
     return options.some((option) => option.value === candidate);
 };
 
@@ -43,28 +47,45 @@ export const SegmentedToggle = <T extends string>({
 
     return (
         <div className={clsx(styles.group, className)}>
-            {options.map((option) => (
-                <button
-                    key={option.value}
-                    type='button'
-                    className={clsx(styles.button, buttonClassName)}
-                    data-selected={option.value === activeSegment}
-                    aria-pressed={option.value === activeSegment}
-                    onClick={() => onChange(option.value)}
-                >
-                    <span className={styles.label}>{option.label}</span>
+            <Swiper
+                spaceBetween={2}
+                slidesPerView={'auto'}
+                style={{
+                    width: '100%',
+                }}
+            >
+                {options.map((option) => (
+                    <SwiperSlide
+                        key={option.value}
+                        style={{
+                            width: 'auto',
+                        }}
+                    >
+                        <button
+                            type='button'
+                            className={clsx(styles.button, buttonClassName)}
+                            data-selected={option.value === activeSegment}
+                            aria-pressed={option.value === activeSegment}
+                            onClick={() => onChange(option.value)}
+                        >
+                            <span className={styles.label}>{option.label}</span>
 
-                    {option.value === activeSegment && (
-                        <motion.div
-                            className={styles.indicator}
-                            layoutId='tab-indicator'
-                            animate={{
-                                y: 'none',
-                            }}
-                        />
-                    )}
-                </button>
-            ))}
+                            {option.value === activeSegment && (
+                                <motion.div
+                                    className={styles.indicator}
+                                    layoutId='tab-indicator'
+                                    initial={{
+                                        y: 'none',
+                                    }}
+                                    animate={{
+                                        y: 'none',
+                                    }}
+                                />
+                            )}
+                        </button>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
         </div>
     );
 };
