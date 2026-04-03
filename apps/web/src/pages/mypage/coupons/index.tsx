@@ -14,7 +14,7 @@ import { CouponRegisterModal } from '@/components/modal/coupon-register';
 import { CouponConstraintDetailContent } from '@/components/mypage/coupons/constraint-detail-content';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
-import * as card from '@/components/mypage/mypage-list-card/index.css';
+import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
 import Paging from '@/components/ui/paging';
 import { useUserCoupons } from '@/hooks/query/promotion/coupon';

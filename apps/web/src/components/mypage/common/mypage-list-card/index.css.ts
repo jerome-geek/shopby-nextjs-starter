@@ -30,6 +30,13 @@ export const section = style({
         [media.mobile]: {
             padding: '16px',
             borderRadius: '4px',
+
+            selectors: {
+                '&[data-type="form"]': {
+                    padding: '0',
+                    border: 'none',
+                },
+            },
         },
     },
 });
@@ -163,6 +170,7 @@ export const list = style({
 });
 
 export const listItem = style({
+    position: 'relative',
     display: 'grid',
     gridTemplateColumns: '1fr',
     gap: '10px',

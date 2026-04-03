@@ -88,6 +88,7 @@ const useDialog = () => {
             message,
             description,
             iconType = 'warning',
+            type,
             onConfirmReturnValue,
             onCloseReturnValue,
             options,
@@ -99,6 +100,7 @@ const useDialog = () => {
                 return (
                     <ConfirmDialog
                         {...props}
+                        type={type}
                         iconType={iconType}
                         Title={
                             <p

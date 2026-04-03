@@ -10,7 +10,7 @@ import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout/mypage';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
-import * as card from '@/components/mypage/mypage-list-card/index.css';
+import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import Paging from '@/components/ui/paging';
 import useAccumulationList from '@/hooks/query/manage/accumulation/useAccumulationList';
 import useAccumulationSummary from '@/hooks/query/manage/accumulation/useAccumulationSummary';

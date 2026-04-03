@@ -6,7 +6,6 @@ import { GetShippingAddressListResponse } from '@/models/order/shippingAddress';
 import addressKeys from '@/hooks/queryKeys/addressKeys';
 
 interface UseShippingAddressListParams<T = GetShippingAddressListResponse> {
-    memberNo: number;
     options?: Omit<
         UseQueryOptions<
             GetShippingAddressListResponse,
@@ -19,11 +18,10 @@ interface UseShippingAddressListParams<T = GetShippingAddressListResponse> {
 }
 
 const useShippingAddressList = <T = GetShippingAddressListResponse>({
-    memberNo = 0,
     options,
-}: UseShippingAddressListParams<T>) => {
+}: UseShippingAddressListParams<T> = {}) => {
     return useQuery({
-        queryKey: addressKeys.noPagingList(memberNo),
+        queryKey: addressKeys.noPagingList(),
         queryFn: async () => {
             const { data } = await shippingAddress.getShippingAddressList();
 

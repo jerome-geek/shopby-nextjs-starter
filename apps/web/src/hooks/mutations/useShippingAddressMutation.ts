@@ -5,31 +5,30 @@ import { useTranslation } from 'react-i18next';
 
 import { shippingAddress } from '@/api/order';
 import { addressKeys } from '@/hooks/queryKeys';
-import { useDialog } from '@/hooks/utils';
-import { AddressRequest } from '@/models/order';
+import { useToast } from '@/hooks/ui';
 import { RegisterShippingAddressData } from '@/models/order/shippingAddress';
 
 const useShippingAddressMutation = () => {
     const { t } = useTranslation();
 
-    const { openDialog } = useDialog();
+    const { addToast } = useToast();
 
     const queryClient = useQueryClient();
     const invalidate = () => {
         queryClient.invalidateQueries({
-            predicate: (query) => {
-                return includes(query.queryKey[0], [...addressKeys.all]);
-            },
+            queryKey: addressKeys.all,
+            refetchType: 'all',
         });
     };
 
     const onErrorHandler = (error: Error) => {
-        openDialog({
+        addToast({
             message: t(
                 isAxiosError(error)
                     ? error.response?.data.message
                     : '알 수 없는 오류가 발생했습니다.',
             ),
+            variant: 'error',
         });
     };
 

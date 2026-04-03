@@ -102,7 +102,7 @@ export const link = style([
 
 export const linkActive = style({
     fontWeight: vars.typography.fontWeight.semibold,
-    color: vars.color.black,
+    color: vars.color.primary,
 });
 
 export const buttonLink = style([

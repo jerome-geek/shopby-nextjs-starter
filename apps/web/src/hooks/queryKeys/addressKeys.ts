@@ -12,8 +12,7 @@ const addressKeys = {
     infiniteList: (params: GetPagedShippingAddressParams, memberNo?: number) =>
         [...addressKeys.lists(), params, memberNo, 'infinite'] as const,
 
-    noPagingList: (memberNo: number) =>
-        [...addressKeys.lists(), 'noPaging', memberNo] as const,
+    noPagingList: () => [...addressKeys.lists(), 'noPaging'] as const,
 
     /** 배송지 상세 조회 */
     details: () => [...addressKeys.all, 'detail'] as const,
