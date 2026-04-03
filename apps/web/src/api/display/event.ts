@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
-import qs from 'qs';
 
 import { shopbyRequest } from '@/api/core/request';
+import { ONE_WEEK } from '@/const/time';
 import {
     GetClosedEventsParams,
     GetClosedEventsResponse,
@@ -23,7 +23,6 @@ import {
     SearchEventsByProgressParams,
     SearchEventsByProgressResponse,
 } from '@/models/display/event';
-import { ONE_WEEK } from '@/const/time';
 
 const EVENT_REVALIDATE_MS = ONE_WEEK;
 
@@ -59,6 +58,7 @@ const event = {
                 ...options?.headers,
                 version: '2.0',
             },
+            params,
             ...options,
         });
     },
