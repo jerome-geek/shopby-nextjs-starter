@@ -1,5 +1,4 @@
 import type { AxiosRequestConfig } from 'axios';
-import qs from 'qs';
 
 import { shopbyRequest } from '@/api/core/request';
 import {
@@ -22,7 +21,10 @@ const cart = {
      * 장바구니 가져오기
      *  - 로그인된 유저의 장바구니 목록을 조회하기 위한 API 입니다
      */
-    getCartList: (params: GetCartListParams, options?: AxiosRequestConfig) => {
+    getCartList: (
+        params: GetCartListParams = {},
+        options?: AxiosRequestConfig,
+    ) => {
         return shopbyRequest<GetCartListResponse>({
             method: 'GET',
             url: '/cart',

@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
         ],
     },
     experimental: {
-        optimizePackageImports: ['@/components/modal', '@/components/layout/modal'],
+        optimizePackageImports: ['@/components/modal', '@/components/layout'],
     },
 };
 

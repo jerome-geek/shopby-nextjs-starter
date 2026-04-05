@@ -8,10 +8,7 @@ import {
 } from '@/schema/common.schema';
 import { PHONE_PREFIX_VALUES } from '@/const/form';
 import { regEx } from '@/utils/validation';
-import {
-    baseRegisterShippingAddressSchema,
-    shippingAddressSchema,
-} from '@/schema/shippingAddress.schema';
+import { shippingAddressSchema } from '@/schema/shippingAddress.schema';
 // import { checkLogin } from '@/utils/users';
 
 const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
@@ -247,7 +244,7 @@ const paymentReserveSchema = z
                     addressNo: z.number().optional(),
                     usesShippingInfoLaterInput: z.boolean().optional(),
                     useDefaultAddress: z.boolean().optional(),
-                    shippingAddress: baseRegisterShippingAddressSchema
+                    shippingAddress: shippingAddressSchema
                         .omit({ receiverContact1: true })
                         .safeExtend({
                             receiverContact1: z.string(),
@@ -745,7 +742,7 @@ const paymentReserveSchemaV2 = z
                 addressNo: z.number(),
                 usesShippingInfoLaterInput: z.boolean().nullable().optional(),
                 useDefaultAddress: z.boolean().nullable(),
-                shippingAddress: baseRegisterShippingAddressSchema
+                shippingAddress: shippingAddressSchema
                     .omit({ receiverContact1: true })
                     .safeExtend({
                         receiverContact1: z.string(),

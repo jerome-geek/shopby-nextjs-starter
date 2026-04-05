@@ -9,7 +9,7 @@ interface SelectedProductOptionProps {
 }
 
 const SelectedProductOption = ({
-    isRemovable = true,
+    isRemovable = false,
 }: SelectedProductOptionProps) => {
     const { selectedOptionList, updateOptionCnt, removeOption } =
         useProductOptionStore();

@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 import BottomNavigation from '@/components/layout/bottom-navigation';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
-import * as styles from '@/components/layout/index.css';
+import * as styles from '@/components/layout/default/index.css';
 import RouteChangeOverlay from '@/components/ui/route-change-overlay';
 import ScrollToTop from '@/components/ui/scroll-to-top';
 import { PATHS } from '@/const/paths';
@@ -55,4 +55,4 @@ export const DefaultLayout = ({ children, className }: LayoutProps) => {
             {isBottomNavigationVisible && <BottomNavigation />}
         </div>
     );
-}
+};

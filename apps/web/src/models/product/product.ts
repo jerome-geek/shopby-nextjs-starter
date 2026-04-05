@@ -155,6 +155,8 @@ export interface ProductBaseInfo {
     accumulationUseYn: OptionYnType;
     /** 스티커 라벨(배열) */
     stickerLabels: string[];
+    /** URL로만 접근 여부 (Y : URL로만 접근 전용, N : 일반) */
+    urlDirectDisplayYn: OptionYnType;
     certifications: CertificationType[];
     /** 판매종료일시 */
     saleEndYmdt: string;
@@ -1571,8 +1573,10 @@ export interface ProductItem {
     saleStatusType: ProductSectionSaleStatusType;
 }
 
-export interface SearchProductItem
-    extends Omit<ProductItem, 'urlDirectDisplayable' | 'frontDisplayable'> {
+export interface SearchProductItem extends Omit<
+    ProductItem,
+    'urlDirectDisplayable' | 'frontDisplayable'
+> {
     /** 그룹관리코드 노출명 */
     groupManagementCodeName: string;
     /** 그룹관리코드 */

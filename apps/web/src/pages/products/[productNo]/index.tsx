@@ -14,7 +14,6 @@ import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo } from 'react';
 
@@ -45,11 +44,13 @@ import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo]/index.css';
+import ProductErrorState from '@/components/product/product-error-state';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import useCustomDialog from '@/hooks/ui/useCustomDialog';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -67,12 +68,18 @@ function ProductDetailView({
 
     const { isMobile } = useResponsive();
 
+    const { openAddCartDialog } = useCustomDialog();
+
     const queryClient = useQueryClient();
 
     const { data: productDetailData } = useProductDetail({
         productNo,
         searchParams,
     });
+    console.log(
+        '🚀 ~ ProductDetailView ~ productDetailData:',
+        productDetailData,
+    );
 
     const { baseInfo, price, counter, brand } = productDetailData;
 
@@ -236,7 +243,7 @@ function ProductDetailView({
                 },
                 {
                     onSuccess: () => {
-                        // openAddCartDialog();
+                        openAddCartDialog();
 
                         queryClient.invalidateQueries({
                             predicate: (query) => {
@@ -525,49 +532,19 @@ export default function ProductDetailPage({
     errorMessage,
     seoData,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const router = useRouter();
     // 1단계 [비즈니스 에러]: API에서 받은 메시지를 그대로 사용자에게 노출
     if (errorStatusCode) {
         return (
-            <div
-                style={{
-                    width: '60vw',
-                    margin: '0 auto',
-                    padding: '100px 20px',
-                    textAlign: 'center',
-                }}
-            >
-                <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>
-                    안내드립니다
-                </h1>
-                <p style={{ margin: '16px 0', color: '#666' }}>
-                    {errorMessage}
-                </p>
-                <Button
-                    frame='solid'
-                    variant='primary'
-                    onClick={() => router.push('/')}
-                >
-                    홈으로 돌아가기
-                </Button>
-            </div>
+            <ProductErrorState
+                errorStatusCode={errorStatusCode}
+                errorMessage={errorMessage}
+            />
         );
     }
 
     return (
         <>
-            {seoData && (
-                <Seo
-                    type='product'
-                    title={seoData.title}
-                    description={seoData.description}
-                    image={seoData.image}
-                    url={seoData.url}
-                    priceAmount={seoData.priceAmount}
-                    brandName={seoData.brandName}
-                    jsonLd={seoData.jsonLd}
-                />
-            )}
+            {seoData && <Seo type='product' {...seoData} />}
 
             <ShopbyApiErrorBoundary
                 fallback={
@@ -647,6 +624,7 @@ export const getServerSideProps: GetServerSideProps = async ({
                 url,
                 priceAmount: finalPrice,
                 brandName: brand?.name || '',
+                noindex: baseInfo.urlDirectDisplayYn === 'Y',
                 jsonLd: {
                     '@context': 'https://schema.org',
                     '@type': 'Product',
