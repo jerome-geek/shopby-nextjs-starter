@@ -5,10 +5,12 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
+import { RecipeCreateSelection, RecipeUrlInput } from '@/components/modal';
+import { MODAL_QUERY_KEY } from '@/const/modal';
 import { PATHS } from '@/const/paths';
 import { vars } from '@/styles/theme.css';
 
-const useCustomDialog = () => {
+export const useCustomDialog = () => {
     const { t } = useTranslation();
     const router = useRouter();
 
@@ -107,7 +109,63 @@ const useCustomDialog = () => {
         });
     }, [t, router]);
 
-    return { openAddCartDialog, openLoginDialog };
-};
+    const openRecipeUrlInput = useCallback(() => {
+        overlay.open((props) => {
+            const handleClose = () => {
+                const newQuery = { ...router.query };
+                delete newQuery[MODAL_QUERY_KEY];
+                router.replace(
+                    { pathname: router.pathname, query: newQuery },
+                    undefined,
+                    { shallow: true },
+                );
+                props.close();
+            };
 
-export default useCustomDialog;
+            return (
+                <RecipeUrlInput
+                    {...props}
+                    close={handleClose}
+                    onSubmit={(url: string) => {
+                        // TODO: Implement recipe extraction logic
+                        console.log('Recipe URL:', url);
+                        handleClose();
+                    }}
+                />
+            );
+        });
+    }, [router]);
+
+    const openRecipeCreateSelection = useCallback(() => {
+        overlay.open((props) => {
+            const handleClose = () => {
+                const newQuery = { ...router.query };
+                delete newQuery[MODAL_QUERY_KEY];
+                router.replace(
+                    { pathname: router.pathname, query: newQuery },
+                    undefined,
+                    { shallow: true },
+                );
+                props.close();
+            };
+
+            return (
+                <RecipeCreateSelection
+                    {...props}
+                    close={handleClose}
+                    onSelectAI={() => {
+                        props.close(); // 기존 선택 모달 닫기
+                        openRecipeUrlInput(); // URL 입력 모달 띄우기
+                    }}
+                />
+            );
+        });
+    }, [router, openRecipeUrlInput]);
+
+    return {
+        openAddCartDialog,
+        openLoginDialog,
+        openRecipeCreateSelection,
+        openRecipeUrlInput,
+    };
+};

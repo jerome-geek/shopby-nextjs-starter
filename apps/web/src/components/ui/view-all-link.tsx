@@ -17,7 +17,7 @@ interface ViewAllLinkProps extends LinkProps {
     style?: CSSProperties;
 }
 
-export default function ViewAllLink({
+export const ViewAllLink = ({
     href = '/',
     children,
     className,
@@ -27,7 +27,7 @@ export default function ViewAllLink({
     gap = '8px',
     style,
     ...props
-}: ViewAllLinkProps) {
+}: ViewAllLinkProps) => {
     const inlineStyle: CSSProperties = {
         color,
         fontSize,

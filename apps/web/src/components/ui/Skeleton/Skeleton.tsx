@@ -10,7 +10,7 @@ interface SkeletonProps {
     circle?: boolean;
 }
 
-const Skeleton = ({
+export const Skeleton = ({
     className,
     style,
     width,

@@ -1,8 +1,9 @@
-import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
-import { media } from '@/styles/media';
-import { textStyles } from '@/styles/typography.css';
+
 import { globalVars } from '@/styles/global.css';
+import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const header = style({
     position: 'fixed',

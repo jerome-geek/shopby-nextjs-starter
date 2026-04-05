@@ -1,21 +1,27 @@
-import Link from 'next/link';
 import { BookmarkIcon, CirclePlusIcon } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
+import logoImage from '@/assets/logo.png';
+import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
+import * as styles from '@/components/layout/header/index.css';
+import { Menu } from '@/components/layout/header/Menu';
+import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { PATHS } from '@/const/paths';
-import * as styles from '@/components/layout/header/Header.css';
+import useCart from '@/hooks/cart/useCart';
 import {
     useCategoriesByCode,
     useCategory,
 } from '@/hooks/query/display/category';
-import { Menu } from '@/components/layout/header/Menu';
-import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
-import useCart from '@/hooks/cart/useCart';
 import { vars } from '@/styles/theme.css';
-import logoImage from '@/assets/logo.png';
 
 export function Header() {
-    const { cartCount } = useCart();
+    const { t } = useTranslation();
+    const router = useRouter();
+
+    const { totalCount } = useCart();
 
     const { data: categoriesByCodeData } = useCategoriesByCode({
         data: { codes: ['MAIN'] },
@@ -42,14 +48,25 @@ export function Header() {
                 </Link>
 
                 <div className={styles.utilitySection}>
-                    <button className={styles.recipeButton}>
+                    <Link
+                        href={{
+                            query: {
+                                ...router.query,
+                                [MODAL_QUERY_KEY]: MODAL_TYPE.RECIPE_CREATE,
+                            },
+                        }}
+                        shallow
+                        replace
+                        className={styles.recipeButton}
+                        style={{ textDecoration: 'none' }}
+                    >
                         <CirclePlusIcon
                             width={24}
                             height={24}
                             color={vars.color.white}
                         />
-                        <span>레시피 만들기</span>
-                    </button>
+                        <span>{t('레시피 만들기')}</span>
+                    </Link>
 
                     <ul className={styles.iconList}>
                         <li>
@@ -71,9 +88,9 @@ export function Header() {
                                 className={`${styles.iconLink} ${styles.mobileVisibleIcon}`}
                             >
                                 <BigCartIcon width={24} height={24} />
-                                {cartCount > 0 && (
+                                {totalCount > 0 && (
                                     <span className={styles.cartBadge}>
-                                        {cartCount > 99 ? '99+' : cartCount}
+                                        {totalCount > 99 ? '99+' : totalCount}
                                     </span>
                                 )}
                             </Link>

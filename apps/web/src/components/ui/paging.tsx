@@ -12,7 +12,7 @@ interface PagingProps extends HTMLAttributes<HTMLDivElement> {
     onPageClick: (pageNumber: number) => void;
 }
 
-const Paging = ({
+export const Paging = ({
     currentPage,
     totalCount,
     pageSize,

@@ -19,7 +19,7 @@ type SelectProps<
     ref?: ForwardedRef<SelectInstance<Option, IsMulti, Group>>;
 };
 
-const Select = <
+export const Select = <
     Option,
     IsMulti extends boolean = false,
     Group extends GroupBase<Option> = GroupBase<Option>,
