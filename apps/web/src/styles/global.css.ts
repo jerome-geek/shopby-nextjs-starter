@@ -178,4 +178,5 @@ export const globalVars = createGlobalTheme(':root', {
         height: '90px',
         mobileHeight: '56px',
     },
+    input: { checkboxSize: '16px' },
 });

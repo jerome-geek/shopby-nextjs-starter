@@ -9,7 +9,7 @@ import SocialLoginList from '@/components/auth/social-login-list';
 import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputCheckbox from '@/components/ui/input/checkbox';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { PATHS } from '@/const/paths';

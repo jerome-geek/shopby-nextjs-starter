@@ -7,13 +7,11 @@ import { textStyles } from '@/styles/typography.css';
 export const container = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '40px',
-    padding: '40px 0',
+    paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
 
     '@media': {
-        [media.mobile]: {
-            padding: '20px',
-            paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
+        [media.desktop]: {
+            gap: '32px',
         },
     },
 });
@@ -27,45 +25,97 @@ export const title = style([
 
 export const contentWrapper = style({
     display: 'flex',
-    flexDirection: 'row',
-    gap: '48px',
+    flexDirection: 'column',
+    gap: '24px',
     maxWidth: '1200px',
+    margin: '0 auto',
     alignItems: 'flex-start',
     width: '100%',
 
     '@media': {
-        [media.mobile]: {
-            flexDirection: 'column',
-            gap: '24px',
+        [media.desktop]: {
+            flexDirection: 'row',
+            gap: '48px',
         },
     },
 });
 
 export const cartListArea = style({
-    flex: 1,
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
-    width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            maxWidth: '666px',
+            flex: '1 0 auto',
+            gap: '32px',
+        },
+    },
+
+    selectors: {
+        '&[data-empty="true"]': {
+            '@media': {
+                [media.desktop]: {
+                    maxWidth: 'none',
+                },
+            },
+        },
+    },
+});
+
+export const cartList = style({
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '32px',
+});
+
+export const itemList = style({
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    display: 'flex',
+    flexDirection: 'column',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
 });
 
 export const selectAllArea = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '16px',
     backgroundColor: vars.color.gray['10'],
+
+    '@media': {
+        [media.desktop]: {
+            padding: '16px 20px',
+        },
+    },
 });
 
 export const partnerGroup = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
-    paddingBottom: '24px',
+    // paddingBottom: '24px',
     borderBottom: `1px solid ${vars.color.gray['20']}`,
     selectors: {
         '&:last-child': {
             borderBottom: 'none',
+        },
+    },
+
+    '@media': {
+        [media.desktop]: {
+            padding: '0 20px 32px 20px',
+            gap: '24px',
         },
     },
 });
@@ -74,12 +124,26 @@ export const partnerHeader = style({
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const partnerName = style([
-    textStyles.body1Semibold,
+    textStyles.headingSemibold,
     {
-        color: vars.color.black,
+        color: vars.color.gray['90'],
+        display: 'flex',
+        alignItems: 'center',
+
+        '@media': {
+            [media.desktop]: {
+                gap: '12px',
+            },
+        },
     },
 ]);
 
@@ -96,12 +160,25 @@ export const itemCheckbox = style({
     top: 0,
 });
 
-export const itemImage = style({
+export const itemImageLink = style({
     width: '80px',
     height: '80px',
-    objectFit: 'cover',
     borderRadius: '4px',
-    border: `1px solid ${vars.color.gray['20']}`,
+    overflow: 'hidden',
+    display: 'block',
+
+    '@media': {
+        [media.desktop]: {
+            width: '128px',
+            height: '128px',
+        },
+    },
+});
+
+export const itemImage = style({
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
 });
 
 export const itemDetails = style({
@@ -109,6 +186,12 @@ export const itemDetails = style({
     flexDirection: 'column',
     gap: '8px',
     flex: 1,
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const itemTop = style({
@@ -120,18 +203,18 @@ export const itemTop = style({
 export const itemTextInfo = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '2px',
 });
 
 export const itemBrand = style([
-    textStyles.caption1Regular,
+    textStyles.body1Regular,
     {
-        color: vars.color.gray['50'],
+        color: vars.color.gray['60'],
     },
 ]);
 
 export const itemName = style([
-    textStyles.body2Semibold,
+    textStyles.headlineMedium,
     {
         color: vars.color.black,
     },
@@ -145,8 +228,7 @@ export const itemOption = style([
 ]);
 
 export const itemXButton = style({
-    padding: '4px',
-    color: vars.color.gray['40'],
+    color: vars.color.gray['60'],
     cursor: 'pointer',
     background: 'none',
     border: 'none',
@@ -184,19 +266,18 @@ export const quantityValue = style([
 export const itemPriceArea = style({
     display: 'flex',
     alignItems: 'baseline',
-    gap: '4px',
-    marginTop: '4px',
+    gap: '3px',
 });
 
 export const itemDiscount = style([
-    textStyles.body1Semibold,
+    textStyles.headingBold,
     {
-        color: vars.color.red,
+        color: vars.color.pink['100'],
     },
 ]);
 
 export const itemPrice = style([
-    textStyles.body1Semibold,
+    textStyles.headingBold,
     {
         color: vars.color.black,
     },
@@ -204,13 +285,20 @@ export const itemPrice = style([
 
 export const recommendArea = style({
     marginTop: '60px',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
+
+    '@media': {
+        [media.desktop]: {
+            marginTop: '100px',
+        },
+    },
 });
 
 export const recommendTitle = style([
-    textStyles.display2Semibold,
+    textStyles.headingSemibold,
     {
         color: vars.color.black,
     },
@@ -218,35 +306,54 @@ export const recommendTitle = style([
 
 /* Right side summary layout */
 export const summaryArea = style({
-    width: '320px',
-    position: 'sticky',
-    top: '40px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
+    width: '100%',
+
     '@media': {
-        [media.mobile]: {
-            width: '100%',
-            position: 'static',
+        [media.desktop]: {
+            width: '486px',
+            position: 'sticky',
+            top: '120px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '32px',
         },
     },
 });
 
 export const summaryBox = style({
-    padding: '24px',
-    backgroundColor: vars.color.gray['10'],
-    borderRadius: '8px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
+});
+
+export const summaryListContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const summaryHeader = style([
-    textStyles.display2Semibold,
+    textStyles.title1Semibold,
     {
         color: vars.color.black,
     },
 ]);
+
+export const summaryList = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+});
 
 export const summaryRow = style({
     display: 'flex',
@@ -255,7 +362,17 @@ export const summaryRow = style({
 });
 
 export const summaryLabel = style([
-    textStyles.body2Regular,
+    textStyles.headlineMedium,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        color: vars.color.black,
+    },
+]);
+
+export const deleteAllButton = style([
+    textStyles.body2Semibold,
     {
         color: vars.color.gray['60'],
     },
@@ -269,8 +386,9 @@ export const summaryValue = style([
 ]);
 
 export const summaryDivider = style({
+    width: '100%',
+    border: 'none',
     borderTop: `1px solid ${vars.color.gray['20']}`,
-    margin: '8px 0',
 });
 
 export const totalLabel = style([
@@ -284,6 +402,28 @@ export const totalValue = style([
     textStyles.display2Semibold,
     {
         color: vars.color.red,
+    },
+]);
+
+export const priceRow = style([
+    textStyles.headlineRegular,
+    {
+        display: 'flex',
+        justifyContent: 'space-between',
+        color: vars.color.gray['80'],
+    },
+]);
+export const totalPriceTitle = style([
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+    },
+]);
+
+export const totalPrice = style([
+    textStyles.title1Bold,
+    {
+        color: vars.color.pink['100'],
     },
 ]);
 
@@ -302,5 +442,35 @@ export const orderButton = style([
         ':hover': {
             backgroundColor: '#d89493',
         },
+    },
+]);
+
+export const emptyCartContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    '@media': {
+        [media.desktop]: {
+            gap: '10px',
+        },
+    },
+});
+
+export const emptyCartTitle = style([
+    textStyles.headingSemibold,
+    { color: vars.color.black },
+]);
+
+export const emptyCartDesc = style([
+    textStyles.body1Regular,
+    { color: vars.color.gray['60'] },
+]);
+
+export const emptyCartLink = style([
+    textStyles.headlineSemibold,
+    {
+        backgroundColor: vars.color.black,
+        color: vars.color.white,
+        padding: '16px',
+        borderRadius: '4px',
     },
 ]);

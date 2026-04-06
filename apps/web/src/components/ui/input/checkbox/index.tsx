@@ -1,6 +1,7 @@
-import { CheckIcon } from '@radix-ui/react-icons';
+import { Check } from 'lucide-react';
 import { Checkbox } from 'radix-ui';
-import * as styles from './Checkbox.css';
+
+import * as styles from '@/components/ui/input/checkbox/index.css';
 
 interface CheckboxFieldProps {
     id?: string;
@@ -23,11 +24,8 @@ const InputCheckbox = ({
             onCheckedChange={onCheckedChange}
             className={styles.checkboxRoot({ disabled })}
         >
-            <Checkbox.Indicator
-                className={styles.checkboxIndicator({ disabled })}
-            >
-                <CheckIcon className={styles.checkIcon} />
-            </Checkbox.Indicator>
+            <Check className={styles.checkIcon} />
+            <Checkbox.Indicator className={styles.checkboxIndicator} />
         </Checkbox.Root>
     );
 };

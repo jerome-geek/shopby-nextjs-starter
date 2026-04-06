@@ -57,7 +57,7 @@ export const useCustomDialog = () => {
                             </p>
                         </div>
                     }
-                    confirm={() => router.push(PATHS.ORDER.CART)}
+                    confirm={() => router.push(PATHS.CART)}
                     close={() => props.close(false as T)}
                     confirmText={t('장바구니 이동')}
                     cancelText={t('쇼핑 계속하기')}

@@ -10,7 +10,7 @@ import { SingleValue } from 'react-select';
 
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputCheckbox from '@/components/ui/input/checkbox';
 import InputField from '@/components/ui/input/field';
 import InputContainer from '@/components/ui/input/container';
 import { InputLabel } from '@/components/ui/input/label';

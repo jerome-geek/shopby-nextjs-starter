@@ -8,7 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import DialogLayout, { DefaultDialogProps } from '@/components/layout/dialog';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputCheckbox from '@/components/ui/input/checkbox';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import TextArea from '@/components/ui/input/TextArea';

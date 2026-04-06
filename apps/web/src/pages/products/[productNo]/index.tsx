@@ -38,7 +38,7 @@ import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
 import { cartKeys, productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
-import { useToast } from '@/hooks/ui';
+import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
@@ -50,7 +50,6 @@ import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import useCustomDialog from '@/hooks/ui/useCustomDialog';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -224,7 +223,6 @@ function ProductDetailView({
     };
 
     const onCartButtonClick = () => {
-        console.log('onCartButtonClick');
         if (isMobile && !isOptionBottomSheetOpen) {
             openOptionBottomSheet();
             return;

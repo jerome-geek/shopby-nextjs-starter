@@ -8,7 +8,7 @@ import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import { InputLabel } from '@/components/ui/input/label';
 import Select from '@/components/ui/select';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputCheckbox from '@/components/ui/input/checkbox';
 import { AddressSearchModal } from '@/components/modal';
 import { PaymentReserveSchemaType } from '@/schema';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';

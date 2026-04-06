@@ -105,39 +105,66 @@ export const buttonRecipe = recipe({
         // ---------- Solid Variants ----------
         {
             variants: { frame: 'solid', variant: 'primary' },
-            style: { color: vars.color.white, backgroundColor: vars.color.primary },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.primary,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'secondary' },
-            style: { color: vars.color.white, backgroundColor: vars.color.secondary },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.secondary,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'tertiary' },
-            style: { color: vars.color.black, backgroundColor: vars.color.green['20'] },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.black,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'kakao' },
-            style: { color: vars.color.black, backgroundColor: vars.color.kakao },
+            style: {
+                color: vars.color.black,
+                backgroundColor: vars.color.kakao,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'kakao-sync' },
-            style: { color: vars.color.black, backgroundColor: vars.color.kakao },
+            style: {
+                color: vars.color.black,
+                backgroundColor: vars.color.kakao,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'naver' },
-            style: { color: vars.color.white, backgroundColor: vars.color.naver },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.naver,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'apple' },
-            style: { color: vars.color.white, backgroundColor: vars.color.apple },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.apple,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'facebook' },
-            style: { color: vars.color.white, backgroundColor: vars.color.facebook },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.facebook,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'line' },
-            style: { color: vars.color.white, backgroundColor: vars.color.line },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.line,
+            },
         },
         {
             variants: { frame: 'solid', variant: 'google' },
@@ -151,7 +178,10 @@ export const buttonRecipe = recipe({
         // ---------- Outlined Variants ----------
         {
             variants: { frame: 'outlined', variant: 'primary' },
-            style: { borderColor: vars.color.primary, color: vars.color.primary },
+            style: {
+                borderColor: vars.color.primary,
+                color: vars.color.primary,
+            },
         },
         {
             variants: { frame: 'outlined', variant: 'secondary' },
@@ -180,4 +210,6 @@ export const buttonRecipe = recipe({
     },
 });
 
-export type ButtonRecipeVariants = NonNullable<RecipeVariants<typeof buttonRecipe>>;
+export type ButtonRecipeVariants = NonNullable<
+    RecipeVariants<typeof buttonRecipe>
+>;

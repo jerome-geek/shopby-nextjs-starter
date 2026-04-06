@@ -16,7 +16,7 @@ import { shopbyRequest } from '@/api/core/request';
 import { AuthLayout } from '@/components/layout/auth';
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputCheckbox from '@/components/ui/input/checkbox';
 import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';

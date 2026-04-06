@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    productionBrowserSourceMaps: false,
     experimental: {
         optimizePackageImports: ['@/components/modal', '@/components/layout'],
     },

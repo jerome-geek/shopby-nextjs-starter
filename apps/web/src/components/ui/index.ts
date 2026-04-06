@@ -7,3 +7,4 @@ export * from '@/components/ui/view-all-link';
 export * from '@/components/ui/route-change-overlay/index';
 export * from '@/components/ui/scroll-to-top/index';
 export * from '@/components/ui/input/label/index';
+export { default as InputCheckbox } from '@/components/ui/input/checkbox';

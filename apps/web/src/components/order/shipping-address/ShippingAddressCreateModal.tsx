@@ -9,7 +9,7 @@ import { ModalLayout } from '@/components/layout/modal';
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputCheckbox from '@/components/ui/input/checkbox';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import { InputLabel } from '@/components/ui/input/label';

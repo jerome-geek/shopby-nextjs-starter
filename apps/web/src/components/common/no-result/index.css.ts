@@ -1,7 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
-import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
 export const noResult = style([
@@ -10,17 +9,14 @@ export const noResult = style([
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'column',
         gap: '8px',
         width: '100%',
         height: '300px',
-        color: vars.color.gray['60'],
 
         '@media': {
             [media.desktop]: {
-                fontWeight: 400,
-                fontSize: '1.5rem',
-                lineHeight: 1.4,
-                letterSpacing: '-0.2%',
+                gap: '20px',
             },
         },
     },

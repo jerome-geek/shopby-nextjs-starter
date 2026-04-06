@@ -16,16 +16,17 @@ import {
 
 import * as styles from './index.css';
 
-const ProductSection = () => {
+const ProductSection = ({ sectionId }: { sectionId: string }) => {
     // MAIN_01
     const { data } = useProductSectionById({
-        sectionId: 'MAIN_01',
+        // sectionId: 'MAIN_01',
+        sectionId,
     });
     console.log('🚀 ~ ProductSection ~ data:', data);
 
     const { data: productSectionProductListData } =
         useProductSectionProductList({
-            sectionId: 'MAIN_01',
+            sectionId,
             searchParams: {
                 by: 'ADMIN_SETTING',
                 direction: 'DESC',
@@ -51,8 +52,8 @@ const ProductSection = () => {
                         <p className={styles.subtitle}>{data?.promotionText}</p>
                     )}
                 </div>
-                <Link href="/" className={styles.moreLink}>
-                    <SmallCaretIcon direction="right" width={16} height={16} />
+                <Link href='/' className={styles.moreLink}>
+                    <SmallCaretIcon direction='right' width={16} height={16} />
                 </Link>
             </div>
             <Swiper
