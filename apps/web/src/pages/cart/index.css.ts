@@ -54,7 +54,7 @@ export const selectAllArea = style({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '16px',
-    backgroundColor: vars.color.gray['05'],
+    backgroundColor: vars.color.gray['10'],
 });
 
 export const partnerGroup = style({
@@ -124,7 +124,7 @@ export const itemTextInfo = style({
 });
 
 export const itemBrand = style([
-    textStyles.body3Regular,
+    textStyles.caption1Regular,
     {
         color: vars.color.gray['50'],
     },
@@ -138,7 +138,7 @@ export const itemName = style([
 ]);
 
 export const itemOption = style([
-    textStyles.body3Regular,
+    textStyles.caption1Regular,
     {
         color: vars.color.gray['50'],
     },
@@ -191,7 +191,7 @@ export const itemPriceArea = style({
 export const itemDiscount = style([
     textStyles.body1Semibold,
     {
-        color: vars.color.primary['red'],
+        color: vars.color.red,
     },
 ]);
 
@@ -234,7 +234,7 @@ export const summaryArea = style({
 
 export const summaryBox = style({
     padding: '24px',
-    backgroundColor: vars.color.gray['05'],
+    backgroundColor: vars.color.gray['10'],
     borderRadius: '8px',
     display: 'flex',
     flexDirection: 'column',
@@ -283,7 +283,7 @@ export const totalLabel = style([
 export const totalValue = style([
     textStyles.display2Semibold,
     {
-        color: vars.color.primary['red'],
+        color: vars.color.red,
     },
 ]);
 

@@ -84,7 +84,7 @@ export function Header() {
                         </li>
                         <li>
                             <Link
-                                href={PATHS.ORDER.CART}
+                                href={PATHS.CART}
                                 className={`${styles.iconLink} ${styles.mobileVisibleIcon}`}
                             >
                                 <BigCartIcon width={24} height={24} />

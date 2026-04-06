@@ -99,10 +99,11 @@ export const PATHS = {
     /** 검색 */
     SEARCH: '/search',
 
+    /** 장바구니 */
+    CART: '/cart',
+
     ORDER: {
         MAIN: '/order',
-        /** 장바구니 */
-        CART: '/order/cart',
         /** 주문서 작성 */
         SHEET: '/order/[orderSheetNo]',
         /** 주문완료 */

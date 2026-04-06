@@ -32,6 +32,7 @@ const useCart = () => {
     );
 
     // ── 비회원: API 상세 리스트 조회 ───────────────────────────
+    const isGuestCartEnabled = !isLogin && guestCartItems.length > 0;
     const mappedGuestCartData = useMemo(() => {
         return guestCartItems.map((item, idx) => ({
             ...item,
@@ -46,13 +47,15 @@ const useCart = () => {
                 divideInvalidProducts: true,
             },
             options: {
-                enabled: !isLogin && guestCartItems.length > 0,
+                enabled: isGuestCartEnabled,
             },
         });
 
     // ── 회원: API 조회 ──────────────────────────────────────
+    const isMemberCartEnabled = !!isLogin;
     const { data: cartListData, isLoading: isCartListLoading } = useCartList({
         searchParams: { divideInvalidProducts: true },
+        options: { enabled: isMemberCartEnabled },
     });
 
     const { data: cartCountData, isLoading: isCartCountLoading } =
