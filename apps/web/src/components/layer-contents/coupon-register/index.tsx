@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/coupon-register/index.css';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
-import InputContainer from '@/components/ui/input/InputContainer';
+import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import { useCouponMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';

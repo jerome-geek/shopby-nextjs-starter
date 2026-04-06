@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { authentication } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import InputContainer from '@/components/ui/input/InputContainer';
+import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { useMall } from '@/hooks/suspenseQuery/admin/mall';
@@ -162,9 +162,9 @@ export default function EmailAuthentication() {
     return (
         <div className={styles.container}>
             <Button
-                type="button"
-                frame="solid"
-                variant="primary"
+                type='button'
+                frame='solid'
+                variant='primary'
                 onClick={onSendButtonClick}
                 disabled={authStatus === 'VERIFIED'}
             >
@@ -194,8 +194,8 @@ export default function EmailAuthentication() {
                         </div>
                     </InputFieldContainer>
                     <Button
-                        type="button"
-                        frame="outlined"
+                        type='button'
+                        frame='outlined'
                         onClick={onCheckButtonClick}
                         disabled={authStatus === 'EXPIRED'}
                     >

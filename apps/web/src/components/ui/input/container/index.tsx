@@ -1,5 +1,6 @@
 import React from 'react';
-import * as styles from './InputContainer.css';
+
+import * as styles from '@/components/ui/input/container/index.css';
 
 type InputContainerProps = React.HTMLAttributes<HTMLDivElement>;
 

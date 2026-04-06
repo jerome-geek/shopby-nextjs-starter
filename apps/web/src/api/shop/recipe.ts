@@ -8,6 +8,7 @@ import {
     CreateManualRecipeData,
     CreateRecipeCollectionData,
     CreateRecipeData,
+    CreateRecipeResponse,
     GetRecipeExposureGroupParams,
     RecipeDetail,
     RecipeExposureGroupResponse,
@@ -21,7 +22,7 @@ const recipe = {
      *  - SNS URL을 분석하여 레시피를 생성하거나 기존 레시피를 반환합니다
      */
     createRecipe: (data: CreateRecipeData, options?: AxiosRequestConfig) => {
-        return geekRequest<RecipeDetail>({
+        return geekRequest<CreateRecipeResponse>({
             method: 'POST',
             url: '/shop/recipe',
             data,
@@ -110,10 +111,7 @@ const recipe = {
      * 레시피 컬렉션 삭제
      *  - 컬렉션을 삭제합니다
      */
-    deleteCollection: (
-        collectionSno: number,
-        options?: AxiosRequestConfig,
-    ) => {
+    deleteCollection: (collectionSno: number, options?: AxiosRequestConfig) => {
         return geekRequest({
             method: 'DELETE',
             url: `/shop/recipe/collections/${collectionSno}`,
@@ -125,10 +123,7 @@ const recipe = {
      * 공유 컬렉션 상세 조회
      *  - 공유 코드로 다른 사용자의 컬렉션을 조회합니다
      */
-    getSharedCollection: (
-        shareCode: string,
-        options?: AxiosRequestConfig,
-    ) => {
+    getSharedCollection: (shareCode: string, options?: AxiosRequestConfig) => {
         return geekRequest<BookmarkedRecipeCollection>({
             method: 'GET',
             url: `/shop/recipe/collections/shared/${shareCode}`,

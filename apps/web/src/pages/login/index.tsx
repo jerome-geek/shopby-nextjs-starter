@@ -18,7 +18,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import * as styles from '@/styles/pages/login.css';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
-import InputContainer from '@/components/ui/input/InputContainer';
+import InputContainer from '@/components/ui/input/container';
 
 const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();

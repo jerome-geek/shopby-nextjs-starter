@@ -1,8 +1,12 @@
+import { isAxiosError } from 'axios';
+import { overlay } from 'overlay-kit';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { recipe } from '@/api/shop';
 import { ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-url-input/index.css';
+import { useDialog } from '@/hooks/utils';
 
 interface RecipeUrlInputProps {
     isOpen: boolean;
@@ -18,6 +22,7 @@ export const RecipeUrlInput = ({
     onSubmit,
 }: RecipeUrlInputProps) => {
     const { t } = useTranslation();
+    const { openAsyncDialog } = useDialog();
     const [url, setUrl] = useState('');
 
     const isValidUrl = (string: string) => {
@@ -31,10 +36,29 @@ export const RecipeUrlInput = ({
 
     const isSubmitEnabled = url.length > 0 && isValidUrl(url);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (isSubmitEnabled) {
-            onSubmit(url);
+
+        try {
+            const { data } = await recipe.createRecipe({ url });
+
+            const isAgree = await openAsyncDialog({
+                message: data.message,
+            });
+
+            if (isAgree) {
+                overlay.closeAll();
+            }
+        } catch (error) {
+            const errorMessage = isAxiosError(error)
+                ? error.response?.data?.message || error.message
+                : t(
+                      '레시피를 생성하는 중 오류가 발생하였습니다.<br/>관리자에게 문의해주세요.',
+                  );
+
+            await openAsyncDialog({
+                message: errorMessage,
+            });
         }
     };
 

@@ -9,7 +9,7 @@ import {
 
 import { CANADA_STATE_LIST, STATE_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
-import InputContainer from '@/components/ui/input/InputContainer';
+import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import Select from '@/components/ui/select';
 import { ErrorMessage } from '@/components/ui/form';

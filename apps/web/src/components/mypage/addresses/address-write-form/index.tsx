@@ -14,7 +14,7 @@ import { ErrorMessage } from '@/components/ui/form';
 import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import InputContainer from '@/components/ui/input/InputContainer';
+import InputContainer from '@/components/ui/input/container';
 import { InputLabel } from '@/components/ui/input/label';
 import Select from '@/components/ui/select';
 import {
@@ -242,7 +242,7 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
         return {
             ...submitData,
             receiverName: isKorean
-                ? submitData.receiverName ?? ''
+                ? (submitData.receiverName ?? '')
                 : `${submitData.receiverFirstName ?? ''} ${
                       submitData.receiverLastName ?? ''
                   }`.trim(),

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import InputContainer from '@/components/ui/input/InputContainer';
+import InputContainer from '@/components/ui/input/container';
 import { InputLabel } from '@/components/ui/input/label';
 import { useMall } from '@/hooks/query/admin/mall';
 import { MemberJoinConfig } from '@/models/admin/mall';

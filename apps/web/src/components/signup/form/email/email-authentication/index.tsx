@@ -8,7 +8,7 @@ import { authentication } from '@/api/auth';
 import { profile } from '@/api/member';
 import { Button } from '@/components/ui/button';
 import FieldContainer from '@/components/ui/input/FieldContainer';
-import InputContainer from '@/components/ui/input/InputContainer';
+import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { Column } from '@/components/ui/layout/flex';
@@ -263,8 +263,8 @@ const EmailAuthentication = ({
                 {authStatus === 'VERIFIED'
                     ? t('인증 완료')
                     : authStatus === 'EXPIRED'
-                    ? t('인증번호 재발송')
-                    : t('인증번호 발송')}
+                      ? t('인증번호 재발송')
+                      : t('인증번호 발송')}
             </Button>
 
             {authStatus !== 'IDLE' && authStatus !== 'VERIFIED' && (

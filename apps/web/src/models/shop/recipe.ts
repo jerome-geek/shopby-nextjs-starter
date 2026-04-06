@@ -6,6 +6,12 @@ export interface CreateRecipeData {
     url: string;
 }
 
+export interface CreateRecipeResponse {
+    created: boolean;
+    message: string;
+    status: 'PROCESSING' | 'COMPLETED';
+}
+
 /** 임시 이미지 항목 */
 export interface RegisterManualTempImageItem {
     /** common/upload 응답의 업로드 파일 URL */

@@ -1,28 +1,30 @@
 import { recipe } from '@vanilla-extract/recipes';
+
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const labelStyles = recipe({
-    base: {
-        position: 'relative',
-        alignSelf: 'flex-start',
-        fontSize: '1.4rem',
-        fontWeight: '400',
-        lineHeight: '1.5',
-        display: 'flex',
-        gap: '8px',
-    },
+    base: [
+        textStyles.headlineSemibold,
+        {
+            position: 'relative',
+            alignSelf: 'flex-start',
+            width: 'fit-content',
+            display: 'inline-flex',
+            alignItems: 'flex-start',
+            gap: '4px',
+        },
+    ],
     variants: {
         isRequired: {
             true: {
                 '::after': {
-                    content: "''",
-                    backgroundColor: '#EF4444', // red-500
-                    position: 'absolute',
-                    width: '4px',
-                    height: '4px',
-                    borderRadius: '50%',
-                    right: '-6px',
-                    top: '0',
+                    content: '"*"',
+                    color: vars.color.pink['100'],
+                    marginLeft: '2px',
+                    fontSize: '1.2rem',
+                    lineHeight: '1',
+                    marginTop: '2px',
                 },
             },
             false: {
