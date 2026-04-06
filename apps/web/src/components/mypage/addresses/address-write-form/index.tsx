@@ -9,12 +9,13 @@ import { useTranslation } from 'react-i18next';
 
 import { address } from '@/api/manage';
 import { AddressSearchModal } from '@/components/modal';
+import * as styles from '@/components/mypage/common/mypage-form/index.css';
+import { InputCheckbox } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import InputContainer from '@/components/ui/input/container';
 import { InputLabel } from '@/components/ui/input/label';
 import Select from '@/components/ui/select';
 import {
@@ -26,6 +27,7 @@ import {
 import { PATHS } from '@/const/paths';
 import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useShippingAddress } from '@/hooks/query/order/shippingAddress';
+import { useToast } from '@/hooks/ui';
 import { useDialog, useGlobal } from '@/hooks/utils';
 import type { CountryCdType } from '@/models';
 import type {
@@ -36,9 +38,7 @@ import {
     shippingAddressSchema,
     ShippingAddressSchemaType,
 } from '@/schema/shippingAddress.schema';
-import * as styles from '@/components/mypage/common/mypage-form/index.css';
 import { parseKrPhoneParts } from '@/utils/phone';
-import { useToast } from '@/hooks/ui';
 
 export interface AddressWriteFormProps {
     addressNo?: number;
@@ -242,7 +242,7 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
         return {
             ...submitData,
             receiverName: isKorean
-                ? submitData.receiverName ?? ''
+                ? (submitData.receiverName ?? '')
                 : `${submitData.receiverFirstName ?? ''} ${
                       submitData.receiverLastName ?? ''
                   }`.trim(),

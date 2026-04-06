@@ -93,15 +93,10 @@ export const ShippingAddressListModal = ({
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo || 0;
     const { data: shippingAddressListData } = useShippingAddressList({
-        memberNo,
         options: {
             enabled: memberNo !== 0,
         },
     });
-    console.log(
-        '🚀 ~ ShippingAddressListModal ~ shippingAddressListData:',
-        shippingAddressListData,
-    );
 
     const addressList = useMemo(() => {
         const defaultAddress = shippingAddressListData?.defaultAddress;
@@ -124,35 +119,36 @@ export const ShippingAddressListModal = ({
 
         let prefix = '010';
         let middle = '';
-        let last = '';
+        let suffix = '';
 
         if (numbers.length === 11) {
             prefix = numbers.slice(0, 3);
             middle = numbers.slice(3, 7);
-            last = numbers.slice(7);
+            suffix = numbers.slice(7);
         } else if (numbers.length === 10) {
             prefix = numbers.slice(0, 3);
             middle = numbers.slice(3, 6);
-            last = numbers.slice(6);
+            suffix = numbers.slice(6);
         } else {
             const parts = contact.split('-');
             if (parts.length === 3) {
-                [prefix, middle, last] = parts;
+                [prefix, middle, suffix] = parts;
             }
         }
 
         setValue(
             'shippingAddress',
             {
-                addressNo: address.addressNo,
+                defaultYn: address.defaultYn,
+                addressType: address.addressType,
+                // addressNo: address.addressNo,
                 addressName: address.addressName,
                 receiverName: address.receiverName,
                 receiverZipCd: address.receiverZipCd,
                 receiverAddress: address.receiverAddress,
-                receiverDetailAddress:
-                    address.receiverDetailAddress ?? undefined,
+                receiverDetailAddress: address.receiverDetailAddress || '',
                 receiverJibunAddress: address.receiverAddress || '',
-                countryCd: address.countryCd ?? undefined,
+                countryCd: address.countryCd ?? 'KR',
                 receiverCity: address.city ?? undefined,
                 receiverState: address.state ?? undefined,
                 customsIdNumber: address.customsIdNumber ?? undefined,
@@ -165,7 +161,7 @@ export const ShippingAddressListModal = ({
                 receiverContact1: {
                     prefix: prefix as PhonePrefixType,
                     middle: middle || '',
-                    last: last || '',
+                    suffix: suffix || '',
                 },
             },
             { shouldValidate: true },
@@ -255,4 +251,3 @@ export const ShippingAddressListModal = ({
         </ModalLayout>
     );
 };
-
