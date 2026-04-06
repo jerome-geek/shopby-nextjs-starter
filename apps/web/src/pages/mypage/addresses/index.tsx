@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { MypageLayout } from '@/components/layout/mypage';
+import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
@@ -133,7 +133,7 @@ export const MypageAddresses = () => {
 
                     <div className={card.metaRowRight}>
                         <Button
-                            className={styles.registerButton}
+                            className={card.registerButton}
                             frame='solid'
                             type='button'
                             variant='primary'

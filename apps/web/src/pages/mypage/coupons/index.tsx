@@ -9,7 +9,7 @@ import { isBoolean, isEmpty } from '@fxts/core';
 import { CouponRegisterBottomSheet } from '@/components/bottom-sheet/coupon-register';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { MypageLayout } from '@/components/layout/mypage';
+import { MypageLayout } from '@/components/layout';
 import { CouponRegisterModal } from '@/components/modal/coupon-register';
 import { CouponConstraintDetailContent } from '@/components/mypage/coupons/constraint-detail-content';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
@@ -197,7 +197,7 @@ export const MypageCoupons = () => {
                                     type='button'
                                     frame='solid'
                                     variant='primary'
-                                    className={styles.registerCouponButton}
+                                    className={card.registerButton}
                                     onClick={openCouponRegister}
                                 >
                                     {t('쿠폰 등록')}

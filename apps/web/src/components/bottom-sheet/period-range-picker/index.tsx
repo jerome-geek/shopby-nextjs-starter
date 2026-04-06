@@ -2,11 +2,13 @@ import { type DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
 
 import { PeriodRangePicker } from '@/components/layer-contents/period-range-picker';
-import BottomSheetLayout from '@/components/layout/bottom-sheet';
-import { type DefaultModalLayoutProps } from '@/components/layout/modal';
+import {
+    BottomSheetLayout,
+    DefaultBottomSheetProps,
+} from '@/components/layout';
 import { Button } from '@/components/ui/button';
 
-interface PeriodRangePickerBottomSheetProps extends DefaultModalLayoutProps {
+interface PeriodRangePickerBottomSheetProps extends DefaultBottomSheetProps {
     initialRange?: DateRange;
     onApply: (range: DateRange) => void;
 }

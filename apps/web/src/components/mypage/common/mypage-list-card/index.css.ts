@@ -296,3 +296,11 @@ export const paging = style({
         },
     },
 });
+
+export const registerButton = style({
+    flexShrink: 0,
+    width: 'auto',
+    minWidth: '86px',
+    height: '30px',
+    fontSize: '1.4rem',
+});

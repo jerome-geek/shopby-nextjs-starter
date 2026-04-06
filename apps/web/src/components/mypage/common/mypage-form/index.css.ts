@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
@@ -52,17 +52,17 @@ export const postcodeButton = style({
     },
 });
 
-export const checkboxRow = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-});
-
 export const checkboxLabel = style([
     textStyles.body2Regular,
     {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
         cursor: 'pointer',
         color: vars.color.gray['80'],
     },
 ]);
 
+globalStyle(`.${checkboxLabel} > span`, {
+    lineHeight: '13px',
+});

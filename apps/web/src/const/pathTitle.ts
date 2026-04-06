@@ -42,7 +42,7 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         title: '1:1 문의 수정',
     },
     {
-        pathname: PATHS.MYPAGE.INQUIRIES.WRITE,
+        pathname: PATHS.MYPAGE.INQUIRIES.REGISTER,
         title: '1:1 문의 작성',
     },
     {

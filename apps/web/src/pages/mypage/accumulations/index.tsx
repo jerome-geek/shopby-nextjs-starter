@@ -7,7 +7,7 @@ import { isEmpty } from '@fxts/core';
 import { CustomAccordion } from '@/components/ui/accordion';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { MypageLayout } from '@/components/layout/mypage';
+import { MypageLayout } from '@/components/layout';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';

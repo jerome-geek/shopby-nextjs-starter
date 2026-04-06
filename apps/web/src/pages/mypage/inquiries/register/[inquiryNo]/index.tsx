@@ -1,26 +1,26 @@
 import { useRouter } from 'next/router';
-import { type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { MypageLayout } from '@/components/layout';
-import { AddressWriteForm } from '@/components/mypage/addresses/address-write-form';
+import { InquiryRegisterForm } from '@/components/mypage/inquiries/inquiry-register-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 
-const MypageAddressEditPage = () => {
+const MypageInquiryEditPage = () => {
     const router = useRouter();
 
-    const addressNo = Number(router.query.addressNo) || 0;
+    const inquiryNo = Number(router.query.inquiryNo) || 0;
 
     return (
         <div className={card.container}>
             <section className={card.section} data-type='form'>
-                <AddressWriteForm addressNo={addressNo} />
+                <InquiryRegisterForm inquiryNo={inquiryNo} />
             </section>
         </div>
     );
 };
 
-MypageAddressEditPage.getLayout = (page: ReactNode) => {
+MypageInquiryEditPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
 
-export default MypageAddressEditPage;
+export default MypageInquiryEditPage;

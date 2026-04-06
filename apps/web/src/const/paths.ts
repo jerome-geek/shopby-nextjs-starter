@@ -186,10 +186,12 @@ export const PATHS = {
         INQUIRIES: {
             /** 고객센터 > 1[1]문의 리스트 */
             MAIN: '/mypage/inquiries',
-            /** 고객센터 > 1[1]문의 리스트 > 문의 작성 */
-            WRITE: '/mypage/inquiries/write',
-            /** 고객센터 > 1[1]문의 리스트 > 문의 수정 */
-            MODIFY: '/mypage/inquiries/write/[inquiryNo]',
+            /** 고객센터 > 1[1]문의 등록 */
+            REGISTER: '/mypage/inquiries/register',
+            /** 고객센터 > 1[1]문의 수정 */
+            MODIFY: '/mypage/inquiries/register/[inquiryNo]',
+            /** @deprecated REGISTER와 동일 */
+            WRITE: '/mypage/inquiries/register',
         },
 
         REVIEWS: {

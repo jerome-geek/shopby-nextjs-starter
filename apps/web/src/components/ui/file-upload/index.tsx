@@ -37,7 +37,6 @@ const FileUpload = ({
     };
 
     useEffect(() => {
-        console.log(fileList);
         setFileListProps(fileList);
     }, [fileList]);
 

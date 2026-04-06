@@ -118,10 +118,7 @@ export const CustomAccordion = (props: CustomAccordionProps) => {
     }
 
     const singleProps = props as SingleAccordionProps;
-    const singleDefault =
-        singleProps.value !== undefined
-            ? undefined
-            : singleProps.defaultValue ?? items[0]?.value;
+    const singleDefault = singleProps.defaultValue;
 
     return (
         <Accordion.Root

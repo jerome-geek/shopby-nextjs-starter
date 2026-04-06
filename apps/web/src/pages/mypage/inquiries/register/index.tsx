@@ -1,21 +1,21 @@
 import type { ReactNode } from 'react';
 
-import { AddressWriteForm } from '@/components/mypage/addresses/address-write-form';
 import { MypageLayout } from '@/components/layout';
+import { InquiryRegisterForm } from '@/components/mypage/inquiries/inquiry-register-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 
-const MypageAddressRegisterPage = () => {
+const MypageInquiryRegisterPage = () => {
     return (
         <div className={card.container}>
             <section className={card.section} data-type='form'>
-                <AddressWriteForm />
+                <InquiryRegisterForm />
             </section>
         </div>
     );
 };
 
-MypageAddressRegisterPage.getLayout = (page: ReactNode) => {
+MypageInquiryRegisterPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
 
-export default MypageAddressRegisterPage;
+export default MypageInquiryRegisterPage;

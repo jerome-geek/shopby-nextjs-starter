@@ -144,7 +144,7 @@ export const accordionTitle = style([
 export const accordionContent = style([
     textStyles.body2Regular,
     {
-        padding: '20px',
+        padding: '16px',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',

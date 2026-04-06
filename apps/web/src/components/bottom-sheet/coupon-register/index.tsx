@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
 import { CouponRegister } from '@/components/layer-contents/coupon-register';
-import BottomSheetLayout from '@/components/layout/bottom-sheet';
-import { type DefaultModalLayoutProps } from '@/components/layout/modal';
+import {
+    BottomSheetLayout,
+    DefaultBottomSheetProps,
+} from '@/components/layout';
 import { Button } from '@/components/ui/button';
 
-export const CouponRegisterBottomSheet = (props: DefaultModalLayoutProps) => {
+export const CouponRegisterBottomSheet = (props: DefaultBottomSheetProps) => {
     const { t } = useTranslation();
 
     return (

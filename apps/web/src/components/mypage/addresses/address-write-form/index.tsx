@@ -242,7 +242,7 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
         return {
             ...submitData,
             receiverName: isKorean
-                ? (submitData.receiverName ?? '')
+                ? submitData.receiverName ?? ''
                 : `${submitData.receiverFirstName ?? ''} ${
                       submitData.receiverLastName ?? ''
                   }`.trim(),
@@ -663,27 +663,22 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
                         )}
                     </InputFieldContainer>
 
-                    <div className={styles.checkboxRow}>
-                        <Controller
-                            control={control}
-                            name='defaultYn'
-                            render={({ field }) => (
+                    <Controller
+                        control={control}
+                        name='defaultYn'
+                        render={({ field, ...rest }) => (
+                            <label className={styles.checkboxLabel}>
                                 <InputCheckbox
+                                    {...rest}
                                     checked={field.value === 'Y'}
-                                    id='check-default'
                                     onCheckedChange={(checked) =>
                                         field.onChange(checked ? 'Y' : 'N')
                                     }
                                 />
-                            )}
-                        />
-                        <label
-                            className={styles.checkboxLabel}
-                            htmlFor='check-default'
-                        >
-                            {t('기본 배송지로 설정')}
-                        </label>
-                    </div>
+                                {t('기본 배송지로 설정')}
+                            </label>
+                        )}
+                    />
                 </div>
 
                 <div className={styles.actions}>

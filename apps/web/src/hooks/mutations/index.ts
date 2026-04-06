@@ -5,6 +5,7 @@ import useProductProfileMutation from '@/hooks/mutations/useProductProfileMutati
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 import useCouponMutation from '@/hooks/mutations/useCouponMutation';
+import useInquiryMutation from '@/hooks/mutations/useInquiryMutation';
 
 export {
     useCartMutation,
@@ -14,4 +15,5 @@ export {
     useProfileMutation,
     useShippingAddressMutation,
     useCouponMutation,
+    useInquiryMutation,
 };

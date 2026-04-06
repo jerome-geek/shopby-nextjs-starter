@@ -4,14 +4,6 @@ import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
-export const registerCouponButton = style({
-    flexShrink: 0,
-    width: 'auto',
-    minWidth: '86px',
-    height: '30px',
-    fontSize: '1.4rem',
-});
-
 export const name = style([
     textStyles.body1Bold,
     {
