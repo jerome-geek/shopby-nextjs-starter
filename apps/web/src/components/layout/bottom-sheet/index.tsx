@@ -1,8 +1,8 @@
 import { isArray } from '@fxts/core';
+import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { overlay, useCurrentOverlay } from 'overlay-kit';
 import { Fragment, useEffect } from 'react';
-import { X } from 'lucide-react';
 
 import * as styles from '@/components/layout/bottom-sheet/index.css';
 import { useKeyDown, useResponsive } from '@/hooks/utils';
@@ -28,7 +28,7 @@ interface BottomSheetProps extends DefaultBottomSheetProps {
     contentStyle?: React.CSSProperties;
 }
 
-const BottomSheetLayout = ({
+export const BottomSheetLayout = ({
     isOpen,
     close,
     unmount,
@@ -180,5 +180,3 @@ const BottomSheetLayout = ({
         </AnimatePresence>
     );
 };
-
-export default BottomSheetLayout;

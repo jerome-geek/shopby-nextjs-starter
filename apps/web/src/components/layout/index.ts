@@ -3,3 +3,4 @@ export * from '@/components/layout/auth';
 export * from '@/components/layout/csr';
 export * from '@/components/layout/mypage';
 export * from '@/components/layout/modal';
+export * from '@/components/layout/bottom-sheet';
