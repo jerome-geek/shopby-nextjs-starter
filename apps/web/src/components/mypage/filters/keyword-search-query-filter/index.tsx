@@ -1,10 +1,10 @@
+import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isEmpty } from '@fxts/core';
 
+import { SearchIcon } from '@/components/icons';
 import * as styles from '@/components/mypage/filters/keyword-search-query-filter/index.css';
-import { Button } from '@/components/ui/button';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import Select from '@/components/ui/select';
@@ -23,7 +23,6 @@ export interface MypageKeywordSearchQueryFilterProps {
     typeOmitValue?: string;
     pageKey?: string;
     placeholder?: string;
-    searchButtonLabel?: string;
 }
 
 const getQueryString = (query: string | string[] | undefined) => {
@@ -38,7 +37,6 @@ type RowProps = {
     typeKey: string;
     pageKey: string;
     placeholder?: string;
-    searchButtonLabel?: string;
     typeOmitValue?: string;
     typeOptions: readonly KeywordSearchQueryTypeOption[];
     typeDefault: string;
@@ -51,7 +49,6 @@ const MypageKeywordSearchFilterRow = ({
     typeKey,
     pageKey,
     placeholder,
-    searchButtonLabel,
     typeOmitValue,
     typeOptions = [],
     typeDefault,
@@ -140,9 +137,7 @@ const MypageKeywordSearchFilterRow = ({
         <form onSubmit={onSubmit}>
             <InputFieldContainer
                 className={styles.container}
-                gridRatio={
-                    isTypeSelectUsed ? (isMobile ? [1] : [1, 2, 1]) : [2, 1]
-                }
+                gridRatio={isTypeSelectUsed ? (isMobile ? [1] : [1, 2]) : [1]}
             >
                 {isTypeSelectUsed ? (
                     <Select
@@ -152,25 +147,26 @@ const MypageKeywordSearchFilterRow = ({
                         onChange={(opt) => {
                             setTypeDraft(opt ?? typeOptionFromUrl);
                         }}
+                        classNames={{
+                            control: () => styles.typeSelectContainer,
+                        }}
                     />
                 ) : null}
 
-                <InputField
-                    key={`${keywordKey}-${keyword ?? ''}`}
-                    ref={keywordInputRef}
-                    type='search'
-                    defaultValue={keyword ?? ''}
-                    placeholder={placeholder ?? t('검색어를 입력해 주세요.')}
-                />
+                <div className={styles.inputWrapper}>
+                    <InputField
+                        key={`${keywordKey}-${keyword ?? ''}`}
+                        ref={keywordInputRef}
+                        defaultValue={keyword ?? ''}
+                        placeholder={
+                            placeholder ?? t('검색어를 입력해 주세요.')
+                        }
+                    />
 
-                <Button
-                    frame='solid'
-                    variant='secondary'
-                    className={styles.searchButton}
-                    type='submit'
-                >
-                    {searchButtonLabel ?? t('검색')}
-                </Button>
+                    <button className={styles.searchButton} type='submit'>
+                        <SearchIcon />
+                    </button>
+                </div>
             </InputFieldContainer>
         </form>
     );
@@ -184,7 +180,6 @@ export const MypageKeywordSearchQueryFilter = ({
     typeOmitValue,
     pageKey = 'pageNumber',
     placeholder,
-    searchButtonLabel,
 }: MypageKeywordSearchQueryFilterProps) => {
     const router = useRouter();
 
@@ -212,7 +207,6 @@ export const MypageKeywordSearchQueryFilter = ({
             typeKey={typeKey}
             pageKey={pageKey}
             placeholder={placeholder}
-            searchButtonLabel={searchButtonLabel}
             typeOmitValue={typeOmitValue}
             typeOptions={typeOptions}
             typeDefault={typeDefault}

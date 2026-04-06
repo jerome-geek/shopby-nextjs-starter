@@ -300,7 +300,7 @@ export const paging = style({
 export const registerButton = style({
     flexShrink: 0,
     width: 'auto',
-    minWidth: '86px',
-    height: '30px',
+    minWidth: '100px',
+    height: '36px',
     fontSize: '1.4rem',
 });

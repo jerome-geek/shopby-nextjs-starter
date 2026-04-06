@@ -22,33 +22,6 @@ globalStyle(`${body} p`, {
     margin: 0,
 });
 
-export const imageList = style({
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '8px',
-    marginTop: '12px',
-});
-
-export const imageButton = style({
-    display: 'block',
-    padding: 0,
-    margin: 0,
-    border: `1px solid ${vars.color.gray['30']}`,
-    borderRadius: '4px',
-    overflow: 'hidden',
-    cursor: 'pointer',
-    background: vars.color.white,
-    width: '72px',
-    height: '72px',
-});
-
-export const thumbImg = style({
-    display: 'block',
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
 export const actions = style({
     display: 'flex',
     justifyContent: 'flex-end',
@@ -110,44 +83,5 @@ export const answerDate = style([
     {
         marginTop: '8px',
         color: vars.color.gray['70'],
-    },
-]);
-
-export const imageOverlayBackdrop = style({
-    position: 'fixed',
-    inset: 0,
-    zIndex: 10000,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '24px',
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-});
-
-export const imageOverlayInner = style({
-    position: 'relative',
-    maxWidth: 'min(90vw, 720px)',
-    maxHeight: '90vh',
-});
-
-export const imageOverlayImg = style({
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '85vh',
-    objectFit: 'contain',
-});
-
-export const imageOverlayClose = style([
-    textStyles.body2Semibold,
-    {
-        position: 'absolute',
-        top: '-40px',
-        right: 0,
-        padding: '8px 12px',
-        border: 0,
-        borderRadius: '4px',
-        background: vars.color.white,
-        color: vars.color.gray['90'],
-        cursor: 'pointer',
     },
 ]);

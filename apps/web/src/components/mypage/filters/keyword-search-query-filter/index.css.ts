@@ -19,24 +19,10 @@ export const container = style({
     },
 });
 
-globalStyle(`${container} > input`, {
-    height: '100%',
+globalStyle(`${container} > div > input`, {
+    height: '42px',
     padding: '0 12px',
-
-    '@media': {
-        [media.mobile]: {
-            height: '44px',
-        },
-    },
-});
-
-export const row = style({
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: '8px',
-    marginTop: '12px',
-    width: '100%',
+    paddingRight: '44px',
 });
 
 export const typeSelect = style({
@@ -49,9 +35,25 @@ export const typeSelect = style({
     },
 });
 
+export const typeSelectContainer = style({
+    height: '42px',
+});
+
+export const inputWrapper = style({
+    position: 'relative',
+});
+
 export const searchButton = style({
     height: '100%',
     fontSize: '1.4rem',
+    position: 'absolute',
+    right: '12px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    padding: '6px 0',
+    border: 0,
+    background: 'transparent',
+    cursor: 'pointer',
 
     '@media': {
         [media.mobile]: {

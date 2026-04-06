@@ -9,7 +9,7 @@ import upload from '@/api/storage/image';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
 import FileUpload from '@/components/ui/file-upload';
-import InputCheckbox from '@/components/ui/input/Checkbox';
+import InputCheckbox from '@/components/ui/input/checkbox';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import InputContainer from '@/components/ui/input/container';
@@ -486,6 +486,7 @@ export const InquiryRegisterForm = ({
                             {...register('inquiryContent')}
                             data-lenis-prevent
                             maxLength={1000}
+                            data-error={!!errors.inquiryContent}
                         />
                         <ErrorMessage name='inquiryContent' />
                     </InputContainer>

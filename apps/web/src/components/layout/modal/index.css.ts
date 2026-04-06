@@ -70,6 +70,7 @@ export const modalContent = style({
     overflowY: 'auto',
     flex: 1,
     minHeight: 0, // flex-item의 overflow scroll을 위해 필수
+    maxHeight: '70vh',
 });
 
 export const modalFooter = style({

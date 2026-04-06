@@ -177,10 +177,12 @@ export const PATHS = {
         PRODUCT_INQUIRIES: {
             /** 마이페이지 > 상품문의 리스트 */
             MAIN: '/mypage/product-inquiries',
-            /** 마이페이지 > 상품문의 리스트 > 상품문의 작성 */
-            WRITE: '/mypage/product-inquiries/write',
-            /** 마이페이지 > 상품문의 리스트 > 상품문의 수정 */
-            MODIFY: '/mypage/product-inquiries/write/[inquiryNo]',
+            /** 마이페이지 > 상품문의 등록 */
+            REGISTER: '/mypage/product-inquiries/register',
+            /** 마이페이지 > 상품문의 수정 */
+            MODIFY: '/mypage/product-inquiries/register/[inquiryNo]',
+            /** @deprecated REGISTER와 동일 */
+            WRITE: '/mypage/product-inquiries/register',
         },
 
         INQUIRIES: {

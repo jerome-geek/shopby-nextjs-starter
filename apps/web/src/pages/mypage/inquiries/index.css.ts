@@ -61,6 +61,24 @@ export const inquiryDesktopSummary = style({
     },
 });
 
+export const inquiryDesktopAccordionItem = style({
+    padding: 0,
+    selectors: {
+        '&:hover': {
+            backgroundColor: vars.color.gray['10'],
+        },
+    },
+});
+
+export const inquiryDesktopSummaryAccordion = style([
+    inquiryDesktopSummary,
+    {
+        marginBottom: 0,
+        width: '100%',
+        padding: '16px 8px',
+    },
+]);
+
 export const inquiryDesktopCell = style({
     textAlign: 'center',
     minWidth: 0,

@@ -44,6 +44,7 @@ export const trigger = style({
     background: 'transparent',
     cursor: 'pointer',
     textAlign: 'left',
+    position: 'relative',
 });
 
 export const iconWrapper = style({
@@ -56,6 +57,15 @@ export const iconWrapper = style({
     selectors: {
         [`${trigger}[data-state="closed"] &`]: {
             transform: 'rotate(360deg)',
+        },
+        [`${trigger}[data-icon-placement="overlay"] &`]: {
+            position: 'absolute',
+            right: 0,
+            top: '50%',
+            transform: 'translateY(-50%) rotate(180deg)',
+        },
+        [`${trigger}[data-icon-placement="overlay"][data-state="closed"] &`]: {
+            transform: 'translateY(-50%) rotate(360deg)',
         },
     },
 });

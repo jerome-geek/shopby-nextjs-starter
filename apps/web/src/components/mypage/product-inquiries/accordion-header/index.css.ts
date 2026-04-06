@@ -15,14 +15,13 @@ export const container = style({
     padding: '16px 0',
 });
 
-export const inner = style({
+export const topRow = style({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
     gap: '8px',
-    flex: 1,
     minWidth: 0,
 });
 
@@ -31,6 +30,7 @@ export const badgeRow = style({
     flexWrap: 'wrap',
     alignItems: 'center',
     gap: '6px',
+    minWidth: 0,
 });
 
 export const statusBadge = style([
@@ -42,19 +42,17 @@ export const statusBadge = style([
         borderRadius: '4px',
         fontSize: '1.2rem',
         lineHeight: 1.3,
+        backgroundColor: vars.color.gray['20'],
+        border: `1px solid ${vars.color.gray['30']}`,
     },
 ]);
 
 export const statusBadgeActive = style({
-    backgroundColor: vars.color.gray['20'],
     color: vars.color.primary,
-    border: `1px solid ${vars.color.gray['30']}`,
 });
 
 export const statusBadgeInactive = style({
-    backgroundColor: vars.color.gray['20'],
     color: vars.color.gray['70'],
-    border: `1px solid ${vars.color.gray['30']}`,
 });
 
 export const typeBadge = style([
@@ -72,18 +70,10 @@ export const typeBadge = style([
     },
 ]);
 
-export const title = style([
-    textStyles.body2Semibold,
-    {
-        color: vars.color.gray['90'],
-        wordBreak: 'break-word',
-        '@media': {
-            [media.mobile]: {
-                fontSize: '1.4rem',
-            },
-        },
-    },
-]);
+export const lockIcon = style({
+    flexShrink: 0,
+    color: vars.color.gray['60'],
+});
 
 export const date = style([
     textStyles.caption1Regular,
@@ -93,13 +83,69 @@ export const date = style([
     },
 ]);
 
-// Desktop variant (mypage/inquiries PC accordion header)
+export const title = style([
+    textStyles.body2Semibold,
+    {
+        color: vars.color.gray['90'],
+        wordBreak: 'break-word',
+        maxWidth: '100%',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+            },
+        },
+    },
+]);
+
+export const productRow = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    width: '100%',
+    minWidth: 0,
+});
+
+export const productThumbLink = style({
+    display: 'block',
+    flexShrink: 0,
+    width: '44px',
+    height: '44px',
+    borderRadius: '6px',
+    overflow: 'hidden',
+    border: `1px solid ${vars.color.gray['30']}`,
+    backgroundColor: vars.color.white,
+});
+
+export const productThumbImg = style({
+    display: 'block',
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+});
+
+export const productName = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['70'],
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
+]);
+
+// Desktop variant (mypage/product-inquiries PC accordion header)
 export const desktopContainer = style({
     display: 'grid',
-    gridTemplateColumns: '0.85fr 1fr 1.4fr 0.75fr',
+    gridTemplateColumns: '0.85fr 1fr 1.4fr 1.4fr 0.75fr',
     alignItems: 'center',
     gap: '16px',
     width: '100%',
+    minWidth: 0,
     padding: '16px 8px',
 });
 
@@ -113,6 +159,9 @@ export const desktopCell = style({
         '&:nth-child(3)': {
             textAlign: 'left',
         },
+        '&:nth-child(4)': {
+            textAlign: 'left',
+        },
     },
 });
 
@@ -121,7 +170,20 @@ export const desktopTitleEllipsis = style([
     {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
+        whiteSpace: 'normal',
+        maxWidth: '100%',
+        minWidth: 0,
         color: vars.color.gray['90'],
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        wordBreak: 'break-word',
+    },
+]);
+
+export const desktopProductRow = style([
+    productRow,
+    {
+        justifyContent: 'flex-start',
     },
 ]);

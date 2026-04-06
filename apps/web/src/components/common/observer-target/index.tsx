@@ -45,13 +45,8 @@ export const ObserverTarget = ({
     }, [onIntersect, rootMargin]);
 
     if (hasNextPage === false) {
-        return (
-            <div className={styles.endMessage}>
-                {totalCount ? `총 ${totalCount}개` : ''}
-            </div>
-        );
+        return <div className={styles.endMessage} />;
     }
 
     return <div ref={ref} className={styles.target} aria-hidden='true' />;
 };
-

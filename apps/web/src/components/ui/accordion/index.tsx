@@ -19,6 +19,8 @@ type BaseAccordionProps = {
     headerClassName?: string;
     contentClassName?: string;
     customIcon?: ReactNode;
+    hideIcon?: boolean;
+    iconPlacement?: 'inline' | 'overlay';
     headerStyle?: CSSProperties;
     contentStyle?: CSSProperties;
     isContentForceMount?: boolean;
@@ -52,6 +54,8 @@ export const CustomAccordion = (props: CustomAccordionProps) => {
         headerClassName,
         contentClassName,
         customIcon = defaultCaret,
+        hideIcon,
+        iconPlacement = 'inline',
         headerStyle,
         contentStyle,
         isContentForceMount,
@@ -75,11 +79,17 @@ export const CustomAccordion = (props: CustomAccordionProps) => {
                             className={clsx(styles.trigger, headerClassName)}
                             style={headerStyle}
                             type='button'
+                            data-icon-placement={iconPlacement}
                         >
                             {item.header}
-                            <span aria-hidden className={styles.iconWrapper}>
-                                {customIcon}
-                            </span>
+                            {!hideIcon && (
+                                <span
+                                    aria-hidden
+                                    className={styles.iconWrapper}
+                                >
+                                    {customIcon}
+                                </span>
+                            )}
                         </button>
                     </Accordion.Trigger>
                 </Accordion.Header>

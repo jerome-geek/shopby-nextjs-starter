@@ -1,5 +1,6 @@
 import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
+import type { ReactNode } from 'react';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,37 +11,38 @@ import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { MypageKeywordSearchQueryFilter } from '@/components/mypage/filters/keyword-search-query-filter';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
-import { InquiryContent } from '@/components/mypage/inquiries/accordion-content';
-import { InquiryHeader } from '@/components/mypage/inquiries/accordion-header';
+import { ProductInquiryContent } from '@/components/mypage/product-inquiries/accordion-content';
+import { ProductInquiryHeader } from '@/components/mypage/product-inquiries/accordion-header';
 import { CustomAccordion } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import Paging from '@/components/ui/paging';
 import { PATHS } from '@/const/paths';
-import { useInquiryMutation } from '@/hooks/mutations';
-import { useInquiryList } from '@/hooks/query/manage/inquiry';
+import { useProductInquiryMutation } from '@/hooks/mutations';
+import { useMall } from '@/hooks/query/admin/mall';
+import { useMyProductInquiryList } from '@/hooks/query/display/productInquiry';
+import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import type { InquirySearchType, InquiryStatusType } from '@/models';
-import * as styles from '@/pages/mypage/inquiries/index.css';
+import type { ProductInquirySearchType } from '@/models';
+import * as styles from '@/pages/mypage/product-inquiries/index.css';
 
 const PAGE_SIZE = 10;
 
-type SearchTypeTab = 'ALL' | 'TITLE' | 'CONTENT';
-
-const toInquiryStatus = (value?: string): InquiryStatusType | undefined => {
+const toAnswered = (value?: string): boolean | undefined => {
     switch (value) {
-        case 'ISSUED':
-        case 'ANSWERED':
-            return value;
+        case 'true':
+            return true;
+        case 'false':
+            return false;
         default:
             return undefined;
     }
 };
 
-const toSearchType = (value?: string): InquirySearchType | undefined => {
+const toSearchType = (value?: string): ProductInquirySearchType | undefined => {
     switch (value) {
         case 'ALL':
-        case 'TITLE':
+        case 'PRODUCT_NAME':
         case 'CONTENT':
             return value;
         default:
@@ -48,46 +50,47 @@ const toSearchType = (value?: string): InquirySearchType | undefined => {
     }
 };
 
-export const MypageInquiries = () => {
+export const MypageProductInquiries = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
     const { openAsyncDialog } = useDialog();
     const { addToast } = useToast();
 
-    const inquiryStatusQuery = router.query.inquiryStatus as string | undefined;
-    const searchTypeQuery =
-        (router.query.searchType as string | undefined) ?? 'ALL';
-    const keywordQuery = router.query.keyword as string | undefined;
+    const { data: profileData } = useProfile();
+    const { data: mallData } = useMall();
 
+    const answeredQuery = router.query.answered as string | undefined;
+    const searchTypeQuery = router.query.searchType as string | undefined;
+    const searchKeywordQuery = router.query.searchKeyword as string | undefined;
     const startYmd = String(router.query.startYmd ?? '') || undefined;
     const endYmd = String(router.query.endYmd ?? '') || undefined;
     const pageNumber = Number(router.query.pageNumber) || 1;
 
-    const parseInquiryStatus = useMemo(
-        () => toInquiryStatus(inquiryStatusQuery),
-        [inquiryStatusQuery],
+    const parsedAnswered = useMemo(
+        () => toAnswered(answeredQuery),
+        [answeredQuery],
     );
 
-    const parseSearchType = useMemo(
-        () => toSearchType(searchTypeQuery),
+    const parsedSearchType = useMemo(
+        () => toSearchType(searchTypeQuery ?? 'ALL'),
         [searchTypeQuery],
     );
 
     const tabOptions = useMemo(
         () => [
             { value: 'ALL' as const, label: t('전체') },
-            { value: 'ISSUED' as const, label: t('답변 대기') },
-            { value: 'ANSWERED' as const, label: t('답변 완료') },
+            { value: 'false' as const, label: t('답변 대기') },
+            { value: 'true' as const, label: t('답변 완료') },
         ],
         [t],
     );
 
     const searchTypeOptions = useMemo(
         () => [
-            { value: 'ALL' as SearchTypeTab, label: t('전체') },
-            { value: 'TITLE' as SearchTypeTab, label: t('제목') },
-            { value: 'CONTENT' as SearchTypeTab, label: t('내용') },
+            { value: 'ALL' as const, label: t('전체') },
+            { value: 'PRODUCT_NAME' as const, label: t('상품명') },
+            { value: 'CONTENT' as const, label: t('내용') },
         ],
         [t],
     );
@@ -114,41 +117,51 @@ export const MypageInquiries = () => {
         () => ({
             pageSize: PAGE_SIZE,
             hasTotalCount: true,
-            inquiryStatus: parseInquiryStatus,
             startYmd,
             endYmd,
-            keyword: keywordQuery || undefined,
-            searchType: parseSearchType,
+            answered: parsedAnswered,
+            searchKeyword: searchKeywordQuery || undefined,
+            searchType: parsedSearchType,
             pageNumber,
         }),
         [
-            parseInquiryStatus,
             startYmd,
             endYmd,
-            keywordQuery,
-            parseSearchType,
+            parsedAnswered,
+            searchKeywordQuery,
+            parsedSearchType,
             pageNumber,
         ],
     );
 
-    const { data: inquiryListData, isLoading: isInquiryListLoading } =
-        useInquiryList({
+    const { data: myProductInquiryListData, isLoading } =
+        useMyProductInquiryList({
             searchParams,
+            memberNo: profileData?.memberNo || 0,
+            options: {
+                enabled: profileData?.memberNo !== 0,
+            },
         });
 
-    const inquiryList = inquiryListData?.items ?? [];
-    const totalCount = inquiryListData?.totalCount ?? 0;
-    const isLoading = isInquiryListLoading;
+    const inquiryList = myProductInquiryListData?.items ?? [];
+    const totalCount = myProductInquiryListData?.totalCount ?? 0;
+
+    const parseInquiryTypeName = useCallback(
+        (type: string) =>
+            mallData?.productInquiryType.find((row) => row.value === type)
+                ?.label,
+        [mallData?.productInquiryType],
+    );
 
     const {
-        delete: { mutate: deleteInquiryMutate },
-    } = useInquiryMutation();
+        remove: { mutate: removeProductInquiryMutate },
+    } = useProductInquiryMutation();
 
     const onDeleteButtonClick = useCallback(
         async (inquiryNo: number) => {
             const isAgree = await openAsyncDialog({
                 type: 'confirm',
-                message: t('1:1 문의를 삭제하시겠습니까?'),
+                message: t('상품 문의를 삭제하시겠습니까?'),
                 iconType: 'warning',
                 onConfirmReturnValue: true,
                 onCloseReturnValue: false,
@@ -158,18 +171,13 @@ export const MypageInquiries = () => {
                 return;
             }
 
-            deleteInquiryMutate(
-                { inquiryNo },
-                {
-                    onSuccess: () => {
-                        addToast({
-                            message: t('1:1 문의가 삭제되었습니다.'),
-                        });
-                    },
+            removeProductInquiryMutate(inquiryNo, {
+                onSuccess: () => {
+                    addToast({ message: t('상품 문의가 삭제되었습니다.') });
                 },
-            );
+            });
         },
-        [addToast, deleteInquiryMutate, openAsyncDialog, t],
+        [addToast, openAsyncDialog, removeProductInquiryMutate, t],
     );
 
     return (
@@ -181,11 +189,15 @@ export const MypageInquiries = () => {
                             className={card.toggleGroup}
                             buttonClassName={card.toggleButton}
                             defaultValue='ALL'
-                            value={parseInquiryStatus ?? 'ALL'}
+                            value={
+                                parsedAnswered === undefined
+                                    ? 'ALL'
+                                    : String(parsedAnswered)
+                            }
                             options={tabOptions}
                             onChange={(nextValue) => {
                                 setQuery({
-                                    inquiryStatus:
+                                    answered:
                                         nextValue === 'ALL'
                                             ? undefined
                                             : nextValue,
@@ -197,6 +209,8 @@ export const MypageInquiries = () => {
                     </div>
 
                     <MypageKeywordSearchQueryFilter
+                        keywordKey='searchKeyword'
+                        typeKey='searchType'
                         typeOptions={searchTypeOptions}
                         typeDefault='ALL'
                         typeOmitValue='ALL'
@@ -230,11 +244,12 @@ export const MypageInquiries = () => {
                                     className={card.registerButton}
                                     onClick={() =>
                                         router.push(
-                                            PATHS.MYPAGE.INQUIRIES.REGISTER,
+                                            PATHS.MYPAGE.PRODUCT_INQUIRIES
+                                                .REGISTER,
                                         )
                                     }
                                 >
-                                    {t('문의 등록')}
+                                    {t('상품 문의 등록')}
                                 </Button>
                             </div>
                         </div>
@@ -246,7 +261,8 @@ export const MypageInquiries = () => {
                         <div
                             className={card.headerRow}
                             style={{
-                                gridTemplateColumns: '0.85fr 1fr 1.4fr 0.75fr',
+                                gridTemplateColumns:
+                                    '0.85fr 1fr 1.4fr 1.4fr 0.75fr',
                             }}
                         >
                             <div className={card.headerCell}>
@@ -256,6 +272,9 @@ export const MypageInquiries = () => {
                                 {t('문의 유형')}
                             </div>
                             <div className={card.headerCell}>{t('제목')}</div>
+                            <div className={card.headerCell}>
+                                {t('상품 정보')}
+                            </div>
                             <div className={card.headerCell}>{t('등록일')}</div>
                         </div>
                     )}
@@ -272,29 +291,36 @@ export const MypageInquiries = () => {
                                     itemClassName={
                                         isMobile
                                             ? undefined
-                                            : styles.inquiryDesktopAccordionItem
+                                            : styles.desktopAccordionItem
                                     }
-                                    items={inquiryList.map((item) => ({
-                                        value: String(item.inquiryNo),
+                                    items={inquiryList.map((inquiry) => ({
+                                        value: String(inquiry.inquiryNo),
                                         header: (
-                                            <InquiryHeader
+                                            <ProductInquiryHeader
                                                 variant={
                                                     isMobile
                                                         ? 'mobile'
                                                         : 'desktop'
                                                 }
-                                                answer={item.answer}
-                                                inquiryTitle={item.inquiryTitle}
-                                                registerYmdt={item.registerYmdt}
-                                                inquiryTypeName={
-                                                    item.inquiryType
-                                                        .inquiryTypeName
+                                                replied={inquiry.replied}
+                                                inquiryTitle={inquiry.title}
+                                                registerYmdt={
+                                                    inquiry.registerYmdt
                                                 }
+                                                inquiryTypeName={parseInquiryTypeName(
+                                                    inquiry.type,
+                                                )}
+                                                secreted={inquiry.secreted}
+                                                productName={
+                                                    inquiry.productName
+                                                }
+                                                imageUrl={inquiry.imageUrl}
+                                                productNo={inquiry.productNo}
                                             />
                                         ),
                                         content: (
-                                            <InquiryContent
-                                                {...item}
+                                            <ProductInquiryContent
+                                                {...inquiry}
                                                 onDeleteButtonClick={
                                                     onDeleteButtonClick
                                                 }
@@ -322,8 +348,8 @@ export const MypageInquiries = () => {
     );
 };
 
-MypageInquiries.getLayout = (page: React.ReactNode) => {
+MypageProductInquiries.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
 
-export default MypageInquiries;
+export default MypageProductInquiries;

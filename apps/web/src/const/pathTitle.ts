@@ -34,7 +34,7 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         title: '상품 문의 수정',
     },
     {
-        pathname: PATHS.MYPAGE.PRODUCT_INQUIRIES.WRITE,
+        pathname: PATHS.MYPAGE.PRODUCT_INQUIRIES.REGISTER,
         title: '상품 문의 작성',
     },
     {

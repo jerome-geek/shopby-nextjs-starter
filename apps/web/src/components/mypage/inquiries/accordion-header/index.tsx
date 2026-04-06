@@ -12,6 +12,7 @@ interface InquiryHeaderProps {
     inquiryTitle: string;
     registerYmdt: string;
     inquiryTypeName?: string;
+    variant?: 'mobile' | 'desktop';
     className?: string;
 }
 
@@ -20,10 +21,50 @@ export const InquiryHeader = ({
     inquiryTitle,
     registerYmdt,
     inquiryTypeName,
+    variant = 'mobile',
     className,
 }: InquiryHeaderProps) => {
     const { t } = useTranslation();
     const isAnswered = Boolean(answer);
+
+    if (variant === 'desktop') {
+        return (
+            <div className={clsx(styles.desktopContainer, className)}>
+                <div className={styles.desktopCell}>
+                    <span
+                        className={clsx(
+                            styles.statusBadge,
+                            isAnswered
+                                ? styles.statusBadgeActive
+                                : styles.statusBadgeInactive,
+                        )}
+                    >
+                        {t(isAnswered ? '답변 완료' : '답변 대기중')}
+                    </span>
+                </div>
+                <div className={styles.desktopCell}>
+                    {inquiryTypeName ? (
+                        <span className={styles.typeBadge}>
+                            {inquiryTypeName}
+                        </span>
+                    ) : null}
+                </div>
+                <div className={styles.desktopCell}>
+                    <span
+                        className={styles.desktopTitleEllipsis}
+                        title={inquiryTitle}
+                    >
+                        {inquiryTitle}
+                    </span>
+                </div>
+                <div className={styles.desktopCell}>
+                    <span className={styles.date}>
+                        {dayjs(registerYmdt).format('YYYY-MM-DD')}
+                    </span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={clsx(styles.container, className)}>

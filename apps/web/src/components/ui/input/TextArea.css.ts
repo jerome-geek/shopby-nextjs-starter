@@ -22,4 +22,9 @@ export const textArea = style({
         outline: 'none',
         borderColor: vars.color.gray[60],
     },
+    selectors: {
+        '&[data-error=true]': {
+            borderColor: vars.color.pink[80],
+        },
+    },
 });

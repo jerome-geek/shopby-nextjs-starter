@@ -1,4 +1,4 @@
-import { MypageLayout } from '@/components/layout/mypage';
+import { MypageLayout } from '@/components/layout';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import MyPageMainMobilePaths from '@/components/mypage/main/mobile-paths';
 import OrderStatusSummary from '@/components/mypage/main/order-status-summary/index';
