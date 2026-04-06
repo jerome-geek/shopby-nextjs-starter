@@ -1,6 +1,7 @@
 import {
     GetArticleListParams,
     GetArticleParams,
+    GetArticleV2Params,
     GetPostListData,
     GetPostListParams,
     GetRepliesByBoardNoParams,
@@ -49,6 +50,20 @@ const boardKeys = {
         articleNo: number,
         searchParams?: GetArticleParams,
     ) => [...boardKeys.details(), boardNo, articleNo, searchParams] as const,
+
+    /** 게시글 상세 조회하기(버전 2) */
+    postDetail: (
+        boardNo: string,
+        postNo: number,
+        searchParams?: GetArticleV2Params,
+    ) =>
+        [
+            ...boardKeys.details(),
+            'post',
+            boardNo,
+            postNo,
+            searchParams,
+        ] as const,
 
     /** 게시글 답글 리스트 */
     replies: () => [...boardKeys.all, 'replies'] as const,

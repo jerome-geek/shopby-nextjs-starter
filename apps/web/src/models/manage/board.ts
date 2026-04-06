@@ -358,7 +358,7 @@ export interface PostArticleParams {
     /** 비밀글 여부 (false: 공개글, true: 비밀글)  */
     secreted: boolean;
     /** 검색용 게시글 태그 (nullable) */
-    postSearchTags: string[];
+    postSearchTags: Nullable<string[]>;
     /** 대표 이미지 (최대 길이 500자) */
     thumbnailUrl?: string;
     /** 태그목록 */
@@ -472,6 +472,8 @@ export interface GetArticleV2Response
     memberGroupNo: Nullable<number>;
     /** 공지글 여부 */
     noticed: GetArticleResponse['notice'];
+    /** 본인의(회원) 추천 여부 */
+    recommended: boolean;
 }
 
 export interface DeleteArticleData {
