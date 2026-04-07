@@ -9,7 +9,6 @@ import {
 } from '@/models/product/profile';
 
 interface UseRecentViewProductListParams<T = GetRecentViewProductsResponse> {
-    memberNo: number;
     searchParams: GetRecentViewProductsParams;
     options?: Omit<
         UseQueryOptions<
@@ -23,20 +22,20 @@ interface UseRecentViewProductListParams<T = GetRecentViewProductsResponse> {
 }
 
 const useRecentViewProductList = <T = GetRecentViewProductsResponse>({
-    memberNo = 0,
     searchParams,
     options,
 }: UseRecentViewProductListParams<T>) => {
     return useQuery({
-        queryKey: productProfileKeys.recentProducts(memberNo, searchParams),
+        queryKey: productProfileKeys.recentProducts(searchParams),
         queryFn: async () => {
-            const { data } =
-                await productProfile.getRecentViewProducts(searchParams);
+            const { data } = await productProfile.getRecentViewProducts(
+                searchParams,
+            );
 
             return data;
         },
         ...options,
-        enabled: (options?.enabled ?? true) && memberNo !== 0,
+        enabled: options?.enabled ?? true,
     });
 };
 

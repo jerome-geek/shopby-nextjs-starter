@@ -47,7 +47,7 @@ const Summary = () => {
     const summaryList = [
         {
             id: 'likeProduct',
-            title: '스크랩북',
+            title: '찜한 상품',
             content: likeProductCountData?.likedCount ?? 0,
             url: PATHS.MYPAGE.WISH,
         },

@@ -28,11 +28,10 @@ interface UseLikeProductListParams<T = GetLikeProductsResponse> {
 
 const useLikeProductList = <T = GetLikeProductsResponse>({
     searchParams,
-    memberNo = 0,
     options,
 }: UseLikeProductListParams<T>) => {
     return useQuery({
-        queryKey: productProfileKeys.likeProductList(memberNo, searchParams),
+        queryKey: productProfileKeys.likeProductList(searchParams),
         queryFn: async () => {
             const { data } = await productProfile.getLikeProducts(searchParams);
 

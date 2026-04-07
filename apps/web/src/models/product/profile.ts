@@ -139,7 +139,7 @@ export interface RecentViewProductsContents {
     /** 추가상품할인가 */
     additionDiscountAmt: number;
     /** 상품 이미지 정보 */
-    imageUrlInfo: ImageUrlType[];
+    imageUrlInfo: ImageUrlType;
     /** 브랜드 번호 */
     brandNo: number;
     /** 단위별 가격 */
@@ -251,7 +251,7 @@ export interface RecentViewProductsContents {
     /** 스티커 정보 */
     stickerInfos: StickerInfo[];
     /** 상품 리스트 이미지 정보 */
-    listImageUrlInfo: ImageUrlType[];
+    listImageUrlInfo: ImageUrlType;
     /** HS CODE */
     hsCode: string;
     /** 즉시할인 종료일자 */

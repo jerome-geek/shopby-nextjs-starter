@@ -45,3 +45,10 @@ export const empty = style([
         color: vars.color.gray['70'],
     },
 ]);
+
+export const noResultText = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['70'],
+    },
+]);

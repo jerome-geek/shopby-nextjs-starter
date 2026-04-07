@@ -29,6 +29,7 @@ interface ProductCardProps {
     immediateDiscountAmt?: number;
     additionDiscountAmt?: number;
     isAdditionalDiscount?: boolean;
+    isHideLikeButton?: boolean;
 }
 
 const ProductCard = ({
@@ -46,6 +47,7 @@ const ProductCard = ({
     immediateDiscountAmt = 0,
     additionDiscountAmt = 0,
     isAdditionalDiscount,
+    isHideLikeButton = false,
 }: ProductCardProps) => {
     const { openDialog, openLoginDialog } = useDialog();
 
@@ -87,6 +89,8 @@ const ProductCard = ({
         );
     };
 
+    console.log(imageUrlInfo);
+
     return (
         <article className={styles.container}>
             <Link
@@ -99,15 +103,17 @@ const ProductCard = ({
                     className={styles.thumb}
                 />
 
-                <button
-                    className={styles.likeButton}
-                    onClick={onLikeButtonClick}
-                >
-                    <ThumbnailBookmarkIcon isActive={liked} />
-                </button>
+                {!isHideLikeButton && (
+                    <button
+                        className={styles.likeButton}
+                        onClick={onLikeButtonClick}
+                    >
+                        <ThumbnailBookmarkIcon isActive={liked} />
+                    </button>
+                )}
             </Link>
 
-            <ProductAdditionalDiscount type="thumbnail" productNo={productNo} />
+            <ProductAdditionalDiscount type='thumbnail' productNo={productNo} />
 
             <div className={styles.productInfoContainer}>
                 <div className={styles.brandInfoWrapper}>

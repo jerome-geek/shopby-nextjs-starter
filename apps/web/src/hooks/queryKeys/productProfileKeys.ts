@@ -12,30 +12,15 @@ const productProfileKeys = {
     products: () => [...productProfileKeys.all, 'products'] as const,
 
     recentProduct: () => [...productProfileKeys.all, 'recentProduct'] as const,
-    recentProducts: (
-        memberNo: number,
-        searchParams: GetRecentViewProductsParams,
-    ) =>
-        [
-            ...productProfileKeys.recentProduct(),
-            memberNo,
-            searchParams,
-        ] as const,
+    recentProducts: (searchParams: GetRecentViewProductsParams) =>
+        [...productProfileKeys.recentProduct(), searchParams] as const,
 
     likeProducts: () =>
         [...productProfileKeys.all, 'products', 'like'] as const,
-    likeProductList: (
-        memberNo?: number,
-        searchParams?: GetLikeProductsParams,
-    ) =>
-        [
-            ...productProfileKeys.likeProducts(),
-            'list',
-            memberNo,
-            searchParams,
-        ] as const,
-    likeProductCount: (memberNo?: number) =>
-        [...productProfileKeys.likeProducts(), 'count', memberNo] as const,
+    likeProductList: (searchParams?: GetLikeProductsParams) =>
+        [...productProfileKeys.likeProducts(), 'list', searchParams] as const,
+    likeProductCount: () =>
+        [...productProfileKeys.likeProducts(), 'count'] as const,
 
     likeBrands: () => [...productProfileKeys.brands(), 'like'] as const,
     likeBrandList: (

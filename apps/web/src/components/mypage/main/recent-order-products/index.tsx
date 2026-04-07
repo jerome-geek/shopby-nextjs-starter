@@ -30,11 +30,18 @@ const RecentOrderProducts = () => {
 
             {items.length === 0 ? (
                 <NoResult
-                    text={t('최근 주문이 없습니다.')}
+                    text={
+                        <p className={styles.noResultText}>
+                            {t('최근 주문이 없습니다.')}
+                        </p>
+                    }
                     style={{
                         height: '40px',
                         justifyContent: 'start',
+                        alignItems: 'center',
+                        flexDirection: 'row',
                     }}
+                    icon={null}
                 />
             ) : (
                 <ul className={styles.list}>

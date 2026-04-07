@@ -48,6 +48,7 @@ import ProductErrorState from '@/components/product/product-error-state';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
+import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -299,6 +300,12 @@ function ProductDetailView({
             },
         });
     };
+
+    const { addRecentProduct } = useRecentViewProducts();
+
+    useEffect(() => {
+        addRecentProduct(productNo);
+    }, []);
 
     useSb({
         product: productDetailData,
@@ -613,7 +620,9 @@ export const getServerSideProps: GetServerSideProps = async ({
                 (price.immediateDiscountAmt || 0) -
                 (price.additionDiscountAmt || 0);
 
-            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/products/${productNo}`;
+            const url = `${
+                process.env.NEXT_PUBLIC_BASE_URL || ''
+            }/products/${productNo}`;
 
             seoData = {
                 title,
