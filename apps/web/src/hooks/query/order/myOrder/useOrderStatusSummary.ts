@@ -10,7 +10,7 @@ import type {
 
 interface UseOrderStatusSummaryParams<T = GetOrderStatusSummaryResponse> {
     memberNo: number;
-    searchParams: GetOrderStatusSummaryParams;
+    searchParams?: GetOrderStatusSummaryParams;
     options?: Omit<
         UseQueryOptions<
             GetOrderStatusSummaryResponse,
@@ -23,7 +23,7 @@ interface UseOrderStatusSummaryParams<T = GetOrderStatusSummaryResponse> {
 
 const useOrderStatusSummary = <T = GetOrderStatusSummaryResponse>({
     memberNo,
-    searchParams,
+    searchParams = {},
     options,
 }: UseOrderStatusSummaryParams<T>) => {
     return useQuery({
@@ -38,4 +38,3 @@ const useOrderStatusSummary = <T = GetOrderStatusSummaryResponse>({
 };
 
 export default useOrderStatusSummary;
-

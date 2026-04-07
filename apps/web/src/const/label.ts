@@ -66,11 +66,21 @@ export const CLAIM_TYPE_MAP = {
 
 // 다음 액션 맵
 export const NEXT_ACTION_MAP = {
+    CANCEL_ALL: '주문 전체 취소',
+    CANCEL: '취소',
+    EXCHANGE: '교환',
+    RETURN: '반품',
+    WITHDRAW_CANCEL: '취소신청 취소',
+    WITHDRAW_EXCHANGE: '교환신청 취소',
+    WITHDRAW_RETURN: '반품신청 취소',
+    VIEW_CLAIM: '클레임 조회',
     VIEW_DELIVERY: '배송조회',
-    DELIVERY_DONE: '배송완료',
+    DELIVERY_DONE: '수취확인',
     CONFIRM_ORDER: '구매확정',
-    WRITE_REVIEW: '상품평작성',
-    VIEW_REVIEW: '상품평조회',
+    CHANGE_ADDRESS: '배송지변경',
+    WRITE_REVIEW: '리뷰 작성',
+    ISSUE_CASH_RECEIPT: '현금영수증 발행',
+    VIEW_RECEIPT: '현금영수증 조회',
 } as const;
 
 // 주문 요청 맵
