@@ -6,7 +6,7 @@ import Link from 'next/link';
 import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 
-import { authCookieManager } from '@/utils/cookie';
+// import { authCookieManager } from '@/utils/cookie';
 import { useAuth } from '@/hooks/useAuth';
 import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
 import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
@@ -316,11 +316,11 @@ const OrderComplete = ({ orderNo, result, guestToken }: OrderCompleteProps) => {
     const router = useRouter();
     const isLogin = useAuth();
 
-    useEffect(() => {
-        if (guestToken) {
-            authCookieManager.setGuestToken(guestToken);
-        }
-    }, [guestToken]);
+    // useEffect(() => {
+    //     if (guestToken) {
+    //         authCookieManager.setGuestToken(guestToken);
+    //     }
+    // }, [guestToken]);
 
     useEffect(() => {
         if (!isMobile && window.opener) {

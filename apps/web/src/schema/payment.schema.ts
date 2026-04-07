@@ -1,29 +1,67 @@
+import z from 'zod';
+
 import {
+    CountryCdType,
     payType,
     pgType,
     phonePrefixType,
     termsType,
 } from '@/schema/common.schema';
-import {
-    baseRegisterShippingAddressSchema,
-    shippingAddressSchema,
-} from '@/schema/shippingAddress.schema';
 import { regEx } from '@/utils/validation';
-import z from 'zod';
 
-// 1. Prefix 옵션들을 '|'로 합쳐서 그룹화 (010|011|016|...)
-const prefixGroup = phonePrefixType.options.join('|');
-// 2. 해당 그룹으로 시작하고 뒤에 7~8자리 숫자가 붙는 정규식
-const mobileRegex = new RegExp(`^(${prefixGroup})[0-9]{7,8}$`);
+const createOrderShippingAddressSchema = (isGlobalMall?: boolean) => {
+    return z.object({
+        receiverLastName: isGlobalMall
+            ? z.string().nonempty('이름을 입력해주세요.')
+            : z.string().nullish(),
+        receiverJibunAddress: z.string(),
+        requestShippingDate: z.date().nullish(),
+        orderAdditionalInfo: z.string().nullish(),
+        usesShippingInfoLaterInput: z.boolean().nullish(),
+        receiverName: z.string(),
+        customsIdNumber: z.string().nullish(),
+        countryCd: CountryCdType,
+        receiverZipCd: z.string().nonempty('우편번호를 입력해주세요.'),
+        receiverDetailAddress: z.string().nonempty('상세주소를 입력해주세요.'),
+        receiverCity: isGlobalMall
+            ? z.string().nonempty('도시를 입력해주세요.')
+            : z.string().nullish(),
+        receiverMobileCountryCd: isGlobalMall
+            ? z.string()
+            : z.string().nullish(),
+        receiverAddress: z.string().nonempty('배송지 주소를 입력해주세요.'),
+        addressNo: z.number(),
+        receiverState: z.string(),
+        addressName: z.string().nullish(),
+        receiverFirstName: isGlobalMall
+            ? z.string().nonempty('성을 입력해주세요.')
+            : z.string().nullish(),
+        shippingInfoLaterInputContact: z.string().nullish(),
+        receiverContact1: z.object({
+            prefix: phonePrefixType,
+            middle: isGlobalMall
+                ? z.string().nullish()
+                : z.string().nonempty('연락처를 입력해주세요.'),
+            suffix: isGlobalMall
+                ? z.string().nullish()
+                : z.string().nonempty('연락처를 입력해주세요.'),
+        }),
+        receiverContact2: z.string().nullish(),
+    });
+};
 
+// NOTE: 필수값이 아니라면 .nullish를 사용하여 null, undefined 모두 허용할 수 있도록
 export const getPaymentSchema = ({
     isLogin,
     isGlobalMall,
 }: {
     isLogin?: boolean;
     isGlobalMall?: boolean;
-}) =>
-    z
+}) => {
+    const shippingAddressSchema =
+        createOrderShippingAddressSchema(isGlobalMall);
+
+    return z
         .object({
             extraData: z.record(z.string(), z.unknown()).optional(),
             customTermsAgrees: z
@@ -149,8 +187,14 @@ export const getPaymentSchema = ({
                         return '이메일을 입력해주세요.';
                     },
                 }),
-                ordererContact1: z.string().regex(mobileRegex, {
-                    message: '올바른 휴대폰 번호 형식이 아닙니다.',
+                ordererContact1: z.object({
+                    prefix: phonePrefixType,
+                    middle: isGlobalMall
+                        ? z.string().nullish()
+                        : z.string().nonempty('연락처를 입력해주세요.'),
+                    suffix: isGlobalMall
+                        ? z.string().nullish()
+                        : z.string().nonempty('연락처를 입력해주세요.'),
                 }),
                 ordererContact2: z.string().optional().nullable(),
                 ordererName: isGlobalMall
@@ -168,6 +212,7 @@ export const getPaymentSchema = ({
             }),
             paymentAmtForVerification: z.number().optional(),
             shippingAddress: shippingAddressSchema,
+            shippingAddresses: z.array(shippingAddressSchema).optional(),
             savesLastPayType: z.boolean(),
             subPayAmt: z.number(),
             cashReceipt: z
@@ -201,84 +246,9 @@ export const getPaymentSchema = ({
                     ),
                 })
                 .optional(),
-            shippingAddresses: z
-                .array(
-                    z.object({
-                        payProductParams: z.array(
-                            z.object({
-                                rentalInfos: z
-                                    .array(
-                                        z.object({
-                                            monthlyRentalAmount: z.number(),
-                                            rentalPeriod: z.number(),
-                                        }),
-                                    )
-                                    .optional(),
-                                recurringPaymentDelivery: z.object({
-                                    date: z.number().optional(),
-                                    cycleType: z
-                                        .enum(['MONTH', 'WEEK'])
-                                        .optional(),
-                                    dayOfWeek: z
-                                        .enum([
-                                            'MONDAY',
-                                            'TUESDAY',
-                                            'WEDNESDAY',
-                                            'THURSDAY',
-                                            'FRIDAY',
-                                            'SATURDAY',
-                                            'SUNDAY',
-                                        ])
-                                        .optional(),
-                                    cycle: z.number().optional(),
-                                }),
-                                baseProductNo: z.number().optional(),
-                                recurringPaymentLastRound: z
-                                    .number()
-                                    .optional(),
-                                orderCnt: z.number(),
-                                optionInputs: z.array(
-                                    z.object({
-                                        optionNo: z.number(),
-                                        optionName: z.string(),
-                                        optionPrice: z.number(),
-                                    }),
-                                ),
-                                productNo: z.number(),
-                                optionNo: z.number(),
-                            }),
-                        ),
-                        requestShippingDate: z.string().optional(),
-                        addressNo: z.number().optional(),
-                        usesShippingInfoLaterInput: z.boolean().optional(),
-                        useDefaultAddress: z.boolean().optional(),
-                        shippingAddress: baseRegisterShippingAddressSchema
-                            .omit({ receiverContact1: true })
-                            .safeExtend({
-                                receiverContact1: z.string(),
-                            }),
-                        addressName: z.string().optional(),
-                        shippingInfoLaterInputContact: z.string().optional(),
-                    }),
-                )
-                .optional(),
             tempPasswordCheck: isLogin
                 ? z.string().nullable().optional()
                 : z.string().nonempty('임시 비밀번호 확인을 입력해주세요.'),
-            selectAddress: isLogin
-                ? z
-                      .boolean({
-                          error: (issue) => {
-                              if (issue.input) {
-                                  return;
-                              }
-                              return '배송지를 선택해주세요.';
-                          },
-                      })
-                      .refine((val) => val, {
-                          message: '배송지를 선택해주세요.',
-                      })
-                : z.boolean().optional(),
         })
         .refine(
             (data) => {
@@ -354,3 +324,8 @@ export const getPaymentSchema = ({
                 path: ['cashReceipt', 'cashReceiptKey'],
             },
         );
+};
+
+export type PaymentReserveSchemaType = z.infer<
+    ReturnType<typeof getPaymentSchema>
+>;

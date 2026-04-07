@@ -1,3 +1,4 @@
+import accumulationKeys from '@/hooks/queryKeys/accumulationKeys';
 import addressKeys from '@/hooks/queryKeys/addressKeys';
 import bannerKeys from '@/hooks/queryKeys/bannerKeys';
 import boardKeys from '@/hooks/queryKeys/boardKeys';
@@ -42,4 +43,5 @@ export {
     reviewKeys,
     termsKeys,
     claimsKeys,
+    accumulationKeys,
 };

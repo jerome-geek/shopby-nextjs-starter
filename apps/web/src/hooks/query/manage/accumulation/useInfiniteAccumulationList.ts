@@ -1,28 +1,31 @@
-import { useInfiniteQuery, UseInfiniteQueryOptions } from '@tanstack/react-query';
+import {
+    keepPreviousData,
+    useInfiniteQuery,
+    UseInfiniteQueryOptions,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { accumulation } from '@/api/manage';
-import accumulationKeys from '@/hooks/queryKeys/accumulationKeys';
+import { accumulationKeys } from '@/hooks/queryKeys';
 import type {
-    AccumulationInfo,
     GetAccumulationsParams,
+    GetAccumulationsResponse,
 } from '@/models/manage/accumulation';
 
-export type InfiniteAccumulationPage = {
-    items: AccumulationInfo[];
-    totalCount: number;
-    pageNumber: number;
-};
+type AccumulationListPage = InfiniteResponse<GetAccumulationsResponse>;
 
 interface UseInfiniteAccumulationListParams {
     memberNo?: number;
     searchParams: GetAccumulationsParams;
     options?: Omit<
         UseInfiniteQueryOptions<
-            InfiniteAccumulationPage,
-            AxiosError<ShopByErrorResponse>
+            AccumulationListPage,
+            AxiosError<ShopByErrorResponse>,
+            InfiniteData<AccumulationListPage>,
+            ReturnType<(typeof accumulationKeys)['infiniteList']>,
+            number
         >,
-        'queryKey' | 'queryFn' | 'getNextPageParam' | 'initialPageParam'
+        'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
     >;
 }
 
@@ -31,9 +34,8 @@ const useInfiniteAccumulationList = ({
     searchParams,
     options,
 }: UseInfiniteAccumulationListParams) => {
-    return useInfiniteQuery<InfiniteAccumulationPage, AxiosError<ShopByErrorResponse>>({
-        queryKey: accumulationKeys.list(memberNo, searchParams),
-        initialPageParam: searchParams.pageNumber ?? 1,
+    return useInfiniteQuery({
+        queryKey: accumulationKeys.infiniteList(memberNo, searchParams),
         queryFn: async ({ pageParam }) => {
             const { data } = await accumulation.getAccumulations({
                 ...searchParams,
@@ -41,25 +43,25 @@ const useInfiniteAccumulationList = ({
             });
 
             return {
-                items: data.items,
-                totalCount: data.totalCount,
-                pageNumber: data.pageNumber,
+                data,
+                pageNumber: pageParam,
             };
         },
+        initialPageParam: searchParams.pageNumber ?? 1,
         getNextPageParam: (lastPage, allPages) => {
-            const loaded = allPages.reduce(
-                (acc, page) => acc + page.items.length,
-                0,
-            );
-            if (loaded >= lastPage.totalCount) {
-                return undefined;
+            if (!searchParams.pageSize) {
+                return;
             }
-            return lastPage.pageNumber + 1;
+
+            return searchParams.pageSize * allPages.length <
+                lastPage.data.totalCount
+                ? lastPage.pageNumber + 1
+                : undefined;
         },
+        placeholderData: keepPreviousData,
         ...options,
         enabled: (options?.enabled ?? true) && memberNo !== 0,
     });
 };
 
 export default useInfiniteAccumulationList;
-

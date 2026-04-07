@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Path, useFormContext, useWatch, Controller } from 'react-hook-form';
 import { overlay } from 'overlay-kit';
+import { useState } from 'react';
+import { Controller, Path, useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import * as styles from './index.css';
+import { AddressSearchModal } from '@/components/modal';
+import { InputCheckbox } from '@/components/ui';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import { InputLabel } from '@/components/ui/input/label';
 import Select from '@/components/ui/select';
-import InputCheckbox from '@/components/ui/input/checkbox';
-import { AddressSearchModal } from '@/components/modal';
-import { PaymentReserveSchemaType } from '@/schema';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
+import { PaymentReserveSchemaType } from '@/schema';
+import * as styles from './index.css';
 
 const DELIVERY_REQUEST_DIRECT = 'DIRECT';
 
@@ -67,19 +67,15 @@ const GuestShippingAddressForm = () => {
         );
 
     const handleSameAsOrderer = () => {
-        console.log(
-            '🚀 ~ handleSameAsOrderer ~ isSameAsOrderer:',
-            isSameAsOrderer,
-        );
         if (isSameAsOrderer) {
             setValue('shippingAddress.receiverName', '');
             setValue('shippingAddress.receiverContact1', {
                 prefix: '010',
                 middle: '',
-                last: '',
+                suffix: '',
             });
         } else {
-            setValue('shippingAddress.receiverName', ordererName);
+            setValue('shippingAddress.receiverName', ordererName ?? '');
             setValue(
                 'shippingAddress.receiverContact1.prefix',
                 ordererContact1Prefix,
@@ -89,7 +85,7 @@ const GuestShippingAddressForm = () => {
                 ordererContact1Middle,
             );
             setValue(
-                'shippingAddress.receiverContact1.last',
+                'shippingAddress.receiverContact1.suffix',
                 ordererContact1Suffix,
             );
         }
@@ -200,7 +196,7 @@ const GuestShippingAddressForm = () => {
                         placeholder='0000'
                         maxLength={4}
                         inputMode='numeric'
-                        {...register('shippingAddress.receiverContact1.last')}
+                        {...register('shippingAddress.receiverContact1.suffix')}
                     />
                 </div>
             </InputFieldContainer>

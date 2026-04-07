@@ -1,10 +1,11 @@
+import { find, keys, pipe } from '@fxts/core';
+
 import { PATHS } from '@/const/paths';
 import type {
     Banner,
     BannerAccount,
     GetBannersResponse,
 } from '@/models/display/banner';
-import { find, keys, pipe, sort, toArray } from '@fxts/core';
 
 /** protocol-relative URL (//)을 https://로 변환 */
 export function normalizeImageUrl(url: string | undefined): string | undefined {
@@ -51,7 +52,7 @@ const PATH_MAP = {
     [PATHS.SHOP.KIDS]: 'MAIN',
     [PATHS.SHOP.LIFE]: 'MAIN',
     [PATHS.PRODUCTS.DETAIL]: 'PRODUCT',
-    [PATHS.ORDER.CART]: 'CART',
+    [PATHS.CART]: 'CART',
     [PATHS.SIGNUP.COMPLETE]: 'MEMBER_JOIN_COMPLETE',
     [PATHS.MYPAGE.MAIN]: 'MY_PAGE',
     [PATHS.PRODUCTS.LIST]: 'PRODUCT_LIST',

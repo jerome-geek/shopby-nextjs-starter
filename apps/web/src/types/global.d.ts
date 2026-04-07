@@ -64,5 +64,16 @@ interface PagedList<T> extends ItemList<T> {
 
 /** 미리보기 파라미터 */
 interface Preview {
+    /* (관리자전용) 미리보기 전용 플래그 값 추가 */
     preview?: boolean;
+}
+
+interface InfiniteResponse<T> {
+    data: T;
+    pageNumber: number;
+}
+
+interface InfiniteData<TData> {
+    pages: TData[];
+    pageParams: number[];
 }

@@ -2,10 +2,10 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { myOrder } from '@/api/order';
-import ordersKeys from '@/hooks/queryKeys/ordersKeys';
+import { ordersKeys } from '@/hooks/queryKeys';
+import { useAuth } from '@/hooks/useAuth';
 import { OrderDetailResponse } from '@/models/order';
 import { GetOrderDetailParams } from '@/models/order/myOrder';
-import { checkLogin } from '@/utils/users';
 
 interface UseOrderDetailParams<T = OrderDetailResponse> {
     orderNo: string;
@@ -28,6 +28,8 @@ const useOrderDetail = <T = OrderDetailResponse>({
     params,
     options,
 }: UseOrderDetailParams<T>) => {
+    const isLogin = useAuth();
+
     return useQuery({
         queryKey: ordersKeys.detail(orderNo, memberNo, params),
         queryFn: async () => {
@@ -37,7 +39,7 @@ const useOrderDetail = <T = OrderDetailResponse>({
 
             return data;
         },
-        enabled: !!orderNo && checkLogin(),
+        enabled: !!orderNo && !!isLogin,
         ...options,
     });
 };

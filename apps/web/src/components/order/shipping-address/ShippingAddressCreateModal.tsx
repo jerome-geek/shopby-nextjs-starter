@@ -5,7 +5,7 @@ import { overlay } from 'overlay-kit';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ModalLayout } from '@/components/layout/modal';
+import { ModalLayout } from '@/components/layout';
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
 import { ErrorMessage } from '@/components/ui/form';
@@ -17,11 +17,11 @@ import Select from '@/components/ui/select';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 import { addressKeys } from '@/hooks/queryKeys';
-import { useDialog } from '@/hooks/utils';
+import { useDialog, useGlobal } from '@/hooks/utils';
 import { Address } from '@/models/order/shippingAddress';
 import {
-    BaseRegisterShippingAddressSchemaType,
-    getBaseRegisterShippingAddressSchema,
+    getRegisterShippingAddressSchema,
+    type RegisterShippingAddressSchemaType,
 } from '@/schema/shippingAddress.schema';
 
 interface ShippingAddressCreateModalProps {
@@ -45,10 +45,13 @@ const ShippingAddressCreateModal = ({
 
     const isEditMode = !!initialData;
 
-    const shippingAddressSchema = getBaseRegisterShippingAddressSchema();
+    const { isKorean } = useGlobal();
+    const registerShippingAddressSchema = getRegisterShippingAddressSchema({
+        isGlobalMall: !isKorean,
+    });
 
-    const methods = useForm<BaseRegisterShippingAddressSchemaType>({
-        resolver: zodResolver(shippingAddressSchema),
+    const methods = useForm<RegisterShippingAddressSchemaType>({
+        resolver: zodResolver(registerShippingAddressSchema),
         defaultValues: {
             countryCd: 'KR',
             addressType: 'BOOK',

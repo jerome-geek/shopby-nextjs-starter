@@ -8,6 +8,7 @@ import { Button } from '@/components/ui';
 import useCart from '@/hooks/cart/useCart';
 import { useOrderSheetMutation } from '@/hooks/mutations';
 import { useCartPrice } from '@/hooks/query/order/cart';
+import { useDialog } from '@/hooks/utils';
 import { CURRENCY } from '@/utils/currency';
 
 interface CartSummaryProps {
@@ -16,6 +17,8 @@ interface CartSummaryProps {
 
 const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
     const { t } = useTranslation();
+
+    const { openDialog } = useDialog();
 
     const { cartInfo } = useCart();
     const products = useMemo(() => {
@@ -74,6 +77,11 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
     } = useOrderSheetMutation();
 
     const onPurchaseClick = () => {
+        if (checkedCartNoList.length === 0) {
+            openDialog({ message: t('상품을 선택해주세요.') });
+            return;
+        }
+
         const orderData = {
             products,
             cartNos: checkedCartNoList,

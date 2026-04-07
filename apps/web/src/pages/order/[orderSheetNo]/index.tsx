@@ -1,6 +1,11 @@
+import { GetServerSideProps } from 'next';
+import { HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { paymentReserveSchema, PaymentReserveSchemaType } from '@/schema';
+import {
+    getPaymentSchema,
+    PaymentReserveSchemaType,
+} from '@/schema/payment.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
@@ -8,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useMyApp } from '@/hooks/myapp';
 import { useOrderSheetInitialize } from '@/hooks/order';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
-import { GetServerSideProps } from 'next';
+
 import OrderPaymentSummary from '@/components/order/payment-summary';
 import PaymentMethod from '@/components/order/payment-method';
 import Accumulation from '@/components/order/accumulation';
@@ -20,7 +25,6 @@ import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 import { useSb } from '@/hooks/libs/shopby';
 import payment from '@/utils/order/payment';
 import { useDialog } from '@/hooks/utils';
-import { HttpStatusCode } from 'axios';
 
 const OrderSheetPage = () => {
     const router = useRouter();
@@ -29,8 +33,14 @@ const OrderSheetPage = () => {
     const isLogin = useAuth();
     const { isMyApp } = useMyApp();
 
+    const isKorean = process.env.NEXT_PUBLIC_LOCALE === 'ko';
+    const paymentSchema = getPaymentSchema({
+        isLogin: !!isLogin,
+        isGlobalMall: !isKorean,
+    });
+
     const methods = useForm<PaymentReserveSchemaType>({
-        resolver: zodResolver(paymentReserveSchema),
+        resolver: zodResolver(paymentSchema),
         defaultValues: {
             orderSheetNo,
             orderer: {
@@ -45,7 +55,6 @@ const OrderSheetPage = () => {
             //     countryCd: 'KR',
             //     receiverZipCd: '',
             // },
-            // selectAddress: !isLogin,
             inAppYn: isMyApp ? 'Y' : 'N',
             member: !!isLogin,
             orderMemo: '',
@@ -95,17 +104,11 @@ const OrderSheetContent = ({
     });
     useSb({ orderSheet: orderSheetData });
 
-    const {
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useFormContext<PaymentReserveSchemaType>();
+    const { handleSubmit } = useFormContext<PaymentReserveSchemaType>();
 
     const onSubmit = handleSubmit(
         async (data) => {
-            console.log('🚀 ~ OrderSheetContent ~ data:', data);
             try {
-                console.log('🚀 ~ onSubmit ~ data:', data);
                 const { orderer, shippingAddress } = data;
                 const submitData = {
                     ...data,

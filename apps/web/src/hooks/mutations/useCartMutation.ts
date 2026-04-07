@@ -42,7 +42,7 @@ const useCartMutation = () => {
     return {
         /** 회원 장바구니 등록 */
         register: useMutation({
-            mutationFn: async ({ data }: { data: RegisterCartData[] }) =>
+            mutationFn: async ({ data }: { data: RegisterCartData }) =>
                 await cart.registerCart(data),
             onSuccess: () => {
                 invalidate();
@@ -54,7 +54,7 @@ const useCartMutation = () => {
 
         /** 회원 장바구니 수정 */
         modify: useMutation({
-            mutationFn: async ({ data }: { data: UpdateCartData[] }) =>
+            mutationFn: async ({ data }: { data: UpdateCartData }) =>
                 await cart.updateCart(data),
             onSuccess: () => {
                 invalidate();

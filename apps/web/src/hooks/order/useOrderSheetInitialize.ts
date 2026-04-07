@@ -15,9 +15,9 @@ import { type PhonePrefixType } from '@/const/form';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
 import { useOrderSheet } from '@/hooks/query/order/orderSheet';
-// import { useGlobal } from '@/hooks/utils';
 import { usePG } from '@/hooks/order';
-import { PaymentReserveSchemaType } from '@/schema';
+import { useGlobal } from '@/hooks/utils';
+import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
 
 const parsePhoneString = (phone: string) => {
     return {
@@ -54,16 +54,13 @@ const useOrderSheetInitialize = ({
     orderSheetNo,
     isLogin,
 }: UseOrderSheetInitializeProps) => {
-    const isKorean = process.env.NEXT_PUBLIC_LOCALE === 'ko';
-    const defaultMobileCountryCode = 'US';
-    // const { isKorean, defaultMobileCountryCode } = useGlobal();
+    const { isKorean, defaultMobileCountryCode } = useGlobal();
 
     const { setValue, reset } = useFormContext<PaymentReserveSchemaType>();
 
     const { data: profileData } = useProfile({
         options: { enabled: isLogin !== null },
     });
-    console.log('🚀 ~ useOrderSheetInitialize ~ profileData:', profileData);
     const { data: orderConfigurationData } = useOrderConfiguration();
     const { data: orderSheetData } = useOrderSheet({
         orderSheetNo,
@@ -72,10 +69,6 @@ const useOrderSheetInitialize = ({
         },
         options: { enabled: isLogin !== null },
     });
-    console.log(
-        '🚀 ~ useOrderSheetInitialize ~ orderSheetData:',
-        orderSheetData,
-    );
 
     // NOTE: PG 스크립트 세팅 (네이버페이는 별도로 설정)
     usePG({ pgType: 'NAVER_EASY_PAY' });
@@ -117,13 +110,22 @@ const useOrderSheetInitialize = ({
                 ...prev,
                 // TODO: 기존에 등록된 주소가 있다면 세팅 필요
                 shippingAddress: {
+                    receiverCity: '',
+                    receiverMobileCountryCd: '',
+                    receiverState: '',
+                    receiverFirstName: '',
+                    receiverLastName: '',
+
                     countryCd: mainAddress.countryCd || 'KR',
                     addressNo: mainAddress.addressNo || 0,
+                    addressName: mainAddress.addressName || '',
                     receiverName: mainAddress.receiverName || '',
                     receiverContact1: parsePhoneStringByHyphen(
                         mainAddress.receiverContact1,
                     ),
                     receiverAddress: mainAddress.receiverAddress || '',
+                    receiverJibunAddress:
+                        mainAddress.receiverJibunAddress || '',
                     receiverDetailAddress:
                         mainAddress.receiverDetailAddress || '',
                     receiverZipCd: mainAddress.receiverZipCd || '',
@@ -170,8 +172,8 @@ const useOrderSheetInitialize = ({
                 suffix: profileData.mobileNo?.slice(7) ?? '',
             });
         } else {
-            // setValue('orderer.ordererLastName', profileData.lastName);
-            // setValue('orderer.ordererFirstName', profileData.firstName);
+            setValue('orderer.ordererLastName', profileData.lastName ?? '');
+            setValue('orderer.ordererFirstName', profileData.firstName ?? '');
             // setValue('orderer.ordererContact1', {
             //     prefix: profileData.mobileNo ?? '',
             // });

@@ -125,14 +125,14 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
             customsIdNumber: a.customsIdNumber ?? null,
             addressName: a.addressName ?? null,
             receiverName: a.receiverName ?? null,
-            receiverLastName: a.lastName ?? null,
-            receiverFirstName: a.firstName ?? null,
-            receiverZipCd: a.receiverZipCd ?? null,
-            receiverAddress: a.receiverAddress ?? null,
+            receiverLastName: a.lastName ?? '',
+            receiverFirstName: a.firstName ?? '',
+            receiverZipCd: a.receiverZipCd ?? '',
+            receiverAddress: a.receiverAddress ?? '',
             receiverJibunAddress: a.receiverJibunAddress ?? '',
             receiverDetailAddress: a.receiverDetailAddress ?? '',
-            receiverState: a.state ?? null,
-            receiverCity: a.city ?? null,
+            receiverState: a.state ?? '',
+            receiverCity: a.city ?? '',
             receiverContact1,
             receiverContact2: a.receiverContact2 ?? null,
             addressMemo: a.addressMemo ?? null,
@@ -186,16 +186,16 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
 
     const onCountryClick = (value: CountryCdType) => {
         setValue('receiverMobileCountryCd', value);
-        reset((prev) => ({
-            ...prev,
+        reset({
+            ...getValues(),
             countryCd: value,
             receiverZipCd: '',
             receiverAddress: '',
             receiverDetailAddress: '',
             receiverJibunAddress: '',
             receiverState: '',
-            city: '',
-        }));
+            receiverCity: '',
+        });
     };
 
     const searchJapanAddress = async () => {

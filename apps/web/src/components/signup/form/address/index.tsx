@@ -16,8 +16,8 @@ import { ErrorMessage } from '@/components/ui/form';
 import InputField from '@/components/ui/input/field';
 import FieldContainer from '@/components/ui/input/FieldContainer';
 import Select from '@/components/ui/select';
-import { COUNTRY_CODE_LIST } from '@/const/form';
 import { useDialog, useGlobal } from '@/hooks/utils';
+import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
 
 const SignupFormAddress = () => {
     const { t } = useTranslation();
@@ -94,10 +94,10 @@ const SignupFormAddress = () => {
                                 <Select
                                     isSearchable
                                     name='countryCd'
-                                    options={COUNTRY_CODE_LIST}
+                                    options={MOBILE_COUNTRY_CODE_LIST}
                                     value={find(
                                         (item) => item.value === value,
-                                        COUNTRY_CODE_LIST,
+                                        MOBILE_COUNTRY_CODE_LIST,
                                     )}
                                     onChange={(selectedOption) => {
                                         if (selectedOption) {

@@ -6,9 +6,9 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import upload from '@/api/storage/image';
+import { InputCheckbox } from '@/components/ui';
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/Checkbox';
 import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
@@ -146,8 +146,8 @@ const ArticleWritePage = () => {
 
         return {
             writerName: isLogin
-                ? profileData?.memberName ?? articleData.registerName ?? ''
-                : articleData.registerName ?? '',
+                ? (profileData?.memberName ?? articleData.registerName ?? '')
+                : (articleData.registerName ?? ''),
             password: '',
             boardCategoryNo: articleData.categoryNo ?? undefined,
             articleTitle: articleData.title ?? '',

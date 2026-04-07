@@ -66,7 +66,7 @@ const useSb = ({
             return;
         }
 
-        const isCartPage = router.pathname === PATHS.ORDER.CART;
+        const isCartPage = router.pathname === PATHS.CART;
         if (isCartPage && cart) {
             window.ShopbyExternalScript.setGlobalObjectSb({
                 cart,

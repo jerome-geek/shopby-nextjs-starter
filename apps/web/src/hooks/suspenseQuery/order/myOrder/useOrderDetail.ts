@@ -1,17 +1,45 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { myOrder } from '@/api/order';
+import {
+    useSuspenseQuery,
+    UseSuspenseQueryOptions,
+} from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
-interface UseOrderDetailParams {
+import { myOrder } from '@/api/order';
+import { ordersKeys } from '@/hooks/queryKeys';
+import { OrderDetailResponse } from '@/models/order';
+import { GetOrderDetailParams } from '@/models/order/myOrder';
+
+interface UseOrderDetailParams<T = OrderDetailResponse> {
     orderNo: string;
+    memberNo?: number;
+    params?: GetOrderDetailParams;
+    options?: Omit<
+        UseSuspenseQueryOptions<
+            OrderDetailResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof ordersKeys)['detail']>
+        >,
+        'queryKey' | 'queryFn'
+    >;
 }
 
-export const useOrderDetail = ({ orderNo }: UseOrderDetailParams) => {
+const useOrderDetail = <T = OrderDetailResponse>({
+    orderNo,
+    memberNo = 0,
+    params,
+    options,
+}: UseOrderDetailParams<T>) => {
     return useSuspenseQuery({
-        queryKey: ['myOrderDetail', orderNo],
+        queryKey: ordersKeys.detail(orderNo, memberNo, params),
         queryFn: async () => {
-            const response = await myOrder.getOrderDetail(orderNo);
-            return response.data;
+            const { data } = await myOrder.getOrderDetail(orderNo, {
+                ...params,
+            });
+
+            return data;
         },
+        ...options,
     });
 };
 

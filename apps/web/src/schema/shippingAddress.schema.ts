@@ -2,8 +2,63 @@ import { z } from 'zod';
 
 import { CountryCdType } from '@/schema/common.schema';
 
-const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
+export const getRegisterShippingAddressSchema = ({
+    isGlobalMall,
+}: {
+    isGlobalMall?: boolean;
+}) => {
+    return z.object({
+        receiverLastName: isGlobalMall
+            ? z.string('성을 입력해주세요.')
+            : z.string().nullish(),
+        receiverJibunAddress: z.string().nonempty('지번을 입력해주세요.'),
+        defaultYn: z.enum(['Y', 'N']),
+        receiverName: isGlobalMall
+            ? z.string().nullish()
+            : z.string().nonempty('받으시는 분 이름을 입력해주세요.'),
+        addressType: z.enum([
+            'BOOK',
+            'RECENT',
+            'RECURRING_PAYMENT',
+            'RECURRING_PAYMENT_PRESENT',
+        ]),
+        customsIdNumber: z.string().nullish(),
+        countryCd: CountryCdType,
+        receiverZipCd: z
+            .string({
+                error: '우편번호를 입력해주세요.',
+            })
+            .nonempty('우편번호를 입력해주세요.'),
+        addressMemo: z.string().nullish(),
+        receiverDetailAddress: z.string().nonempty('상세 주소를 입력해주세요.'),
+        receiverCity: z.string().nullish(),
+        receiverMobileCountryCd: isGlobalMall
+            ? z.string().nonempty('연락처 국가코드를 선택해주세요.')
+            : z.string().nullish(),
+        receiverAddress: z.string().nonempty('주소를 입력해주세요.'),
+        receiverState: z.string().nullish(),
+        addressName: z.string().nullish(),
+        receiverFirstName: isGlobalMall
+            ? z.string('이름을 입력해주세요.')
+            : z.string().nullish(),
+        receiverContact1: z.object({
+            prefix: z.string().nonempty('연락처를 입력해주세요.'),
+            middle: isGlobalMall
+                ? z.string().nullish()
+                : z.string().nonempty('연락처를 입력해주세요.'),
+            suffix: isGlobalMall
+                ? z.string().nullish()
+                : z.string().nonempty('연락처를 입력해주세요.'),
+        }),
+        receiverContact2: z.string().nullish(),
+    });
+};
 
+export type RegisterShippingAddressSchemaType = z.infer<
+    ReturnType<typeof getRegisterShippingAddressSchema>
+>;
+
+const isGlobalMall = false;
 export const shippingAddressSchema = z.object({
     addressType: z.enum([
         'BOOK',

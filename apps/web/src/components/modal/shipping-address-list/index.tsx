@@ -6,7 +6,10 @@ import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ModalLayout } from '@/components/layout/modal';
+import { ModalLayout } from '@/components/layout';
+import * as styles from '@/components/modal/shipping-address-list/index.css';
+import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
+import { PhonePrefixType } from '@/const/form';
 import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
@@ -14,9 +17,6 @@ import { addressKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
 import { Address } from '@/models/order/shippingAddress';
 import { PaymentReserveSchemaType } from '@/schema';
-import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
-import * as styles from '@/components/modal/shipping-address-list/index.css';
-import { PhonePrefixType } from '@/const/form';
 
 interface ShippingAddressListModalProps {
     isOpen: boolean;
@@ -139,25 +139,25 @@ export const ShippingAddressListModal = ({
         setValue(
             'shippingAddress',
             {
-                defaultYn: address.defaultYn,
-                addressType: address.addressType,
-                // addressNo: address.addressNo,
+                // defaultYn: address.defaultYn,
+                // addressType: address.addressType,
+                addressNo: address.addressNo,
                 addressName: address.addressName,
                 receiverName: address.receiverName,
                 receiverZipCd: address.receiverZipCd,
                 receiverAddress: address.receiverAddress,
                 receiverDetailAddress: address.receiverDetailAddress || '',
-                receiverJibunAddress: address.receiverAddress || '',
+                receiverJibunAddress:
+                    address.receiverJibunAddress || address.receiverAddress,
                 countryCd: address.countryCd ?? 'KR',
-                receiverCity: address.city ?? undefined,
-                receiverState: address.state ?? undefined,
-                customsIdNumber: address.customsIdNumber ?? undefined,
-                receiverMobileCountryCd:
-                    address.receiverMobileCountryCd ?? undefined,
+                receiverCity: address.city || '',
+                receiverState: address.state || '',
+                customsIdNumber: address.customsIdNumber || '',
+                receiverMobileCountryCd: address.receiverMobileCountryCd || '',
                 receiverLastName:
-                    address.shippingEtcInfo?.receiverLastName ?? undefined,
+                    address.shippingEtcInfo?.receiverLastName || '',
                 receiverFirstName:
-                    address.shippingEtcInfo?.receiverFirstName ?? undefined,
+                    address.shippingEtcInfo?.receiverFirstName || '',
                 receiverContact1: {
                     prefix: prefix as PhonePrefixType,
                     middle: middle || '',
