@@ -20,7 +20,7 @@ import { fromError } from 'zod-validation-error';
 
 import { oauth2 } from '@/api/auth';
 import upload from '@/api/storage/image';
-import { AuthLayout } from '@/components/layout/auth';
+import { AuthLayout } from '@/components/layout';
 import {
     SignupFormAddress,
     SignupFormBirthday,
