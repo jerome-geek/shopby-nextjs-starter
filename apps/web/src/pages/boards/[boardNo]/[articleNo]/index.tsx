@@ -12,6 +12,7 @@ import { board } from '@/api/manage';
 import Comments from '@/components/board/comments';
 import { PasswordCheckBottomSheet } from '@/components/bottom-sheet/password-check';
 import { ReportBottomSheet } from '@/components/bottom-sheet/report';
+import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { PasswordCheckModal } from '@/components/modal/password-check';
 import { ReportModal } from '@/components/modal/report';
@@ -32,7 +33,7 @@ export default function BoardArticle({
     boardNo,
     articleNo,
     searchParams,
-    // seoData,
+    seoData,
     errorStatusCode,
     errorMessage,
     errorCode,
@@ -492,108 +493,119 @@ export default function BoardArticle({
     }
 
     return (
-        <ShopbyApiErrorBoundary
-            fallback={
-                <div style={{ padding: '100px', textAlign: 'center' }}>
-                    게시글 정보를 불러오는 중입니다...
-                </div>
-            }
-        >
-            <div className={styles.container}>
-                {!isMobile && (
-                    <h1 className={styles.title}>
-                        {currentBoardConfig?.name ?? '게시판'}
-                    </h1>
-                )}
+        <>
+            {seoData && <Seo type='article' {...seoData} />}
 
-                <div className={styles.articleContainer}>
-                    <div className={styles.articleHeader}>
-                        <h1 className={styles.articleTitle}>
-                            {boardArticleData?.title}
+            <ShopbyApiErrorBoundary
+                fallback={
+                    <div style={{ padding: '100px', textAlign: 'center' }}>
+                        게시글 정보를 불러오는 중입니다...
+                    </div>
+                }
+            >
+                <div className={styles.container}>
+                    {!isMobile && (
+                        <h1 className={styles.title}>
+                            {currentBoardConfig?.name ?? '게시판'}
                         </h1>
-                        <div className={styles.articleHeaderInfo}>
-                            <span className={styles.articleWriter}>
-                                {boardArticleData?.registerName}
-                            </span>
-                            <div className={styles.articleHeaderInfoRight}>
-                                <span className={styles.articleRegisterYmdt}>
-                                    {dayjs(
-                                        boardArticleData?.registerYmdt,
-                                    ).format('YYYY.MM.DD HH:mm')}
+                    )}
+
+                    <div className={styles.articleContainer}>
+                        <div className={styles.articleHeader}>
+                            <h1 className={styles.articleTitle}>
+                                {boardArticleData?.title}
+                            </h1>
+                            <div className={styles.articleHeaderInfo}>
+                                <span className={styles.articleWriter}>
+                                    {boardArticleData?.registerName}
                                 </span>
-                                <span className={styles.viewCount}>
-                                    조회 {boardArticleData?.viewCnt}
-                                </span>
+                                <div className={styles.articleHeaderInfoRight}>
+                                    <span
+                                        className={styles.articleRegisterYmdt}
+                                    >
+                                        {dayjs(
+                                            boardArticleData?.registerYmdt,
+                                        ).format('YYYY.MM.DD HH:mm')}
+                                    </span>
+                                    <span className={styles.viewCount}>
+                                        조회 {boardArticleData?.viewCnt}
+                                    </span>
+                                </div>
                             </div>
                         </div>
+                        <div className={styles.articleContent}>
+                            {boardArticleData?.content}
+                        </div>
+                        <ul className={styles.articleAttachmentList}>
+                            {boardArticleData?.attachments.map((attachment) => (
+                                <li
+                                    key={attachment.fileName}
+                                    className={styles.articleAttachmentListItem}
+                                >
+                                    <img
+                                        className={styles.attachmentImage}
+                                        src={attachment.downloadFileUrl}
+                                        alt={attachment.fileName}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    <div className={styles.articleContent}>
-                        {boardArticleData?.content}
-                    </div>
-                    <ul className={styles.articleAttachmentList}>
-                        {boardArticleData?.attachments.map((attachment) => (
-                            <li
-                                key={attachment.fileName}
-                                className={styles.articleAttachmentListItem}
-                            >
-                                <img
-                                    className={styles.attachmentImage}
-                                    src={attachment.downloadFileUrl}
-                                    alt={attachment.fileName}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <Row justify='end' gap='sm'>
-                    {isVisible.modifyButton ? (
-                        <>
-                            <button
-                                onClick={handleModifyClick}
-                                className={styles.bottomButton}
-                            >
-                                수정
-                            </button>
-                            <button
-                                onClick={handleDeleteClick}
-                                className={styles.bottomButton}
-                            >
-                                삭제
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <button
-                                onClick={handleRecommendClick}
-                                className={styles.bottomButton}
-                                aria-pressed={boardArticleData?.recommended}
-                            >
-                                추천 {boardArticleData?.recommendedCnt}
-                            </button>
-                            <button
-                                onClick={handleReportClick}
-                                className={styles.bottomButton}
-                            >
-                                {isReported ? '신고 취소' : '신고'}
-                            </button>
-                        </>
+                    <Row justify='end' gap='sm'>
+                        {isVisible.modifyButton ? (
+                            <>
+                                <button
+                                    onClick={handleModifyClick}
+                                    className={styles.bottomButton}
+                                >
+                                    수정
+                                </button>
+                                <button
+                                    onClick={handleDeleteClick}
+                                    className={styles.bottomButton}
+                                >
+                                    삭제
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={handleRecommendClick}
+                                    className={styles.bottomButton}
+                                    aria-pressed={boardArticleData?.recommended}
+                                >
+                                    추천 {boardArticleData?.recommendedCnt}
+                                </button>
+                                <button
+                                    onClick={handleReportClick}
+                                    className={styles.bottomButton}
+                                >
+                                    {isReported ? '신고 취소' : '신고'}
+                                </button>
+                            </>
+                        )}
+                    </Row>
+
+                    {isVisible.reply && (
+                        <Comments
+                            key={`${boardNo}-${articleNo}`}
+                            boardNo={boardNo}
+                            articleNo={articleNo}
+                            categoryNo={
+                                boardArticleData?.categoryNo ?? undefined
+                            }
+                        />
                     )}
-                </Row>
 
-                {isVisible.reply && (
-                    <Comments
-                        key={`${boardNo}-${articleNo}`}
-                        boardNo={boardNo}
-                        articleNo={articleNo}
-                        categoryNo={boardArticleData?.categoryNo ?? undefined}
-                    />
-                )}
-
-                <Link href={`/boards/${boardNo}`} className={styles.listLink}>
-                    목록으로
-                </Link>
-            </div>
-        </ShopbyApiErrorBoundary>
+                    <Link
+                        href={`/boards/${boardNo}`}
+                        className={styles.listLink}
+                    >
+                        목록으로
+                    </Link>
+                </div>
+            </ShopbyApiErrorBoundary>
+        </>
     );
 }
 
@@ -629,10 +641,10 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     const searchParams: GetArticleV2Params = {};
 
-    // let seoData = null;
+    let seoData = null;
 
     try {
-        await queryClient.fetchQuery({
+        const postData = await queryClient.fetchQuery({
             queryKey: boardKeys.postDetail(
                 String(boardNo),
                 articleNo,
@@ -652,65 +664,22 @@ export const getServerSideProps: GetServerSideProps = async ({
             },
         });
 
-        // // ── SEO 데이터 추출 ──
-        // if (productData?.baseInfo) {
-        //     const { baseInfo, brand, price, reviewRate, counter } = productData;
+        // ── SEO 데이터 추출 ──
+        if (postData) {
+            const title = postData.title;
 
-        //     const title = brand?.name
-        //         ? `[${brand.name}] ${baseInfo.productName}`
-        //         : baseInfo.productName;
+            const description = postData?.content?.slice(0, 120);
 
-        //     const description =
-        //         baseInfo.promotionText || baseInfo.productName || '';
+            const url = `${
+                process.env.NEXT_PUBLIC_BASE_URL || ''
+            }/boards/${boardNo}/${articleNo}`;
 
-        //     const image =
-        //         baseInfo.imageUrls?.[0] ||
-        //         baseInfo.imageUrlInfo?.[0]?.url ||
-        //         '';
-
-        //     const finalPrice =
-        //         price.salePrice -
-        //         (price.immediateDiscountAmt || 0) -
-        //         (price.additionDiscountAmt || 0);
-
-        //     const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/products/${productNo}`;
-
-        //     seoData = {
-        //         title,
-        //         description,
-        //         image,
-        //         url,
-        //         priceAmount: finalPrice,
-        //         brandName: brand?.name || '',
-        //         jsonLd: {
-        //             '@context': 'https://schema.org',
-        //             '@type': 'Product',
-        //             name: baseInfo.productName,
-        //             image,
-        //             description,
-        //             ...(brand?.name && {
-        //                 brand: {
-        //                     '@type': 'Brand',
-        //                     name: brand.name,
-        //                 },
-        //             }),
-        //             ...(reviewRate && {
-        //                 aggregateRating: {
-        //                     '@type': 'AggregateRating',
-        //                     ratingValue: reviewRate,
-        //                     reviewCount: counter?.reviewCnt || 0,
-        //                 },
-        //             }),
-        //             offers: {
-        //                 '@type': 'Offer',
-        //                 price: finalPrice,
-        //                 priceCurrency: 'KRW',
-        //                 availability: 'https://schema.org/InStock',
-        //                 url,
-        //             },
-        //         },
-        //     };
-        // }
+            seoData = {
+                title,
+                description,
+                url,
+            };
+        }
     } catch (error) {
         if (isAxiosError(error)) {
             const status =
@@ -744,7 +713,7 @@ export const getServerSideProps: GetServerSideProps = async ({
             boardNo: String(boardNo),
             articleNo,
             searchParams,
-            // seoData,
+            seoData,
             dehydratedState: dehydrate(queryClient),
         },
     };
