@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useEffect, useMemo } from 'react';
 import {
     FieldError,
     useFormContext,
@@ -18,20 +18,44 @@ import InputRadio from '@/components/ui/input/Radio';
 import Select from '@/components/ui/select';
 import { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 import { SignupFormSchemaType } from '@/schema';
-
 import * as styles from '@/components/signup/member-config/index.css';
+
+type MemberConfigProps =
+    GetMemberExtraInfoResponse['extraInfoContents'][number] & {
+        defaultData?: {
+            extraInfoNo: number;
+            extraInfoOptionNos: (string | number | boolean)[];
+            extraInfoOptionTextContent?: string;
+        };
+    };
 
 const MemberConfig = ({
     extraInfoNo,
     extraInfoName,
     extraInfoType,
     extraInfoOptions,
+    defaultData,
     status,
-}: GetMemberExtraInfoResponse['extraInfoContents'][number]) => {
+}: MemberConfigProps) => {
     const { t } = useTranslation();
 
-    const { setValue, control, clearErrors } =
-        useFormContext<SignupFormSchemaType>();
+    const { setValue, control } = useFormContext<SignupFormSchemaType>();
+
+    useEffect(() => {
+        if (!defaultData) {
+            return;
+        }
+
+        setValue(`extraInfo.${extraInfoKey}`, {
+            extraInfoNo,
+            extraInfoName,
+            extraInfoOptionNos: defaultData.extraInfoOptionNos.map(
+                (item) => String(item) || '',
+            ),
+            extraInfoOptionTextContent:
+                defaultData.extraInfoOptionTextContent ?? '',
+        });
+    }, [defaultData]);
 
     const extraInfoKey = `no_${extraInfoNo}`;
 
@@ -55,7 +79,7 @@ const MemberConfig = ({
 
             return !!extraInfoOptionNos?.includes(String(extraInfoOptionNo));
         },
-        [currentExtraInfo],
+        [currentExtraInfo?.extraInfoOptionNos],
     );
 
     const onCheckboxClick = useCallback(
@@ -198,6 +222,7 @@ const MemberConfig = ({
                     placeholder={t('{{extraInfoName}}을(를) 입력해 주세요.', {
                         extraInfoName: extraInfoName,
                     })}
+                    defaultValue={defaultData?.extraInfoOptionTextContent}
                     data-error={!!errorMessage}
                 />
             )}
@@ -239,18 +264,33 @@ const MemberConfig = ({
                 <Select
                     placeholder={t(extraInfoName)}
                     options={dropdownOptions}
+                    defaultValue={dropdownOptions?.find(
+                        (item) =>
+                            item.value === defaultData?.extraInfoOptionNos?.[0],
+                    )}
                     onChange={onDropdownChange}
                 />
             )}
 
             {extraInfoType === 'RADIOBUTTON' && (
-                <InputRadio onChange={onRadioChange} options={radioOptions} />
+                <InputRadio
+                    onChange={onRadioChange}
+                    options={radioOptions}
+                    defaultValue={
+                        String(defaultData?.extraInfoOptionNos?.[0]) ||
+                        undefined
+                    }
+                />
             )}
 
             {extraInfoType === 'IMAGE' && (
                 <>
                     <FileUpload
-                        initialFileList={[]}
+                        initialFileList={
+                            defaultData?.extraInfoOptionTextContent
+                                ? [defaultData.extraInfoOptionTextContent]
+                                : []
+                        }
                         setFileList={(fileList) => {
                             onFileChange(fileList[0] as File);
                         }}

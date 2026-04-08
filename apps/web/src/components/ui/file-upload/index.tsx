@@ -1,4 +1,4 @@
-import { isEmpty } from '@fxts/core';
+import { includes, isEmpty } from '@fxts/core';
 import { Plus, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -13,22 +13,30 @@ interface FileUploadProps {
     maxLength?: number;
 }
 
+type DeletedInitialImage = {
+    image: string;
+    index: number;
+};
+
 const FileUpload = ({
     initialFileList,
     setFileList: setFileListProps,
     maxLength = 3,
 }: FileUploadProps) => {
-    const { uploadFile, uploadFileHandler, deleteUploadFileImage } =
-        useFileUpload({
-            maxSize: 12 * 1024 * 1024,
-            maxLength,
-        });
+    const { uploadFileHandler, deleteUploadFileImage } = useFileUpload({
+        maxSize: 12 * 1024 * 1024,
+        maxLength,
+    });
 
     const [fileList, setFileList] = useState<(string | UploadFileBlob)[]>(
         () => {
             return initialFileList;
         },
     );
+
+    const [deletedInitialImages, setDeletedInitialImages] = useState<
+        DeletedInitialImage[]
+    >([]);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,7 +46,36 @@ const FileUpload = ({
 
     useEffect(() => {
         setFileListProps(fileList);
-    }, [fileList]);
+    }, [fileList, setFileListProps]);
+
+    const isUndoDeletedInitialImage =
+        !isEmpty(initialFileList) &&
+        !isEmpty(deletedInitialImages) &&
+        fileList.length < maxLength;
+
+    const restoreLastDeletedInitialImage = () => {
+        if (fileList.length >= maxLength) {
+            return;
+        }
+
+        const lastDeleted = deletedInitialImages.at(-1);
+
+        if (!lastDeleted) {
+            return;
+        }
+
+        setDeletedInitialImages((prev) => prev.slice(0, -1));
+
+        setFileList((prev) => {
+            const next = [...prev];
+            const safeIndex = Math.max(
+                0,
+                Math.min(lastDeleted.index, next.length),
+            );
+            next.splice(safeIndex, 0, lastDeleted.image);
+            return next;
+        });
+    };
 
     return (
         <div className={styles.imageContainer}>
@@ -102,6 +139,17 @@ const FileUpload = ({
                                     type='button'
                                     onClick={(e) => {
                                         e.stopPropagation();
+                                        const isInitialImage =
+                                            typeof image === 'string' &&
+                                            includes(image, initialFileList);
+
+                                        if (isInitialImage) {
+                                            setDeletedInitialImages((prev) => [
+                                                ...prev,
+                                                { image, index },
+                                            ]);
+                                        }
+
                                         setFileList((prev) =>
                                             prev.filter(
                                                 (_, prevIndex) =>
@@ -127,6 +175,16 @@ const FileUpload = ({
                         );
                     })}
                 </ul>
+            )}
+
+            {isUndoDeletedInitialImage && (
+                <button
+                    type='button'
+                    className={styles.undoButton}
+                    onClick={restoreLastDeletedInitialImage}
+                >
+                    삭제한 이미지 되돌리기
+                </button>
             )}
         </div>
     );

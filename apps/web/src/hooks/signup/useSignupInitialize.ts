@@ -17,9 +17,9 @@ const useSignupInitialize = ({
     provider,
 }: {
     reset: UseFormReset<SignupFormSchemaType>;
-    accessToken: string;
+    accessToken?: string;
     isSocialLogin: boolean;
-    key: string;
+    key?: string;
     provider: NcpOpenIdProviderType;
 }) => {
     const { data: mallData } = useMall();
@@ -33,12 +33,12 @@ const useSignupInitialize = ({
             'Shop-By-Authorization': `Bearer ${accessToken}`,
         },
         options: {
-            enabled: isSocialLogin && !isEmpty(accessToken),
+            enabled: isSocialLogin && !!accessToken,
         },
     });
 
     const { data: kcpCertificationResultData } = useKCPCertificationResult({
-        key,
+        key: key ?? '',
         options: {
             enabled: !!key,
         },

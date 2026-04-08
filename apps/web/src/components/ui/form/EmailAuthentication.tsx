@@ -172,8 +172,8 @@ export default function EmailAuthentication() {
                     {authStatus === 'VERIFIED'
                         ? t('인증 완료')
                         : authStatus === 'EXPIRED'
-                          ? t('인증번호 재발송')
-                          : t('인증번호 발송')}
+                        ? t('인증번호 재발송')
+                        : t('인증번호 발송')}
                 </span>
             </Button>
             {authStatus !== 'IDLE' && authStatus !== 'VERIFIED' && (

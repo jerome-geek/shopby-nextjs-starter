@@ -1,19 +1,35 @@
-import { Controller, useFormContext, useFormState } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
+import {
+    Controller,
+    useFormContext,
+    useFormState,
+    useWatch,
+} from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import EmailAuthentication from '@/components/signup/form/email/email-authentication';
 import { ErrorMessage } from '@/components/ui/form';
 import InputField from '@/components/ui/input/field';
 import FieldContainer from '@/components/ui/input/FieldContainer';
 import Select from '@/components/ui/select';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
-import EmailAuthentication from '@/components/signup/form/email/email-authentication';
 
-const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
+const SignupFormEmail = ({
+    disabled,
+    isDefaultDuplicated = true,
+}: {
+    disabled?: boolean;
+    isDefaultDuplicated?: boolean;
+}) => {
     const { t } = useTranslation();
 
     const { control, setValue } = useFormContext();
+
+    const isModifyEmailWatch = useWatch({
+        control,
+        name: 'isModifyEmail',
+    });
 
     const {
         errors: { email: emailError, isDuplicateEmail: isDuplicateEmailError },
@@ -21,7 +37,7 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
         name: ['email', 'isDuplicateEmail'],
     });
 
-    const [isDuplicated, setIsDuplicated] = useState(true);
+    const [isDuplicated, setIsDuplicated] = useState(isDefaultDuplicated);
 
     useEffect(() => {
         if (isDuplicated) {
@@ -30,6 +46,8 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
     }, [isDuplicated, setValue]);
 
     const emailDomainRef = useRef<HTMLInputElement>(null);
+
+    const isDisabled = disabled && !isModifyEmailWatch;
 
     return (
         <WithMemberJoinConfig name='email' label={t('이메일')}>
@@ -58,7 +76,7 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                         setIsDuplicated(true);
                                     }}
                                     placeholder={t('이메일을 입력해 주세요.')}
-                                    readOnly={disabled}
+                                    readOnly={isDisabled}
                                     data-error={
                                         !!emailError || !!isDuplicateEmailError
                                     }
@@ -76,7 +94,7 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                 <InputField
                                     ref={emailDomainRef}
                                     value={emailDomain}
-                                    readOnly={disabled}
+                                    readOnly={isDisabled}
                                     onChange={(e) => {
                                         onChange(
                                             `${emailId}@${e.target.value}`,
@@ -89,7 +107,7 @@ const SignupFormEmail = ({ disabled }: { disabled?: boolean }) => {
                                 />
                             </FieldContainer>
 
-                            {!disabled && (
+                            {!isDisabled && (
                                 <Select
                                     isSearchable
                                     placeholder={t('직접입력')}

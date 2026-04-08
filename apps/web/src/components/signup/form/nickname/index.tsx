@@ -11,8 +11,13 @@ import InputField from '@/components/ui/input/field';
 import FieldContainer from '@/components/ui/input/FieldContainer';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useToast } from '@/hooks/ui';
+import * as styles from '@/components/signup/form/index.css';
 
-const SignupFormNickname = () => {
+const SignupFormNickname = ({
+    isDefaultDuplicated = true,
+}: {
+    isDefaultDuplicated?: boolean;
+}) => {
     const { t } = useTranslation();
 
     const { register, getValues, setError, setValue, clearErrors, setFocus } =
@@ -22,7 +27,7 @@ const SignupFormNickname = () => {
         name: ['nickname', 'isDuplicateNickname'],
     });
 
-    const [isDuplicated, setIsDuplicated] = useState(true);
+    const [isDuplicated, setIsDuplicated] = useState(isDefaultDuplicated);
 
     const { data: mallData } = useMall();
 
@@ -97,9 +102,7 @@ const SignupFormNickname = () => {
                 <Button
                     frame='solid'
                     variant='apple'
-                    style={{
-                        height: '100%',
-                    }}
+                    className={styles.button}
                     onClick={checkDuplicateNickname}
                     disabled={checkDuplicateNicknameMutate.isPending}
                 >

@@ -43,4 +43,3 @@ export const inlineRow = style({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
 });
-

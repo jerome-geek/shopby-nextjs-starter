@@ -16,13 +16,18 @@ import { ErrorMessage } from '@/components/ui/form';
 import InputField from '@/components/ui/input/field';
 import FieldContainer from '@/components/ui/input/FieldContainer';
 import Select from '@/components/ui/select';
-import { useDialog, useGlobal } from '@/hooks/utils';
+import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
+import { overlay } from 'overlay-kit';
+import { AddressRegister, AddressSearchModal } from '@/components/modal';
+import * as styles from '@/components/signup/form/index.css';
 
 const SignupFormAddress = () => {
     const { t } = useTranslation();
 
     const { isKorean } = useGlobal();
+
+    const { isMobile } = useResponsive();
 
     const { register, control, getValues, setValue } = useFormContext();
 
@@ -53,32 +58,36 @@ const SignupFormAddress = () => {
         }
     };
 
-    // const addressRegister = (address: AddressRegister) => {
-    //     setValue('jibunAddress', address.receiverJibunAddress);
-    //     setValue('address', address.receiverAddress);
-    //     setValue('zipCd', address.receiverZipCd);
-    // };
+    const addressRegister = (address: AddressRegister) => {
+        setValue('jibunAddress', address.receiverJibunAddress, {
+            shouldValidate: true,
+        });
+        setValue('address', address.receiverAddress, {
+            shouldValidate: true,
+        });
+        setValue('zipCd', address.receiverZipCd, {
+            shouldValidate: true,
+        });
+    };
 
     const onOpenAddressSearchModal = () => {
-        // if (isMobile) {
-        //     overlay.open((props) => {
-        //         return (
-        //             // <AddressSearchBottomSheet
-        //             //     {...props}
-        //             //     addressRegister={addressRegister}
-        //             // />
-        //         );
-        //     });
-        // } else {
-        //     overlay.open((props) => {
-        //         return (
-        //             // <AddressSearchModal
-        //             //     {...props}
-        //             //     addressRegister={addressRegister}
-        //             // />
-        //         );
-        //     });
-        // }
+        if (isMobile) {
+            overlay.open((props) => {
+                return (
+                    // <AddressSearchBottomSheet
+                    //     {...props}
+                    //     addressRegister={addressRegister}
+                    // />
+                    <></>
+                );
+            });
+        } else {
+            overlay.open((props) => {
+                return (
+                    <AddressSearchModal {...props} onSelect={addressRegister} />
+                );
+            });
+        }
     };
 
     return (
@@ -120,10 +129,8 @@ const SignupFormAddress = () => {
                             <Button
                                 frame='solid'
                                 variant='apple'
-                                style={{
-                                    height: '100%',
-                                }}
                                 onClick={searchJapanAddress}
+                                className={styles.button}
                             >
                                 {t('우편번호 찾기')}
                             </Button>
@@ -160,9 +167,7 @@ const SignupFormAddress = () => {
                             <Button
                                 frame='solid'
                                 variant='apple'
-                                style={{
-                                    height: '100%',
-                                }}
+                                className={styles.button}
                                 onClick={onOpenAddressSearchModal}
                             >
                                 {t('우편번호 찾기')}

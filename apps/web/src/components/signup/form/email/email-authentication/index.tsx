@@ -1,8 +1,8 @@
+import { useMutation } from '@tanstack/react-query';
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import z from 'zod';
-import { useMutation } from '@tanstack/react-query';
 
 import { authentication } from '@/api/auth';
 import { profile } from '@/api/member';
@@ -13,12 +13,15 @@ import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { Column } from '@/components/ui/layout/flex';
 import { CertificationCheckContext } from '@/context/certificationCheck';
+import { useToast } from '@/hooks/ui';
 import { useTimer } from '@/hooks/useTimer';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import { useToast } from '@/hooks/ui';
 import { signupDuplicateCheckEmailSchema } from '@/schema';
-
+import * as formStyles from '@/components/signup/form/index.css';
 import * as styles from '@/components/signup/form/email/email-authentication/index.css';
+import useApiError from '@/hooks/useApiError';
+import { useRouter } from 'next/router';
+import { PATHS } from '@/const/paths';
 
 type AuthStatus = 'IDLE' | 'SENT' | 'VERIFIED' | 'EXPIRED';
 
@@ -59,9 +62,15 @@ const EmailAuthentication = ({
     disabled?: boolean;
     setIsDuplicated: (isDuplicated: boolean) => void;
 }) => {
+    const router = useRouter();
+
     const { isMobile } = useResponsive();
 
     const { addToast } = useToast();
+
+    const { handleError } = useApiError();
+
+    const isEditPage = router.pathname === PATHS.MYPAGE.EDIT;
 
     // 상태 정의: IDLE (초기), SENT (발송/대기), VERIFIED (인증완료), EXPIRED (시간초과)
     const [authStatus, dispatch] = useReducer(authReducer, 'IDLE');
@@ -84,6 +93,11 @@ const EmailAuthentication = ({
     const emailWatch = useWatch({
         control,
         name: 'email',
+    });
+
+    const isModifyEmailWatch = useWatch({
+        control,
+        name: 'isModifyEmail',
     });
 
     // 이메일 변경 시 인증 상태 초기화
@@ -176,7 +190,9 @@ const EmailAuthentication = ({
                     ),
                 });
                 setFocus('email');
-                setValue('isDuplicateEmail', true);
+                setValue('isDuplicateEmail', true, {
+                    shouldValidate: true,
+                });
                 return;
             }
 
@@ -188,14 +204,16 @@ const EmailAuthentication = ({
                 notiAccount: emailWatch,
             });
 
-            setValue('isDuplicateEmail', false);
+            setValue('isDuplicateEmail', false, {
+                shouldValidate: true,
+            });
             clearErrors('email');
             clearErrors('isDuplicateEmail');
             startTimer(remainTime);
             dispatch({ type: 'SEND_SUCCESS' });
             openDialog({ message: t('인증번호가 발송되었습니다.') });
         } catch (error) {
-            console.error('🚀 ~ error:', error);
+            await handleError(error);
         }
     };
 
@@ -231,6 +249,10 @@ const EmailAuthentication = ({
         }
     };
 
+    const onModifyEmailButtonClick = () => {
+        setValue('isModifyEmail', true);
+    };
+
     if (!isAuthenticationByEmail) {
         return (
             <Button
@@ -242,8 +264,26 @@ const EmailAuthentication = ({
                 style={{
                     height: isMobile ? '44px' : '50px',
                 }}
+                className={formStyles.button}
             >
                 {t('중복확인')}
+            </Button>
+        );
+    }
+
+    if (isEditPage && !isModifyEmailWatch) {
+        return (
+            <Button
+                type='button'
+                frame='solid'
+                variant='apple'
+                onClick={onModifyEmailButtonClick}
+                style={{
+                    height: isMobile ? '44px' : '50px',
+                }}
+                className={formStyles.button}
+            >
+                {t('이메일 변경')}
             </Button>
         );
     }
@@ -259,12 +299,13 @@ const EmailAuthentication = ({
                 style={{
                     height: isMobile ? '44px' : '50px',
                 }}
+                className={formStyles.button}
             >
                 {authStatus === 'VERIFIED'
                     ? t('인증 완료')
                     : authStatus === 'EXPIRED'
-                      ? t('인증번호 재발송')
-                      : t('인증번호 발송')}
+                    ? t('인증번호 재발송')
+                    : t('인증번호 발송')}
             </Button>
 
             {authStatus !== 'IDLE' && authStatus !== 'VERIFIED' && (
@@ -291,9 +332,7 @@ const EmailAuthentication = ({
                             variant='apple'
                             onClick={onCheckButtonClick}
                             disabled={authStatus === 'EXPIRED'}
-                            style={{
-                                height: '100%',
-                            }}
+                            className={formStyles.button}
                         >
                             {t('확인')}
                         </Button>

@@ -9,6 +9,18 @@ export const imageContainer = style({
     gap: '12px',
 });
 
+export const undoButton = style({
+    flexBasis: '100%',
+    width: 'fit-content',
+    padding: '8px 10px',
+    borderRadius: '6px',
+    border: `1px solid ${vars.color.gray['30']}`,
+    backgroundColor: vars.color.white,
+    color: vars.color.gray['70'],
+    fontSize: '12px',
+    fontWeight: '600',
+});
+
 export const imageList = style({
     display: 'flex',
     flexWrap: 'wrap',

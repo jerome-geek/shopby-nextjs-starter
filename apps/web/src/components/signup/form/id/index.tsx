@@ -1,11 +1,12 @@
+import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
-import { useEffect, useState } from 'react';
 
 import { profile } from '@/api/member';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
 import InputField from '@/components/ui/input/field';
@@ -46,13 +47,9 @@ const SignupFormId = () => {
     const checkDuplicateMemberId = async () => {
         const memberId = getValues('memberId');
 
-        console.log('memberId', memberId);
-
         try {
             signupDuplicateCheckMemberIdSchema.parse(memberId);
-            console.log('memberId is valid');
         } catch (error) {
-            console.log('memberId is invalid', error);
             if (error instanceof z.ZodError) {
                 setError('memberId', { message: error.issues[0].message });
             }
@@ -96,12 +93,11 @@ const SignupFormId = () => {
                     )}
                     data-error={!!memberIdError || !!isDuplicateMemberIdError}
                 />
+
                 <Button
                     frame='solid'
                     variant='apple'
-                    style={{
-                        height: '100%',
-                    }}
+                    className={styles.button}
                     onClick={checkDuplicateMemberId}
                     disabled={checkDuplicateMemberIdMutate.isPending}
                 >

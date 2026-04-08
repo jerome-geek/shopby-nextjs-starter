@@ -1,21 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
 import InputContainer from '@/components/ui/input/container';
 import Field from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
-import { PATHS } from '@/const/paths';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
-import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useDialog } from '@/hooks/utils';
+import { useProfile } from '@/hooks/suspenseQuery/member/profile';
 
 const schema = z.object({
     password: z.string().min(1, '비밀번호를 입력해 주세요.'),
@@ -23,15 +20,17 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export const MypageCheckAccount = () => {
+export const CheckAccountForm = ({
+    setPassword,
+}: {
+    setPassword: (password: string) => void;
+}) => {
     const { t } = useTranslation();
     const router = useRouter();
     const { openAsyncDialog } = useDialog();
 
     const { data: profileData } = useProfile();
     const isSocialLogin = Boolean(profileData?.providerType);
-
-    const [isVerifying, setIsVerifying] = useState(false);
 
     const methods = useForm<FormValues>({
         resolver: zodResolver(schema),
@@ -40,37 +39,22 @@ export const MypageCheckAccount = () => {
         defaultValues: { password: '' },
     });
 
-    const { register, handleSubmit } = methods;
+    const {
+        register,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = methods;
 
     const {
         checkPassword: { mutate: checkPasswordMutate },
     } = useProfileMutation();
 
     const onSubmit = handleSubmit(async ({ password }) => {
-        setIsVerifying(true);
-
         checkPasswordMutate(
             { data: { password } },
             {
                 onSuccess: async () => {
-                    const response = await fetch('/api/mypage/edit/issue', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ password }),
-                    });
-
-                    if (!response.ok) {
-                        await openAsyncDialog({
-                            message: t(
-                                '인증 토큰 발급에 실패했습니다. 잠시 후 다시 시도해주세요.',
-                            ),
-                        });
-
-                        setIsVerifying(false);
-                        return;
-                    }
-
-                    router.replace(PATHS.MYPAGE.EDIT);
+                    setPassword(password);
                 },
                 onError: async (error) => {
                     await openAsyncDialog({
@@ -79,8 +63,6 @@ export const MypageCheckAccount = () => {
                               t('비밀번호 인증에 실패했습니다.')
                             : t('비밀번호 인증에 실패했습니다.'),
                     });
-
-                    setIsVerifying(false);
                 },
             },
         );
@@ -124,7 +106,7 @@ export const MypageCheckAccount = () => {
                             type='submit'
                             frame='solid'
                             variant='primary'
-                            disabled={isSocialLogin || isVerifying}
+                            disabled={isSocialLogin || isSubmitting}
                         >
                             {t('확인')}
                         </Button>
@@ -134,9 +116,3 @@ export const MypageCheckAccount = () => {
         </div>
     );
 };
-
-MypageCheckAccount.getLayout = (page: React.ReactNode) => {
-    return <MypageLayout>{page}</MypageLayout>;
-};
-
-export default MypageCheckAccount;
