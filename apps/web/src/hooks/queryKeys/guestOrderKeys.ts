@@ -23,7 +23,7 @@ const guestOrderKeys = {
         ] as const,
 
     detailsByOrderOptionNo: (
-        orderOptionNo: string,
+        orderOptionNo: number,
         searchParams?: { claimType: ClaimType },
     ) => [...guestOrderKeys.details(), orderOptionNo, searchParams] as const,
 };

@@ -60,7 +60,7 @@ const ordersKeys = {
         ] as const,
 
     detailsByOrderOptionNo: (
-        orderOptionNo: string,
+        orderOptionNo: number,
         searchParams?: { claimType: ClaimType },
     ) => [...ordersKeys.details(), orderOptionNo, searchParams] as const,
 };

@@ -4,7 +4,7 @@ import { GetStaticProps } from 'next';
 import { banner } from '@/api/display';
 import SocialLoginList from '@/components/auth/social-login-list';
 import FetchBoundary from '@/components/common/FetchBoundary';
-import { AuthLayout } from '@/components/layout/auth';
+import { AuthLayout } from '@/components/layout';
 import { BANNER_ID } from '@/const/banner';
 import { bannerKeys } from '@/hooks/queryKeys';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';

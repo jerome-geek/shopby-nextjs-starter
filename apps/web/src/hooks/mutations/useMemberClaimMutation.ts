@@ -11,8 +11,7 @@ import {
     RequestExchangeData,
     RequestReturnMultipleOptionsData,
 } from '@/models/claim/member';
-import { ordersKeys } from '@/hooks/queryKeys';
-import claimsKeys from '@/hooks/queryKeys/claimsKeys';
+import { ordersKeys, claimsKeys } from '@/hooks/queryKeys';
 
 const useMemberClaimMutation = ({
     orderNo,
