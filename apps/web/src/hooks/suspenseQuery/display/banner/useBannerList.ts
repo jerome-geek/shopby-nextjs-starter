@@ -1,6 +1,6 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
