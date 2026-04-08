@@ -1,11 +1,11 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 import { useSearchParams } from 'next/navigation';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import { ChannelType } from '@/models';
-import {
+import type { ChannelType } from '@/models';
+import type {
     GetProductDetailParams,
     ProductDetailResponse,
 } from '@/models/product/product';

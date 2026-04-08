@@ -7,10 +7,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { cartKeys } from '@/hooks/queryKeys';
 import { useCartStore } from '@/store/useCartStore';
 import { useStore } from '@/hooks/utils/useStore';
-import { GetCartListResponse } from '@/models/order/cart';
+import type { GetCartListResponse } from '@/models/order/cart';
 import { useCartCount, useCartList } from '@/hooks/query/order/cart';
 import useGuestCartList from '@/hooks/query/order/guestOrder/useGuestCartList';
-import { GetCartData } from '@/models/order/guestOrder';
+import type { GetCartData } from '@/models/order/guestOrder';
 
 /**
  * 장바구니 관련 훅

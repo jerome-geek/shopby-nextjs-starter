@@ -1,10 +1,9 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import { ShopByErrorResponse } from '@/models/api/response';
-import { GetRelatedProductsResponse } from '@/models/product/product';
+import type { GetRelatedProductsResponse } from '@/models/product/product';
 
 interface UseRelatedProductListParams<T = GetRelatedProductsResponse> {
     productNo: number;

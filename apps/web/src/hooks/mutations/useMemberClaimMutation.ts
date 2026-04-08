@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import { istype AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { memberClaim } from '@/api/claim';
 import { useDialog } from '@/hooks/utils';
-import { CancelOptionsData } from '@/models/claim';
-import { CancelClaimData } from '@/models/claim/guest';
+import type { CancelOptionsData } from '@/models/claim';
+import type { CancelClaimData } from '@/models/claim/guest';
 import {
     CheckFreeGiftSatisfyData,
     RequestExchangeData,

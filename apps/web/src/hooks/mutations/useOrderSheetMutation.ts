@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
-import { isAxiosError } from 'axios';
+import { istype AxiosError } from 'axios';
 import { includes } from '@fxts/core';
 
 import { orderSheet } from '@/api/order';

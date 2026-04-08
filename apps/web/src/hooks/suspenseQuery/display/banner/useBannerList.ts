@@ -2,11 +2,11 @@ import {
     useSuspenseQuery,
     UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { banner } from '@/api/display';
 import { bannerKeys } from '@/hooks/queryKeys';
-import { GetBannersResponse } from '@/models/display/banner';
+import type { GetBannersResponse } from '@/models/display/banner';
 
 interface UseBannerListParams<T = GetBannersResponse> {
     type?: 'code' | 'id';

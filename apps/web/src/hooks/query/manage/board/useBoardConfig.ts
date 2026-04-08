@@ -1,9 +1,9 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
-import { GetBoardConfigResponse } from '@/models/manage/board';
+import type { GetBoardConfigResponse } from '@/models/manage/board';
 
 interface UseBoardConfigParams<T = GetBoardConfigResponse> {
     options?: Omit<

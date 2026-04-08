@@ -4,7 +4,7 @@ import {
     GetOrderListParams,
     GetOrderStatusSummaryParams,
 } from '@/models/order/myOrder';
-import { GetPreviousOrdersParams } from '@/models/order/previousOrder';
+import type { GetPreviousOrdersParams } from '@/models/order/previousOrder';
 
 const ordersKeys = {
     all: ['orders'] as const,

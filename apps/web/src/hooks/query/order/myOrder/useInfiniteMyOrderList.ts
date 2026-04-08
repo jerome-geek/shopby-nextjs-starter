@@ -4,7 +4,7 @@ import {
     useInfiniteQuery,
     InfiniteData,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { myOrder } from '@/api/order';
 import ordersKeys from '@/hooks/queryKeys/ordersKeys';

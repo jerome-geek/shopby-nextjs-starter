@@ -3,15 +3,15 @@ import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { guestClaim } from '@/api/claim';
+import { guestOrderKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
-import { CancelOptionsData } from '@/models/claim';
-import { CancelClaimData } from '@/models/claim/guest';
-import {
+import type { CancelOptionsData } from '@/models/claim';
+import type { CancelClaimData } from '@/models/claim/guest';
+import type {
     CheckFreeGiftSatisfyData,
     RequestExchangeData,
     RequestReturnMultipleOptionsData,
 } from '@/models/claim/member';
-import { guestOrderKeys } from '@/hooks/queryKeys';
 
 const useGuestClaimMutation = ({
     orderNo,

@@ -1,10 +1,10 @@
 import { isEmpty } from '@fxts/core';
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { shippingAddress } from '@/api/order';
 import addressKeys from '@/hooks/queryKeys/addressKeys';
-import { GetShippingAddressResponse } from '@/models/order/shippingAddress';
+import type { GetShippingAddressResponse } from '@/models/order/shippingAddress';
 
 interface UseShippingAddressParams<T = GetShippingAddressResponse> {
     addressNo: number;

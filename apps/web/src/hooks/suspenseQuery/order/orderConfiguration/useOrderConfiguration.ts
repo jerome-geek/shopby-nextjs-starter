@@ -1,12 +1,12 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { orderConfiguration } from '@/api/order';
 import { ordersKeys } from '@/hooks/queryKeys';
-import { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
+import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
 
 interface UseOrderConfigurationParams<T = GetOrderConfigsResponse> {
     options?: Omit<

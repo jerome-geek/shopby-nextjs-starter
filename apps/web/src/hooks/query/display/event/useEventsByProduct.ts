@@ -3,10 +3,10 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
-import { GetEventsByProductNoResponse } from '@/models/display/event';
+import type { GetEventsByProductNoResponse } from '@/models/display/event';
 
 interface UseEventParams<T = GetEventsByProductNoResponse> {
     productNo: number;

@@ -1,8 +1,8 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { memberConfig } from '@/api/member';
-import { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
+import type { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 
 interface UseMemberExtraInfoParams<T = GetMemberExtraInfoResponse> {
     options?: Omit<

@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from 'axios';
 
-import { DesignPopupData, GetAllPopupParams } from '@/models/display/popup';
+import type { DesignPopupData, GetAllPopupParams } from '@/models/display/popup';
 
 const popupKeys = {
     all: ['popup'] as const,

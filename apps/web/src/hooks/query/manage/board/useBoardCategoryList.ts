@@ -1,9 +1,9 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
-import { GetCategoriesResponse } from '@/models/manage/board';
+import type { GetCategoriesResponse } from '@/models/manage/board';
 
 interface UseBoardCategoryListParams<T = GetCategoriesResponse> {
     boardNo: string;

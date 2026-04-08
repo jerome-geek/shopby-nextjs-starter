@@ -1,5 +1,5 @@
-import { MutateOptions } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import { type MutateOptions } from '@tanstack/react-query';
+import type { AxiosResponse } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 
@@ -13,7 +13,7 @@ import {
 } from '@/hooks/mutations';
 import useDialog from '@/hooks/utils/useDialog';
 import { NextActionType } from '@/models';
-import { CancelClaimData } from '@/models/claim/guest';
+import type { CancelClaimData } from '@/models/claim/guest';
 import { useAuth } from '@/hooks/useAuth';
 
 interface useClaimProps {

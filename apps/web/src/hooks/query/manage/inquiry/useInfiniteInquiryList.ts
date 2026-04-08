@@ -3,7 +3,7 @@ import {
     useInfiniteQuery,
     type UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { inquiry } from '@/api/manage';
 import { inquiryKeys } from '@/hooks/queryKeys';

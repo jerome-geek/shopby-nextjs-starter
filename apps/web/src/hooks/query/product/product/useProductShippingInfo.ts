@@ -1,9 +1,9 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetProductsShippingInfoParams,
     GetProductsShippingInfoResponse,
 } from '@/models/product/product';

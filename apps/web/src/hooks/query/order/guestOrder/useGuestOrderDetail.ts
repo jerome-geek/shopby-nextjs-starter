@@ -1,11 +1,11 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { guestOrder } from '@/api/order';
 import { guestOrderKeys } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
-import { OrderDetailResponse } from '@/models/order';
-import { GetOrderDetailParams } from '@/models/order/myOrder';
+import type { OrderDetailResponse } from '@/models/order';
+import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
 interface UseGuestOrderDetailParams<T = OrderDetailResponse> {
     orderNo: string;

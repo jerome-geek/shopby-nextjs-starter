@@ -1,8 +1,8 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { cart } from '@/api/order';
-import { GetCartCountResponse } from '@/models/order/cart';
+import type { GetCartCountResponse } from '@/models/order/cart';
 import { cartKeys } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
 

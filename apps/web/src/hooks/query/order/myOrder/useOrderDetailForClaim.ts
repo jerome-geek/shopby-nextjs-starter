@@ -1,10 +1,10 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { myOrder } from '@/api/order';
 import ordersKeys from '@/hooks/queryKeys/ordersKeys';
 import { ClaimType } from '@/models';
-import { OrderDetailResponse } from '@/models/order';
+import type { OrderDetailResponse } from '@/models/order';
 
 interface UseOrderDetailForClaimParams<T = OrderDetailResponse> {
     orderNo: string;

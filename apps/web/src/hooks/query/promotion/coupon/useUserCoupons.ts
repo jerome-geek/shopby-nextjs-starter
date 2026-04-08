@@ -5,8 +5,8 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import coupon from '@/api/promotion/coupon';
-import couponKeys from '@/hooks/queryKeys/couponKeys';
+import { coupon } from '@/api/promotion';
+import { couponKeys } from '@/hooks/queryKeys';
 import type {
     GetUserCouponsParams,
     GetUserCouponsResponse,
@@ -15,7 +15,12 @@ import type {
 interface UseUserCouponsParams<T = GetUserCouponsResponse> {
     params: GetUserCouponsParams;
     options?: Omit<
-        UseQueryOptions<GetUserCouponsResponse, AxiosError, T>,
+        UseQueryOptions<
+            GetUserCouponsResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof couponKeys)['list']>
+        >,
         'queryKey' | 'queryFn'
     >;
 }
@@ -28,6 +33,7 @@ const useUserCoupons = <T = GetUserCouponsResponse>({
         queryKey: couponKeys.list(params),
         queryFn: async () => {
             const { data } = await coupon.getUserCoupons(params);
+
             return data;
         },
         placeholderData: keepPreviousData,

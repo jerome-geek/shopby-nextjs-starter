@@ -1,4 +1,4 @@
-import { GetEventInfoParams } from '@/models/display';
+import type { GetEventInfoParams } from '@/models/display';
 import {
     GetEventParams,
     GetEventProductDisplaySectionParams,

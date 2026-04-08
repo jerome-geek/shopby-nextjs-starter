@@ -1,5 +1,5 @@
 import { ClaimType } from '@/models';
-import { GetOrderDetailParams } from '@/models/order/myOrder';
+import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
 const guestOrderKeys = {
     all: ['guestOrder'] as const,

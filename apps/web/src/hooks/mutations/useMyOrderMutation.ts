@@ -1,12 +1,12 @@
 import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import { istype AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { myOrder } from '@/api/order';
 import { ordersKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
-import { RequestCashReceiptData } from '@/models/order/myOrder';
+import type { RequestCashReceiptData } from '@/models/order/myOrder';
 
 const useMyOrderMutation = ({
     orderNo,

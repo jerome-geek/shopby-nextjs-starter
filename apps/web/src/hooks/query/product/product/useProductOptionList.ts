@@ -1,10 +1,10 @@
 import { useSearchParams } from 'next/navigation';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { productOption } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetProductOptionParams,
     ProductOptionResponse,
 } from '@/models/product/productOption';

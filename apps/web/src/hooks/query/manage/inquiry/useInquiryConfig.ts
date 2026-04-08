@@ -1,9 +1,9 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { inquiry } from '@/api/manage';
 import { inquiryKeys } from '@/hooks/queryKeys';
-import { GetInquiryConfigResponse } from '@/models/manage/inquiry';
+import type { GetInquiryConfigResponse } from '@/models/manage/inquiry';
 
 interface UseInquiryConfigParams<T = GetInquiryConfigResponse> {
     options?: Omit<

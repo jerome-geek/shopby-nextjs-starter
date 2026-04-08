@@ -1,5 +1,5 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { terms } from '@/api/manage';
 import { termsKeys } from '@/hooks/queryKeys';

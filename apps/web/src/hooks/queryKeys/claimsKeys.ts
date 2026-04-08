@@ -1,5 +1,5 @@
-import { EstimatedRefundPriceData } from '@/models/claim';
-import { GetClaimListParams } from '@/models/claim/member';
+import type { EstimatedRefundPriceData } from '@/models/claim';
+import type { GetClaimListParams } from '@/models/claim/member';
 
 const claimsKeys = {
     all: ['claims'] as const,

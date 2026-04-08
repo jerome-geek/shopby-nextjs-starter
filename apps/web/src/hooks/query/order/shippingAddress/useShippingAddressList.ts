@@ -1,8 +1,8 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { shippingAddress } from '@/api/order';
-import { GetShippingAddressListResponse } from '@/models/order/shippingAddress';
+import type { GetShippingAddressListResponse } from '@/models/order/shippingAddress';
 import addressKeys from '@/hooks/queryKeys/addressKeys';
 
 interface UseShippingAddressListParams<T = GetShippingAddressListResponse> {

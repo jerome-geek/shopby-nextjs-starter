@@ -1,14 +1,14 @@
 import {
     InfiniteData,
-    UseInfiniteQueryOptions,
+    type UseInfiniteQueryOptions,
     keepPreviousData,
     useInfiniteQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import {
+import type {
     ProductSearchParams,
     ProductsSearchResponse,
 } from '@/models/product/product';

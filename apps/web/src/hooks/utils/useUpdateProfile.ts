@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { AxiosError, HttpStatusCode, isAxiosError } from 'axios';
+import { type AxiosError, HttpStatusCode, istype AxiosError } from 'axios';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';

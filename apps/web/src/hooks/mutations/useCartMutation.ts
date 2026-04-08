@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import { istype AxiosError } from 'axios';
 
 import { cart, guestOrder } from '@/api/order';
 import { cartKeys } from '@/hooks/queryKeys';
@@ -9,7 +9,7 @@ import {
     RegisterCartData,
     UpdateCartData,
 } from '@/models/order/cart';
-import { GetCartData, GetCartParams } from '@/models/order/guestOrder';
+import type { GetCartData, GetCartParams } from '@/models/order/guestOrder';
 import { useToast } from '@/hooks/ui';
 
 const useCartMutation = () => {

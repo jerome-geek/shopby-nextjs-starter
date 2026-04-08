@@ -3,11 +3,11 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { cart } from '@/api/order';
 import { cartKeys } from '@/hooks/queryKeys';
-import { GetCartListParams, GetCartListResponse } from '@/models/order/cart';
+import type { GetCartListParams, GetCartListResponse } from '@/models/order/cart';
 import { useAuth } from '@/hooks/useAuth';
 
 interface UseCartListParams<T = GetCartListResponse> {

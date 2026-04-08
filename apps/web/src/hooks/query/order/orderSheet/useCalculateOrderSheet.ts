@@ -3,7 +3,7 @@ import {
     useQuery,
     UseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { orderSheet } from '@/api/order';
 import { orderSheetKeys } from '@/hooks/queryKeys';

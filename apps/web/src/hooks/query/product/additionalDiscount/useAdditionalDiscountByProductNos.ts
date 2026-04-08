@@ -1,8 +1,8 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { additionalDiscount } from '@/api/product';
-import {
+import type {
     GetAdditionalDiscountByProductNosParams,
     GetAdditionalDiscountByProductNosResponse,
 } from '@/models/product/additionalDiscount';
