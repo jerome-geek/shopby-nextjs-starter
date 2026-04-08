@@ -1,3 +1,5 @@
+import { OrderDirectionType } from '@/models';
+
 // ===== Request Types =====
 
 /** SNS URL로 레시피 생성 요청 */
@@ -22,6 +24,8 @@ export interface RegisterManualTempImageItem {
     size: number;
     /** 파일 content type */
     contentType: string;
+    /** 정렬 순서 */
+    sortOrder: number;
 }
 
 /** 수동 레시피 임시 이미지 등록 요청 */
@@ -96,6 +100,51 @@ export interface BookmarkRecipeData {
 export interface GetRecipeExposureGroupParams {
     /** 노출 개수 */
     exposureCount?: number;
+}
+
+/** 레시피 필터 타입 */
+export type RecipeFilterType = 'LIKED' | 'CREATED';
+
+/** 레시피 검색 파라미터 (내 레시피/좋아요) */
+export interface SearchRecipesParams {
+    /** 정렬 방향 (ASC: 최신 순, DESC: 오래된 순) */
+    order?: OrderDirectionType;
+    /** 페이지 번호 */
+    page?: number;
+    /** 페이지당 노출 개수 */
+    take?: number;
+    /** 검색 키워드 */
+    keyword?: string;
+    /** 필터 (LIKED: 좋아요 한 레시피, CREATED: 내가 생성한 레시피) */
+    filter?: RecipeFilterType;
+    /** 카테고리 번호 */
+    categoryId?: number;
+}
+
+/** 전체 레시피 검색 파라미터 */
+export interface SearchPublicRecipesParams {
+    /** 정렬 방향 (ASC: 최신 순, DESC: 오래된 순) */
+    order?: OrderDirectionType;
+    /** 페이지 번호 */
+    page?: number;
+    /** 페이지당 노출 개수 */
+    take?: number;
+    /** 검색 키워드 */
+    keyword?: string;
+    /** 카테고리 번호 */
+    categoryId?: number;
+}
+
+/** 전체 컬렉션 검색 파라미터 */
+export interface SearchPublicCollectionsParams {
+    /** 정렬 방향 (ASC: 최신 순, DESC: 오래된 순) */
+    order?: OrderDirectionType;
+    /** 페이지 번호 */
+    page?: number;
+    /** 페이지당 노출 개수 */
+    take?: number;
+    /** 검색 키워드 */
+    keyword?: string;
 }
 
 // ===== Response Types =====
@@ -198,4 +247,16 @@ export interface RecipeExposureGroupItem {
 export interface RecipeExposureGroupResponse {
     groupId: string;
     groups: RecipeExposureGroupItem[];
+}
+
+/** 페이징 포함 레시피 응답 */
+export interface SearchRecipesResponse {
+    items: RecipeDetail[];
+    total: number;
+}
+
+/** 페이징 포함 컬렉션 응답 */
+export interface SearchCollectionsResponse {
+    items: BookmarkedRecipeCollection[];
+    total: number;
 }

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { isAxiosError, type AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
@@ -39,10 +39,10 @@ const useProfileMutation = () => {
                 }),
             onError: (error) => {
                 const errorMessage = isAxiosError(error)
-                    ? error.response?.data.message ??
+                    ? (error.response?.data.message ??
                       t(
                           '회원가입에 실패했습니다.<br />관리자에게 문의해주세요.',
-                      )
+                      ))
                     : t(
                           '회원가입에 실패했습니다.<br />관리자에게 문의해주세요.',
                       );

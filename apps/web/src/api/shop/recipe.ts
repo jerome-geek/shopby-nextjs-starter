@@ -13,6 +13,11 @@ import {
     RecipeDetail,
     RecipeExposureGroupResponse,
     RegisterManualTempImagesData,
+    SearchCollectionsResponse,
+    SearchPublicCollectionsParams,
+    SearchPublicRecipesParams,
+    SearchRecipesParams,
+    SearchRecipesResponse,
     UpdateRecipeCollectionData,
 } from '@/models/shop/recipe';
 
@@ -31,6 +36,26 @@ const recipe = {
     },
 
     /**
+     * 공용 이미지 업로드 (Geek 백엔드)
+     */
+    upload: (formData: FormData, options?: AxiosRequestConfig) => {
+        return geekRequest<{
+            filePath: string;
+            originFileName: string;
+            size: number;
+            contentType: string;
+        }>({
+            method: 'POST',
+            url: '/common/upload',
+            data: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            ...options,
+        });
+    },
+
+    /**
      * 수동 레시피 임시 이미지 등록
      *  - 수동 레시피 작성 시 사용할 임시 이미지를 등록합니다
      */
@@ -38,7 +63,17 @@ const recipe = {
         data: RegisterManualTempImagesData,
         options?: AxiosRequestConfig,
     ) => {
-        return geekRequest({
+        return geekRequest<{
+            memberNo: number;
+            tempImages: {
+                sno: number;
+                uploadPath: string;
+                imageUrl: string;
+                sortOrder: number;
+                //TODO: TEMP or ....
+                status: string;
+            }[];
+        }>({
             method: 'POST',
             url: '/shop/recipe/manual/temp-images',
             data,
@@ -251,6 +286,54 @@ const recipe = {
         return geekRequest({
             method: 'DELETE',
             url: `/shop/recipe/${sno}/bookmark`,
+            ...options,
+        });
+    },
+
+    /**
+     * 내 레시피/북마크 검색
+     *  - 사용자가 생성하거나 북마크한 레시피를 검색합니다
+     */
+    searchMyRecipes: (
+        params: SearchRecipesParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return geekRequest<SearchRecipesResponse>({
+            method: 'GET',
+            url: '/shop/recipe/search',
+            params,
+            ...options,
+        });
+    },
+
+    /**
+     * 전체 레시피 검색
+     *  - 공개된 모든 레시피를 검색합니다
+     */
+    searchPublicRecipes: (
+        params: SearchPublicRecipesParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return geekRequest<SearchRecipesResponse>({
+            method: 'GET',
+            url: '/shop/recipe/public-search',
+            params,
+            ...options,
+        });
+    },
+
+    /**
+     * 전체 컬렉션 검색
+     *  - 공개된 모든 레시피 컬렉션을 검색합니다
+     */
+    searchPublicCollections: (
+        params: SearchPublicCollectionsParams,
+        options?: AxiosRequestConfig,
+    ) => {
+        return geekRequest<SearchCollectionsResponse>({
+            method: 'GET',
+            url: '/shop/recipe/collections/public-search',
+            params,
             ...options,
         });
     },
