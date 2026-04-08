@@ -13,6 +13,7 @@ import { InputLabel } from '@/components/ui/input/label';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useDialog } from '@/hooks/utils';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
+import useSnsLogin from '@/hooks/useSnsLogin';
 
 const schema = z.object({
     password: z.string().min(1, '비밀번호를 입력해 주세요.'),
@@ -38,6 +39,12 @@ export const CheckAccountForm = ({
         reValidateMode: 'onChange',
         defaultValues: { password: '' },
     });
+
+    const { socialLoginList } = useSnsLogin();
+
+    const socialInfo = socialLoginList.find(
+        (item) => item.providerType === profileData?.providerType,
+    );
 
     const {
         register,
@@ -77,11 +84,30 @@ export const CheckAccountForm = ({
                     </p>
 
                     {isSocialLogin ? (
-                        <p className={card.listCaption}>
-                            {t(
-                                '소셜 로그인 회원은 소셜 인증 플로우로 연결이 필요합니다.',
+                        <>
+                            <p className={card.listCaption}>
+                                {t(
+                                    '소셜 로그인 회원은 소셜 인증 플로우로 연결이 필요합니다.',
+                                )}
+                            </p>
+
+                            {socialInfo && (
+                                <Button
+                                    type='button'
+                                    frame='solid'
+                                    variant={socialInfo.provider}
+                                    onClick={() => {
+                                        socialInfo.onClick();
+                                    }}
+                                    style={{
+                                        marginTop: 16,
+                                    }}
+                                >
+                                    <socialInfo.Icon />
+                                    <span>{socialInfo.label}</span>
+                                </Button>
                             )}
-                        </p>
+                        </>
                     ) : (
                         <InputContainer style={{ marginTop: 16 }}>
                             <InputLabel isRequired>{t('비밀번호')}</InputLabel>

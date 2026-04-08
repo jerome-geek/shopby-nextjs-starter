@@ -5,6 +5,7 @@ import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
 
 import upload from '@/api/storage/image';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
@@ -41,9 +42,10 @@ import {
 } from '@/schema/profile.schema';
 import { accessTokenCookie } from '@/utils/cookie';
 import useSnsLogin from '@/hooks/useSnsLogin';
-import { useContext } from 'react';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import * as signupFormStyles from '@/components/signup/form/index.css';
+import { profile } from '@/api/member';
+import { useMyApp } from '@/hooks/myapp';
 
 export const EditForm = ({
     password,
@@ -54,6 +56,8 @@ export const EditForm = ({
 }) => {
     const { t } = useTranslation();
     const router = useRouter();
+
+    const { isMyApp, handleSendPasswordModify } = useMyApp();
 
     const queryClient = useQueryClient();
 
@@ -143,7 +147,7 @@ export const EditForm = ({
         setError,
     } = methods;
 
-    const { formValueDisabled } = useEditInitialize({
+    const { formValueDisabled, key } = useEditInitialize({
         reset,
         profileData,
     });
@@ -264,12 +268,31 @@ export const EditForm = ({
                 data: updateData,
             });
 
+            if (key) {
+                await profile.updateProfileByCertification(
+                    {
+                        key,
+                    },
+                    {
+                        headers: {
+                            'Shop-By-Authorization': `Bearer ${accessToken}`,
+                        },
+                    },
+                );
+
+                queryClient.removeQueries();
+            } else {
+                queryClient.invalidateQueries({
+                    queryKey: profileKeys.all,
+                });
+            }
+
+            if (data.isModifyPassword && isMyApp) {
+                handleSendPasswordModify();
+            }
+
             addToast({
                 message: t('회원정보가 변경되었습니다.'),
-            });
-
-            queryClient.invalidateQueries({
-                queryKey: profileKeys.all,
             });
 
             router.replace(PATHS.MYPAGE.MAIN);

@@ -5,7 +5,8 @@ import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useMall } from '@/hooks/query/admin/mall';
 import { GetProfileResponse } from '@/models/member/profile';
 import { UpdateProfileSchemaType } from '@/schema/profile.schema';
-import { useGlobal } from '@/hooks/utils';
+import { useDialog, useGlobal, useKcpCertification } from '@/hooks/utils';
+import { profile } from '@/api/member';
 
 const useEditInitialize = ({
     reset,
@@ -15,6 +16,8 @@ const useEditInitialize = ({
     profileData: GetProfileResponse;
 }) => {
     const { data: mallData } = useMall();
+
+    const { openDialog } = useDialog();
 
     const { isKorean } = useGlobal();
 
@@ -39,6 +42,41 @@ const useEditInitialize = ({
                   profileData.sex !== 'X'
             : false,
     );
+
+    const [key, setKey] = useState('');
+    useKcpCertification({
+        onNext: async (data) => {
+            const isAuth = profileData.principalCertificated;
+
+            if (isMobileAuth && isAuth) {
+                const { data: checkDuplicateMySelfData } =
+                    await profile.checkDuplicateCIMySelf({ ci: data.ci });
+
+                if (!checkDuplicateMySelfData.matched) {
+                    openDialog({
+                        message:
+                            '본인인증 결과가 가입한 회원과 일치하지 않습니다.',
+                    });
+                    return;
+                }
+            }
+
+            setKey(data.key);
+            setIsCertificated(true);
+            reset(
+                (prev) => ({
+                    ...prev,
+                    memberName: data.name,
+                    mobileNo: data.phone,
+                    birthday: data.birthday?.replace(/-/g, ''),
+                    sex: data.sexCode === '01' ? 'M' : 'F',
+                }),
+                {
+                    keepFieldsRef: true,
+                },
+            );
+        },
+    });
 
     useEffect(() => {
         if (!mallData) {
@@ -78,7 +116,7 @@ const useEditInitialize = ({
     };
 
     return {
-        isSocialLogin,
+        key,
         formValueDisabled,
     };
 };

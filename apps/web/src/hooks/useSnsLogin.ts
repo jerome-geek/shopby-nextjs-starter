@@ -241,6 +241,7 @@ const useSnsLogin = () => {
     const socialLoginList = [
         {
             provider: 'kakao' as const,
+            providerType: 'KAKAO' as const,
             label: t('카카오로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
             isAvailable: includes(
@@ -252,6 +253,7 @@ const useSnsLogin = () => {
         },
         {
             provider: 'kakao-sync' as const,
+            providerType: 'KAKAO_SYNC' as const,
             label: t('카카오로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
             isAvailable: includes(
@@ -263,6 +265,7 @@ const useSnsLogin = () => {
         },
         {
             provider: 'naver' as const,
+            providerType: 'NAVER' as const,
             label: t('네이버로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
             isAvailable: includes(
@@ -274,6 +277,7 @@ const useSnsLogin = () => {
         },
         {
             provider: 'apple' as const,
+            providerType: 'APPLE' as const,
             label: t('Apple로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
             isAvailable: includes(
@@ -285,6 +289,7 @@ const useSnsLogin = () => {
         },
         {
             provider: 'facebook' as const,
+            providerType: 'FACEBOOK' as const,
             label: t('페이스북으로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
             isAvailable: includes(
@@ -296,6 +301,7 @@ const useSnsLogin = () => {
         },
         {
             provider: 'google' as const,
+            providerType: 'GOOGLE' as const,
             label: t('구글로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
             isAvailable: includes(
@@ -307,6 +313,7 @@ const useSnsLogin = () => {
         },
         {
             provider: 'line' as const,
+            providerType: 'LINE' as const,
             label: t('라인으로 로그인'),
             // TODO: SNS 연동 이후 수정 필요
             isAvailable: includes(
