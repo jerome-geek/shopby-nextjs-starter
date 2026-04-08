@@ -1,11 +1,11 @@
 import {
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
-import {
+import type {
     GetMyProductReviewsParams,
     GetMyProductReviewsResponse,
 } from '@/models/display/review';

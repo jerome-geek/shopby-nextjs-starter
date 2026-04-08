@@ -7,7 +7,7 @@ import {
     GetProductsShippingInfoParams,
     ProductSearchParams,
 } from '@/models/product/product';
-import { GetProductOptionParams } from '@/models/product/productOption';
+import type { GetProductOptionParams } from '@/models/product/productOption';
 import {
     GetLikeBrandsCountParams,
     GetLikeProductsParams,

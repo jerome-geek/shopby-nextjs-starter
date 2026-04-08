@@ -2,17 +2,15 @@
 
 import Link from 'next/link';
 
+import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
+import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import { PATHS } from '@/const/paths';
-import { useProductProfileMutation } from '@/hooks/mutations';
-import { useAuth } from '@/hooks/useAuth';
-import useDialog from '@/hooks/utils/useDialog';
+import useProductLike from '@/hooks/useProductLike';
 import { StickerInfo } from '@/models/display';
 import { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
-import ProductAdditionalDiscount from '@/components/product/additional-discount';
-import * as styles from './index.css';
-import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
+import * as styles from '@/components/product/card/index.css';
 
 interface ProductCardProps {
     productNo: number;
@@ -49,53 +47,14 @@ const ProductCard = ({
     isAdditionalDiscount,
     isHideLikeButton = false,
 }: ProductCardProps) => {
-    const { openDialog, openLoginDialog } = useDialog();
-
-    const {
-        like: { mutate: likeMutate },
-    } = useProductProfileMutation();
-    const isAuthenticated = useAuth();
-
-    const onLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (!isAuthenticated) {
-            openLoginDialog();
-            return;
-        }
-
-        likeMutate(
-            {
-                data: {
-                    items: [
-                        {
-                            productNo,
-                            like: liked ? 'N' : 'Y',
-                        },
-                    ],
-                },
-            },
-            {
-                onSuccess: () => {
-                    // router.refresh();
-                    openDialog({
-                        message: liked
-                            ? '좋아하는 상품에서 제거하였습니다.'
-                            : '좋아하는 상품에 추가하였습니다.',
-                    });
-                },
-            },
-        );
-    };
-
-    console.log(imageUrlInfo);
+    const { onLikeButtonClick } = useProductLike();
 
     return (
         <article className={styles.container}>
             <Link
                 href={`${PATHS.PRODUCTS.MAIN}/${productNo}`}
                 className={styles.thumbWrapper}
+                prefetch={false}
             >
                 <img
                     src={normalizeImageUrl(imageUrlInfo?.[0]?.url)}
@@ -106,7 +65,7 @@ const ProductCard = ({
                 {!isHideLikeButton && (
                     <button
                         className={styles.likeButton}
-                        onClick={onLikeButtonClick}
+                        onClick={onLikeButtonClick(productNo, liked)}
                     >
                         <ThumbnailBookmarkIcon isActive={liked} />
                     </button>

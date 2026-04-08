@@ -1,13 +1,13 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { myOrder } from '@/api/order';
 import { ordersKeys } from '@/hooks/queryKeys';
-import { OrderDetailResponse } from '@/models/order';
-import { GetOrderDetailParams } from '@/models/order/myOrder';
+import type { OrderDetailResponse } from '@/models/order';
+import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
 interface UseOrderDetailParams<T = OrderDetailResponse> {
     orderNo: string;

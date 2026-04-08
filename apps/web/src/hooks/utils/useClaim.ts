@@ -1,85 +1,330 @@
-import { useRouter } from 'next/router';
+import { type MutateOptions } from '@tanstack/react-query';
+import type { AxiosResponse } from 'axios';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
 
 import { NEXT_ACTION_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
-import { useDialog } from '@/hooks/utils';
+import {
+    useGuestClaimMutation,
+    useGuestOrderMutation,
+    useMemberClaimMutation,
+    useMyOrderMutation,
+} from '@/hooks/mutations';
+import useDialog from '@/hooks/utils/useDialog';
 import { NextActionType } from '@/models';
+import type { CancelClaimData } from '@/models/claim/guest';
+import { useAuth } from '@/hooks/useAuth';
 
-interface UseClaimProps {
+interface useClaimProps {
     nextActionType: NextActionType;
     orderOptionNo: number;
     orderNo: string;
     uri: string;
-    claimNo: number | null;
+    claimNo: Nullable<number>;
     productNo: number;
     optionNo: number;
 }
 
-export const useClaim = ({
+const useClaim = ({
     nextActionType,
     orderOptionNo,
     orderNo,
     productNo,
     optionNo,
     uri,
-    // claimNo,
-}: UseClaimProps) => {
+    claimNo,
+}: useClaimProps) => {
     const { t } = useTranslation();
+
+    const label = t(NEXT_ACTION_MAP[nextActionType]) ?? '';
+
     const router = useRouter();
+
     const { openDialog, openAsyncDialog } = useDialog();
 
-    // label map (fallback to nextActionType text if not mapped)
-    const rawLabel =
-        NEXT_ACTION_MAP[nextActionType as keyof typeof NEXT_ACTION_MAP];
-    const label = t(rawLabel ?? '');
+    const isLogin = useAuth();
+
+    const claimUrl = isLogin
+        ? PATHS.MYPAGE.CLAIMS.REQUEST
+        : PATHS.GUEST.CLAIMS.REQUEST;
+
+    const {
+        requestCancelAll: { mutate: requestCancelAllMutate },
+        checkClaimValidation: { mutateAsync: checkClaimValidationMutateAsync },
+        withdrawClaimByClaimNo: { mutate: withdrawClaimByClaimNoMutate },
+    } = useMemberClaimMutation({
+        orderNo,
+        orderOptionNo,
+    });
+
+    const {
+        requestCancelAll: { mutate: guestCancelAllMutate },
+        checkClaimValidation: {
+            mutateAsync: checkGuestClaimValidationMutateAsync,
+        },
+        withdrawClaimByClaimNo: { mutate: withdrawGuestClaimMutate },
+    } = useGuestClaimMutation({
+        orderNo,
+        orderOptionNo,
+    });
+
+    const {
+        confirmPurchase: { mutate: confirmPurchaseMutate },
+        deliveryDone: { mutate: deliveryDoneMutate },
+    } = useMyOrderMutation({
+        orderNo,
+        orderOptionNo,
+    });
+
+    const {
+        confirmOrder: { mutate: guestConfirmPurchaseMutate },
+        confirmDeliveryCompletion: { mutate: guestDeliveryDoneMutate },
+    } = useGuestOrderMutation();
+
+    // const { sendCancelAllEvent } = useAirbridgeEvent();
 
     const nextAction = () => {
         switch (nextActionType) {
-            case 'VIEW_DELIVERY':
-                return () => {
-                    if (uri) window.open(uri, '_blank');
-                };
-            case 'VIEW_CLAIM':
-                return () => {
-                    void router.push(`${PATHS.MYPAGE.ORDERS.MAIN}/${orderNo}`);
-                };
-            case 'WRITE_REVIEW':
-                return () => {
-                    void router.push(
-                        `${PATHS.MYPAGE.REVIEWS.MAIN}/write/${productNo}?optionNo=${optionNo}&orderOptionNo=${orderOptionNo}`,
-                    );
-                };
-            case 'CONFIRM_ORDER':
-            case 'DELIVERY_DONE':
-            case 'CANCEL':
-            case 'RETURN':
-            case 'EXCHANGE':
-            case 'CANCEL_ALL':
-            case 'WITHDRAW_CANCEL':
-            case 'WITHDRAW_EXCHANGE':
-            case 'WITHDRAW_RETURN':
+            case 'CANCEL_ALL': {
                 return async () => {
-                    const confirmMessage =
-                        nextActionType === 'CONFIRM_ORDER'
-                            ? '해당 상품을 구매확정하시겠습니까?'
-                            : nextActionType === 'DELIVERY_DONE'
-                              ? '해당 상품을 배송완료 처리하시겠습니까?'
-                              : '신청하시겠습니까?';
-
                     const isAgree = await openAsyncDialog({
-                        message: t(confirmMessage),
+                        message: t('전체 주문을 취소하시겠습니까?'),
                         onCloseReturnValue: false,
                         onConfirmReturnValue: true,
                     });
 
                     if (isAgree) {
-                        // TODO: Mutation 연동 필요
-                        openDialog({
-                            message: t('준비 중인 기능입니다.'),
-                        });
+                        const parseData = {
+                            orderNo,
+                            data: {
+                                claimReasonType: 'OTHERS_BUYER' as const,
+                                claimReasonDetail: '',
+                                claimType: 'CANCEL' as const,
+                                saveBankAccountInfo: false,
+                                refundsImmediately: true,
+                            },
+                        };
+
+                        const callback: MutateOptions<
+                            AxiosResponse<unknown, unknown>,
+                            Error,
+                            { orderNo: string; data: CancelClaimData },
+                            unknown
+                        > = {
+                            onSuccess: (_, variable) => {
+                                openDialog({
+                                    message: '전체 주문 취소가 완료되었습니다.',
+                                });
+
+                                // sendCancelAllEvent({
+                                //     orderNo: variable.orderNo,
+                                // });
+                            },
+                        };
+
+                        if (isLogin) {
+                            requestCancelAllMutate(parseData, callback);
+                        } else {
+                            guestCancelAllMutate(parseData, callback);
+                        }
                     }
                 };
+            }
+
+            case 'CANCEL': {
+                return () =>
+                    router.push({
+                        pathname: claimUrl,
+                        query: isLogin
+                            ? {
+                                  orderOptionNo: orderOptionNo.toString(),
+                                  claimType: 'CANCEL',
+                              }
+                            : {
+                                  orderOptionNo: orderOptionNo.toString(),
+                                  claimType: 'CANCEL',
+                                  returnOrderNo: orderNo,
+                              },
+                    });
+            }
+
+            case 'EXCHANGE': {
+                return () => {
+                    router.push({
+                        pathname: claimUrl,
+                        query: isLogin
+                            ? {
+                                  orderOptionNo: orderOptionNo.toString(),
+                                  claimType: 'EXCHANGE',
+                              }
+                            : {
+                                  orderOptionNo: orderOptionNo.toString(),
+                                  claimType: 'EXCHANGE',
+                                  returnOrderNo: orderNo,
+                              },
+                    });
+                };
+            }
+
+            case 'RETURN': {
+                return () => {
+                    router.push({
+                        pathname: claimUrl,
+                        query: isLogin
+                            ? {
+                                  orderOptionNo: orderOptionNo.toString(),
+                                  claimType: 'RETURN',
+                              }
+                            : {
+                                  orderOptionNo: orderOptionNo.toString(),
+                                  claimType: 'RETURN',
+                                  returnOrderNo: orderNo,
+                              },
+                    });
+                };
+            }
+
+            case 'WITHDRAW_CANCEL':
+            case 'WITHDRAW_EXCHANGE':
+            case 'WITHDRAW_RETURN': {
+                return async () => {
+                    if (!claimNo) {
+                        return;
+                    }
+
+                    const isAgree = await openAsyncDialog({
+                        message: t('클레임 신청을 철회하시겠습니까?'),
+                        onCloseReturnValue: false,
+                        onConfirmReturnValue: true,
+                    });
+
+                    if (!isAgree) {
+                        return;
+                    }
+
+                    const { data } = await (() => {
+                        if (isLogin) {
+                            return checkClaimValidationMutateAsync({
+                                claimNo,
+                            });
+                        }
+
+                        return checkGuestClaimValidationMutateAsync({
+                            claimNo,
+                        });
+                    })();
+
+                    if (data.validationType !== 'WITHDRAWABLE') {
+                        openDialog({
+                            message: t('클레임 신청이 불가능합니다.'),
+                        });
+                        return;
+                    }
+
+                    // TODO: 성공일 경우 response.status === 204
+                    const successCallback = {
+                        onSuccess: () => {
+                            openDialog({
+                                message: t('클레임 신청이 철회되었습니다.'),
+                            });
+                        },
+                    };
+
+                    if (isLogin) {
+                        withdrawClaimByClaimNoMutate(
+                            {
+                                claimNo,
+                            },
+                            successCallback,
+                        );
+                    } else {
+                        withdrawGuestClaimMutate(
+                            {
+                                claimNo,
+                            },
+                            successCallback,
+                        );
+                    }
+                };
+            }
+
+            case 'VIEW_DELIVERY': {
+                return () => {
+                    window.open(uri ?? '', '_blank');
+                };
+            }
+
+            case 'VIEW_CLAIM': {
+                return () => {
+                    router.push(`${PATHS.MYPAGE.ORDERS.MAIN}/${orderNo}`);
+                };
+            }
+
+            case 'DELIVERY_DONE': {
+                return async () => {
+                    const isAgree = await openAsyncDialog({
+                        message: t('해당 상품을 배송완료 처리하시겠습니까?'),
+                        onCloseReturnValue: false,
+                        onConfirmReturnValue: true,
+                    });
+
+                    if (!isAgree) {
+                        return;
+                    }
+
+                    const callback = {
+                        onSuccess: () => {
+                            openDialog({
+                                message: t('배송완료 처리되었습니다.'),
+                            });
+                        },
+                    };
+
+                    if (isLogin) {
+                        deliveryDoneMutate({ orderOptionNo }, callback);
+                    } else {
+                        guestDeliveryDoneMutate({ orderOptionNo }, callback);
+                    }
+                };
+            }
+
+            case 'CONFIRM_ORDER': {
+                return async () => {
+                    const isAgree = await openAsyncDialog({
+                        message: t('해당 상품을 구매확정하시겠습니까?'),
+                        onCloseReturnValue: false,
+                        onConfirmReturnValue: true,
+                    });
+
+                    if (!isAgree) {
+                        return;
+                    }
+
+                    const callback = {
+                        onSuccess: () => {
+                            openDialog({
+                                message: t('구매확정 처리되었습니다.'),
+                            });
+                        },
+                    };
+
+                    if (isLogin) {
+                        confirmPurchaseMutate({ orderOptionNo }, callback);
+                    } else {
+                        guestConfirmPurchaseMutate({ orderOptionNo }, callback);
+                    }
+                };
+            }
+
+            case 'WRITE_REVIEW': {
+                return () => {
+                    router.push(
+                        `${PATHS.MYPAGE.REVIEWS.MAIN}/write/${productNo}?optionNo=${optionNo}&orderOptionNo=${orderOptionNo}`,
+                    );
+                };
+            }
+
             default:
                 return () => {};
         }
@@ -87,3 +332,5 @@ export const useClaim = ({
 
     return { label, nextAction };
 };
+
+export default useClaim;

@@ -24,6 +24,7 @@ import { AppProviders } from '@/providers';
 import '@/i18n/config';
 import '@/styles/global.css.ts';
 import 'react-day-picker/dist/style.css';
+import { env } from '@/configs/env';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -114,7 +115,17 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                                 position='bottom-center'
                                 duration={1500}
                             />
-                            <ReactQueryDevtools initialIsOpen={false} />
+
+                            {env.NEXT_PUBLIC_MODE !== 'production' && (
+                                <div
+                                    style={{
+                                        fontSize: '16px',
+                                    }}
+                                    data-lenis-prevent
+                                >
+                                    <ReactQueryDevtools initialIsOpen={false} />
+                                </div>
+                            )}
                             <Analytics />
                             <SpeedInsights />
                         </AppProviders>

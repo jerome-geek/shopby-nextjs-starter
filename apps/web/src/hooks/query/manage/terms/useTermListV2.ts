@@ -4,8 +4,8 @@ import {
     GetTermListByPostData,
     GetTermListResponse,
 } from '@/models/manage/terms';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError, AxiosRequestConfig } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError, AxiosRequestConfig } from 'axios';
 
 interface UseTermListV2Options<T = GetTermListResponse> {
     data: GetTermListByPostData;

@@ -1,9 +1,9 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { productSection } from '@/api/display';
 import { productSectionKeys } from '@/hooks/queryKeys';
-import { GetProductSectionsResponse } from '@/models/display/productSection';
+import type { GetProductSectionsResponse } from '@/models/display/productSection';
 
 interface UseProductSectionListParams<T = GetProductSectionsResponse> {
     options?: Omit<

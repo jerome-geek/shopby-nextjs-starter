@@ -3,11 +3,11 @@ import {
     useInfiniteQuery,
     UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import eventKeys from '@/hooks/queryKeys/eventKeys';
-import { GetEventsResponse, GetEventsV2Params } from '@/models/display/event';
+import type { GetEventsResponse, GetEventsV2Params } from '@/models/display/event';
 
 interface UseInfiniteEventListParams {
     searchParams: GetEventsV2Params;

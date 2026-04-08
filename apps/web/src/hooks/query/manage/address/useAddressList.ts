@@ -3,7 +3,7 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { address } from '@/api/manage';
 import { addressKeys } from '@/hooks/queryKeys';

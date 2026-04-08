@@ -1,12 +1,12 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { category } from '@/api/display';
 import { categoryKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetCategoryParams,
     GetCategoryResponse,
 } from '@/models/display/category';

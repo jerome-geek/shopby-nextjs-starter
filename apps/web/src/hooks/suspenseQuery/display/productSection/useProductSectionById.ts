@@ -1,12 +1,12 @@
 import {
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { productSection } from '@/api/display';
 import { productSectionKeys } from '@/hooks/queryKeys';
-import { GetProductSectionByIdResponse } from '@/models/display/productSection';
+import type { GetProductSectionByIdResponse } from '@/models/display/productSection';
 
 interface UseProductSectionByIdParams<T = GetProductSectionByIdResponse> {
     sectionId: string;

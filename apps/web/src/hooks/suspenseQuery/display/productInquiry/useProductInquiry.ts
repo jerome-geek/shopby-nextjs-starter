@@ -1,12 +1,12 @@
 import {
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
-import { GetProductInquiryResponse } from '@/models/display/productInquiry';
+import type { GetProductInquiryResponse } from '@/models/display/productInquiry';
 
 interface UseProductInquiryParams<T = GetProductInquiryResponse> {
     productNo: number;

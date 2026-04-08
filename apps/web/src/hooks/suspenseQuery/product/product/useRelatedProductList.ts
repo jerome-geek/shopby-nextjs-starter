@@ -1,13 +1,13 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import { ShopByErrorResponse } from '@/models/api/response';
-import { GetRelatedProductsResponse } from '@/models/product/product';
+import type { ShopByErrorResponse } from '@/models/api/response';
+import type { GetRelatedProductsResponse } from '@/models/product/product';
 
 interface UseRelatedProductListParams<T = GetRelatedProductsResponse> {
     productNo: number;

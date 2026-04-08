@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 
 import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/query/admin/mall';
-import { GetCategoryResponse } from '@/models/display/category';
-import { CartList, OrderDetailResponse } from '@/models/order';
-import { GetOrderSheetResponse } from '@/models/order/orderSheet';
+import type { GetCategoryResponse } from '@/models/display/category';
+import type { CartList, OrderDetailResponse } from '@/models/order';
+import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
 import {
     ProductDetailResponse,
     ProductsSearchResponse,

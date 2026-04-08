@@ -2,8 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { memo, useMemo } from 'react';
 
-import ProductCard from '@/components/product/card';
-import { CountdownTimer } from '@/components/product/countdown-timer';
+import { ProductCard, CountdownTimer } from '@/components/product';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
 import { ImageUrlType } from '@/models/product';
 import * as styles from '@/components/section/timeSale/index.css';

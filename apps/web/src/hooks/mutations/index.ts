@@ -7,6 +7,10 @@ import useProductInquiryMutation from '@/hooks/mutations/useProductInquiryMutati
 import useProductProfileMutation from '@/hooks/mutations/useProductProfileMutation';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
+import useGuestClaimMutation from '@/hooks/mutations/useGuestClaimMutation';
+import useGuestOrderMutation from '@/hooks/mutations/useGuestOrderMutation';
+import useMemberClaimMutation from '@/hooks/mutations/useMemberClaimMutation';
+import useMyOrderMutation from '@/hooks/mutations/useMyOrderMutation';
 
 export {
     useBoardReplyMutation,
@@ -18,4 +22,8 @@ export {
     useProductProfileMutation,
     useProfileMutation,
     useShippingAddressMutation,
+    useGuestClaimMutation,
+    useGuestOrderMutation,
+    useMemberClaimMutation,
+    useMyOrderMutation,
 };

@@ -99,7 +99,7 @@ const myOrder = {
      * 상품 주문 구매 확정하기
      *  - 배송중, 배송완료 상태의 상태주문을 구매확정 처리하는 API 입니다.
      */
-    confirmPurchase: (orderOptionNo: string, options?: AxiosRequestConfig) => {
+    confirmPurchase: (orderOptionNo: number, options?: AxiosRequestConfig) => {
         return shopbyRequest({
             method: 'PUT',
             url: `/profile/order-options/${orderOptionNo}/confirm`,
@@ -112,7 +112,7 @@ const myOrder = {
      *  - 배송중 상태의 상품주문을 배송완료 처리하는 API 입니다.
      */
     processDeliveryDone: (
-        orderOptionNo: string,
+        orderOptionNo: number,
         options?: AxiosRequestConfig,
     ) => {
         return shopbyRequest({

@@ -1,16 +1,16 @@
-import { AxiosError } from 'axios';
-
-import { product } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-import {
-    ProductSearchParams,
-    ProductsSearchResponse,
-} from '@/models/product/product';
 import {
     keepPreviousData,
     useQuery,
-    UseQueryOptions,
+    type UseQueryOptions,
 } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+
+import { product } from '@/api/product';
+import { productKeys } from '@/hooks/queryKeys';
+import type {
+    ProductSearchParams,
+    ProductsSearchResponse,
+} from '@/models/product/product';
 
 export interface UseProductListParams<T = ProductsSearchResponse> {
     searchParams: ProductSearchParams;

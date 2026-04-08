@@ -1,9 +1,9 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { terms } from '@/api/manage';
 import { termsKeys } from '@/hooks/queryKeys';
-import { GetTermListParams, GetTermListResponse } from '@/models/manage/terms';
+import type { GetTermListParams, GetTermListResponse } from '@/models/manage/terms';
 
 interface UseTermListParams<T = GetTermListResponse> {
     searchParams: GetTermListParams;

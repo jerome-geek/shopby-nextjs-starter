@@ -4,7 +4,7 @@ import {
     GetOrderListParams,
     GetOrderStatusSummaryParams,
 } from '@/models/order/myOrder';
-import { GetPreviousOrdersParams } from '@/models/order/previousOrder';
+import type { GetPreviousOrdersParams } from '@/models/order/previousOrder';
 
 const ordersKeys = {
     all: ['orders'] as const,
@@ -60,7 +60,7 @@ const ordersKeys = {
         ] as const,
 
     detailsByOrderOptionNo: (
-        orderOptionNo: string,
+        orderOptionNo: number,
         searchParams?: { claimType: ClaimType },
     ) => [...ordersKeys.details(), orderOptionNo, searchParams] as const,
 };

@@ -1,9 +1,9 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetGroupManagementCodesData,
     GroupManagementCodeResponse,
 } from '@/models/product/product';

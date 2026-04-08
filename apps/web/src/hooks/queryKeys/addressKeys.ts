@@ -1,5 +1,5 @@
-import { SearchAddressParams } from '@/models/manage/address';
-import { GetPagedShippingAddressParams } from '@/models/order/shippingAddress';
+import type { SearchAddressParams } from '@/models/manage/address';
+import type { GetPagedShippingAddressParams } from '@/models/order/shippingAddress';
 
 const addressKeys = {
     all: ['addresses'] as const,

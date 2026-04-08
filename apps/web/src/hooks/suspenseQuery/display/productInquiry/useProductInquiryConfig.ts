@@ -1,12 +1,12 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
-import { GetProductInquiryConfigResponse } from '@/models/display/productInquiry';
+import type { GetProductInquiryConfigResponse } from '@/models/display/productInquiry';
 
 interface UseProductInquiryConfigParams<T = GetProductInquiryConfigResponse> {
     options?: Omit<

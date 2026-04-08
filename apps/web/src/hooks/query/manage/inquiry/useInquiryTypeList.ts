@@ -1,12 +1,12 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { inquiry } from '@/api/manage';
 import { inquiryKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetInquiryTypesParams,
     GetInquiryTypesResponse,
 } from '@/models/manage/inquiry';

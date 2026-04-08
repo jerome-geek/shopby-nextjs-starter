@@ -1,10 +1,10 @@
 import { isNil } from '@fxts/core';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
-import { GetArticleParams, GetArticleResponse } from '@/models/manage/board';
+import type { GetArticleParams, GetArticleResponse } from '@/models/manage/board';
 
 interface UseBoardArticleParams<T = GetArticleResponse> {
     boardNo: string;

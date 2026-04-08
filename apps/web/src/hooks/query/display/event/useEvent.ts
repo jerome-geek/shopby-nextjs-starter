@@ -3,12 +3,12 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { useSearchParams } from 'next/navigation';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
-import { GetEventParams, GetEventResponse } from '@/models/display/event';
+import type { GetEventParams, GetEventResponse } from '@/models/display/event';
 
 interface UseEventParams<T = GetEventResponse> {
     eventKey: string | number;

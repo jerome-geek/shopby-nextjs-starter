@@ -1,8 +1,8 @@
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { KCPCertification } from '@/api/auth';
-import { GetKCPCertificationResultResponse } from '@/models/auth/KCPCertification';
+import type { GetKCPCertificationResultResponse } from '@/models/auth/KCPCertification';
 
 interface UseKCPCertificationResultParams<
     T = GetKCPCertificationResultResponse,

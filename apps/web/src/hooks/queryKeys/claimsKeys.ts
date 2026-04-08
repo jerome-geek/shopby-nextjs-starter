@@ -1,5 +1,6 @@
-import { EstimatedRefundPriceData } from '@/models/claim';
-import { GetClaimListParams } from '@/models/claim/member';
+import type { EstimatedRefundPriceData } from '@/models/claim';
+import type { GetClaimOptionPriceParams } from '@/models/claim/guest';
+import type { GetClaimListParams } from '@/models/claim/member';
 
 const claimsKeys = {
     all: ['claims'] as const,
@@ -14,26 +15,26 @@ const claimsKeys = {
 
     /** 클레임 상세 조회 */
     details: () => [...claimsKeys.all, 'detail'] as const,
-    detail: (claimNo: string, memberNo?: number) =>
+    detail: (claimNo: number, memberNo?: number) =>
         [...claimsKeys.details(), claimNo, memberNo] as const,
 
     /** 클레임 옵션 예상 환불 금액 조회 */
     estimates: () => ['estimate'] as const,
     estimate: (
-        orderOptionNo: string,
+        orderOptionNo: number,
         searchParams: Omit<EstimatedRefundPriceData, 'claimedProductOptions'>,
     ) => [...claimsKeys.estimates(), orderOptionNo, searchParams] as const,
 
     /** 게스트 클레임 상세 조회 */
     guestDetails: () => [...claimsKeys.all, 'guestDetail'] as const,
-    guestDetail: (claimNo: string) =>
+    guestDetail: (claimNo: number) =>
         [...claimsKeys.details(), claimNo] as const,
 
     /** 게스트 클레임 옵션 예상 환불 금액 조회 */
     guestEstimates: () => ['guestEstimate'] as const,
     guestEstimate: (
-        orderOptionNo: string,
-        searchParams: Omit<EstimatedRefundPriceData, 'claimedProductOptions'>,
+        orderOptionNo: number,
+        searchParams: GetClaimOptionPriceParams,
     ) => [...claimsKeys.guestEstimates(), orderOptionNo, searchParams] as const,
 };
 

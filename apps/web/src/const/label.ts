@@ -1,70 +1,147 @@
-// 적립금 지급/차감 사유 맵
-export const ACCUMULATION_RESERVE_REASON_MAP = {
-    PURCHASE: '구매 적립',
-    SIGN_UP: '회원가입 적립',
-    REVIEW: '상품평 적립',
-    BIRTHDAY: '생일 적립',
-    MANUAL: '관리자 수동 지급',
-    REFUND: '환불 적립',
-    CANCEL: '취소',
-    USE: '사용',
-    EXPIRATION: '만료',
-    ADD_MANUAL: '지급 수동',
-    SUB_MANUAL: '차감 수동',
+// 주문상태(16)
+export const ORDER_STATUS_MAP = {
+    DEPOSIT_WAIT: '입금대기',
+    PAY_DONE: '결제완료',
+    PRODUCT_PREPARE: '상품준비중',
+    DELIVERY_PREPARE: '배송준비중',
+    DELIVERY_ING: '배송중',
+    DELIVERY_DONE: '배송완료',
+    BUY_CONFIRM: '구매확정',
+    CANCEL_DONE: '취소완료',
+    RETURN_DONE: '반품완료',
+    EXCHANGE_DONE: '교환완료',
+    PAY_WAIT: '결제대기',
+    PAY_CANCEL: '결제포기',
+    PAY_FAIL: '결제실패',
+    DELETE: '삭제',
+    EXCHANGE_WAIT: '교환대기',
+    REFUND_DONE: '환불완료',
 } as const;
 
-// 현금영수증 발급 목적 타입 맵
-export const CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP = {
-    INCOME_DEDUCTION: '소득공제용',
-    PROOF_OF_EXPENDITURE: '지출증빙용',
+// 주문상태
+export const ORDER_REQUEST_MAP = {
+    DEPOSIT_WAIT: '입금대기',
+    PAY_DONE: '결제완료',
+    PRODUCT_PREPARE: '상품준비중',
+    DELIVERY_PREPARE: '배송준비중',
+    DELIVERY_ING: '배송중',
+    DELIVERY_DONE: '배송완료',
+    BUY_CONFIRM: '구매확정',
+    CANCEL_DONE: '취소완료',
+    RETURN_DONE: '반품완료',
+    EXCHANGE_DONE: '교환완료',
+    CANCEL_PROCESSING: '취소처리중',
+    RETURN_PROCESSING: '반품처리중',
+    EXCHANGE_WAITING: '교환대기중',
+    EXCHANGE_PROCESSING: '교환처리중',
 } as const;
 
-// 현금영수증 발급 타입 맵
 export const CASH_RECEIPT_ISSUE_TYPE_MAP = {
-    MOBILE_NO: '휴대폰번호',
-    CARD: '현금영수증 카드번호',
-    BUSINESS_REGISTRATION_NO: '사업자등록번호',
+    REQUEST: '발급요청',
+    COMPLETE: '발급완료',
+    CANCEL: '발급취소',
+    FAIL: '발급실패',
 } as const;
 
-// 클레임 사유 맵
-export const CLAIM_REASON_MAP = {
-    CHANGE_MIND: '단순변심',
-    DEFECT: '상품불량',
-    WRONG_DELIVERY: '오배송',
-    LATE_DELIVERY: '배송지연',
-    ETC: '기타',
+export const CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP = {
+    INCOME_TAX_DEDUCTION: '소득공제용',
+    PROOF_EXPENDITURE: '지출증빙용',
+    VOLUNTARY: '자진발급',
 } as const;
 
-// 클레임 상태 맵
-export const CLAIM_STATUS_MAP = {
-    CANCEL_REQUEST: '취소 신청',
-    CANCEL_PROC_REQUEST_REFUND: '취소 환불 요청',
-    CANCEL_PROC_WAITING_REFUND: '취소 환불 대기',
-    CANCEL_NO_REFUND: '취소 환불 없음',
-    CANCEL_DONE: '취소 완료',
-    RETURN_REQUEST: '반품 신청',
-    RETURN_REJECT_REQUEST: '반품 거부 요청',
-    RETURN_PROC_BEFORE_RECEIVE: '반품 수거 전',
-    RETURN_PROC_REQUEST_REFUND: '반품 환불 요청',
-    RETURN_PROC_WAITING_REFUND: '반품 환불 대기',
-    RETURN_REFUND_AMT_ADJUST_REQUESTED: '반품 환불 금액 조정 요청',
-    RETURN_DONE: '반품 완료',
-    EXCHANGE_REQUEST: '교환 신청',
-    EXCHANGE_REJECT_REQUEST: '교환 거부 요청',
-    EXCHANGE_PROC_BEFORE_RECEIVE: '교환 수거 전',
-    EXCHANGE_PROC_REQUEST_PAY: '교환 결제 요청',
-    EXCHANGE_PROC_WAITING: '교환 대기',
-    EXCHANGE_DONE: '교환 완료',
+export const PAY_TYPE_MAP = {
+    CREDIT_CARD: '신용카드',
+    ACCOUNT: '무통장입금',
+    MOBILE: '휴대폰결제',
+    REALTIME_ACCOUNT_TRANSFER: '실시간계좌이체',
+    VIRTUAL_ACCOUNT: '가상계좌',
+    GIFT: '상품권',
+    ATM: 'ATM',
+    PAYCO: 'PAYCO',
+    ZERO_PAY: '0원 결제',
+    ACCUMULATION: '적립금 전액 사용',
+    PHONE_BILL: '전화 결제',
+    POINT: '포인트 결제',
+    YPAY: '옐로페이',
+    KPAY: '케이페이',
+    PAYPIN: '페이핀',
+    INIPAY: 'INIPay 간편결제',
+    PAYPAL: 'PAYPAL',
+    STRIPE: 'STRIPE',
+    NAVER_PAY: '네이버페이 주문형',
+    KAKAO_PAY: '카카오페이',
+    NAVER_EASY_PAY: '네이버페이 결제형',
+    SAMSUNG_PAY: '삼성페이',
+    CHAI: '차이',
+    TOSS_PAY: '토스페이',
+    SK_PAY: 'SK페이',
+    ESCROW_REALTIME_ACCOUNT_TRANSFER: '실시간계좌이체-에스크로',
+    ESCROW_VIRTUAL_ACCOUNT: '가상계좌-에스크로',
+    RENTAL: '렌탈결제',
+    VERITRANS_CARD: 'Veritrans CreditCard',
+    TOASTCAM: '토스트캠',
+    APPLE_PAY: '애플페이',
+    LPAY: '엘페이',
+    APP_CARD: '앱카드',
+    ETC: '기타결제수단',
 } as const;
 
-// 클레임 타입 맵
+export const COUPON_TYPE_MAP = {
+    PRODUCT: '상품적용 쿠폰',
+    CART: '주문적용 쿠폰',
+    CART_DELIVERY: '장바구니 배송비 할인',
+    GIFT: '기프트 쿠폰',
+} as const;
+
 export const CLAIM_TYPE_MAP = {
     CANCEL: '취소',
     RETURN: '반품',
     EXCHANGE: '교환',
 } as const;
 
-// 다음 액션 맵
+export const CLAIM_REASON_MAP = {
+    CHANGE_MIND: '단순변심(색상,사이즈 등)',
+    DEFECTIVE_PRODUCT: '상품불량/파손',
+    WRONG_DELIVERY: '배송누락/오배송',
+    OUT_OF_STOCK_SYSTEM: '재고부족(품절취소)',
+    CANCEL_BEFORE_PAY: '입금전취소',
+    WRONG_PRODUCT_DETAIL: '상품상세 정보와 다름',
+    DELAY_DELIVERY: '판매자 배송 지연',
+    OTHERS_SELLER: '기타(판매자 귀책)',
+    OTHERS_BUYER: '기타(구매자 귀책)',
+    OUT_OF_STOCK: '상품 품절/재고 없음',
+    LATER_INPUT_ORDER: '배송지 미입력 취소',
+    LATER_INPUT_ORDER_RECEIVER_CANCEL: '선물거절취소',
+} as const;
+
+/** 클레임 상태(24) */
+export const CLAIM_STATUS_MAP = {
+    CANCEL_NO_REFUND: '취소완료[환불없음]',
+    CANCEL_REQUEST: '취소신청[승인대기]',
+    CANCEL_PROC_REQUEST_REFUND: '취소처리[환불보류]',
+    CANCEL_PROC_WAITING_REFUND: '취소처리[환불대기]',
+    CANCEL_DONE: '취소완료[환불완료]',
+    RETURN_NO_REFUND: '반품완료[환불없음]',
+    RETURN_REQUEST: '반품신청[승인대기]',
+    RETURN_REJECT_REQUEST: '반품신청[철회대기]',
+    RETURN_PROC_BEFORE_RECEIVE: '반품처리[수거진행]',
+    RETURN_PROC_REQUEST_REFUND: '반품처리[환불보류]',
+    RETURN_PROC_WAITING_REFUND: '반품처리[환불대기]',
+    RETURN_DONE: '반품완료[환불완료]',
+    RETURN_REFUND_AMT_ADJUST_REQUESTED: '반품처리[조정요청]',
+    EXCHANGE_REQUEST: '교환신청[승인대기]',
+    EXCHANGE_REJECT_REQUEST: '교환처리[철회대기]',
+    EXCHANGE_PROC_BEFORE_RECEIVE: '교환처리[수거진행]',
+    EXCHANGE_PROC_REQUEST_PAY: '교환처리[결제대기]',
+    EXCHANGE_PROC_REQUEST_REFUND: '교환처리[환불보류]',
+    EXCHANGE_PROC_WAITING: '교환처리[처리대기]',
+    EXCHANGE_PROC_WAITING_PAY: '교환처리[입금처리대기]',
+    EXCHANGE_PROC_WAITING_REFUND: '교환처리[환불대기]',
+    EXCHANGE_DONE: '교환완료[차액없음]',
+    EXCHANGE_DONE_PAY_DONE: '교환완료[결제완료]',
+    EXCHANGE_DONE_REFUND_DONE: '교환완료[환불완료]',
+} as const;
+
 export const NEXT_ACTION_MAP = {
     CANCEL_ALL: '주문 전체 취소',
     CANCEL: '취소',
@@ -83,15 +160,7 @@ export const NEXT_ACTION_MAP = {
     VIEW_RECEIPT: '현금영수증 조회',
 } as const;
 
-// 주문 요청 맵
-export const ORDER_REQUEST_MAP = {
-    ALL: '전체',
-    CLAIM: '클레임 진행중',
-    NORMAL: '정상',
-} as const;
-
-// 주문 상태 맵
-export const ORDER_STATUS_MAP = {
+export const PREVIOUS_ORDER_STATUS_MAP = {
     DEPOSIT_WAIT: '입금대기',
     PAY_DONE: '결제완료',
     PRODUCT_PREPARE: '상품준비중',
@@ -103,37 +172,87 @@ export const ORDER_STATUS_MAP = {
     RETURN_DONE: '반품완료',
     EXCHANGE_DONE: '교환완료',
     PAY_WAIT: '결제대기',
-    PAY_CANCEL: '결제취소',
+    PAY_CANCEL: '결제포기',
     PAY_FAIL: '결제실패',
+    DELETE: '삭제',
+    EXCHANGE_WAIT: '교환대기',
+    REFUND_DONE: '환불완료',
 } as const;
 
-// 이전 주문 상태 맵
-export const PREVIOUS_ORDER_STATUS_MAP = {
-    ...ORDER_STATUS_MAP,
+export const PRODUCT_REVIEW_REPORT_MAP = {
+    COPYRIGHT: '저작권 침해 및 기타사유',
+    SLANDER: '욕설 또는 비방',
 } as const;
 
-// 상품 문의 맵
 export const PRODUCT_INQUIRY_MAP = {
     PRODUCT: '상품',
     DELIVERY: '배송',
-    EXCHANGE_RETURN: '교환/반품',
-    ETC: '기타',
+    CANCEL: '취소',
+    RETURN: '반품',
+    EXCHANGE: '교환',
+    REFUND: '환불',
+    OTHER: '기타',
 } as const;
 
-// 상품평 신고 사유 맵
-export const PRODUCT_REVIEW_REPORT_MAP = {
-    COPYRIGHT: '저작권 침해',
-    DEFAMATION: '명예훼손',
-    OBSCENE: '음란/선정적 내용',
-    SPAM: '스팸/광고',
-    ETC: '기타',
+export const ACCUMULATION_RESERVE_REASON_MAP = {
+    ADD_AFTER_PAYMENT: '상품 구매확정 적립',
+    ADD_AFTER_EVENT_PAYMENT: '이벤트 구매확정 적립',
+    ADD_AFTER_REPLACE_PAYMENT: '상품 교환 결제 추가 적립',
+    ADD_POSTING: '상품평 작성 적립',
+    ADD_CANCEL: '주문취소 재적립',
+    ADD_RETURN: '반품 재적립',
+    ADD_MANUAL: '운영자 지급',
+    ADD_EVENT: '이벤트성 적립',
+    ADD_SIGNUP: '회원가입 적립금',
+    ADD_BIRTHDAY: '생일축하 적립금',
+    ADD_APP_INSTALL: '앱설치 적립금',
+    ADD_APP_ORDER: '앱 구매 혜택',
+    ADD_APP_NOTIFICATION: '앱 알림 혜택',
+    ADD_GRADE: '회원등급 적립금',
+    ADD_GRADE_BENEFIT: '등급 혜택 즉시 지급 적립금',
+    ADD_COUPON: '쿠폰 혜택 지급',
+    SUB_PAYMENT_USED: '상품 결제 사용 차감',
+    SUB_EXTRA_PAYMENT_USED: '교환 상품 추가 결제 차감',
+    SUB_CANCEL: '사용적립금 주문취소 재적립',
+    SUB_RETURN: '상품 구매확정 취소 차감',
+    SUB_DELETE_POSTING: '상품평 삭제 차감',
+    SUB_EXPIRED: '유효기간 만료',
+    SUB_MANUAL: '운영자 차감',
+    SUB_DELETE_ACCOUNT: '회원탈퇴 차감',
+    EXTERNAL_ACCUMULATION: '외부적립금',
 } as const;
 
-// 샵바이 약관 이력 맵
+export const SHOPBY_TERMS_TYPE_MAP = {
+    MALL_INTRODUCTION: '쇼핑몰 / 회사 소개',
+    USE: '이용약관',
+    E_COMMERCE: '전자금융거래 이용약관',
+    PI_PROCESS: '개인정보처리방침',
+    PI_COLLECTION_AND_USE_REQUIRED: '개인정보 수집 / 이용',
+    PI_COLLECTION_AND_USE_OPTIONAL: '개인정보 수집 / 이용',
+    PI_PROCESS_CONSIGNMENT: '개인정보 처리 / 위탁',
+    PI_THIRD_PARTY_PROVISION: '개인정보 제3자 제공',
+    PI_COLLECTION_AND_USE_FOR_GUEST_ON_ARTICLE: '개인정보 수집 / 이용',
+    ACCESS_GUIDE: '이용안내',
+    WITHDRAWAL_GUIDE: '탈퇴안내',
+    PI_SELLER_PROVISION: '개인정보 판매자 제공',
+    PI_COLLECTION_AND_USE_ON_ORDER: '개인정보 수집 / 이용',
+    ORDER_INFO_AGREE: '구매 동의',
+    CLEARANCE_INFO_COLLECTION_AND_USE: '통관정보 수집 / 이용',
+    TRANSFER_AGREE: '개인정보 국외 이전 동의',
+    REGULAR_PAYMENT_USE: '정기결제(배송) 이용약관',
+    AUTO_APPROVAL_USE: '자동 승인 이용약관',
+    PI_LIQUOR_PURCHASE_PROVISION: '주류구매 개인정보 수집 / 이용',
+    PI_RESTOCK_NOTICE: '개인정보 수집 / 이용',
+    PI_14_AGE: '만 14세 이상 가입 동의',
+    PI_GIFT_ACCEPT_COLLECTION_AND_USE: '선물수락 개인정보 수집/이용',
+} as const;
+
 export const SHOPBY_TERM_HISTORY_MAP = {
-    CREATE: '생성',
-    UPDATE: '수정',
-    DELETE: '삭제',
+    USE: SHOPBY_TERMS_TYPE_MAP.USE,
+    E_COMMERCE: SHOPBY_TERMS_TYPE_MAP.E_COMMERCE,
+    PI_PROCESS: SHOPBY_TERMS_TYPE_MAP.PI_PROCESS,
+    REGULAR_PAYMENT_USE: SHOPBY_TERMS_TYPE_MAP.REGULAR_PAYMENT_USE,
+    AUTO_APPROVAL_USE: SHOPBY_TERMS_TYPE_MAP.AUTO_APPROVAL_USE,
 } as const;
 
 export const SHOPBY_JOIN_AGREEMENT_TYPE_MAP = {
@@ -146,42 +265,92 @@ export const SHOPBY_JOIN_AGREEMENT_TYPE_MAP = {
     PI_14_AGE: '만 14세 이상 가입 동의',
 } as const;
 
-// 샵바이 약관 타입 맵
-export const SHOPBY_TERMS_TYPE_MAP = {
-    // USE: '이용약관',
-    // PRIVACY: '개인정보처리방침',
-    // PI_PROVISION: '개인정보 제3자 제공 동의',
-    // TEENAGER: '청소년보호정책',
-    // ORDER_AGE: '만 14세 이상',
-    // ORDER_INFO: '결제대행서비스 이용약관',
-    // EMAIL_COLLECTION: '이메일 무단수집거부',
-    // MARKETING: '마케팅 활용 동의',
-    // AD: '광고성 정보 수신 동의',
-    // REFUND: '취소/반품/환불 규정',
-    // ORDER_AGREE: '주문정보 확인 동의',
+export const DELIVERY_CONDITION_MAP = {
+    FREE: '무료배송',
+    CONDITIONAL: '조건별 무료배송',
+    FIXED_FEE: '유료(고정 배송비)',
+    QUANTITY_PROPOSITIONAL_FEE: '수량 비례',
+    PRICE_FEE: '금액별 차등',
+    QUANTITY_FEE: '수량별 차등',
+} as const;
 
-    MALL_INTRODUCTION: '쇼핑몰/회사 소개',
-    USE: '이용약관',
-    E_COMMERCE: '전자금융거래 이용약관',
-    PI_PROCESS: '개인정보처리방침',
-    PI_COLLECTION_AND_USE_REQUIRED: '개인정보 수집 및 이용 동의',
-    PI_COLLECTION_AND_USE_OPTIONAL: '개인정보 수집 및 이용 동의',
-    PI_PROCESS_CONSIGNMENT: '개인정보 처리/위탁',
-    PI_THIRD_PARTY_PROVISION: '개인정보 제3자 제공 동의',
-    PI_COLLECTION_AND_USE_FOR_GUEST_ON_ARTICLE: '개인정보 수집/이용',
-    ACCESS_GUIDE: '이용안내',
-    WITHDRAWAL_GUIDE: '탈퇴안내',
-    PI_SELLER_PROVISION: '개인정보 제 3자 제공 동의',
-    PI_COLLECTION_AND_USE_ON_ORDER: '개인정보 수집 및 이용 동의',
-    ORDER_INFO_AGREE: '구매 동의',
-    CLEARANCE_INFO_COLLECTION_AND_USE: '통관정보 수집/이용',
-    TRANSFER_AGREE: '개인정보 국외 이전 동의',
-    REGULAR_PAYMENT_USE: '정기결제(배송) 이용약관',
-    AUTO_APPROVAL_USE: '자동 승인 이용약관',
-    PI_LIQUOR_PURCHASE_PROVISION: '주류구매 개인정보 수집 / 이용',
-    PI_RESTOCK_NOTICE: '개인정보 수집 / 이용',
-    PI_14_AGE: '만 14세 이상 가입 동의',
-    PI_GIFT_ACCEPT_COLLECTION_AND_USE: '선물수락 개인정보 수집 / 이용',
-    MARKETING_RECEIVE: '광고성 수신 동의',
-    MARKETING_INFO_USAGE: '마케팅 목적의 개인정보 수집 / 이용 동의',
+export const BANK_MAP = {
+    ANONYMOUS: '미확인은행',
+    KDB: '산업은행',
+    IBK: '기업은행',
+    KB: '국민은행',
+    KEB: '외환은행',
+    SUHYUP: '수협',
+    KEXIM: '수출입은행',
+    NH: 'NH농협은행',
+    NHLOCAL: '지역농축협',
+    WOORI: '우리은행',
+    SC: 'SC제일은행',
+    CITY: '한국씨티은행',
+    DAEGU: '대구은행',
+    PUSAN: '부산은행',
+    GWANGJU: '광주은행',
+    JEJU: '제주은행',
+    JEONBUK: '전북은행',
+    GYEONGNAM: '경남은행',
+    KFCC: '새마을금고',
+    CU: '신협',
+    SANGHO: '상호저축은행',
+    HSBC: 'HSBC은행',
+    DEUTSCHE: '도이치은행',
+    NFCF: '산림조합중앙회',
+    EPOST: '우체국',
+    KEBHANA: 'KEB하나은행',
+    SHINHAN: '신한은행',
+    KBANK: '케이뱅크',
+    KAKAO: '카카오뱅크',
+    TOSS: '토스뱅크',
+    YUANTA: '유안타증권',
+    KBSEC: 'KB증권',
+    MIRAE: ' 미래에셋증권',
+    MIRAEDAEWOO: ' 미래에셋대우증권',
+    SAMSUNG: ' 삼성증권',
+    HANKOOK: ' 한국투자증권',
+    NH_INVEST: ' NH투자증권',
+    KYOBO: ' 교보증권',
+    HI_INVEST: ' 하이투자증권',
+    HMC_INVEST: ' HMC투자증권',
+    KIWOOM: ' 키움증권',
+    EBEST: ' 이베스트투자증권',
+    SK: 'SK증권',
+    DAISHIN: ' 대신증권',
+    SOLOMON_INVEST: ' 솔로몬증권',
+    HANHWA: ' 한화투자증권',
+    HANA_INVEST: ' 하나금융투자',
+    SHINHAN_INVEST: ' 신한금융투자',
+    DONGBU: ' DB금융투자',
+    EUGENE_INVEST: ' 유진투자증권',
+    MERITZ_COMPREHENSIVE: ' 메리츠종합금융증권',
+    BOOKOOK: ' 부국증권',
+    SHINYOUNG: ' 신영증권',
+    CAPE: ' 케이프투자증권',
+} as const;
+
+export const RETURN_WAY_MAP = {
+    SELLER_COLLECT: '판매자수거요청',
+    BUYER_DIRECT_RETURN: '구매자직접반품',
+} as const;
+
+export const INQUIRY_STATUS_MAP = {
+    ISSUED: '답변 대기',
+    IN_PROGRESS: '답변 진행중',
+    ANSWERED: '답변 완료',
+} as const;
+
+export const WITHDRAWAL_REASON_MAP = {
+    INSUFFICIENT_PRODUCTS: '상품종류가 부족하다',
+    HIGH_PRICE: '상품가격이 비싸다',
+    LOW_QUALITY: '상품가격에 비해 품질이 떨어진다',
+    SLOW_DELIVERY: '배송이 느리다',
+    REFUND_DISSATISFACTION: '반품/교환이 불만이다',
+    CUSTOMER_SERVICE: '상담원 고객응대 서비스가 불만이다',
+    INSUFFICIENT_BENEFITS: '쇼핑몰 혜택이 부족하다 (쿠폰, 적립금,할인 등)',
+    LOW_USAGE: '이용빈도가 낮다',
+    PRIVACY_CONCERN: '개인정보 유출이 염려된다',
+    ETC: '기타',
 } as const;

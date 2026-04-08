@@ -1,11 +1,11 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { mall } from '@/api/admin';
-import { GetMallResponse } from '@/models/admin/mall';
+import type { GetMallResponse } from '@/models/admin/mall';
 
 interface useMallParams<T = GetMallResponse> {
     options?: Omit<

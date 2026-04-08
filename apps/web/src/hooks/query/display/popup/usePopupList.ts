@@ -1,8 +1,8 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 import { popup } from '@/api/display';
-import { GetAllPopupParams, GetAllPopupResponse } from '@/models/display/popup';
+import type { GetAllPopupParams, GetAllPopupResponse } from '@/models/display/popup';
 import popupKeys from '@/hooks/queryKeys/popupKeys';
 
 interface UseAllPopupListParams<T = GetAllPopupResponse> {

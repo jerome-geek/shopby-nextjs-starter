@@ -1,36 +1,48 @@
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import { useMemo } from 'react';
+import { filter, isEmpty, pipe, toArray } from '@fxts/core';
 
 import * as styles from '@/components/mypage/orders/order-options-item.css';
 import { NextActionButton } from '@/components/mypage/orders/next-action-button';
 import { PATHS } from '@/const/paths';
-import { OrderOption } from '@/models/order';
+import { OrderOption, NextAction } from '@/models/order';
 import { useResponsive } from '@/hooks/utils';
 import { CURRENCY } from '@/utils/currency';
 
-type MypageOrderOptionListItemProps = Pick<
-    OrderOption,
-    | 'productNo'
-    | 'imageUrl'
-    | 'brandName'
-    | 'brandNameEn'
-    | 'productName'
-    | 'optionTitle'
-    | 'orderCnt'
-    | 'price'
-    | 'optionNo'
-    | 'orderOptionNo'
-    | 'orderNo'
-    | 'orderStatusType'
-    | 'orderStatusTypeLabel'
-    | 'claimStatusTypeLabel'
-    | 'claimNo'
-    | 'isFreeGift'
-    | 'inputs'
-    | 'isExtraProduct'
-    | 'baseProductName'
-    | 'nextActions'
->;
+type MypageOrderOptionListItemProps = Omit<
+    Pick<
+        OrderOption,
+        | 'productNo'
+        | 'imageUrl'
+        | 'brandName'
+        | 'brandNameEn'
+        | 'productName'
+        | 'optionTitle'
+        | 'orderCnt'
+        | 'price'
+        | 'optionNo'
+        | 'orderOptionNo'
+        | 'orderNo'
+        | 'orderStatusType'
+        | 'orderStatusTypeLabel'
+        | 'claimStatusTypeLabel'
+        | 'claimNo'
+        | 'isFreeGift'
+        | 'isExtraProduct'
+        | 'baseProductName'
+    >,
+    'nextActions' | 'inputs'
+> & {
+    nextActions: Array<Omit<NextAction, 'actionGroupType'>>;
+    inputs?: Nullable<
+        Array<{
+            inputNo?: number;
+            inputValue?: Nullable<string>;
+            inputLabel?: Nullable<string>;
+        }>
+    >;
+};
 
 export const OrderOptionsItem = ({
     productNo,
@@ -50,12 +62,32 @@ export const OrderOptionsItem = ({
     orderOptionNo,
     claimNo,
     orderNo,
+    inputs,
 }: MypageOrderOptionListItemProps) => {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
 
     const isBuyConfirm = orderStatusType === 'BUY_CONFIRM';
     const finalPrice = price?.salePrice ?? 0;
+
+    const filteredNextActions = useMemo(() => {
+        return pipe(
+            nextActions,
+            filter(({ nextActionType }) => {
+                if (
+                    isFreeGift &&
+                    (nextActionType === 'EXCHANGE' ||
+                        nextActionType === 'WRITE_REVIEW')
+                ) {
+                    return false;
+                }
+
+                return true;
+            }),
+            toArray,
+        );
+    }, [nextActions, isFreeGift]);
+    console.log(filteredNextActions);
 
     return (
         <li className={styles.itemContainer}>
@@ -97,30 +129,39 @@ export const OrderOptionsItem = ({
                                 </span>
                                 {baseProductName}
                             </p>
-                            <p className={styles.productName}>
-                                <span className={styles.productBadge}>
-                                    [{t('추가상품')}]
-                                </span>{' '}
-                                {productName}
-                            </p>
+                            <p
+                                className={styles.productName}
+                                dangerouslySetInnerHTML={{
+                                    __html: `<span class="${styles.productBadge}">${t('추가상품')}</span> ${productName}`,
+                                }}
+                            />
                         </>
                     ) : (
-                        <p className={styles.productName}>
-                            {isFreeGift && (
-                                <span className={styles.productBadge}>
-                                    [{t('사은품')}]
-                                </span>
-                            )}{' '}
-                            {productName}
-                        </p>
+                        <p
+                            className={styles.productName}
+                            dangerouslySetInnerHTML={{
+                                __html: `${
+                                    isFreeGift
+                                        ? `<span class="${styles.productBadge}">[${t('사은품')}]</span> `
+                                        : ''
+                                } ${productName}`,
+                            }}
+                        />
                     )}
 
-                    {optionTitle && (
-                        <p className={styles.optionText}>
-                            {optionTitle} | {orderCnt}
-                            {t('개')}
-                        </p>
-                    )}
+                    <div className={styles.optionText}>
+                        {optionTitle && (
+                            <p>
+                                {optionTitle} | {orderCnt}
+                                {t('개')}
+                            </p>
+                        )}
+                        {inputs?.map((input) => (
+                            <p key={input.inputNo}>
+                                {input.inputLabel} : {input.inputValue}
+                            </p>
+                        ))}
+                    </div>
 
                     {!isFreeGift && (
                         <p className={styles.priceText}>
@@ -142,40 +183,21 @@ export const OrderOptionsItem = ({
                 </div>
             )}
 
-            {!isMobile && (
+            {!isEmpty(filteredNextActions) && (
                 <div className={styles.actionsContainer}>
-                    {nextActions && nextActions.length > 0 ? (
-                        nextActions.map((action) => (
-                            <NextActionButton
-                                key={action.nextActionType}
-                                nextActionType={action.nextActionType}
-                                productNo={productNo}
-                                optionNo={optionNo}
-                                orderOptionNo={orderOptionNo}
-                                orderNo={orderNo}
-                                uri={action.uri}
-                                isFreeGift={isFreeGift}
-                                claimNo={claimNo || null}
-                            />
-                        ))
-                    ) : (
-                        <>
-                            <button
-                                type='button'
-                                className={styles.actionButton}
-                            >
-                                {t('내역조회')}
-                            </button>
-                            {isBuyConfirm && (
-                                <button
-                                    type='button'
-                                    className={`${styles.actionButton} ${styles.actionButtonPrimary}`}
-                                >
-                                    {t('리뷰작성')}
-                                </button>
-                            )}
-                        </>
-                    )}
+                    {filteredNextActions.map((action) => (
+                        <NextActionButton
+                            key={action.nextActionType}
+                            nextActionType={action.nextActionType}
+                            productNo={productNo}
+                            optionNo={optionNo}
+                            orderOptionNo={orderOptionNo}
+                            orderNo={orderNo}
+                            uri={action.uri}
+                            isFreeGift={isFreeGift}
+                            claimNo={claimNo || null}
+                        />
+                    ))}
                 </div>
             )}
         </li>

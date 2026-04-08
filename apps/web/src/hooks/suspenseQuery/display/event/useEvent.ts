@@ -1,14 +1,14 @@
 import {
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { useSearchParams } from 'next/navigation';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
-import { GetEventParams } from '@/models/display';
-import { GetEventResponse } from '@/models/display/event';
+import type { GetEventParams } from '@/models/display';
+import type { GetEventResponse } from '@/models/display/event';
 
 interface UseEventParams<T = GetEventResponse> {
     eventKey: string | number;

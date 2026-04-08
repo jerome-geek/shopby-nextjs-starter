@@ -1,6 +1,6 @@
 import { Minus, Plus, X } from 'lucide-react';
 
-import * as styles from '@/components/product/option/selected/index.css';
+import * as styles from '@/components/option/selected/index.css';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 

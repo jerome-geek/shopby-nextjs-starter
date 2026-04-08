@@ -1,12 +1,12 @@
 import {
     useSuspenseQuery,
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { category } from '@/api/display';
 import { categoryKeys } from '@/hooks/queryKeys';
-import { GetNewProductCategoriesResponse } from '@/models/display/category';
+import type { GetNewProductCategoriesResponse } from '@/models/display/category';
 
 interface UseNewProductCategoryListParams<T = GetNewProductCategoriesResponse> {
     options?: Omit<

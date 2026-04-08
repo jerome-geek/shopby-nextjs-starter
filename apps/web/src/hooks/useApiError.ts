@@ -1,6 +1,6 @@
 'use client';
 
-import { AxiosError, isAxiosError } from 'axios';
+import { isAxiosError, type AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import useDialog from '@/hooks/utils/useDialog';

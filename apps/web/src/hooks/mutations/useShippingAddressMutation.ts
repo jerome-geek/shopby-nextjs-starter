@@ -1,12 +1,12 @@
 import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import { istype AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { shippingAddress } from '@/api/order';
 import { addressKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui';
-import { RegisterShippingAddressData } from '@/models/order/shippingAddress';
+import type { RegisterShippingAddressData } from '@/models/order/shippingAddress';
 
 const useShippingAddressMutation = () => {
     const { t } = useTranslation();

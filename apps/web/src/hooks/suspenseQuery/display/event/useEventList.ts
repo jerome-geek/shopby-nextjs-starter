@@ -1,12 +1,15 @@
 import {
-    UseSuspenseQueryOptions,
+    type UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
-import { GetEventsV2Params, GetEventsResponse } from '@/models/display/event';
+import type {
+    GetEventsV2Params,
+    GetEventsResponse,
+} from '@/models/display/event';
 
 interface UseEventListParams<T = GetEventsResponse> {
     params: GetEventsV2Params;

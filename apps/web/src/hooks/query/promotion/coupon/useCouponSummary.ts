@@ -1,8 +1,8 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import coupon from '@/api/promotion/coupon';
-import couponKeys from '@/hooks/queryKeys/couponKeys';
+import { coupon } from '@/api/promotion';
+import { couponKeys } from '@/hooks/queryKeys';
 import type {
     GetCouponSummaryParams,
     GetCouponSummaryResponse,
@@ -15,7 +15,8 @@ interface UseCouponSummaryParams<T = GetCouponSummaryResponse> {
         UseQueryOptions<
             GetCouponSummaryResponse,
             AxiosError<ShopByErrorResponse>,
-            T
+            T,
+            ReturnType<(typeof couponKeys)['summary']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -30,6 +31,7 @@ const useCouponSummary = <T = GetCouponSummaryResponse>({
         queryKey: couponKeys.summary(memberNo, params),
         queryFn: async () => {
             const { data } = await coupon.getCouponSummary(params);
+
             return data;
         },
         ...options,
@@ -37,4 +39,3 @@ const useCouponSummary = <T = GetCouponSummaryResponse>({
 };
 
 export default useCouponSummary;
-
