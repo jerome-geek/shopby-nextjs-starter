@@ -43,3 +43,22 @@ export const inlineRow = style({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
 });
+
+export const withdrawalButton = style({
+    color: vars.color.gray['70'],
+    fontSize: '1.6rem',
+    fontWeight: 400,
+    lineHeight: '2.0rem',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+    height: '30px',
+    marginLeft: 'auto',
+    width: 'auto',
+
+    '@media': {
+        [media.mobile]: {
+            height: '20px',
+            fontSize: '1.4rem',
+        },
+    },
+});

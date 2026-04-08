@@ -84,7 +84,9 @@ export const ModalLayout = ({
                         )}
 
                         {/* 컨텐츠 영역 */}
-                        <div className={styles.modalContent}>{children}</div>
+                        <div className={styles.modalContent} data-lenis-prevent>
+                            {children}
+                        </div>
 
                         {/* 푸터 영역 (선택 사항) */}
                         {footerButtonList && footerButtonList.length > 0 && (

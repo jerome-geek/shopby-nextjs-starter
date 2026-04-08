@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
+import { overlay } from 'overlay-kit';
 
 import upload from '@/api/storage/image';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
@@ -33,7 +34,7 @@ import { useMemberExtraInfo } from '@/hooks/query/member/memberConfig';
 import { profileKeys } from '@/hooks/queryKeys';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
 import { useToast } from '@/hooks/ui/useToast';
-import { useDialog, useGlobal } from '@/hooks/utils';
+import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/edit/index.css';
 import * as memberConfigStyles from '@/pages/signup/register/index.css';
 import {
@@ -46,6 +47,8 @@ import { CertificationCheckContext } from '@/context/certificationCheck';
 import * as signupFormStyles from '@/components/signup/form/index.css';
 import { profile } from '@/api/member';
 import { useMyApp } from '@/hooks/myapp';
+import { WithdrawalModal } from '@/components/modal/withdrawal';
+import { WithdrawalBottomSheet } from '@/components/bottom-sheet/withdrawal';
 
 export const EditForm = ({
     password,
@@ -54,6 +57,8 @@ export const EditForm = ({
     password: string;
     setPassword: (password: string) => void;
 }) => {
+    const { isMobile } = useResponsive();
+
     const { t } = useTranslation();
     const router = useRouter();
 
@@ -306,6 +311,16 @@ export const EditForm = ({
         }
     });
 
+    const openWithdrawal = () => {
+        overlay.open((props) => {
+            return isMobile ? (
+                <WithdrawalBottomSheet {...props} />
+            ) : (
+                <WithdrawalModal {...props} />
+            );
+        });
+    };
+
     return (
         <div className={card.container}>
             <section className={card.section} data-type='form'>
@@ -413,6 +428,14 @@ export const EditForm = ({
                                         )}
                                     </div>
                                 )}
+
+                                <Button
+                                    frame='text'
+                                    className={styles.withdrawalButton}
+                                    onClick={openWithdrawal}
+                                >
+                                    {t('회원 탈퇴')}
+                                </Button>
                             </div>
 
                             <div className={formStyles.actions}>

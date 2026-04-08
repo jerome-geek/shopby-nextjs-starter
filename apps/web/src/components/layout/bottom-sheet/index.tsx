@@ -161,6 +161,7 @@ export const BottomSheetLayout = ({
                         isFooter: !!footerButtonList,
                     })}
                     style={{ ...contentStyle }}
+                    data-lenis-prevent
                 >
                     {isArray(children) && children.length > 1 ? (
                         <>{children}</>

@@ -178,5 +178,5 @@ export const noOptionsMessage = style([
 ]);
 
 export const menuPortal = style({
-    zIndex: 9999,
+    zIndex: '9999 !important',
 });
