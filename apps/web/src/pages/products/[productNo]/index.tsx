@@ -20,21 +20,25 @@ import { useEffect, useMemo } from 'react';
 import { product } from '@/api/product';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import ProductAdditionalDiscount from '@/components/product/additional-discount';
-import ProductMainImage from '@/components/product/main-image';
 import {
+    PhotoReview,
+    ProductAdditionalDiscount,
+    ProductMainImage,
+    ProductTabs,
+    ProductErrorState,
+} from '@/components/product';
+import {
+    FlatProductOption,
     MultiProductOption,
     SelectedProductOption,
-} from '@/components/product/option';
-import FlatProductOption from '@/components/product/option/flat';
-import PhotoReview from '@/components/product/photo-review';
-import ProductTabs from '@/components/product/product-tabs';
+} from '@/components/product-option';
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
 import { toOrderSheetOption, toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
+import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
 import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
 import { cartKeys, productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
@@ -44,11 +48,9 @@ import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo]/index.css';
-import ProductErrorState from '@/components/product/product-error-state';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
-import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -129,6 +131,10 @@ function ProductDetailView({
         (price.additionDiscountAmt || 0);
 
     const { onLikeButtonClick } = useProductLike();
+
+    const onCouponDownloadClick = () => {
+        // overlay.open((props) => {});
+    };
 
     const overlayData = useOverlayData();
     const isOptionBottomSheetOpen =
@@ -351,9 +357,9 @@ function ProductDetailView({
 
                             <div className={styles.ratingContainer}>
                                 <Star
-                                    size={14}
-                                    fill='#E2808F'
-                                    stroke='#E2808F'
+                                    size={20}
+                                    fill={vars.color.pink['80']}
+                                    stroke={vars.color.pink['80']}
                                 />
                                 <strong className={styles.reviewRate}>
                                     {productDetailData.reviewRate || 0}
@@ -366,7 +372,7 @@ function ProductDetailView({
 
                         <button
                             className={styles.likeButton}
-                            onClick={() => onLikeButtonClick(productNo, liked)}
+                            onClick={onLikeButtonClick(productNo, liked)}
                         >
                             <BookmarkIcon
                                 width={36}
@@ -403,7 +409,10 @@ function ProductDetailView({
                                 </span>
                             </div>
                         </div>
-                        <button className={styles.couponButton}>
+                        <button
+                            className={styles.couponButton}
+                            onClick={onCouponDownloadClick}
+                        >
                             쿠폰 받기
                         </button>
                     </div>

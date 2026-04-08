@@ -3,7 +3,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { useProductProfileMutation } from '@/hooks/mutations';
-import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
+import {
+    productKeys,
+    productProfileKeys,
+    productSectionKeys,
+} from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
 import useDialog from '@/hooks/utils/useDialog';
 
@@ -51,9 +55,10 @@ const useProductLike = () => {
                             predicate: (query) =>
                                 includes(query.queryKey[0], [
                                     ...productKeys.all,
+                                    ...productSectionKeys.all,
                                     ...productProfileKeys.all,
                                 ]),
-                            refetchType: 'none',
+                            refetchType: 'active',
                         });
 
                         openDialog({
