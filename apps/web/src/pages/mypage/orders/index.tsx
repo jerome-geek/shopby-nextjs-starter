@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
-import dayjs from 'dayjs';
+import { isEmpty } from '@fxts/core';
 
-import { MypageLayout } from '@/components/layout/mypage';
+import { MypageLayout } from '@/components/layout';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
@@ -19,11 +18,9 @@ import {
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
 import { DEFAULT_ORDER_TAB_TYPES } from '@/const/order';
-import { PATHS } from '@/const/paths';
 import { OrderRequestStatusType } from '@/models';
-import { CURRENCY } from '@/utils/currency';
+import { OrderOptions } from '@/components/mypage/orders/order-options';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import * as styles from '@/pages/mypage/orders/index.css';
 
 const PAGE_SIZE = 10;
 
@@ -57,10 +54,16 @@ export const Orders = () => {
                     ` ${orderStatusSummaryData?.depositWaitCnt ?? 0}`,
             },
             {
-                value: 'PAY_DONE,PRODUCT_PREPARE,DELIVERY_PREPARE',
+                value: 'PAY_DONE',
+                label:
+                    t('결제완료') +
+                    ` ${orderStatusSummaryData?.payDoneCnt ?? 0}`,
+            },
+            {
+                value: 'PRODUCT_PREPARE,DELIVERY_PREPARE',
                 label:
                     t('출고대기') +
-                    ` ${orderStatusSummaryData?.payDoneCnt ?? 0}`,
+                    ` ${orderStatusSummaryData?.productPrepareCnt ?? 0}`,
             },
             {
                 value: 'DELIVERY_ING',
@@ -221,227 +224,13 @@ export const Orders = () => {
                     )}
 
                     <LoadingWrapper isLoading={isLoading}>
-                        {myOrderList.length === 0 ? (
-                            <NoResult text={t('주문 내역이 없습니다.')} />
+                        {!isEmpty(myOrderList) ? (
+                            <OrderOptions optionItems={myOrderList} />
                         ) : (
-                            <ul>
-                                {myOrderList.map((orderGroup) => (
-                                    <li
-                                        key={orderGroup.orderNo}
-                                        className={styles.orderGroup}
-                                    >
-                                        {/* 주문번호 / 날짜 헤더 */}
-                                        <div
-                                            className={styles.orderGroupHeader}
-                                        >
-                                            <Link
-                                                href={PATHS.MYPAGE.ORDERS.DETAIL.replace(
-                                                    '[orderNo]',
-                                                    orderGroup.orderNo,
-                                                )}
-                                                className={styles.orderNoLink}
-                                            >
-                                                {orderGroup.orderNo}
-                                            </Link>
-                                            <span className={styles.orderDate}>
-                                                {dayjs(
-                                                    orderGroup.orderYmdt,
-                                                ).format('YYYY.MM.DD')}
-                                            </span>
-                                        </div>
-
-                                        {/* 개별 상품 옵션 행 */}
-                                        {orderGroup.orderOptions.map(
-                                            (option) => {
-                                                const isBuyConfirm =
-                                                    option.orderStatusType ===
-                                                    'BUY_CONFIRM';
-                                                const statusLabel =
-                                                    option.claimStatusTypeLabel ||
-                                                    option.orderStatusTypeLabel;
-
-                                                return (
-                                                    <div
-                                                        key={
-                                                            option.orderOptionNo
-                                                        }
-                                                        className={
-                                                            styles.orderItemRow
-                                                        }
-                                                    >
-                                                        {/* 상품 정보 셀 */}
-                                                        <div
-                                                            className={
-                                                                styles.productCell
-                                                            }
-                                                        >
-                                                            <Link
-                                                                href={
-                                                                    option.isExtraProduct
-                                                                        ? '#'
-                                                                        : `${PATHS.PRODUCTS.MAIN}/${option.productNo}`
-                                                                }
-                                                                style={{
-                                                                    pointerEvents:
-                                                                        option.isExtraProduct
-                                                                            ? 'none'
-                                                                            : 'auto',
-                                                                    flexShrink: 0,
-                                                                }}
-                                                            >
-                                                                <img
-                                                                    src={
-                                                                        option.imageUrl ||
-                                                                        ''
-                                                                    }
-                                                                    alt={
-                                                                        option.productName
-                                                                    }
-                                                                    className={
-                                                                        styles.thumbnail
-                                                                    }
-                                                                />
-                                                            </Link>
-
-                                                            <div
-                                                                className={
-                                                                    styles.productInfo
-                                                                }
-                                                            >
-                                                                {/* 모바일 전용 주문 상태 뱃지 */}
-                                                                <span
-                                                                    className={`${styles.mobileStatusBadge} ${isBuyConfirm ? styles.mobileStatusBadgePrimary : ''}`}
-                                                                >
-                                                                    {
-                                                                        statusLabel
-                                                                    }
-                                                                </span>
-
-                                                                {option.isFreeGift && (
-                                                                    <span
-                                                                        className={
-                                                                            styles.productBadge
-                                                                        }
-                                                                    >
-                                                                        [
-                                                                        {t(
-                                                                            '사은품',
-                                                                        )}
-                                                                        ]
-                                                                    </span>
-                                                                )}
-
-                                                                {option.isExtraProduct && (
-                                                                    <span
-                                                                        className={
-                                                                            styles.productBadge
-                                                                        }
-                                                                    >
-                                                                        [
-                                                                        {t(
-                                                                            '추가상품',
-                                                                        )}
-                                                                        ]
-                                                                    </span>
-                                                                )}
-
-                                                                <p
-                                                                    className={
-                                                                        styles.productName
-                                                                    }
-                                                                >
-                                                                    {
-                                                                        option.productName
-                                                                    }
-                                                                </p>
-
-                                                                {option.optionTitle && (
-                                                                    <p
-                                                                        className={
-                                                                            styles.optionText
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            option.optionTitle
-                                                                        }{' '}
-                                                                        |{' '}
-                                                                        {
-                                                                            option.orderCnt
-                                                                        }
-                                                                        {t(
-                                                                            '개',
-                                                                        )}
-                                                                    </p>
-                                                                )}
-
-                                                                {!option.isFreeGift && (
-                                                                    <p
-                                                                        className={
-                                                                            styles.priceText
-                                                                        }
-                                                                    >
-                                                                        {CURRENCY(
-                                                                            option
-                                                                                .price
-                                                                                ?.salePrice ??
-                                                                                0,
-                                                                        ).format()}
-                                                                    </p>
-                                                                )}
-                                                            </div>
-                                                        </div>
-
-                                                        {/* 주문 상태 셀 (데스크탑) */}
-                                                        <div
-                                                            className={
-                                                                styles.statusCell
-                                                            }
-                                                        >
-                                                            <span
-                                                                className={`${styles.statusText} ${isBuyConfirm ? styles.statusTextPrimary : ''}`}
-                                                            >
-                                                                {statusLabel}
-                                                            </span>
-                                                        </div>
-
-                                                        <div
-                                                            className={
-                                                                styles.actionsCell
-                                                            }
-                                                        >
-                                                            <Link
-                                                                href={PATHS.MYPAGE.ORDERS.DETAIL.replace(
-                                                                    '[orderNo]',
-                                                                    orderGroup.orderNo,
-                                                                )}
-                                                                className={
-                                                                    styles.actionButton
-                                                                }
-                                                            >
-                                                                {t('내역조회')}
-                                                            </Link>
-
-                                                            {isBuyConfirm && (
-                                                                <button
-                                                                    type='button'
-                                                                    className={`${styles.actionButton} ${styles.actionButtonPrimary}`}
-                                                                >
-                                                                    {t(
-                                                                        '리뷰작성',
-                                                                    )}
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            },
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
+                            <NoResult text={t('주문 내역이 없습니다.')} />
                         )}
 
-                        {isMobile && (
+                        {isMobile ? (
                             <ObserverTarget
                                 onIntersect={() => {
                                     if (hasNextPage) {
@@ -451,22 +240,20 @@ export const Orders = () => {
                                 hasNextPage={hasNextPage || false}
                                 totalCount={totalCount}
                             />
+                        ) : (
+                            <div className={card.paging}>
+                                <Paging
+                                    currentPage={pageNumber}
+                                    totalCount={totalCount}
+                                    pageSize={PAGE_SIZE}
+                                    onPageClick={(page) => {
+                                        setQuery({ pageNumber: page });
+                                    }}
+                                />
+                            </div>
                         )}
                     </LoadingWrapper>
                 </div>
-
-                {!isMobile && (
-                    <div className={card.paging}>
-                        <Paging
-                            currentPage={pageNumber}
-                            totalCount={totalCount}
-                            pageSize={PAGE_SIZE}
-                            onPageClick={(page) => {
-                                setQuery({ pageNumber: page });
-                            }}
-                        />
-                    </div>
-                )}
             </section>
         </div>
     );

@@ -12,7 +12,6 @@ export const OrderOptions = ({
 }: {
     optionItems: OrderItems[] | MemberClaim[];
 }) => {
-
     const isOrderItems = optionItems.every(
         (option) => 'orderOptions' in option,
     );
@@ -50,6 +49,7 @@ export const OrderOptions = ({
                             <OrderOptionsItem
                                 key={option.orderOptionNo}
                                 {...option}
+                                inputs={option.inputs}
                                 orderNo={options.orderNo}
                             />
                         ))}
@@ -59,4 +59,3 @@ export const OrderOptions = ({
         </ul>
     );
 };
-

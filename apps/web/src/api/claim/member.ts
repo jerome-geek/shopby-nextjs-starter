@@ -295,5 +295,20 @@ import {
 
 // export default memberClaim;
 
-const memberClaim = {};
+const memberClaim = {
+    /**
+     * 회원 주문취소 신청하기
+     *  - 주문을 취소신청하는 API입니다
+     */
+    requestCancel: (
+        orderNo: string,
+        data: CancelClaimData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return shopbyRequest.post(`profile/orders/${orderNo}/claims/cancel`, {
+            json: data,
+            ...options,
+        });
+    },
+};
 export default memberClaim;
