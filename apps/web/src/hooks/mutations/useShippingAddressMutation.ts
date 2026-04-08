@@ -1,6 +1,6 @@
 import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { istype AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { shippingAddress } from '@/api/order';

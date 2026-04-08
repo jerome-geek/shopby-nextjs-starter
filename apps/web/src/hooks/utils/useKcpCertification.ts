@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isNull, isUndefined } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
-import { istype AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { overlay } from 'overlay-kit';
 import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';

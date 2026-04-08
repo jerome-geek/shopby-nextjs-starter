@@ -4,7 +4,7 @@ import {
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { type AxiosError, istype AxiosError } from 'axios';
+import { type AxiosError, isAxiosError } from 'axios';
 
 // import { request } from '@/api/core';
 import { guestOrder } from '@/api/order';
