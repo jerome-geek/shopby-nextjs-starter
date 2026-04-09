@@ -5,7 +5,7 @@ import { memberClaim } from '@/api/claim';
 import claimsKeys from '@/hooks/queryKeys/claimsKeys';
 import { ClaimPriceInfo } from '@/models/claim';
 import { GetClaimOptionPriceParams } from '@/models/claim/guest';
-import { checkLogin } from '@/utils/users';
+import { useAuth } from '@/hooks/useAuth';
 
 interface UseOrderOptionDetailForClaimProps<T = ClaimPriceInfo> {
     orderOptionNo: number;
@@ -26,6 +26,8 @@ const useOrderOptionEstimate = <T = ClaimPriceInfo>({
     searchParams,
     options,
 }: UseOrderOptionDetailForClaimProps<T>) => {
+    const isLogin = useAuth();
+
     return useQuery({
         queryKey: claimsKeys.estimate(orderOptionNo, searchParams),
         queryFn: async () => {
@@ -40,7 +42,7 @@ const useOrderOptionEstimate = <T = ClaimPriceInfo>({
         enabled:
             (options?.enabled ?? true) &&
             !!orderOptionNo &&
-            checkLogin() &&
+            !!isLogin &&
             !!searchParams?.claimReasonType,
     });
 };

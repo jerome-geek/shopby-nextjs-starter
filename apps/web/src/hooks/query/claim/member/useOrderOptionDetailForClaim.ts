@@ -7,7 +7,7 @@ import {
     GetOrderOptionDetailForClaimParams,
     GetOrderOptionDetailForClaimResponse,
 } from '@/models/claim/member';
-import { checkLogin } from '@/utils/users';
+import { useAuth } from '@/hooks/useAuth';
 
 interface UseOrderOptionDetailForClaimProps<
     T = GetOrderOptionDetailForClaimResponse,
@@ -32,6 +32,8 @@ const useOrderOptionDetailForClaim = <
     searchParams,
     options,
 }: UseOrderOptionDetailForClaimProps<T>) => {
+    const isLogin = useAuth();
+
     return useQuery({
         queryKey: ordersKeys.detailsByOrderOptionNo(
             orderOptionNo,
@@ -45,7 +47,7 @@ const useOrderOptionDetailForClaim = <
 
             return data;
         },
-        enabled: !!orderOptionNo && checkLogin(),
+        enabled: !!orderOptionNo && !!isLogin,
         ...options,
     });
 };
