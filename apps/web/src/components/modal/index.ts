@@ -1,5 +1,6 @@
 export * from '@/components/modal/address-search';
 export * from '@/components/modal/recipe-create-select';
+export * from '@/components/modal/recipe-image-upload';
 export * from '@/components/modal/recipe-url-input';
 export * from '@/components/modal/shipping-address-list';
 export * from '@/components/modal/coupon-register';

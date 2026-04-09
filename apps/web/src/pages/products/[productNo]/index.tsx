@@ -53,6 +53,7 @@ import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { ProductCouponModal } from '@/components/modal/product-coupon';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -133,7 +134,14 @@ function ProductDetailView({
     const { onLikeButtonClick } = useProductLike();
 
     const onCouponDownloadClick = () => {
-        // overlay.open((props) => {});
+        console.log('onCouponDownloadClick');
+        overlay.open((props) => {
+            return isMobile ? (
+                <></>
+            ) : (
+                <ProductCouponModal productNo={productNo} {...props} />
+            );
+        });
     };
 
     const overlayData = useOverlayData();

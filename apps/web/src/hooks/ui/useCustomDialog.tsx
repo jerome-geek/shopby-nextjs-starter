@@ -5,7 +5,9 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
-import { RecipeCreateSelection, RecipeUrlInput } from '@/components/modal';
+import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
+import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
+import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 import { PATHS } from '@/const/paths';
 import { vars } from '@/styles/theme.css';
@@ -136,6 +138,32 @@ export const useCustomDialog = () => {
         });
     }, [router]);
 
+    const openRecipeImageUpload = useCallback(() => {
+        overlay.open((props) => {
+            const handleClose = () => {
+                const newQuery = { ...router.query };
+                delete newQuery[MODAL_QUERY_KEY];
+                router.replace(
+                    { pathname: router.pathname, query: newQuery },
+                    undefined,
+                    { shallow: true },
+                );
+                props.close();
+            };
+
+            return (
+                <RecipeImageUploadModal
+                    {...props}
+                    close={handleClose}
+                    onNext={() => {
+                        handleClose();
+                        router.push(PATHS.RECIPES.WRITE);
+                    }}
+                />
+            );
+        });
+    }, [router]);
+
     const openRecipeCreateSelection = useCallback(() => {
         overlay.open((props) => {
             const handleClose = () => {
@@ -154,18 +182,23 @@ export const useCustomDialog = () => {
                     {...props}
                     close={handleClose}
                     onSelectAI={() => {
-                        props.close(); // 기존 선택 모달 닫기
-                        openRecipeUrlInput(); // URL 입력 모달 띄우기
+                        props.close();
+                        openRecipeUrlInput();
+                    }}
+                    onSelectDirect={() => {
+                        props.close();
+                        openRecipeImageUpload();
                     }}
                 />
             );
         });
-    }, [router, openRecipeUrlInput]);
+    }, [router, openRecipeUrlInput, openRecipeImageUpload]);
 
     return {
         openAddCartDialog,
         openLoginDialog,
         openRecipeCreateSelection,
         openRecipeUrlInput,
+        openRecipeImageUpload,
     };
 };

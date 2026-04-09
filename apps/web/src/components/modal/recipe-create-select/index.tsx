@@ -1,8 +1,6 @@
-import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import { ModalLayout } from '@/components/layout';
-import { PATHS } from '@/const/paths';
 import * as styles from '@/components/modal/recipe-create-select/index.css';
 
 interface RecipeCreateSelectionProps {
@@ -10,6 +8,7 @@ interface RecipeCreateSelectionProps {
     close: () => void;
     unmount: () => void;
     onSelectAI: () => void;
+    onSelectDirect: () => void;
 }
 
 export const RecipeCreateSelection = ({
@@ -17,6 +16,7 @@ export const RecipeCreateSelection = ({
     close,
     unmount,
     onSelectAI,
+    onSelectDirect,
 }: RecipeCreateSelectionProps) => {
     const { t } = useTranslation();
 
@@ -37,14 +37,13 @@ export const RecipeCreateSelection = ({
                 >
                     {t('AI로 만들기')}
                 </button>
-                <Link
-                    href={PATHS.RECIPES.WRITE}
+                <button
+                    type='button'
                     className={styles.directButton}
-                    style={{ textDecoration: 'none' }}
-                    onClick={close} // 👈 이 부분을 추가하여 모달을 닫아줍니다!
+                    onClick={onSelectDirect}
                 >
                     {t('직접 만들기')}
-                </Link>
+                </button>
             </div>
         </ModalLayout>
     );
