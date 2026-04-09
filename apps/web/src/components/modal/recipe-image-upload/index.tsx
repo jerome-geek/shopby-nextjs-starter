@@ -56,7 +56,11 @@ interface SortableImageItemProps {
     onDelete: (index: number) => void;
 }
 
-const SortableImageItem = ({ src, index, onDelete }: SortableImageItemProps) => {
+const SortableImageItem = ({
+    src,
+    index,
+    onDelete,
+}: SortableImageItemProps) => {
     const {
         attributes,
         listeners,
@@ -133,7 +137,7 @@ export const RecipeImageUploadModal = ({
         }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
-        })
+        }),
     );
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,15 +174,7 @@ export const RecipeImageUploadModal = ({
             title={t('이미지 추가')}
             width='588px'
             footerButtonList={[
-                <div
-                    key='footer'
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '16px',
-                    }}
-                >
+                <div key='footer' className={styles.nextButtonContainer}>
                     <p className={styles.hint}>{hint}</p>
                     <motion.button
                         whileTap={{ scale: isLoading ? 1 : 0.98 }}

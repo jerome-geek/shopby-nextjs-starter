@@ -1,6 +1,5 @@
-import { createStore } from './utils';
-
-import type { RegisterManualTempImagesData } from '@/models/shop/recipe';
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 /** registerManualTempImages 응답의 tempImages 아이템 */
 export interface ManualTempImage {
@@ -18,11 +17,20 @@ interface RecipeManualStore {
     clearTempImages: () => void;
 }
 
-export const useRecipeManualStore = createStore<RecipeManualStore>(
-    (set) => ({
-        tempImages: [],
-        setTempImages: (images) => set({ tempImages: images }, false, 'setTempImages'),
-        clearTempImages: () => set({ tempImages: [] }, false, 'clearTempImages'),
-    }),
-    'RecipeManualStore'
+export const useRecipeManualStore = create<RecipeManualStore>()(
+    devtools(
+        persist(
+            (set) => ({
+                tempImages: [],
+                setTempImages: (images) =>
+                    set({ tempImages: images }, false, 'setTempImages'),
+                clearTempImages: () =>
+                    set({ tempImages: [] }, false, 'clearTempImages'),
+            }),
+            {
+                name: 'RecipeManualStore',
+            },
+        ),
+        { name: 'RecipeManualStore' },
+    ),
 );

@@ -116,6 +116,13 @@ export const imageDeleteBtn = style({
     },
 });
 
+export const nextButtonContainer = style({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+});
+
 export const hint = style([
     textStyles.body2Medium,
     {
@@ -127,11 +134,11 @@ export const hint = style([
 ]);
 
 export const nextButton = style([
-    textStyles.title1Semibold,
+    textStyles.headlineSemibold,
     {
         width: '100%',
-        height: '68px',
-        backgroundColor: '#efb8be',
+        height: '53px',
+        backgroundColor: vars.color.pink['50'],
         color: vars.color.white,
         borderRadius: '12px',
         border: 'none',

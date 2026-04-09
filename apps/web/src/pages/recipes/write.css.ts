@@ -49,8 +49,8 @@ export const section = style({
 
 export const labelArea = style({
     display: 'flex',
-    alignItems: 'baseline',
-    gap: '4px',
+    alignItems: 'center',
+    gap: '12px',
 });
 
 export const labelText = style({
@@ -65,17 +65,23 @@ export const requiredDot = style({
     fontWeight: vars.typography.fontWeight.bold,
 });
 
-export const labelHint = style({
-    fontSize: vars.typography.fontSize['caption-1'],
-    color: vars.color.gray['50'],
-    marginLeft: '8px',
-});
+export const labelHint = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['50'],
+    },
+]);
 
 export const imageUploadGrid = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(5, 1fr)',
     gap: '12px',
+
     '@media': {
+        [media.desktop]: {
+            // 데스크탑에서 한 줄에 8개로 변경
+            gridTemplateColumns: 'repeat(8, 1fr)',
+        },
         [media.mobile]: {
             gridTemplateColumns: 'repeat(3, 1fr)',
         },
@@ -86,15 +92,20 @@ export const imageSlot = style({
     aspectRatio: '1 / 1',
     width: '100%',
     backgroundColor: vars.color.gray['10'],
-    border: `1px solid ${vars.color.gray['30']}`,
-    borderRadius: '12px',
+    border: `1px dashed ${vars.color.gray['50']}`,
+    borderRadius: '4px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'visible',
     transition: 'all 0.2s ease',
+    '@media': {
+        [media.desktop]: {
+            maxWidth: '130px',
+        },
+    },
     selectors: {
         '&:hover': {
             backgroundColor: vars.color.gray['20'],
@@ -108,30 +119,49 @@ export const plusIcon = style({
     color: vars.color.gray['40'],
 });
 
-export const mainBadge = style({
+export const mainBadge = style([
+    textStyles.body1Semibold,
+    {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        backgroundColor: 'rgba(26, 26, 26, 0.8)',
+        color: vars.color.white,
+        padding: '4px 8px',
+        borderBottomRightRadius: '4px',
+        zIndex: 10,
+    },
+]);
+
+export const deleteButtonWrapper = style({
     position: 'absolute',
-    top: '0',
-    left: '0',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    color: vars.color.white,
-    fontSize: '11px',
-    padding: '2px 6px',
-    borderBottomRightRadius: '8px',
+    top: '-12px',
+    right: '-12px',
+    width: '28px',
+    height: '28px',
+    borderRadius: '50%',
+    backgroundColor: vars.color.white,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease',
+
+    selectors: {
+        '&:hover': {
+            transform: 'scale(1.1)',
+        },
+    },
 });
 
 export const deleteButton = style({
-    position: 'absolute',
-    top: '4px',
-    right: '4px',
-    width: '24px',
-    height: '24px',
+    width: '22px',
+    height: '22px',
     borderRadius: '50%',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: vars.color.gray['50'],
     color: vars.color.white,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backdropFilter: 'blur(4px)',
 });
 
 export const inputGroup = style({
