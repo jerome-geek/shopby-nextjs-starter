@@ -1,19 +1,19 @@
-import { useRef, useState, useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { authentication } from '@/api/auth';
+import { profile } from '@/api/member';
 import { Button } from '@/components/ui/button';
+import * as styles from '@/components/ui/form/EmailAuthentication.css';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
 import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import { useMall } from '@/hooks/suspenseQuery/admin/mall';
-import useDialog from '@/hooks/utils/useDialog';
-import { useTimer } from '@/hooks/useTimer';
-import * as styles from '@/components/ui/form/EmailAuthentication.css';
-import { profile } from '@/api/member';
 import useApiError from '@/hooks/useApiError';
+import { useTimer } from '@/hooks/useTimer';
+import useDialog from '@/hooks/utils/useDialog';
 
 type AuthStatus = 'IDLE' | 'SENT' | 'VERIFIED' | 'EXPIRED';
 
@@ -72,7 +72,7 @@ export default function EmailAuthentication() {
         name: 'email',
     });
 
-    const { handleError } = useApiError();
+    const { handleErrorDialog } = useApiError();
 
     // 이메일 변경 시 인증 상태 초기화
     useEffect(() => {
@@ -119,7 +119,7 @@ export default function EmailAuthentication() {
 
             openDialog({ message: t('인증번호가 발송되었습니다.') });
         } catch (error) {
-            await handleError(error);
+            await handleErrorDialog(error);
         }
     };
 
@@ -151,7 +151,7 @@ export default function EmailAuthentication() {
             setValue('certificated', true);
             openDialog({ message: t('인증번호가 확인되었습니다.') });
         } catch (error) {
-            await handleError(error);
+            await handleErrorDialog(error);
         }
     };
 

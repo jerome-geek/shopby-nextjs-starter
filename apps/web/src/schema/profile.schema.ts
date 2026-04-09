@@ -191,9 +191,7 @@ export const createUpdateProfileSchema = ({
             /** 현재 비밀번호 (nullable) */
             currentPassword: isSocialLogin
                 ? z.string().optional()
-                : z
-                      .string('현재 비밀번호를 입력해주세요.')
-                      .nonempty('현재 비밀번호를 입력해주세요.'),
+                : z.string('현재 비밀번호를 입력해주세요.'),
             /** 가입시 동의한 선택 동의 항목 (nullable) */
             joinTermsAgreements: z
                 .array(

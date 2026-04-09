@@ -18,7 +18,7 @@ interface DialogProps extends DefaultDialogProps {
 // TODO: 1. ESC 키로 닫기 (모달이 여러개 노출될 경우 모달 오픈 순서의 역순으로 닫혀야함)
 // TODO: 2. 모달 열릴 때 포커스 트랩 설정
 // TODO: 3. 모달 닫힐 때 이전 포커스 위치로 복귀
-const DialogLayout = ({
+export const DialogLayout = ({
     isOpen,
     close,
     unmount,
@@ -74,5 +74,3 @@ const DialogLayout = ({
         </AnimatePresence>
     );
 };
-
-export default DialogLayout;

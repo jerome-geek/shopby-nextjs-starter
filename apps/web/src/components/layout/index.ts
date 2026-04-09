@@ -1,4 +1,5 @@
 export * from '@/components/layout/default';
+export * from '@/components/layout/dialog';
 export * from '@/components/layout/auth';
 export * from '@/components/layout/csr';
 export * from '@/components/layout/mypage';

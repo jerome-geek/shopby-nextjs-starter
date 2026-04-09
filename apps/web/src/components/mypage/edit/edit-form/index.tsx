@@ -55,7 +55,7 @@ export const EditForm = ({
     setPassword,
 }: {
     password: string;
-    setPassword: (password: string) => void;
+    setPassword: (password: string | null) => void;
 }) => {
     const { isMobile } = useResponsive();
 
@@ -265,6 +265,7 @@ export const EditForm = ({
             ...data,
             extraInfo: extraInfoList,
             joinTermsAgreements: undefined,
+            password: data.isModifyPassword ? data.password : undefined,
         };
 
         try {
@@ -445,7 +446,7 @@ export const EditForm = ({
                                     variant='secondary'
                                     className={formStyles.actionButton}
                                     onClick={() => {
-                                        setPassword('');
+                                        setPassword(null);
                                     }}
                                 >
                                     {t('취소')}

@@ -47,7 +47,7 @@ export const Withdrawal = (props: DefaultModalLayoutProps) => {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
 
-    const { handleError } = useApiError();
+    const { handleErrorDialog } = useApiError();
 
     const { isMyApp, handleSendLogout } = useMyApp();
     const { openAsyncDialog } = useDialog();
@@ -124,7 +124,7 @@ export const Withdrawal = (props: DefaultModalLayoutProps) => {
                     router.replace(PATHS.MAIN);
                 },
                 onError: (error) => {
-                    handleError(error);
+                    handleErrorDialog(error);
                 },
             },
         );

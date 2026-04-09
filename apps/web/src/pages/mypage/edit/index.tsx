@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { isNull } from '@fxts/core';
 
 import { MypageLayout } from '@/components/layout';
 import { CheckAccountForm } from '@/components/mypage/edit/check-account-form';
@@ -28,11 +29,11 @@ export const MypageEdit = ({
         }
     }, [token, isAuthenticated]);
 
-    const [password, setPassword] = useState<string | 'SOCIAL_LOGIN'>(() =>
-        isAuthenticated ? 'SOCIAL_LOGIN' : '',
+    const [password, setPassword] = useState<string | 'SOCIAL_LOGIN' | null>(
+        () => (isAuthenticated ? 'SOCIAL_LOGIN' : null),
     );
 
-    return !!password ? (
+    return !isNull(password) ? (
         <EditForm password={password} setPassword={setPassword} />
     ) : (
         <CheckAccountForm setPassword={setPassword} />

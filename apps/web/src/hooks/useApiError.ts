@@ -4,6 +4,7 @@ import { isAxiosError, type AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import useDialog from '@/hooks/utils/useDialog';
+import { useToast } from '@/hooks/ui';
 
 /**
  * API 에러 핸들링을 위한 설정 인터페이스
@@ -42,7 +43,7 @@ interface ErrorStrategy {
  * - 모든 반환은 비동기(Promise)로 처리되어 Next.js의 최신 관례와 일치합니다.
  *
  * @example
- * const { handleError } = useApiError();
+ * const { handleErrorDialog, handleErrorToast } = useApiError();
  *
  * try { ... } catch (err) {
  *    await handleError(err);
@@ -51,6 +52,7 @@ interface ErrorStrategy {
 const useApiError = () => {
     const { t } = useTranslation();
     const { openDialog } = useDialog();
+    const { addToast } = useToast();
 
     // 에러 처리 전략 목록
     const strategies: ErrorStrategy[] = [
@@ -132,6 +134,7 @@ const useApiError = () => {
     const handleError = async (
         error: unknown,
         config: ErrorHandlerConfig = {},
+        type: 'dialog' | 'toast' = 'dialog',
     ): Promise<string | null> => {
         const { log = true, silent = false } = config;
 
@@ -144,7 +147,11 @@ const useApiError = () => {
                 const message = await strategy.getMessage(error, config);
 
                 if (message && !silent) {
-                    openDialog({ message });
+                    if (type === 'dialog') {
+                        openDialog({ message });
+                    } else {
+                        addToast({ message, variant: 'error' });
+                    }
                 }
 
                 return message;
@@ -154,7 +161,21 @@ const useApiError = () => {
         return null;
     };
 
-    return { handleError };
+    const handleErrorDialog = async (
+        error: unknown,
+        config: ErrorHandlerConfig = {},
+    ): Promise<string | null> => {
+        return await handleError(error, config, 'dialog');
+    };
+
+    const handleErrorToast = async (
+        error: unknown,
+        config: ErrorHandlerConfig = {},
+    ): Promise<string | null> => {
+        return await handleError(error, config, 'toast');
+    };
+
+    return { handleError, handleErrorDialog, handleErrorToast };
 };
 
 export default useApiError;

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
-import { AuthLayout } from '@/components/layout/auth';
+import { AuthLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
 import InputCheckbox from '@/components/ui/input/checkbox';
@@ -32,7 +32,7 @@ const LoginPage: NextPageWithLayout = () => {
         { href: PATHS.GUEST.LOGIN, label: '비회원 배송조회' },
     ] as const;
 
-    const { handleError } = useApiError();
+    const { handleErrorDialog } = useApiError();
 
     const methods = useForm<LoginFormSchemaType>({
         resolver: zodResolver(loginFormSchema),
@@ -72,7 +72,7 @@ const LoginPage: NextPageWithLayout = () => {
 
             throw new Error(t('로그인 실패하였습니다.'));
         } catch (error) {
-            handleError(error);
+            handleErrorDialog(error);
         }
     });
 

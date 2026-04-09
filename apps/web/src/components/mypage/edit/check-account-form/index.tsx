@@ -1,18 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
+import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import InputContainer from '@/components/ui/input/container';
 import Field from '@/components/ui/input/field';
 import { InputLabel } from '@/components/ui/input/label';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
-import { useDialog } from '@/hooks/utils';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
+import useApiError from '@/hooks/useApiError';
 import useSnsLogin from '@/hooks/useSnsLogin';
 
 const schema = z.object({
@@ -28,7 +28,8 @@ export const CheckAccountForm = ({
 }) => {
     const { t } = useTranslation();
     const router = useRouter();
-    const { openAsyncDialog } = useDialog();
+
+    const { handleErrorToast } = useApiError();
 
     const { data: profileData } = useProfile();
     const isSocialLogin = Boolean(profileData?.providerType);
@@ -49,7 +50,7 @@ export const CheckAccountForm = ({
     const {
         register,
         handleSubmit,
-        formState: { isSubmitting },
+        formState: { isSubmitting, errors },
     } = methods;
 
     const {
@@ -60,16 +61,11 @@ export const CheckAccountForm = ({
         checkPasswordMutate(
             { data: { password } },
             {
-                onSuccess: async () => {
+                onSuccess: () => {
                     setPassword(password);
                 },
-                onError: async (error) => {
-                    await openAsyncDialog({
-                        message: isAxiosError(error)
-                            ? error.response?.data.message ??
-                              t('비밀번호 인증에 실패했습니다.')
-                            : t('비밀번호 인증에 실패했습니다.'),
-                    });
+                onError: (error) => {
+                    handleErrorToast(error);
                 },
             },
         );
@@ -78,66 +74,72 @@ export const CheckAccountForm = ({
     return (
         <div className={card.container}>
             <section className={card.section}>
-                <form onSubmit={onSubmit}>
-                    <p className={card.selectedRangeText}>
-                        {t('개인정보 보호를 위해 본인 확인이 필요합니다.')}
-                    </p>
+                <FormProvider {...methods}>
+                    <form onSubmit={onSubmit}>
+                        <p className={card.selectedRangeText}>
+                            {t('개인정보 보호를 위해 본인 확인이 필요합니다.')}
+                        </p>
 
-                    {isSocialLogin ? (
-                        <>
-                            <p className={card.listCaption}>
-                                {t(
-                                    '소셜 로그인 회원은 소셜 인증 플로우로 연결이 필요합니다.',
+                        {isSocialLogin ? (
+                            <>
+                                <p className={card.listCaption}>
+                                    {t(
+                                        '소셜 로그인 회원은 소셜 인증 플로우로 연결이 필요합니다.',
+                                    )}
+                                </p>
+
+                                {socialInfo && (
+                                    <Button
+                                        type='button'
+                                        frame='solid'
+                                        variant={socialInfo.provider}
+                                        onClick={() => {
+                                            socialInfo.onClick();
+                                        }}
+                                        style={{
+                                            marginTop: 16,
+                                        }}
+                                    >
+                                        <socialInfo.Icon />
+                                        <span>{socialInfo.label}</span>
+                                    </Button>
                                 )}
-                            </p>
+                            </>
+                        ) : (
+                            <InputContainer style={{ marginTop: 16 }}>
+                                <InputLabel isRequired>
+                                    {t('비밀번호')}
+                                </InputLabel>
+                                <Field
+                                    type='password'
+                                    placeholder={t('비밀번호를 입력해주세요.')}
+                                    {...register('password')}
+                                    data-error={!!errors.password}
+                                />
+                                <ErrorMessage name='password' />
+                            </InputContainer>
+                        )}
 
-                            {socialInfo && (
-                                <Button
-                                    type='button'
-                                    frame='solid'
-                                    variant={socialInfo.provider}
-                                    onClick={() => {
-                                        socialInfo.onClick();
-                                    }}
-                                    style={{
-                                        marginTop: 16,
-                                    }}
-                                >
-                                    <socialInfo.Icon />
-                                    <span>{socialInfo.label}</span>
-                                </Button>
-                            )}
-                        </>
-                    ) : (
-                        <InputContainer style={{ marginTop: 16 }}>
-                            <InputLabel isRequired>{t('비밀번호')}</InputLabel>
-                            <Field
-                                type='password'
-                                placeholder={t('비밀번호를 입력해주세요.')}
-                                {...register('password')}
-                            />
-                        </InputContainer>
-                    )}
-
-                    <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
-                        <Button
-                            type='button'
-                            frame='outlined'
-                            variant='secondary'
-                            onClick={() => router.back()}
-                        >
-                            {t('취소')}
-                        </Button>
-                        <Button
-                            type='submit'
-                            frame='solid'
-                            variant='primary'
-                            disabled={isSocialLogin || isSubmitting}
-                        >
-                            {t('확인')}
-                        </Button>
-                    </div>
-                </form>
+                        <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
+                            <Button
+                                type='button'
+                                frame='outlined'
+                                variant='secondary'
+                                onClick={() => router.back()}
+                            >
+                                {t('취소')}
+                            </Button>
+                            <Button
+                                type='submit'
+                                frame='solid'
+                                variant='primary'
+                                disabled={isSocialLogin || isSubmitting}
+                            >
+                                {t('확인')}
+                            </Button>
+                        </div>
+                    </form>
+                </FormProvider>
             </section>
         </div>
     );
