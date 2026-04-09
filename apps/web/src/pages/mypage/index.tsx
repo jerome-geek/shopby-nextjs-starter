@@ -25,11 +25,9 @@ export default function MypageMain() {
                 <OrderSummary />
             </ShopbyApiErrorBoundary>
 
-            {!isMobile && (
-                <ShopbyApiErrorBoundary>
-                    <RecentOrderProducts />
-                </ShopbyApiErrorBoundary>
-            )}
+            <ShopbyApiErrorBoundary>
+                <RecentOrderProducts />
+            </ShopbyApiErrorBoundary>
 
             {isMobile && <MyPageMainMobilePaths />}
         </div>

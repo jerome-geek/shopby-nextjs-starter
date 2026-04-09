@@ -5,6 +5,7 @@ import { PATHS } from '@/const/paths';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useOrderSummary } from '@/hooks/query/order/myOrder';
 import * as styles from '@/components/mypage/main/order-summary/index.css';
+import { CURRENCY } from '@/utils/currency';
 
 const OrderSummary = () => {
     const { data: profileData } = useProfile();
@@ -24,12 +25,16 @@ const OrderSummary = () => {
 
             <div className={styles.row}>
                 <span className={styles.label}>{t('주문건수')}</span>
-                <span className={styles.value}>{data?.orderCnt ?? 0}</span>
+                <span className={styles.value}>
+                    {(data?.orderCnt ?? 0).toLocaleString()}건
+                </span>
             </div>
 
             <div className={styles.row}>
                 <span className={styles.label}>{t('결제금액')}</span>
-                <span className={styles.value}>{data?.lastPayAmt ?? 0}</span>
+                <span className={styles.value}>
+                    {CURRENCY(data?.lastPayAmt ?? 0).format()}
+                </span>
             </div>
 
             <Link href={PATHS.MYPAGE.ORDERS.MAIN} className={styles.link}>

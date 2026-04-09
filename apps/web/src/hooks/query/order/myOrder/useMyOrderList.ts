@@ -14,7 +14,6 @@ import {
 
 interface UseOrderListParams<T = GetOrderListResponse> {
     searchParams: GetOrderListParams;
-    memberNo?: number;
     options?: Omit<
         UseQueryOptions<
             GetOrderListResponse,
@@ -28,11 +27,10 @@ interface UseOrderListParams<T = GetOrderListResponse> {
 
 const useMyOrderList = <T = GetOrderListResponse>({
     searchParams,
-    memberNo = 0,
     options,
 }: UseOrderListParams<T>) => {
     return useQuery({
-        queryKey: ordersKeys.list(memberNo, searchParams),
+        queryKey: ordersKeys.list(searchParams),
         queryFn: async () => {
             const { data } = await myOrder.getOrderList(searchParams);
 
@@ -41,7 +39,7 @@ const useMyOrderList = <T = GetOrderListResponse>({
 
         ...options,
         placeholderData: keepPreviousData,
-        enabled: (options?.enabled ?? true) && memberNo !== 0,
+        enabled: options?.enabled ?? true,
     });
 };
 

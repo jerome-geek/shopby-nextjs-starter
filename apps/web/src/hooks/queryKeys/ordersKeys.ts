@@ -17,12 +17,12 @@ const ordersKeys = {
 
     /** 주문 리스트 조회 */
     lists: () => [...ordersKeys.all, 'list'] as const,
-    list: (memberNo: number, searchParams: GetOrderListParams) =>
-        [...ordersKeys.lists(), memberNo, searchParams] as const,
+    list: (searchParams: GetOrderListParams) =>
+        [...ordersKeys.lists(), searchParams] as const,
 
     /** 주문 리스트 조회 (무한스크롤)) */
-    infiniteList: (memberNo: number, searchParams: GetOrderListParams) =>
-        [...ordersKeys.lists(), 'infinite', memberNo, searchParams] as const,
+    infiniteList: (searchParams: GetOrderListParams) =>
+        [...ordersKeys.lists(), 'infinite', searchParams] as const,
 
     /** 주문 상세 조회 */
     details: () => [...ordersKeys.all, 'detail'] as const,

@@ -1,3 +1,4 @@
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -53,8 +54,20 @@ export const RouteChangeOverlay = () => {
                         height: '100%',
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
                         zIndex: 1000,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                     }}
-                ></motion.div>
+                >
+                    <LoadingWrapper
+                        isLoading
+                        containerStyle={{
+                            height: '30px',
+                        }}
+                    >
+                        <span />
+                    </LoadingWrapper>
+                </motion.div>
             )}
         </AnimatePresence>
     );

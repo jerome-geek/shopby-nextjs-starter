@@ -124,10 +124,9 @@ export const Orders = () => {
 
     const { data: myOrderListData, isLoading: isMyOrderListLoading } =
         useMyOrderList({
-            memberNo,
             searchParams,
             options: {
-                enabled: !isMobile && memberNo > 0,
+                enabled: !isMobile,
             },
         });
 
@@ -137,10 +136,9 @@ export const Orders = () => {
         hasNextPage,
         fetchNextPage,
     } = useInfiniteMyOrderList({
-        memberNo,
         searchParams,
         options: {
-            enabled: isMobile && memberNo > 0,
+            enabled: isMobile,
         },
     });
 

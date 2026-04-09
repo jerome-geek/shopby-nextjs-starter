@@ -14,7 +14,6 @@ import {
 } from '@/models/order/myOrder';
 
 interface UseInfiniteMyOrderListParams {
-    memberNo: number;
     searchParams: GetOrderListParams;
     options?: Omit<
         UseInfiniteQueryOptions<
@@ -29,12 +28,11 @@ interface UseInfiniteMyOrderListParams {
 }
 
 const useInfiniteMyOrderList = ({
-    memberNo,
     searchParams,
     options,
 }: UseInfiniteMyOrderListParams) => {
     return useInfiniteQuery({
-        queryKey: ordersKeys.infiniteList(memberNo, searchParams),
+        queryKey: ordersKeys.infiniteList(searchParams),
         queryFn: async ({ pageParam = 1 }: { pageParam: number }) => {
             const { data } = await myOrder.getOrderList({
                 ...searchParams,
@@ -47,13 +45,13 @@ const useInfiniteMyOrderList = ({
             const pageSize = searchParams.pageSize || 10;
             const totalCount = lastPage.totalCount || 0;
             const hasNextPage = pageSize * allPages.length < totalCount;
-            
+
             return hasNextPage ? allPages.length + 1 : undefined;
         },
         placeholderData: keepPreviousData,
         initialPageParam: 1,
         ...options,
-        enabled: (options?.enabled ?? true) && memberNo !== 0,
+        enabled: options?.enabled ?? true,
     });
 };
 
