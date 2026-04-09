@@ -50,6 +50,14 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         title: '상품후기 작성',
     },
     {
+        pathname: PATHS.MYPAGE.REVIEWS.MODIFY,
+        title: '상품후기 수정',
+    },
+    {
+        pathname: PATHS.MYPAGE.REVIEWS.DETAIL,
+        title: '상품후기 상세',
+    },
+    {
         pathname: PATHS.MYPAGE.ORDERS.MAIN,
         title: '주문/배송 내역',
     },

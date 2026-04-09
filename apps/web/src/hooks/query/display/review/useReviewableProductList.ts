@@ -6,6 +6,7 @@ import {
     GetReviewableProductsParams,
     GetReviewableProductsResponse,
 } from '@/models/display/review';
+import { reviewKeys } from '@/hooks/queryKeys';
 
 interface UseReviewableProductListParams<T = GetReviewableProductsResponse> {
     searchParams: GetReviewableProductsParams;
@@ -14,7 +15,7 @@ interface UseReviewableProductListParams<T = GetReviewableProductsResponse> {
             GetReviewableProductsResponse,
             AxiosError<ShopByErrorResponse>,
             T,
-            [string, { searchParams: GetReviewableProductsParams }]
+            ReturnType<(typeof reviewKeys)['myReviewableList']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -25,7 +26,7 @@ const useReviewableProductList = <T = GetReviewableProductsResponse>({
     options,
 }: UseReviewableProductListParams<T>) => {
     return useQuery({
-        queryKey: ['reviewableList', { searchParams }],
+        queryKey: reviewKeys.myReviewableList(searchParams),
         queryFn: async () => {
             const { data } = await review.getReviewableProducts(searchParams);
 

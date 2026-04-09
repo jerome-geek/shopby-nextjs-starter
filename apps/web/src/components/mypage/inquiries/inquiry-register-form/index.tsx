@@ -1,4 +1,4 @@
-import { find, findIndex, isEmpty, map, pipe, toArray } from '@fxts/core';
+import { find, isEmpty, map, pipe, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -6,34 +6,32 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import upload from '@/api/storage/image';
+import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
+import * as styles from '@/components/mypage/inquiries/inquiry-register-form/index.css';
+import { InquiryTypeList } from '@/components/mypage/inquiries/inquiry-type-list';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
 import FileUpload from '@/components/ui/file-upload';
+import { ErrorMessage } from '@/components/ui/form';
 import InputCheckbox from '@/components/ui/input/checkbox';
+import InputContainer from '@/components/ui/input/container';
 import InputField from '@/components/ui/input/field';
 import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import InputContainer from '@/components/ui/input/container';
 import { InputLabel } from '@/components/ui/input/label';
 import TextArea from '@/components/ui/input/TextArea';
 import Select from '@/components/ui/select';
-import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
-import { InquiryTypeList } from '@/components/mypage/inquiries/inquiry-type-list';
 import { EMAIL_DOMAIN_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';
 import { useInquiryMutation } from '@/hooks/mutations';
 import { useInquiry, useInquiryConfig } from '@/hooks/query/manage/inquiry';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui';
-import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal } from '@/hooks/utils';
 import type { UploadFileBlob } from '@/hooks/utils/useFileUpload';
+import type { UpdateInquiryData } from '@/models/manage/inquiry';
 import {
     registerInquirySchema,
     type RegisterInquirySchemaType,
 } from '@/schema/inquiry.schema';
-import type { UpdateInquiryData } from '@/models/manage/inquiry';
-
-import * as styles from './index.css';
 
 export interface InquiryRegisterFormProps {
     inquiryNo?: number;

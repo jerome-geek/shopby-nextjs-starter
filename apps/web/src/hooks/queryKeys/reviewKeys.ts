@@ -26,24 +26,16 @@ const reviewKeys = {
         [...reviewKeys.comments(), searchParams] as const,
 
     myReviewedLists: () => [...reviewKeys.all, 'myReviewedList'] as const,
-    myReviewedList: (
-        memberNo: number,
-        searchParams: GetMyProductReviewsParams,
-    ) => [...reviewKeys.lists(), memberNo, searchParams] as const,
-    myReviewedInfiniteList: (
-        memberNo: number,
-        searchParams: GetMyProductReviewsParams,
-    ) => [...reviewKeys.lists(), 'infinite', memberNo, searchParams] as const,
+    myReviewedList: (searchParams: GetMyProductReviewsParams) =>
+        [...reviewKeys.myReviewedLists(), searchParams] as const,
+    myReviewedInfiniteList: (searchParams: GetMyProductReviewsParams) =>
+        [...reviewKeys.myReviewedLists(), 'infinite', searchParams] as const,
 
     myReviewableLists: () => [...reviewKeys.all, 'myReviewableList'] as const,
-    myReviewableList: (
-        memberNo: number,
-        searchParams: GetReviewableProductsParams,
-    ) => [...reviewKeys.lists(), memberNo, searchParams] as const,
-    myReviewableInfiniteList: (
-        memberNo: number,
-        searchParams: GetReviewableProductsParams,
-    ) => [...reviewKeys.lists(), 'infinite', memberNo, searchParams] as const,
+    myReviewableList: (searchParams: GetReviewableProductsParams) =>
+        [...reviewKeys.myReviewableLists(), searchParams] as const,
+    myReviewableInfiniteList: (searchParams: GetReviewableProductsParams) =>
+        [...reviewKeys.myReviewableLists(), 'infinite', searchParams] as const,
 };
 
 export default reviewKeys;

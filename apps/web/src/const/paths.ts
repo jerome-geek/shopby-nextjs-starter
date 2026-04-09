@@ -202,7 +202,9 @@ export const PATHS = {
             /** 마이페이지 > 상품후기 리스트 > 후기 작성 */
             WRITE: '/mypage/reviews/write/[productNo]',
             /** 마이페이지 > 상품후기 리스트 > 후기 수정 */
-            MODIFY: '/mypage/reviews/write/[reviewNo]',
+            MODIFY: '/mypage/reviews/modify/[reviewNo]',
+            /** 마이페이지 > 상품후기 리스트 > 후기 상세 */
+            DETAIL: '/mypage/reviews/[reviewNo]',
         },
 
         /** 마이페이지 > 회원정보 수정 */

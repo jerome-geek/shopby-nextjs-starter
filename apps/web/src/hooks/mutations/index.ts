@@ -11,6 +11,7 @@ import useGuestClaimMutation from '@/hooks/mutations/useGuestClaimMutation';
 import useGuestOrderMutation from '@/hooks/mutations/useGuestOrderMutation';
 import useMemberClaimMutation from '@/hooks/mutations/useMemberClaimMutation';
 import useMyOrderMutation from '@/hooks/mutations/useMyOrderMutation';
+import useReviewMutation from '@/hooks/mutations/useReviewMutation';
 
 export {
     useBoardReplyMutation,
@@ -26,4 +27,5 @@ export {
     useGuestOrderMutation,
     useMemberClaimMutation,
     useMyOrderMutation,
+    useReviewMutation,
 };

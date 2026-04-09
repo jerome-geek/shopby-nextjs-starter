@@ -2,45 +2,36 @@ import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
-
 import {
     GetMyProductReviewsParams,
     GetMyProductReviewsResponse,
 } from '@/models/display/review';
+import { reviewKeys } from '@/hooks/queryKeys';
 
 interface UseMyReviewListParams<T = GetMyProductReviewsResponse> {
-    memberNo: number;
     searchParams: GetMyProductReviewsParams;
     options?: Omit<
         UseQueryOptions<
             GetMyProductReviewsResponse,
             AxiosError<ShopByErrorResponse>,
             T,
-            [
-                string,
-                {
-                    searchParams: GetMyProductReviewsParams;
-                    memberNo: number;
-                },
-            ]
+            ReturnType<(typeof reviewKeys)['myReviewedList']>
         >,
         'queryKey' | 'queryFn'
     >;
 }
 
 const useMyReviewList = <T = GetMyProductReviewsResponse>({
-    memberNo = 0,
     searchParams,
     options,
 }: UseMyReviewListParams<T>) => {
     return useQuery({
-        queryKey: ['myReviewList', { searchParams, memberNo }],
+        queryKey: reviewKeys.myReviewedList(searchParams),
         queryFn: async () => {
             const { data } = await review.getMyProductReviews(searchParams);
 
             return data;
         },
-        enabled: memberNo !== 0,
         ...options,
     });
 };
