@@ -12,11 +12,16 @@ import Select from '@/components/ui/select';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PaymentReserveSchemaType } from '@/schema';
 import * as styles from './index.css';
+import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
+import { useResponsive } from '@/hooks/utils';
 
 const DELIVERY_REQUEST_DIRECT = 'DIRECT';
 
 const GuestShippingAddressForm = () => {
     const { t } = useTranslation();
+
+    const { isMobile } = useResponsive();
+
     const { register, setValue, watch, control } =
         useFormContext<PaymentReserveSchemaType>();
 
@@ -94,16 +99,28 @@ const GuestShippingAddressForm = () => {
     };
 
     const handleAddressSearch = () => {
-        overlay.open(
-            ({
-                isOpen: isSearchOpen,
-                close: closeSearch,
-                unmount: unmountSearch,
-            }) => (
+        overlay.open((props) =>
+            isMobile ? (
+                <AddressSearchBottomSheet
+                    {...props}
+                    onSelect={(data) => {
+                        setValue(
+                            'shippingAddress.receiverZipCd',
+                            data.receiverZipCd,
+                        );
+                        setValue(
+                            'shippingAddress.receiverAddress',
+                            data.receiverAddress,
+                        );
+                        setValue(
+                            'shippingAddress.receiverJibunAddress',
+                            data.receiverJibunAddress,
+                        );
+                    }}
+                />
+            ) : (
                 <AddressSearchModal
-                    isOpen={isSearchOpen}
-                    close={closeSearch}
-                    unmount={unmountSearch}
+                    {...props}
                     onSelect={(data) => {
                         setValue(
                             'shippingAddress.receiverZipCd',

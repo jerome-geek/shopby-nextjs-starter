@@ -17,12 +17,13 @@ import Select from '@/components/ui/select';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 import { addressKeys } from '@/hooks/queryKeys';
-import { useDialog, useGlobal } from '@/hooks/utils';
+import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import { Address } from '@/models/order/shippingAddress';
 import {
     getRegisterShippingAddressSchema,
     type RegisterShippingAddressSchemaType,
 } from '@/schema/shippingAddress.schema';
+import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 
 interface ShippingAddressCreateModalProps {
     isOpen: boolean;
@@ -40,6 +41,8 @@ const ShippingAddressCreateModal = ({
     const queryClient = useQueryClient();
 
     const { t } = useTranslation();
+
+    const { isMobile } = useResponsive();
 
     const { openDialog } = useDialog();
 
@@ -94,16 +97,24 @@ const ShippingAddressCreateModal = ({
     };
 
     const handleAddressSearch = () => {
-        overlay.open(
-            ({
-                isOpen: isSearchOpen,
-                close: closeSearch,
-                unmount: unmountSearch,
-            }) => (
+        overlay.open((props) =>
+            isMobile ? (
+                <AddressSearchBottomSheet
+                    {...props}
+                    onSelect={(data) => {
+                        setValue('receiverZipCd', data.receiverZipCd, {
+                            shouldValidate: true,
+                        });
+                        setValue('receiverAddress', data.receiverAddress);
+                        setValue(
+                            'receiverJibunAddress',
+                            data.receiverJibunAddress,
+                        );
+                    }}
+                />
+            ) : (
                 <AddressSearchModal
-                    isOpen={isSearchOpen}
-                    close={closeSearch}
-                    unmount={unmountSearch}
+                    {...props}
                     onSelect={(data) => {
                         setValue('receiverZipCd', data.receiverZipCd, {
                             shouldValidate: true,

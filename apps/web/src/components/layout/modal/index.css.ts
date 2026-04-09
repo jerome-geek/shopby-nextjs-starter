@@ -71,6 +71,14 @@ export const modalContent = style({
     flex: 1,
     minHeight: 0, // flex-item의 overflow scroll을 위해 필수
     maxHeight: '70vh',
+
+    '::-webkit-scrollbar': {
+        width: '4px',
+    },
+    '::-webkit-scrollbar-thumb': {
+        backgroundColor: vars.color.gray['30'],
+        borderRadius: '10px',
+    },
 });
 
 export const modalFooter = style({

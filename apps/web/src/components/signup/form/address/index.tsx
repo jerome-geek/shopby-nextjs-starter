@@ -19,8 +19,10 @@ import Select from '@/components/ui/select';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
 import { overlay } from 'overlay-kit';
-import { AddressRegister, AddressSearchModal } from '@/components/modal';
+import { AddressSearchModal } from '@/components/modal/address-search';
+import { AddressRegister } from '@/components/layer-contents/address-search';
 import * as styles from '@/components/signup/form/index.css';
+import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 
 const SignupFormAddress = () => {
     const { t } = useTranslation();
@@ -71,23 +73,23 @@ const SignupFormAddress = () => {
     };
 
     const onOpenAddressSearchModal = () => {
-        if (isMobile) {
-            overlay.open((props) => {
-                return (
-                    // <AddressSearchBottomSheet
-                    //     {...props}
-                    //     addressRegister={addressRegister}
-                    // />
-                    <></>
-                );
-            });
-        } else {
-            overlay.open((props) => {
-                return (
-                    <AddressSearchModal {...props} onSelect={addressRegister} />
-                );
-            });
-        }
+        overlay.open((props) =>
+            isMobile ? (
+                <AddressSearchBottomSheet
+                    {...props}
+                    onSelect={(data) => {
+                        addressRegister(data);
+                    }}
+                />
+            ) : (
+                <AddressSearchModal
+                    {...props}
+                    onSelect={(data) => {
+                        addressRegister(data);
+                    }}
+                />
+            ),
+        );
     };
 
     return (

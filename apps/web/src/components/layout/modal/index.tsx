@@ -84,7 +84,11 @@ export const ModalLayout = ({
                         )}
 
                         {/* 컨텐츠 영역 */}
-                        <div className={styles.modalContent} data-lenis-prevent>
+                        <div
+                            className={styles.modalContent}
+                            data-lenis-prevent
+                            id='modal-content'
+                        >
                             {children}
                         </div>
 

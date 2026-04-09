@@ -4,27 +4,29 @@ import {
     AddressRegister,
     AddressSearch,
 } from '@/components/layer-contents/address-search';
-import { ModalLayout } from '@/components/layout';
+import { BottomSheetLayout } from '@/components/layout';
 
-interface AddressSearchModalProps {
+interface AddressSearchBottomSheetProps {
     isOpen: boolean;
     close: () => void;
     unmount: () => void;
     onSelect: (address: AddressRegister) => void;
 }
 
-export const AddressSearchModal = (props: AddressSearchModalProps) => {
+export const AddressSearchBottomSheet = (
+    props: AddressSearchBottomSheetProps,
+) => {
     const { t } = useTranslation();
 
     return (
-        <ModalLayout
+        <BottomSheetLayout
             isOpen={props.isOpen}
             close={props.close}
             unmount={props.unmount}
             title={t('주소 검색')}
-            size='medium'
+            type='fullscreen'
         >
             <AddressSearch {...props} />
-        </ModalLayout>
+        </BottomSheetLayout>
     );
 };

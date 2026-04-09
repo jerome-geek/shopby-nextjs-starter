@@ -28,7 +28,7 @@ import { PATHS } from '@/const/paths';
 import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useShippingAddress } from '@/hooks/query/order/shippingAddress';
 import { useToast } from '@/hooks/ui';
-import { useDialog, useGlobal } from '@/hooks/utils';
+import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import type { CountryCdType } from '@/models';
 import type {
     Address,
@@ -39,6 +39,7 @@ import {
     ShippingAddressSchemaType,
 } from '@/schema/shippingAddress.schema';
 import { parseKrPhoneParts } from '@/utils/phone';
+import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 
 export interface AddressWriteFormProps {
     addressNo?: number;
@@ -49,8 +50,9 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
     const router = useRouter();
     const { isKorean, defaultMobileCountryCode, countryCd } = useGlobal();
     const { openDialog } = useDialog();
-
     const { addToast } = useToast();
+
+    const { isMobile } = useResponsive();
 
     const isModify = !!addressNo;
     const mode = isModify ? 'update' : 'register';
@@ -166,16 +168,17 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
     };
 
     const onOpenAddressSearchModal = () => {
-        overlay.open(
-            ({
-                isOpen: isSearchOpen,
-                close: closeSearch,
-                unmount: unmountSearch,
-            }) => (
+        overlay.open((props) =>
+            isMobile ? (
+                <AddressSearchBottomSheet
+                    {...props}
+                    onSelect={(data) => {
+                        addressRegister(data);
+                    }}
+                />
+            ) : (
                 <AddressSearchModal
-                    close={closeSearch}
-                    isOpen={isSearchOpen}
-                    unmount={unmountSearch}
+                    {...props}
                     onSelect={(data) => {
                         addressRegister(data);
                     }}
@@ -242,7 +245,7 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
         return {
             ...submitData,
             receiverName: isKorean
-                ? (submitData.receiverName ?? '')
+                ? submitData.receiverName ?? ''
                 : `${submitData.receiverFirstName ?? ''} ${
                       submitData.receiverLastName ?? ''
                   }`.trim(),
