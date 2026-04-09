@@ -1,5 +1,5 @@
 import { append, filter, map, pipe, some, toArray } from '@fxts/core';
-import { create } from 'zustand';
+import { createStore } from './utils';
 
 import { toSelectedOption } from '@/helpers/product';
 
@@ -13,7 +13,8 @@ interface ProductOptionState {
     clearOptions: () => void;
 }
 
-export const useProductOptionStore = create<ProductOptionState>((set) => ({
+export const useProductOptionStore = createStore<ProductOptionState>(
+    (set) => ({
     selectedOptionList: [],
 
     addOption: (option) =>
@@ -55,4 +56,4 @@ export const useProductOptionStore = create<ProductOptionState>((set) => ({
         })),
 
     clearOptions: () => set({ selectedOptionList: [] }),
-}));
+}), 'ProductOptionStore');

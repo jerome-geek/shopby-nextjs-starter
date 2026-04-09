@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { createStore } from './utils';
 
 import type { RegisterManualTempImagesData } from '@/models/shop/recipe';
 
@@ -18,8 +18,11 @@ interface RecipeManualStore {
     clearTempImages: () => void;
 }
 
-export const useRecipeManualStore = create<RecipeManualStore>()((set) => ({
-    tempImages: [],
-    setTempImages: (images) => set({ tempImages: images }),
-    clearTempImages: () => set({ tempImages: [] }),
-}));
+export const useRecipeManualStore = createStore<RecipeManualStore>(
+    (set) => ({
+        tempImages: [],
+        setTempImages: (images) => set({ tempImages: images }, false, 'setTempImages'),
+        clearTempImages: () => set({ tempImages: [] }, false, 'clearTempImages'),
+    }),
+    'RecipeManualStore'
+);
