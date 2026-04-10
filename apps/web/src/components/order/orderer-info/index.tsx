@@ -3,9 +3,11 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import * as styles from '@/components/order/orderer-info/index.css';
 import ErrorMessage from '@/components/ui/form/error-message';
-import InputField from '@/components/ui/input/field';
-import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import { InputLabel } from '@/components/ui/input/label';
+import {
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+} from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PaymentReserveSchemaType } from '@/schema';

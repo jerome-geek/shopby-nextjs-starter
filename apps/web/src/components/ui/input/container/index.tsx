@@ -4,7 +4,7 @@ import * as styles from '@/components/ui/input/container/index.css';
 
 type InputContainerProps = React.HTMLAttributes<HTMLDivElement>;
 
-const InputContainer = ({
+export const InputContainer = ({
     children,
     className,
     ...props
@@ -18,5 +18,3 @@ const InputContainer = ({
         </div>
     );
 };
-
-export default InputContainer;

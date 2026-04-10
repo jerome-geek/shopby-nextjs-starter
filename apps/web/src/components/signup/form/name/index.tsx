@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
-import InputField from '@/components/ui/input/field';
-import FieldContainer from '@/components/ui/input/FieldContainer';
+import { InputField, InputFieldContainer } from '@/components/ui/input';
 import { useLocale } from '@/hooks/utils';
 
 const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
@@ -40,7 +39,7 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
             )}
             {isJapan && (
                 <>
-                    <FieldContainer gridRatio={[1, 1]}>
+                    <InputFieldContainer gridRatio={[1, 1]}>
                         <InputField
                             {...register('lastName')}
                             placeholder={t('성을 입력해 주세요.')}
@@ -55,7 +54,7 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                             readOnly={disabled}
                             data-error={!!firstNameError}
                         />
-                    </FieldContainer>
+                    </InputFieldContainer>
 
                     <ErrorMessage name='lastName' />
                     <ErrorMessage name='firstName' />
@@ -63,7 +62,7 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
             )}
             {!isKorean && !isJapan && (
                 <>
-                    <FieldContainer gridRatio={[1, 1]}>
+                    <InputFieldContainer gridRatio={[1, 1]}>
                         <InputField
                             {...register('firstName')}
                             placeholder={t('이름을 입력해 주세요.')}
@@ -78,7 +77,7 @@ const SignupFormName = ({ disabled }: { disabled?: boolean }) => {
                             readOnly={disabled}
                             data-error={!!lastNameError}
                         />
-                    </FieldContainer>
+                    </InputFieldContainer>
 
                     <ErrorMessage name='firstName' />
                     <ErrorMessage name='lastName' />

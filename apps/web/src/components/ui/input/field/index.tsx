@@ -9,7 +9,7 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const ALLOWED_KEYS = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
 
-const InputField = ({
+export const InputField = ({
     onKeyDown,
     ref,
     className,
@@ -44,5 +44,3 @@ const InputField = ({
         />
     );
 };
-
-export default InputField;

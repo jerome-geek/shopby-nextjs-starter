@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
-import InputField from '@/components/ui/input/field';
-import FieldContainer from '@/components/ui/input/FieldContainer';
+import { InputField, InputFieldContainer } from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
 import { useGlobal } from '@/hooks/utils';
@@ -44,7 +43,7 @@ const SignupFormMobile = ({ disabled }: { disabled?: boolean }) => {
                 </>
             ) : (
                 <>
-                    <FieldContainer gridRatio={[1, 2]}>
+                    <InputFieldContainer gridRatio={[1, 2]}>
                         <Controller
                             control={control}
                             name='mobileCountryCode'
@@ -75,7 +74,7 @@ const SignupFormMobile = ({ disabled }: { disabled?: boolean }) => {
                             {...register('mobileNo')}
                             data-error={!!errors.mobileNo}
                         />
-                    </FieldContainer>
+                    </InputFieldContainer>
 
                     <ErrorMessage name='mobileCountryCode' />
                     <ErrorMessage name='mobileNo' />

@@ -1,12 +1,12 @@
 import React from 'react';
-import * as styles from './FieldContainer.css';
 
-interface InputFieldContainerProps
-    extends React.HTMLAttributes<HTMLDivElement> {
+import * as styles from '@/components/ui/input/field-container/index.css';
+
+interface InputFieldContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     gridRatio?: number[];
 }
 
-const InputFieldContainer = ({
+export const InputFieldContainer = ({
     children,
     gridRatio = [],
     className,
@@ -28,5 +28,3 @@ const InputFieldContainer = ({
         </div>
     );
 };
-
-export default InputFieldContainer;

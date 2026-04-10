@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
-import FieldContainer from '@/components/ui/input/FieldContainer';
+import FieldContainer from '@/components/ui/input/field-container';
 import Select from '@/components/ui/select';
 import { DAY_LIST, MONTH_LIST, YEAR_LIST } from '@/const/date';
 

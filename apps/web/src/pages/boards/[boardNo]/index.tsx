@@ -6,15 +6,12 @@ import { overlay } from 'overlay-kit';
 import { useMemo, type MouseEvent } from 'react';
 import { Control, Controller, UseFormRegister, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import 'swiper/css';
-import 'swiper/css/pagination';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
 import { SortBottomSheet } from '@/components/bottom-sheet/sort';
 import { NoResult } from '@/components/common/no-result';
 import { Button } from '@/components/ui/button';
-import InputField from '@/components/ui/input/field';
-import FieldContainer from '@/components/ui/input/FieldContainer';
+import { InputFieldContainer, InputField } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import Paging from '@/components/ui/paging';
 import Select from '@/components/ui/select';
@@ -37,6 +34,9 @@ import * as styles from '@/pages/boards/[boardNo]/index.css';
 import { BREAKPOINTS } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { checkBoardWritePermission } from '@/utils/boards';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 type SearchFormValues = {
     searchType: string;
@@ -76,9 +76,9 @@ const BoardSearchForm = ({
             )}
         />
 
-        <FieldContainer className={styles.searchInputWrapper}>
+        <InputFieldContainer className={styles.searchInputWrapper}>
             <InputField {...register('keyword')} />
-        </FieldContainer>
+        </InputFieldContainer>
 
         <Button
             frame='outlined'

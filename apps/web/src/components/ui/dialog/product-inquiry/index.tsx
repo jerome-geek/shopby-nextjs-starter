@@ -7,10 +7,12 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/checkbox';
-import InputField from '@/components/ui/input/field';
-import { InputLabel } from '@/components/ui/input/label';
-import TextArea from '@/components/ui/input/TextArea';
+import {
+    InputCheckbox,
+    InputField,
+    InputLabel,
+    TextArea,
+} from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { PATHS } from '@/const/paths';
 import { useProductInquiryMutation } from '@/hooks/mutations';

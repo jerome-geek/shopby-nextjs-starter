@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SearchIcon } from '@/components/icons';
 import * as styles from '@/components/mypage/filters/keyword-search-query-filter/index.css';
-import InputField from '@/components/ui/input/field';
-import InputFieldContainer from '@/components/ui/input/FieldContainer';
+import { InputField, InputFieldContainer } from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { useResponsive } from '@/hooks/utils';
 

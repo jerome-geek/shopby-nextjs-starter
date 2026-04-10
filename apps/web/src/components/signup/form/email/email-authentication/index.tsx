@@ -1,27 +1,29 @@
 import { useMutation } from '@tanstack/react-query';
-import { useContext, useEffect, useReducer, useRef, useState } from 'react';
+import { useContext, useEffect, useReducer, useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import z from 'zod';
 
 import { authentication } from '@/api/auth';
 import { profile } from '@/api/member';
+import * as styles from '@/components/signup/form/email/email-authentication/index.css';
+import * as formStyles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui/button';
-import FieldContainer from '@/components/ui/input/FieldContainer';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import { InputLabel } from '@/components/ui/input/label';
+import {
+    InputFieldContainer,
+    InputContainer,
+    InputField,
+    InputLabel,
+} from '@/components/ui/input';
 import { Column } from '@/components/ui/layout/flex';
+import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useToast } from '@/hooks/ui';
+import useApiError from '@/hooks/useApiError';
 import { useTimer } from '@/hooks/useTimer';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { signupDuplicateCheckEmailSchema } from '@/schema';
-import * as formStyles from '@/components/signup/form/index.css';
-import * as styles from '@/components/signup/form/email/email-authentication/index.css';
-import useApiError from '@/hooks/useApiError';
 import { useRouter } from 'next/router';
-import { PATHS } from '@/const/paths';
 
 type AuthStatus = 'IDLE' | 'SENT' | 'VERIFIED' | 'EXPIRED';
 
@@ -304,15 +306,15 @@ const EmailAuthentication = ({
                 {authStatus === 'VERIFIED'
                     ? t('인증 완료')
                     : authStatus === 'EXPIRED'
-                    ? t('인증번호 재발송')
-                    : t('인증번호 발송')}
+                      ? t('인증번호 재발송')
+                      : t('인증번호 발송')}
             </Button>
 
             {authStatus !== 'IDLE' && authStatus !== 'VERIFIED' && (
                 <InputContainer>
                     <InputLabel isRequired>{t('인증 번호')}</InputLabel>
 
-                    <FieldContainer gridRatio={[3, 1]}>
+                    <InputFieldContainer gridRatio={[3, 1]}>
                         <div className={styles.timerContainer}>
                             <InputField
                                 ref={certificatedNumberRef}
@@ -336,7 +338,7 @@ const EmailAuthentication = ({
                         >
                             {t('확인')}
                         </Button>
-                    </FieldContainer>
+                    </InputFieldContainer>
                 </InputContainer>
             )}
         </Column>

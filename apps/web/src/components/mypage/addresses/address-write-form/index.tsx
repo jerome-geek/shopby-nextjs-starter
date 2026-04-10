@@ -8,15 +8,18 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { address } from '@/api/manage';
+import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/mypage/common/mypage-form/index.css';
 import { InputCheckbox } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import { InputLabel } from '@/components/ui/input/label';
+import {
+    InputContainer,
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+} from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import {
     ADDRESS_MEMO_LIST,
@@ -39,7 +42,6 @@ import {
     ShippingAddressSchemaType,
 } from '@/schema/shippingAddress.schema';
 import { parseKrPhoneParts } from '@/utils/phone';
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 
 export interface AddressWriteFormProps {
     addressNo?: number;
@@ -245,7 +247,7 @@ export const AddressWriteForm = ({ addressNo = 0 }: AddressWriteFormProps) => {
         return {
             ...submitData,
             receiverName: isKorean
-                ? submitData.receiverName ?? ''
+                ? (submitData.receiverName ?? '')
                 : `${submitData.receiverFirstName ?? ''} ${
                       submitData.receiverLastName ?? ''
                   }`.trim(),

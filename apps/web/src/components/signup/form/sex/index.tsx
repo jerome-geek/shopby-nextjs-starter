@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
-import InputRadio from '@/components/ui/input/Radio';
+import { InputRadio } from '@/components/ui/input';
 
 const SignupFormSex = ({ disabled }: { disabled?: boolean }) => {
     const { t } = useTranslation();

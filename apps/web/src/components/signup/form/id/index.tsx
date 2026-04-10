@@ -9,8 +9,7 @@ import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputField from '@/components/ui/input/field';
-import FieldContainer from '@/components/ui/input/FieldContainer';
+import { InputField, InputFieldContainer } from '@/components/ui/input';
 import { useToast } from '@/hooks/ui';
 import { signupDuplicateCheckMemberIdSchema } from '@/schema';
 
@@ -79,7 +78,7 @@ const SignupFormId = () => {
 
     return (
         <WithMemberJoinConfig name='memberId' label={t('아이디')}>
-            <FieldContainer gridRatio={[3, 1]}>
+            <InputFieldContainer gridRatio={[3, 1]}>
                 <InputField
                     {...register('memberId', {
                         onChange: () => {
@@ -103,7 +102,7 @@ const SignupFormId = () => {
                 >
                     {t('중복확인')}
                 </Button>
-            </FieldContainer>
+            </InputFieldContainer>
             <ErrorMessage name='memberId' />
             <ErrorMessage name='isDuplicateMemberId' />
         </WithMemberJoinConfig>

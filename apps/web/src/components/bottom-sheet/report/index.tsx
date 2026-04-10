@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@hookform/error-message';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -7,15 +8,12 @@ import {
 } from '@/components/layout';
 import { REPORT_REASON_OPTIONS } from '@/components/modal/report';
 import * as styles from '@/components/modal/report/index.css';
-import { InputLabel, Select } from '@/components/ui';
+import { Select } from '@/components/ui';
 import { Button } from '@/components/ui/button';
-
-import InputContainer from '@/components/ui/input/container';
-import TextArea from '@/components/ui/input/TextArea';
+import { InputContainer, InputLabel, TextArea } from '@/components/ui/input';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import { useDialog } from '@/hooks/utils';
 import { ReportArticleData } from '@/models/manage/board';
-import { ErrorMessage } from '@hookform/error-message';
 
 interface ReportBottomSheetProps extends DefaultModalLayoutProps {
     boardNo: string;

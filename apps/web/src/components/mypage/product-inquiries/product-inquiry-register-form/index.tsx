@@ -6,17 +6,21 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { ProductSelectBottomSheet } from '@/components/bottom-sheet/product-select';
+import { CloseIcon } from '@/components/icons';
 import { ProductSelectModal } from '@/components/modal/product-select';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
 import * as styles from '@/components/mypage/product-inquiries/product-inquiry-register-form/index.css';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/checkbox';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import { InputLabel } from '@/components/ui/input/label';
-import TextArea from '@/components/ui/input/TextArea';
+import {
+    InputCheckbox,
+    InputContainer,
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+    TextArea,
+} from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';
@@ -28,7 +32,7 @@ import {
 } from '@/hooks/query/display/productInquiry';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui';
-import { useDialog } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import type {
     UpdateProductInquiryData,
     WriteProductInquiryData,
@@ -38,9 +42,6 @@ import {
     productInquiryFormSchema,
     type ProductInquiryFormSchemaType,
 } from '@/schema/product-inquiry.schema';
-import { CloseIcon } from '@/components/icons';
-import { useResponsive } from '@/hooks/utils';
-import { ProductSelectBottomSheet } from '@/components/bottom-sheet/product-select';
 
 export interface ProductInquiryRegisterFormProps {
     inquiryNo?: number;
@@ -155,11 +156,11 @@ export const ProductInquiryRegisterForm = ({
 
     const productName = isModify
         ? productInquiryData?.productName
-        : productInfo?.productName ?? '';
+        : (productInfo?.productName ?? '');
 
     const imageUrl = isModify
         ? productInquiryData?.imageUrl
-        : productInfo?.listImageUrls?.[0] ?? '';
+        : (productInfo?.listImageUrls?.[0] ?? '');
 
     const openProductSelect = () => {
         overlay.open((props) => {

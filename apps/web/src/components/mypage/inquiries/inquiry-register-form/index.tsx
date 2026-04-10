@@ -12,12 +12,14 @@ import { InquiryTypeList } from '@/components/mypage/inquiries/inquiry-type-list
 import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/checkbox';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import { InputLabel } from '@/components/ui/input/label';
-import TextArea from '@/components/ui/input/TextArea';
+import {
+    InputCheckbox,
+    InputContainer,
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+    TextArea,
+} from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { EMAIL_DOMAIN_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';

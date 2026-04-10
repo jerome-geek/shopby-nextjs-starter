@@ -1,5 +1,6 @@
 import { RadioGroup } from 'radix-ui';
-import * as styles from './Radio.css';
+
+import * as styles from '@/components/ui/input/radio/index.css';
 
 interface RadioFieldProps {
     id?: string;
@@ -15,7 +16,7 @@ interface RadioFieldProps {
     disabled?: boolean;
 }
 
-const InputRadio = ({
+export const InputRadio = ({
     id,
     onChange,
     options,
@@ -59,5 +60,3 @@ const InputRadio = ({
         </RadioGroup.Root>
     );
 };
-
-export default InputRadio;

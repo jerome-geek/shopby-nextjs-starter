@@ -10,11 +10,13 @@ import { SingleValue } from 'react-select';
 
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/checkbox';
-import InputField from '@/components/ui/input/field';
-import InputContainer from '@/components/ui/input/container';
-import { InputLabel } from '@/components/ui/input/label';
-import InputRadio from '@/components/ui/input/Radio';
+import {
+    InputRadio,
+    InputLabel,
+    InputContainer,
+    InputField,
+    InputCheckbox,
+} from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 import { SignupFormSchemaType } from '@/schema';

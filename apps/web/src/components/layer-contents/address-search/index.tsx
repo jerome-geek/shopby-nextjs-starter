@@ -6,10 +6,9 @@ import { useTranslation } from 'react-i18next';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
-import InputField from '@/components/ui/input/field';
-import { useInfiniteAddressList } from '@/hooks/query/manage/address';
 import * as styles from '@/components/layer-contents/address-search/index.css';
-import InputFieldContainer from '@/components/ui/input/FieldContainer';
+import { InputField, InputFieldContainer } from '@/components/ui/input';
+import { useInfiniteAddressList } from '@/hooks/query/manage/address';
 
 export interface AddressRegister {
     receiverJibunAddress: string;

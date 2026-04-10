@@ -16,9 +16,7 @@ import * as styles from '@/components/mypage/review/review-form/index.css';
 import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
-import InputContainer from '@/components/ui/input/container';
-import { InputLabel } from '@/components/ui/input/label';
-import TextArea from '@/components/ui/input/TextArea';
+import { InputContainer, InputLabel, TextArea } from '@/components/ui/input';
 import { ORDER_STATUS_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { useReviewMutation } from '@/hooks/mutations';
@@ -270,24 +268,24 @@ export const ReviewForm = ({ reviewNo, orderNo }: ReviewFormProps) => {
     const reviewProduct = useMemo(() => {
         const reviewProduct = {
             imageUrl: isEdit
-                ? productReviewData?.imageUrl ?? ''
-                : productInfo?.imageUrl ?? '',
+                ? (productReviewData?.imageUrl ?? '')
+                : (productInfo?.imageUrl ?? ''),
             productName: isEdit
-                ? productReviewData?.productName ?? ''
-                : productInfo?.productName ?? '',
+                ? (productReviewData?.productName ?? '')
+                : (productInfo?.productName ?? ''),
             optionName: isEdit
-                ? productReviewData?.orderedOption?.optionName ?? ''
-                : productInfo?.optionName ?? '',
+                ? (productReviewData?.orderedOption?.optionName ?? '')
+                : (productInfo?.optionName ?? ''),
             optionValue: isEdit
-                ? productReviewData?.orderedOption?.optionValue ?? ''
-                : productInfo?.optionValue ?? '',
+                ? (productReviewData?.orderedOption?.optionValue ?? '')
+                : (productInfo?.optionValue ?? ''),
             inputs: isEdit
-                ? productReviewData?.orderedOption?.inputs ?? []
-                : productInfo?.inputs ?? [],
+                ? (productReviewData?.orderedOption?.inputs ?? [])
+                : (productInfo?.inputs ?? []),
             orderCnt: isEdit
-                ? productReviewData?.orderedOption?.orderCnt ?? 0
-                : productInfo?.orderCnt ?? 0,
-            orderStatusType: isEdit ? '' : productInfo?.orderStatusType ?? '',
+                ? (productReviewData?.orderedOption?.orderCnt ?? 0)
+                : (productInfo?.orderCnt ?? 0),
+            orderStatusType: isEdit ? '' : (productInfo?.orderStatusType ?? ''),
         };
 
         if (!reviewProduct?.productName) {
@@ -409,7 +407,9 @@ export const ReviewForm = ({ reviewNo, orderNo }: ReviewFormProps) => {
                         <InputLabel>{t('사진 첨부')}</InputLabel>
                         <FileUpload
                             initialFileList={
-                                isEdit ? productReviewData?.fileUrls ?? [] : []
+                                isEdit
+                                    ? (productReviewData?.fileUrls ?? [])
+                                    : []
                             }
                             setFileList={setUploadFileList}
                             maxLength={4}

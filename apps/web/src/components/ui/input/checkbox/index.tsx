@@ -10,7 +10,7 @@ interface CheckboxFieldProps {
     onCheckedChange: (checked: boolean) => void;
 }
 
-const InputCheckbox = ({
+export const InputCheckbox = ({
     id,
     onCheckedChange,
     disabled = false,
@@ -29,5 +29,3 @@ const InputCheckbox = ({
         </Checkbox.Root>
     );
 };
-
-export default InputCheckbox;

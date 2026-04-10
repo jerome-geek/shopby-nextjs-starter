@@ -6,10 +6,12 @@ import { authentication } from '@/api/auth';
 import { profile } from '@/api/member';
 import { Button } from '@/components/ui/button';
 import * as styles from '@/components/ui/form/EmailAuthentication.css';
-import InputFieldContainer from '@/components/ui/input/FieldContainer';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import { InputLabel } from '@/components/ui/input/label';
+import {
+    InputContainer,
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+} from '@/components/ui/input';
 import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 import useApiError from '@/hooks/useApiError';
 import { useTimer } from '@/hooks/useTimer';
@@ -172,8 +174,8 @@ export default function EmailAuthentication() {
                     {authStatus === 'VERIFIED'
                         ? t('인증 완료')
                         : authStatus === 'EXPIRED'
-                        ? t('인증번호 재발송')
-                        : t('인증번호 발송')}
+                          ? t('인증번호 재발송')
+                          : t('인증번호 발송')}
                 </span>
             </Button>
             {authStatus !== 'IDLE' && authStatus !== 'VERIFIED' && (

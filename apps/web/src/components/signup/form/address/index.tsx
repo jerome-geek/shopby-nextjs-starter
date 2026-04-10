@@ -13,12 +13,10 @@ import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import ReceiverState from '@/components/signup/form/address/receiver-state';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputField from '@/components/ui/input/field';
-import FieldContainer from '@/components/ui/input/FieldContainer';
+import { InputFieldContainer, InputField } from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
-import { overlay } from 'overlay-kit';
 import { AddressSearchModal } from '@/components/modal/address-search';
 import { AddressRegister } from '@/components/layer-contents/address-search';
 import * as styles from '@/components/signup/form/index.css';
@@ -123,7 +121,7 @@ const SignupFormAddress = () => {
 
                 {countryCdWatch === 'JP' ? (
                     <>
-                        <FieldContainer gridRatio={[3, 1]}>
+                        <InputFieldContainer gridRatio={[3, 1]}>
                             <InputField
                                 {...register('zipCd')}
                                 data-error={!!errors.zipCd}
@@ -136,28 +134,28 @@ const SignupFormAddress = () => {
                             >
                                 {t('우편번호 찾기')}
                             </Button>
-                        </FieldContainer>
-                        <FieldContainer>
+                        </InputFieldContainer>
+                        <InputFieldContainer>
                             <InputField
                                 placeholder={t('주소')}
                                 {...register('address')}
                                 data-error={!!errors.address}
                             />
-                        </FieldContainer>
-                        <FieldContainer>
+                        </InputFieldContainer>
+                        <InputFieldContainer>
                             <InputField
                                 placeholder={t('상세 주소')}
                                 {...register('detailAddress')}
                                 data-error={!!errors.detailAddress}
                             />
-                        </FieldContainer>
+                        </InputFieldContainer>
                         <ErrorMessage name='zipCd' />
                         <ErrorMessage name='address' />
                         <ErrorMessage name='detailAddress' />
                     </>
                 ) : countryCdWatch === 'KR' ? (
                     <>
-                        <FieldContainer gridRatio={[3, 1]}>
+                        <InputFieldContainer gridRatio={[3, 1]}>
                             <InputField
                                 {...register('zipCd')}
                                 placeholder={t('우편번호를 입력해 주세요.')}
@@ -174,7 +172,7 @@ const SignupFormAddress = () => {
                             >
                                 {t('우편번호 찾기')}
                             </Button>
-                        </FieldContainer>
+                        </InputFieldContainer>
                         <InputField
                             {...register('address')}
                             placeholder={t('주소를 입력해 주세요.')}
@@ -194,37 +192,37 @@ const SignupFormAddress = () => {
                     </>
                 ) : (
                     <>
-                        <FieldContainer>
+                        <InputFieldContainer>
                             <InputField
                                 placeholder='Address'
                                 {...register('address')}
                                 data-error={!!errors.address}
                             />
-                        </FieldContainer>
-                        <FieldContainer>
+                        </InputFieldContainer>
+                        <InputFieldContainer>
                             <InputField
                                 placeholder='DetailAddress'
                                 {...register('detailAddress')}
                                 data-error={!!errors.detailAddress}
                             />
-                        </FieldContainer>
+                        </InputFieldContainer>
 
                         <ReceiverState name='state' countryCdName='countryCd' />
 
-                        <FieldContainer>
+                        <InputFieldContainer>
                             <InputField
                                 placeholder='City'
                                 {...register('city')}
                                 data-error={!!errors.city}
                             />
-                        </FieldContainer>
-                        <FieldContainer>
+                        </InputFieldContainer>
+                        <InputFieldContainer>
                             <InputField
                                 placeholder='Zip/Postal Code'
                                 {...register('zipCd')}
                                 data-error={!!errors.zipCd}
                             />
-                        </FieldContainer>
+                        </InputFieldContainer>
 
                         <ErrorMessage name='address' />
                         <ErrorMessage name='detailAddress' />

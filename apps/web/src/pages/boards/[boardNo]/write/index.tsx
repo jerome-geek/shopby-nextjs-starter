@@ -9,10 +9,12 @@ import upload from '@/api/storage/image';
 import { InputCheckbox } from '@/components/ui';
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import { InputLabel } from '@/components/ui/input/label';
-import TextArea from '@/components/ui/input/TextArea';
+import {
+    TextArea,
+    InputFieldContainer,
+    InputField,
+    InputLabel,
+} from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import Select from '@/components/ui/select';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
@@ -326,7 +328,7 @@ const ArticleWritePage = () => {
                         onSubmit={onSubmit}
                         className={styles.form}
                     >
-                        <InputContainer>
+                        <InputFieldContainer>
                             <InputLabel isRequired>작성자</InputLabel>
                             <InputField
                                 readOnly={(isLogin || isModify) ?? false}
@@ -334,21 +336,21 @@ const ArticleWritePage = () => {
                                 type='text'
                             />
                             <ErrorMessage name='writerName' />
-                        </InputContainer>
+                        </InputFieldContainer>
 
                         {isVisible.password && (
-                            <InputContainer>
+                            <InputFieldContainer>
                                 <InputLabel isRequired>비밀번호</InputLabel>
                                 <InputField
                                     {...register('password')}
                                     type='password'
                                 />
                                 <ErrorMessage name='password' />
-                            </InputContainer>
+                            </InputFieldContainer>
                         )}
 
                         {isVisible.category && (
-                            <InputContainer>
+                            <InputFieldContainer>
                                 <InputLabel isRequired>카테고리</InputLabel>
                                 <Controller
                                     control={control}
@@ -372,25 +374,25 @@ const ArticleWritePage = () => {
                                     )}
                                 />
                                 <ErrorMessage name='boardCategoryNo' />
-                            </InputContainer>
+                            </InputFieldContainer>
                         )}
 
-                        <InputContainer>
+                        <InputFieldContainer>
                             <InputLabel isRequired>제목</InputLabel>
                             <InputField
                                 {...register('articleTitle')}
                                 type='text'
                             />
                             <ErrorMessage name='articleTitle' />
-                        </InputContainer>
-                        <InputContainer>
+                        </InputFieldContainer>
+                        <InputFieldContainer>
                             <InputLabel isRequired>내용</InputLabel>
                             <TextArea {...register('articleContent')} />
                             <ErrorMessage name='articleContent' />
-                        </InputContainer>
+                        </InputFieldContainer>
 
                         {isVisible.thumbnail && (
-                            <InputContainer>
+                            <InputFieldContainer>
                                 <InputLabel>대표 이미지</InputLabel>
                                 <Column gap='8px'>
                                     <FileUpload
@@ -418,11 +420,11 @@ const ArticleWritePage = () => {
                                         - 업로드 용량은 5MB 이하로만 가능합니다.
                                     </p>
                                 </Column>
-                            </InputContainer>
+                            </InputFieldContainer>
                         )}
 
                         {isVisible.attachment && (
-                            <InputContainer>
+                            <InputFieldContainer>
                                 <InputLabel>첨부 이미지</InputLabel>
                                 <Column gap='8px'>
                                     <FileUpload
@@ -450,7 +452,7 @@ const ArticleWritePage = () => {
                                         - 업로드 용량은 5MB 이하로만 가능합니다.
                                     </p>
                                 </Column>
-                            </InputContainer>
+                            </InputFieldContainer>
                         )}
 
                         {isVisible.secret && (

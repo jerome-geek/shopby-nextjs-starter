@@ -20,17 +20,20 @@ import { isAxiosError } from 'axios';
 import { ImageIcon, Plus, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import RecipePreviewImage from '@/components/recipe/preview-image';
-import { ErrorMessage } from '@/components/ui/form';
 import { CSRLayout } from '@/components/layout';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import { InputLabel } from '@/components/ui/input/label';
-import TextArea from '@/components/ui/input/TextArea';
+import { RecipePreviewImage } from '@/components/recipe';
+import { ErrorMessage } from '@/components/ui/form';
+import {
+    InputContainer,
+    InputField,
+    InputLabel,
+    TextArea,
+} from '@/components/ui/input';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useToast } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
@@ -95,6 +98,8 @@ const SortablePreviewImage = ({
 // TODO: 회원만 접근 가능하도록 처리
 const RecipeWritePage = () => {
     const { t } = useTranslation();
+
+    const router = useRouter();
 
     const { isMobile } = useResponsive();
 
@@ -279,6 +284,7 @@ const RecipeWritePage = () => {
                         console.log('🚀 ~ onSubmit ~ res:', res);
                         addToast({ message: t('레시피가 등록되었습니다.') });
                         clearTempImages();
+                        router.push(`/recipes/${res.data.sno}`);
                     },
                     onError: (error) => {
                         addToast({

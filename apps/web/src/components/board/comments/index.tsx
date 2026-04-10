@@ -1,16 +1,16 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/index.css';
 import CommentItem from '@/components/board/comments/item';
-import TextArea from '@/components/ui/input/TextArea';
+import { TextArea } from '@/components/ui/input';
 import Paging from '@/components/ui/paging';
 import { BOARD_PAGINATION, BOARD_REPLY_MAX_LENGTH } from '@/const/board';
 import { useBoardReplyMutation } from '@/hooks/mutations';
 import { useBoardReplyList } from '@/hooks/query/manage/board';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
-import { useState } from 'react';
 
 interface CommentsProps {
     boardNo: string;
