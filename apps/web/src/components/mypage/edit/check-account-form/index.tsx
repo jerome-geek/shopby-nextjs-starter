@@ -7,9 +7,11 @@ import { z } from 'zod';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
-import InputContainer from '@/components/ui/input/container';
-import Field from '@/components/ui/input/field';
-import { InputLabel } from '@/components/ui/input/label';
+import {
+    InputLabel,
+    InputField,
+    InputFieldContainer,
+} from '@/components/ui/input';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
 import useApiError from '@/hooks/useApiError';
@@ -106,18 +108,18 @@ export const CheckAccountForm = ({
                                 )}
                             </>
                         ) : (
-                            <InputContainer style={{ marginTop: 16 }}>
+                            <InputFieldContainer style={{ marginTop: 16 }}>
                                 <InputLabel isRequired>
                                     {t('비밀번호')}
                                 </InputLabel>
-                                <Field
+                                <InputField
                                     type='password'
                                     placeholder={t('비밀번호를 입력해주세요.')}
                                     {...register('password')}
                                     data-error={!!errors.password}
                                 />
                                 <ErrorMessage name='password' />
-                            </InputContainer>
+                            </InputFieldContainer>
                         )}
 
                         <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>

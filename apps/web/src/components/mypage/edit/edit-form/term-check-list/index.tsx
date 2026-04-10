@@ -1,12 +1,12 @@
 import { every } from '@fxts/core';
 import dayjs from 'dayjs';
+import { useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/mypage/edit/edit-form/term-check-list/index.css';
-import InputCheckbox from '@/components/ui/input/checkbox';
+import { InputCheckbox } from '@/components/ui/input';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
-import { useMemo } from 'react';
 
 const OPT_IN_LIST = [
     {

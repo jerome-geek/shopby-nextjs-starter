@@ -8,7 +8,7 @@ import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import ProductCard from '@/components/product/card';
 import { Button } from '@/components/ui/button';
-import InputCheckbox from '@/components/ui/input/checkbox';
+import { InputCheckbox } from '@/components/ui/input';
 import { useProductProfileMutation } from '@/hooks/mutations';
 import { useRecentViewProductList } from '@/hooks/query/product/profile';
 import { useToast } from '@/hooks/ui';

@@ -10,7 +10,7 @@ import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import ProductCard from '@/components/product/card';
 import { Button } from '@/components/ui/button';
-import InputCheckbox from '@/components/ui/input/checkbox';
+import { InputCheckbox } from '@/components/ui/input';
 import Paging from '@/components/ui/paging';
 import { useProductProfileMutation } from '@/hooks/mutations';
 import useLikeProductList from '@/hooks/query/product/profile/useLikeProductList';

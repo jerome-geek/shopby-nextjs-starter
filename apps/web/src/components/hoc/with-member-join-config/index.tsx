@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 
-import InputContainer from '@/components/ui/input/container';
-import { InputLabel } from '@/components/ui/input/label';
+import { InputFieldContainer, InputLabel } from '@/components/ui/input';
 import { useMall } from '@/hooks/query/admin/mall';
 import { MemberJoinConfig } from '@/models/admin/mall';
 
@@ -27,7 +26,7 @@ const WithMemberJoinConfig = ({
     }
 
     return (
-        <InputContainer>
+        <InputFieldContainer>
             <InputLabel
                 isRequired={mallData.memberJoinConfig[name] === 'REQUIRED'}
             >
@@ -35,7 +34,7 @@ const WithMemberJoinConfig = ({
             </InputLabel>
 
             {children}
-        </InputContainer>
+        </InputFieldContainer>
     );
 };
 

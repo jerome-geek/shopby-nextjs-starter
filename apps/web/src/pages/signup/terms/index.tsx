@@ -13,10 +13,10 @@ import { ReactElement, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { shopbyRequest } from '@/api/core/request';
-import { AuthLayout } from '@/components/layout/auth';
+import { AuthLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
-import InputCheckbox from '@/components/ui/input/checkbox';
+import { InputCheckbox } from '@/components/ui/input';
 import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';

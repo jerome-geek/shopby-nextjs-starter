@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import * as styles from '@/components/order/payment-summary/index.css';
 import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
-import InputCheckbox from '@/components/ui/input/checkbox';
+import { InputCheckbox } from '@/components/ui/input';
 import { useOrderSheetCalculate } from '@/hooks/order';
 import { OrderTermsType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';
