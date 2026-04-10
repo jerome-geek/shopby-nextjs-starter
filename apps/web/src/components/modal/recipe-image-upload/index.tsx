@@ -19,15 +19,14 @@ import { Loader2, Plus, X } from 'lucide-react';
 import { motion, AnimatePresence, type Variants } from 'motion/react';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
 
 import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-image-upload/index.css';
+import { MODAL_QUERY_KEY } from '@/const/modal';
+import { PATHS } from '@/const/paths';
 import useRecipeImageUploadMutation from '@/hooks/mutations/useRecipeImageUploadMutation';
 import { vars } from '@/styles/theme.css';
-
-interface RecipeImageUploadModalProps extends DefaultModalLayoutProps {
-    onNext: () => void;
-}
 
 // 🎯 더 쫀득한 느낌을 주기 위해 Spring transition 적용
 const itemVariants: Variants = {
@@ -118,14 +117,23 @@ const SortableImageItem = ({
 };
 
 // --- Main Modal Component ---
-export const RecipeImageUploadModal = ({
-    onNext,
-    ...props
-}: RecipeImageUploadModalProps) => {
+export const RecipeImageUploadModal = (props: DefaultModalLayoutProps) => {
     const { t } = useTranslation();
+    const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
     const [images, setImages] = useState<string[]>([]);
     const { uploadAndRegister } = useRecipeImageUploadMutation();
+
+    const handleClose = () => {
+        const newQuery = { ...router.query };
+        delete newQuery[MODAL_QUERY_KEY];
+        router.replace(
+            { pathname: router.pathname, query: newQuery },
+            undefined,
+            { shallow: true },
+        );
+        props.close();
+    };
 
     const isLoading = uploadAndRegister.isPending;
 
@@ -171,6 +179,7 @@ export const RecipeImageUploadModal = ({
     return (
         <ModalLayout
             {...props}
+            close={handleClose}
             title={t('이미지 추가')}
             width='588px'
             footerButtonList={[
@@ -182,7 +191,10 @@ export const RecipeImageUploadModal = ({
                         disabled={images.length === 0 || isLoading}
                         onClick={() =>
                             uploadAndRegister.mutate(images, {
-                                onSuccess: onNext,
+                                onSuccess: () => {
+                                    handleClose();
+                                    router.push(PATHS.RECIPES.WRITE);
+                                },
                             })
                         }
                     >

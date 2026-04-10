@@ -13,9 +13,24 @@ export const useModalWatcher = () => {
         openRecipeSave,
     } = useCustomDialog();
 
-    // 🎯 현재 열려 있는 모달의 타입을 기억하여 중복 오픈을 방지합니다.
     const openedModalTypeRef = useRef<string | null>(null);
+    const handlersRef = useRef({
+        openRecipeCreateSelection,
+        openRecipeImageUpload,
+        openRecipeUrlInput,
+        openRecipeSave,
+    });
 
+    useEffect(() => {
+        handlersRef.current = {
+            openRecipeCreateSelection,
+            openRecipeImageUpload,
+            openRecipeUrlInput,
+            openRecipeSave,
+        };
+    });
+
+    // TODO: 쿼리스트링이 있는 경우에만 replace가 아니라 push
     useEffect(() => {
         const modalType = query[MODAL_QUERY_KEY] as string | undefined;
 
@@ -27,40 +42,34 @@ export const useModalWatcher = () => {
         // 2. 레시피 생성 모달 처리
         if (modalType === MODAL_TYPE.RECIPE_CREATE) {
             openedModalTypeRef.current = modalType;
-            openRecipeCreateSelection();
+            handlersRef.current.openRecipeCreateSelection();
             return;
         }
 
         // 3. 레시피 이미지 업로드 모달 처리
         if (modalType === MODAL_TYPE.RECIPE_IMAGE_UPLOAD) {
             openedModalTypeRef.current = modalType;
-            openRecipeImageUpload();
+            handlersRef.current.openRecipeImageUpload();
             return;
         }
 
         // 4. 레시피 URL 입력 모달 처리
         if (modalType === MODAL_TYPE.RECIPE_URL_INPUT) {
             openedModalTypeRef.current = modalType;
-            openRecipeUrlInput();
+            handlersRef.current.openRecipeUrlInput();
             return;
         }
 
         // 5. 레시피 저장 모달 처리
         if (modalType === MODAL_TYPE.RECIPE_SAVE) {
             openedModalTypeRef.current = modalType;
-            openRecipeSave();
+            handlersRef.current.openRecipeSave();
             return;
         }
 
-        // 5. 쿼리가 사라졌다면 Ref 초기화 (닫힘 감지)
+        // 6. 쿼리가 사라졌다면 Ref 초기화 (닫힘 감지)
         if (!modalType) {
             openedModalTypeRef.current = null;
         }
-    }, [
-        query,
-        openRecipeCreateSelection,
-        openRecipeImageUpload,
-        openRecipeUrlInput,
-        openRecipeSave,
-    ]);
+    }, [query]);
 };

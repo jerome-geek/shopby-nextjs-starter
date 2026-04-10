@@ -29,11 +29,12 @@ export const buttonRecipe = recipe({
             solid: [
                 textStyles.headingSemibold,
                 {
+                    color: vars.color.white,
                     border: 'none',
                     gap: '8px',
                     ':disabled': {
                         backgroundColor: vars.color.gray['20'],
-                        color: vars.color.gray['50'],
+                        color: vars.color.gray['60'],
                         cursor: 'not-allowed',
                         opacity: 1, // disabled 시 hover opacity 해제 또는 기본 상태를 유지
                     },
@@ -52,7 +53,7 @@ export const buttonRecipe = recipe({
                     border: `1px solid ${vars.color.gray['50']}`,
                     ':disabled': {
                         backgroundColor: vars.color.gray['20'],
-                        color: vars.color.gray['50'],
+                        color: vars.color.gray['60'],
                         cursor: 'not-allowed',
                         opacity: 1,
                     },

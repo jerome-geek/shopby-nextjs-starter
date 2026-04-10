@@ -9,7 +9,7 @@ import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
 import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
-import { MODAL_QUERY_KEY } from '@/const/modal';
+import { CollectionCreateModal } from '@/components/modal/collection-create';
 import { PATHS } from '@/const/paths';
 import { vars } from '@/styles/theme.css';
 
@@ -69,151 +69,80 @@ export const useCustomDialog = () => {
         });
     }, [t, router]);
 
-    const openLoginDialog = useCallback(() => {
-        overlay.open((props) => {
-            return (
-                <ConfirmDialog
-                    {...props}
-                    type='confirm'
-                    Title={
-                        <div style={{ textAlign: 'center' }}>
-                            <p
-                                style={{
-                                    fontSize: '18px',
-                                    fontWeight: vars.typography.fontWeight.bold,
-                                    marginBottom: '8px',
-                                }}
-                            >
-                                {t('로그인이 필요합니다')}
-                            </p>
-                            <p
-                                style={{
-                                    fontSize: '14px',
-                                    color: vars.color.gray['60'],
-                                }}
-                            >
-                                {t('로그인 페이지로 이동하시겠습니까?')}
-                            </p>
-                        </div>
-                    }
-                    confirm={() => {
-                        overlay.closeAll();
-                        router.push({
-                            pathname: PATHS.AUTH.LOGIN,
-                            query: {
-                                returnUrl: `${location.pathname}${location.search}`,
-                            },
-                        });
-                    }}
-                    confirmText={t('로그인하기')}
-                    cancelText={t('닫기')}
-                />
-            );
-        });
-    }, [t, router]);
-
-    const openRecipeUrlInput = useCallback(() => {
-        overlay.open((props) => {
-            const handleClose = () => {
-                const newQuery = { ...router.query };
-                delete newQuery[MODAL_QUERY_KEY];
-                router.replace(
-                    { pathname: router.pathname, query: newQuery },
-                    undefined,
-                    { shallow: true },
-                );
-                props.close();
-            };
-
-            return <RecipeUrlInput {...props} close={handleClose} />;
-        });
-    }, [router]);
-
-    const openRecipeImageUpload = useCallback(() => {
-        overlay.open((props) => {
-            const handleClose = () => {
-                const newQuery = { ...router.query };
-                delete newQuery[MODAL_QUERY_KEY];
-                router.replace(
-                    { pathname: router.pathname, query: newQuery },
-                    undefined,
-                    { shallow: true },
-                );
-                props.close();
-            };
-
-            return (
-                <RecipeImageUploadModal
-                    {...props}
-                    close={handleClose}
-                    onNext={() => {
-                        handleClose();
-                        router.push(PATHS.RECIPES.WRITE);
-                    }}
-                />
-            );
-        });
-    }, [router]);
-
-    const openRecipeCreateSelection = useCallback(() => {
-        overlay.open((props) => {
-            const handleClose = () => {
-                const newQuery = { ...router.query };
-                delete newQuery[MODAL_QUERY_KEY];
-                router.replace(
-                    { pathname: router.pathname, query: newQuery },
-                    undefined,
-                    { shallow: true },
-                );
-                props.close();
-            };
-
-            return (
-                <RecipeCreateSelection
-                    {...props}
-                    close={handleClose}
-                    onSelectAI={() => {
-                        props.close();
-                        openRecipeUrlInput();
-                    }}
-                    onSelectDirect={() => {
-                        props.close();
-                        openRecipeImageUpload();
-                    }}
-                />
-            );
-        });
-    }, [router, openRecipeUrlInput, openRecipeImageUpload]);
-
-    const openRecipeSave = useCallback(
-        (recipeSno?: number) => {
+    const openLoginDialog = useCallback(
+        (returnUrl?: string) => {
             overlay.open((props) => {
-                const handleClose = () => {
-                    const newQuery = { ...router.query };
-                    delete newQuery[MODAL_QUERY_KEY];
-                    router.replace(
-                        { pathname: router.pathname, query: newQuery },
-                        undefined,
-                        { shallow: true },
-                    );
-                    props.close();
-                };
-
                 return (
-                    <RecipeSaveModal
+                    <ConfirmDialog
                         {...props}
-                        close={handleClose}
-                        recipeSno={recipeSno}
-                        onAddCollection={() => {
-                            // TODO: Open collection create modal or logic
-                            console.log('Open Collection Create');
+                        type='confirm'
+                        Title={
+                            <div style={{ textAlign: 'center' }}>
+                                <p
+                                    style={{
+                                        fontSize: '18px',
+                                        fontWeight:
+                                            vars.typography.fontWeight.bold,
+                                        marginBottom: '8px',
+                                    }}
+                                >
+                                    {t('로그인이 필요합니다')}
+                                </p>
+                                <p
+                                    style={{
+                                        fontSize: '14px',
+                                        color: vars.color.gray['60'],
+                                    }}
+                                >
+                                    {t('로그인 페이지로 이동하시겠습니까?')}
+                                </p>
+                            </div>
+                        }
+                        confirm={() => {
+                            overlay.closeAll();
+                            router.push({
+                                pathname: PATHS.AUTH.LOGIN,
+                                query: {
+                                    returnUrl: returnUrl ?? router.asPath,
+                                },
+                            });
                         }}
+                        confirmText={t('로그인하기')}
+                        cancelText={t('닫기')}
                     />
                 );
             });
         },
-        [router],
+        [t, router],
     );
+
+    const openRecipeUrlInput = useCallback(() => {
+        overlay.open((props) => <RecipeUrlInput {...props} />);
+    }, []);
+
+    const openRecipeImageUpload = useCallback(() => {
+        overlay.open((props) => <RecipeImageUploadModal {...props} />);
+    }, []);
+
+    const openRecipeCreateSelection = useCallback(() => {
+        overlay.open((props) => <RecipeCreateSelection {...props} />);
+    }, []);
+
+    const openCollectionCreate = useCallback(() => {
+        overlay.open((props) => <CollectionCreateModal {...props} />);
+    }, []);
+
+    const openRecipeSave = useCallback((recipeSno?: number) => {
+        overlay.open((props) => (
+            <RecipeSaveModal
+                {...props}
+                recipeSno={recipeSno}
+                onAddCollection={() => {
+                    openCollectionCreate();
+                }}
+            />
+        ));
+    }, [openCollectionCreate]);
 
     return {
         openAddCartDialog,
@@ -222,5 +151,6 @@ export const useCustomDialog = () => {
         openRecipeUrlInput,
         openRecipeImageUpload,
         openRecipeSave,
+        openCollectionCreate,
     };
 };

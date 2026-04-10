@@ -1,8 +1,10 @@
 import { Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
 
 import { ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-save/index.css';
+import { MODAL_QUERY_KEY } from '@/const/modal';
 import { vars } from '@/styles/theme.css';
 import { useCollectionList } from '@/hooks/query/shop/collection';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
@@ -25,8 +27,20 @@ export const RecipeSaveModal = ({
     onAddCollection,
 }: RecipeSaveModalProps) => {
     const { t } = useTranslation();
+    const router = useRouter();
     const { bookmarkRecipe } = useRecipeMutation();
     const { addToast } = useToast();
+
+    const handleClose = () => {
+        const newQuery = { ...router.query };
+        delete newQuery[MODAL_QUERY_KEY];
+        router.replace(
+            { pathname: router.pathname, query: newQuery },
+            undefined,
+            { shallow: true },
+        );
+        close();
+    };
 
     const { data = [] } = useCollectionList();
 
@@ -43,7 +57,7 @@ export const RecipeSaveModal = ({
                 variant: 'success',
                 message: t("'{{title}}' 컬렉션에 저장되었습니다.", { title }),
             });
-            close();
+            handleClose();
         } catch (error) {
             const errorMessage = isAxiosError(error)
                 ? error.response?.data?.message || error.message
@@ -55,7 +69,7 @@ export const RecipeSaveModal = ({
     return (
         <ModalLayout
             isOpen={isOpen}
-            close={close}
+            close={handleClose}
             unmount={unmount}
             title={t('레시피 저장')}
             size='small'

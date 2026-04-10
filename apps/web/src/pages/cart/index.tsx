@@ -9,7 +9,7 @@ import { NoResult } from '@/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
 import ProductSection from '@/components/product-section';
-import { InputCheckbox, InputLabel } from '@/components/ui';
+import { InputCheckbox, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
 import { useCartMutation } from '@/hooks/mutations';

@@ -16,9 +16,8 @@ import {
     useCategory,
 } from '@/hooks/query/display/category';
 import { useCustomDialog } from '@/hooks/ui';
-import { vars } from '@/styles/theme.css';
-import { isLoggedIn } from '@/utils/auth';
 import { useAuth } from '@/hooks/useAuth';
+import { vars } from '@/styles/theme.css';
 
 export function Header() {
     const { t } = useTranslation();
@@ -41,7 +40,11 @@ export function Header() {
     const handleRecipeButtonClick = (e: React.MouseEvent) => {
         if (!isLogin) {
             e.preventDefault();
-            openLoginDialog();
+            const [basePath, existingSearch] = router.asPath.split('?');
+            const params = new URLSearchParams(existingSearch);
+            params.set(MODAL_QUERY_KEY, MODAL_TYPE.RECIPE_CREATE);
+            const returnUrl = `${basePath}?${params.toString()}`;
+            openLoginDialog(returnUrl);
             return;
         }
 

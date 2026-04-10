@@ -82,6 +82,17 @@ const recipe = {
     },
 
     /**
+     * 수동 레시피 임시 이미지 전체 삭제
+     */
+    deleteManualTempImages: (options?: AxiosRequestConfig) => {
+        return geekRequest({
+            method: 'DELETE',
+            url: '/shop/recipe/manual/temp-images',
+            ...options,
+        });
+    },
+
+    /**
      * 수동 레시피 생성
      *  - 직접 입력한 정보로 레시피를 생성합니다
      */

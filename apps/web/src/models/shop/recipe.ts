@@ -11,7 +11,7 @@ export interface CreateRecipeData {
 export interface CreateRecipeResponse {
     created: boolean;
     message: string;
-    status: 'PROCESSING' | 'COMPLETED';
+    status: 'PROCESSING' | 'COMPLETED' | 'FAILED';
     recipeSno: number;
 }
 

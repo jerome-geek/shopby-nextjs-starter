@@ -1,24 +1,23 @@
-import * as React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-    ChevronRight,
-    Plus,
+    ArrowUp,
     Bookmark,
+    ChevronRight,
     Clock,
-    Users,
     LayoutGrid,
     List,
-    Search,
-    ShoppingCart,
-    Share2,
-    ArrowUp,
+    Plus,
+    Users,
 } from 'lucide-react';
-import * as styles from '@/pages/recipes/scrap/index.css';
-import { useTranslation } from 'react-i18next';
-import { vars } from '@/styles/theme.css';
-import { RecipeCollectionCreateModal } from '@/components/modal';
+import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
-import { DefaultLayout } from '@/components/layout';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { CSRLayout } from '@/components/layout';
+import { RecipeCollectionCreateModal } from '@/components/modal';
+import * as styles from '@/pages/recipes/scrap/index.css';
+import { vars } from '@/styles/theme.css';
+import { useCustomDialog } from '@/hooks/ui';
 
 /* --- Mock Data --- */
 const MOCK_COLLECTIONS = [
@@ -273,8 +272,11 @@ type TabId = (typeof TABS)[number]['id'];
 /**
  * 전체 탭 레이아웃 (컬렉션, 상품, 레시피 그리드)
  */
-const ScrapAllContent = ({ openModal }: { openModal: () => void }) => {
+const ScrapAllContent = () => {
     const { t } = useTranslation();
+
+    const { openCollectionCreate } = useCustomDialog();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -335,7 +337,7 @@ const ScrapAllContent = ({ openModal }: { openModal: () => void }) => {
                 <button
                     className={styles.createButton}
                     type='button'
-                    onClick={openModal}
+                    onClick={openCollectionCreate}
                 >
                     <Plus size={18} />
                     {t('새 컬렉션 만들기')}
@@ -858,7 +860,7 @@ const ScrapDetailContent = ({ tabId }: { tabId: TabId }) => {
 
 /* --- Main Page --- */
 
-const RecipeScrap = () => {
+const RecipeScrapPage = () => {
     const router = useRouter();
     const { t } = useTranslation();
 
@@ -918,9 +920,7 @@ const RecipeScrap = () => {
             <AnimatePresence mode='wait'>
                 <div key={activeTab}>
                     {activeTab === 'all' ? (
-                        <ScrapAllContent
-                            openModal={() => setIsModalOpen(true)}
-                        />
+                        <ScrapAllContent />
                     ) : (
                         <ScrapDetailContent tabId={activeTab} />
                     )}
@@ -944,8 +944,8 @@ const RecipeScrap = () => {
     );
 };
 
-RecipeScrap.getLayout = (page: React.ReactNode) => {
-    return <DefaultLayout>{page}</DefaultLayout>;
+RecipeScrapPage.getLayout = (page: React.ReactNode) => {
+    return <CSRLayout>{page}</CSRLayout>;
 };
 
-export default RecipeScrap;
+export default RecipeScrapPage;

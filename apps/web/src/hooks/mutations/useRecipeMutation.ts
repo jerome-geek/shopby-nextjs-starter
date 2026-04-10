@@ -38,6 +38,13 @@ const useRecipeMutation = () => {
         }),
 
         /**
+         * 수동 레시피 임시 이미지 전체 삭제
+         */
+        deleteManualTempImages: useMutation({
+            mutationFn: async () => await recipe.deleteManualTempImages(),
+        }),
+
+        /**
          * 수동 레시피 생성
          */
         createManualRecipe: useMutation({
