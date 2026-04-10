@@ -13,6 +13,8 @@ export const container = style({
     flexDirection: 'column',
     gap: '24px',
     padding: '12px 0',
+    height: '100%',
+    maxHeight: '388px',
 });
 
 export const imageGrid = style({
@@ -144,6 +146,9 @@ export const nextButton = style([
         border: 'none',
         cursor: 'pointer',
         transition: 'all 0.3s ease',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
 
         ':hover': {
             opacity: 0.9,

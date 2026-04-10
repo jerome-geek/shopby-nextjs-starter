@@ -1,21 +1,24 @@
-import * as styles from '@/components/recipe/preview-image/index.css';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { DraggableAttributes } from '@dnd-kit/core';
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 
-interface RecipePreviewImageProps {
+import * as styles from '@/components/recipe/preview-image/index.css';
+
+export interface RecipePreviewImageProps {
     isMain?: boolean;
     sno: number | null;
     url: string;
-    onDeleteButtonClick?: (sno: any) => void;
+    onDeleteButtonClick?: (sno: number) => void;
     onClick?: () => void;
     // DND 관련 props 추가
-    attributes?: any;
-    listeners?: any;
+    attributes?: DraggableAttributes;
+    listeners?: SyntheticListenerMap;
     setNodeRef?: (node: HTMLElement | null) => void;
     style?: React.CSSProperties;
 }
 
-const RecipePreviewImage = ({
+export const RecipePreviewImage = ({
     isMain,
     sno,
     url,
@@ -40,7 +43,7 @@ const RecipePreviewImage = ({
             {isMain && <span className={styles.mainBadge}>{t('대표')}</span>}
             <img
                 src={url}
-                // alt={`preview-${i}`}
+                alt={`recipe-preview-image-${sno}`}
                 className={styles.previewImage}
             />
             {onDeleteButtonClick && (
@@ -61,5 +64,3 @@ const RecipePreviewImage = ({
         </div>
     );
 };
-
-export default RecipePreviewImage;
