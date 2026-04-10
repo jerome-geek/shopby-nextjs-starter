@@ -16,6 +16,10 @@ export const ORDER_STATUS_MAP = {
     DELETE: '삭제',
     EXCHANGE_WAIT: '교환대기',
     REFUND_DONE: '환불완료',
+    CANCEL_PROCESSING: '취소처리중',
+    RETURN_PROCESSING: '반품처리중',
+    EXCHANGE_WAITING: '교환대기중',
+    EXCHANGE_PROCESSING: '교환처리중',
 } as const;
 
 // 주문상태
