@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import EmailAuthentication from '@/components/signup/form/email/email-authentication';
 import { ErrorMessage } from '@/components/ui/form';
-import { InputField } from '@/components/ui/input';
+import { InputField, InputFieldContainer } from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 
@@ -59,8 +59,8 @@ const SignupFormEmail = ({
                     ).split('@');
 
                     return (
-                        <FieldContainer>
-                            <FieldContainer
+                        <InputFieldContainer>
+                            <InputFieldContainer
                                 style={{
                                     flexDirection: 'row',
                                 }}
@@ -104,7 +104,7 @@ const SignupFormEmail = ({
                                         !!emailError || !!isDuplicateEmailError
                                     }
                                 />
-                            </FieldContainer>
+                            </InputFieldContainer>
 
                             {!isDisabled && (
                                 <Select
@@ -128,7 +128,7 @@ const SignupFormEmail = ({
                                     }}
                                 />
                             )}
-                        </FieldContainer>
+                        </InputFieldContainer>
                     );
                 }}
             />
