@@ -10,6 +10,7 @@ export const useModalWatcher = () => {
         openRecipeCreateSelection,
         openRecipeImageUpload,
         openRecipeUrlInput,
+        openRecipeSave,
     } = useCustomDialog();
 
     // 🎯 현재 열려 있는 모달의 타입을 기억하여 중복 오픈을 방지합니다.
@@ -44,6 +45,13 @@ export const useModalWatcher = () => {
             return;
         }
 
+        // 5. 레시피 저장 모달 처리
+        if (modalType === MODAL_TYPE.RECIPE_SAVE) {
+            openedModalTypeRef.current = modalType;
+            openRecipeSave();
+            return;
+        }
+
         // 5. 쿼리가 사라졌다면 Ref 초기화 (닫힘 감지)
         if (!modalType) {
             openedModalTypeRef.current = null;
@@ -53,5 +61,6 @@ export const useModalWatcher = () => {
         openRecipeCreateSelection,
         openRecipeImageUpload,
         openRecipeUrlInput,
+        openRecipeSave,
     ]);
 };

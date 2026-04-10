@@ -12,6 +12,7 @@ export interface CreateRecipeResponse {
     created: boolean;
     message: string;
     status: 'PROCESSING' | 'COMPLETED';
+    recipeSno: number;
 }
 
 /** 임시 이미지 항목 */
@@ -151,6 +152,8 @@ export interface SearchPublicCollectionsParams {
 
 export type RecipeSourceType = 'YOUTUBE' | 'INSTAGRAM' | 'MANUAL';
 export type RecipeDifficulty = 'EASY' | 'NORMAL' | 'HARD';
+export type RecipeStatus = 'PROCESSING' | 'COMPLETED' | 'FAILURE';
+export type RecipeOwnershipType = 'CREATED' | 'BOOKMARKED';
 
 /** 조리 단계 */
 export interface RecipeStep {
@@ -194,23 +197,26 @@ export interface RecipeDetail {
     memberId: string | null;
     title: string;
     description: string | null;
-    sourceUrl: string;
+    sourceUrl?: string | null;
     sourceType: RecipeSourceType;
-    sourceId: string;
+    sourceId?: string | null;
     authorName: string | null;
-    authorUrl: string | null;
+    authorUrl?: string | null;
     thumbnailUrl: string | null;
-    channelImageUrl: string | null;
-    durationSeconds: number | null;
-    difficulty: RecipeDifficulty;
-    servings: number | null;
-    caloriesPerServingKcal: number | null;
-    nutritionEstimated: boolean | null;
-    extraData: Record<string, unknown> | null;
+    channelImageUrl?: string | null;
+    durationSeconds?: number | null;
+    difficulty?: RecipeDifficulty | null;
+    servings?: number | null;
+    caloriesPerServingKcal?: number | null;
+    nutritionEstimated?: boolean | null;
+    extraData?: Record<string, unknown> | null;
     regDt: string;
     updateDt: string;
-    steps: RecipeStep[];
-    ingredients: RecipeIngredient[];
+    steps?: RecipeStep[];
+    ingredients?: RecipeIngredient[];
+    recipeStatus: RecipeStatus;
+    ownershipType: RecipeOwnershipType;
+    failureReason: string | null;
 }
 
 /** 컬렉션 북마크 응답 */
@@ -251,8 +257,13 @@ export interface RecipeExposureGroupResponse {
 
 /** 페이징 포함 레시피 응답 */
 export interface SearchRecipesResponse {
+    count: number;
+    currentPage: number;
     items: RecipeDetail[];
-    total: number;
+    lastPage: number;
+    nextPage: Nullable<number>;
+    prevPage: Nullable<number>;
+    statusCode: 'success' | 'fail';
 }
 
 /** 페이징 포함 컬렉션 응답 */

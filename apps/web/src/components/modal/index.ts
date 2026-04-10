@@ -6,3 +6,4 @@ export * from '@/components/modal/shipping-address-list';
 export * from '@/components/modal/coupon-register';
 export * from '@/components/modal/period-range-picker';
 export * from '@/components/modal/recipe-collection-create';
+export * from '@/components/modal/recipe-save';

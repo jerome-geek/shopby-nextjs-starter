@@ -5,6 +5,7 @@ import {
     CreateManualRecipeData,
     CreateRecipeData,
     RegisterManualTempImagesData,
+    BookmarkRecipeData,
 } from '@/models/shop/recipe';
 
 const useRecipeMutation = () => {
@@ -58,6 +59,27 @@ const useRecipeMutation = () => {
         unlikeRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.unlikeRecipe(sno),
+        }),
+
+        /**
+         * 레시피 북마크 (컬렉션 저장)
+         */
+        bookmarkRecipe: useMutation({
+            mutationFn: async ({
+                sno,
+                data,
+            }: {
+                sno: number;
+                data: BookmarkRecipeData;
+            }) => await recipe.bookmarkRecipe(sno, data),
+        }),
+
+        /**
+         * 레시피 북마크 취소
+         */
+        unBookmarkRecipe: useMutation({
+            mutationFn: async ({ sno }: { sno: number }) =>
+                await recipe.unBookmarkRecipe(sno),
         }),
     };
 };

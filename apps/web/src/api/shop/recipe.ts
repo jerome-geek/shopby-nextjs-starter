@@ -282,7 +282,7 @@ const recipe = {
      * 레시피 북마크 취소
      *  - 레시피 북마크를 취소합니다
      */
-    unbookmarkRecipe: (sno: number, options?: AxiosRequestConfig) => {
+    unBookmarkRecipe: (sno: number, options?: AxiosRequestConfig) => {
         return geekRequest({
             method: 'DELETE',
             url: `/shop/recipe/${sno}/bookmark`,

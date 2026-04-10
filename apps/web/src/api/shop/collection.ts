@@ -1,14 +1,9 @@
 import { geekRequest } from '@/api/core/geekRequest';
-
-export interface CreateCollectionRequest {
-    title: string;
-    description?: string;
-}
-
-export interface UpdateCollectionRequest {
-    title?: string;
-    description?: string;
-}
+import {
+    CollectionListResponse,
+    CreateCollectionRequest,
+    UpdateCollectionRequest,
+} from '@/models/shop/collection';
 
 const collection = {
     /** 컬렉션 생성 */
@@ -22,7 +17,7 @@ const collection = {
 
     /** 내 컬렉션 목록 조회 */
     getList: () => {
-        return geekRequest({
+        return geekRequest<CollectionListResponse>({
             method: 'GET',
             url: '/shop/recipe/collections',
         });

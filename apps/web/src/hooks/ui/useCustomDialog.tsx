@@ -8,6 +8,7 @@ import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
 import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
+import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 import { PATHS } from '@/const/paths';
 import { vars } from '@/styles/theme.css';
@@ -124,17 +125,7 @@ export const useCustomDialog = () => {
                 props.close();
             };
 
-            return (
-                <RecipeUrlInput
-                    {...props}
-                    close={handleClose}
-                    onSubmit={(url: string) => {
-                        // TODO: Implement recipe extraction logic
-                        console.log('Recipe URL:', url);
-                        handleClose();
-                    }}
-                />
-            );
+            return <RecipeUrlInput {...props} close={handleClose} />;
         });
     }, [router]);
 
@@ -194,11 +185,42 @@ export const useCustomDialog = () => {
         });
     }, [router, openRecipeUrlInput, openRecipeImageUpload]);
 
+    const openRecipeSave = useCallback(
+        (recipeSno?: number) => {
+            overlay.open((props) => {
+                const handleClose = () => {
+                    const newQuery = { ...router.query };
+                    delete newQuery[MODAL_QUERY_KEY];
+                    router.replace(
+                        { pathname: router.pathname, query: newQuery },
+                        undefined,
+                        { shallow: true },
+                    );
+                    props.close();
+                };
+
+                return (
+                    <RecipeSaveModal
+                        {...props}
+                        close={handleClose}
+                        recipeSno={recipeSno}
+                        onAddCollection={() => {
+                            // TODO: Open collection create modal or logic
+                            console.log('Open Collection Create');
+                        }}
+                    />
+                );
+            });
+        },
+        [router],
+    );
+
     return {
         openAddCartDialog,
         openLoginDialog,
         openRecipeCreateSelection,
         openRecipeUrlInput,
         openRecipeImageUpload,
+        openRecipeSave,
     };
 };

@@ -15,13 +15,19 @@ import {
     useCategoriesByCode,
     useCategory,
 } from '@/hooks/query/display/category';
+import { useCustomDialog } from '@/hooks/ui';
 import { vars } from '@/styles/theme.css';
+import { isLoggedIn } from '@/utils/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
     const { t } = useTranslation();
     const router = useRouter();
 
+    const isLogin = useAuth();
+
     const { totalCount } = useCart();
+    const { openLoginDialog } = useCustomDialog();
 
     const { data: categoriesByCodeData } = useCategoriesByCode({
         data: { codes: ['MAIN'] },
@@ -31,6 +37,25 @@ export function Header() {
     const { data: categoryData } = useCategory({
         categoryNo,
     });
+
+    const handleRecipeButtonClick = (e: React.MouseEvent) => {
+        if (!isLogin) {
+            e.preventDefault();
+            openLoginDialog();
+            return;
+        }
+
+        router.replace(
+            {
+                query: {
+                    ...router.query,
+                    [MODAL_QUERY_KEY]: MODAL_TYPE.RECIPE_CREATE,
+                },
+            },
+            undefined,
+            { shallow: true },
+        );
+    };
 
     return (
         <header id='header' className={styles.header}>
@@ -48,17 +73,10 @@ export function Header() {
                 </Link>
 
                 <div className={styles.utilitySection}>
-                    <Link
-                        href={{
-                            query: {
-                                ...router.query,
-                                [MODAL_QUERY_KEY]: MODAL_TYPE.RECIPE_CREATE,
-                            },
-                        }}
-                        shallow
-                        replace
+                    <button
+                        type='button'
                         className={styles.recipeButton}
-                        style={{ textDecoration: 'none' }}
+                        onClick={handleRecipeButtonClick}
                     >
                         <CirclePlusIcon
                             width={24}
@@ -66,7 +84,7 @@ export function Header() {
                             color={vars.color.white}
                         />
                         <span>{t('레시피 만들기')}</span>
-                    </Link>
+                    </button>
 
                     <ul className={styles.iconList}>
                         <li>
@@ -76,7 +94,7 @@ export function Header() {
                         </li>
                         <li className={styles.mobileHiddenItem}>
                             <Link
-                                href={PATHS.MYPAGE.WISH}
+                                href={PATHS.RECIPES.SCRAP}
                                 className={styles.iconLink}
                             >
                                 <BookmarkIcon width={24} height={24} />

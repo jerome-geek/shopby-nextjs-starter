@@ -19,26 +19,35 @@ interface AddToastParams {
 }
 
 export const useToast = () => {
-    const addToast = useCallback(({ message, variant = 'default', link }: AddToastParams) => {
-        if (link) {
-            toast.custom((t) => (
+    const addToast = useCallback(
+        ({ message, variant = 'default', link }: AddToastParams) => {
+            if (link) {
+                toast.custom((t) => (
+                    <div className={styles.toastWrapper[variant]}>
+                        <div className={styles.toastMessageWithLink}>
+                            {message}
+                        </div>
+                        <Link
+                            href={link.href}
+                            className={styles.toastLink}
+                            onClick={() => toast.dismiss(t)}
+                        >
+                            {link.label}
+                            <ChevronRight size={16} />
+                        </Link>
+                    </div>
+                ));
+                return;
+            }
+
+            toast.custom(() => (
                 <div className={styles.toastWrapper[variant]}>
-                    <div className={styles.toastMessageWithLink}>{message}</div>
-                    <Link href={link.href} className={styles.toastLink} onClick={() => toast.dismiss(t)}>
-                        {link.label}
-                        <ChevronRight size={16} />
-                    </Link>
+                    <div className={styles.toastMessage}>{message}</div>
                 </div>
             ));
-            return;
-        }
-
-        toast.custom(() => (
-            <div className={styles.toastWrapper[variant]}>
-                <div className={styles.toastMessage}>{message}</div>
-            </div>
-        ));
-    }, []);
+        },
+        [],
+    );
 
     return { addToast };
 };

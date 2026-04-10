@@ -6,23 +6,23 @@ import { useTranslation } from 'react-i18next';
 import { recipe } from '@/api/shop';
 import { ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-url-input/index.css';
+import { useCustomDialog } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 
 interface RecipeUrlInputProps {
     isOpen: boolean;
     close: () => void;
     unmount: () => void;
-    onSubmit: (url: string) => void;
 }
 
 export const RecipeUrlInput = ({
     isOpen,
     close,
     unmount,
-    onSubmit,
 }: RecipeUrlInputProps) => {
     const { t } = useTranslation();
     const { openAsyncDialog } = useDialog();
+    const { openRecipeSave } = useCustomDialog();
     const [url, setUrl] = useState('');
 
     const isValidUrl = (string: string) => {
@@ -42,12 +42,14 @@ export const RecipeUrlInput = ({
         try {
             const { data } = await recipe.createRecipe({ url });
 
-            const isAgree = await openAsyncDialog({
+            const recipeSno = await openAsyncDialog<number>({
                 message: data.message,
+                onConfirmReturnValue: data.recipeSno,
             });
 
-            if (isAgree) {
+            if (recipeSno) {
                 overlay.closeAll();
+                openRecipeSave(recipeSno);
             }
         } catch (error) {
             const errorMessage = isAxiosError(error)
