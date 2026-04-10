@@ -243,5 +243,6 @@ export const PATHS = {
         MAIN: '/recipes',
         WRITE: '/recipes/write',
         DETAIL: '/recipes/[recipeNo]',
+        SCRAP: '/recipes/scrap',
     },
 } as const;
