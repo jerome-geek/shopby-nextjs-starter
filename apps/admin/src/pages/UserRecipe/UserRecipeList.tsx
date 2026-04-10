@@ -1,9 +1,13 @@
-import { useState } from 'react';
-import { Link } from 'react-router';
+import { useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
+import { isEmpty } from '@fxts/core';
 
 import PageMeta from '@/components/common/PageMeta';
 import { PATHS } from '@/const/paths';
 import CreateUserRecipeModal from '@/components/modal/CreateUserRecipeModal';
+import { useSearchRecipeList } from '@/hooks/query/recipe';
+import LoadingWrapper from '@/components/ui/loading-wrapper';
+
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
 import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
@@ -11,54 +15,53 @@ import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react'
 import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
 import { ReactComponent as ChevronRightSmallIcon } from '@/icons/chevron-right-small.svg?react';
 
-interface UserRecipe {
-    id: string;
-    title: string;
-    emoji: string;
-    userId: string;
-    source: 'YouTube' | 'Instagram';
-    bookmarks: number;
-    likes: number;
-    createdAt: string;
-}
-
-const MOCK_DATA: UserRecipe[] = [
-    { id: '1', emoji: '🍝', title: '10분 완성 파스타', userId: 'user123', source: 'YouTube', bookmarks: 456, likes: 2890, createdAt: '2026-03-21' },
-    { id: '2', emoji: '🥪', title: '초간단 샌드위치', userId: 'user456', source: 'Instagram', bookmarks: 289, likes: 1567, createdAt: '2026-03-21' },
-    { id: '3', emoji: '🥗', title: '건강 샐러드 볼', userId: 'user789', source: 'YouTube', bookmarks: 678, likes: 4123, createdAt: '2026-03-20' },
-    { id: '4', emoji: '🍲', title: '김치찌개 레시피', userId: 'user234', source: 'YouTube', bookmarks: 892, likes: 5678, createdAt: '2026-03-19' },
-    { id: '5', emoji: '🍳', title: '계란말이 만들기', userId: 'user567', source: 'Instagram', bookmarks: 534, likes: 3201, createdAt: '2026-03-18' },
-    { id: '6', emoji: '🍰', title: '티라미수 레시피', userId: 'user890', source: 'YouTube', bookmarks: 723, likes: 4567, createdAt: '2026-03-17' },
-    { id: '7', emoji: '🥘', title: '된장찌개', userId: 'user111', source: 'YouTube', bookmarks: 412, likes: 2456, createdAt: '2026-03-16' },
-    { id: '8', emoji: '🍝', title: '까르보나라', userId: 'user222', source: 'Instagram', bookmarks: 645, likes: 3890, createdAt: '2026-03-15' },
-    { id: '9', emoji: '🍚', title: '비빔밥', userId: 'user333', source: 'YouTube', bookmarks: 567, likes: 3456, createdAt: '2026-03-14' },
-    { id: '10', emoji: '🥤', title: '과일 스무디', userId: 'user444', source: 'Instagram', bookmarks: 389, likes: 2134, createdAt: '2026-03-13' },
-];
-
-const SourceBadge = ({ source }: { source: 'YouTube' | 'Instagram' }) => {
-    if (source === 'YouTube') {
+const SourceBadge = ({ source }: { source: string }) => {
+    if (source === 'YOUTUBE') {
         return (
             <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#ffe2e2] text-[#9f0712]'>
                 YouTube
             </span>
         );
     }
-    return (
-        <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#fce7f3] text-[#a3004c]'>
-            Instagram
-        </span>
-    );
-}
+
+    if (source === 'INSTAGRAM') {
+        return (
+            <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#fce7f3] text-[#a3004c]'>
+                Instagram
+            </span>
+        );
+    }
+
+    return null;
+};
 
 const UserRecipeList = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const keyword = searchParams.get('keyword') ?? '';
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    const filteredData = MOCK_DATA.filter(
-        (item) =>
-            item.title.includes(searchQuery) ||
-            item.userId.includes(searchQuery)
-    );
+    const {
+        data: searchRecipeListData = [],
+        isLoading: isSearchRecipeListLoading,
+    } = useSearchRecipeList({
+        params: {
+            keyword,
+        },
+    });
+
+    const setQuery = (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const keyword = inputRef.current?.value ?? '';
+
+        setSearchParams({
+            keyword,
+        });
+    };
 
     return (
         <>
@@ -92,102 +95,127 @@ const UserRecipeList = () => {
                 <div className='bg-white border border-[#e5e7eb] rounded-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] overflow-hidden'>
                     {/* 검색 영역 */}
                     <div className='px-4 py-4 border-b border-[#e5e7eb]'>
-                        <div className='relative'>
+                        <form onSubmit={setQuery} className='relative'>
                             <span className='absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#717182] flex items-center justify-center w-4 h-4'>
                                 <SearchIcon className='w-full h-full' />
                             </span>
                             <input
                                 type='text'
-                                placeholder='레시피 또는 사용자 검색...'
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder='레시피 키워드를 입력하세요.'
+                                defaultValue={keyword}
+                                ref={inputRef}
                                 className='w-full h-10 pl-10 pr-4 py-1 bg-[#f3f3f5] rounded-xl text-[14px] text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:bg-white transition-all'
                             />
-                        </div>
+                        </form>
                     </div>
 
-                    {/* 테이블 */}
-                    <div className='overflow-x-auto'>
-                        <table className='w-full min-w-[900px]'>
-                            <thead>
-                                <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
-                                        레시피
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
-                                        사용자
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
-                                        소스
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[120px]'>
-                                        북마크
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[120px]'>
-                                        좋아요
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[130px]'>
-                                        생성일
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredData.length === 0 ? (
-                                    <tr>
-                                        <td
-                                            colSpan={6}
-                                            className='px-6 py-12 text-center text-sm text-[#6a7282]'
-                                        >
-                                            검색 결과가 없습니다.
-                                        </td>
+                    <LoadingWrapper
+                        isLoading={isSearchRecipeListLoading}
+                        containerStyle={{
+                            height: '50vh',
+                        }}
+                    >
+                        {/* 테이블 */}
+                        <div className='overflow-x-auto'>
+                            <table className='w-full min-w-[900px]'>
+                                <thead>
+                                    <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                            레시피
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                            사용자
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                            소스
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[120px]'>
+                                            북마크
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[120px]'>
+                                            좋아요
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[130px]'>
+                                            생성일
+                                        </th>
                                     </tr>
-                                ) : (
-                                    filteredData.map((item) => (
-                                        <tr
-                                            key={item.id}
-                                            className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors group'
-                                        >
-                                            <td className='px-6 py-6'>
-                                                <div className='flex items-center gap-2'>
-                                                    <span className='text-lg'>{item.emoji}</span>
-                                                    <Link
-                                                        to={PATHS.APP.USER_RECIPE.DETAIL.replace(
-                                                            ':sno',
-                                                            item.id,
-                                                        )}
-                                                        className='text-[15px] font-bold text-[#ff6900] hover:underline'
-                                                    >
-                                                        {item.title}
-                                                    </Link>
-                                                </div>
-                                            </td>
-                                            <td className='px-6 py-6 text-[14px] text-[#364153]'>
-                                                {item.userId}
-                                            </td>
-                                            <td className='px-6 py-6'>
-                                                <SourceBadge source={item.source} />
-                                            </td>
-                                            <td className='px-6 py-6'>
-                                                <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
-                                                    <BookmarkIcon className='w-4 h-4 text-[#6a7282]' />
-                                                    {item.bookmarks.toLocaleString()}
-                                                </div>
-                                            </td>
-                                            <td className='px-6 py-6'>
-                                                <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
-                                                    <HeartIcon className='w-4 h-4 text-[#6a7282]' />
-                                                    {item.likes.toLocaleString()}
-                                                </div>
-                                            </td>
-                                            <td className='px-6 py-6 text-[14px] text-[#6a7282]'>
-                                                {item.createdAt}
+                                </thead>
+
+                                <tbody>
+                                    {isEmpty(searchRecipeListData) ? (
+                                        <tr>
+                                            <td
+                                                colSpan={6}
+                                                className='px-6 py-12 text-center text-sm text-[#6a7282]'
+                                            >
+                                                검색 결과가 없습니다.
                                             </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                    ) : (
+                                        searchRecipeListData?.map((item) => (
+                                            <tr
+                                                key={item.sno}
+                                                className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors group'
+                                            >
+                                                <td className='px-6 py-6'>
+                                                    <div className='flex items-center gap-2'>
+                                                        <span className='text-lg'>
+                                                            <img
+                                                                src={
+                                                                    item.thumbnailUrl
+                                                                }
+                                                                alt={item.title}
+                                                                className='w-10 h-10 min-w-10 min-h-10 aspect-square rounded-xl object-cover'
+                                                                style={{
+                                                                    fontSize:
+                                                                        '10px',
+                                                                }}
+                                                            />
+                                                        </span>
+                                                        <Link
+                                                            to={PATHS.APP.USER_RECIPE.DETAIL.replace(
+                                                                ':sno',
+                                                                item.sno.toString(),
+                                                            )}
+                                                            className='text-[15px] font-bold text-[#ff6900] hover:underline whitespace-nowrap max-w-[150px] overflow-hidden text-ellipsis'
+                                                        >
+                                                            {item.title}
+                                                        </Link>
+                                                    </div>
+                                                </td>
+                                                <td className='px-6 py-6 text-[14px] text-[#364153]'>
+                                                    {item.authorName}
+                                                </td>
+                                                <td className='px-6 py-6'>
+                                                    <SourceBadge
+                                                        source={item.sourceType}
+                                                    />
+                                                </td>
+                                                <td className='px-6 py-6'>
+                                                    <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
+                                                        <BookmarkIcon className='w-4 h-4 text-[#6a7282]' />
+                                                        {/* {item.bookmarks.toLocaleString()} */}
+                                                        1
+                                                    </div>
+                                                </td>
+                                                <td className='px-6 py-6'>
+                                                    <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
+                                                        <HeartIcon className='w-4 h-4 text-[#6a7282]' />
+                                                        {/* {item.likes.toLocaleString()} */}
+                                                        1
+                                                    </div>
+                                                </td>
+                                                <td className='px-6 py-6 text-[14px] text-[#6a7282]'>
+                                                    {/* {item.createdAt} */}
+                                                    2026-03-21
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </LoadingWrapper>
                 </div>
 
                 {/* 하단 푸터 (총 개수 + 페이지네이션) */}

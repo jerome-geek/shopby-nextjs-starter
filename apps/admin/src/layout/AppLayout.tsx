@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router';
+import { ErrorBoundary, Suspense } from '@suspensive/react';
 
 import { SidebarProvider, useSidebar } from '@/context/SidebarContext';
+import AppErrorFallback from '@/components/common/AppErrorFallback';
 import AppHeader from '@/layout/AppHeader';
 import Backdrop from '@/layout/Backdrop';
 import AppSidebar from '@/layout/AppSidebar';
 import WithAuth from '@/components/hoc/WithAuth';
+import LoadingWrapper from '@/components/ui/loading-wrapper';
 
 const LayoutContent = () => {
     const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -22,7 +25,17 @@ const LayoutContent = () => {
             >
                 <AppHeader />
                 <div className='p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6'>
-                    <Outlet />
+                    <Suspense
+                        fallback={
+                            <LoadingWrapper isLoading>
+                                <span />
+                            </LoadingWrapper>
+                        }
+                    >
+                        <ErrorBoundary fallback={AppErrorFallback}>
+                            <Outlet />
+                        </ErrorBoundary>
+                    </Suspense>
                 </div>
             </div>
         </div>
