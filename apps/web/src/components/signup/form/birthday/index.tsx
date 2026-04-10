@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
-import FieldContainer from '@/components/ui/input/field-container';
-import Select from '@/components/ui/select';
+import { InputFieldContainer, Select } from '@/components/ui/input';
 import { DAY_LIST, MONTH_LIST, YEAR_LIST } from '@/const/date';
 
 const SignupFormBirthday = ({ disabled }: { disabled?: boolean }) => {
@@ -47,7 +46,7 @@ const SignupFormBirthday = ({ disabled }: { disabled?: boolean }) => {
 
     return (
         <WithMemberJoinConfig name='birthday' label={t('생년월일')}>
-            <FieldContainer gridRatio={[1, 1, 1]}>
+            <InputFieldContainer gridRatio={[1, 1, 1]}>
                 <Controller
                     control={control}
                     name='birthday'
@@ -132,7 +131,7 @@ const SignupFormBirthday = ({ disabled }: { disabled?: boolean }) => {
                         />
                     )}
                 />
-            </FieldContainer>
+            </InputFieldContainer>
 
             <ErrorMessage name='birthday' />
         </WithMemberJoinConfig>

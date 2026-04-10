@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
-import InputField from '@/components/ui/input/field';
+import { InputField } from '@/components/ui/input';
 
 const SignupFormPassword = () => {
     const { t } = useTranslation();

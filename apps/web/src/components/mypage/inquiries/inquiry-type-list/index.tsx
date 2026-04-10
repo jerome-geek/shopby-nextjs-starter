@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import Select from '@/components/ui/select';
+import { Select } from '@/components/ui/input';
 import { useInquiryTypeList } from '@/hooks/query/manage/inquiry';
 import type { RegisterInquirySchemaType } from '@/schema/inquiry.schema';
 import * as styles from '@/components/mypage/inquiries/inquiry-type-list/index.css';

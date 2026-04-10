@@ -19,8 +19,8 @@ import {
     InputField,
     InputFieldContainer,
     InputLabel,
+    Select,
 } from '@/components/ui/input';
-import Select from '@/components/ui/select';
 import {
     ADDRESS_MEMO_LIST,
     MOBILE_COUNTRY_CODE_LIST,

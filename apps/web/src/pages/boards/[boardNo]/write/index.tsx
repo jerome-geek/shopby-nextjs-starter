@@ -14,9 +14,9 @@ import {
     InputFieldContainer,
     InputField,
     InputLabel,
+    Select,
 } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
-import Select from '@/components/ui/select';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import {
     useBoardArticle,

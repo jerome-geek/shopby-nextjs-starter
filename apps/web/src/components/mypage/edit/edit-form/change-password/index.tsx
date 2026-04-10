@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, InputLabel } from '@/components/ui';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
+import { InputFieldContainer, InputField } from '@/components/ui/input';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/components/signup/form/index.css';
 
@@ -44,7 +43,7 @@ export const ChangePassword = () => {
 
             {isModifyPasswordWatch && (
                 <>
-                    <InputContainer>
+                    <InputFieldContainer>
                         <InputLabel isRequired>{t('비밀번호')}</InputLabel>
 
                         <InputField
@@ -55,9 +54,9 @@ export const ChangePassword = () => {
                             data-error={!!errors.password}
                         />
                         <ErrorMessage name='password' />
-                    </InputContainer>
+                    </InputFieldContainer>
 
-                    <InputContainer>
+                    <InputFieldContainer>
                         <InputLabel isRequired>{t('비밀번호 확인')}</InputLabel>
 
                         <InputField
@@ -68,7 +67,7 @@ export const ChangePassword = () => {
                             data-error={!!errors.passwordConfirm}
                         />
                         <ErrorMessage name='passwordConfirm' />
-                    </InputContainer>
+                    </InputFieldContainer>
                 </>
             )}
         </>

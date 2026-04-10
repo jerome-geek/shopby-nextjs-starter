@@ -11,10 +11,9 @@ import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import { SortBottomSheet } from '@/components/bottom-sheet/sort';
 import { NoResult } from '@/components/common/no-result';
 import { Button } from '@/components/ui/button';
-import { InputFieldContainer, InputField } from '@/components/ui/input';
+import { Select, InputFieldContainer, InputField } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import Paging from '@/components/ui/paging';
-import Select from '@/components/ui/select';
 import {
     BOARD_DEFAULT_START_YMD,
     BOARD_PAGINATION,

@@ -10,8 +10,7 @@ import { useTranslation } from 'react-i18next';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import EmailAuthentication from '@/components/signup/form/email/email-authentication';
 import { ErrorMessage } from '@/components/ui/form';
-import { InputField, InputFieldContainer } from '@/components/ui/input';
-import Select from '@/components/ui/select';
+import { Select, InputField, InputFieldContainer } from '@/components/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 
 const SignupFormEmail = ({

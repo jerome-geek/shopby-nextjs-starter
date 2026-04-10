@@ -9,7 +9,7 @@ import ReactSelect, {
     components,
 } from 'react-select';
 
-import * as s from '@/components/ui/select/index.css';
+import * as s from '@/components/ui/input/select/index.css';
 
 type SelectProps<
     Option,
@@ -131,5 +131,3 @@ export const Select = <
         />
     );
 };
-
-export default Select;

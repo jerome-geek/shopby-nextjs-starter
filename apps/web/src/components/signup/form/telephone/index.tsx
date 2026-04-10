@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import { ErrorMessage } from '@/components/ui/form';
-import { InputFieldContainer, InputField } from '@/components/ui/input';
-import Select from '@/components/ui/select';
+import { Select, InputFieldContainer, InputField } from '@/components/ui/input';
 import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
 import { useGlobal } from '@/hooks/utils';
 

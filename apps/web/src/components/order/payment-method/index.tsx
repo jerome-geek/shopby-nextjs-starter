@@ -5,8 +5,7 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import InputField from '@/components/ui/input/field';
-import Select from '@/components/ui/select';
+import { Select, InputField } from '@/components/ui/input';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import { PayType, PgType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';

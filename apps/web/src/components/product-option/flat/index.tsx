@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SingleValue } from 'react-select';
 
-import Select from '@/components/ui/select';
+import { Select } from '@/components/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useResponsive } from '@/hooks/utils';
 import { FlatOption } from '@/models/product/productOption';

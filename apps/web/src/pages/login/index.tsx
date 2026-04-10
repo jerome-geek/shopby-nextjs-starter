@@ -9,16 +9,18 @@ import SocialLoginList from '@/components/auth/social-login-list';
 import { AuthLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
-import InputCheckbox from '@/components/ui/input/checkbox';
-import InputField from '@/components/ui/input/field';
-import { InputLabel } from '@/components/ui/input/label';
+import {
+    InputCheckbox,
+    InputContainer,
+    InputField,
+    InputLabel,
+} from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import useApiError from '@/hooks/useApiError';
 import { NextPageWithLayout } from '@/pages/_app';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import * as styles from '@/styles/pages/login.css';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
-import InputContainer from '@/components/ui/input/container';
 
 const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();

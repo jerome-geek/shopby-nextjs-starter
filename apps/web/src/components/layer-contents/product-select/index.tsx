@@ -11,8 +11,7 @@ import { ObserverTarget } from '@/components/common/observer-target';
 import * as styles from '@/components/layer-contents/product-select/index.css';
 import { type DefaultModalLayoutProps } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import InputField from '@/components/ui/input/field';
-import Select from '@/components/ui/select';
+import { Select, InputField } from '@/components/ui/input';
 import {
     useCategoriesByCode,
     useCategory,
@@ -230,8 +229,8 @@ export const ProductSelect = ({
                                                     i < index
                                                         ? value
                                                         : i === index
-                                                        ? opt.value
-                                                        : undefined,
+                                                          ? opt.value
+                                                          : undefined,
                                                 ),
                                             );
                                         }}

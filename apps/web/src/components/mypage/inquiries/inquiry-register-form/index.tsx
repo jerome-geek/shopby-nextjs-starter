@@ -19,8 +19,8 @@ import {
     InputFieldContainer,
     InputLabel,
     TextArea,
+    Select,
 } from '@/components/ui/input';
-import Select from '@/components/ui/select';
 import { EMAIL_DOMAIN_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';
 import { useInquiryMutation } from '@/hooks/mutations';

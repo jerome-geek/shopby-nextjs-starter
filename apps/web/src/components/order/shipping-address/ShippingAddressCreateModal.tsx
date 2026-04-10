@@ -15,8 +15,8 @@ import {
     InputField,
     InputFieldContainer,
     InputLabel,
+    Select,
 } from '@/components/ui/input';
-import Select from '@/components/ui/select';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 import { addressKeys } from '@/hooks/queryKeys';

@@ -16,8 +16,8 @@ import {
     InputContainer,
     InputField,
     InputCheckbox,
+    Select,
 } from '@/components/ui/input';
-import Select from '@/components/ui/select';
 import { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 import { SignupFormSchemaType } from '@/schema';
 import * as styles from '@/components/signup/member-config/index.css';

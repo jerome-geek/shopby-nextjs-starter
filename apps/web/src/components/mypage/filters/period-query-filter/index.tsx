@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import type { DateRange } from 'react-day-picker';
 import { overlay } from 'overlay-kit';
 
-import Select from '@/components/ui/select';
+import { Select } from '@/components/ui/input';
 import { PeriodRangePickerModal } from '@/components/modal/period-range-picker';
 import * as styles from '@/components/mypage/filters/period-query-filter/index.css';
 import { useResponsive } from '@/hooks/utils';
@@ -59,10 +59,10 @@ const getPresetRange = (preset: Exclude<PeriodPreset, 'custom'>) => {
         preset === '7d'
             ? endDate.subtract(7, 'day')
             : preset === '3m'
-            ? endDate.subtract(3, 'month')
-            : preset === '6m'
-            ? endDate.subtract(6, 'month')
-            : endDate.subtract(1, 'year');
+              ? endDate.subtract(3, 'month')
+              : preset === '6m'
+                ? endDate.subtract(6, 'month')
+                : endDate.subtract(1, 'year');
 
     return { startDate, endDate };
 };

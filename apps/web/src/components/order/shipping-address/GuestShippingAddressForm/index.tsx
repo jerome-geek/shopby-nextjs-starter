@@ -11,8 +11,8 @@ import {
     InputField,
     InputFieldContainer,
     InputLabel,
+    Select,
 } from '@/components/ui/input';
-import Select from '@/components/ui/select';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';

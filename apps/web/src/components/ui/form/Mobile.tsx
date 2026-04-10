@@ -2,8 +2,8 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/ui/form';
-import InputField from '@/components/ui/input/field';
 import * as styles from '@/components/ui/form/Mobile.css';
+import { InputField } from '@/components/ui/input';
 
 export default function Mobile() {
     const { t } = useTranslation();

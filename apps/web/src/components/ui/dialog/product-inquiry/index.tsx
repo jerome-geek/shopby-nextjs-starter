@@ -12,8 +12,8 @@ import {
     InputField,
     InputLabel,
     TextArea,
+    Select,
 } from '@/components/ui/input';
-import Select from '@/components/ui/select';
 import { PATHS } from '@/const/paths';
 import { useProductInquiryMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';

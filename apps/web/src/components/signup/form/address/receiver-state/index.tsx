@@ -9,9 +9,7 @@ import {
 
 import { CANADA_STATE_LIST, STATE_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
-import InputContainer from '@/components/ui/input/container';
-import InputField from '@/components/ui/input/field';
-import Select from '@/components/ui/select';
+import { Select, InputField, InputFieldContainer } from '@/components/ui/input';
 import { ErrorMessage } from '@/components/ui/form';
 
 type ReceiverStateProps =
@@ -58,7 +56,7 @@ const ReceiverState = ({
     }, [isCountryCdDirty, countryCdWatch, name, resetField]);
 
     return (
-        <InputContainer>
+        <InputFieldContainer>
             {isStateSelectable ? (
                 <Controller
                     control={control}
@@ -101,7 +99,7 @@ const ReceiverState = ({
             )}
 
             <ErrorMessage name={name} />
-        </InputContainer>
+        </InputFieldContainer>
     );
 };
 

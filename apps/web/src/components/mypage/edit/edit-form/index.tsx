@@ -26,7 +26,7 @@ import {
 } from '@/components/signup/form';
 import MemberConfig from '@/components/signup/member-config';
 import { Button } from '@/components/ui/button';
-import InputField from '@/components/ui/input/field';
+import { InputField } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import { useEditInitialize } from '@/hooks/edit';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
@@ -97,7 +97,7 @@ export const EditForm = ({
         defaultValues: {
             currentPassword: isSocialLogin ? undefined : password,
             memberName: isKorean
-                ? profileData.memberName ?? ''
+                ? (profileData.memberName ?? '')
                 : `${profileData.firstName} ${profileData.lastName}`,
             firstName: profileData.firstName ?? undefined,
             lastName: profileData.lastName ?? undefined,
@@ -125,10 +125,10 @@ export const EditForm = ({
             countryCd: isJapaneseAddress
                 ? 'JP'
                 : isEnglishAddress
-                ? 'US'
-                : profileData.providerType === 'KAKAO_SYNC'
-                ? 'KR'
-                : profileData.countryCd ?? undefined,
+                  ? 'US'
+                  : profileData.providerType === 'KAKAO_SYNC'
+                    ? 'KR'
+                    : (profileData.countryCd ?? undefined),
             state: profileData.state || '',
             city: profileData.city || '',
             isBirthdayRequired: false,
@@ -305,8 +305,8 @@ export const EditForm = ({
         } catch (error) {
             openDialog({
                 message: isAxiosError(error)
-                    ? error.response?.data.message ??
-                      t('회원정보 수정에 실패했습니다.')
+                    ? (error.response?.data.message ??
+                      t('회원정보 수정에 실패했습니다.'))
                     : t('회원정보 수정에 실패했습니다.'),
             });
         }
