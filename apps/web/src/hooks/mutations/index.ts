@@ -13,6 +13,7 @@ import useMemberClaimMutation from '@/hooks/mutations/useMemberClaimMutation';
 import useMyOrderMutation from '@/hooks/mutations/useMyOrderMutation';
 import useReviewMutation from '@/hooks/mutations/useReviewMutation';
 import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
+import useRecipeCommentMutation from '@/hooks/mutations/useRecipeCommentMutation';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 
 export {
@@ -31,5 +32,6 @@ export {
     useMyOrderMutation,
     useReviewMutation,
     useCollectionMutation,
+    useRecipeCommentMutation,
     useRecipeMutation,
 };

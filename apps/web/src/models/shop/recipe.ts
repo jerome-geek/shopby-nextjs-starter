@@ -1,3 +1,5 @@
+import { GeekResponse, ShopByResponse } from '@/models/api/response';
+import { Nullable } from '@/models/common';
 import { OrderDirectionType } from '@/models';
 
 // ===== Request Types =====
@@ -186,7 +188,7 @@ export interface RecipeIngredient {
 }
 
 /** 레시피 상세 */
-export interface RecipeDetail {
+export interface GetRecipeDetailResponse {
     sno: number;
     memberNo: number;
     liked: boolean;
@@ -246,7 +248,7 @@ export interface RecipeExposureGroupItem {
     description: string | null;
     sortOrder: number;
     isDisplay: boolean;
-    recipes: RecipeDetail[];
+    recipes: GetRecipeDetailResponse[];
 }
 
 /** 상위 영역별 레시피 노출 그룹 응답 */
@@ -256,15 +258,7 @@ export interface RecipeExposureGroupResponse {
 }
 
 /** 페이징 포함 레시피 응답 */
-export interface SearchRecipesResponse {
-    count: number;
-    currentPage: number;
-    items: RecipeDetail[];
-    lastPage: number;
-    nextPage: Nullable<number>;
-    prevPage: Nullable<number>;
-    statusCode: 'success' | 'fail';
-}
+export type SearchRecipesResponse = GeekResponse<GetRecipeDetailResponse>;
 
 /** 페이징 포함 컬렉션 응답 */
 export interface SearchCollectionsResponse {

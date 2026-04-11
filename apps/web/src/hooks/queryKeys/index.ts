@@ -4,6 +4,7 @@ import bannerKeys from '@/hooks/queryKeys/bannerKeys';
 import boardKeys from '@/hooks/queryKeys/boardKeys';
 import brandKeys from '@/hooks/queryKeys/brandKeys';
 import cartKeys from '@/hooks/queryKeys/cartKeys';
+import commentKeys from '@/hooks/queryKeys/commentKeys';
 import categoryKeys from '@/hooks/queryKeys/categoryKeys';
 import claimsKeys from '@/hooks/queryKeys/claimsKeys';
 import couponKeys from '@/hooks/queryKeys/couponKeys';
@@ -18,16 +19,20 @@ import productKeys from '@/hooks/queryKeys/productKeys';
 import productProfileKeys from '@/hooks/queryKeys/productProfileKeys';
 import productSectionKeys from '@/hooks/queryKeys/productSectionKeys';
 import profileKeys from '@/hooks/queryKeys/profileKeys';
+import recipeKeys from '@/hooks/queryKeys/recipeKeys';
 import reviewKeys from '@/hooks/queryKeys/reviewKeys';
 import termsKeys from '@/hooks/queryKeys/termsKeys';
 
 export {
+    accumulationKeys,
     addressKeys,
     bannerKeys,
     boardKeys,
     brandKeys,
     cartKeys,
+    commentKeys,
     categoryKeys,
+    claimsKeys,
     couponKeys,
     eventKeys,
     freeGiftKeys,
@@ -40,8 +45,7 @@ export {
     productProfileKeys,
     productSectionKeys,
     profileKeys,
+    recipeKeys,
     reviewKeys,
     termsKeys,
-    claimsKeys,
-    accumulationKeys,
 };

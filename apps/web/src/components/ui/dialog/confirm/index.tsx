@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 // import DialogLockIcon from '@/assets/icons/dialog/lock.svg';
 // import DialogWarningIcon from '@/assets/icons/dialog/warning.svg';
 
-import { DialogLayout, DefaultDialogProps } from '@/components/layout';
-import * as styles from '@/components/ui/dialog/confirm/index.css';
+import type { DefaultDialogProps } from '@/components/layout';
+import { DialogLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
+import * as styles from '@/components/ui/dialog/confirm/index.css';
 // import { BigCartIcon } from '@/components/icons';
 export interface ConfirmDialogProps extends DefaultDialogProps {
     type?: 'confirm' | 'modal';

@@ -1,3 +1,5 @@
+import { Nullable } from '@/models/common';
+
 /** ShopBy API 에러 응답 타입 */
 export interface ShopByErrorResponse {
     /** 에러 코드 */
@@ -27,4 +29,15 @@ export interface PageResponse<T> {
         totalCount: number;
         totalPages: number;
     };
+}
+
+/** Geek API 공통 응답 타입 (페이징 포함) */
+export interface GeekResponse<T> {
+    count: number;
+    currentPage: number;
+    data: T[];
+    lastPage: number;
+    nextPage: Nullable<number>;
+    prevPage: Nullable<number>;
+    statusCode: 'success' | 'fail';
 }

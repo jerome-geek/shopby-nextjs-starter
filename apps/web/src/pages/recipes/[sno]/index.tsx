@@ -1,8 +1,9 @@
-import React from 'react';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { Suspense } from 'react';
+import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import {
     Heart,
     Bookmark,
-    Image as ImageIcon,
     ShoppingCart,
     Clock,
     Users,
@@ -12,14 +13,25 @@ import {
 import Head from 'next/head';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
+import { overlay } from 'overlay-kit';
+
+import ProductCard from '@/components/product/card';
+import {
+    RecipeSaveModal,
+    RecipeCollectionCreateModal,
+} from '@/components/modal';
+import { RecipeCommentSection } from '@/components/recipe/RecipeCommentSection';
+import * as styles from '@/pages/recipes/[sno]/index.css';
+import { recipe } from '@/api/shop';
+import { useRecipeMutation } from '@/hooks/mutations';
+import { useRecipeDetail } from '@/hooks/query/shop/recipe';
+import { recipeKeys } from '@/hooks/queryKeys';
+import { useToast } from '@/hooks/ui/useToast';
+
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
-import ProductCard from '@/components/product/card';
-import * as styles from '@/pages/recipes/[sno]/index.css';
-import { CSRLayout } from '@/components/layout';
-import { useToast } from '@/hooks/ui/useToast';
+import { vars } from '@/styles/theme.css';
 
 // --- MOCK DATA ---
 const MOCK_RECIPE = {
@@ -207,13 +219,88 @@ const MOCK_RECIPE = {
     ],
 };
 
-const RecipeDetailPage = () => {
+const RecipeDetailPage = ({
+    sno,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const { addToast } = useToast();
+    const queryClient = useQueryClient();
+
+    const { data: recipeDetailData } = useRecipeDetail({ sno });
+    const { likeRecipe, unlikeRecipe, bookmarkRecipe, unBookmarkRecipe } =
+        useRecipeMutation();
+
+    const liked = !!recipeDetailData?.liked;
+    const likeCount = recipeDetailData?.likeCount ?? 0;
+
+    const bookmarked = !!recipeDetailData?.bookmarked;
+    const bookmarkCount = recipeDetailData?.bookmarkCount ?? 0;
+
+    const onLikeToggle = () => {
+        const mutation = liked ? unlikeRecipe : likeRecipe;
+
+        mutation.mutate(
+            { sno },
+            {
+                onSuccess: () => {
+                    queryClient.invalidateQueries({
+                        queryKey: recipeKeys.detail(sno),
+                    });
+                    addToast({
+                        message: liked
+                            ? '좋아요를 취소했습니다.'
+                            : '레시피를 좋아합니다.',
+                        variant: 'success',
+                    });
+                },
+            },
+        );
+    };
+
+    const onBookmarkToggle = () => {
+        if (bookmarked) {
+            unBookmarkRecipe.mutate(
+                { sno },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: recipeKeys.detail(sno),
+                        });
+                        addToast({
+                            message: '북마크를 취소했습니다.',
+                            variant: 'success',
+                        });
+                    },
+                },
+            );
+        } else {
+            openRecipeSaveModal();
+        }
+    };
+
+    const openRecipeSaveModal = () => {
+        overlay.open((props) => (
+            <RecipeSaveModal
+                {...props}
+                recipeSno={sno}
+                onAddCollection={() => {
+                    openRecipeCollectionCreateModal();
+                }}
+            />
+        ));
+    };
+
+    const openRecipeCollectionCreateModal = () => {
+        overlay.open((props) => <RecipeCollectionCreateModal {...props} />);
+    };
+
+    console.log('🚀 ~ RecipeDetailPage ~ recipeDetailData:', recipeDetailData);
 
     return (
         <div className={styles.container}>
             <Head>
-                <title>{MOCK_RECIPE.title} | JollyPot</title>
+                <title>
+                    {recipeDetailData?.title || MOCK_RECIPE.title} | JollyPot
+                </title>
             </Head>
 
             {/* --- HEADER AREA --- */}
@@ -225,7 +312,10 @@ const RecipeDetailPage = () => {
                         navigation
                         style={{ height: '100%' }}
                     >
-                        {MOCK_RECIPE.images.map((img, idx) => (
+                        {(recipeDetailData?.thumbnailUrl
+                            ? [recipeDetailData.thumbnailUrl]
+                            : MOCK_RECIPE.images
+                        ).map((img, idx) => (
                             <SwiperSlide key={idx}>
                                 <img
                                     src={img}
@@ -238,40 +328,50 @@ const RecipeDetailPage = () => {
                 </div>
                 <div className={styles.headerInfo}>
                     <div className={styles.titleRow}>
-                        <h1 className={styles.title}>{MOCK_RECIPE.title}</h1>
+                        <h1 className={styles.title}>
+                            {recipeDetailData?.title || MOCK_RECIPE.title}
+                        </h1>
                         <div className={styles.actionButtons}>
                             <button
                                 className={styles.actionButton}
-                                onClick={() =>
-                                    addToast({
-                                        message: '레시피를 좋아합니다.',
-                                        variant: 'success',
-                                    })
-                                }
+                                onClick={onLikeToggle}
+                                style={{
+                                    color: liked ? '#ff4d4f' : 'inherit',
+                                }}
                             >
-                                <Heart size={24} />
-                                <span>{MOCK_RECIPE.likes}</span>
+                                <Heart
+                                    size={24}
+                                    fill={liked ? '#ff4d4f' : 'none'}
+                                />
+                                <span>{likeCount}</span>
                             </button>
                             <button
                                 className={styles.actionButton}
-                                onClick={() =>
-                                    addToast({
-                                        message:
-                                            '레시피를 북마크에 담았습니다.',
-                                        variant: 'success',
-                                    })
-                                }
+                                onClick={onBookmarkToggle}
+                                style={{
+                                    color: bookmarked
+                                        ? vars.color.green['100']
+                                        : 'inherit',
+                                }}
                             >
-                                <Bookmark size={24} />
-                                <span>
-                                    {MOCK_RECIPE.bookmarks.toLocaleString()}
-                                </span>
+                                <Bookmark
+                                    size={24}
+                                    fill={
+                                        bookmarked
+                                            ? vars.color.green['100']
+                                            : 'none'
+                                    }
+                                />
+                                <span>{bookmarkCount.toLocaleString()}</span>
                             </button>
                         </div>
                     </div>
-                    <p className={styles.author}>by {MOCK_RECIPE.author}</p>
+
+                    <p className={styles.author}>
+                        by {recipeDetailData?.authorName}
+                    </p>
                     <p className={styles.description}>
-                        {MOCK_RECIPE.description}
+                        {recipeDetailData?.description}
                     </p>
                     <div className={styles.metaList}>
                         <div className={styles.metaItem}>
@@ -280,9 +380,12 @@ const RecipeDetailPage = () => {
                         <div className={styles.metaItem}>
                             <Users size={18} /> {MOCK_RECIPE.servings}
                         </div>
-                        <div className={styles.metaItem}>
-                            <Flame size={18} /> {MOCK_RECIPE.calories}
-                        </div>
+                        {recipeDetailData?.caloriesPerServingKcal && (
+                            <div className={styles.metaItem}>
+                                <Flame size={18} />{' '}
+                                {`${recipeDetailData.caloriesPerServingKcal} Kcal`}
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
@@ -345,14 +448,16 @@ const RecipeDetailPage = () => {
                     따라해봐 How to Cook
                 </h2>
                 <div className={styles.stepList}>
-                    {MOCK_RECIPE.steps.map((step) => (
-                        <div key={step.no} className={styles.stepItem}>
-                            <div className={styles.stepNumber}>{step.no}</div>
+                    {recipeDetailData?.steps?.map((step) => (
+                        <div key={step.sno} className={styles.stepItem}>
+                            <div className={styles.stepNumber}>
+                                {step.stepNumber}
+                            </div>
                             <div className={styles.stepContent}>
                                 <p className={styles.stepDescription}>
-                                    {step.desc}{' '}
+                                    {step.description}{' '}
                                     <span className={styles.stepTime}>
-                                        {step.time}
+                                        {step.timestampSeconds}
                                     </span>
                                 </p>
                             </div>
@@ -362,60 +467,10 @@ const RecipeDetailPage = () => {
             </section>
 
             {/* --- COMMENTS AREA --- */}
-            <section className={styles.commentSection}>
-                <h2 className={styles.commentTitle}>
-                    댓글 {MOCK_RECIPE.comments.length}
-                </h2>
-                <div className={styles.commentList}>
-                    {MOCK_RECIPE.comments.map((comment, idx) => (
-                        <div key={idx} className={styles.commentItem}>
-                            <div className={styles.commentHeader}>
-                                <div className={styles.commentAuthorInfo}>
-                                    <span className={styles.commentAuthor}>
-                                        {comment.author}
-                                    </span>
-                                    <span className={styles.commentDate}>
-                                        {comment.date}
-                                    </span>
-                                </div>
-                                <button className={styles.commentReportBtn}>
-                                    신고
-                                </button>
-                            </div>
-                            <p className={styles.commentText}>
-                                {comment.content}
-                            </p>
-                            {comment.images && (
-                                <div className={styles.commentImages}>
-                                    {comment.images.map((img, i) => (
-                                        <img
-                                            key={i}
-                                            src={img}
-                                            alt='comment attachment'
-                                            className={styles.commentImage}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
 
-                <div className={styles.commentInputArea}>
-                    <textarea
-                        className={styles.commentTextArea}
-                        placeholder='댓글을 남겨주세요.'
-                    />
-                    <div className={styles.commentToolbar}>
-                        <button className={styles.attachButton}>
-                            <ImageIcon size={18} /> 사진
-                        </button>
-                        <button className={styles.submitButton}>
-                            등록하기
-                        </button>
-                    </div>
-                </div>
-            </section>
+            <Suspense fallback={<div>Loading comments...</div>}>
+                <RecipeCommentSection recipeSno={Number(sno)} />
+            </Suspense>
 
             {/* --- RECOMMENDED RECIPES --- */}
             <section>
@@ -478,8 +533,36 @@ const RecipeDetailPage = () => {
     );
 };
 
-RecipeDetailPage.getLayout = (page: React.ReactElement) => {
-    return <CSRLayout>{page}</CSRLayout>;
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    const queryClient = new QueryClient();
+    const sno = Number(params?.sno) || 0;
+
+    if (!sno) {
+        return { notFound: true };
+    }
+
+    try {
+        await queryClient.fetchQuery({
+            queryKey: recipeKeys.detail(sno),
+            queryFn: async () => {
+                const { data } = await recipe.getRecipeDetail(sno);
+
+                return data;
+            },
+        });
+    } catch (error) {
+        console.error('Failed to fetch recipe:', error);
+        return {
+            notFound: true,
+        };
+    }
+
+    return {
+        props: {
+            sno,
+            dehydratedState: dehydrate(queryClient),
+        },
+    };
 };
 
 export default RecipeDetailPage;

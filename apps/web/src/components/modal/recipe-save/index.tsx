@@ -1,15 +1,17 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { Plus } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-save/index.css';
 import { MODAL_QUERY_KEY } from '@/const/modal';
-import { vars } from '@/styles/theme.css';
-import { useCollectionList } from '@/hooks/query/shop/collection';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
-import { useToast } from '@/hooks/ui';
-import { isAxiosError } from 'axios';
+import { useCollectionList } from '@/hooks/query/shop/collection';
+import { recipeKeys } from '@/hooks/queryKeys';
+import { useToast } from '@/hooks/ui/useToast';
+import { vars } from '@/styles/theme.css';
 
 interface RecipeSaveModalProps {
     isOpen: boolean;
@@ -28,6 +30,7 @@ export const RecipeSaveModal = ({
 }: RecipeSaveModalProps) => {
     const { t } = useTranslation();
     const router = useRouter();
+    const queryClient = useQueryClient();
     const { bookmarkRecipe } = useRecipeMutation();
     const { addToast } = useToast();
 
@@ -51,6 +54,10 @@ export const RecipeSaveModal = ({
             await bookmarkRecipe.mutateAsync({
                 sno: recipeSno,
                 data: { collectionSno },
+            });
+
+            queryClient.invalidateQueries({
+                queryKey: recipeKeys.detail(recipeSno),
             });
 
             addToast({

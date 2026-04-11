@@ -10,7 +10,7 @@ import {
     CreateRecipeData,
     CreateRecipeResponse,
     GetRecipeExposureGroupParams,
-    RecipeDetail,
+    GetRecipeDetailResponse,
     RecipeExposureGroupResponse,
     RegisterManualTempImagesData,
     SearchCollectionsResponse,
@@ -100,7 +100,7 @@ const recipe = {
         data: CreateManualRecipeData,
         options?: AxiosRequestConfig,
     ) => {
-        return geekRequest<RecipeDetail>({
+        return geekRequest<GetRecipeDetailResponse>({
             method: 'POST',
             url: '/shop/recipe/manual',
             data,
@@ -241,7 +241,7 @@ const recipe = {
      *  - 레시피 번호로 상세 정보를 조회합니다
      */
     getRecipeDetail: (sno: number, options?: AxiosRequestConfig) => {
-        return geekRequest<RecipeDetail>({
+        return geekRequest<GetRecipeDetailResponse>({
             method: 'GET',
             url: `/shop/recipe/${sno}`,
             ...options,
