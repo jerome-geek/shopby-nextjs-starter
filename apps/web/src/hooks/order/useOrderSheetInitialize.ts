@@ -11,7 +11,7 @@ import {
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { type PhonePrefixType } from '@/const/form';
+import { type PhonePrefixType } from '@/schema/common.schema';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
 import { useOrderSheet } from '@/hooks/query/order/orderSheet';

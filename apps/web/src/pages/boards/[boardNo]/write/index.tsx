@@ -6,15 +6,15 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import upload from '@/api/storage/image';
-import { InputCheckbox } from '@/components/ui';
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
 import {
-    TextArea,
-    InputFieldContainer,
+    InputCheckbox,
     InputField,
+    InputFieldContainer,
     InputLabel,
     Select,
+    TextArea,
 } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';

@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { memberClaim } from '@/api/claim';
-import claimsKeys from '@/hooks/queryKeys/claimsKeys';
+import { claimsKeys } from '@/hooks/queryKeys';
 import { ClaimPriceInfo } from '@/models/claim';
 import { GetClaimOptionPriceParams } from '@/models/claim/guest';
 import { useAuth } from '@/hooks/useAuth';

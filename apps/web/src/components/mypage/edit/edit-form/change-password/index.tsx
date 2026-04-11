@@ -1,11 +1,15 @@
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button, InputLabel } from '@/components/ui';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
-import { InputFieldContainer, InputField } from '@/components/ui/input';
-import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/components/signup/form/index.css';
+import { Button } from '@/components/ui';
+import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import {
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+} from '@/components/ui/input';
+import { useResponsive } from '@/hooks/utils';
 
 export const ChangePassword = () => {
     const { t } = useTranslation();

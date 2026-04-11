@@ -1,14 +1,13 @@
 import { z } from 'zod';
 
 import {
-    CountryCdType,
     payType,
     pgType,
+    PhonePrefixType,
     termsType,
 } from '@/schema/common.schema';
-import { PHONE_PREFIX_VALUES } from '@/const/form';
-import { regEx } from '@/utils/validation';
 import { shippingAddressSchema } from '@/schema/shippingAddress.schema';
+import { regEx } from '@/utils/validation';
 // import { checkLogin } from '@/utils/users';
 
 const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
@@ -145,7 +144,7 @@ const paymentReserveSchema = z
                 },
             }),
             ordererContact1: z.object({
-                prefix: z.enum(PHONE_PREFIX_VALUES),
+                prefix: PhonePrefixType,
                 middle: z
                     .string()
                     .min(3, '올바른 번호를 입력해주세요')
@@ -599,7 +598,7 @@ const paymentReserveSchemaV2 = z
             //         message: '형식에 맞게 입력해 주세요.',
             //     }),
             ordererContact1: z.object({
-                prefix: z.enum(PHONE_PREFIX_VALUES),
+                prefix: PhonePrefixType,
                 middle: z
                     .string()
                     .min(3, '올바른 번호를 입력해주세요')
@@ -608,7 +607,7 @@ const paymentReserveSchemaV2 = z
             }),
             ordererContact2: z
                 .object({
-                    prefix: z.enum(PHONE_PREFIX_VALUES),
+                    prefix: PhonePrefixType,
                     middle: z
                         .string()
                         .min(3, '올바른 번호를 입력해주세요')

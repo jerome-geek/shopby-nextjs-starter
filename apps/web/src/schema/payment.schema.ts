@@ -4,7 +4,7 @@ import {
     CountryCdType,
     payType,
     pgType,
-    phonePrefixType,
+    PhonePrefixType,
     termsType,
 } from '@/schema/common.schema';
 import { regEx } from '@/utils/validation';
@@ -38,7 +38,7 @@ const createOrderShippingAddressSchema = (isGlobalMall?: boolean) => {
             : z.string().nullish(),
         shippingInfoLaterInputContact: z.string().nullish(),
         receiverContact1: z.object({
-            prefix: phonePrefixType,
+            prefix: PhonePrefixType,
             middle: isGlobalMall
                 ? z.string().nullish()
                 : z.string().nonempty('연락처를 입력해주세요.'),
@@ -188,7 +188,7 @@ export const getPaymentSchema = ({
                     },
                 }),
                 ordererContact1: z.object({
-                    prefix: phonePrefixType,
+                    prefix: PhonePrefixType,
                     middle: isGlobalMall
                         ? z.string().nullish()
                         : z.string().nonempty('연락처를 입력해주세요.'),

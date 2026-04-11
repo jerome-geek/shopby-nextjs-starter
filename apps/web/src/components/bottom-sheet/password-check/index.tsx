@@ -1,21 +1,22 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { ErrorMessage } from '@hookform/error-message';
 
 import {
     BottomSheetLayout,
     DefaultModalLayoutProps,
 } from '@/components/layout';
 import { PasswordCheckOverlayProps } from '@/components/modal/password-check';
-import { InputLabel } from '@/components/ui';
 import { Button } from '@/components/ui/button';
-import InputContainer from '@/components/ui/input/container';
-import { ErrorMessage } from '@hookform/error-message';
-import Field from '@/components/ui/input/field';
+import {
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+} from '@/components/ui/input';
 import { CheckPasswordData } from '@/models/member/profile';
 
 interface PasswordCheckBottomSheetProps
-    extends DefaultModalLayoutProps,
-        PasswordCheckOverlayProps {}
+    extends DefaultModalLayoutProps, PasswordCheckOverlayProps {}
 
 export const PasswordCheckBottomSheet = (
     props: PasswordCheckBottomSheetProps,
@@ -79,10 +80,10 @@ export const PasswordCheckBottomSheet = (
                 onSubmit={onSubmit}
                 data-lenis-prevent
             >
-                <InputContainer>
+                <InputFieldContainer>
                     <InputLabel isRequired>{t('비밀번호')}</InputLabel>
 
-                    <Field
+                    <InputField
                         type='password'
                         placeholder={t(
                             '작성 시 설정한 비밀번호를 입력해주세요.',
@@ -93,7 +94,7 @@ export const PasswordCheckBottomSheet = (
                     />
 
                     <ErrorMessage name='password' errors={errors} />
-                </InputContainer>
+                </InputFieldContainer>
             </form>
         </BottomSheetLayout>
     );

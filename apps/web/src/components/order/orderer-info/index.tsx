@@ -82,7 +82,7 @@ const OrdererInfo = () => {
                                 if (option) {
                                     setValue(
                                         'orderer.ordererContact1.prefix',
-                                        option.value,
+                                        option.value as any,
                                         { shouldDirty: true },
                                     );
                                 }

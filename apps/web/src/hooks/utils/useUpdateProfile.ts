@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { type AxiosError, HttpStatusCode, isAxiosError } from 'axios';
+import { AxiosError, HttpStatusCode, isAxiosError } from 'axios';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
@@ -31,8 +31,8 @@ const useUpdateProfile = () => {
         if (error) {
             openDialog({
                 message: isAxiosError(error)
-                    ? error.response?.data.message ??
-                      t('알 수 없는 오류가 발생했습니다.')
+                    ? (error.response?.data.message ??
+                      t('알 수 없는 오류가 발생했습니다.'))
                     : t('알 수 없는 오류가 발생했습니다.'),
             });
 

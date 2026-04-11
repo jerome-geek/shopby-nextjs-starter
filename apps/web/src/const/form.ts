@@ -1,4 +1,4 @@
-import { CountryCdType } from '@/models';
+
 
 const EMAIL_DOMAIN_LIST = [
     {
@@ -27,7 +27,7 @@ const EMAIL_DOMAIN_LIST = [
     },
 ];
 
-const PHONE_FIRST_NUMBER_LIST = [
+const PHONE_PREFIX_NUMBER_LIST = [
     { label: '010', value: '010' },
     { label: '011', value: '011' },
     { label: '016', value: '016' },
@@ -1050,7 +1050,7 @@ const MOBILE_COUNTRY_CODE_LIST = [
     },
 ];
 
-const COUNTRY_CODE_LIST: { label: string; value: CountryCdType }[] = [
+const COUNTRY_CODE_LIST = [
     {
         label: 'Afghanistan',
         value: 'AF',
@@ -2051,7 +2051,7 @@ const COUNTRY_CODE_LIST: { label: string; value: CountryCdType }[] = [
         label: 'Kosovo',
         value: 'XK',
     },
-];
+] as const;
 
 const STATE_LIST = [
     {
@@ -2371,7 +2371,7 @@ const CASH_RECEIPT_RADIO_LIST = [
 
 export {
     EMAIL_DOMAIN_LIST,
-    PHONE_FIRST_NUMBER_LIST,
+    PHONE_PREFIX_NUMBER_LIST,
     TEL_FIRST_NUMBER_LIST,
     ADDRESS_MEMO_LIST,
     MOBILE_COUNTRY_CODE_LIST,

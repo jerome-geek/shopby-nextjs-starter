@@ -398,7 +398,6 @@ export const mobileCountryCodeType = z.enum([
 export const countryCodeType = z.string().length(2);
 export const stateType = z.string();
 
-
 export const payType = z.enum(
     [
         'CREDIT_CARD',
@@ -499,7 +498,7 @@ export const termsType = z.enum([
     'PI_GIFT_ACCEPT_COLLECTION_AND_USE',
 ]);
 
-export const phonePrefixType = z.enum([
+export const PhonePrefixType = z.enum([
     '010',
     '011',
     '016',
@@ -507,3 +506,5 @@ export const phonePrefixType = z.enum([
     '018',
     '019',
 ]);
+
+export type PhonePrefixType = z.infer<typeof PhonePrefixType>;

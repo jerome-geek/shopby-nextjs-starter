@@ -3,7 +3,7 @@
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 
-import DialogLayout, { DefaultDialogProps } from '@/components/layout/dialog';
+import { DialogLayout, type DefaultDialogProps } from '@/components/layout';
 import * as styles from '@/components/ui/dialog/term/index.css';
 
 interface TermDialogProps extends DefaultDialogProps {

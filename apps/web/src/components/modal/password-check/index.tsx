@@ -1,12 +1,14 @@
+import { ErrorMessage } from '@hookform/error-message';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
-import { InputLabel } from '@/components/ui';
 import { Button } from '@/components/ui/button';
-import InputContainer from '@/components/ui/input/container';
-import { ErrorMessage } from '@hookform/error-message';
-import Field from '@/components/ui/input/field';
+import {
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+} from '@/components/ui/input';
 import { CheckPasswordData } from '@/models/member/profile';
 
 export interface PasswordCheckOverlayProps {
@@ -14,8 +16,7 @@ export interface PasswordCheckOverlayProps {
 }
 
 interface PasswordCheckModalProps
-    extends DefaultModalLayoutProps,
-        PasswordCheckOverlayProps {}
+    extends DefaultModalLayoutProps, PasswordCheckOverlayProps {}
 
 export const PasswordCheckModal = (props: PasswordCheckModalProps) => {
     const { onConfirm, close, ...layoutProps } = props;
@@ -74,10 +75,10 @@ export const PasswordCheckModal = (props: PasswordCheckModalProps) => {
             ]}
         >
             <form id='password-check-form' onSubmit={onSubmit}>
-                <InputContainer>
+                <InputFieldContainer>
                     <InputLabel isRequired>{t('비밀번호')}</InputLabel>
 
-                    <Field
+                    <InputField
                         type='password'
                         placeholder={t(
                             '작성 시 설정한 비밀번호를 입력해주세요.',
@@ -88,7 +89,7 @@ export const PasswordCheckModal = (props: PasswordCheckModalProps) => {
                     />
 
                     <ErrorMessage name='password' errors={errors} />
-                </InputContainer>
+                </InputFieldContainer>
             </form>
         </ModalLayout>
     );

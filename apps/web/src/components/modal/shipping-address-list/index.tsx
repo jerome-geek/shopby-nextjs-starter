@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/shipping-address-list/index.css';
 import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
-import { PhonePrefixType } from '@/const/form';
 import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
@@ -159,7 +158,7 @@ export const ShippingAddressListModal = ({
                 receiverFirstName:
                     address.shippingEtcInfo?.receiverFirstName || '',
                 receiverContact1: {
-                    prefix: prefix as PhonePrefixType,
+                    prefix: prefix as any,
                     middle: middle || '',
                     suffix: suffix || '',
                 },

@@ -1,37 +1,36 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { Suspense } from 'react';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import {
-    Heart,
-    Bookmark,
-    ShoppingCart,
-    Clock,
-    Users,
-    Flame,
     ArrowUp,
+    Bookmark,
+    Clock,
+    Flame,
+    Heart,
+    ShoppingCart,
+    Users,
 } from 'lucide-react';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper/modules';
 import { overlay } from 'overlay-kit';
+import { Suspense } from 'react';
+import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-import ProductCard from '@/components/product/card';
+import { recipe } from '@/api/shop';
 import {
-    RecipeSaveModal,
     RecipeCollectionCreateModal,
+    RecipeSaveModal,
 } from '@/components/modal';
 import { RecipeCommentSection } from '@/components/recipe/RecipeCommentSection';
-import * as styles from '@/pages/recipes/[sno]/index.css';
-import { recipe } from '@/api/shop';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useRecipeDetail } from '@/hooks/query/shop/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui/useToast';
+import * as styles from '@/pages/recipes/[sno]/index.css';
+import { vars } from '@/styles/theme.css';
 
 import 'swiper/css';
-import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { vars } from '@/styles/theme.css';
+import 'swiper/css/pagination';
 
 // --- MOCK DATA ---
 const MOCK_RECIPE = {
@@ -430,13 +429,13 @@ const RecipeDetailPage = ({
                 >
                     사용할 도구
                 </h2>
-                <div className={styles.toolsGrid}>
+                {/* <div className={styles.toolsGrid}>
                     {MOCK_RECIPE.tools.map((tool) => (
                         <div key={tool.productNo} className={styles.toolCard}>
                             <ProductCard {...tool} />
                         </div>
                     ))}
-                </div>
+                </div> */}
             </section>
 
             {/* --- STEPS AREA --- */}

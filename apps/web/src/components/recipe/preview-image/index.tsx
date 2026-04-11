@@ -54,7 +54,9 @@ export const RecipePreviewImage = ({
                         // onClick={() => (img.sno ? null : handleDeleteImage(i))}
                         onClick={(e) => {
                             e.stopPropagation();
-                            onDeleteButtonClick(sno);
+                            if (sno) {
+                                onDeleteButtonClick(sno);
+                            }
                         }}
                     >
                         <X size={20} />

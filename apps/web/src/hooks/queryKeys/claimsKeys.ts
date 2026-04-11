@@ -1,4 +1,3 @@
-import type { EstimatedRefundPriceData } from '@/models/claim';
 import type { GetClaimOptionPriceParams } from '@/models/claim/guest';
 import type { GetClaimListParams } from '@/models/claim/member';
 
@@ -22,7 +21,7 @@ const claimsKeys = {
     estimates: () => ['estimate'] as const,
     estimate: (
         orderOptionNo: number,
-        searchParams: Omit<EstimatedRefundPriceData, 'claimedProductOptions'>,
+        searchParams: GetClaimOptionPriceParams,
     ) => [...claimsKeys.estimates(), orderOptionNo, searchParams] as const,
 
     /** 게스트 클레임 상세 조회 */
