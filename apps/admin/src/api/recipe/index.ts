@@ -9,6 +9,7 @@ import {
     RecipeExposureGroupDetailResponse,
     UpdateRecipeExposureGroupsResponse,
     UpdateRecipeExposureGroupsBody,
+    UpdateRecipeExposureGroupsSortOrderBody,
 } from '@/model/recipe';
 
 export const recipe = {
@@ -53,6 +54,15 @@ export const recipe = {
         return request({
             method: 'DELETE',
             url: `/admin/recipe/exposure-groups/${groupSno}`,
+        });
+    },
+    updateRecipeExposureGroupsSortOrder: (
+        data: UpdateRecipeExposureGroupsSortOrderBody,
+    ) => {
+        return request({
+            method: 'PUT',
+            url: '/admin/recipe/exposure-groups/reorder',
+            data,
         });
     },
 };

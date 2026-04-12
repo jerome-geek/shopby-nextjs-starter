@@ -4,6 +4,7 @@ import { recipe } from '@/api/recipe';
 import {
     CreateRecipeExposureGroupsBody,
     UpdateRecipeExposureGroupsBody,
+    UpdateRecipeExposureGroupsSortOrderBody,
 } from '@/model/recipe';
 
 const useRecipeMutation = () => {
@@ -24,6 +25,10 @@ const useRecipeMutation = () => {
                 groupSno: number;
                 data: UpdateRecipeExposureGroupsBody;
             }) => await recipe.updateRecipeExposureGroups(groupSno, data),
+        }),
+        updateRecipeExposureGroupsSortOrder: useMutation({
+            mutationFn: async (data: UpdateRecipeExposureGroupsSortOrderBody) =>
+                await recipe.updateRecipeExposureGroupsSortOrder(data),
         }),
     };
 };

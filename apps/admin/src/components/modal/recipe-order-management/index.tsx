@@ -1,94 +1,317 @@
-import { useState } from 'react';
+import { isEmpty } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion, Reorder, useDragControls } from 'motion/react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { InputContainer, Label } from '@/components/form/input';
+import Select from '@/components/form/select/intdex';
+import LoadingWrapper from '@/components/ui/loading-wrapper';
+import useRecipeMutation from '@/hooks/mutations/useReceipeMutation';
+import { useRecipeExposureGroups } from '@/hooks/query/recipe';
+import recipeKeys from '@/hooks/queryKeys/recipeKeys';
+import useApiError from '@/hooks/useApiError';
 import { ModalLayout } from '@/layout/modal';
-import { ReactComponent as DragHandleIcon } from '@/icons/drag-handle.svg?react';
-import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
+import type { ExposureLocation, RecipeExposureGroup } from '@/model/recipe';
+import {
+    exposureLocationLabel,
+    groupByExposureLocation,
+} from '@/utils/receipe';
+
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
-import { ReactComponent as ChevronDownSimpleIcon } from '@/icons/chevron-down-simple.svg?react';
+import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
+import { ReactComponent as DragHandleIcon } from '@/icons/drag-handle.svg?react';
 
-interface RecipeOrderItem {
-    id: string;
-    groupName: string;
-    recipeName: string;
+interface RecipeOrderManagementModalProps {
+    isOpen: boolean;
+    close: () => void;
+    unmount: () => void;
 }
 
-interface RecipeGroupOrderData {
-    groupId: string;
-    items: RecipeOrderItem[];
-}
+const RecipeOrderManagementModal = ({
+    close,
+    isOpen,
+    ...props
+}: RecipeOrderManagementModalProps) => {
+    const queryClient = useQueryClient();
 
-const RECIPE_GROUP_ORDER_DATA: RecipeGroupOrderData[] = [
-    {
-        groupId: 'recipe_group_1',
-        items: [
-            {
-                id: 'rg1-1',
-                groupName: '인기 레시피',
-                recipeName: '김치찌개 황금레시피',
-            },
-            {
-                id: 'rg1-2',
-                groupName: '인기 레시피 2',
-                recipeName: '크림 파스타',
-            },
-            {
-                id: 'rg1-3',
-                groupName: '인기 레시피 3',
-                recipeName: '김밥 만들기',
-            },
-        ],
-    },
-    {
-        groupId: 'recipe_group_2',
-        items: [
-            {
-                id: 'rg2-1',
-                groupName: '계절 특집',
-                recipeName: '봄나물 비빔밥',
-            },
-        ],
-    },
-    {
-        groupId: 'recipe_group_3',
-        items: [
-            {
-                id: 'rg3-1',
-                groupName: '다이어트',
-                recipeName: '닭가슴살 샐러드',
-            },
-        ],
-    },
-];
+    const { data: recipeExposureGroups = [], isLoading } =
+        useRecipeExposureGroups();
 
-const SELECT_OPTIONS = [
-    { value: 'all', label: '전체 보기' },
-    ...RECIPE_GROUP_ORDER_DATA.map((g) => ({
-        value: g.groupId,
-        label: g.groupId,
-    })),
-];
+    const { updateRecipeExposureGroupsSortOrder } = useRecipeMutation();
+
+    const [selectedFilter, setSelectedFilter] = useState<string>('all');
+    const [orderData, setOrderData] = useState<ExposureLocationGroup[]>([]);
+
+    const initialGroupSnosByExposureLocation = useRef<
+        Map<ExposureLocation, number[]>
+    >(new Map());
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        const grouped = groupByExposureLocation(recipeExposureGroups);
+        setOrderData(cloneGrouped(grouped));
+        initialGroupSnosByExposureLocation.current = new Map(
+            grouped.map(([exposureLocation, groups]) => [
+                exposureLocation,
+                groups.map((group) => group.sno),
+            ]),
+        );
+    }, [isOpen, recipeExposureGroups]);
+
+    const selectOptions = useMemo(() => {
+        const fromData = orderData.map((section) => ({
+            value: section.exposureLocation,
+            label: exposureLocationLabel(section.exposureLocation),
+        }));
+        return [{ value: 'all', label: '전체 보기' }, ...fromData];
+    }, [orderData]);
+
+    const displayedSections =
+        selectedFilter === 'all'
+            ? orderData
+            : orderData.filter(
+                  (section) => section.exposureLocation === selectedFilter,
+              );
+
+    const moveGroup = (
+        exposureLocation: ExposureLocation,
+        fromIndex: number,
+        toIndex: number,
+    ) => {
+        setOrderData((previous) =>
+            previous.map((section) => {
+                if (section.exposureLocation !== exposureLocation) {
+                    return section;
+                }
+                const nextGroups = [...section.groups];
+                const [removed] = nextGroups.splice(fromIndex, 1);
+                nextGroups.splice(toIndex, 0, removed);
+                return { ...section, groups: nextGroups };
+            }),
+        );
+    };
+
+    const reorderSection = (
+        exposureLocation: ExposureLocation,
+        nextGroups: RecipeExposureGroup[],
+    ) => {
+        setOrderData((previous) =>
+            previous.map((section) =>
+                section.exposureLocation === exposureLocation
+                    ? { ...section, groups: nextGroups }
+                    : section,
+            ),
+        );
+    };
+
+    const handleClose = () => {
+        setSelectedFilter('all');
+        setOrderData(
+            cloneGrouped(groupByExposureLocation(recipeExposureGroups)),
+        );
+        close();
+    };
+
+    const { handleErrorDialog } = useApiError();
+
+    const handleSave = async () => {
+        try {
+            const sectionsWithOrderChanged = orderData.filter((section) => {
+                const nextGroupSnos = section.groups.map((group) => group.sno);
+                const initialGroupSnos =
+                    initialGroupSnosByExposureLocation.current.get(
+                        section.exposureLocation,
+                    );
+
+                if (initialGroupSnos === undefined) {
+                    return nextGroupSnos.length > 0;
+                }
+
+                return !areNumberSequencesEqual(
+                    initialGroupSnos,
+                    nextGroupSnos,
+                );
+            });
+
+            await Promise.all(
+                sectionsWithOrderChanged.map((section) =>
+                    updateRecipeExposureGroupsSortOrder.mutateAsync({
+                        exposureLocation: section.exposureLocation,
+                        groupSnos: section.groups.map((group) => group.sno),
+                    }),
+                ),
+            );
+
+            queryClient.invalidateQueries({
+                queryKey: recipeKeys.all,
+                refetchType: 'all',
+            });
+
+            handleClose();
+        } catch (error) {
+            handleErrorDialog(error);
+        }
+    };
+
+    const isPending = updateRecipeExposureGroupsSortOrder.isPending;
+
+    return (
+        <ModalLayout
+            {...props}
+            isOpen={isOpen}
+            close={close}
+            title='노출 순서 관리'
+            subtitle='같은 그룹 아이디(노출 위치) 안에서 레시피 노출 그룹의 정렬 순서를 바꿀 수 있습니다.'
+            footer={
+                <>
+                    <button
+                        type='button'
+                        onClick={handleClose}
+                        disabled={isPending}
+                        className='h-9 rounded-lg border border-[#e5e7eb] bg-white px-4 text-sm font-medium text-[#364153] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'
+                    >
+                        닫기
+                    </button>
+                    <button
+                        type='button'
+                        onClick={handleSave}
+                        disabled={
+                            isPending ||
+                            isLoading ||
+                            recipeExposureGroups.length === 0
+                        }
+                        className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50'
+                    >
+                        저장
+                    </button>
+                </>
+            }
+        >
+            <div className='flex flex-col gap-4'>
+                <InputContainer>
+                    <Label>그룹 아이디 선택</Label>
+
+                    <Select
+                        options={selectOptions}
+                        value={
+                            selectOptions.find(
+                                (option) => option.value === selectedFilter,
+                            ) ?? null
+                        }
+                        onChange={(option) =>
+                            setSelectedFilter(option?.value ?? 'all')
+                        }
+                        isDisabled={isLoading}
+                        placeholder='그룹 아이디를 선택하세요'
+                    />
+                </InputContainer>
+
+                <LoadingWrapper
+                    isLoading={isLoading}
+                    containerStyle={{ minHeight: 200 }}
+                >
+                    {isEmpty(displayedSections) ? (
+                        <p className='py-8 text-center text-sm text-[#6a7282]'>
+                            등록된 레시피 노출 그룹이 없습니다.
+                        </p>
+                    ) : (
+                        <div className='flex max-h-[380px] flex-col gap-6 overflow-y-auto pt-1'>
+                            {displayedSections.map((section) => (
+                                <div
+                                    key={section.exposureLocation}
+                                    className='rounded-xl border border-[#e5e7eb] p-4'
+                                >
+                                    <div className='mb-2 flex items-center gap-2'>
+                                        <span className='rounded bg-[#f3f4f6] px-2 py-0.5 font-mono text-xs font-medium text-[#364153]'>
+                                            {section.exposureLocation}
+                                        </span>
+                                        <span className='text-xs font-medium text-[#6a7282]'>
+                                            ({section.groups.length}개)
+                                        </span>
+                                    </div>
+
+                                    <Reorder.Group
+                                        axis='y'
+                                        values={section.groups}
+                                        onReorder={(nextGroups) =>
+                                            reorderSection(
+                                                section.exposureLocation,
+                                                nextGroups,
+                                            )
+                                        }
+                                        className='flex flex-col'
+                                        style={{
+                                            listStyle: 'none',
+                                            padding: 0,
+                                            margin: 0,
+                                        }}
+                                    >
+                                        {section.groups.map((group, index) => (
+                                            <ReorderItem
+                                                key={group.sno}
+                                                group={group}
+                                                index={index}
+                                                total={section.groups.length}
+                                                exposureLocation={
+                                                    section.exposureLocation
+                                                }
+                                                onMove={moveGroup}
+                                            />
+                                        ))}
+                                    </Reorder.Group>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </LoadingWrapper>
+            </div>
+        </ModalLayout>
+    );
+};
+
+export default RecipeOrderManagementModal;
+
+type ExposureLocationGroup = {
+    exposureLocation: ExposureLocation;
+    groups: RecipeExposureGroup[];
+};
 
 interface ReorderItemProps {
-    item: RecipeOrderItem;
+    group: RecipeExposureGroup;
     index: number;
     total: number;
-    groupId: string;
-    onMove: (groupId: string, fromIdx: number, toIdx: number) => void;
+    exposureLocation: ExposureLocation;
+    onMove: (
+        exposureLocation: ExposureLocation,
+        fromIndex: number,
+        toIndex: number,
+    ) => void;
 }
 
+const cloneGrouped = (tuples: [ExposureLocation, RecipeExposureGroup[]][]) =>
+    tuples.map(([exposureLocation, groups]) => ({
+        exposureLocation,
+        groups: [...groups],
+    }));
+
+const areNumberSequencesEqual = (a: number[], b: number[]): boolean =>
+    a.length === b.length && a.every((value, index) => value === b[index]);
+
 const ReorderItem = ({
-    item,
+    group,
     index,
     total,
-    groupId,
+    exposureLocation,
     onMove,
 }: ReorderItemProps) => {
     const dragControls = useDragControls();
 
     return (
         <Reorder.Item
-            value={item}
+            value={group}
             dragListener={false}
             dragControls={dragControls}
             className='mt-2 flex cursor-default items-center gap-2 rounded-lg border border-[#e5e7eb] bg-white px-3 py-2.5'
@@ -126,10 +349,12 @@ const ReorderItem = ({
 
             <div className='min-w-0 flex-1'>
                 <p className='truncate text-sm font-medium leading-5 text-[#101828]'>
-                    {item.groupName}
+                    {group.groupName}
                 </p>
                 <p className='truncate text-xs font-normal leading-4 text-[#6a7282]'>
-                    {item.recipeName}
+                    {group.description?.trim()
+                        ? group.description
+                        : `레시피 ${group.recipeCount}개 · sno ${group.sno}`}
                 </p>
             </div>
 
@@ -137,7 +362,7 @@ const ReorderItem = ({
                 <motion.button
                     type='button'
                     onClick={() =>
-                        index > 0 && onMove(groupId, index, index - 1)
+                        index > 0 && onMove(exposureLocation, index, index - 1)
                     }
                     disabled={index === 0}
                     className='flex h-7 w-7 items-center justify-center rounded bg-[#f3f4f6] transition-colors hover:bg-[#e5e7eb] disabled:cursor-not-allowed disabled:opacity-30'
@@ -149,7 +374,8 @@ const ReorderItem = ({
                 <motion.button
                     type='button'
                     onClick={() =>
-                        index < total - 1 && onMove(groupId, index, index + 1)
+                        index < total - 1 &&
+                        onMove(exposureLocation, index, index + 1)
                     }
                     disabled={index === total - 1}
                     className='flex h-7 w-7 items-center justify-center rounded bg-[#f3f4f6] transition-colors hover:bg-[#e5e7eb] disabled:cursor-not-allowed disabled:opacity-30'
@@ -162,161 +388,3 @@ const ReorderItem = ({
         </Reorder.Item>
     );
 };
-
-interface RecipeOrderManagementModalProps {
-    isOpen: boolean;
-    close: () => void;
-    unmount: () => void;
-}
-
-const RecipeOrderManagementModal = ({
-    close,
-    ...props
-}: RecipeOrderManagementModalProps) => {
-    const [selectedGroupId, setSelectedGroupId] = useState<string>('all');
-    const [orderData, setOrderData] = useState<RecipeGroupOrderData[]>(() =>
-        RECIPE_GROUP_ORDER_DATA.map((g) => ({
-            ...g,
-            items: [...g.items],
-        })),
-    );
-
-    const displayedGroups =
-        selectedGroupId === 'all'
-            ? orderData
-            : orderData.filter((g) => g.groupId === selectedGroupId);
-
-    const moveItem = (groupId: string, fromIdx: number, toIdx: number) => {
-        setOrderData((prev) =>
-            prev.map((group) => {
-                if (group.groupId !== groupId) return group;
-                const newItems = [...group.items];
-                const [removed] = newItems.splice(fromIdx, 1);
-                newItems.splice(toIdx, 0, removed);
-                return { ...group, items: newItems };
-            }),
-        );
-    };
-
-    const reorderGroup = (groupId: string, newItems: RecipeOrderItem[]) => {
-        setOrderData((prev) =>
-            prev.map((group) =>
-                group.groupId === groupId
-                    ? { ...group, items: newItems }
-                    : group,
-            ),
-        );
-    };
-
-    const handleClose = () => {
-        setSelectedGroupId('all');
-        setOrderData(
-            RECIPE_GROUP_ORDER_DATA.map((g) => ({
-                ...g,
-                items: [...g.items],
-            })),
-        );
-        close();
-    };
-
-    const handleSave = () => {
-        // TODO: API 연동 시 순서 저장
-        handleClose();
-    };
-
-    return (
-        <ModalLayout
-            {...props}
-            close={close}
-            title='노출 순서 관리'
-            subtitle='같은 그룹 아이디 내에서 레시피의 노출 순서를 변경할 수 있습니다.'
-            footer={
-                <>
-                    <button
-                        type='button'
-                        onClick={handleClose}
-                        className='h-9 rounded-lg border border-[#e5e7eb] bg-white px-4 text-sm font-medium text-[#364153] transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'
-                    >
-                        닫기
-                    </button>
-                    <button
-                        type='button'
-                        onClick={handleSave}
-                        className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600'
-                    >
-                        저장
-                    </button>
-                </>
-            }
-        >
-            <div className='flex flex-col gap-4'>
-                <div>
-                    <label className='mb-1.5 block text-xs font-medium text-[#364153]'>
-                        그룹 아이디 선택
-                    </label>
-                    <div className='relative'>
-                        <select
-                            value={selectedGroupId}
-                            onChange={(e) => setSelectedGroupId(e.target.value)}
-                            className='h-9 w-full cursor-pointer appearance-none rounded-lg border border-[#e5e7eb] bg-white pl-3 pr-8 text-sm text-[#101828] transition-colors focus:border-[#ff6900] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20'
-                        >
-                            {SELECT_OPTIONS.map((opt) => (
-                                <option key={opt.value} value={opt.value}>
-                                    {opt.label}
-                                </option>
-                            ))}
-                        </select>
-                        <span className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6a7282]'>
-                            <ChevronDownSimpleIcon className='h-3.5 w-3.5' />
-                        </span>
-                    </div>
-                </div>
-
-                <div className='flex max-h-[380px] flex-col gap-6 overflow-y-auto pt-1'>
-                    {displayedGroups.map((group) => (
-                        <div
-                            key={group.groupId}
-                            className='rounded-xl border border-[#e5e7eb] p-4'
-                        >
-                            <div className='mb-2 flex items-center gap-2'>
-                                <span className='rounded bg-[#f3f4f6] px-2 py-0.5 font-mono text-xs font-medium text-[#364153]'>
-                                    {group.groupId}
-                                </span>
-                                <span className='text-xs font-medium text-[#6a7282]'>
-                                    ({group.items.length}개)
-                                </span>
-                            </div>
-
-                            <Reorder.Group
-                                axis='y'
-                                values={group.items}
-                                onReorder={(newItems) =>
-                                    reorderGroup(group.groupId, newItems)
-                                }
-                                className='flex flex-col'
-                                style={{
-                                    listStyle: 'none',
-                                    padding: 0,
-                                    margin: 0,
-                                }}
-                            >
-                                {group.items.map((item, idx) => (
-                                    <ReorderItem
-                                        key={item.id}
-                                        item={item}
-                                        index={idx}
-                                        total={group.items.length}
-                                        groupId={group.groupId}
-                                        onMove={moveItem}
-                                    />
-                                ))}
-                            </Reorder.Group>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </ModalLayout>
-    );
-};
-
-export default RecipeOrderManagementModal;

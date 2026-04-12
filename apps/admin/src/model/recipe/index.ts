@@ -71,3 +71,8 @@ export interface UpdateRecipeExposureGroupsBody {
 }
 
 export type UpdateRecipeExposureGroupsResponse = RecipeExposureGroup;
+
+export interface UpdateRecipeExposureGroupsSortOrderBody {
+    exposureLocation: ExposureLocation;
+    groupSnos: number[];
+}

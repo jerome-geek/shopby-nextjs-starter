@@ -456,6 +456,7 @@ const CreateRecipeGroupModal = ({
                                         {selectedRecipes.length}개
                                     </span>
                                 </div>
+
                                 {selectedRecipes.map((recipe, index) => {
                                     return (
                                         <label
