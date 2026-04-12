@@ -1,19 +1,20 @@
-import { useRef, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
 import { isEmpty } from '@fxts/core';
+import { overlay } from 'overlay-kit';
+import { useRef } from 'react';
+import { Link, useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
-import { PATHS } from '@/const/paths';
-import CreateUserRecipeModal from '@/components/modal/CreateUserRecipeModal';
-import { useSearchRecipeList } from '@/hooks/query/recipe';
+import CreateUserRecipeModal from '@/components/modal/create-user-recipe';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
+import { PATHS } from '@/const/paths';
+import { useSearchRecipeList } from '@/hooks/query/recipe';
 
-import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
-import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
-import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
 import { ReactComponent as ChevronRightSmallIcon } from '@/icons/chevron-right-small.svg?react';
+import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
+import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
+import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
 const SourceBadge = ({ source }: { source: string }) => {
     if (source === 'YOUTUBE') {
@@ -42,8 +43,6 @@ const UserRecipeList = () => {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
     const {
         data: searchRecipeListData = [],
         isLoading: isSearchRecipeListLoading,
@@ -60,6 +59,12 @@ const UserRecipeList = () => {
 
         setSearchParams({
             keyword,
+        });
+    };
+
+    const openCreateUserRecipeOverlay = () => {
+        overlay.open((props) => {
+            return <CreateUserRecipeModal {...props} />;
         });
     };
 
@@ -83,7 +88,7 @@ const UserRecipeList = () => {
 
                     {/* 액션 버튼 */}
                     <button
-                        onClick={() => setIsCreateModalOpen(true)}
+                        onClick={openCreateUserRecipeOverlay}
                         className='flex items-center gap-2 h-10 px-4 rounded-xl bg-[#ff6900] text-white text-sm font-semibold transition-all hover:bg-orange-600 shadow-sm'
                     >
                         <PlusSimpleIcon className='w-4 h-4 text-white' />
@@ -239,13 +244,6 @@ const UserRecipeList = () => {
                     </div>
                 </div>
             </div>
-
-            {/* 레시피 생성 모달 */}
-            <CreateUserRecipeModal
-                isOpen={isCreateModalOpen}
-                close={() => setIsCreateModalOpen(false)}
-                unmount={() => setIsCreateModalOpen(false)}
-            />
         </>
     );
 };

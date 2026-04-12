@@ -1,7 +1,7 @@
 import { overlay } from 'overlay-kit';
 import { useCallback } from 'react';
 
-import ConfirmDialog from '@/components/ui/dialog/confirm';
+import ConfirmDialog from '@/components/dialog/confirm';
 
 const dialogTitleClass =
     'text-gray-800 text-base font-medium leading-6 break-words whitespace-normal dark:text-white/90';

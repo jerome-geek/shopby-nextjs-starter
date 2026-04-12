@@ -39,18 +39,6 @@ export const DialogLayout: React.FC<DialogLayoutProps> = ({
         };
     }, [isOpen, close]);
 
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [isOpen]);
-
     const contentClasses =
         'relative w-full min-w-90 rounded-3xl bg-white  dark:bg-gray-900';
 
@@ -58,7 +46,7 @@ export const DialogLayout: React.FC<DialogLayoutProps> = ({
         <AnimatePresence onExitComplete={unmount}>
             {isOpen && (
                 <motion.div
-                    className='fixed inset-0 h-full w-full bg-gray-700/50 backdrop-blur-[1px] z-99999'
+                    className='fixed inset-0 z-99999 h-full w-full bg-gray-700/50'
                     variants={{
                         init: { opacity: 0 },
                         show: { opacity: 0.6 },
@@ -67,10 +55,7 @@ export const DialogLayout: React.FC<DialogLayoutProps> = ({
                     initial='init'
                     animate='show'
                     exit='hide'
-                    onClick={() => {
-                        console.log(1);
-                        close();
-                    }}
+                    onClick={close}
                 ></motion.div>
             )}
 
@@ -81,16 +66,14 @@ export const DialogLayout: React.FC<DialogLayoutProps> = ({
                     aria-modal='true'
                     aria-labelledby='modal-title'
                     aria-describedby='modal-description'
-                    key='modal-container'
+                    key='dialog-container'
                     variants={{
-                        init: { opacity: 0, x: '0%', y: '-5%' },
+                        init: { opacity: 0, y: '-5%' },
                         show: {
-                            opacity: isOpen ? 1 : 0,
-                            x: '0%',
-                            y: isOpen ? '0%' : '-5%',
-                            visibility: isOpen ? 'visible' : 'hidden',
+                            opacity: 1,
+                            y: '0%',
                         },
-                        hide: { opacity: 0, x: '0%', y: '-5%' },
+                        hide: { opacity: 0, y: '-5%' },
                     }}
                     initial='init'
                     animate='show'

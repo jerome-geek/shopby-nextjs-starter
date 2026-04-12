@@ -1,8 +1,5 @@
 import Button from '@/components/ui/button/Button';
-import {
-    DialogLayout,
-    type DefaultDialogLayoutProps,
-} from '@/components/ui/dialog/layout';
+import { DialogLayout, type DefaultDialogLayoutProps } from '@/layout/dialog';
 
 export interface ConfirmDialogProps extends DefaultDialogLayoutProps {
     type?: 'confirm' | 'modal';
