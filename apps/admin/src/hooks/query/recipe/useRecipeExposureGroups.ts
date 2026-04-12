@@ -12,7 +12,7 @@ import {
     RecipeExposureGroupResponse,
 } from '@/model/recipe';
 
-interface UseGetRecipeExposureGroupsParams<T = RecipeExposureGroupResponse> {
+interface UseRecipeExposureGroupsParams<T = RecipeExposureGroupResponse> {
     params?: GetRecipeExposureGroupsParams;
     options?: Omit<
         UseQueryOptions<
@@ -25,10 +25,10 @@ interface UseGetRecipeExposureGroupsParams<T = RecipeExposureGroupResponse> {
     >;
 }
 
-const useGetRecipeExposureGroups = <T = RecipeExposureGroupResponse>({
+const useRecipeExposureGroups = <T = RecipeExposureGroupResponse>({
     params,
     options,
-}: UseGetRecipeExposureGroupsParams<T> = {}) => {
+}: UseRecipeExposureGroupsParams<T> = {}) => {
     return useQuery({
         queryKey: recipeKeys.getRecipeExposureGroup(params),
         queryFn: async () => {
@@ -41,4 +41,4 @@ const useGetRecipeExposureGroups = <T = RecipeExposureGroupResponse>({
     });
 };
 
-export default useGetRecipeExposureGroups;
+export default useRecipeExposureGroups;

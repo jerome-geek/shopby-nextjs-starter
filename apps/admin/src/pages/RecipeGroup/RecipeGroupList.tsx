@@ -10,7 +10,7 @@ import RecipeOrderManagementModal from '@/components/modal/recipe-order-manageme
 import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import { PATHS } from '@/const/paths';
-import { useGetRecipeExposureGroups } from '@/hooks/query/recipe';
+import { useRecipeExposureGroups } from '@/hooks/query/recipe';
 import {
     groupByExposureLocation,
     exposureLocationLabel,
@@ -30,7 +30,7 @@ const RecipeGroupList = () => {
     const {
         data: recipeExposureGroupsData = [],
         isLoading: isRecipeExposureGroupsLoading,
-    } = useGetRecipeExposureGroups();
+    } = useRecipeExposureGroups();
 
     const inputRef = useRef<HTMLInputElement>(null);
     const [groupNameKeyword, setGroupNameKeyword] = useState('');
@@ -39,8 +39,10 @@ const RecipeGroupList = () => {
         overlay.open((props) => <RecipeOrderManagementModal {...props} />);
     };
 
-    const openCreateRecipeGroupOverlay = () => {
-        overlay.open((props) => <CreateRecipeGroupModal {...props} />);
+    const openCreateRecipeGroupOverlay = (groupSno?: number) => {
+        overlay.open((props) => (
+            <CreateRecipeGroupModal {...props} groupSno={groupSno} />
+        ));
     };
 
     const applySearchFilter = () => {
@@ -133,7 +135,7 @@ const RecipeGroupList = () => {
                         {/* 그룹 생성 버튼 */}
                         <button
                             type='button'
-                            onClick={openCreateRecipeGroupOverlay}
+                            onClick={() => openCreateRecipeGroupOverlay()}
                             className='flex items-center gap-2 h-9 px-3 rounded-lg bg-[#ff6900] text-white text-sm font-medium transition-colors hover:bg-orange-600'
                         >
                             <PlusSimpleIcon className='w-4 h-4 text-white' />
@@ -297,6 +299,11 @@ const RecipeGroupList = () => {
                                                                         type='button'
                                                                         className='flex h-8 w-8 items-center justify-center rounded-lg text-[#364153] transition-colors hover:bg-gray-100'
                                                                         aria-label='수정'
+                                                                        onClick={() =>
+                                                                            openCreateRecipeGroupOverlay(
+                                                                                item.sno,
+                                                                            )
+                                                                        }
                                                                     >
                                                                         <PencilSimpleIcon className='h-4 w-4 text-[#364153]' />
                                                                     </button>

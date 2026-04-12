@@ -1,4 +1,9 @@
 import useSearchRecipeList from '@/hooks/query/recipe/useSearchRecipeList';
-import useGetRecipeExposureGroups from '@/hooks/query/recipe/useGetRecipeExposureGroups';
+import useRecipeExposureGroups from '@/hooks/query/recipe/useRecipeExposureGroups';
+import useRecipeExposureGroupDetail from '@/hooks/query/recipe/useRecipeExposureGroupDetail';
 
-export { useSearchRecipeList, useGetRecipeExposureGroups };
+export {
+    useSearchRecipeList,
+    useRecipeExposureGroups,
+    useRecipeExposureGroupDetail,
+};

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isEmpty } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -17,9 +17,14 @@ import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
 import {
     createRecipeExposureGroupsSchema,
     CreateRecipeExposureGroupsSchemaType,
+    UpdateRecipeExposureGroupsSchemaType,
+    updateRecipeExposureGroupsSchema,
 } from '@/schema/receipe.schema';
 import { RECIPE_GROUP_ID_OPTIONS } from '@/const/receipe';
-import { useSearchRecipeList } from '@/hooks/query/recipe';
+import {
+    useRecipeExposureGroupDetail,
+    useSearchRecipeList,
+} from '@/hooks/query/recipe';
 import type { Recipe, SearchRecipesResponse } from '@/model/recipe';
 import useRecipeMutation from '@/hooks/mutations/useReceipeMutation';
 import { useDialog } from '@/hooks/utils';
@@ -28,11 +33,35 @@ import { recipeKeys } from '@/hooks/queryKeys';
 
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
-const CreateRecipeGroupModal = ({ ...props }: DefaultModalLayoutProps) => {
+interface CreateRecipeGroupModalProps extends DefaultModalLayoutProps {
+    groupSno?: number;
+}
+
+const CreateRecipeGroupModal = ({
+    groupSno = 0,
+    ...props
+}: CreateRecipeGroupModalProps) => {
     const queryClient = useQueryClient();
 
-    const methods = useForm<CreateRecipeExposureGroupsSchemaType>({
-        resolver: zodResolver(createRecipeExposureGroupsSchema),
+    const isModify = !!groupSno;
+
+    const { data: recipeExposureGroupDetailData } =
+        useRecipeExposureGroupDetail({
+            groupSno,
+            options: {
+                enabled: isModify,
+            },
+        });
+
+    const methods = useForm<
+        | CreateRecipeExposureGroupsSchemaType
+        | UpdateRecipeExposureGroupsSchemaType
+    >({
+        resolver: zodResolver(
+            isModify
+                ? updateRecipeExposureGroupsSchema
+                : createRecipeExposureGroupsSchema,
+        ),
         defaultValues: {
             exposureLocation: '',
             groupName: '',
@@ -44,25 +73,68 @@ const CreateRecipeGroupModal = ({ ...props }: DefaultModalLayoutProps) => {
 
     const {
         control,
-        formState: { isSubmitting },
+        formState: { isSubmitting, isDirty },
         register,
         handleSubmit,
         setValue,
+        reset,
     } = methods;
 
     const { openAsyncDialog } = useDialog();
     const { handleErrorDialog } = useApiError();
 
-    const { createRecipeExposureGroups: createRecipeExposureGroupsMutation } =
-        useRecipeMutation();
+    const {
+        createRecipeExposureGroups: createRecipeExposureGroupsMutation,
+        updateRecipeExposureGroups: updateRecipeExposureGroupsMutation,
+    } = useRecipeMutation();
 
-    const onSubmit = (data: CreateRecipeExposureGroupsSchemaType) => {
-        createRecipeExposureGroupsMutation.mutate(data, {
+    const invalidate = () => {
+        queryClient.invalidateQueries({
+            queryKey: recipeKeys.all,
+            refetchType: 'all',
+        });
+    };
+
+    const isPending = isModify
+        ? updateRecipeExposureGroupsMutation.isPending
+        : createRecipeExposureGroupsMutation.isPending;
+
+    const onSubmit = (
+        data:
+            | CreateRecipeExposureGroupsSchemaType
+            | UpdateRecipeExposureGroupsSchemaType,
+    ) => {
+        if (isModify) {
+            const parseData = updateRecipeExposureGroupsSchema.parse(data);
+
+            updateRecipeExposureGroupsMutation.mutate(
+                {
+                    groupSno,
+                    data: parseData,
+                },
+                {
+                    onSuccess: async () => {
+                        invalidate();
+
+                        await openAsyncDialog({
+                            message: '레시피 그룹이 수정되었습니다.',
+                        });
+
+                        props.close();
+                    },
+                    onError: (error) => {
+                        handleErrorDialog(error);
+                    },
+                },
+            );
+            return;
+        }
+
+        const parseData = createRecipeExposureGroupsSchema.parse(data);
+
+        createRecipeExposureGroupsMutation.mutate(parseData, {
             onSuccess: async () => {
-                queryClient.invalidateQueries({
-                    queryKey: recipeKeys.all,
-                    refetchType: 'all',
-                });
+                invalidate();
 
                 await openAsyncDialog({
                     message: '레시피 그룹이 생성되었습니다.',
@@ -128,10 +200,39 @@ const CreateRecipeGroupModal = ({ ...props }: DefaultModalLayoutProps) => {
         recipe: Recipe,
         currentSnos: number[],
     ) => {
+        if (isModify) {
+            return;
+        }
+
         const list = currentSnos.filter((sno) => sno !== recipe.sno);
         setValue('recipeSnos', list);
         setSelectedRecipes((prev) => prev.filter((r) => r.sno !== recipe.sno));
     };
+
+    useEffect(() => {
+        if (!isModify) {
+            return;
+        }
+
+        if (!recipeExposureGroupDetailData) {
+            return;
+        }
+
+        reset(
+            (prev) => ({
+                ...prev,
+                ...recipeExposureGroupDetailData,
+                recipeSnos: recipeExposureGroupDetailData.recipes.map(
+                    (recipe) => recipe.sno,
+                ),
+            }),
+            {
+                keepFieldsRef: true,
+            },
+        );
+
+        setSelectedRecipes(recipeExposureGroupDetailData.recipes);
+    }, [recipeExposureGroupDetailData, isModify, reset]);
 
     return (
         <ModalLayout
@@ -151,12 +252,9 @@ const CreateRecipeGroupModal = ({ ...props }: DefaultModalLayoutProps) => {
                         type='submit'
                         onClick={handleSubmit(onSubmit)}
                         className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50'
-                        disabled={
-                            isSubmitting ||
-                            createRecipeExposureGroupsMutation.isPending
-                        }
+                        disabled={isSubmitting || isPending || !isDirty}
                     >
-                        생성
+                        {isModify ? '수정' : '생성'}
                     </button>
                 </>
             }
@@ -183,6 +281,7 @@ const CreateRecipeGroupModal = ({ ...props }: DefaultModalLayoutProps) => {
                                     onChange={(opt) =>
                                         onChange(opt?.value ?? '')
                                     }
+                                    isDisabled={isModify}
                                 />
                             )}
                         />
@@ -233,108 +332,122 @@ const CreateRecipeGroupModal = ({ ...props }: DefaultModalLayoutProps) => {
                     <InputContainer>
                         <Label isRequired>레시피 선택</Label>
 
-                        <form onSubmit={onSubmitKeyword} className='relative'>
-                            <span className='pointer-events-none absolute left-3 top-1/2 -translate-y-1/2'>
-                                <SearchIcon className='h-[14px] w-[14px] text-[#99a1af]' />
-                            </span>
-                            <Input
-                                type='text'
-                                placeholder='레시피 검색...'
-                                className='pl-8'
-                                ref={inputRef}
-                            />
-                        </form>
+                        {!isModify && (
+                            <>
+                                <form
+                                    onSubmit={onSubmitKeyword}
+                                    className='relative'
+                                >
+                                    <span className='pointer-events-none absolute left-3 top-1/2 -translate-y-1/2'>
+                                        <SearchIcon className='h-[14px] w-[14px] text-[#99a1af]' />
+                                    </span>
+                                    <Input
+                                        type='text'
+                                        placeholder='레시피 검색...'
+                                        className='pl-8'
+                                        ref={inputRef}
+                                    />
+                                </form>
 
-                        <p className='mt-2 text-xs font-medium text-[#6a7282] dark:text-gray-400'>
-                            검색 결과
-                        </p>
-                        <div className='mt-1.5 flex flex-col overflow-hidden rounded-lg border border-[#e5e7eb] bg-white dark:border-gray-700 dark:bg-gray-900'>
-                            {isEmpty(recipeListData) ? (
-                                <p className='px-3 py-4 text-center text-sm text-[#99a1af]'>
-                                    검색 결과가 없습니다.
+                                <p className='mt-2 text-xs font-medium text-[#6a7282] dark:text-gray-400'>
+                                    검색 결과
                                 </p>
-                            ) : (
-                                <Controller
-                                    name='recipeSnos'
-                                    control={control}
-                                    render={({
-                                        field: { onChange, value },
-                                    }) => (
-                                        <>
-                                            {recipeListData.map(
-                                                (recipe, index) => {
-                                                    const checked =
-                                                        value?.includes(
-                                                            recipe.sno,
-                                                        );
 
-                                                    return (
-                                                        <label
-                                                            key={recipe.sno}
-                                                            className={`flex cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors hover:bg-[#fafafa] ${
-                                                                index !== 0
-                                                                    ? 'border-t border-[#f3f4f6]'
-                                                                    : ''
-                                                            } ${
-                                                                checked
-                                                                    ? 'bg-[#fff7ed]'
-                                                                    : ''
-                                                            }`}
-                                                        >
-                                                            <input
-                                                                type='checkbox'
-                                                                checked={
-                                                                    checked
-                                                                }
-                                                                onChange={(e) =>
-                                                                    applyRecipeSnosToggle(
-                                                                        e.target
-                                                                            .checked,
-                                                                        recipe,
-                                                                        value ??
-                                                                            [],
-                                                                        onChange,
-                                                                    )
-                                                                }
-                                                                className='h-4 w-4 shrink-0 cursor-pointer rounded border-[#d1d5db] text-[#ff6900] accent-[#ff6900] focus:ring-[#ff6900]'
-                                                            />
+                                <div className='mt-1.5 mb-1.5 flex flex-col overflow-hidden rounded-lg border border-[#e5e7eb] bg-white dark:border-gray-700 dark:bg-gray-900'>
+                                    {isEmpty(recipeListData) ? (
+                                        <p className='px-3 py-4 text-center text-sm text-[#99a1af]'>
+                                            검색 결과가 없습니다.
+                                        </p>
+                                    ) : (
+                                        <Controller
+                                            name='recipeSnos'
+                                            control={control}
+                                            render={({
+                                                field: { onChange, value },
+                                            }) => (
+                                                <>
+                                                    {recipeListData.map(
+                                                        (recipe, index) => {
+                                                            const checked =
+                                                                value?.includes(
+                                                                    recipe.sno,
+                                                                );
 
-                                                            <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e5e7eb] bg-[#f3f4f6] text-sm shadow-sm'>
-                                                                <img
-                                                                    src={
-                                                                        recipe.thumbnailUrl
+                                                            return (
+                                                                <label
+                                                                    key={
+                                                                        recipe.sno
                                                                     }
-                                                                    alt={
-                                                                        recipe.title
-                                                                    }
-                                                                    className='w-full h-full object-cover'
-                                                                />
-                                                            </div>
+                                                                    className={`flex cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors hover:bg-[#fafafa] ${
+                                                                        index !==
+                                                                        0
+                                                                            ? 'border-t border-[#f3f4f6]'
+                                                                            : ''
+                                                                    } ${
+                                                                        checked
+                                                                            ? 'bg-[#fff7ed]'
+                                                                            : ''
+                                                                    }`}
+                                                                >
+                                                                    <input
+                                                                        type='checkbox'
+                                                                        checked={
+                                                                            checked
+                                                                        }
+                                                                        onChange={(
+                                                                            e,
+                                                                        ) =>
+                                                                            applyRecipeSnosToggle(
+                                                                                e
+                                                                                    .target
+                                                                                    .checked,
+                                                                                recipe,
+                                                                                value ??
+                                                                                    [],
+                                                                                onChange,
+                                                                            )
+                                                                        }
+                                                                        className='h-4 w-4 shrink-0 cursor-pointer rounded border-[#d1d5db] text-[#ff6900] accent-[#ff6900] focus:ring-[#ff6900]'
+                                                                    />
 
-                                                            <div className='min-w-0 flex-1'>
-                                                                <p className='max-w-[300px] truncate text-sm font-medium leading-5 text-[#101828]'>
-                                                                    {
-                                                                        recipe.title
-                                                                    }
-                                                                </p>
-                                                                <p className='text-xs leading-4 text-[#6a7282]'>
-                                                                    {
-                                                                        recipe.authorName
-                                                                    }
-                                                                </p>
-                                                            </div>
-                                                        </label>
-                                                    );
-                                                },
+                                                                    <div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e5e7eb] bg-[#f3f4f6] text-sm shadow-sm'>
+                                                                        <img
+                                                                            src={
+                                                                                recipe.thumbnailUrl
+                                                                            }
+                                                                            alt={
+                                                                                recipe.title
+                                                                            }
+                                                                            className='w-full h-full object-cover'
+                                                                        />
+                                                                    </div>
+
+                                                                    <div className='min-w-0 flex-1'>
+                                                                        <p className='max-w-[300px] truncate text-sm font-medium leading-5 text-[#101828]'>
+                                                                            {
+                                                                                recipe.title
+                                                                            }
+                                                                        </p>
+                                                                        <p className='text-xs leading-4 text-[#6a7282]'>
+                                                                            {
+                                                                                recipe.authorName
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                </label>
+                                                            );
+                                                        },
+                                                    )}
+                                                </>
                                             )}
-                                        </>
+                                        />
                                     )}
-                                />
-                            )}
-                        </div>
+                                </div>
+                            </>
+                        )}
 
                         {!isEmpty(recipeSnos) && (
-                            <div className='mt-4 flex flex-col overflow-hidden rounded-lg border border-[#ff6900]/25 bg-white shadow-[inset_3px_0_0_0_#ff6900] dark:border-orange-500/30 dark:bg-gray-900'>
+                            <div className='flex flex-col overflow-hidden rounded-lg border border-[#ff6900]/25 bg-white shadow-[inset_3px_0_0_0_#ff6900] dark:border-orange-500/30 dark:bg-gray-900'>
                                 <div className='flex items-center justify-between gap-2 border-b border-[#f3f4f6] bg-[#fff9f5] px-3 py-2 dark:border-gray-700 dark:bg-orange-950/25'>
                                     <span className='text-xs font-semibold text-[#364153] dark:text-gray-200'>
                                         선택된 레시피
@@ -356,6 +469,7 @@ const CreateRecipeGroupModal = ({ ...props }: DefaultModalLayoutProps) => {
                                             <input
                                                 type='checkbox'
                                                 checked={true}
+                                                disabled={isModify}
                                                 onChange={() =>
                                                     removeRecipeFromSelection(
                                                         recipe,

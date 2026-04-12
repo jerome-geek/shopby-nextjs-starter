@@ -16,6 +16,12 @@ const recipeKeys = {
         [...recipeKeys.all, 'exposureGroups'] as const,
     getRecipeExposureGroup: (params?: GetRecipeExposureGroupsParams) =>
         [...recipeKeys.getRecipeExposureGroups(), params] as const,
+
+    /** 레시피 노출 그룹 상세 조회 */
+    getRecipeExposureGroupDetail: () =>
+        [...recipeKeys.all, 'exposureGroupDetail'] as const,
+    exposureGroupDetail: (groupSno: number) =>
+        [...recipeKeys.getRecipeExposureGroupDetail(), groupSno] as const,
 };
 
 export default recipeKeys;

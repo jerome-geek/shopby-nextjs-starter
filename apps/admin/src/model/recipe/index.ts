@@ -36,6 +36,24 @@ export interface RecipeExposureGroup {
 
 export type RecipeExposureGroupResponse = RecipeExposureGroup[];
 
+export interface RecipeExposureGroupDetailResponse {
+    sno: number;
+    groupName: string;
+    description: string;
+    exposureLocation: ExposureLocation;
+    isDisplay: boolean;
+    sortOrder: number;
+    recipes: {
+        sno: number;
+        recipeSno: number;
+        title: string;
+        authorName: string;
+        thumbnailUrl: string;
+        sourceType: string;
+        sortOrder: number;
+    }[];
+}
+
 export interface CreateRecipeExposureGroupsBody {
     exposureLocation: string;
     groupName: string;
@@ -45,3 +63,11 @@ export interface CreateRecipeExposureGroupsBody {
 }
 
 export type CreateRecipeExposureGroupsResponse = RecipeExposureGroup;
+
+export interface UpdateRecipeExposureGroupsBody {
+    groupName: string;
+    description?: string;
+    isDisplay: boolean;
+}
+
+export type UpdateRecipeExposureGroupsResponse = RecipeExposureGroup;

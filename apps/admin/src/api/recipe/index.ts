@@ -6,6 +6,9 @@ import {
     SearchRecipesParams,
     SearchRecipesResponse,
     RecipeExposureGroupResponse,
+    RecipeExposureGroupDetailResponse,
+    UpdateRecipeExposureGroupsResponse,
+    UpdateRecipeExposureGroupsBody,
 } from '@/model/recipe';
 
 export const recipe = {
@@ -23,10 +26,26 @@ export const recipe = {
             params,
         });
     },
+    getRecipeExposureGroup: (groupSno: number) => {
+        return request<RecipeExposureGroupDetailResponse>({
+            method: 'GET',
+            url: `/admin/recipe/exposure-groups/${groupSno}`,
+        });
+    },
     createRecipeExposureGroups: (data: CreateRecipeExposureGroupsBody) => {
         return request<CreateRecipeExposureGroupsResponse>({
             method: 'POST',
             url: '/admin/recipe/exposure-groups',
+            data,
+        });
+    },
+    updateRecipeExposureGroups: (
+        groupSno: number,
+        data: UpdateRecipeExposureGroupsBody,
+    ) => {
+        return request<UpdateRecipeExposureGroupsResponse>({
+            method: 'PATCH',
+            url: `/admin/recipe/exposure-groups/${groupSno}`,
             data,
         });
     },

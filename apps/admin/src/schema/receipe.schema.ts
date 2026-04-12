@@ -11,3 +11,13 @@ export const createRecipeExposureGroupsSchema = z.object({
 export type CreateRecipeExposureGroupsSchemaType = z.infer<
     typeof createRecipeExposureGroupsSchema
 >;
+
+export const updateRecipeExposureGroupsSchema = z.object({
+    groupName: z.string().min(1, '그룹명을 입력해 주세요.'),
+    description: z.string().optional(),
+    isDisplay: z.boolean(),
+});
+
+export type UpdateRecipeExposureGroupsSchemaType = z.infer<
+    typeof updateRecipeExposureGroupsSchema
+>;
