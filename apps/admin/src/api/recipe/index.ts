@@ -30,4 +30,10 @@ export const recipe = {
             data,
         });
     },
+    deleteRecipeExposureGroups: (groupSno: number) => {
+        return request({
+            method: 'DELETE',
+            url: `/admin/recipe/exposure-groups/${groupSno}`,
+        });
+    },
 };

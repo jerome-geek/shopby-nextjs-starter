@@ -2,6 +2,7 @@ import { isEmpty } from '@fxts/core';
 import { overlay } from 'overlay-kit';
 import { Fragment, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
 
 import PageMeta from '@/components/common/PageMeta';
 import CreateRecipeGroupModal from '@/components/modal/create-recipe-group';
@@ -14,6 +15,10 @@ import {
     groupByExposureLocation,
     exposureLocationLabel,
 } from '@/utils/receipe';
+import useRecipeMutation from '@/hooks/mutations/useReceipeMutation';
+import { recipeKeys } from '@/hooks/queryKeys';
+import useApiError from '@/hooks/useApiError';
+import { useDialog } from '@/hooks/utils';
 
 import { ReactComponent as GridDotsIcon } from '@/icons/grid-dots.svg?react';
 import { ReactComponent as PencilSimpleIcon } from '@/icons/pencil-simple.svg?react';
@@ -60,6 +65,41 @@ const RecipeGroupList = () => {
         [recipeExposureGroupList],
     );
 
+    const queryClient = useQueryClient();
+
+    const { openAsyncDialog, openDialog } = useDialog();
+    const { handleErrorDialog } = useApiError();
+
+    const { deleteRecipeExposureGroups: deleteRecipeExposureGroupsMutation } =
+        useRecipeMutation();
+
+    const handleDeleteRecipeExposureGroups = async (groupSno: number) => {
+        const isAgree = await openAsyncDialog({
+            message: '레시피 그룹을 삭제하시겠습니까?',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (!isAgree) {
+            return;
+        }
+
+        deleteRecipeExposureGroupsMutation.mutate(groupSno, {
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: recipeKeys.all,
+                    refetchType: 'all',
+                });
+
+                openDialog({
+                    message: '레시피 그룹이 삭제되었습니다.',
+                });
+            },
+            onError: (error) => {
+                handleErrorDialog(error);
+            },
+        });
+    };
     return (
         <>
             <PageMeta
@@ -265,6 +305,11 @@ const RecipeGroupList = () => {
                                                                         type='button'
                                                                         className='flex h-8 w-8 items-center justify-center rounded-lg text-[#f54900] transition-colors hover:bg-red-50'
                                                                         aria-label='삭제'
+                                                                        onClick={() =>
+                                                                            handleDeleteRecipeExposureGroups(
+                                                                                item.sno,
+                                                                            )
+                                                                        }
                                                                     >
                                                                         <TrashSimpleIcon className='h-4 w-4 text-[#f54900]' />
                                                                     </button>

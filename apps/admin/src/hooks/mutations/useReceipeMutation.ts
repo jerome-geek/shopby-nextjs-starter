@@ -9,6 +9,10 @@ const useRecipeMutation = () => {
             mutationFn: async (data: CreateRecipeExposureGroupsBody) =>
                 await recipe.createRecipeExposureGroups(data),
         }),
+        deleteRecipeExposureGroups: useMutation({
+            mutationFn: async (groupSno: number) =>
+                await recipe.deleteRecipeExposureGroups(groupSno),
+        }),
     };
 };
 
