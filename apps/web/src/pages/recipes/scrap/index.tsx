@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CSRLayout } from '@/components/layout';
 import { RecipeCollectionCreateModal } from '@/components/modal';
+import { RecipeGridSection } from '@/components/recipe/RecipeGridSection';
 import * as styles from '@/pages/recipes/scrap/index.css';
 import { vars } from '@/styles/theme.css';
 import { useCustomDialog } from '@/hooks/ui';
@@ -435,63 +436,7 @@ const ScrapAllContent = () => {
             />
 
             {/* 레시피 섹션 */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>{t('레시피')}</h2>
-                    <div className={styles.viewAll}>
-                        {t('전체보기')} <ChevronRight size={14} />
-                    </div>
-                </div>
-                <div className={styles.recipeGrid}>
-                    {MOCK_RECIPES.map((r) => (
-                        <motion.div key={r.id} whileHover={{ y: -4 }}>
-                            <div className={styles.recipeImgArea}>
-                                <img
-                                    src={r.img}
-                                    className={styles.productImg}
-                                    alt={r.title}
-                                />
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: '8px',
-                                        right: '8px',
-                                    }}
-                                >
-                                    <Bookmark
-                                        size={18}
-                                        fill='white'
-                                        color='white'
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.productInfo}>
-                                <h3 className={styles.productName}>
-                                    {r.title}
-                                </h3>
-                                <span className={styles.brandName}>
-                                    {r.author}
-                                </span>
-                                <div className={styles.recipeMeta}>
-                                    <span className={styles.iconText}>
-                                        <Clock size={12} /> {r.time}
-                                    </span>
-                                    <span className={styles.iconText}>
-                                        <Users size={12} /> {r.servings}
-                                    </span>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-                <div className={styles.pagination}>
-                    <span style={{ color: vars.color.black, fontWeight: 700 }}>
-                        1
-                    </span>
-                    <span>2</span>
-                    <ChevronRight size={14} />
-                </div>
-            </section>
+            <RecipeGridSection title='레시피' recipes={MOCK_RECIPES} />
         </motion.div>
     );
 };

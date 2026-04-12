@@ -154,8 +154,11 @@ export interface SearchPublicCollectionsParams {
 
 export type RecipeSourceType = 'YOUTUBE' | 'INSTAGRAM' | 'MANUAL';
 export type RecipeDifficulty = 'EASY' | 'NORMAL' | 'HARD';
-export type RecipeStatus = 'PROCESSING' | 'COMPLETED' | 'FAILURE';
-export type RecipeOwnershipType = 'CREATED' | 'BOOKMARKED';
+export type RecipeStatus = 'PROCESSING' | 'COMPLETED' | 'FAILED';
+export type RecipeOwnershipType =
+    | 'CREATED'
+    | 'BOOKMARKED'
+    | 'CREATED_AND_BOOKMARKED';
 
 /** 조리 단계 */
 export interface RecipeStep {

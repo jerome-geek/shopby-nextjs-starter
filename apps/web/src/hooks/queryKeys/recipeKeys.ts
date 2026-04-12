@@ -1,7 +1,11 @@
+import { SearchRecipesParams } from '@/models/shop/recipe';
+
 const recipeKeys = {
     all: ['recipe'] as const,
 
-    lists: () => [] as const,
+    lists: () => [...recipeKeys.all, 'list'] as const,
+    list: (params?: SearchRecipesParams) =>
+        [...recipeKeys.lists(), params] as const,
 
     details: () => [...recipeKeys.all, 'detail'] as const,
     detail: (sno: number) => [...recipeKeys.details(), sno] as const,
