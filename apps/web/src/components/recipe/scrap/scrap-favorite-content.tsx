@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
-import * as styles from '../index.css';
+import * as styles from '@/pages/recipes/scrap/index.css';
 
 // TODO: 페이징 처리
 export const ScrapFavoriteContent = () => {

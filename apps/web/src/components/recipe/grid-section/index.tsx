@@ -30,7 +30,7 @@ export const RecipeGridSection = ({
         {},
     );
 
-    const { data } = useSearchMyRecipeList({ params: { page: 1, take: 10 } });
+    const { data } = useSearchMyRecipeList({ searchParams: { page: 1, take: 10 } });
     const recipes = data?.data ?? [];
     console.log('🚀 ~ RecipeGridSection ~ recipes:', recipes);
 
