@@ -17,6 +17,23 @@ import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
+const tableLayout = {
+    minWidth: 'min-w-[900px]',
+    column: {
+        recipe: '',
+        author: 'w-[150px]',
+        source: 'w-[150px]',
+        bookmark: 'w-[120px]',
+        like: 'w-[120px]',
+        createdAt: 'w-[130px]',
+    },
+} as const;
+
+const tableTh = {
+    left: 'px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]',
+    right: 'px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282]',
+} as const;
+
 const UserRecipeList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -111,25 +128,44 @@ const UserRecipeList = () => {
                     >
                         {/* 테이블 */}
                         <div className='overflow-x-auto'>
-                            <table className='w-full min-w-[900px]'>
+                            <table
+                                className={`w-full ${tableLayout.minWidth} table-fixed`}
+                            >
                                 <thead>
                                     <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
-                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                        <th
+                                            className={[
+                                                tableLayout.column.recipe,
+                                                tableTh.left,
+                                            ]
+                                                .filter(Boolean)
+                                                .join(' ')}
+                                        >
                                             레시피
                                         </th>
-                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                        <th
+                                            className={`${tableLayout.column.author} ${tableTh.left}`}
+                                        >
                                             사용자
                                         </th>
-                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                        <th
+                                            className={`${tableLayout.column.source} ${tableTh.left}`}
+                                        >
                                             소스
                                         </th>
-                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[120px]'>
+                                        <th
+                                            className={`${tableLayout.column.bookmark} ${tableTh.left}`}
+                                        >
                                             북마크
                                         </th>
-                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[120px]'>
+                                        <th
+                                            className={`${tableLayout.column.like} ${tableTh.left}`}
+                                        >
                                             좋아요
                                         </th>
-                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[130px]'>
+                                        <th
+                                            className={`${tableLayout.column.createdAt} ${tableTh.right}`}
+                                        >
                                             생성일
                                         </th>
                                     </tr>
@@ -171,7 +207,7 @@ const UserRecipeList = () => {
                                                                 ':sno',
                                                                 item.sno.toString(),
                                                             )}
-                                                            className='text-[15px] font-bold text-[#ff6900] hover:underline whitespace-nowrap max-w-[150px] overflow-hidden text-ellipsis'
+                                                            className='text-[15px] font-bold text-[#ff6900] hover:underline whitespace-nowrap overflow-hidden text-ellipsis'
                                                         >
                                                             {item.title}
                                                         </Link>
@@ -199,7 +235,7 @@ const UserRecipeList = () => {
                                                         1
                                                     </div>
                                                 </td>
-                                                <td className='px-6 py-6 text-[14px] text-[#6a7282]'>
+                                                <td className='px-6 py-6 text-[14px] text-[#6a7282] text-right'>
                                                     {/* {item.createdAt} */}
                                                     2026-03-21
                                                 </td>

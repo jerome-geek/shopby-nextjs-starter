@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
+import { ExternalLinkIconButton } from '@/components/ui/button/ExternalLinkIconButton';
 import { PATHS } from '@/const/paths';
 import { ReactComponent as YoutubeSimpleIcon } from '@/icons/youtube-simple.svg?react';
 import { ReactComponent as InstagramSimpleIcon } from '@/icons/instagram-simple.svg?react';
 import { ReactComponent as EyeSmallIcon } from '@/icons/eye-small.svg?react';
-import { ReactComponent as ExternalLinkIcon } from '@/icons/external-link.svg?react';
 import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
 
 // ─────────────────────────────────────────────
@@ -155,17 +155,6 @@ const VisibilityBadge = ({ isVisible }: { isVisible: boolean }) => {
         <span className='inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f3f4f6] text-[#1e2939]'>
             숨김
         </span>
-    );
-};
-
-// ─────────────────────────────────────────────
-// 외부 링크 버튼
-// ─────────────────────────────────────────────
-const ExternalLinkButton = () => {
-    return (
-        <button className='flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f3f4f6] transition-colors text-[#6a7282] hover:text-[#101828]'>
-            <ExternalLinkIcon className='w-4 h-4' />
-        </button>
     );
 };
 
@@ -388,7 +377,7 @@ const CollectionGroupDetail = () => {
 
                                         {/* 작업 */}
                                         <td className='px-6 py-4 text-right'>
-                                            <ExternalLinkButton />
+                                            <ExternalLinkIconButton />
                                         </td>
                                     </tr>
                                 ))}

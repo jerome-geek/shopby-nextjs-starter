@@ -21,9 +21,14 @@ import NotFound from '@/pages/OtherPage/NotFound';
 import AuthLayout from '@/pages/AuthPages/AuthPageLayout';
 import { useAxiosInterceptor } from '@/hooks/utils';
 
-const AxiosInterceptor = () => {
-    useAxiosInterceptor();
-    return null;
+const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
+    const { isLoading } = useAxiosInterceptor();
+
+    if (!isLoading) {
+        return null;
+    }
+
+    return children;
 };
 
 export default function App() {
@@ -67,63 +72,67 @@ export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <OverlayProvider>
-                <AxiosInterceptor />
-                <Router>
-                    <ScrollToTop />
-                    <Routes>
-                        {/* Dashboard Layout */}
-                        <Route element={<AppLayout />}>
-                            <Route
-                                index
-                                path={PATHS.DASHBOARD}
-                                element={<Home />}
-                            />
-                            <Route
-                                path={PATHS.APP.COLLECTION_GROUP.LIST}
-                                element={<CollectionGroupList />}
-                            />
-                            <Route
-                                path={PATHS.APP.COLLECTION_GROUP.DETAIL}
-                                element={<CollectionGroupDetail />}
-                            />
-                            <Route
-                                path={PATHS.APP.RECIPE_GROUP.LIST}
-                                element={<RecipeGroupList />}
-                            />
-                            <Route
-                                path={PATHS.APP.RECIPE_GROUP.DETAIL}
-                                element={<RecipeGroupDetail />}
-                            />
-                            <Route
-                                path={PATHS.APP.USER_COLLECTION.LIST}
-                                element={<UserCollections />}
-                            />
-                            <Route
-                                path={PATHS.APP.USER_COLLECTION.DETAIL}
-                                element={<UserCollectionDetail />}
-                            />
-                            <Route
-                                path={PATHS.APP.USER_RECIPE.LIST}
-                                element={<UserRecipeList />}
-                            />
-                            <Route
-                                path={PATHS.APP.USER_RECIPE.DETAIL}
-                                element={<UserRecipeDetail />}
-                            />
-                        </Route>
+                <AxiosInterceptor>
+                    <Router>
+                        <ScrollToTop />
+                        <Routes>
+                            {/* Dashboard Layout */}
+                            <Route element={<AppLayout />}>
+                                <Route
+                                    index
+                                    path={PATHS.DASHBOARD}
+                                    element={<Home />}
+                                />
+                                <Route
+                                    path={PATHS.APP.COLLECTION_GROUP.LIST}
+                                    element={<CollectionGroupList />}
+                                />
+                                <Route
+                                    path={PATHS.APP.COLLECTION_GROUP.DETAIL}
+                                    element={<CollectionGroupDetail />}
+                                />
+                                <Route
+                                    path={PATHS.APP.RECIPE_GROUP.LIST}
+                                    element={<RecipeGroupList />}
+                                />
+                                <Route
+                                    path={PATHS.APP.RECIPE_GROUP.DETAIL}
+                                    element={<RecipeGroupDetail />}
+                                />
+                                <Route
+                                    path={PATHS.APP.USER_COLLECTION.LIST}
+                                    element={<UserCollections />}
+                                />
+                                <Route
+                                    path={PATHS.APP.USER_COLLECTION.DETAIL}
+                                    element={<UserCollectionDetail />}
+                                />
+                                <Route
+                                    path={PATHS.APP.USER_RECIPE.LIST}
+                                    element={<UserRecipeList />}
+                                />
+                                <Route
+                                    path={PATHS.APP.USER_RECIPE.DETAIL}
+                                    element={<UserRecipeDetail />}
+                                />
+                            </Route>
 
-                        {/* Auth Layout */}
-                        <Route element={<AuthLayout />}>
-                            <Route
-                                path={PATHS.AUTH.LOGIN}
-                                element={<SignIn />}
-                            />
-                        </Route>
+                            {/* Auth Layout */}
+                            <Route element={<AuthLayout />}>
+                                <Route
+                                    path={PATHS.AUTH.LOGIN}
+                                    element={<SignIn />}
+                                />
+                            </Route>
 
-                        {/* Fallback Route */}
-                        <Route path={PATHS.ERROR_400} element={<NotFound />} />
-                    </Routes>
-                </Router>
+                            {/* Fallback Route */}
+                            <Route
+                                path={PATHS.ERROR_400}
+                                element={<NotFound />}
+                            />
+                        </Routes>
+                    </Router>
+                </AxiosInterceptor>
             </OverlayProvider>
         </QueryClientProvider>
     );

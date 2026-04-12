@@ -26,6 +26,22 @@ import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react'
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
+const tableLayout = {
+    minWidth: 'min-w-[960px]',
+    column: {
+        sortOrder: 'w-[130px]',
+        groupName: 'w-[180px] max-w-[280px]',
+        recipeCount: 'w-[100px]',
+        display: 'w-[100px]',
+        actions: 'w-[100px]',
+    },
+} as const;
+
+const tableTh = {
+    left: 'px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]',
+    right: 'px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282]',
+} as const;
+
 const RecipeGroupList = () => {
     const {
         data: recipeExposureGroupsData = [],
@@ -179,25 +195,34 @@ const RecipeGroupList = () => {
                         containerStyle={{ minHeight: '50vh' }}
                     >
                         <div className='overflow-x-auto'>
-                            <table className='w-full min-w-[960px] table-fixed'>
+                            <table
+                                className={`w-full ${tableLayout.minWidth} table-fixed`}
+                            >
                                 <thead>
                                     <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
-                                        <th className='w-[130px] px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                        <th
+                                            className={`${tableLayout.column.sortOrder} ${tableTh.left}`}
+                                        >
                                             그룹 아이디 (정렬 순서)
                                         </th>
-                                        <th className='w-[180px] max-w-[280px] px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                        <th
+                                            className={`${tableLayout.column.groupName} ${tableTh.left}`}
+                                        >
                                             그룹명
                                         </th>
-                                        <th className='w-[100px] px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                        <th
+                                            className={`${tableLayout.column.recipeCount} ${tableTh.left}`}
+                                        >
                                             레시피 수
                                         </th>
-                                        <th className='w-[100px] px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                        <th
+                                            className={`${tableLayout.column.display} ${tableTh.left}`}
+                                        >
                                             노출여부
                                         </th>
-                                        <th className='w-[100px] px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
-                                            생성일
-                                        </th>
-                                        <th className='w-[100px] px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282]'>
+                                        <th
+                                            className={`${tableLayout.column.actions} ${tableTh.right}`}
+                                        >
                                             작업
                                         </th>
                                     </tr>
@@ -206,7 +231,7 @@ const RecipeGroupList = () => {
                                     {isEmpty(recipeExposureGroupList) ? (
                                         <tr>
                                             <td
-                                                colSpan={6}
+                                                colSpan={5}
                                                 className='px-6 py-12 text-center text-sm text-[#6a7282]'
                                             >
                                                 {groupNameKeyword !== ''
@@ -220,7 +245,7 @@ const RecipeGroupList = () => {
                                                 <Fragment key={location}>
                                                     <tr className='border-b border-[#e5e7eb] bg-[#f3f4f6]'>
                                                         <td
-                                                            colSpan={6}
+                                                            colSpan={5}
                                                             className='px-6 py-2.5 text-xs font-semibold uppercase tracking-wide text-[#364153]'
                                                         >
                                                             {exposureLocationLabel(
@@ -244,7 +269,7 @@ const RecipeGroupList = () => {
                                                             </td>
 
                                                             <td className='max-w-0 px-6 py-5'>
-                                                                <div className='flex min-w-0 max-w-[280px] flex-col gap-1'>
+                                                                <div className='flex min-w-0 flex-col gap-1'>
                                                                     <Link
                                                                         to={PATHS.APP.RECIPE_GROUP.DETAIL.replace(
                                                                             ':sno',
@@ -285,12 +310,6 @@ const RecipeGroupList = () => {
                                                                         item.isDisplay
                                                                     }
                                                                 />
-                                                            </td>
-
-                                                            <td className='px-6 py-5'>
-                                                                <span className='text-sm font-normal text-[#6a7282]'>
-                                                                    —
-                                                                </span>
                                                             </td>
 
                                                             <td className='px-6 py-5 text-right'>

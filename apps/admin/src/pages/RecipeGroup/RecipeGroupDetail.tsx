@@ -1,342 +1,177 @@
 import { Link, useParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
+import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility';
+import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
+import { ExternalLinkIconButton } from '@/components/ui/button/ExternalLinkIconButton';
 import { PATHS } from '@/const/paths';
-import { ReactComponent as YoutubeSimpleIcon } from '@/icons/youtube-simple.svg?react';
-import { ReactComponent as InstagramSimpleIcon } from '@/icons/instagram-simple.svg?react';
-import { ReactComponent as EyeSmallIcon } from '@/icons/eye-small.svg?react';
-import { ReactComponent as ExternalLinkIcon } from '@/icons/external-link.svg?react';
+import { useRecipeExposureGroupDetail } from '@/hooks/suspenseQuery/receipe';
+import type { RecipeExposureGroupDetailResponse } from '@/model/recipe';
+
 import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
 
-// ─────────────────────────────────────────────
-// 더미 데이터
-// ─────────────────────────────────────────────
-type RecipeSource = 'YouTube' | 'Instagram';
-
-interface Recipe {
-    id: string;
-    emoji: string;
-    title: string;
-    author: string;
-    source: RecipeSource;
-    views: number;
-    likes: number;
-}
-
-interface RecipeGroupDetailData {
-    groupId: string;
-    groupName: string;
-    description: string;
-    isVisible: boolean;
-    createdAt: string;
-    recipes: Recipe[];
-}
-
-const MOCK_DETAIL: Record<string, RecipeGroupDetailData> = {
-    recipe_group_1: {
-        groupId: 'recipe_group_1',
-        groupName: '인기 레시피',
-        description: '사용자들이 가장 많이 본 레시피',
-        isVisible: true,
-        createdAt: '2026-03-15',
-        recipes: [
-            {
-                id: 'r1',
-                emoji: '🍲',
-                title: '김치찌개 황금 레시피',
-                author: '요리왕',
-                source: 'YouTube',
-                views: 45000,
-                likes: 3200,
-            },
-            {
-                id: 'r2',
-                emoji: '🍳',
-                title: '계란말이 만들기',
-                author: '쿡스타그램',
-                source: 'Instagram',
-                views: 32000,
-                likes: 2100,
-            },
-            {
-                id: 'r3',
-                emoji: '🍝',
-                title: '파스타 레시피',
-                author: '이탈리안셰프',
-                source: 'YouTube',
-                views: 38000,
-                likes: 2800,
-            },
-        ],
+const tableLayout = {
+    minWidth: 'min-w-[720px]',
+    column: {
+        thumbnail: 'w-[90px]',
+        title: '',
+        author: 'w-[140px]',
+        source: 'w-[140px]',
+        actions: 'w-[80px]',
     },
-    recipe_group_2: {
-        groupId: 'recipe_group_2',
-        groupName: '계절 특집',
-        description: '봄 시즌 추천 레시피',
-        isVisible: true,
-        createdAt: '2026-03-10',
-        recipes: [
-            {
-                id: 'r4',
-                emoji: '🌿',
-                title: '봄나물 비빔밥',
-                author: '나물요리사',
-                source: 'YouTube',
-                views: 9800,
-                likes: 720,
-            },
-        ],
-    },
-    recipe_group_3: {
-        groupId: 'recipe_group_3',
-        groupName: '다이어트',
-        description: '다이어터를 위한 추천 건강식',
-        isVisible: false,
-        createdAt: '2026-03-05',
-        recipes: [
-            {
-                id: 'r5',
-                emoji: '🥦',
-                title: '닭가슴살 샐러드',
-                author: '헬스쿡',
-                source: 'Instagram',
-                views: 21000,
-                likes: 1800,
-            },
-        ],
-    },
-};
+} as const;
 
-const SourceBadge = ({ source }: { source: RecipeSource }) => {
-    if (source === 'YouTube') {
-        return (
-            <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#ffe2e2] text-[#9f0712]'>
-                <YoutubeSimpleIcon className='w-3 h-3' />
-                YouTube
-            </span>
-        );
-    }
-    return (
-        <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#fce7f3] text-[#a3004c]'>
-            <InstagramSimpleIcon className='w-3 h-3' />
-            Instagram
-        </span>
-    );
-};
+const tableTh = {
+    left: 'px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]',
+    right: 'px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282]',
+} as const;
 
-// ─────────────────────────────────────────────
-// 노출 상태 배지
-// ─────────────────────────────────────────────
-const VisibilityBadge = ({ isVisible }: { isVisible: boolean }) => {
-    if (isVisible) {
-        return (
-            <span className='inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#dcfce7] text-[#016630]'>
-                <EyeSmallIcon className='w-3 h-3' />
-                노출
-            </span>
-        );
-    }
-    return (
-        <span className='inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#f3f4f6] text-[#1e2939]'>
-            비노출
-        </span>
-    );
-};
-
-// ─────────────────────────────────────────────
-// 외부 링크 버튼
-// ─────────────────────────────────────────────
-const ExternalLinkButton = () => {
-    return (
-        <button className='flex items-center justify-center w-9 h-9 rounded-lg hover:bg-[#f3f4f6] transition-colors text-[#6a7282] hover:text-[#101828]'>
-            <ExternalLinkIcon className='w-4 h-4' />
-        </button>
-    );
-};
-
-// ─────────────────────────────────────────────
-// 메인 컴포넌트
-// ─────────────────────────────────────────────
 const RecipeGroupDetail = () => {
     const { sno } = useParams<{ sno: string }>();
-    const detail = sno ? MOCK_DETAIL[sno] : null;
 
-    if (!detail) {
-        return (
-            <div className='flex-1 p-6 flex items-center justify-center'>
-                <p className='text-sm text-[#6a7282]'>
-                    레시피 그룹을 찾을 수 없습니다.
-                </p>
-            </div>
-        );
-    }
+    const groupSno = Number(sno) || 0;
+
+    const { data: recipeExposureGroupDetailData } =
+        useRecipeExposureGroupDetail({
+            groupSno,
+        });
+
+    const sortedRecipes = [...recipeExposureGroupDetailData.recipes].sort(
+        (a, b) => a.sortOrder - b.sortOrder,
+    );
+    const groupInfoItems = buildGroupInfoItems(recipeExposureGroupDetailData);
 
     return (
         <>
             <PageMeta
-                title={`${detail.groupName} | 레시피 그룹 상세`}
-                description={detail.description}
+                title={`${recipeExposureGroupDetailData.groupName} | 레시피 그룹 상세`}
+                description={
+                    recipeExposureGroupDetailData.description ||
+                    recipeExposureGroupDetailData.groupName
+                }
             />
 
-            <div className='flex-1 px-6 pt-6 pb-10 flex flex-col gap-6'>
-                {/* 뒤로 가기 + 페이지 타이틀 */}
+            <div className='flex flex-1 flex-col gap-6 px-6 pt-6 pb-10'>
                 <div className='flex flex-col gap-3'>
                     <Link
                         to={PATHS.APP.RECIPE_GROUP.LIST}
-                        className='inline-flex items-center gap-1.5 text-sm font-medium text-[#0a0a0a] hover:text-[#ff6900] transition-colors w-fit'
+                        className='inline-flex w-fit items-center gap-1.5 text-sm font-medium text-[#0a0a0a] transition-colors hover:text-[#ff6900]'
                     >
-                        <ChevronLeftSmallIcon className='w-4 h-4' />
+                        <ChevronLeftSmallIcon className='h-4 w-4' />
                         목록으로
                     </Link>
-                    <h1 className='text-2xl font-bold text-[#101828] tracking-tight'>
+                    <h1 className='text-2xl font-bold tracking-tight text-[#101828]'>
                         레시피 그룹 상세
                     </h1>
                 </div>
 
-                {/* 그룹 기본 정보 카드 */}
-                <div className='bg-white border border-[#e5e7eb] rounded-2xl shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] px-6 pt-6 pb-5'>
+                <div className='rounded-2xl border border-[#e5e7eb] bg-white px-6 pt-6 pb-5 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]'>
                     <div className='grid grid-cols-2 gap-x-6 gap-y-6'>
-                        {/* 그룹 아이디 */}
-                        <div className='flex flex-col gap-1.5'>
-                            <span className='text-xs font-normal text-[#6a7282]'>
-                                그룹 아이디
-                            </span>
-                            <span className='inline-block w-fit bg-[#f3f4f6] rounded-lg px-2.5 py-1 font-mono text-xs text-[#364153]'>
-                                {detail.groupId}
-                            </span>
-                        </div>
-
-                        {/* 그룹명 */}
-                        <div className='flex flex-col gap-1.5'>
-                            <span className='text-xs font-normal text-[#6a7282]'>
-                                그룹명
-                            </span>
-                            <span className='text-sm font-medium text-[#101828]'>
-                                {detail.groupName}
-                            </span>
-                        </div>
-
-                        {/* 설명 */}
-                        <div className='flex flex-col gap-1.5'>
-                            <span className='text-xs font-normal text-[#6a7282]'>
-                                설명
-                            </span>
-                            <span className='text-sm font-normal text-[#364153]'>
-                                {detail.description}
-                            </span>
-                        </div>
-
-                        {/* 노출 상태 + 생성일 */}
-                        <div className='flex items-start gap-6'>
-                            <div className='flex flex-col gap-1.5'>
-                                <span className='text-xs font-normal text-[#6a7282]'>
-                                    노출 상태
-                                </span>
-                                <VisibilityBadge isVisible={detail.isVisible} />
+                        {groupInfoItems.map(({ key, fullWidth, node }) => (
+                            <div
+                                key={key}
+                                className={fullWidth ? 'col-span-2' : undefined}
+                            >
+                                {node}
                             </div>
-                            <div className='flex flex-col gap-1.5'>
-                                <span className='text-xs font-normal text-[#6a7282]'>
-                                    생성일
-                                </span>
-                                <span className='text-sm font-normal text-[#364153]'>
-                                    {detail.createdAt}
-                                </span>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
 
-                {/* 레시피 목록 카드 */}
-                <div className='bg-white border border-[#e5e7eb] rounded-2xl shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] overflow-hidden'>
-                    {/* 카드 헤더 */}
-                    <div className='px-6 py-4 border-b border-[#e5e7eb]'>
+                <div className='overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]'>
+                    <div className='border-b border-[#e5e7eb] px-6 py-4'>
                         <h2 className='text-sm font-semibold text-[#101828]'>
-                            레시피 목록 ({detail.recipes.length}개)
+                            레시피 목록 ({sortedRecipes.length}개)
                         </h2>
                     </div>
 
-                    {/* 테이블 */}
                     <div className='overflow-x-auto'>
-                        <table className='w-full'>
+                        <table
+                            className={`w-full ${tableLayout.minWidth} table-fixed`}
+                        >
                             <thead>
-                                <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[90px]'>
+                                <tr className='border-b border-[#e5e7eb] bg-[#f9fafb]'>
+                                    <th
+                                        className={`${tableLayout.column.thumbnail} ${tableTh.left}`}
+                                    >
                                         썸네일
                                     </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                    <th
+                                        className={[
+                                            tableLayout.column.title,
+                                            tableTh.left,
+                                        ]
+                                            .filter(Boolean)
+                                            .join(' ')}
+                                    >
                                         제목
                                     </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                    <th
+                                        className={`${tableLayout.column.author} ${tableTh.left}`}
+                                    >
                                         작성자
                                     </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                    <th
+                                        className={`${tableLayout.column.source} ${tableTh.left}`}
+                                    >
                                         소스
                                     </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[110px]'>
-                                        조회수
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[100px]'>
-                                        좋아요
-                                    </th>
-                                    <th className='px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282] w-[80px]'>
+                                    <th
+                                        className={`${tableLayout.column.actions} ${tableTh.right}`}
+                                    >
                                         작업
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {detail.recipes.map((recipe) => (
-                                    <tr
-                                        key={recipe.id}
-                                        className={`border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors`}
-                                    >
-                                        {/* 썸네일 */}
-                                        <td className='px-6 py-4'>
-                                            <div className='flex items-center justify-center w-10 h-10 bg-[#f3f4f6] rounded-xl text-xl shadow-sm'>
-                                                {recipe.emoji}
-                                            </div>
-                                        </td>
-
-                                        {/* 제목 */}
-                                        <td className='px-6 py-4'>
-                                            <span className='text-[14px] font-medium text-[#101828]'>
-                                                {recipe.title}
-                                            </span>
-                                        </td>
-
-                                        {/* 작성자 */}
-                                        <td className='px-6 py-4'>
-                                            <span className='text-[14px] font-normal text-[#6a7282]'>
-                                                {recipe.author}
-                                            </span>
-                                        </td>
-
-                                        {/* 소스 */}
-                                        <td className='px-6 py-4'>
-                                            <SourceBadge
-                                                source={recipe.source}
-                                            />
-                                        </td>
-
-                                        {/* 조회수 */}
-                                        <td className='px-6 py-4'>
-                                            <span className='text-[14px] font-normal text-[#6a7282]'>
-                                                {recipe.views.toLocaleString()}
-                                            </span>
-                                        </td>
-
-                                        {/* 좋아요 */}
-                                        <td className='px-6 py-4'>
-                                            <span className='text-[14px] font-normal text-[#6a7282]'>
-                                                {recipe.likes.toLocaleString()}
-                                            </span>
-                                        </td>
-
-                                        {/* 작업 */}
-                                        <td className='px-6 py-4 text-right'>
-                                            <ExternalLinkButton />
+                                {sortedRecipes.length === 0 ? (
+                                    <tr>
+                                        <td
+                                            colSpan={5}
+                                            className='px-6 py-12 text-center text-sm text-[#6a7282]'
+                                        >
+                                            등록된 레시피가 없습니다.
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    sortedRecipes.map((recipe) => (
+                                        <tr
+                                            key={recipe.sno}
+                                            className='border-b border-[#e5e7eb] transition-colors last:border-b-0 hover:bg-[#fafafa]'
+                                        >
+                                            <td className='px-6 py-4'>
+                                                <div className='flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-[#f3f4f6] shadow-sm'>
+                                                    <img
+                                                        src={
+                                                            recipe.thumbnailUrl
+                                                        }
+                                                        alt={recipe.title}
+                                                        className='h-full w-full object-cover'
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className='px-6 py-4'>
+                                                <span className='text-[14px] font-medium text-[#101828]'>
+                                                    {recipe.title}
+                                                </span>
+                                            </td>
+                                            <td className='px-6 py-4'>
+                                                <span className='text-[14px] font-normal text-[#6a7282]'>
+                                                    {recipe.authorName}
+                                                </span>
+                                            </td>
+                                            <td className='px-6 py-4'>
+                                                <RecipeSourceBadge
+                                                    source={recipe.sourceType}
+                                                    showIcon
+                                                />
+                                            </td>
+                                            <td className='px-6 py-4 text-right'>
+                                                <ExternalLinkIconButton />
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -347,3 +182,82 @@ const RecipeGroupDetail = () => {
 };
 
 export default RecipeGroupDetail;
+
+const infoLabelClass = 'text-xs font-normal text-[#6a7282]';
+
+const buildGroupInfoItems = (detail: RecipeExposureGroupDetailResponse) => [
+    {
+        key: 'exposureLocation',
+        node: (
+            <div className='flex flex-col gap-1.5'>
+                <span className={infoLabelClass}>그룹 아이디</span>
+                <span className='inline-block w-fit rounded-lg bg-[#f3f4f6] px-2.5 py-1 font-mono text-xs text-[#364153]'>
+                    {detail.exposureLocation}
+                </span>
+            </div>
+        ),
+    },
+    {
+        key: 'sno',
+        node: (
+            <div className='flex flex-col gap-1.5'>
+                <span className={infoLabelClass}>그룹 번호</span>
+                <span className='text-sm font-medium text-[#101828]'>
+                    {detail.sno}
+                </span>
+            </div>
+        ),
+    },
+    {
+        key: 'groupName',
+        node: (
+            <div className='flex flex-col gap-1.5'>
+                <span className={infoLabelClass}>그룹명</span>
+                <span className='text-sm font-medium text-[#101828]'>
+                    {detail.groupName}
+                </span>
+            </div>
+        ),
+    },
+    {
+        key: 'sortOrder',
+        node: (
+            <div className='flex flex-col gap-1.5'>
+                <span className={infoLabelClass}>정렬 순서</span>
+                <span className='text-sm font-medium tabular-nums text-[#101828]'>
+                    {detail.sortOrder}
+                </span>
+            </div>
+        ),
+    },
+    {
+        key: 'description',
+        fullWidth: true,
+        node: (
+            <div className='flex flex-col gap-1.5'>
+                <span className={infoLabelClass}>설명</span>
+                <span className='text-sm font-normal text-[#364153]'>
+                    {detail.description?.trim() ? detail.description : '—'}
+                </span>
+            </div>
+        ),
+    },
+    {
+        key: 'displayAndCreated',
+        fullWidth: true,
+        node: (
+            <div className='flex items-start gap-6'>
+                <div className='flex flex-col gap-1.5'>
+                    <span className={infoLabelClass}>노출 상태</span>
+                    <DisplayVisibilityBadge isVisible={detail.isDisplay} />
+                </div>
+                <div className='flex flex-col gap-1.5'>
+                    <span className={infoLabelClass}>생성일</span>
+                    <span className='text-sm font-normal text-[#364153]'>
+                        —
+                    </span>
+                </div>
+            </div>
+        ),
+    },
+];

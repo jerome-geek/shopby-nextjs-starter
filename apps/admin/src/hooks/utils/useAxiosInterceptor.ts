@@ -4,7 +4,7 @@ import {
     HttpStatusCode,
     InternalAxiosRequestConfig,
 } from 'axios';
-import { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 import { controller } from '@/api/core/controller';
 import { request } from '@/api/core/request';
@@ -15,6 +15,8 @@ import { useDialog } from '@/hooks/utils';
 
 const useAxiosInterceptor = () => {
     const { openAsyncDialog } = useDialog();
+
+    const [isLoading, setisLoading] = useState(false);
 
     const requestHandler = async (config: InternalAxiosRequestConfig) => {
         logOnDev(
@@ -109,6 +111,7 @@ const useAxiosInterceptor = () => {
             responseHandler,
             (error) => responseErrorHandler(error),
         );
+        setisLoading(true);
 
         return {
             requestInterceptor,
@@ -132,6 +135,10 @@ const useAxiosInterceptor = () => {
             ejectInterceptors(requestInterceptor, responseInterceptor);
         };
     }, [setupInterceptors]);
+
+    return {
+        isLoading,
+    };
 };
 
 export default useAxiosInterceptor;
