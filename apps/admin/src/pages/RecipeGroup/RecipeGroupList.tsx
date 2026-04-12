@@ -1,100 +1,55 @@
-import { useState } from 'react';
+import { isEmpty } from '@fxts/core';
+import { overlay } from 'overlay-kit';
+import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
+import CreateRecipeGroupModal from '@/components/modal/create-recipe-group';
+import RecipeOrderManagementModal from '@/components/modal/recipe-order-management';
+import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility';
+import LoadingWrapper from '@/components/ui/loading-wrapper';
 import { PATHS } from '@/const/paths';
-import RecipeOrderManagementModal from '@/components/modal/RecipeOrderManagementModal';
-import CreateRecipeGroupModal from '@/components/modal/CreateRecipeGroupModal';
-import { ReactComponent as EyeSmallIcon } from '@/icons/eye-small.svg?react';
-import { ReactComponent as EyeOffIcon } from '@/icons/eye-off.svg?react';
+import { useGetRecipeExposureGroups } from '@/hooks/query/recipe';
+
 import { ReactComponent as GridDotsIcon } from '@/icons/grid-dots.svg?react';
+import { ReactComponent as PencilSimpleIcon } from '@/icons/pencil-simple.svg?react';
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
-import { ReactComponent as PencilSimpleIcon } from '@/icons/pencil-simple.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
-type RecipeGroupStatus = '노출' | '비노출';
-
-interface RecipeGroup {
-    id: string;
-    groupName: string;
-    description: string;
-    recipeName: string;
-    status: RecipeGroupStatus;
-    createdAt: string;
-}
-
-const MOCK_DATA: RecipeGroup[] = [
-    {
-        id: 'recipe_group_1',
-        groupName: '인기 레시피',
-        description: '가장 많이 조회된 레시피',
-        recipeName: '김치찌개 황금레시피',
-        status: '노출',
-        createdAt: '2026-03-15',
-    },
-    {
-        id: 'recipe_group_1',
-        groupName: '인기 레시피 2',
-        description: '두 번째로 인기있는 레시피',
-        recipeName: '크림 파스타',
-        status: '노출',
-        createdAt: '2026-03-16',
-    },
-    {
-        id: 'recipe_group_1',
-        groupName: '인기 레시피 3',
-        description: '세 번째로 인기있는 레시피',
-        recipeName: '김밥 만들기',
-        status: '노출',
-        createdAt: '2026-03-17',
-    },
-    {
-        id: 'recipe_group_2',
-        groupName: '계절 특집',
-        description: '봄 시즌 추천 레시피',
-        recipeName: '봄나물 비빔밥',
-        status: '노출',
-        createdAt: '2026-03-10',
-    },
-    {
-        id: 'recipe_group_3',
-        groupName: '다이어트',
-        description: '건강한 다이어트 레시피',
-        recipeName: '닭가슴살 샐러드',
-        status: '비노출',
-        createdAt: '2026-03-05',
-    },
-];
-
-const StatusBadge = ({ status }: { status: RecipeGroupStatus }) => {
-    if (status === '노출') {
-        return (
-            <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#dcfce7] text-[#016630] text-xs font-medium whitespace-nowrap'>
-                <EyeSmallIcon className='w-3 h-3 text-[#016630]' />
-                노출
-            </span>
-        );
-    }
-    return (
-        <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#f3f4f6] text-[#1e2939] text-xs font-medium whitespace-nowrap'>
-            <EyeOffIcon className='w-3 h-3 text-[#1e2939]' />
-            비노출
-        </span>
-    );
-}
-
 const RecipeGroupList = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const {
+        data: recipeExposureGroupsData = [],
+        isLoading: isRecipeExposureGroupsLoading,
+    } = useGetRecipeExposureGroups();
 
-    const filteredData = MOCK_DATA.filter(
-        (item) =>
-            item.groupName.includes(searchQuery) ||
-            item.recipeName.includes(searchQuery) ||
-            item.id.includes(searchQuery),
-    );
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [groupNameKeyword, setGroupNameKeyword] = useState('');
+
+    const openRecipeOrderOverlay = () => {
+        overlay.open((props) => <RecipeOrderManagementModal {...props} />);
+    };
+
+    const openCreateRecipeGroupOverlay = () => {
+        overlay.open((props) => <CreateRecipeGroupModal {...props} />);
+    };
+
+    const applySearchFilter = () => {
+        const keyword = inputRef.current?.value.trim() ?? '';
+        setGroupNameKeyword(keyword);
+    };
+
+    const recipeExposureGroupList = useMemo(() => {
+        if (groupNameKeyword === '') {
+            return recipeExposureGroupsData;
+        }
+
+        return recipeExposureGroupsData.filter(
+            (item) =>
+                item.groupName.includes(groupNameKeyword) ||
+                item.description.includes(groupNameKeyword),
+        );
+    }, [recipeExposureGroupsData, groupNameKeyword]);
 
     return (
         <>
@@ -118,7 +73,8 @@ const RecipeGroupList = () => {
                     <div className='flex items-center gap-3'>
                         {/* 순서 관리 버튼 */}
                         <button
-                            onClick={() => setIsOrderModalOpen(true)}
+                            type='button'
+                            onClick={openRecipeOrderOverlay}
                             className='flex items-center gap-2 h-9 px-3 rounded-lg border border-[#ff6900] bg-white text-[#ff6900] text-sm font-medium transition-colors hover:bg-orange-50'
                         >
                             <GridDotsIcon className='w-4 h-4 text-[#ff6900]' />
@@ -127,7 +83,8 @@ const RecipeGroupList = () => {
 
                         {/* 그룹 생성 버튼 */}
                         <button
-                            onClick={() => setIsCreateModalOpen(true)}
+                            type='button'
+                            onClick={openCreateRecipeGroupOverlay}
                             className='flex items-center gap-2 h-9 px-3 rounded-lg bg-[#ff6900] text-white text-sm font-medium transition-colors hover:bg-orange-600'
                         >
                             <PlusSimpleIcon className='w-4 h-4 text-white' />
@@ -136,153 +93,161 @@ const RecipeGroupList = () => {
                     </div>
                 </div>
 
-                {/* 테이블 카드 */}
                 <div className='bg-white border border-[#e5e7eb] rounded-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] overflow-hidden'>
-                    {/* 검색 영역 */}
-                    <div className='px-4 py-4 border-b border-[#e5e7eb]'>
-                        <div className='relative'>
-                            <span className='absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#717182] flex items-center justify-center w-4 h-4'>
-                                <SearchIcon className='w-full h-full' />
-                            </span>
-                            <input
-                                type='text'
-                                placeholder='그룹명으로 검색...'
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className='w-full h-9 pl-10 pr-3 py-1 bg-[#f3f3f5] rounded-lg text-sm text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:bg-white transition-colors'
-                            />
-                        </div>
+                    <div className='border-b border-[#e5e7eb] px-4 py-4'>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                applySearchFilter();
+                            }}
+                            className='flex gap-2'
+                        >
+                            <div className='relative min-w-0 flex-1'>
+                                <span className='pointer-events-none absolute left-3 top-1/2 flex h-4 w-4 -translate-y-1/2 items-center justify-center text-[#717182]'>
+                                    <SearchIcon className='h-full w-full' />
+                                </span>
+                                <input
+                                    ref={inputRef}
+                                    type='search'
+                                    placeholder='그룹명으로 검색...'
+                                    className='w-full h-10 pl-10 pr-4 py-1 bg-[#f3f3f5] rounded-xl text-[14px] text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:bg-white transition-all'
+                                />
+                            </div>
+                            <button
+                                type='submit'
+                                className='flex shrink-0 items-center gap-1.5 rounded-lg border border-[#e5e7eb] bg-white px-4 text-sm font-medium text-[#364153] transition-colors hover:bg-gray-50'
+                            >
+                                <SearchIcon className='h-4 w-4 text-[#99a1af]' />
+                                검색
+                            </button>
+                        </form>
                     </div>
 
-                    {/* 테이블 */}
-                    <div className='overflow-x-auto'>
-                        <table className='w-full min-w-[900px]'>
-                            <thead>
-                                <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[170px]'>
-                                        그룹 아이디
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
-                                        그룹명
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
-                                        레시피
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[130px]'>
-                                        노출여부
-                                    </th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[130px]'>
-                                        생성일
-                                    </th>
-                                    <th className='px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282] w-[100px]'>
-                                        작업
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredData.length === 0 ? (
-                                    <tr>
-                                        <td
-                                            colSpan={6}
-                                            className='px-6 py-12 text-center text-sm text-[#6a7282]'
-                                        >
-                                            검색 결과가 없습니다.
-                                        </td>
+                    <LoadingWrapper
+                        isLoading={isRecipeExposureGroupsLoading}
+                        containerStyle={{ minHeight: '50vh' }}
+                    >
+                        <div className='overflow-x-auto'>
+                            <table className='w-full min-w-[900px]'>
+                                <thead>
+                                    <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[170px]'>
+                                            그룹 아이디
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                            그룹명
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[120px]'>
+                                            레시피 수
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[130px]'>
+                                            노출여부
+                                        </th>
+                                        <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[130px]'>
+                                            생성일
+                                        </th>
+                                        <th className='px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282] w-[100px]'>
+                                            작업
+                                        </th>
                                     </tr>
-                                ) : (
-                                    filteredData.map((item, idx) => (
-                                        <tr
-                                            key={`${item.id}-${idx}`}
-                                            className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors'
-                                        >
-                                            {/* 그룹 아이디 */}
-                                            <td className='px-6 py-5'>
-                                                <span className='inline-block font-mono text-sm font-medium text-[#6a7282]'>
-                                                    {item.id}
-                                                </span>
-                                            </td>
-
-                                            {/* 그룹명 */}
-                                            <td className='px-6 py-5'>
-                                                <div className='flex flex-col gap-1'>
-                                                    <Link
-                                                        to={PATHS.APP.RECIPE_GROUP.DETAIL.replace(
-                                                            ':sno',
-                                                            item.id,
-                                                        )}
-                                                        className='text-[15px] font-semibold text-[#ff6900] hover:underline'
-                                                    >
-                                                        {item.groupName}
-                                                    </Link>
-                                                    <span className='text-xs font-normal text-[#6a7282]'>
-                                                        {item.description}
-                                                    </span>
-                                                </div>
-                                            </td>
-
-                                            {/* 레시피 */}
-                                            <td className='px-6 py-5'>
-                                                <span className='text-sm font-medium text-[#364153]'>
-                                                    {item.recipeName}
-                                                </span>
-                                            </td>
-
-                                            {/* 노출여부 */}
-                                            <td className='px-6 py-5'>
-                                                <StatusBadge
-                                                    status={item.status}
-                                                />
-                                            </td>
-
-                                            {/* 생성일 */}
-                                            <td className='px-6 py-5'>
-                                                <span className='text-sm font-normal text-[#6a7282]'>
-                                                    {item.createdAt}
-                                                </span>
-                                            </td>
-
-                                            {/* 작업 버튼 */}
-                                            <td className='px-6 py-5 text-right'>
-                                                <div className='flex items-center justify-end gap-2'>
-                                                    {/* 수정 버튼 */}
-                                                    <button
-                                                        className='flex items-center justify-center w-8 h-8 rounded-lg text-[#364153] hover:bg-gray-100 transition-colors'
-                                                        aria-label='수정'
-                                                    >
-                                                        <PencilSimpleIcon className='w-4 h-4 text-[#364153]' />
-                                                    </button>
-
-                                                    {/* 삭제 버튼 */}
-                                                    <button
-                                                        className='flex items-center justify-center w-8 h-8 rounded-lg text-[#f54900] hover:bg-red-50 transition-colors'
-                                                        aria-label='삭제'
-                                                    >
-                                                        <TrashSimpleIcon className='w-4 h-4 text-[#f54900]' />
-                                                    </button>
-                                                </div>
+                                </thead>
+                                <tbody>
+                                    {isEmpty(recipeExposureGroupList) ? (
+                                        <tr>
+                                            <td
+                                                colSpan={6}
+                                                className='px-6 py-12 text-center text-sm text-[#6a7282]'
+                                            >
+                                                {groupNameKeyword !== ''
+                                                    ? '검색 결과가 없습니다.'
+                                                    : '등록된 레시피 그룹이 없습니다.'}
                                             </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                    ) : (
+                                        recipeExposureGroupList.map((item) => (
+                                            <tr
+                                                key={item.sno}
+                                                className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors'
+                                            >
+                                                <td className='px-6 py-5'>
+                                                    <div className='flex flex-col gap-0.5'>
+                                                        <span className='inline-block font-mono text-sm font-medium text-[#6a7282]'>
+                                                            {
+                                                                item.exposureLocation
+                                                            }
+                                                        </span>
+                                                        <span className='text-xs font-normal text-[#99a1af]'>
+                                                            sno {item.sno}
+                                                        </span>
+                                                    </div>
+                                                </td>
+
+                                                <td className='px-6 py-5'>
+                                                    <div className='flex flex-col gap-1'>
+                                                        <Link
+                                                            to={PATHS.APP.RECIPE_GROUP.DETAIL.replace(
+                                                                ':sno',
+                                                                item.sno.toString(),
+                                                            )}
+                                                            className='text-[15px] font-semibold text-[#ff6900] hover:underline'
+                                                        >
+                                                            {item.groupName}
+                                                        </Link>
+                                                        <span className='text-xs font-normal text-[#6a7282]'>
+                                                            {item.description}
+                                                        </span>
+                                                    </div>
+                                                </td>
+
+                                                <td className='px-6 py-5'>
+                                                    <span className='text-sm font-medium text-[#364153]'>
+                                                        {item.recipeCount.toLocaleString()}
+                                                        개
+                                                    </span>
+                                                </td>
+
+                                                <td className='px-6 py-5'>
+                                                    <DisplayVisibilityBadge
+                                                        isVisible={
+                                                            item.isDisplay
+                                                        }
+                                                    />
+                                                </td>
+
+                                                <td className='px-6 py-5'>
+                                                    <span className='text-sm font-normal text-[#6a7282]'>
+                                                        —
+                                                    </span>
+                                                </td>
+
+                                                <td className='px-6 py-5 text-right'>
+                                                    <div className='flex items-center justify-end gap-2'>
+                                                        <button
+                                                            type='button'
+                                                            className='flex h-8 w-8 items-center justify-center rounded-lg text-[#364153] transition-colors hover:bg-gray-100'
+                                                            aria-label='수정'
+                                                        >
+                                                            <PencilSimpleIcon className='h-4 w-4 text-[#364153]' />
+                                                        </button>
+
+                                                        <button
+                                                            type='button'
+                                                            className='flex h-8 w-8 items-center justify-center rounded-lg text-[#f54900] transition-colors hover:bg-red-50'
+                                                            aria-label='삭제'
+                                                        >
+                                                            <TrashSimpleIcon className='h-4 w-4 text-[#f54900]' />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </LoadingWrapper>
                 </div>
             </div>
-
-            {/* 순서 관리 모달 */}
-            <RecipeOrderManagementModal
-                isOpen={isOrderModalOpen}
-                close={() => setIsOrderModalOpen(false)}
-                unmount={() => setIsOrderModalOpen(false)}
-            />
-
-            {/* 그룹 생성 모달 */}
-            <CreateRecipeGroupModal
-                isOpen={isCreateModalOpen}
-                close={() => setIsCreateModalOpen(false)}
-                unmount={() => setIsCreateModalOpen(false)}
-            />
         </>
     );
 };

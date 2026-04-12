@@ -5,6 +5,7 @@ import { Link, useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
 import CreateUserRecipeModal from '@/components/modal/create-user-recipe';
+import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import { PATHS } from '@/const/paths';
 import { useSearchRecipeList } from '@/hooks/query/recipe';
@@ -15,26 +16,6 @@ import { ReactComponent as ChevronRightSmallIcon } from '@/icons/chevron-right-s
 import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
-
-const SourceBadge = ({ source }: { source: string }) => {
-    if (source === 'YOUTUBE') {
-        return (
-            <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#ffe2e2] text-[#9f0712]'>
-                YouTube
-            </span>
-        );
-    }
-
-    if (source === 'INSTAGRAM') {
-        return (
-            <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#fce7f3] text-[#a3004c]'>
-                Instagram
-            </span>
-        );
-    }
-
-    return null;
-};
 
 const UserRecipeList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -96,11 +77,12 @@ const UserRecipeList = () => {
                     </button>
                 </div>
 
-                {/* 테이블 카드 */}
                 <div className='bg-white border border-[#e5e7eb] rounded-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] overflow-hidden'>
-                    {/* 검색 영역 */}
                     <div className='px-4 py-4 border-b border-[#e5e7eb]'>
-                        <form onSubmit={setQuery} className='relative'>
+                        <form
+                            onSubmit={setQuery}
+                            className='relative flex gap-2'
+                        >
                             <span className='absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#717182] flex items-center justify-center w-4 h-4'>
                                 <SearchIcon className='w-full h-full' />
                             </span>
@@ -111,6 +93,13 @@ const UserRecipeList = () => {
                                 ref={inputRef}
                                 className='w-full h-10 pl-10 pr-4 py-1 bg-[#f3f3f5] rounded-xl text-[14px] text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:bg-white transition-all'
                             />
+                            <button
+                                type='submit'
+                                className='flex shrink-0 items-center gap-1.5 rounded-lg border border-[#e5e7eb] bg-white px-4 text-sm font-medium text-[#364153] transition-colors hover:bg-gray-50'
+                            >
+                                <SearchIcon className='h-4 w-4 text-[#99a1af]' />
+                                검색
+                            </button>
                         </form>
                     </div>
 
@@ -192,7 +181,7 @@ const UserRecipeList = () => {
                                                     {item.authorName}
                                                 </td>
                                                 <td className='px-6 py-6'>
-                                                    <SourceBadge
+                                                    <RecipeSourceBadge
                                                         source={item.sourceType}
                                                     />
                                                 </td>

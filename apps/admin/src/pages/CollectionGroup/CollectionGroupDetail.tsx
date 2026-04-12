@@ -46,9 +46,33 @@ const MOCK_DETAIL: Record<string, CollectionGroupDetailData> = {
         collectionAuthor: 'user123',
         collectionId: 'col_001',
         recipes: [
-            { id: 'r1', emoji: '🍲', title: '10분만에 완성! 김치찌개 황금 레시피', author: '요리왕김치', source: 'YouTube', views: 12500, likes: 890 },
-            { id: 'r2', emoji: '🍳', title: '폭신폭신 계란말이 만들기', author: '쿡스타그램', source: 'Instagram', views: 8900, likes: 650 },
-            { id: 'r3', emoji: '🥘', title: '집밥 된장찌개 레시피', author: '엄마손요리', source: 'YouTube', views: 15200, likes: 1100 },
+            {
+                id: 'r1',
+                emoji: '🍲',
+                title: '10분만에 완성! 김치찌개 황금 레시피',
+                author: '요리왕김치',
+                source: 'YouTube',
+                views: 12500,
+                likes: 890,
+            },
+            {
+                id: 'r2',
+                emoji: '🍳',
+                title: '폭신폭신 계란말이 만들기',
+                author: '쿡스타그램',
+                source: 'Instagram',
+                views: 8900,
+                likes: 650,
+            },
+            {
+                id: 'r3',
+                emoji: '🥘',
+                title: '집밥 된장찌개 레시피',
+                author: '엄마손요리',
+                source: 'YouTube',
+                views: 15200,
+                likes: 1100,
+            },
         ],
     },
     collection_group_2: {
@@ -61,7 +85,15 @@ const MOCK_DETAIL: Record<string, CollectionGroupDetailData> = {
         collectionAuthor: 'user456',
         collectionId: 'col_002',
         recipes: [
-            { id: 'r4', emoji: '🌿', title: '향긋한 봄나물 비빔밥', author: '나물요리사', source: 'YouTube', views: 9800, likes: 720 },
+            {
+                id: 'r4',
+                emoji: '🌿',
+                title: '향긋한 봄나물 비빔밥',
+                author: '나물요리사',
+                source: 'YouTube',
+                views: 9800,
+                likes: 720,
+            },
         ],
     },
     collection_group_3: {
@@ -74,7 +106,15 @@ const MOCK_DETAIL: Record<string, CollectionGroupDetailData> = {
         collectionAuthor: 'user789',
         collectionId: 'col_003',
         recipes: [
-            { id: 'r5', emoji: '🥗', title: '저칼로리 닭가슴살 샐러드', author: '헬스쿡', source: 'Instagram', views: 21000, likes: 1800 },
+            {
+                id: 'r5',
+                emoji: '🥗',
+                title: '저칼로리 닭가슴살 샐러드',
+                author: '헬스쿡',
+                source: 'Instagram',
+                views: 21000,
+                likes: 1800,
+            },
         ],
     },
 };
@@ -97,7 +137,7 @@ const SourceBadge = ({ source }: { source: RecipeSource }) => {
             Instagram
         </span>
     );
-}
+};
 
 // ─────────────────────────────────────────────
 // 노출 상태 배지
@@ -116,7 +156,7 @@ const VisibilityBadge = ({ isVisible }: { isVisible: boolean }) => {
             숨김
         </span>
     );
-}
+};
 
 // ─────────────────────────────────────────────
 // 외부 링크 버튼
@@ -127,7 +167,7 @@ const ExternalLinkButton = () => {
             <ExternalLinkIcon className='w-4 h-4' />
         </button>
     );
-}
+};
 
 // ─────────────────────────────────────────────
 // 메인 컴포넌트
@@ -139,7 +179,9 @@ const CollectionGroupDetail = () => {
     if (!detail) {
         return (
             <div className='flex-1 p-6 flex items-center justify-center'>
-                <p className='text-sm text-[#6a7282]'>컬렉션 그룹을 찾을 수 없습니다.</p>
+                <p className='text-sm text-[#6a7282]'>
+                    컬렉션 그룹을 찾을 수 없습니다.
+                </p>
             </div>
         );
     }
@@ -171,7 +213,9 @@ const CollectionGroupDetail = () => {
                     <div className='grid grid-cols-2 gap-x-6 gap-y-6'>
                         {/* 그룹 아이디 */}
                         <div className='flex flex-col gap-1.5'>
-                            <span className='text-xs font-normal text-[#6a7282]'>그룹 아이디</span>
+                            <span className='text-xs font-normal text-[#6a7282]'>
+                                그룹 아이디
+                            </span>
                             <span className='inline-block w-fit bg-[#f3f4f6] rounded-lg px-2.5 py-1 font-mono text-xs text-[#364153]'>
                                 {detail.groupId}
                             </span>
@@ -179,25 +223,39 @@ const CollectionGroupDetail = () => {
 
                         {/* 그룹명 */}
                         <div className='flex flex-col gap-1.5'>
-                            <span className='text-xs font-normal text-[#6a7282]'>그룹명</span>
-                            <span className='text-sm font-medium text-[#101828]'>{detail.groupName}</span>
+                            <span className='text-xs font-normal text-[#6a7282]'>
+                                그룹명
+                            </span>
+                            <span className='text-sm font-medium text-[#101828]'>
+                                {detail.groupName}
+                            </span>
                         </div>
 
                         {/* 설명 */}
                         <div className='flex flex-col gap-1.5'>
-                            <span className='text-xs font-normal text-[#6a7282]'>설명</span>
-                            <span className='text-sm font-normal text-[#364153]'>{detail.description}</span>
+                            <span className='text-xs font-normal text-[#6a7282]'>
+                                설명
+                            </span>
+                            <span className='text-sm font-normal text-[#364153]'>
+                                {detail.description}
+                            </span>
                         </div>
 
                         {/* 노출 상태 + 생성일 */}
                         <div className='flex items-start gap-6'>
                             <div className='flex flex-col gap-1.5'>
-                                <span className='text-xs font-normal text-[#6a7282]'>노출 상태</span>
+                                <span className='text-xs font-normal text-[#6a7282]'>
+                                    노출 상태
+                                </span>
                                 <VisibilityBadge isVisible={detail.isVisible} />
                             </div>
                             <div className='flex flex-col gap-1.5'>
-                                <span className='text-xs font-normal text-[#6a7282]'>생성일</span>
-                                <span className='text-sm font-normal text-[#364153]'>{detail.createdAt}</span>
+                                <span className='text-xs font-normal text-[#6a7282]'>
+                                    생성일
+                                </span>
+                                <span className='text-sm font-normal text-[#364153]'>
+                                    {detail.createdAt}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -205,23 +263,37 @@ const CollectionGroupDetail = () => {
 
                 {/* 컬렉션 정보 카드 */}
                 <div className='bg-white border border-[#e5e7eb] rounded-2xl shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] px-6 pt-5 pb-5 flex flex-col gap-4'>
-                    <h2 className='text-sm font-semibold text-[#101828]'>컬렉션 정보</h2>
+                    <h2 className='text-sm font-semibold text-[#101828]'>
+                        컬렉션 정보
+                    </h2>
                     <div className='bg-[#fff7ed] border border-[#ffd6a8] rounded-xl px-4 pt-4 pb-4'>
                         <div className='grid grid-cols-2 gap-x-6 gap-y-4'>
                             {/* 컬렉션명 */}
                             <div className='flex flex-col gap-1'>
-                                <span className='text-xs font-normal text-[#6a7282]'>컬렉션명</span>
-                                <span className='text-sm font-medium text-[#101828]'>{detail.collectionName}</span>
+                                <span className='text-xs font-normal text-[#6a7282]'>
+                                    컬렉션명
+                                </span>
+                                <span className='text-sm font-medium text-[#101828]'>
+                                    {detail.collectionName}
+                                </span>
                             </div>
                             {/* 작성자 */}
                             <div className='flex flex-col gap-1'>
-                                <span className='text-xs font-normal text-[#6a7282]'>작성자</span>
-                                <span className='text-sm font-medium text-[#101828]'>{detail.collectionAuthor}</span>
+                                <span className='text-xs font-normal text-[#6a7282]'>
+                                    작성자
+                                </span>
+                                <span className='text-sm font-medium text-[#101828]'>
+                                    {detail.collectionAuthor}
+                                </span>
                             </div>
                             {/* 컬렉션 아이디 */}
                             <div className='flex flex-col gap-1'>
-                                <span className='text-xs font-normal text-[#6a7282]'>컬렉션 아이디</span>
-                                <span className='font-mono text-xs text-[#364153]'>{detail.collectionId}</span>
+                                <span className='text-xs font-normal text-[#6a7282]'>
+                                    컬렉션 아이디
+                                </span>
+                                <span className='font-mono text-xs text-[#364153]'>
+                                    {detail.collectionId}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -241,20 +313,36 @@ const CollectionGroupDetail = () => {
                         <table className='w-full'>
                             <thead>
                                 <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[90px]'>썸네일</th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>제목</th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>작성자</th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>소스</th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[110px]'>조회수</th>
-                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[100px]'>좋아요</th>
-                                    <th className='px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282] w-[80px]'>작업</th>
+                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[90px]'>
+                                        썸네일
+                                    </th>
+                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282]'>
+                                        제목
+                                    </th>
+                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                        작성자
+                                    </th>
+                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[150px]'>
+                                        소스
+                                    </th>
+                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[110px]'>
+                                        조회수
+                                    </th>
+                                    <th className='px-6 py-3 text-left text-xs font-medium uppercase text-[#6a7282] w-[100px]'>
+                                        좋아요
+                                    </th>
+                                    <th className='px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282] w-[80px]'>
+                                        작업
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {detail.recipes.map((recipe, idx) => (
                                     <tr
                                         key={recipe.id}
-                                        className={`border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors ${idx % 2 === 0 ? '' : ''}`}
+                                        className={`border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors ${
+                                            idx % 2 === 0 ? '' : ''
+                                        }`}
                                     >
                                         {/* 썸네일 */}
                                         <td className='px-6 py-4'>
@@ -279,7 +367,9 @@ const CollectionGroupDetail = () => {
 
                                         {/* 소스 */}
                                         <td className='px-6 py-4'>
-                                            <SourceBadge source={recipe.source} />
+                                            <SourceBadge
+                                                source={recipe.source}
+                                            />
                                         </td>
 
                                         {/* 조회수 */}

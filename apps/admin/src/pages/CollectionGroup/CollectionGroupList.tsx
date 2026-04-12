@@ -88,7 +88,7 @@ const StatusBadge = ({ status }: { status: CollectionGroupStatus }) => {
             숨김
         </span>
     );
-}
+};
 
 const CollectionGroupList = () => {
     const [searchQuery, setSearchQuery] = useState('');

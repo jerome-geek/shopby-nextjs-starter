@@ -122,7 +122,7 @@ const SourceBadge = ({ source }: { source: RecipeSource }) => {
             Instagram
         </span>
     );
-}
+};
 
 // ─────────────────────────────────────────────
 // 노출 상태 배지
@@ -141,7 +141,7 @@ const VisibilityBadge = ({ isVisible }: { isVisible: boolean }) => {
             비노출
         </span>
     );
-}
+};
 
 // ─────────────────────────────────────────────
 // 외부 링크 버튼
@@ -152,7 +152,7 @@ const ExternalLinkButton = () => {
             <ExternalLinkIcon className='w-4 h-4' />
         </button>
     );
-}
+};
 
 // ─────────────────────────────────────────────
 // 메인 컴포넌트

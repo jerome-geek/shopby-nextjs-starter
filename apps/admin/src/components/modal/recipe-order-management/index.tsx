@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { motion, Reorder, useDragControls } from 'motion/react';
 
-import { Modal } from '@/components/ui/modal';
+import { ModalLayout } from '@/layout/modal';
 import { ReactComponent as DragHandleIcon } from '@/icons/drag-handle.svg?react';
 import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
-import { ReactComponent as CloseThickIcon } from '@/icons/close-thick.svg?react';
 import { ReactComponent as ChevronDownSimpleIcon } from '@/icons/chevron-down-simple.svg?react';
 
 interface RecipeOrderItem {
@@ -92,7 +91,7 @@ const ReorderItem = ({
             value={item}
             dragListener={false}
             dragControls={dragControls}
-            className='flex items-center gap-2 bg-white border border-[#e5e7eb] rounded-lg px-3 py-2.5 cursor-default mt-2'
+            className='mt-2 flex cursor-default items-center gap-2 rounded-lg border border-[#e5e7eb] bg-white px-3 py-2.5'
             style={{ listStyle: 'none' }}
             animate={{
                 scale: 1,
@@ -108,12 +107,11 @@ const ReorderItem = ({
             transition={{ duration: 0.2 }}
             layout
         >
-            {/* 드래그 핸들 - 이 영역에서만 드래그 가능 */}
             <span
-                className='shrink-0 cursor-grab active:cursor-grabbing text-[#99a1af] touch-none'
+                className='shrink-0 cursor-grab touch-none text-[#99a1af] active:cursor-grabbing'
                 onPointerDown={(e) => dragControls.start(e)}
             >
-                <DragHandleIcon className='w-4 h-4' />
+                <DragHandleIcon className='h-4 w-4' />
             </span>
 
             <motion.span
@@ -121,49 +119,49 @@ const ReorderItem = ({
                 initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.2 }}
-                className='shrink-0 w-5 text-sm font-medium text-[#6a7282] text-center'
+                className='w-5 shrink-0 text-center text-sm font-medium text-[#6a7282]'
             >
                 {index + 1}
             </motion.span>
 
-            {/* 그룹명 + 레시피명 */}
-            <div className='flex-1 min-w-0'>
-                <p className='text-sm font-medium text-[#101828] truncate leading-5'>
+            <div className='min-w-0 flex-1'>
+                <p className='truncate text-sm font-medium leading-5 text-[#101828]'>
                     {item.groupName}
                 </p>
-                <p className='text-xs font-normal text-[#6a7282] truncate leading-4'>
+                <p className='truncate text-xs font-normal leading-4 text-[#6a7282]'>
                     {item.recipeName}
                 </p>
             </div>
 
-            {/* 위/아래 버튼 */}
-            <div className='flex items-center gap-1 shrink-0'>
+            <div className='flex shrink-0 items-center gap-1'>
                 <motion.button
+                    type='button'
                     onClick={() =>
                         index > 0 && onMove(groupId, index, index - 1)
                     }
                     disabled={index === 0}
-                    className='flex items-center justify-center w-7 h-7 rounded bg-[#f3f4f6] hover:bg-[#e5e7eb] disabled:opacity-30 disabled:cursor-not-allowed transition-colors'
+                    className='flex h-7 w-7 items-center justify-center rounded bg-[#f3f4f6] transition-colors hover:bg-[#e5e7eb] disabled:cursor-not-allowed disabled:opacity-30'
                     aria-label='위로'
                     whileTap={index > 0 ? { scale: 0.85 } : {}}
                 >
-                    <ArrowUpSimpleIcon className='w-4 h-4' />
+                    <ArrowUpSimpleIcon className='h-4 w-4' />
                 </motion.button>
                 <motion.button
+                    type='button'
                     onClick={() =>
                         index < total - 1 && onMove(groupId, index, index + 1)
                     }
                     disabled={index === total - 1}
-                    className='flex items-center justify-center w-7 h-7 rounded bg-[#f3f4f6] hover:bg-[#e5e7eb] disabled:opacity-30 disabled:cursor-not-allowed transition-colors'
+                    className='flex h-7 w-7 items-center justify-center rounded bg-[#f3f4f6] transition-colors hover:bg-[#e5e7eb] disabled:cursor-not-allowed disabled:opacity-30'
                     aria-label='아래로'
                     whileTap={index < total - 1 ? { scale: 0.85 } : {}}
                 >
-                    <ArrowDownSimpleIcon className='w-4 h-4' />
+                    <ArrowDownSimpleIcon className='h-4 w-4' />
                 </motion.button>
             </div>
         </Reorder.Item>
     );
-}
+};
 
 interface RecipeOrderManagementModalProps {
     isOpen: boolean;
@@ -172,13 +170,15 @@ interface RecipeOrderManagementModalProps {
 }
 
 const RecipeOrderManagementModal = ({
-    isOpen,
     close,
-    unmount,
+    ...props
 }: RecipeOrderManagementModalProps) => {
     const [selectedGroupId, setSelectedGroupId] = useState<string>('all');
-    const [orderData, setOrderData] = useState<RecipeGroupOrderData[]>(
-        RECIPE_GROUP_ORDER_DATA,
+    const [orderData, setOrderData] = useState<RecipeGroupOrderData[]>(() =>
+        RECIPE_GROUP_ORDER_DATA.map((g) => ({
+            ...g,
+            items: [...g.items],
+        })),
     );
 
     const displayedGroups =
@@ -208,45 +208,57 @@ const RecipeOrderManagementModal = ({
         );
     };
 
-    return (
-        <Modal
-            isOpen={isOpen}
-            close={close}
-            unmount={unmount}
-            showCloseButton={false}
-            className='max-w-[520px] w-full mx-4 shadow-xl rounded-2xl overflow-hidden'
-        >
-            <div className='flex flex-col'>
-                {/* 헤더 */}
-                <div className='flex items-start justify-between px-6 pt-6 pb-3'>
-                    <div className='flex flex-col gap-1'>
-                        <h3 className='text-base font-semibold text-[#101828] leading-6'>
-                            노출 순서 관리
-                        </h3>
-                        <p className='text-xs font-normal text-[#6a7282] leading-5'>
-                            같은 그룹 아이디 내에서 레시피의 노출 순서를 변경할
-                            수 있습니다.
-                        </p>
-                    </div>
-                    <button
-                        onClick={close}
-                        className='ml-4 shrink-0 flex items-center justify-center w-6 h-6 text-[#6a7282] hover:text-[#101828] transition-colors'
-                        aria-label='닫기'
-                    >
-                        <CloseThickIcon className='w-4 h-4 text-inherit' />
-                    </button>
-                </div>
+    const handleClose = () => {
+        setSelectedGroupId('all');
+        setOrderData(
+            RECIPE_GROUP_ORDER_DATA.map((g) => ({
+                ...g,
+                items: [...g.items],
+            })),
+        );
+        close();
+    };
 
-                {/* 그룹 아이디 선택 */}
-                <div className='px-6 pb-4'>
-                    <label className='block text-xs font-medium text-[#364153] mb-1.5'>
+    const handleSave = () => {
+        // TODO: API 연동 시 순서 저장
+        handleClose();
+    };
+
+    return (
+        <ModalLayout
+            {...props}
+            close={close}
+            title='노출 순서 관리'
+            subtitle='같은 그룹 아이디 내에서 레시피의 노출 순서를 변경할 수 있습니다.'
+            footer={
+                <>
+                    <button
+                        type='button'
+                        onClick={handleClose}
+                        className='h-9 rounded-lg border border-[#e5e7eb] bg-white px-4 text-sm font-medium text-[#364153] transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'
+                    >
+                        닫기
+                    </button>
+                    <button
+                        type='button'
+                        onClick={handleSave}
+                        className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600'
+                    >
+                        저장
+                    </button>
+                </>
+            }
+        >
+            <div className='flex flex-col gap-4'>
+                <div>
+                    <label className='mb-1.5 block text-xs font-medium text-[#364153]'>
                         그룹 아이디 선택
                     </label>
                     <div className='relative'>
                         <select
                             value={selectedGroupId}
                             onChange={(e) => setSelectedGroupId(e.target.value)}
-                            className='w-full h-9 pl-3 pr-8 bg-white border border-[#e5e7eb] rounded-lg text-sm text-[#101828] appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:border-[#ff6900] transition-colors cursor-pointer'
+                            className='h-9 w-full cursor-pointer appearance-none rounded-lg border border-[#e5e7eb] bg-white pl-3 pr-8 text-sm text-[#101828] transition-colors focus:border-[#ff6900] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20'
                         >
                             {SELECT_OPTIONS.map((opt) => (
                                 <option key={opt.value} value={opt.value}>
@@ -255,21 +267,19 @@ const RecipeOrderManagementModal = ({
                             ))}
                         </select>
                         <span className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6a7282]'>
-                            <ChevronDownSimpleIcon className='w-3.5 h-3.5' />
+                            <ChevronDownSimpleIcon className='h-3.5 w-3.5' />
                         </span>
                     </div>
                 </div>
 
-                {/* 그룹 목록 */}
-                <div className='px-6 pb-6 pt-2 flex flex-col gap-6 max-h-[400px] overflow-y-auto'>
+                <div className='flex max-h-[380px] flex-col gap-6 overflow-y-auto pt-1'>
                     {displayedGroups.map((group) => (
                         <div
                             key={group.groupId}
-                            className='border border-[#e5e7eb] rounded-xl p-4'
+                            className='rounded-xl border border-[#e5e7eb] p-4'
                         >
-                            {/* 그룹 아이디 헤더 */}
-                            <div className='flex items-center gap-2 mb-2'>
-                                <span className='font-mono text-xs font-medium text-[#364153] bg-[#f3f4f6] px-2 py-0.5 rounded'>
+                            <div className='mb-2 flex items-center gap-2'>
+                                <span className='rounded bg-[#f3f4f6] px-2 py-0.5 font-mono text-xs font-medium text-[#364153]'>
                                     {group.groupId}
                                 </span>
                                 <span className='text-xs font-medium text-[#6a7282]'>
@@ -304,25 +314,9 @@ const RecipeOrderManagementModal = ({
                         </div>
                     ))}
                 </div>
-
-                {/* 하단 버튼 */}
-                <div className='flex items-center justify-end gap-2 px-6 py-4 border-t border-[#e5e7eb]'>
-                    <button
-                        onClick={close}
-                        className='h-9 px-4 rounded-lg border border-[#e5e7eb] bg-white text-sm font-medium text-[#364153] hover:bg-gray-50 transition-colors'
-                    >
-                        닫기
-                    </button>
-                    <button
-                        onClick={close}
-                        className='h-9 px-4 rounded-lg bg-[#ff6900] text-white text-sm font-medium hover:bg-orange-600 transition-colors'
-                    >
-                        저장
-                    </button>
-                </div>
             </div>
-        </Modal>
+        </ModalLayout>
     );
-}
+};
 
 export default RecipeOrderManagementModal;
