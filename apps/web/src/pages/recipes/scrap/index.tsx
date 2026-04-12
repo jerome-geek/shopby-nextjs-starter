@@ -1,13 +1,4 @@
-import {
-    ArrowUp,
-    Bookmark,
-    ChevronRight,
-    Clock,
-    LayoutGrid,
-    List,
-    Plus,
-    Users,
-} from 'lucide-react';
+import { ArrowUp, Bookmark, ChevronRight, Plus } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -15,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 
 import { CSRLayout } from '@/components/layout';
 import { RecipeCollectionCreateModal } from '@/components/modal';
-import { RecipeGridSection } from '@/components/recipe/RecipeGridSection';
+import { RecipeGridSection } from '@/components/recipe/grid-section';
+import { useCustomDialog } from '@/hooks/ui';
+import { ScrapFavoriteContent } from '@/pages/recipes/scrap/components/scrap-favorite-content';
 import * as styles from '@/pages/recipes/scrap/index.css';
 import { vars } from '@/styles/theme.css';
-import { useCustomDialog } from '@/hooks/ui';
 
 /* --- Mock Data --- */
 const MOCK_COLLECTIONS = [
@@ -436,7 +428,7 @@ const ScrapAllContent = () => {
             />
 
             {/* 레시피 섹션 */}
-            <RecipeGridSection title='레시피' recipes={MOCK_RECIPES} />
+            <RecipeGridSection title='레시피' />
         </motion.div>
     );
 };
@@ -446,307 +438,12 @@ const ScrapAllContent = () => {
  */
 const ScrapDetailContent = ({ tabId }: { tabId: TabId }) => {
     const { t } = useTranslation();
-    const [viewMode, setViewMode] = React.useState<'grid' | 'details'>(
-        'details',
-    );
-
-    if (tabId === 'favorite') {
-        return (
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className={styles.detailContainer}
-            >
-                <div className={styles.detailHeader}>
-                    <div className={styles.detailTitleArea}>
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                            }}
-                        >
-                            <h2 className={styles.detailTitle}>
-                                {t('내가 좋아하는 레시피')}
-                            </h2>
-                            <button
-                                type='button'
-                                style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    padding: '4px',
-                                }}
-                            >
-                                <Plus
-                                    size={18}
-                                    style={{
-                                        transform: 'rotate(45deg)',
-                                        color: vars.color.gray['40'],
-                                    }}
-                                />
-                            </button>
-                        </div>
-
-                        <p className={styles.detailSubtitle}>
-                            제가 좋아하지만 누구에게나 추천합니다 즐거운 식사
-                            합시다
-                        </p>
-
-                        <p className={styles.detailMeta}>By 나 · 6개</p>
-                    </div>
-
-                    <div className={styles.viewToggle}>
-                        <button
-                            className={styles.toggleItem}
-                            data-active={viewMode === 'details'}
-                            onClick={() => setViewMode('details')}
-                        >
-                            <List
-                                size={20}
-                                color={
-                                    viewMode === 'details'
-                                        ? vars.color.black
-                                        : vars.color.gray['30']
-                                }
-                            />
-                        </button>
-                        <button
-                            className={styles.toggleItem}
-                            data-active={viewMode === 'grid'}
-                            onClick={() => setViewMode('grid')}
-                        >
-                            <LayoutGrid
-                                size={20}
-                                color={
-                                    viewMode === 'grid'
-                                        ? vars.color.black
-                                        : vars.color.gray['30']
-                                }
-                            />
-                        </button>
-                    </div>
-                </div>
-
-                <div
-                    className={
-                        viewMode === 'grid'
-                            ? styles.recipeGrid
-                            : styles.recipeDetailGrid
-                    }
-                >
-                    {MOCK_RECIPES.map((r) => (
-                        <motion.div
-                            key={r.id}
-                            className={
-                                viewMode === 'grid'
-                                    ? ''
-                                    : styles.recipeDetailCard
-                            }
-                            whileHover={{ y: -4 }}
-                        >
-                            {viewMode === 'grid' ? (
-                                <>
-                                    <div className={styles.recipeImgArea}>
-                                        <img
-                                            src={r.img}
-                                            className={styles.productImg}
-                                            alt={r.title}
-                                        />
-                                        <div
-                                            style={{
-                                                position: 'absolute',
-                                                top: '12px',
-                                                right: '12px',
-                                            }}
-                                        >
-                                            <Bookmark
-                                                size={20}
-                                                fill='white'
-                                                color='white'
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className={styles.productInfo}>
-                                        <h3
-                                            className={styles.productName}
-                                            style={{ fontWeight: 600 }}
-                                        >
-                                            {r.title}
-                                        </h3>
-                                        <span className={styles.brandName}>
-                                            {r.author}
-                                        </span>
-                                        <div className={styles.recipeMeta}>
-                                            <span className={styles.iconText}>
-                                                <Clock size={12} /> {r.time}
-                                            </span>
-                                            <span className={styles.iconText}>
-                                                <Users size={12} /> {r.servings}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className={styles.cardContent}>
-                                    <div className={styles.cardHeader}>
-                                        <div className={styles.cardTitleArea}>
-                                            <h3
-                                                className={
-                                                    styles.recipeDetailTitle
-                                                }
-                                            >
-                                                {r.title}
-                                            </h3>
-                                            <span
-                                                className={
-                                                    styles.recipeDetailAuthor
-                                                }
-                                            >
-                                                {r.author}
-                                            </span>
-                                        </div>
-                                        <Bookmark
-                                            size={20}
-                                            fill='#4a5d45'
-                                            color='#4a5d45'
-                                        />
-                                    </div>
-
-                                    <div className={styles.recipeDetailMeta}>
-                                        <span className={styles.iconText}>
-                                            <Clock size={14} /> {r.time}
-                                        </span>
-                                        <span className={styles.iconText}>
-                                            <Users size={14} /> {r.servings}
-                                        </span>
-                                        <span className={styles.iconText}>
-                                            <div
-                                                style={{
-                                                    width: 14,
-                                                    height: 14,
-                                                    borderRadius: '50%',
-                                                    border: '2px solid currentColor',
-                                                }}
-                                            />{' '}
-                                            {r.kcal}
-                                        </span>
-                                    </div>
-
-                                    <div className={styles.ingredientSection}>
-                                        <div
-                                            className={styles.ingredientHeader}
-                                        >
-                                            <h4
-                                                className={
-                                                    styles.ingredientTitle
-                                                }
-                                            >
-                                                {t('요리 재료 List')}
-                                            </h4>
-                                            <div
-                                                style={{
-                                                    width: 16,
-                                                    height: 16,
-                                                    borderRadius: '50%',
-                                                    backgroundColor:
-                                                        vars.color.gray['20'],
-                                                    color: vars.color.white,
-                                                    fontSize: 10,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                }}
-                                            >
-                                                i
-                                            </div>
-                                        </div>
-                                        <div
-                                            className={styles.ingredientContent}
-                                        >
-                                            <div
-                                                className={
-                                                    styles.recipeDetailImgArea
-                                                }
-                                            >
-                                                <img
-                                                    src={r.img}
-                                                    className={
-                                                        styles.recipeDetailImg
-                                                    }
-                                                    alt={r.title}
-                                                />
-                                            </div>
-                                            <div
-                                                className={
-                                                    styles.ingredientsList
-                                                }
-                                            >
-                                                {r.ingredients.map((ing, i) => (
-                                                    <div
-                                                        key={i}
-                                                        className={
-                                                            styles.ingredientItem
-                                                        }
-                                                    >
-                                                        <span>
-                                                            · {ing.name}
-                                                        </span>
-                                                        <span
-                                                            style={{
-                                                                color: vars
-                                                                    .color.gray[
-                                                                    '40'
-                                                                ],
-                                                            }}
-                                                        >
-                                                            - {ing.amount}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.stepSection}>
-                                        <h4 className={styles.stepTitle}>
-                                            {t('따라봐 How to Cook')}
-                                        </h4>
-                                        <div className={styles.stepList}>
-                                            {r.steps.map((step, i) => (
-                                                <div
-                                                    key={i}
-                                                    className={styles.stepItem}
-                                                >
-                                                    <span
-                                                        className={
-                                                            styles.stepNumber
-                                                        }
-                                                    >
-                                                        {i + 1}
-                                                    </span>
-                                                    <p
-                                                        className={
-                                                            styles.stepText
-                                                        }
-                                                    >
-                                                        {step}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </motion.div>
-                    ))}
-                </div>
-            </motion.div>
-        );
-    }
 
     const activeTabLabel = TABS.find((t) => t.id === tabId)?.label || '';
+
+    if (tabId === 'favorite') {
+        return <ScrapFavoriteContent />;
+    }
 
     return (
         <motion.div

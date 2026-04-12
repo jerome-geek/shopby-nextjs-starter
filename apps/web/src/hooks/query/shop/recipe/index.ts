@@ -1,4 +1,4 @@
 import useRecipeDetail from '@/hooks/query/shop/recipe/useRecipeDetail';
-import useSearchMyRecipes from '@/hooks/query/shop/recipe/useSearchMyRecipes';
+import useSearchMyRecipeList from '@/hooks/query/shop/recipe/useSearchMyRecipeList';
 
-export { useRecipeDetail, useSearchMyRecipes };
+export { useRecipeDetail, useSearchMyRecipeList };

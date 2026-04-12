@@ -1,19 +1,19 @@
 import {
+    AlertCircle,
     Bookmark,
     ChefHat,
     ChevronRight,
     Clock,
     Loader2,
     Users,
-    AlertCircle,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/recipe/RecipeGridSection/RecipeGridSection.css';
-import { useSearchMyRecipes } from '@/hooks/query/shop/recipe';
+import * as styles from '@/components/recipe/grid-section/index.css';
+import { useSearchMyRecipeList } from '@/hooks/query/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
 interface RecipeGridSectionProps {
@@ -30,7 +30,7 @@ export const RecipeGridSection = ({
         {},
     );
 
-    const { data } = useSearchMyRecipes({ params: { page: 1, take: 10 } });
+    const { data } = useSearchMyRecipeList({ params: { page: 1, take: 10 } });
     const recipes = data?.data ?? [];
     console.log('🚀 ~ RecipeGridSection ~ recipes:', recipes);
 
@@ -115,12 +115,15 @@ export const RecipeGridSection = ({
                                         <div className={styles.loadingIconArea}>
                                             <AlertCircle
                                                 size={32}
-                                                color="#e57373"
+                                                color='#e57373'
                                                 strokeWidth={1.5}
                                             />
                                             <span
                                                 className={styles.loadingText}
-                                                style={{ color: '#e57373', marginTop: '4px' }}
+                                                style={{
+                                                    color: '#e57373',
+                                                    marginTop: '4px',
+                                                }}
                                             >
                                                 {t('레시피 분석 실패')}
                                             </span>
@@ -129,7 +132,8 @@ export const RecipeGridSection = ({
                                 </div>
                                 <div className={styles.productInfo}>
                                     <h3 className={styles.productName}>
-                                        {r.title || t('분석을 완료하지 못했어요')}
+                                        {r.title ||
+                                            t('분석을 완료하지 못했어요')}
                                     </h3>
                                     {r.failureReason ? (
                                         <div
@@ -144,7 +148,9 @@ export const RecipeGridSection = ({
                                         </div>
                                     ) : (
                                         <div className={styles.brandName}>
-                                            {t('다시 시도하거나 URL을 확인해주세요.')}
+                                            {t(
+                                                '다시 시도하거나 URL을 확인해주세요.',
+                                            )}
                                         </div>
                                     )}
                                 </div>

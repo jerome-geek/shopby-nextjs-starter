@@ -25,8 +25,10 @@ schema/     store/        styles/    types/   utils/
 
 ## 컴포넌트 구조
 
-폴더당 `index.tsx` (로직) + `index.css.ts` (스타일) + `index.ts` (re-export, 필요 시)
-외부에서는 폴더 경로(`@/components/...`)로만 접근 — 파일 직접 참조 금지
+- **폴더명/파일명**: 소문자 케밥 케이스(`kebab-case`) 필수 (예: `comment-section`, `comment-input.tsx`).
+- **구조**: 폴더당 `index.tsx` (로직) + `index.css.ts` (스타일).
+- **서브 컴포넌트**: 특정 컴포넌트 내부에서만 사용되는 서브 컴포넌트는 해당 폴더 내에 파일로 배치하되, 복잡도가 높아지거나 재사용이 필요하면 별도 폴더로 격상.
+- **접근**: 외부에서는 폴더 경로(`@/components/...`)로만 접근 — 파일 직접 참조 금지.
 
 ## 컨벤션
 

@@ -19,10 +19,22 @@ export const commentSection = style({
     },
 });
 
-export const commentTitle = style({
-    fontSize: '18px',
-    fontWeight: 'bold',
-});
+export const commentTitle = style([
+    textStyles.title1Bold,
+    {
+        color: vars.color.black,
+        display: 'flex',
+        gap: '6px',
+        alignItems: 'center',
+    },
+]);
+
+export const commentCount = style([
+    textStyles.title1Bold,
+    {
+        color: vars.color.gray['60'],
+    },
+]);
 
 export const commentList = style({
     display: 'flex',
@@ -101,10 +113,16 @@ export const commentImage = style({
 export const commentInputArea = style({
     display: 'flex',
     flexDirection: 'column',
-    border: `1px solid ${vars.color.gray['30']}`,
+    backgroundColor: vars.color.ivory['10'],
     borderRadius: '8px',
-    background: vars.color.white,
-    overflow: 'hidden',
+    border: `1px solid ${vars.color.gray['20']}`,
+
+    '@media': {
+        [media.desktop]: {
+            gap: '14px',
+            padding: '20px 16px',
+        },
+    },
 });
 
 export const commentTextArea = style({
@@ -120,28 +138,42 @@ export const commentTextArea = style({
 export const commentToolbar = style({
     display: 'flex',
     justifyContent: 'space-between',
-    padding: '12px 16px',
-    borderTop: `1px solid ${vars.color.gray['10']}`,
-    background: vars.color.gray['10'],
 });
 
-export const attachButton = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    color: vars.color.gray['60'],
-    fontSize: '14px',
-});
+export const attachButton = style([
+    textStyles.body1Semibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        borderRadius: '2px',
+        cursor: 'pointer',
+        color: vars.color.gray['80'],
+        backgroundColor: vars.color.green['40'],
+        padding: '8px 10px',
+    },
+]);
 
-export const submitButton = style({
-    padding: '8px 16px',
-    background: vars.color.primary,
-    color: vars.color.white,
-    border: 'none',
-    borderRadius: '4px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-});
+export const submitButton = style([
+    textStyles.body1Semibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        borderRadius: '2px',
+        cursor: 'pointer',
+        color: vars.color.white,
+        backgroundColor: vars.color.gray['80'],
+        padding: '8px 10px',
+        border: 'none',
+        transition: 'all 0.2s ease-in-out',
+
+        selectors: {
+            '&:disabled': {
+                backgroundColor: vars.color.gray['20'],
+                color: vars.color.gray['40'],
+                cursor: 'not-allowed',
+            },
+        },
+    },
+]);

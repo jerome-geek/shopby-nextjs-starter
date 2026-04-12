@@ -5,6 +5,7 @@ import {
     Clock,
     Flame,
     Heart,
+    MessageCircle,
     ShoppingCart,
     Users,
 } from 'lucide-react';
@@ -20,13 +21,12 @@ import {
     RecipeCollectionCreateModal,
     RecipeSaveModal,
 } from '@/components/modal';
-import { RecipeCommentSection } from '@/components/recipe/RecipeCommentSection';
+import { RecipeCommentSection } from '@/components/recipe';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useRecipeDetail } from '@/hooks/query/shop/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui/useToast';
 import * as styles from '@/pages/recipes/[sno]/index.css';
-import { vars } from '@/styles/theme.css';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -225,8 +225,7 @@ const RecipeDetailPage = ({
     const queryClient = useQueryClient();
 
     const { data: recipeDetailData } = useRecipeDetail({ sno });
-    const { likeRecipe, unlikeRecipe, bookmarkRecipe, unBookmarkRecipe } =
-        useRecipeMutation();
+    const { likeRecipe, unlikeRecipe, unBookmarkRecipe } = useRecipeMutation();
 
     const liked = !!recipeDetailData?.liked;
     const likeCount = recipeDetailData?.likeCount ?? 0;
@@ -273,6 +272,13 @@ const RecipeDetailPage = ({
             );
         } else {
             openRecipeSaveModal();
+        }
+    };
+
+    const scrollToComments = () => {
+        const element = document.getElementById('recipe-comments');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
@@ -334,32 +340,24 @@ const RecipeDetailPage = ({
                             <button
                                 className={styles.actionButton}
                                 onClick={onLikeToggle}
-                                style={{
-                                    color: liked ? '#ff4d4f' : 'inherit',
-                                }}
+                                data-active={liked}
+                                data-type='like'
                             >
                                 <Heart
-                                    size={24}
-                                    fill={liked ? '#ff4d4f' : 'none'}
+                                    size={36}
+                                    fill={liked ? 'currentColor' : 'none'}
                                 />
                                 <span>{likeCount}</span>
                             </button>
                             <button
                                 className={styles.actionButton}
                                 onClick={onBookmarkToggle}
-                                style={{
-                                    color: bookmarked
-                                        ? vars.color.green['100']
-                                        : 'inherit',
-                                }}
+                                data-active={bookmarked}
+                                data-type='bookmark'
                             >
                                 <Bookmark
-                                    size={24}
-                                    fill={
-                                        bookmarked
-                                            ? vars.color.green['100']
-                                            : 'none'
-                                    }
+                                    size={36}
+                                    fill={bookmarked ? 'currentColor' : 'none'}
                                 />
                                 <span>{bookmarkCount.toLocaleString()}</span>
                             </button>
@@ -466,10 +464,11 @@ const RecipeDetailPage = ({
             </section>
 
             {/* --- COMMENTS AREA --- */}
-
-            <Suspense fallback={<div>Loading comments...</div>}>
-                <RecipeCommentSection recipeSno={Number(sno)} />
-            </Suspense>
+            <div id='recipe-comments'>
+                <Suspense fallback={<div>Loading comments...</div>}>
+                    <RecipeCommentSection recipeSno={Number(sno)} />
+                </Suspense>
+            </div>
 
             {/* --- RECOMMENDED RECIPES --- */}
             <section>
@@ -528,6 +527,40 @@ const RecipeDetailPage = ({
                     ))}
                 </div>
             </section>
+
+            {/* --- MOBILE STICKY FOOTER --- */}
+            <footer className={styles.mobileStickyFooter}>
+                <button
+                    className={styles.mobileActionButton}
+                    onClick={onLikeToggle}
+                    data-active={liked}
+                    data-type='like'
+                >
+                    <Heart size={24} fill={liked ? 'currentColor' : 'none'} />
+                    <span>{likeCount}</span>
+                </button>
+
+                <button
+                    className={styles.mobileActionButton}
+                    onClick={scrollToComments}
+                >
+                    <MessageCircle size={24} />
+                    <span>{MOCK_RECIPE.comments.length}</span>
+                </button>
+
+                <button
+                    className={styles.mobileActionButton}
+                    onClick={onBookmarkToggle}
+                    data-active={bookmarked}
+                    data-type='bookmark'
+                >
+                    <Bookmark
+                        size={24}
+                        fill={bookmarked ? 'currentColor' : 'none'}
+                    />
+                    <span>{bookmarkCount.toLocaleString()}</span>
+                </button>
+            </footer>
         </div>
     );
 };

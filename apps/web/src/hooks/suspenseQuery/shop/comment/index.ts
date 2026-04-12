@@ -1,1 +1,3 @@
-export { default as useSuspenseCommentList } from './useSuspenseCommentList';
+import useRecipeCommentList from '@/hooks/suspenseQuery/shop/comment/useRecipeCommentList';
+
+export { useRecipeCommentList };

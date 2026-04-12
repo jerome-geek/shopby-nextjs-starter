@@ -306,7 +306,7 @@ const recipe = {
      *  - 사용자가 생성하거나 북마크한 레시피를 검색합니다
      */
     searchMyRecipes: (
-        params: SearchRecipesParams,
+        params?: SearchRecipesParams,
         options?: AxiosRequestConfig,
     ) => {
         return geekRequest<SearchRecipesResponse>({

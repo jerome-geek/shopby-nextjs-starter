@@ -1,3 +1,4 @@
-import useSearchMyRecipes from '@/hooks/suspenseQuery/shop/recipe/useSearchMyRecipes';
+import useRecipeDetail from '@/hooks/suspenseQuery/shop/recipe/useRecipeDetail';
+import useSearchMyRecipeList from '@/hooks/suspenseQuery/shop/recipe/useSearchMyRecipeList';
 
-export { useSearchMyRecipes };
+export { useRecipeDetail, useSearchMyRecipeList };

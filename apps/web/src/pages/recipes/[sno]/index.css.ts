@@ -1,6 +1,7 @@
-import { style } from '@vanilla-extract/css';
+import { style, globalStyle } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
+import { textStyles } from '@/styles/typography.css';
 
 export const container = style({
     maxWidth: '1200px',
@@ -84,19 +85,35 @@ export const actionButtons = style({
     },
 });
 
-export const actionButton = style({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '4px',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    color: vars.color.gray['60'],
-    fontSize: '12px',
-    flexShrink: 0,
-    minWidth: '40px',
-});
+export const actionButton = style([
+    textStyles.body1Medium,
+    {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '4px',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        color: vars.color.gray['60'],
+        flexShrink: 0,
+        transition: 'all 0.2s ease',
+
+        selectors: {
+            // 좋아요 활성화 상태 (Pink)
+            '&[data-active="true"][data-type="like"]': {
+                color: vars.color.pink['80'],
+            },
+            // 북마크 활성화 상태 (Green)
+            '&[data-active="true"][data-type="bookmark"]': {
+                color: vars.color.green['100'],
+            },
+        },
+    },
+]);
+
+// (SVG 아이콘 색상은 컴포넌트 레벨에서 fill prop으로 제어함)
+
 
 export const author = style({
     fontSize: '14px',
@@ -288,7 +305,6 @@ export const stepImage = style({
 
 // --- Comments ---
 
-
 // --- Recommended ---
 export const recommendedGrid = style({
     display: 'grid',
@@ -306,7 +322,62 @@ export const recipeCard = style({
     flexDirection: 'column',
     gap: '12px',
     cursor: 'pointer',
+    marginBottom: '80px', // Footer 여백 확보
+    '@media': {
+        [media.desktop]: {
+            marginBottom: '0',
+        },
+    },
 });
+
+// TODO: 전역 BottomNavigation과 레이아웃이 겹칠 수 있으므로 추후 공통 레이아웃 작업 시 높이(bottom) 확인 필요
+export const mobileStickyFooter = style({
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '64px',
+    backgroundColor: vars.color.white,
+    borderTop: `1px solid ${vars.color.gray['20']}`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: '0 16px',
+    paddingBottom: 'env(safe-area-inset-bottom)',
+    zIndex: 100,
+    boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
+
+    '@media': {
+        [media.desktop]: {
+            display: 'none',
+        },
+    },
+});
+
+export const mobileActionButton = style([
+    textStyles.body2Medium,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        color: vars.color.gray['80'],
+        background: 'none',
+        border: 'none',
+        padding: '8px',
+        cursor: 'pointer',
+
+        selectors: {
+            '&[data-active="true"][data-type="like"]': {
+                color: vars.color.pink['80'],
+            },
+            '&[data-active="true"][data-type="bookmark"]': {
+                color: vars.color.green['100'],
+            },
+        },
+    },
+]);
+
+// (SVG 아이콘 색상은 컴포넌트 레벨에서 fill prop으로 제어함)
 
 export const recipeCardThumbWrapper = style({
     position: 'relative',

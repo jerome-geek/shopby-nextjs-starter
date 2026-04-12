@@ -1,11 +1,14 @@
-import { useSuspenseQuery, type UseSuspenseQueryOptions } from '@tanstack/react-query';
+import {
+    useSuspenseQuery,
+    type UseSuspenseQueryOptions,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { comment } from '@/api/shop';
 import { commentKeys } from '@/hooks/queryKeys';
 import { GetCommentsParams, GetCommentsResponse } from '@/models/shop/comment';
 
-interface UseSuspenseCommentListParams<T = GetCommentsResponse> {
+interface UseRecipeCommentListParams<T = GetCommentsResponse> {
     params: GetCommentsParams;
     options?: Omit<
         UseSuspenseQueryOptions<
@@ -18,10 +21,10 @@ interface UseSuspenseCommentListParams<T = GetCommentsResponse> {
     >;
 }
 
-const useSuspenseCommentList = ({
+const useRecipeCommentList = ({
     params,
     options,
-}: UseSuspenseCommentListParams) => {
+}: UseRecipeCommentListParams) => {
     return useSuspenseQuery({
         queryKey: commentKeys.list(params),
         queryFn: async () => {
@@ -33,4 +36,4 @@ const useSuspenseCommentList = ({
     });
 };
 
-export default useSuspenseCommentList;
+export default useRecipeCommentList;

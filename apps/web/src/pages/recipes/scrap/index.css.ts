@@ -306,15 +306,14 @@ export const productInfo = style({
     gap: '4px',
 });
 
-export const brandName = style([
-    textStyles.caption2Regular,
-    {
-        color: vars.color.gray['40'],
-    },
-]);
+export const cardTitleContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+});
 
 export const productName = style([
-    textStyles.body2Regular,
+    textStyles.headingSemibold,
     {
         color: vars.color.black,
         overflow: 'hidden',
@@ -322,6 +321,13 @@ export const productName = style([
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
+    },
+]);
+
+export const brandName = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['60'],
     },
 ]);
 
@@ -365,6 +371,9 @@ export const badge = style([
 /* Recipe Cards */
 export const recipeGrid = style({
     display: 'grid',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '12px',
     '@media': {
@@ -475,34 +484,54 @@ export const viewToggle = style({
     display: 'flex',
     backgroundColor: '#f2f5f1',
     padding: '4px',
-    borderRadius: '10px',
-    gap: '4px',
+    borderRadius: '100px',
+    gap: '2px',
+    position: 'relative',
+    border: '1px solid rgba(0, 0, 0, 0.02)',
+    cursor: 'pointer',
+    width: 'fit-content',
+    outline: 'none',
+    transition: 'all 0.2s ease',
+    selectors: {
+        '&:active': {
+            transform: 'scale(0.96)',
+        },
+    },
 });
 
 export const toggleItem = style({
-    width: '36px',
-    height: '36px',
+    width: '40px',
+    height: '32px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '8px',
-    border: 'none',
-    backgroundColor: 'transparent',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    selectors: {
-        '&[data-active="true"]': {
-            backgroundColor: vars.color.white,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
-        },
-    },
+    borderRadius: '100px',
+    position: 'relative',
+    zIndex: 1,
+    pointerEvents: 'none', // 부모 버튼의 클릭을 방해하지 않도록 처리
+});
+
+export const toggleActiveBg = style({
+    position: 'absolute',
+    top: '4px',
+    left: '4px',
+    width: '40px',
+    height: '32px',
+    borderRadius: '100px',
+    backgroundColor: vars.color.white,
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+    zIndex: 0,
 });
 
 /* Recipe Detail Card */
 export const recipeDetailGrid = style({
     display: 'grid',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
     gridTemplateColumns: 'repeat(1, 1fr)',
     gap: '24px',
+
     '@media': {
         [media.desktop]: {
             gridTemplateColumns: 'repeat(3, 1fr)',
@@ -511,10 +540,9 @@ export const recipeDetailGrid = style({
 });
 
 export const recipeDetailCard = style({
-    backgroundColor: vars.color.white,
-    borderRadius: '24px',
-    border: '1px solid rgba(0, 0, 0, 0.03)',
-    overflow: 'hidden',
+    border: '1px solid red',
+    backgroundColor: vars.color.ivory['10'],
+    borderRadius: '8px',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
 });
 
@@ -690,4 +718,11 @@ export const fab = style({
             height: '56px',
         },
     },
+});
+
+export const recipeLink = style({
+    display: 'block',
+    textDecoration: 'none',
+    color: 'inherit',
+    height: '100%',
 });
