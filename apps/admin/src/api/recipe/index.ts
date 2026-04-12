@@ -1,9 +1,11 @@
 import { request } from '@/api/core/request';
 import {
     GetRecipeExposureGroupsParams,
-    RecipeExposureGroupResponse,
+    CreateRecipeExposureGroupsBody,
+    CreateRecipeExposureGroupsResponse,
     SearchRecipesParams,
     SearchRecipesResponse,
+    RecipeExposureGroupResponse,
 } from '@/model/recipe';
 
 export const recipe = {
@@ -19,6 +21,13 @@ export const recipe = {
             method: 'GET',
             url: '/admin/recipe/exposure-groups',
             params,
+        });
+    },
+    createRecipeExposureGroups: (data: CreateRecipeExposureGroupsBody) => {
+        return request<CreateRecipeExposureGroupsResponse>({
+            method: 'POST',
+            url: '/admin/recipe/exposure-groups',
+            data,
         });
     },
 };

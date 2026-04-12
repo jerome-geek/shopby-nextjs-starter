@@ -86,7 +86,7 @@ export const ModalLayout: React.FC<ModalLayoutProps> = ({
                 >
                     <div
                         className={clsx(
-                            'relative flex min-w-90 w-full flex-col rounded-3xl bg-white dark:bg-gray-900',
+                            'relative flex min-w-100 w-full flex-col rounded-3xl bg-white dark:bg-gray-900',
                             className,
                         )}
                     >

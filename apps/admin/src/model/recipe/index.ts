@@ -35,3 +35,13 @@ export interface RecipeExposureGroup {
 }
 
 export type RecipeExposureGroupResponse = RecipeExposureGroup[];
+
+export interface CreateRecipeExposureGroupsBody {
+    exposureLocation: string;
+    groupName: string;
+    description?: string;
+    isDisplay: boolean;
+    recipeSnos: number[];
+}
+
+export type CreateRecipeExposureGroupsResponse = RecipeExposureGroup;

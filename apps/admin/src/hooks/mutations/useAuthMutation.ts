@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { auth } from '@/api/auth';
-import { LoginRequest } from '@/model/auth';
+import { LoginRequestBody } from '@/model/auth';
 
 const useAuthMutation = () => {
     return {
         login: useMutation({
-            mutationFn: async ({ id, pwd }: LoginRequest) =>
+            mutationFn: async ({ id, pwd }: LoginRequestBody) =>
                 await auth.login({ id, pwd }),
         }),
         logout: useMutation({
