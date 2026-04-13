@@ -22,6 +22,60 @@ export interface Recipe {
 }
 
 export type SearchRecipesResponse = PageResponse<Recipe>;
+
+export interface GetRecipeResponse {
+    sno: number;
+    memberNo: number;
+    liked: boolean;
+    bookmarked: boolean;
+    likeCount: number;
+    bookmarkCount: number;
+    memberName: string;
+    memberId: string;
+    title: string;
+    description: string;
+    recipeStatus: string;
+    failureReason: string | null;
+    sourceUrl: string;
+    sourceType: string;
+    sourceId: string;
+    authorName: string;
+    authorUrl: null;
+    thumbnailUrl: string;
+    channelImageUrl: string | null;
+    durationSeconds: number;
+    difficulty: string;
+    servings: number;
+    caloriesPerServingKcal: number | null;
+    nutritionEstimated: boolean;
+    extraData: Record<string, unknown>;
+    regDt: string;
+    updateDt: string;
+    steps: {
+        sno: number;
+        stepNumber: number;
+        description: string;
+        stepImageUrl: string;
+        timestampSeconds: number;
+    }[];
+    ingredients: {
+        sno: number;
+        name: string;
+        amount: string;
+        isEssential: boolean;
+        coupangProduct: {
+            productCacheSno: number;
+            productId: string;
+            name: string;
+            price: number;
+            imageUrl: string;
+            url: string;
+            status: string;
+            isRocket: boolean;
+            isFreeShipping: boolean;
+        };
+    }[];
+}
 export interface GetRecipeExposureGroupsParams extends PageParams {
     isDisplay?: boolean;
     exposureLocation?: string;

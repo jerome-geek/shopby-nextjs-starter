@@ -11,6 +11,7 @@ import {
     UpdateRecipeExposureGroupsResponse,
     UpdateRecipeExposureGroupsBody,
     UpdateRecipeExposureGroupsSortOrderBody,
+    GetRecipeResponse,
 } from '@/model/recipe';
 
 export const recipe = {
@@ -26,6 +27,12 @@ export const recipe = {
             method: 'GET',
             url: '/admin/recipe/search',
             params,
+        });
+    },
+    getRecipe: (sno: number) => {
+        return request<GetRecipeResponse>({
+            method: 'GET',
+            url: `/admin/recipe/${sno}`,
         });
     },
     getRecipeExposureGroups: (params?: GetRecipeExposureGroupsParams) => {

@@ -23,7 +23,7 @@ import {
 import { RECIPE_GROUP_ID_OPTIONS } from '@/const/recipe';
 import {
     useRecipeExposureGroupDetail,
-    useSearchRecipeList,
+    useRecipeList,
 } from '@/hooks/query/recipe';
 import type { Recipe } from '@/model/recipe';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
@@ -158,7 +158,7 @@ const CreateRecipeGroupModal = ({
         setKeyword(inputRef.current?.value ?? '');
     };
 
-    const { data: recipeListData } = useSearchRecipeList({
+    const { data: recipeListData } = useRecipeList({
         params: {
             keyword,
             take: 100,

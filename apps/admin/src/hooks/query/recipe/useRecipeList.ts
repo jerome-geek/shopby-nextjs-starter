@@ -9,25 +9,25 @@ import { recipe } from '@/api/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { SearchRecipesParams, SearchRecipesResponse } from '@/model/recipe';
 
-interface UseSearchRecipeListParams<T = SearchRecipesResponse> {
+interface UseRecipeListParams<T = SearchRecipesResponse> {
     params: SearchRecipesParams;
     options?: Omit<
         UseQueryOptions<
             SearchRecipesResponse,
             AxiosError,
             T,
-            ReturnType<(typeof recipeKeys)['searchList']>
+            ReturnType<(typeof recipeKeys)['list']>
         >,
         'queryKey' | 'queryFn'
     >;
 }
 
-const useSearchRecipeList = <T = SearchRecipesResponse>({
+const useRecipeList = <T = SearchRecipesResponse>({
     params,
     options,
-}: UseSearchRecipeListParams<T>) => {
+}: UseRecipeListParams<T>) => {
     return useQuery({
-        queryKey: recipeKeys.searchList(params),
+        queryKey: recipeKeys.list(params),
         queryFn: async () => {
             const { data } = await recipe.searchRecipes(params);
 
@@ -38,4 +38,4 @@ const useSearchRecipeList = <T = SearchRecipesResponse>({
     });
 };
 
-export default useSearchRecipeList;
+export default useRecipeList;

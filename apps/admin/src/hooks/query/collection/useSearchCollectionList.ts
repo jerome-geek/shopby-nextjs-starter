@@ -19,7 +19,7 @@ interface UseSearchCollectionListParams<T = SearchCollectionsResponse> {
             SearchCollectionsResponse,
             AxiosError,
             T,
-            ReturnType<(typeof collectionKeys)['searchList']>
+            ReturnType<(typeof collectionKeys)['list']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -30,7 +30,7 @@ const useSearchCollectionList = <T = SearchCollectionsResponse>({
     options,
 }: UseSearchCollectionListParams<T>) => {
     return useQuery({
-        queryKey: collectionKeys.searchList(params),
+        queryKey: collectionKeys.list(params),
         queryFn: async () => {
             const { data } = await collection.searchCollections(params);
 

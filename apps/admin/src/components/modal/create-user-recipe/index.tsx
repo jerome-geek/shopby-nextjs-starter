@@ -105,7 +105,7 @@ const CreateUserRecipeModal = ({ ...props }: CreateUserRecipeModalProps) => {
         createUserRecipeMutation.mutate(data, {
             onSuccess: async () => {
                 queryClient.invalidateQueries({
-                    queryKey: recipeKeys.searchLists(),
+                    queryKey: recipeKeys.lists(),
                 });
 
                 await openAsyncDialog({

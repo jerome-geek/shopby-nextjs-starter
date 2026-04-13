@@ -14,7 +14,7 @@ interface UseRecipeExposureGroupDetailParams<
             RecipeExposureGroupDetailResponse,
             AxiosError,
             T,
-            ReturnType<(typeof recipeKeys)['detail']>
+            ReturnType<(typeof recipeKeys)['groupDetail']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -25,7 +25,7 @@ const useRecipeExposureGroupDetail = <T = RecipeExposureGroupDetailResponse>({
     options,
 }: UseRecipeExposureGroupDetailParams<T>) => {
     return useQuery({
-        queryKey: recipeKeys.detail(groupSno),
+        queryKey: recipeKeys.groupDetail(groupSno),
         queryFn: async () => {
             const { data } = await recipe.getRecipeExposureGroup(groupSno);
 

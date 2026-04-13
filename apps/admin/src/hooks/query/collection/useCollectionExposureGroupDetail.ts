@@ -14,7 +14,7 @@ interface UseCollectionExposureGroupDetailParams<
             CollectionExposureGroupDetailResponse,
             AxiosError,
             T,
-            ReturnType<(typeof collectionKeys)['detail']>
+            ReturnType<(typeof collectionKeys)['groupDetail']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -27,7 +27,7 @@ const useCollectionExposureGroupDetail = <
     options,
 }: UseCollectionExposureGroupDetailParams<T>) => {
     return useQuery({
-        queryKey: collectionKeys.detail(groupSno),
+        queryKey: collectionKeys.groupDetail(groupSno),
         queryFn: async () => {
             const { data } = await collection.getCollectionExposureGroup(
                 groupSno,

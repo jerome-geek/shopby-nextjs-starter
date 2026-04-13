@@ -21,7 +21,7 @@ interface UseCollectionExposureGroupListParams<
             CollectionExposureGroupResponse,
             AxiosError,
             T,
-            ReturnType<(typeof collectionKeys)['list']>
+            ReturnType<(typeof collectionKeys)['groupList']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -32,7 +32,7 @@ const useCollectionExposureGroupList = <T = CollectionExposureGroupResponse>({
     options,
 }: UseCollectionExposureGroupListParams<T>) => {
     return useQuery({
-        queryKey: collectionKeys.list(params),
+        queryKey: collectionKeys.groupList(params),
         queryFn: async () => {
             const { data } = await collection.getCollectionExposureGroups(
                 params,

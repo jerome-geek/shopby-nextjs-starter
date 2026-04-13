@@ -19,7 +19,7 @@ interface UseRecipeExposureGroupListParams<T = RecipeExposureGroupResponse> {
             RecipeExposureGroupResponse,
             AxiosError,
             T,
-            ReturnType<(typeof recipeKeys)['list']>
+            ReturnType<(typeof recipeKeys)['groupList']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -30,7 +30,7 @@ const useRecipeExposureGroupList = <T = RecipeExposureGroupResponse>({
     options,
 }: UseRecipeExposureGroupListParams<T>) => {
     return useQuery({
-        queryKey: recipeKeys.list(params),
+        queryKey: recipeKeys.groupList(params),
         queryFn: async () => {
             const { data } = await recipe.getRecipeExposureGroups(params);
 

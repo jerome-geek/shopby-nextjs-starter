@@ -7,18 +7,23 @@ const recipeKeys = {
     all: ['recipe'] as const,
 
     /** 레시피 검색 */
-    searchLists: () => [...recipeKeys.all, 'search'] as const,
-    searchList: (params: SearchRecipesParams) =>
-        [...recipeKeys.searchLists(), params] as const,
-
-    /** 레시피 노출 그룹 조회 */
-    lists: () => [...recipeKeys.all, 'exposureGroups'] as const,
-    list: (params?: GetRecipeExposureGroupsParams) =>
+    lists: () => [...recipeKeys.all, 'search'] as const,
+    list: (params: SearchRecipesParams) =>
         [...recipeKeys.lists(), params] as const,
 
+    /** 레시피 상세 조회 */
+    details: () => [...recipeKeys.all, 'detail'] as const,
+    detail: (sno: number) => [...recipeKeys.details(), sno] as const,
+
+    /** 레시피 노출 그룹 조회 */
+    groupLists: () => [...recipeKeys.all, 'exposureGroups'] as const,
+    groupList: (params?: GetRecipeExposureGroupsParams) =>
+        [...recipeKeys.groupLists(), params] as const,
+
     /** 레시피 노출 그룹 상세 조회 */
-    details: () => [...recipeKeys.all, 'exposureGroupDetail'] as const,
-    detail: (groupSno: number) => [...recipeKeys.details(), groupSno] as const,
+    groupDetails: () => [...recipeKeys.all, 'exposureGroupDetail'] as const,
+    groupDetail: (groupSno: number) =>
+        [...recipeKeys.groupDetails(), groupSno] as const,
 };
 
 export default recipeKeys;

@@ -9,7 +9,7 @@ import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
-import { useSearchRecipeList } from '@/hooks/query/recipe';
+import { useRecipeList } from '@/hooks/query/recipe';
 import { isProcessingRecipe } from '@/utils/recipe';
 
 import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
@@ -52,17 +52,17 @@ const UserRecipeList = () => {
         };
     }, [keyword, page]);
 
-    const { data: searchRecipeListData, isLoading: isSearchRecipeListLoading } =
-        useSearchRecipeList({
+    const { data: recipeListData, isLoading: isRecipeListLoading } =
+        useRecipeList({
             params,
         });
 
-    const totalCount = searchRecipeListData?.count ?? 0;
-    const lastPage = searchRecipeListData?.lastPage ?? 1;
+    const totalCount = recipeListData?.count ?? 0;
+    const lastPage = recipeListData?.lastPage ?? 1;
 
     const searchRecipeList = useMemo(() => {
-        return searchRecipeListData?.data ?? [];
-    }, [searchRecipeListData]);
+        return recipeListData?.data ?? [];
+    }, [recipeListData]);
 
     const setQuery = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -135,7 +135,7 @@ const UserRecipeList = () => {
                     </div>
 
                     <LoadingWrapper
-                        isLoading={isSearchRecipeListLoading}
+                        isLoading={isRecipeListLoading}
                         containerStyle={{
                             height: '50vh',
                         }}
