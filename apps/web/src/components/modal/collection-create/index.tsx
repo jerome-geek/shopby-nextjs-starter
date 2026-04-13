@@ -13,8 +13,8 @@ import {
     TextArea,
 } from '@/components/ui/input';
 import { useCollectionMutation } from '@/hooks/mutations';
-import { useToast } from '@/hooks/ui';
 import { recipeKeys } from '@/hooks/queryKeys';
+import { useToast } from '@/hooks/ui';
 
 type CollectionCreateModalProps = DefaultModalLayoutProps;
 

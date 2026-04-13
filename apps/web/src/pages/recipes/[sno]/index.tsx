@@ -1,16 +1,22 @@
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import {
-    ArrowUp,
     Bookmark,
     Clock,
     Flame,
     Heart,
     MessageCircle,
     ShoppingCart,
+    Timer,
     Users,
 } from 'lucide-react';
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import type {
+    GetStaticPaths,
+    GetStaticProps,
+    InferGetStaticPropsType,
+} from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { overlay } from 'overlay-kit';
 import { Suspense } from 'react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -23,9 +29,12 @@ import {
 } from '@/components/modal';
 import { RecipeCommentSection } from '@/components/recipe';
 import { useRecipeMutation } from '@/hooks/mutations';
-import { useRecipeDetail } from '@/hooks/query/shop/recipe';
+import { useProfile } from '@/hooks/query/member/profile';
 import { recipeKeys } from '@/hooks/queryKeys';
+import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
+import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
+import { useAuth } from '@/hooks/useAuth';
 import * as styles from '@/pages/recipes/[sno]/index.css';
 
 import 'swiper/css';
@@ -220,11 +229,20 @@ const MOCK_RECIPE = {
 
 const RecipeDetailPage = ({
     sno,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
     const { addToast } = useToast();
+
+    const { openLoginDialog } = useCustomDialog();
+
     const queryClient = useQueryClient();
 
-    const { data: recipeDetailData } = useRecipeDetail({ sno });
+    const isLogin = useAuth();
+    console.log('🚀 ~ RecipeDetailPage ~ isLogin:', isLogin);
+    const { data: profileData } = useProfile();
+    const memberNo = profileData?.memberNo || 0;
+
+    const { data: recipeDetailData } = useRecipeDetail({ sno, memberNo });
+    console.log('🚀 ~ RecipeDetailPage ~ recipeDetailData:', recipeDetailData);
     const { likeRecipe, unlikeRecipe, unBookmarkRecipe } = useRecipeMutation();
 
     const liked = !!recipeDetailData?.liked;
@@ -233,7 +251,14 @@ const RecipeDetailPage = ({
     const bookmarked = !!recipeDetailData?.bookmarked;
     const bookmarkCount = recipeDetailData?.bookmarkCount ?? 0;
 
+    const ingredients = recipeDetailData?.ingredients ?? [];
+
     const onLikeToggle = () => {
+        if (!isLogin) {
+            openLoginDialog();
+            return;
+        }
+
         const mutation = liked ? unlikeRecipe : likeRecipe;
 
         mutation.mutate(
@@ -241,7 +266,7 @@ const RecipeDetailPage = ({
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries({
-                        queryKey: recipeKeys.detail(sno),
+                        queryKey: recipeKeys.detail(sno, memberNo),
                     });
                     addToast({
                         message: liked
@@ -255,13 +280,18 @@ const RecipeDetailPage = ({
     };
 
     const onBookmarkToggle = () => {
+        if (!isLogin) {
+            openLoginDialog();
+            return;
+        }
+
         if (bookmarked) {
             unBookmarkRecipe.mutate(
                 { sno },
                 {
                     onSuccess: () => {
                         queryClient.invalidateQueries({
-                            queryKey: recipeKeys.detail(sno),
+                            queryKey: recipeKeys.detail(sno, memberNo),
                         });
                         addToast({
                             message: '북마크를 취소했습니다.',
@@ -303,9 +333,7 @@ const RecipeDetailPage = ({
     return (
         <div className={styles.container}>
             <Head>
-                <title>
-                    {recipeDetailData?.title || MOCK_RECIPE.title} | JollyPot
-                </title>
+                <title>{recipeDetailData.title} | JollyPot</title>
             </Head>
 
             {/* --- HEADER AREA --- */}
@@ -317,24 +345,26 @@ const RecipeDetailPage = ({
                         navigation
                         style={{ height: '100%' }}
                     >
-                        {(recipeDetailData?.thumbnailUrl
-                            ? [recipeDetailData.thumbnailUrl]
-                            : MOCK_RECIPE.images
-                        ).map((img, idx) => (
-                            <SwiperSlide key={idx}>
-                                <img
-                                    src={img}
-                                    alt={`recipe image ${idx}`}
-                                    className={styles.carouselImage}
-                                />
-                            </SwiperSlide>
-                        ))}
+                        {[recipeDetailData.thumbnailUrl].map((img, idx) => {
+                            if (img) {
+                                return (
+                                    <SwiperSlide key={idx}>
+                                        <img
+                                            src={img}
+                                            alt={`recipe image ${idx}`}
+                                            className={styles.carouselImage}
+                                        />
+                                    </SwiperSlide>
+                                );
+                            }
+                        })}
                     </Swiper>
                 </div>
+
                 <div className={styles.headerInfo}>
                     <div className={styles.titleRow}>
                         <h1 className={styles.title}>
-                            {recipeDetailData?.title || MOCK_RECIPE.title}
+                            {recipeDetailData.title}
                         </h1>
                         <div className={styles.actionButtons}>
                             <button
@@ -365,22 +395,32 @@ const RecipeDetailPage = ({
                     </div>
 
                     <p className={styles.author}>
-                        by {recipeDetailData?.authorName}
+                        {`By ${recipeDetailData.authorName}`}
                     </p>
+
                     <p className={styles.description}>
-                        {recipeDetailData?.description}
+                        {recipeDetailData.description}
                     </p>
+
                     <div className={styles.metaList}>
-                        <div className={styles.metaItem}>
-                            <Clock size={18} /> {MOCK_RECIPE.time}
-                        </div>
-                        <div className={styles.metaItem}>
-                            <Users size={18} /> {MOCK_RECIPE.servings}
-                        </div>
-                        {recipeDetailData?.caloriesPerServingKcal && (
+                        {recipeDetailData.durationSeconds && (
+                            <div className={styles.durationMetaItem}>
+                                <Timer size={24} />
+                                <span>{`${Math.floor(recipeDetailData.durationSeconds / 60)}분`}</span>
+                            </div>
+                        )}
+
+                        {recipeDetailData.servings && (
                             <div className={styles.metaItem}>
-                                <Flame size={18} />{' '}
-                                {`${recipeDetailData.caloriesPerServingKcal} Kcal`}
+                                <Users size={24} />
+                                <span>{`${recipeDetailData.servings}인분`}</span>
+                            </div>
+                        )}
+
+                        {recipeDetailData.caloriesPerServingKcal && (
+                            <div className={styles.metaItem}>
+                                <Flame size={24} />
+                                <span>{`${recipeDetailData.caloriesPerServingKcal} Kcal`}</span>
                             </div>
                         )}
                     </div>
@@ -388,79 +428,105 @@ const RecipeDetailPage = ({
             </section>
 
             {/* --- INGREDIENTS AREA --- */}
-            <section>
-                <div
-                    className={styles.sectionTitleRow}
-                    style={{ marginBottom: '24px' }}
-                >
-                    <h2 className={styles.sectionTitle}>요리 재료 List</h2>
-                    <button className={styles.ingredientExpandBtn}>
-                        <ArrowUp size={20} />
-                    </button>
-                </div>
-                <div className={styles.ingredientsGrid}>
-                    {MOCK_RECIPE.ingredients.map((ing, idx) => (
-                        <div key={idx} className={styles.ingredientItem}>
-                            <div className={styles.ingredientInfo}>
-                                <span className={styles.ingredientName}>
-                                    · {ing.name}{' '}
-                                    <span className={styles.ingredientAmount}>
-                                        - {ing.amount}
-                                    </span>
-                                </span>
-                            </div>
-                            {ing.hasProduct && (
-                                <button className={styles.buyButton}>
-                                    <ShoppingCart size={14} /> 구매
-                                </button>
-                            )}
-                        </div>
-                    ))}
-                </div>
+            <section className={styles.sectionContainer}>
+                <h2 className={styles.sectionTitle}>요리 재료 List</h2>
+
+                <ul className={styles.ingredientsGrid}>
+                    {ingredients.map(
+                        ({ sno, name, amount, coupangProduct }) => {
+                            return (
+                                <li
+                                    key={`ingredients-${sno}`}
+                                    className={styles.ingredientItem}
+                                >
+                                    <div className={styles.ingredientInfo}>
+                                        <span className={styles.ingredientName}>
+                                            · {name}{' '}
+                                            {amount && (
+                                                <span
+                                                    className={
+                                                        styles.ingredientAmount
+                                                    }
+                                                >
+                                                    - {amount}
+                                                </span>
+                                            )}
+                                        </span>
+                                    </div>
+                                    {coupangProduct && (
+                                        <Link
+                                            href={coupangProduct.url}
+                                            target='_blank'
+                                            className={styles.buyButton}
+                                        >
+                                            <ShoppingCart
+                                                size={14}
+                                                fill='currentColor'
+                                            />
+                                            <span>구매</span>
+                                        </Link>
+                                    )}
+                                </li>
+                            );
+                        },
+                    )}
+                </ul>
             </section>
 
             {/* --- TOOLS AREA --- */}
-            <section>
-                <h2
-                    className={styles.sectionTitle}
-                    style={{ marginBottom: '24px' }}
-                >
-                    사용할 도구
-                </h2>
-                {/* <div className={styles.toolsGrid}>
+            {/* TODO: 기존에 없던 영역이므로 일단 제거, 어떻게 처리할진 논의 필요 */}
+            {/* <section className={styles.sectionContainer}>
+                <h2 className={styles.sectionTitle}>사용할 도구</h2>
+
+                <div className={styles.toolsGrid}>
                     {MOCK_RECIPE.tools.map((tool) => (
                         <div key={tool.productNo} className={styles.toolCard}>
                             <ProductCard {...tool} />
                         </div>
                     ))}
-                </div> */}
-            </section>
+                </div>
+            </section> */}
 
             {/* --- STEPS AREA --- */}
-            <section>
-                <h2
-                    className={styles.sectionTitle}
-                    style={{ marginBottom: '24px' }}
-                >
-                    따라해봐 How to Cook
-                </h2>
-                <div className={styles.stepList}>
-                    {recipeDetailData?.steps?.map((step) => (
-                        <div key={step.sno} className={styles.stepItem}>
+            <section className={styles.sectionContainer}>
+                <h2 className={styles.sectionTitle}>따라해봐 How to Cook</h2>
+
+                <ul className={styles.stepList}>
+                    {recipeDetailData.steps?.map((step) => (
+                        <li key={step.sno} className={styles.stepItem}>
                             <div className={styles.stepNumber}>
                                 {step.stepNumber}
                             </div>
                             <div className={styles.stepContent}>
                                 <p className={styles.stepDescription}>
-                                    {step.description}{' '}
-                                    <span className={styles.stepTime}>
-                                        {step.timestampSeconds}
-                                    </span>
+                                    {step.description}
+                                    {step.timestampSeconds &&
+                                        step.timestampSeconds > 0 && (
+                                            <Link
+                                                href={
+                                                    recipeDetailData.sourceType ===
+                                                    'YOUTUBE'
+                                                        ? `https://www.youtube.com/watch?v=${recipeDetailData.sourceId}&t=${step.timestampSeconds}s`
+                                                        : recipeDetailData.sourceUrl ||
+                                                          '#'
+                                                }
+                                                target='_blank'
+                                                className={styles.stepTime}
+                                            >
+                                                {dayjs()
+                                                    .startOf('day')
+                                                    .add(
+                                                        step.timestampSeconds,
+                                                        'second',
+                                                    )
+                                                    .format('mm:ss')}
+                                            </Link>
+                                        )}
                                 </p>
                             </div>
-                        </div>
+                        </li>
                     ))}
-                </div>
+                </ul>
             </section>
 
             {/* --- COMMENTS AREA --- */}
@@ -545,7 +611,8 @@ const RecipeDetailPage = ({
                     onClick={scrollToComments}
                 >
                     <MessageCircle size={24} />
-                    <span>{MOCK_RECIPE.comments.length}</span>
+                    {/* <span>{recipeDetailData?.commentCount ?? 0}</span> */}
+                    <span>0</span>
                 </button>
 
                 <button
@@ -565,7 +632,14 @@ const RecipeDetailPage = ({
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: 'blocking', // 처음 들어오는 sno에 대해 서버에서 생성될 때까지 대기(SEO 유리)
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
     const queryClient = new QueryClient();
     const sno = Number(params?.sno) || 0;
 
@@ -575,10 +649,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
     try {
         await queryClient.fetchQuery({
-            queryKey: recipeKeys.detail(sno),
+            queryKey: recipeKeys.detail(sno, 0),
             queryFn: async () => {
                 const { data } = await recipe.getRecipeDetail(sno);
-
                 return data;
             },
         });
@@ -594,6 +667,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
             sno,
             dehydratedState: dehydrate(queryClient),
         },
+        revalidate: 60 * 60 * 6, // 6시간마다 데이터 갱신 여부 체크 (ISR)
     };
 };
 

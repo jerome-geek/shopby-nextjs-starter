@@ -1,13 +1,15 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
 
 import { recipe } from '@/api/shop';
 import { ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-url-input/index.css';
 import { MODAL_QUERY_KEY } from '@/const/modal';
+import { recipeKeys } from '@/hooks/queryKeys';
 import { useCustomDialog } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 
@@ -26,6 +28,7 @@ export const RecipeUrlInput = ({
     const router = useRouter();
     const { openAsyncDialog } = useDialog();
     const { openRecipeSave } = useCustomDialog();
+    const queryClient = useQueryClient();
 
     const handleClose = () => {
         const newQuery = { ...router.query };
@@ -66,6 +69,9 @@ export const RecipeUrlInput = ({
             });
 
             if (recipeSno) {
+                await queryClient.invalidateQueries({
+                    queryKey: recipeKeys.lists(),
+                });
                 overlay.closeAll();
                 openRecipeSave(recipeSno);
             }

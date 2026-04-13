@@ -10,9 +10,9 @@ export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '40px',
+
     '@media': {
         [media.desktop]: {
-            padding: '40px 16px',
             gap: '60px',
         },
     },
@@ -58,13 +58,18 @@ export const headerInfo = style({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const titleRow = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: '16px',
 });
 
 export const title = style({
@@ -112,45 +117,53 @@ export const actionButton = style([
     },
 ]);
 
-// (SVG 아이콘 색상은 컴포넌트 레벨에서 fill prop으로 제어함)
+export const author = style([
+    textStyles.headlineRegular,
+    {
+        color: vars.color.gray['80'],
+    },
+]);
 
-
-export const author = style({
-    fontSize: '14px',
-    color: vars.color.gray['60'],
-    marginBottom: '16px',
-});
-
-export const description = style({
-    fontSize: '16px',
-    color: vars.color.gray['80'],
-    lineHeight: '1.6',
-    marginBottom: '24px',
-});
+export const description = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.gray['60'],
+    },
+]);
 
 export const metaList = style({
     display: 'flex',
     gap: '16px',
     alignItems: 'center',
-    background: 'none',
     padding: '0',
+
     '@media': {
         [media.desktop]: {
-            gap: '24px',
-            background: vars.color.gray['10'],
-            padding: '16px 24px',
-            borderRadius: '8px',
+            gap: '12px',
+            paddingTop: '12px',
         },
     },
 });
 
-export const metaItem = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    color: vars.color.gray['80'],
-    fontSize: '14px',
-});
+export const durationMetaItem = style([
+    textStyles.body1Semibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        color: vars.color.gray['80'],
+    },
+]);
+
+export const metaItem = style([
+    textStyles.body1Semibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        color: vars.color.gray['60'],
+    },
+]);
 
 // --- Section General ---
 export const sectionTitleRow = style({
@@ -160,21 +173,38 @@ export const sectionTitleRow = style({
     marginBottom: '24px',
 });
 
-export const sectionTitle = style({
-    fontSize: '20px',
-    fontWeight: 'bold',
+export const sectionContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
 });
+
+export const sectionTitle = style([
+    textStyles.title1Bold,
+    {
+        color: vars.color.black,
+    },
+]);
 
 // --- Ingredients ---
 export const ingredientsGrid = style({
     display: 'grid',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
     gridTemplateColumns: 'repeat(1, 1fr)',
     gap: '0',
     marginTop: '16px',
+
     '@media': {
         [media.desktop]: {
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '16px',
+            gap: '8px 32px',
         },
     },
 });
@@ -223,19 +253,19 @@ export const ingredientAmount = style({
     color: vars.color.gray['50'],
 });
 
-export const buyButton = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    padding: '6px 10px',
-    border: `1px solid ${vars.color.gray['20']}`,
-    borderRadius: '4px',
-    background: vars.color.white,
-    color: vars.color.primary,
-    fontSize: '12px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-});
+export const buyButton = style([
+    textStyles.body2Semibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '6px 10px',
+        borderRadius: '2px',
+        background: vars.color.green['40'],
+        color: vars.color.gray['80'],
+        cursor: 'pointer',
+    },
+]);
 
 // --- Tools ---
 export const toolsGrid = style({
@@ -256,44 +286,63 @@ export const toolCard = style({
 export const stepList = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '32px',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+
+    '@media': {
+        [media.desktop]: { gap: '16px' },
+    },
 });
 
 export const stepItem = style({
     display: 'flex',
-    gap: '16px',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+
+    '@media': {
+        [media.desktop]: { gap: '12px' },
+    },
 });
 
-export const stepNumber = style({
-    width: '28px',
-    height: '28px',
-    borderRadius: '50%',
-    background: vars.color.primary,
-    color: vars.color.white,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 'bold',
-    flexShrink: 0,
-});
+export const stepNumber = style([
+    textStyles.body1Semibold,
+    {
+        width: '28px',
+        height: '28px',
+        borderRadius: '50%',
+        background: vars.color.green['80'],
+        color: vars.color.white,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+    },
+]);
 
 export const stepContent = style({
-    flex: 1,
-    paddingTop: '2px', // Align with number
+    // flex: 1,
 });
 
-export const stepDescription = style({
-    fontSize: '16px',
-    color: vars.color.black,
-    lineHeight: '1.6',
-    marginBottom: '8px',
-});
+export const stepDescription = style([
+    textStyles.headlineRegular,
+    {
+        color: vars.color.gray['80'],
+    },
+]);
 
-export const stepTime = style({
-    fontSize: '14px',
-    color: vars.color.gray['50'],
-});
+export const stepTime = style([
+    textStyles.headlineRegular,
+    {
+        color: vars.color.green['80'],
+        marginLeft: '8px',
+        display: 'inline-block',
+        textDecoration: 'none',
+        cursor: 'pointer',
+        ':hover': {
+            textDecoration: 'underline',
+        },
+    },
+]);
 
 export const stepImage = style({
     width: '200px',

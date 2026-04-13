@@ -60,7 +60,7 @@ export const recipeGrid = style({
 export const recipeImgArea = style({
     position: 'relative',
     aspectRatio: '3 / 4',
-    borderRadius: '16px',
+    borderRadius: '8px',
     overflow: 'hidden',
 });
 
@@ -76,6 +76,25 @@ export const productInfo = style({
     flexDirection: 'column',
     gap: '4px',
 });
+
+export const recipeTitle = style([
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+    },
+]);
+
+export const recipeAuthor = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.gray['60'],
+    },
+]);
 
 export const productName = style([
     textStyles.body2Regular,
@@ -97,12 +116,16 @@ export const brandName = style([
 ]);
 
 export const recipeMeta = style([
-    textStyles.caption2Regular,
+    textStyles.body2Regular,
     {
         display: 'flex',
-        gap: '8px',
         color: vars.color.gray['40'],
-        marginTop: '4px',
+
+        '@media': {
+            [media.desktop]: {
+                gap: '12px',
+            },
+        },
     },
 ]);
 
@@ -218,7 +241,84 @@ export const container = style({
     display: 'block',
     textDecoration: 'none',
     color: 'inherit',
+
     ':hover': {
         textDecoration: 'none',
     },
 });
+
+export const recipeCardContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+
+    '@media': {
+        [media.desktop]: { gap: '16px' },
+    },
+});
+
+export const emptyState = style({
+    padding: '80px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '20px',
+    textAlign: 'center',
+    backgroundColor: '#fafaf9',
+    borderRadius: '24px',
+    margin: '12px 0',
+});
+
+export const emptyIconArea = style({
+    width: '64px',
+    height: '64px',
+    borderRadius: '20px',
+    backgroundColor: '#f2f5f1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#8da287',
+});
+
+export const emptyTitle = style([
+    textStyles.headingBold,
+    {
+        color: vars.color.black,
+        marginBottom: '8px',
+    },
+]);
+
+export const emptyDescription = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['40'],
+        lineHeight: 1.6,
+    },
+]);
+
+export const createRecipeButton = style([
+    textStyles.headlineSemibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '12px 24px',
+        backgroundColor: vars.color.green['100'],
+        color: vars.color.white,
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        marginTop: '12px',
+        boxShadow: '0 4px 12px rgba(141, 162, 135, 0.2)',
+
+        ':hover': {
+            backgroundColor: vars.color.gray['90'],
+            transform: 'translateY(-2px)',
+            boxShadow: '0 6px 16px rgba(141, 162, 135, 0.3)',
+        },
+
+        ':active': {
+            transform: 'translateY(0)',
+        },
+    },
+]);

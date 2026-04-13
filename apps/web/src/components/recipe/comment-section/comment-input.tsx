@@ -1,3 +1,4 @@
+import { each, join, map, pipe, toArray } from '@fxts/core';
 import { Image as ImageIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import useFileUpload from '@/hooks/utils/useFileUpload';
+import { useCustomDialog } from '@/hooks/ui';
 
 interface CommentInputProps {
     recipeSno: number;
@@ -21,6 +23,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
     const isLogin = useAuth();
 
     const { addToast } = useToast();
+    const { openLoginDialog } = useCustomDialog();
 
     const [commentText, setCommentText] = useState('');
 
@@ -30,7 +33,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
         deleteUploadFileImage,
         setUploadFile,
     } = useFileUpload({
-        maxLength: 1,
+        maxLength: 5,
         maxSize: 12 * 1024 * 1024,
     });
 
@@ -38,26 +41,27 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
 
     const { upload } = useRecipeMutation();
 
-    const { data: profileData } = useProfile({
-        options: {
-            enabled: !!isLogin,
-        },
-    });
+    const { data: profileData } = useProfile();
 
-    const previewUrl = useMemo(() => {
-        if (uploadFile.length === 0) {
-            return '';
+    const handleTextAreaClick = () => {
+        if (!isLogin) {
+            openLoginDialog();
         }
-        return URL.createObjectURL(uploadFile[0]);
+    };
+
+    const previewUrls = useMemo(() => {
+        return pipe(
+            uploadFile,
+            map((file) => URL.createObjectURL(file)),
+            toArray,
+        );
     }, [uploadFile]);
 
     useEffect(() => {
         return () => {
-            if (previewUrl) {
-                URL.revokeObjectURL(previewUrl);
-            }
+            each((url) => URL.revokeObjectURL(url), previewUrls);
         };
-    }, [previewUrl]);
+    }, [previewUrls]);
 
     const handleSubmit = async () => {
         if (!isLogin) {
@@ -83,13 +87,20 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
         try {
             let attachment = '';
 
-            // 1. 이미지 업로드 필요 시 먼저 수행
+            // 1. 이미지 업로드 필요 시 먼저 수행 (최대 5개, '|' 구분자로 결합)
             if (uploadFile.length > 0) {
-                const formData = new FormData();
-                formData.append('file', uploadFile[0]);
-
-                const uploadRes = await upload.mutateAsync(formData);
-                attachment = uploadRes.data.filePath;
+                const uploadResults = await Promise.all(
+                    uploadFile.map((file) => {
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        return upload.mutateAsync(formData);
+                    }),
+                );
+                attachment = pipe(
+                    uploadResults,
+                    map((res) => res.data.filePath),
+                    join('|'),
+                );
             }
 
             // 2. 댓글 등록 수행
@@ -122,15 +133,18 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
 
     return (
         <div className={styles.commentInputArea}>
-            {previewUrl && (
+            {previewUrls.length > 0 && (
                 <div className={styles.commentImages}>
-                    <RecipePreviewImage
-                        sno={0}
-                        url={previewUrl}
-                        onDeleteButtonClick={() =>
-                            deleteUploadFileImage(uploadFile[0].name!)
-                        }
-                    />
+                    {previewUrls.map((url, index) => (
+                        <RecipePreviewImage
+                            key={url}
+                            sno={index}
+                            url={url}
+                            onDeleteButtonClick={() =>
+                                deleteUploadFileImage(uploadFile[index].name!)
+                            }
+                        />
+                    ))}
                 </div>
             )}
             <TextArea
@@ -142,6 +156,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
                 }
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
+                onClick={handleTextAreaClick}
                 readOnly={!isLogin}
             />
 

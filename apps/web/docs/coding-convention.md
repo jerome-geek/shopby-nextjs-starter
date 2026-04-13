@@ -37,18 +37,26 @@ src/hooks/useClickOutside.ts             (X) - 카멜 케이스
 ### 일반 변수, 함수, 훅스(Hooks): 카멜 케이스 (camelCase)
 - 무조건 변수와 일반 함수형 로직은 `camelCase`를 준수하세요.
 
+### 이벤트 핸들러 네이밍: on{Event} vs handle{Event}
+"이벤트가 언제 일어나는지(알림)"와 "그 이벤트를 어떻게 처리하는지(로직)"를 명확히 구분하기 위해 아래 규칙을 권장합니다.
+
+- **`on{Event}` (Props용)**: 컴포넌트 외부에서 받는 이벤트 속성(Props)이나 이벤트를 알리는 용도로 사용합니다.
+- **`handle{Event}` (로직용)**: 이벤트를 실제로 처리하는 내부 로직(기능 구현) 함수에 사용합니다.
+
 ✅ **Good Example:**
 ```tsx
-// 위치: src/components/ui/scroll-to-top/index.tsx
+const Parent = () => {
+  // 실제 로직이 담긴 함수: handle{Event}
+  const handleTextAreaClick = () => {
+    if (!isLogin) openLoginDialog();
+  };
 
-import React, { useState } from 'react';
+  // 자식에게는 알림용 Prop 이름으로 전달: on{Event}
+  return <CommentInput onTextAreaClick={handleTextAreaClick} />;
+};
 
-// 변수 및 훅스: camelCase
-// 컴포넌트명: PascalCase
-export const ScrollToTop = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return <button>상단으로 이동</button>;
+const CommentInput = ({ onTextAreaClick }) => {
+  return <textarea onClick={onTextAreaClick} />;
 };
 ```
 

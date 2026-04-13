@@ -8,13 +8,10 @@ export const commentSection = style({
     padding: '0',
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
+
     '@media': {
         [media.desktop]: {
-            background: vars.color.gray['10'],
-            padding: '40px',
-            borderRadius: '12px',
-            gap: '32px',
+            gap: '24px',
         },
     },
 });
@@ -115,7 +112,6 @@ export const commentInputArea = style({
     flexDirection: 'column',
     backgroundColor: vars.color.ivory['10'],
     borderRadius: '8px',
-    border: `1px solid ${vars.color.gray['20']}`,
 
     '@media': {
         [media.desktop]: {
@@ -127,12 +123,8 @@ export const commentInputArea = style({
 
 export const commentTextArea = style({
     width: '100%',
-    minHeight: '80px',
+    minHeight: '100px',
     padding: '16px',
-    border: 'none',
-    resize: 'none',
-    outline: 'none',
-    fontSize: '15px',
 });
 
 export const commentToolbar = style({

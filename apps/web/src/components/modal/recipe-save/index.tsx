@@ -12,6 +12,7 @@ import { useCollectionList } from '@/hooks/query/shop/collection';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui/useToast';
 import { vars } from '@/styles/theme.css';
+import { useProfile } from '@/hooks/query/member/profile';
 
 interface RecipeSaveModalProps {
     isOpen: boolean;
@@ -45,6 +46,9 @@ export const RecipeSaveModal = ({
         close();
     };
 
+    const { data: profileData } = useProfile();
+    const memberNo = profileData?.memberNo || 0;
+
     const { data = [] } = useCollectionList();
 
     const handleBookmark = async (collectionSno: number, title: string) => {
@@ -57,7 +61,7 @@ export const RecipeSaveModal = ({
             });
 
             queryClient.invalidateQueries({
-                queryKey: recipeKeys.detail(recipeSno),
+                queryKey: recipeKeys.detail(recipeSno, memberNo),
             });
 
             addToast({

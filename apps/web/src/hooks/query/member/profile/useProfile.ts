@@ -4,6 +4,7 @@ import type { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { profile } from '@/api/member';
 import { profileKeys } from '@/hooks/queryKeys';
 import type { GetProfileResponse } from '@/models/member/profile';
+import { useAuth } from '@/hooks/useAuth';
 
 interface UseProfileParams<T = GetProfileResponse> {
     headers?: RawAxiosRequestHeaders;
@@ -22,6 +23,8 @@ const useProfile = <T = GetProfileResponse>({
     headers,
     options,
 }: UseProfileParams<T> = {}) => {
+    const isLogin = useAuth();
+
     return useQuery({
         queryKey: profileKeys.getProfile(headers),
         queryFn: async () => {
@@ -32,6 +35,7 @@ const useProfile = <T = GetProfileResponse>({
         staleTime: 1000 * 60 * 60,
         gcTime: 1000 * 60 * 60,
         ...options,
+        enabled: (options?.enabled ?? true) && !!isLogin,
     });
 };
 

@@ -1,11 +1,10 @@
+import dayjs from '@/utils/dayjs';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/comment-section/index.css';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useAuth } from '@/hooks/useAuth';
 import { CommentResponse } from '@/models/shop/comment';
-import dayjs from '@/utils/dayjs';
-import { env } from '@/configs/env';
 
 interface CommentItemProps {
     comment: CommentResponse;
@@ -23,15 +22,7 @@ export const CommentItem = ({ comment, onDelete }: CommentItemProps) => {
 
     const isAuthor = isLogin && profile?.memberNo === comment.memberNo;
 
-    const images = comment.attachment
-        ? comment.attachment.split(',').map((url) => {
-              const trimmedUrl = url.trim();
-              if (trimmedUrl.startsWith('http')) {
-                  return trimmedUrl;
-              }
-              return `${env.NEXT_PUBLIC_GEEK_BASE_URL}/${trimmedUrl}`;
-          })
-        : [];
+    const images = comment.attachment ? comment.attachment.split('|') : [];
 
     return (
         <article className={styles.commentItem}>
