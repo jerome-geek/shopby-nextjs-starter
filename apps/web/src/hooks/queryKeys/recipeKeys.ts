@@ -1,3 +1,4 @@
+import type { SearchPublicRecipesParams } from '@/models/shop/recipe';
 import { SearchRecipesParams } from '@/models/shop/recipe';
 
 const recipeKeys = {
@@ -6,6 +7,12 @@ const recipeKeys = {
     lists: () => [...recipeKeys.all, 'list'] as const,
     list: (params?: SearchRecipesParams) =>
         [...recipeKeys.lists(), params] as const,
+
+    publicSearches: () => [...recipeKeys.all, 'public-search'] as const,
+    publicSearch: (params: SearchPublicRecipesParams) =>
+        [...recipeKeys.publicSearches(), params] as const,
+    publicSearchInfinite: (params: Omit<SearchPublicRecipesParams, 'page'>) =>
+        [...recipeKeys.publicSearches(), 'infinite', params] as const,
 
     details: () => [...recipeKeys.all, 'detail'] as const,
     detail: (sno: number) => [...recipeKeys.details(), sno] as const,

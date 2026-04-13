@@ -21,3 +21,10 @@ export interface RecipeCollection {
 }
 
 export type CollectionListResponse = RecipeCollection[];
+
+export interface SearchPublicCollectionParams {
+    keyword?: string;
+    order?: 'ASC' | 'DESC';
+    page?: number;
+    take?: number;
+}

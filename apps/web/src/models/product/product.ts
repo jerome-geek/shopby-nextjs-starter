@@ -923,6 +923,8 @@ export interface ProductSearchParams extends Paging {
         maxReviewRating?: number;
         /** 판매중지 상품을 포함할지 여부를 선택할 수 있습니다.(default: false) */
         includeStopProducts?: boolean;
+        /** 상품명 부분 일치 검색 활성화 여부를 선택할 수 있습니다. 키워드가 2자 이상이어야 활성화 됩니다. */
+        includeLikeSearch?: boolean;
     };
     order?: {
         /** 정렬 방법 (POPULAR:판매인기순 (DEFAULT) */
@@ -1573,10 +1575,8 @@ export interface ProductItem {
     saleStatusType: ProductSectionSaleStatusType;
 }
 
-export interface SearchProductItem extends Omit<
-    ProductItem,
-    'urlDirectDisplayable' | 'frontDisplayable'
-> {
+export interface SearchProductItem
+    extends Omit<ProductItem, 'urlDirectDisplayable' | 'frontDisplayable'> {
     /** 그룹관리코드 노출명 */
     groupManagementCodeName: string;
     /** 그룹관리코드 */

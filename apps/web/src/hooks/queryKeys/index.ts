@@ -6,6 +6,7 @@ import brandKeys from '@/hooks/queryKeys/brandKeys';
 import cartKeys from '@/hooks/queryKeys/cartKeys';
 import commentKeys from '@/hooks/queryKeys/commentKeys';
 import categoryKeys from '@/hooks/queryKeys/categoryKeys';
+import collectionKeys from '@/hooks/queryKeys/collectionKeys';
 import claimsKeys from '@/hooks/queryKeys/claimsKeys';
 import couponKeys from '@/hooks/queryKeys/couponKeys';
 import eventKeys from '@/hooks/queryKeys/eventKeys';
@@ -32,6 +33,7 @@ export {
     cartKeys,
     commentKeys,
     categoryKeys,
+    collectionKeys,
     claimsKeys,
     couponKeys,
     eventKeys,

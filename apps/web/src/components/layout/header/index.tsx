@@ -1,14 +1,17 @@
+import { pipe, some, values } from '@fxts/core';
 import { BookmarkIcon, CirclePlusIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
-import logoImage from '@/assets/logo.png';
+import { SearchDrawer } from '@/components/drawer/search';
 import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
 import * as styles from '@/components/layout/header/index.css';
 import { Menu } from '@/components/layout/header/Menu';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
+import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
 import {
@@ -18,6 +21,8 @@ import {
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { vars } from '@/styles/theme.css';
+
+import logoImage from '@/assets/logo.png';
 
 export function Header() {
     const { t } = useTranslation();
@@ -36,6 +41,14 @@ export function Header() {
     const { data: categoryData } = useCategory({
         categoryNo,
     });
+
+    const overlayData = useOverlayData();
+
+    const isSearchOpen = pipe(
+        overlayData,
+        values,
+        some((item) => item.id === OVERLAY_ID.SEARCH_DRAWER),
+    );
 
     const handleRecipeButtonClick = (e: React.MouseEvent) => {
         if (!isLogin) {
@@ -57,6 +70,21 @@ export function Header() {
             },
             undefined,
             { shallow: true },
+        );
+    };
+
+    const handleSearchClick = () => {
+        if (isSearchOpen) {
+            overlay.close(OVERLAY_ID.SEARCH_DRAWER);
+            return;
+        }
+
+        overlay.closeAll();
+        overlay.open(
+            (props) => {
+                return <SearchDrawer {...props} />;
+            },
+            { overlayId: OVERLAY_ID.SEARCH_DRAWER },
         );
     };
 
@@ -91,7 +119,10 @@ export function Header() {
 
                     <ul className={styles.iconList}>
                         <li>
-                            <button className={styles.searchIcon}>
+                            <button
+                                className={styles.searchIcon}
+                                onClick={handleSearchClick}
+                            >
                                 <BigSearchIcon width={24} height={24} />
                             </button>
                         </li>

@@ -2,8 +2,10 @@ import { geekRequest } from '@/api/core/geekRequest';
 import {
     CollectionListResponse,
     CreateCollectionRequest,
+    SearchPublicCollectionParams,
     UpdateCollectionRequest,
 } from '@/models/shop/collection';
+import { SearchCollectionsResponse } from '@/models/shop/recipe';
 
 const collection = {
     /** 컬렉션 생성 */
@@ -41,13 +43,8 @@ const collection = {
     },
 
     /** 공개 컬렉션 검색 */
-    searchPublic: (params: {
-        keyword?: string;
-        order?: 'RECENT' | 'POPULAR';
-        page?: number;
-        take?: number;
-    }) => {
-        return geekRequest({
+    searchPublic: (params: SearchPublicCollectionParams) => {
+        return geekRequest<SearchCollectionsResponse>({
             method: 'GET',
             url: '/shop/recipe/collections/public-search',
             params,

@@ -22,6 +22,19 @@ const productSectionKeys = {
             sectionId,
             searchParams,
         ] as const,
+
+    /** 상품 진열 내 상품 목록 (무한 스크롤) */
+    infiniteProducts: (
+        sectionId: string,
+        searchParams: Omit<GetProductSectionProductsParams, 'pageNumber'>,
+    ) =>
+        [
+            ...productSectionKeys.all,
+            'products',
+            'infinite',
+            sectionId,
+            searchParams,
+        ] as const,
 };
 
 export default productSectionKeys;
