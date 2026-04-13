@@ -6,6 +6,7 @@ import {
     UpdateRecipeExposureGroupsBody,
     UpdateRecipeExposureGroupsSortOrderBody,
     CreateUserRecipeBody,
+    UpdateAllRecipeExposureGroupsBody,
 } from '@/model/recipe';
 
 const useRecipeMutation = () => {
@@ -30,6 +31,16 @@ const useRecipeMutation = () => {
                 groupSno: number;
                 data: UpdateRecipeExposureGroupsBody;
             }) => await recipe.updateRecipeExposureGroups(groupSno, data),
+        }),
+        updateAllRecipeExposureGroups: useMutation({
+            mutationFn: async ({
+                groupSno,
+                data,
+            }: {
+                groupSno: number;
+                data: UpdateAllRecipeExposureGroupsBody;
+            }) =>
+                await recipe.updateAllRecipeExposureGroups({ groupSno, data }),
         }),
         updateRecipeExposureGroupsSortOrder: useMutation({
             mutationFn: async (data: UpdateRecipeExposureGroupsSortOrderBody) =>

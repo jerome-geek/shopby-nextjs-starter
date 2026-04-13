@@ -131,6 +131,10 @@ export interface UpdateRecipeExposureGroupsBody {
 
 export type UpdateRecipeExposureGroupsResponse = RecipeExposureGroup;
 
+export interface UpdateAllRecipeExposureGroupsBody {
+    recipeSnos: number[];
+}
+
 export interface UpdateRecipeExposureGroupsSortOrderBody {
     exposureLocation: string;
     groupSnos: number[];
