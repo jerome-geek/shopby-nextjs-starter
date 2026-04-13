@@ -9,6 +9,9 @@ const geekRequest = axios.create({
     baseURL: env.NEXT_PUBLIC_GEEK_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
+        // 핵심: 브라우저인 척 해서 CloudFront 방화벽을 뚫습니다.
+        'User-Agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
     },
     signal: controller.signal,
     paramsSerializer: (params) => {
