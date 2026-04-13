@@ -38,7 +38,7 @@ export default function App() {
                         refetchOnMount: import.meta.env.PROD,
                         refetchOnReconnect: true,
                         retry: (failureCount, error) => {
-                            if (process.env.NODE_ENV === 'development') {
+                            if (import.meta.env.DEV) {
                                 return false;
                             }
 

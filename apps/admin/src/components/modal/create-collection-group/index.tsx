@@ -165,7 +165,7 @@ const CreateCollectionGroupModal = ({
     const inputRef = useRef<HTMLInputElement>(null);
     const [keyword, setKeyword] = useState('');
 
-    const onSubmitKeyword = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const onSubmitKeyword = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setKeyword(inputRef.current?.value ?? '');

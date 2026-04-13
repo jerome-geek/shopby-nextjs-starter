@@ -50,7 +50,7 @@ const UserRecipeList = () => {
         },
     });
 
-    const setQuery = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const setQuery = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const keyword = inputRef.current?.value ?? '';
