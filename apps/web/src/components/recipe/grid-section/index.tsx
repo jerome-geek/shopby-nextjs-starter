@@ -1,5 +1,4 @@
 import {
-    AlertCircle,
     Bookmark,
     ChefHat,
     ChevronRight,
@@ -11,13 +10,16 @@ import {
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Paging from '@/components/ui/paging';
 import * as styles from '@/components/recipe/grid-section/index.css';
+import { FailedCard } from '@/components/recipe/grid-section/failed-card';
+import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
+import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
-import { useSearchMyRecipeList } from '@/hooks/query/shop/recipe';
+import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { vars } from '@/styles/theme.css';
@@ -28,7 +30,7 @@ interface RecipeGridSectionProps {
     onViewAll?: () => void;
 }
 
-export const RecipeGridSection = ({
+const RecipeGridSectionContent = ({
     title,
     onViewAll,
 }: RecipeGridSectionProps) => {
@@ -50,7 +52,7 @@ export const RecipeGridSection = ({
     const { data } = useSearchMyRecipeList({
         searchParams,
     });
-    const recipes = data?.data ?? [];
+    const recipes = data.data ?? [];
 
     console.log('🚀 ~ RecipeGridSection ~ recipes:', recipes);
 
@@ -129,120 +131,12 @@ export const RecipeGridSection = ({
 
                         if (isProcessing) {
                             return (
-                                <motion.div
-                                    key={r.sno}
-                                    style={{ cursor: 'default' }}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                >
-                                    <div className={styles.recipeImgArea}>
-                                        <div
-                                            className={
-                                                styles.processingThumbnail
-                                            }
-                                        >
-                                            <div
-                                                className={
-                                                    styles.loadingIconArea
-                                                }
-                                            >
-                                                <ChefHat
-                                                    size={32}
-                                                    className={styles.spinner}
-                                                />
-                                                <span
-                                                    className={
-                                                        styles.loadingText
-                                                    }
-                                                >
-                                                    {t('레시피를 생성중입니다')}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.productInfo}>
-                                        <h3 className={styles.productName}>
-                                            {r.title || t('새로운 레시피')}
-                                        </h3>
-                                        <div
-                                            className={styles.brandName}
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '4px',
-                                            }}
-                                        >
-                                            <Loader2
-                                                size={12}
-                                                className={styles.spinner}
-                                            />
-                                            {t('레시피 정보를 가져오고 있어요')}
-                                        </div>
-                                    </div>
-                                </motion.div>
+                                <ProcessingCard key={r.sno} recipe={r} />
                             );
                         }
 
                         if (isFailed) {
-                            return (
-                                <motion.div
-                                    key={r.sno}
-                                    style={{ cursor: 'default' }}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                >
-                                    <div className={styles.recipeImgArea}>
-                                        <div className={styles.failedThumbnail}>
-                                            <div
-                                                className={
-                                                    styles.loadingIconArea
-                                                }
-                                            >
-                                                <AlertCircle
-                                                    size={32}
-                                                    color='#e57373'
-                                                    strokeWidth={1.5}
-                                                />
-                                                <span
-                                                    className={
-                                                        styles.loadingText
-                                                    }
-                                                    style={{
-                                                        color: '#e57373',
-                                                        marginTop: '4px',
-                                                    }}
-                                                >
-                                                    {t('레시피 분석 실패')}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.productInfo}>
-                                        <h3 className={styles.productName}>
-                                            {r.title ||
-                                                t('분석을 완료하지 못했어요')}
-                                        </h3>
-                                        {r.failureReason ? (
-                                            <div
-                                                style={{
-                                                    fontSize: '11px',
-                                                    color: '#e57373',
-                                                    lineHeight: 1.4,
-                                                    wordBreak: 'keep-all',
-                                                }}
-                                            >
-                                                {r.failureReason}
-                                            </div>
-                                        ) : (
-                                            <div className={styles.brandName}>
-                                                {t(
-                                                    '다시 시도하거나 URL을 확인해주세요.',
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </motion.div>
-                            );
+                            return <FailedCard key={r.sno} recipe={r} />;
                         }
 
                         return (
@@ -319,13 +213,13 @@ export const RecipeGridSection = ({
                                                 size={18}
                                                 fill={
                                                     r.bookmarked
-                                                        ? '#8da287'
-                                                        : 'white'
+                                                        ? vars.color.green['80']
+                                                        : vars.color.white
                                                 }
                                                 color={
                                                     r.bookmarked
-                                                        ? '#8da287'
-                                                        : 'white'
+                                                        ? vars.color.green['80']
+                                                        : vars.color.white
                                                 }
                                             />
                                         </div>
@@ -383,5 +277,13 @@ export const RecipeGridSection = ({
                 />
             )}
         </section>
+    );
+};
+
+export const RecipeGridSection = (props: RecipeGridSectionProps) => {
+    return (
+        <Suspense fallback={<RecipeGridSkeleton />}>
+            <RecipeGridSectionContent {...props} />
+        </Suspense>
     );
 };

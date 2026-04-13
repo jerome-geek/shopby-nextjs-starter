@@ -91,6 +91,28 @@ export const tabList = style({
     },
 });
 
+export const addCollectionButton = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    border: `1px solid ${vars.color.gray['40']}`,
+    backgroundColor: vars.color.white,
+    color: vars.color.gray['60'],
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    selectors: {
+        '&:hover': {
+            backgroundColor: vars.color.green['40'],
+            borderColor: vars.color.green['80'],
+            color: vars.color.green['80'],
+        },
+    },
+});
+
 export const tabItem = style([
     textStyles.body2Semibold,
     {

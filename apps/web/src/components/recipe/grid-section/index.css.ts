@@ -171,11 +171,11 @@ export const failedThumbnail = style({
     position: 'relative',
     borderRadius: '16px',
     overflow: 'hidden',
-    backgroundColor: '#fdf5f5', // 은은한 에러 배경색
+    backgroundColor: vars.color.pink['20'],
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: '1px solid #fae6e6',
+    border: `1px solid ${vars.color.pink['80']}`,
 });
 
 export const skeletonThumbnail = style({
@@ -184,8 +184,7 @@ export const skeletonThumbnail = style({
     position: 'relative',
     borderRadius: '16px',
     overflow: 'hidden',
-    backgroundColor: '#f9fbf8', // 아주 연한 세이지 톤 배경
-    background: `linear-gradient(135deg, ${vars.color.gray['10']} 0%, #f2f5f1 50%, ${vars.color.gray['10']} 100%)`,
+    background: `linear-gradient(135deg, ${vars.color.gray['10']} 0%, ${vars.color.green['40']} 50%, ${vars.color.gray['10']} 100%)`,
     backgroundSize: '200% 200%',
     animation: `${shimmer} 2s infinite ease-in-out`,
     display: 'flex',
@@ -224,7 +223,7 @@ export const processingOverlay = style({
 
 export const spinner = style({
     animation: `${rotate} 2s infinite linear`,
-    color: '#8da287',
+    color: vars.color.green['80'],
 });
 
 export const processingTitle = style([
@@ -233,6 +232,45 @@ export const processingTitle = style([
         color: vars.color.gray['60'],
         textAlign: 'center',
         padding: '0 12px',
+    },
+]);
+
+export const statusCard = style({
+    cursor: 'default',
+});
+
+export const processingStatusText = style([
+    textStyles.caption1Semibold,
+    {
+        color: vars.color.gray['60'],
+        letterSpacing: '-0.01em',
+    },
+]);
+
+export const processingSubText = style([
+    textStyles.caption2Regular,
+    {
+        color: vars.color.gray['50'],
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+    },
+]);
+
+export const failedStatusText = style([
+    textStyles.caption1Semibold,
+    {
+        color: vars.color.pink['100'],
+        letterSpacing: '-0.01em',
+    },
+]);
+
+export const failedReasonText = style([
+    textStyles.caption2Regular,
+    {
+        color: vars.color.pink['80'],
+        lineHeight: 1.4,
+        wordBreak: 'keep-all',
     },
 ]);
 
@@ -246,6 +284,28 @@ export const container = style({
         textDecoration: 'none',
     },
 });
+
+export const skeletonBar = style({
+    borderRadius: '6px',
+    background: `linear-gradient(135deg, ${vars.color.gray['10']} 0%, ${vars.color.green['40']} 50%, ${vars.color.gray['10']} 100%)`,
+    backgroundSize: '200% 200%',
+    animation: `${shimmer} 2s infinite ease-in-out`,
+});
+
+export const skeletonTitle = style([
+    skeletonBar,
+    { width: '120px', height: '22px' },
+]);
+
+export const skeletonTextLine = style([
+    skeletonBar,
+    { width: '100%', height: '14px' },
+]);
+
+export const skeletonTextShort = style([
+    skeletonBar,
+    { width: '60%', height: '12px' },
+]);
 
 export const recipeCardContainer = style({
     display: 'flex',
@@ -263,7 +323,7 @@ export const emptyState = style({
     alignItems: 'center',
     gap: '20px',
     textAlign: 'center',
-    backgroundColor: '#fafaf9',
+    backgroundColor: vars.color.gray['10'],
     borderRadius: '24px',
     margin: '12px 0',
 });
@@ -272,11 +332,11 @@ export const emptyIconArea = style({
     width: '64px',
     height: '64px',
     borderRadius: '20px',
-    backgroundColor: '#f2f5f1',
+    backgroundColor: vars.color.green['40'],
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: '#8da287',
+    color: vars.color.green['80'],
 });
 
 export const emptyTitle = style([
@@ -309,12 +369,12 @@ export const createRecipeButton = style([
         cursor: 'pointer',
         transition: 'all 0.2s ease',
         marginTop: '12px',
-        boxShadow: '0 4px 12px rgba(141, 162, 135, 0.2)',
+        boxShadow: vars.shadow.sm,
 
         ':hover': {
             backgroundColor: vars.color.gray['90'],
             transform: 'translateY(-2px)',
-            boxShadow: '0 6px 16px rgba(141, 162, 135, 0.3)',
+            boxShadow: vars.shadow.md,
         },
 
         ':active': {

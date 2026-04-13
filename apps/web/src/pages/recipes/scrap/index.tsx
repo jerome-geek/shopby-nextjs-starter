@@ -1,17 +1,18 @@
-import { map, pipe, prepend, sort, sortBy, toArray } from '@fxts/core';
-import { useMemo, useState } from 'react';
+import { map, pipe, prepend, sort, toArray } from '@fxts/core';
+import { useMemo } from 'react';
 import { ArrowUp, Bookmark, ChevronRight, Plus } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { overlay } from 'overlay-kit';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { AuthGuardLayout, CSRLayout } from '@/components/layout';
 import { RecipeCollectionCreateModal } from '@/components/modal';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
-import { useCustomDialog } from '@/hooks/ui';
 import { ScrapFavoriteContent } from '@/components/recipe/scrap/scrap-favorite-content';
 import * as styles from '@/pages/recipes/scrap/index.css';
 import { vars } from '@/styles/theme.css';
+import { OVERLAY_ID } from '@/const/overlay';
 import { useScrapCollections } from '@/hooks/query/shop/recipe';
 import RecipeScrapSummary from '@/components/recipe/scrap/summary';
 
@@ -132,17 +133,31 @@ const RecipeScrapPage = () => {
         );
     };
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openCollectionCreateModal = () => {
+        overlay.open(
+            (props) => <RecipeCollectionCreateModal {...props} />,
+            { overlayId: OVERLAY_ID.RECIPE_COLLECTION_CREATE },
+        );
+    };
 
     return (
         <div className={styles.container}>
             <div className={styles.titleContainer}>
                 <h1 className={styles.title}>{t('스크랩북')}</h1>
 
-                <div className={styles.tabList}>
+                <div
+                    role='tablist'
+                    aria-label={t('스크랩 컬렉션')}
+                    className={styles.tabList}
+                >
                     {tabs.map((tab) => (
-                        <motion.div
+                        <motion.button
                             key={tab.id}
+                            type='button'
+                            role='tab'
+                            id={`tab-${tab.sno}`}
+                            aria-selected={activeTabId === tab.sno}
+                            aria-controls={`tabpanel-scrap`}
                             className={styles.tabItem}
                             data-active={activeTabId === tab.sno}
                             onClick={() => handleTabChange(tab.sno)}
@@ -162,32 +177,40 @@ const RecipeScrapPage = () => {
                             <span style={{ position: 'relative', zIndex: 1 }}>
                                 {t(tab.label)}
                             </span>
-                        </motion.div>
+                        </motion.button>
                     ))}
+                    <button
+                        type='button'
+                        className={styles.addCollectionButton}
+                        onClick={openCollectionCreateModal}
+                        aria-label={t('컬렉션 추가')}
+                    >
+                        <Plus size={16} />
+                    </button>
                 </div>
             </div>
 
-            <AnimatePresence mode='wait'>
-                <div key={activeTabId}>
-                    {activeTabId === 0 ? (
-                        <RecipeScrapSummary />
-                    ) : (
-                        <ScrapDetailContent
-                            sno={activeTabId}
-                            title={
-                                tabs.find((t) => t.id === activeTabId)?.label ||
-                                ''
-                            }
-                        />
-                    )}
-                </div>
-            </AnimatePresence>
-
-            <RecipeCollectionCreateModal
-                isOpen={isModalOpen}
-                close={() => setIsModalOpen(false)}
-                unmount={() => setIsModalOpen(false)}
-            />
+            <div
+                id='tabpanel-scrap'
+                role='tabpanel'
+                aria-labelledby={`tab-${activeTabId}`}
+            >
+                <AnimatePresence mode='wait'>
+                    <div key={activeTabId}>
+                        {activeTabId === 0 ? (
+                            <RecipeScrapSummary />
+                        ) : (
+                            <ScrapDetailContent
+                                sno={activeTabId}
+                                title={
+                                    tabs.find((t) => t.id === activeTabId)
+                                        ?.label || ''
+                                }
+                            />
+                        )}
+                    </div>
+                </AnimatePresence>
+            </div>
 
             <button
                 className={styles.fab}

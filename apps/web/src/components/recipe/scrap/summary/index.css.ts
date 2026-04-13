@@ -172,7 +172,17 @@ export const collectionGrid = style({
     },
 });
 
+export const collectionTitle = style([
+    textStyles.headlineMedium,
+    {
+        color: vars.color.gray['90'],
+    },
+]);
+
 export const collectionCard = style({
+    display: 'block',
+    textDecoration: 'none',
+    color: 'inherit',
     borderRadius: '16px',
     overflow: 'hidden',
     backgroundColor: vars.color.white,
@@ -182,6 +192,7 @@ export const collectionCard = style({
     selectors: {
         '&:hover': {
             boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
+            textDecoration: 'none',
         },
     },
 });
@@ -194,6 +205,19 @@ export const collageGrid = style({
     '@media': {
         [media.desktop]: {
             gridTemplateRows: 'repeat(2, 100px)',
+        },
+    },
+});
+
+export const collagePlaceholder = style({
+    height: '160px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: vars.color.green['40'],
+    '@media': {
+        [media.desktop]: {
+            height: '200px',
         },
     },
 });
@@ -216,7 +240,12 @@ export const collectionInfo = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
-    backgroundColor: '#f9fbf8',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '10px',
+        },
+    },
 });
 
 export const collectionTitleArea = style({
@@ -226,18 +255,16 @@ export const collectionTitleArea = style({
 });
 
 export const collectionDesc = style([
-    textStyles.caption1Regular,
+    textStyles.body1Regular,
     {
-        color: vars.color.gray['60'],
-        lineHeight: '1.5',
+        color: vars.color.gray['80'],
     },
 ]);
 
 export const collectionFooter = style([
-    textStyles.caption2Regular,
+    textStyles.body2Regular,
     {
-        color: vars.color.gray['40'],
-        marginTop: '8px',
+        color: vars.color.gray['60'],
     },
 ]);
 

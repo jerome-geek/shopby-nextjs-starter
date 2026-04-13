@@ -12,4 +12,5 @@ export const OVERLAY_ID = {
     PI_RESTOCK_NOTICE_MODAL: 'pi-restock-notice-modal',
     TOAST: 'toast',
     LOADING: 'loading',
+    RECIPE_COLLECTION_CREATE: 'recipe-collection-create',
 };

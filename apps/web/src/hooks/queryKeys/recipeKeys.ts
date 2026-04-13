@@ -19,6 +19,11 @@ const recipeKeys = {
         [...recipeKeys.details(), sno, memberNo] as const,
 
     collections: () => [...recipeKeys.all, 'collections'] as const,
+
+    sharedCollections: () =>
+        [...recipeKeys.all, 'shared-collection'] as const,
+    sharedCollection: (shareCode: string) =>
+        [...recipeKeys.sharedCollections(), shareCode] as const,
 };
 
 export default recipeKeys;

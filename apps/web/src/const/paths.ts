@@ -244,5 +244,6 @@ export const PATHS = {
         WRITE: '/recipes/write',
         DETAIL: '/recipes/[recipeNo]',
         SCRAP: '/recipes/scrap',
+        COLLECTIONS: '/recipes/collections/[shareCode]',
     },
-} as const;
+};
