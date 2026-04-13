@@ -27,6 +27,16 @@ const useCollectionMutation = () => {
             mutationFn: async ({ collectionSno }: { collectionSno: number }) =>
                 await collection.remove(collectionSno),
         }),
+
+        bookmarkCollection: useMutation({
+            mutationFn: async ({ collectionSno }: { collectionSno: number }) =>
+                await collection.bookmarkCollection(collectionSno),
+        }),
+
+        unBookmarkCollection: useMutation({
+            mutationFn: async ({ collectionSno }: { collectionSno: number }) =>
+                await collection.unBookmarkCollection(collectionSno),
+        }),
     };
 };
 

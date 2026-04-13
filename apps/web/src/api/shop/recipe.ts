@@ -179,36 +179,6 @@ const recipe = {
     },
 
     /**
-     * 컬렉션 북마크 추가
-     *  - 다른 사용자의 컬렉션을 북마크합니다
-     */
-    bookmarkCollection: (
-        collectionSno: number,
-        options?: AxiosRequestConfig,
-    ) => {
-        return geekRequest<CollectionBookmarkResponse>({
-            method: 'POST',
-            url: `/shop/recipe/collections/${collectionSno}/bookmark`,
-            ...options,
-        });
-    },
-
-    /**
-     * 컬렉션 북마크 취소
-     *  - 컬렉션 북마크를 취소합니다
-     */
-    unbookmarkCollection: (
-        collectionSno: number,
-        options?: AxiosRequestConfig,
-    ) => {
-        return geekRequest<CollectionBookmarkResponse>({
-            method: 'DELETE',
-            url: `/shop/recipe/collections/${collectionSno}/bookmark`,
-            ...options,
-        });
-    },
-
-    /**
      * 북마크한 컬렉션 목록 조회
      *  - 사용자가 북마크한 컬렉션 목록을 조회합니다
      */

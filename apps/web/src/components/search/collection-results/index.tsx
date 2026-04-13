@@ -57,7 +57,7 @@ export const CollectionSearchResults = ({
                 <ObserverTarget
                     onIntersect={() => {
                         if (hasNextPage) {
-                            void fetchNextPage();
+                            fetchNextPage();
                         }
                     }}
                     hasNextPage={hasNextPage}

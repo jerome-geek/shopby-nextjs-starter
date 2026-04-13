@@ -54,7 +54,7 @@ export const RecipeSearchResults = ({
                 <ObserverTarget
                     onIntersect={() => {
                         if (hasNextPage) {
-                            void fetchNextPage();
+                            fetchNextPage();
                         }
                     }}
                     hasNextPage={hasNextPage}

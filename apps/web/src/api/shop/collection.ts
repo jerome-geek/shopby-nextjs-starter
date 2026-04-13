@@ -5,7 +5,11 @@ import {
     SearchPublicCollectionParams,
     UpdateCollectionRequest,
 } from '@/models/shop/collection';
-import { SearchCollectionsResponse } from '@/models/shop/recipe';
+import {
+    CollectionBookmarkResponse,
+    SearchCollectionsResponse,
+} from '@/models/shop/recipe';
+import { AxiosRequestConfig } from 'axios';
 
 const collection = {
     /** 컬렉션 생성 */
@@ -48,6 +52,36 @@ const collection = {
             method: 'GET',
             url: '/shop/recipe/collections/public-search',
             params,
+        });
+    },
+
+    /**
+     * 컬렉션 북마크 추가
+     *  - 다른 사용자의 컬렉션을 북마크합니다
+     */
+    bookmarkCollection: (
+        collectionSno: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return geekRequest<CollectionBookmarkResponse>({
+            method: 'POST',
+            url: `/shop/recipe/collections/${collectionSno}/bookmark`,
+            ...options,
+        });
+    },
+
+    /**
+     * 컬렉션 북마크 취소
+     *  - 컬렉션 북마크를 취소합니다
+     */
+    unBookmarkCollection: (
+        collectionSno: number,
+        options?: AxiosRequestConfig,
+    ) => {
+        return geekRequest<CollectionBookmarkResponse>({
+            method: 'DELETE',
+            url: `/shop/recipe/collections/${collectionSno}/bookmark`,
+            ...options,
         });
     },
 };

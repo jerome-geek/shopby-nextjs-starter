@@ -1,17 +1,73 @@
-import { Bookmark, ChefHat } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
+import { Bookmark, ChefHat } from 'lucide-react';
 
 import * as styles from '@/components/collection/collection-card/index.css';
+import { useCollectionMutation } from '@/hooks/mutations';
+import { useCustomDialog } from '@/hooks/ui/useCustomDialog';
+import { useToast } from '@/hooks/ui/useToast';
+import { useAuth } from '@/hooks/useAuth';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
+import { collectionKeys } from '@/hooks/queryKeys';
 
 export interface CollectionCardProps {
     collection: BookmarkedRecipeCollection;
 }
 
 export const CollectionCard = ({ collection }: CollectionCardProps) => {
+    const isLogin = useAuth();
+
+    const { addToast } = useToast();
+
+    const { openLoginDialog } = useCustomDialog();
+
+    const queryClient = useQueryClient();
+
     const imageUrls = collection.recipeImageUrls.filter(Boolean);
     const hasImages = imageUrls.length > 0;
+
+    const { bookmarkCollection, unBookmarkCollection } =
+        useCollectionMutation();
+
+    const onBookmarkToggle = (collection: BookmarkedRecipeCollection) => {
+        if (!isLogin) {
+            openLoginDialog();
+            return;
+        }
+
+        if (collection.bookmarked) {
+            unBookmarkCollection.mutate(
+                { collectionSno: collection.sno },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: collectionKeys.publicSearches(),
+                        });
+                        addToast({
+                            message: '북마크를 취소했습니다.',
+                            variant: 'success',
+                        });
+                    },
+                },
+            );
+        } else {
+            bookmarkCollection.mutate(
+                { collectionSno: collection.sno },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: collectionKeys.publicSearches(),
+                        });
+                        addToast({
+                            message: '북마크를 추가했습니다.',
+                            variant: 'success',
+                        });
+                    },
+                },
+            );
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -63,18 +119,26 @@ export const CollectionCard = ({ collection }: CollectionCardProps) => {
                     </div>
                 </div>
 
-                <Bookmark
-                    size={24}
-                    strokeWidth={1.5}
-                    fill={
-                        collection.bookmarked ? vars.color.green['100'] : 'none'
-                    }
-                    color={
-                        collection.bookmarked
-                            ? vars.color.green['100']
-                            : 'black'
-                    }
-                />
+                <button
+                    onClick={() => {
+                        onBookmarkToggle(collection);
+                    }}
+                >
+                    <Bookmark
+                        size={24}
+                        strokeWidth={1.5}
+                        fill={
+                            collection.bookmarked
+                                ? vars.color.green['100']
+                                : 'none'
+                        }
+                        color={
+                            collection.bookmarked
+                                ? vars.color.green['100']
+                                : 'black'
+                        }
+                    />
+                </button>
             </div>
         </div>
     );
