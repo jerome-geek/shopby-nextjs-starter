@@ -101,7 +101,7 @@ const UserRecipeList = () => {
                     {/* 액션 버튼 */}
                     <button
                         onClick={openCreateUserRecipeOverlay}
-                        className='flex items-center gap-2 h-10 px-4 rounded-xl bg-[#ff6900] text-white text-sm font-semibold transition-all hover:bg-orange-600 shadow-sm'
+                        className='flex h-9 items-center gap-2 rounded-lg bg-brand-500 px-3 text-sm font-medium text-white transition-colors hover:bg-brand-600'
                     >
                         <PlusSimpleIcon className='w-4 h-4 text-white' />
                         레시피 생성

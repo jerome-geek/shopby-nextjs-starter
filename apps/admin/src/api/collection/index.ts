@@ -10,9 +10,17 @@ import {
     UpdateCollectionExposureGroupsResponse,
     UpdateCollectionExposureGroupsBody,
     UpdateCollectionExposureGroupsSortOrderBody,
+    CreateUserCollectionBody,
 } from '@/model/collection';
 
 export const collection = {
+    createUserCollection: (data: CreateUserCollectionBody) => {
+        return request({
+            method: 'POST',
+            url: '/admin/recipe/user-collections',
+            data,
+        });
+    },
     searchCollections: (params: SearchCollectionsParams) => {
         return request<SearchCollectionsResponse>({
             method: 'GET',

@@ -16,6 +16,14 @@ export interface Collection {
 
 export type SearchCollectionsResponse = PageResponse<Collection>;
 
+export interface CreateUserCollectionBody {
+    memberNo: number;
+    memberName?: string;
+    memberId?: string;
+    collectionName: string;
+    recipeSnos: number[];
+}
+
 export interface GetCollectionExposureGroupsParams extends PageParams {
     isDisplay?: boolean;
     exposureLocation?: string;

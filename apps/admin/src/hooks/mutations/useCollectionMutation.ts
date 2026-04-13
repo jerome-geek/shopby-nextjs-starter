@@ -5,10 +5,15 @@ import {
     CreateCollectionExposureGroupsBody,
     UpdateCollectionExposureGroupsBody,
     UpdateCollectionExposureGroupsSortOrderBody,
+    CreateUserCollectionBody,
 } from '@/model/collection';
 
 const useCollectionMutation = () => {
     return {
+        createUserCollection: useMutation({
+            mutationFn: async (data: CreateUserCollectionBody) =>
+                await collection.createUserCollection(data),
+        }),
         createCollectionExposureGroups: useMutation({
             mutationFn: async (data: CreateCollectionExposureGroupsBody) =>
                 await collection.createCollectionExposureGroups(data),

@@ -1,35 +1,35 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { filter, isEmpty, pipe, toArray } from '@fxts/core';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import ErrorMessage from '@/components/form/ErrorMessage';
-import Select from '@/components/form/select/intdex';
-import Toggle from '@/components/form/toggle';
 import {
     Input,
     InputContainer,
     Label,
     TextArea,
 } from '@/components/form/input';
-import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
-import {
-    createRecipeExposureGroupsSchema,
-    CreateRecipeExposureGroupsSchemaType,
-    UpdateRecipeExposureGroupsSchemaType,
-    updateRecipeExposureGroupsSchema,
-} from '@/schema/recipe.schema';
+import Select from '@/components/form/select/intdex';
+import Toggle from '@/components/form/toggle';
 import { RECIPE_GROUP_ID_OPTIONS } from '@/const/recipe';
+import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import {
     useRecipeExposureGroupDetail,
     useRecipeList,
 } from '@/hooks/query/recipe';
-import type { Recipe } from '@/model/recipe';
-import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
-import { useDialog } from '@/hooks/utils';
-import useApiError from '@/hooks/useApiError';
 import { recipeKeys } from '@/hooks/queryKeys';
+import useApiError from '@/hooks/useApiError';
+import { useDialog } from '@/hooks/utils';
+import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
+import type { Recipe } from '@/model/recipe';
+import {
+    createRecipeExposureGroupsSchema,
+    CreateRecipeExposureGroupsSchemaType,
+    updateRecipeExposureGroupsSchema,
+    UpdateRecipeExposureGroupsSchemaType,
+} from '@/schema/recipe.schema';
 import { isProcessingRecipe } from '@/utils/recipe';
 
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
@@ -461,7 +461,7 @@ const CreateRecipeGroupModal = ({
                             </>
                         )}
 
-                        {!isEmpty(recipeSnos) && (
+                        {!isEmpty(selectedRecipes) && (
                             <div className='flex flex-col overflow-hidden rounded-lg border border-[#ff6900]/25 bg-white shadow-[inset_3px_0_0_0_#ff6900] dark:border-orange-500/30 dark:bg-gray-900'>
                                 <div className='flex items-center justify-between gap-2 border-b border-[#f3f4f6] bg-[#fff9f5] px-3 py-2 dark:border-gray-700 dark:bg-orange-950/25'>
                                     <span className='text-xs font-semibold text-[#364153] dark:text-gray-200'>

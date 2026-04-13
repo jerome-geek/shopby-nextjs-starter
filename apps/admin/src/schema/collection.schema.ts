@@ -22,3 +22,15 @@ export const updateCollectionExposureGroupsSchema = z.object({
 export type UpdateCollectionExposureGroupsSchemaType = z.infer<
     typeof updateCollectionExposureGroupsSchema
 >;
+
+export const createUserCollectionSchema = z.object({
+    memberNo: z.number().min(1, '사용자를 입력해 주세요.'),
+    memberName: z.string().optional(),
+    memberId: z.string().optional(),
+    collectionName: z.string().min(1, '컬렉션명을 입력해 주세요.'),
+    recipeSnos: z.array(z.number()).min(1, '레시피를 선택해 주세요.'),
+});
+
+export type CreateUserCollectionSchemaType = z.infer<
+    typeof createUserCollectionSchema
+>;
