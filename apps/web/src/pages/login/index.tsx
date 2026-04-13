@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -36,6 +37,8 @@ const LoginPage: NextPageWithLayout = () => {
 
     const { handleErrorDialog } = useApiError();
 
+    const [isNavigating, setIsNavigating] = useState(false);
+
     const methods = useForm<LoginFormSchemaType>({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -51,23 +54,24 @@ const LoginPage: NextPageWithLayout = () => {
         formState: { isSubmitting },
     } = methods;
 
-    const onSubmit = handleSubmit(async ({ memberId, password, isSaved }) => {
+    const onSubmit = handleSubmit(async ({ memberId, password }) => {
         try {
-            const data = await oauth2.issueAccessToken({
+            const { data } = await oauth2.issueAccessToken({
                 memberId,
                 password,
                 keepLogin: true,
             });
 
-            const accessToken = data.data?.accessToken;
-            const accessTokenExpiresIn = data.data?.expiresIn;
-            const refreshToken = data.data?.refreshToken;
-            const refreshTokenExpiresIn = data.data?.refreshTokenExpiresIn;
+            const accessToken = data?.accessToken;
+            const accessTokenExpiresIn = data?.expiresIn;
+            const refreshToken = data?.refreshToken;
+            const refreshTokenExpiresIn = data?.refreshTokenExpiresIn;
 
             if (accessToken && refreshToken) {
                 accessTokenCookie.set(accessToken, accessTokenExpiresIn);
                 refreshTokenCookie.set(refreshToken, refreshTokenExpiresIn);
 
+                setIsNavigating(true);
                 location.replace(returnUrl || PATHS.MAIN);
                 return;
             }
@@ -75,6 +79,7 @@ const LoginPage: NextPageWithLayout = () => {
             throw new Error(t('로그인 실패하였습니다.'));
         } catch (error) {
             handleErrorDialog(error);
+            setIsNavigating(false);
         }
     });
 
@@ -140,10 +145,10 @@ const LoginPage: NextPageWithLayout = () => {
                                 type='submit'
                                 frame='solid'
                                 variant='primary'
-                                disabled={isSubmitting}
+                                disabled={isSubmitting || isNavigating}
                             >
                                 <span>
-                                    {isSubmitting
+                                    {isSubmitting || isNavigating
                                         ? t('로그인 중...')
                                         : t('로그인')}
                                 </span>

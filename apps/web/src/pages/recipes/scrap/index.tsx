@@ -134,10 +134,9 @@ const RecipeScrapPage = () => {
     };
 
     const openCollectionCreateModal = () => {
-        overlay.open(
-            (props) => <RecipeCollectionCreateModal {...props} />,
-            { overlayId: OVERLAY_ID.RECIPE_COLLECTION_CREATE },
-        );
+        overlay.open((props) => <RecipeCollectionCreateModal {...props} />, {
+            overlayId: OVERLAY_ID.RECIPE_COLLECTION_CREATE,
+        });
     };
 
     return (
@@ -203,7 +202,7 @@ const RecipeScrapPage = () => {
                             <ScrapDetailContent
                                 sno={activeTabId}
                                 title={
-                                    tabs.find((t) => t.id === activeTabId)
+                                    tabs.find((t) => t.sno === activeTabId)
                                         ?.label || ''
                                 }
                             />
@@ -224,11 +223,7 @@ const RecipeScrapPage = () => {
 };
 
 RecipeScrapPage.getLayout = (page: React.ReactNode) => {
-    return (
-        <CSRLayout>
-            <AuthGuardLayout>{page}</AuthGuardLayout>
-        </CSRLayout>
-    );
+    return <CSRLayout>{page}</CSRLayout>;
 };
 
 export default RecipeScrapPage;

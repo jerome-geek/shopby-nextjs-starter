@@ -48,5 +48,6 @@ export const config = {
 
         // [PROTECTED] 비로그인 상태에서 접근 불가
         '/mypage/:path*',
+        '/recipes/scrap',
     ],
 };
