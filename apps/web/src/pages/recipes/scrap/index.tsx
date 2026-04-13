@@ -1,20 +1,18 @@
 import { map, pipe, prepend, sort, toArray } from '@fxts/core';
-import { useMemo } from 'react';
-import { ArrowUp, Bookmark, ChevronRight, Plus } from 'lucide-react';
+import { ArrowUp, Bookmark, Plus } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { overlay } from 'overlay-kit';
 import { useRouter } from 'next/router';
+import { overlay } from 'overlay-kit';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AuthGuardLayout, CSRLayout } from '@/components/layout';
+import { CSRLayout } from '@/components/layout';
 import { RecipeCollectionCreateModal } from '@/components/modal';
-import { RecipeGridSection } from '@/components/recipe/grid-section';
-import { ScrapFavoriteContent } from '@/components/recipe/scrap/scrap-favorite-content';
-import * as styles from '@/pages/recipes/scrap/index.css';
-import { vars } from '@/styles/theme.css';
+import RecipeScrapSummary from '@/components/recipe/scrap/summary';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useScrapCollections } from '@/hooks/query/shop/recipe';
-import RecipeScrapSummary from '@/components/recipe/scrap/summary';
+import * as styles from '@/pages/recipes/scrap/index.css';
+import { vars } from '@/styles/theme.css';
 
 /**
  * 스크랩 상세 레이아웃 (개별 카테고리 탭용)
