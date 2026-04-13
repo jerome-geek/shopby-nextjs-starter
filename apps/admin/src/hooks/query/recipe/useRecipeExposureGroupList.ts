@@ -13,7 +13,7 @@ import {
 } from '@/model/recipe';
 
 interface UseRecipeExposureGroupListParams<T = RecipeExposureGroupResponse> {
-    params?: GetRecipeExposureGroupsParams;
+    params: GetRecipeExposureGroupsParams;
     options?: Omit<
         UseQueryOptions<
             RecipeExposureGroupResponse,
@@ -28,7 +28,7 @@ interface UseRecipeExposureGroupListParams<T = RecipeExposureGroupResponse> {
 const useRecipeExposureGroupList = <T = RecipeExposureGroupResponse>({
     params,
     options,
-}: UseRecipeExposureGroupListParams<T> = {}) => {
+}: UseRecipeExposureGroupListParams<T>) => {
     return useQuery({
         queryKey: recipeKeys.list(params),
         queryFn: async () => {

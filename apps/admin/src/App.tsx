@@ -23,6 +23,7 @@ import UserCollections from '@/pages/UserCollection/UserCollections';
 import UserCollectionDetail from '@/pages/UserCollection/UserCollectionDetail';
 import UserRecipeList from '@/pages/UserRecipe/UserRecipeList';
 import UserRecipeDetail from '@/pages/UserRecipe/UserRecipeDetail';
+import RecipeSettings from '@/pages/RecipeSettings/RecipeSettings';
 import NotFound from '@/pages/OtherPage/NotFound';
 import AuthLayout from '@/pages/AuthPages/AuthPageLayout';
 import { useAxiosInterceptor } from '@/hooks/utils';
@@ -78,6 +79,10 @@ export default function App() {
                                     index
                                     path={PATHS.DASHBOARD}
                                     element={<Home />}
+                                />
+                                <Route
+                                    path={PATHS.APP.RECIPE_SETTINGS}
+                                    element={<RecipeSettings />}
                                 />
                                 <Route
                                     path={PATHS.APP.COLLECTION_GROUP.LIST}

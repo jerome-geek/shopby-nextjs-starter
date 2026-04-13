@@ -1,7 +1,7 @@
-export interface SearchCollectionsParams {
+import { PageParams, PageResponse } from '@/model/common';
+
+export interface SearchCollectionsParams extends PageParams {
     keyword: string;
-    // page: number;
-    // take: number;
 }
 
 export interface Collection {
@@ -14,9 +14,9 @@ export interface Collection {
     title: string;
 }
 
-export type SearchCollectionsResponse = Collection[];
+export type SearchCollectionsResponse = PageResponse<Collection>;
 
-export interface GetCollectionExposureGroupsParams {
+export interface GetCollectionExposureGroupsParams extends PageParams {
     isDisplay?: boolean;
     exposureLocation?: string;
 }
@@ -40,7 +40,8 @@ export interface CollectionExposureGroup {
     };
 }
 
-export type CollectionExposureGroupResponse = CollectionExposureGroup[];
+export type CollectionExposureGroupResponse =
+    PageResponse<CollectionExposureGroup>;
 
 export type CollectionExposureGroupDetailResponse = CollectionExposureGroup;
 

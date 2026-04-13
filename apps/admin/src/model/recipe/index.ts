@@ -1,7 +1,7 @@
-export interface SearchRecipesParams {
+import { PageParams, PageResponse } from '@/model/common';
+
+export interface SearchRecipesParams extends PageParams {
     keyword: string;
-    // page: number;
-    // take: number;
 }
 
 export interface Recipe {
@@ -12,35 +12,29 @@ export interface Recipe {
     title: string;
 }
 
-export type SearchRecipesResponse = Recipe[];
-
-export type ExposureLocation =
-    | 'recipe_group_1'
-    | 'recipe_group_2'
-    | 'recipe_group_3';
-
-export interface GetRecipeExposureGroupsParams {
+export type SearchRecipesResponse = PageResponse<Recipe>;
+export interface GetRecipeExposureGroupsParams extends PageParams {
     isDisplay?: boolean;
-    exposureLocation?: ExposureLocation;
+    exposureLocation?: string;
 }
 
 export interface RecipeExposureGroup {
     sno: number;
     groupName: string;
     description: string;
-    exposureLocation: ExposureLocation;
+    exposureLocation: string;
     isDisplay: boolean;
     sortOrder: number;
     recipeCount: number;
 }
 
-export type RecipeExposureGroupResponse = RecipeExposureGroup[];
+export type RecipeExposureGroupResponse = PageResponse<RecipeExposureGroup>;
 
 export interface RecipeExposureGroupDetailResponse {
     sno: number;
     groupName: string;
     description: string;
-    exposureLocation: ExposureLocation;
+    exposureLocation: string;
     isDisplay: boolean;
     sortOrder: number;
     recipes: {
@@ -73,6 +67,6 @@ export interface UpdateRecipeExposureGroupsBody {
 export type UpdateRecipeExposureGroupsResponse = RecipeExposureGroup;
 
 export interface UpdateRecipeExposureGroupsSortOrderBody {
-    exposureLocation: ExposureLocation;
+    exposureLocation: string;
     groupSnos: number[];
 }

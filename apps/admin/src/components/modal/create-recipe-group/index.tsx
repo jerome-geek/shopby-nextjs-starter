@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { isEmpty } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -25,7 +25,7 @@ import {
     useRecipeExposureGroupDetail,
     useSearchRecipeList,
 } from '@/hooks/query/recipe';
-import type { Recipe, SearchRecipesResponse } from '@/model/recipe';
+import type { Recipe } from '@/model/recipe';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useDialog } from '@/hooks/utils';
 import useApiError from '@/hooks/useApiError';
@@ -157,22 +157,28 @@ const CreateRecipeGroupModal = ({
         setKeyword(inputRef.current?.value ?? '');
     };
 
-    const { data: recipeListData = [] } = useSearchRecipeList({
+    const { data: recipeListData } = useSearchRecipeList({
         params: {
             keyword,
+            take: 100,
+            page: 1,
         },
         options: {
             enabled: !!keyword,
         },
     });
 
+    const recipeList = useMemo(
+        () => recipeListData?.data ?? [],
+        [recipeListData],
+    );
+
     const recipeSnos = useWatch({
         control,
         name: 'recipeSnos',
     });
 
-    const [selectedRecipes, setSelectedRecipes] =
-        useState<SearchRecipesResponse>([]);
+    const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
 
     const applyRecipeSnosToggle = (
         nextChecked: boolean,
@@ -354,7 +360,7 @@ const CreateRecipeGroupModal = ({
                                 </p>
 
                                 <div className='mt-1.5 mb-1.5 flex flex-col overflow-hidden rounded-lg border border-[#e5e7eb] bg-white dark:border-gray-700 dark:bg-gray-900'>
-                                    {isEmpty(recipeListData) ? (
+                                    {isEmpty(recipeList) ? (
                                         <p className='px-3 py-4 text-center text-sm text-[#99a1af]'>
                                             검색 결과가 없습니다.
                                         </p>
@@ -366,7 +372,7 @@ const CreateRecipeGroupModal = ({
                                                 field: { onChange, value },
                                             }) => (
                                                 <>
-                                                    {recipeListData.map(
+                                                    {recipeList.map(
                                                         (recipe, index) => {
                                                             const checked =
                                                                 value?.includes(

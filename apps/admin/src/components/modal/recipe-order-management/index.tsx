@@ -11,7 +11,7 @@ import { useRecipeExposureGroupList } from '@/hooks/query/recipe';
 import recipeKeys from '@/hooks/queryKeys/recipeKeys';
 import useApiError from '@/hooks/useApiError';
 import { ModalLayout } from '@/layout/modal';
-import type { ExposureLocation, RecipeExposureGroup } from '@/model/recipe';
+import type { RecipeExposureGroup } from '@/model/recipe';
 import { exposureLocationLabel, groupByExposureLocation } from '@/utils/recipe';
 
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
@@ -31,24 +31,34 @@ const RecipeOrderManagementModal = ({
 }: RecipeOrderManagementModalProps) => {
     const queryClient = useQueryClient();
 
-    const { data: recipeExposureGroupListData = [], isLoading } =
-        useRecipeExposureGroupList();
+    const { data: recipeExposureGroupListData, isLoading } =
+        useRecipeExposureGroupList({
+            params: {
+                take: 100,
+                page: 1,
+            },
+        });
+
+    const recipeExposureGroupList = useMemo(
+        () => recipeExposureGroupListData?.data ?? [],
+        [recipeExposureGroupListData],
+    );
 
     const { updateRecipeExposureGroupsSortOrder } = useRecipeMutation();
 
     const [selectedFilter, setSelectedFilter] = useState<string>('all');
     const [orderData, setOrderData] = useState<ExposureLocationGroup[]>([]);
 
-    const initialGroupSnosByExposureLocation = useRef<
-        Map<ExposureLocation, number[]>
-    >(new Map());
+    const initialGroupSnosByExposureLocation = useRef<Map<string, number[]>>(
+        new Map(),
+    );
 
     useEffect(() => {
         if (!isOpen) {
             return;
         }
 
-        const grouped = groupByExposureLocation(recipeExposureGroupListData);
+        const grouped = groupByExposureLocation(recipeExposureGroupList);
         setOrderData(cloneGrouped(grouped));
         initialGroupSnosByExposureLocation.current = new Map(
             grouped.map(([exposureLocation, groups]) => [
@@ -56,7 +66,7 @@ const RecipeOrderManagementModal = ({
                 groups.map((group) => group.sno),
             ]),
         );
-    }, [isOpen, recipeExposureGroupListData]);
+    }, [isOpen, recipeExposureGroupList]);
 
     const selectOptions = useMemo(() => {
         const fromData = orderData.map((section) => ({
@@ -74,7 +84,7 @@ const RecipeOrderManagementModal = ({
               );
 
     const moveGroup = (
-        exposureLocation: ExposureLocation,
+        exposureLocation: string,
         fromIndex: number,
         toIndex: number,
     ) => {
@@ -92,7 +102,7 @@ const RecipeOrderManagementModal = ({
     };
 
     const reorderSection = (
-        exposureLocation: ExposureLocation,
+        exposureLocation: string,
         nextGroups: RecipeExposureGroup[],
     ) => {
         setOrderData((previous) =>
@@ -107,7 +117,7 @@ const RecipeOrderManagementModal = ({
     const handleClose = () => {
         setSelectedFilter('all');
         setOrderData(
-            cloneGrouped(groupByExposureLocation(recipeExposureGroupListData)),
+            cloneGrouped(groupByExposureLocation(recipeExposureGroupList)),
         );
         close();
     };
@@ -178,7 +188,7 @@ const RecipeOrderManagementModal = ({
                         disabled={
                             isPending ||
                             isLoading ||
-                            recipeExposureGroupListData.length === 0
+                            recipeExposureGroupList.length === 0
                         }
                         className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50'
                     >
@@ -272,7 +282,7 @@ const RecipeOrderManagementModal = ({
 export default RecipeOrderManagementModal;
 
 type ExposureLocationGroup = {
-    exposureLocation: ExposureLocation;
+    exposureLocation: string;
     groups: RecipeExposureGroup[];
 };
 
@@ -280,15 +290,15 @@ interface ReorderItemProps {
     group: RecipeExposureGroup;
     index: number;
     total: number;
-    exposureLocation: ExposureLocation;
+    exposureLocation: string;
     onMove: (
-        exposureLocation: ExposureLocation,
+        exposureLocation: string,
         fromIndex: number,
         toIndex: number,
     ) => void;
 }
 
-const cloneGrouped = (tuples: [ExposureLocation, RecipeExposureGroup[]][]) =>
+const cloneGrouped = (tuples: [string, RecipeExposureGroup[]][]) =>
     tuples.map(([exposureLocation, groups]) => ({
         exposureLocation,
         groups: [...groups],

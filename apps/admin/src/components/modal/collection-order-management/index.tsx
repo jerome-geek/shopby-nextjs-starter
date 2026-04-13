@@ -34,8 +34,18 @@ const CollectionOrderManagementModal = ({
 }: CollectionOrderManagementModalProps) => {
     const queryClient = useQueryClient();
 
-    const { data: collectionExposureGroupListData = [], isLoading } =
-        useCollectionExposureGroupList();
+    const { data: collectionExposureGroupListData, isLoading } =
+        useCollectionExposureGroupList({
+            params: {
+                take: 100,
+                page: 1,
+            },
+        });
+
+    const collectionExposureGroupList = useMemo(
+        () => collectionExposureGroupListData?.data ?? [],
+        [collectionExposureGroupListData],
+    );
 
     const { updateCollectionExposureGroupsSortOrder } = useCollectionMutation();
 
@@ -54,7 +64,7 @@ const CollectionOrderManagementModal = ({
         }
 
         const grouped = groupCollectionExposureByLocation(
-            collectionExposureGroupListData,
+            collectionExposureGroupList,
         );
         setOrderData(cloneGrouped(grouped));
         initialGroupSnosByExposureLocation.current = new Map(
@@ -63,7 +73,7 @@ const CollectionOrderManagementModal = ({
                 groups.map((group) => group.sno),
             ]),
         );
-    }, [isOpen, collectionExposureGroupListData]);
+    }, [isOpen, collectionExposureGroupList]);
 
     const selectOptions = useMemo(() => {
         const fromData = orderData.map((section) => ({
@@ -115,9 +125,7 @@ const CollectionOrderManagementModal = ({
         setSelectedFilter('all');
         setOrderData(
             cloneGrouped(
-                groupCollectionExposureByLocation(
-                    collectionExposureGroupListData,
-                ),
+                groupCollectionExposureByLocation(collectionExposureGroupList),
             ),
         );
         close();
@@ -189,7 +197,7 @@ const CollectionOrderManagementModal = ({
                         disabled={
                             isPending ||
                             isLoading ||
-                            collectionExposureGroupListData.length === 0
+                            collectionExposureGroupList.length === 0
                         }
                         className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50'
                     >

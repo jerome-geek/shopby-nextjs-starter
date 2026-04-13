@@ -21,5 +21,6 @@ export const PATHS = {
             LIST: '/user-recipes',
             DETAIL: '/user-recipes/:sno',
         },
+        RECIPE_SETTINGS: '/recipe-settings',
     },
 };

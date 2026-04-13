@@ -1,35 +1,34 @@
 import { isEmpty } from '@fxts/core';
 import { overlay } from 'overlay-kit';
-import { Fragment, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router';
+import { useCallback, useMemo } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 
 import PageMeta from '@/components/common/PageMeta';
+import Select from '@/components/form/select/intdex';
 import CreateCollectionGroupModal from '@/components/modal/create-collection-group';
 import CollectionOrderManagementModal from '@/components/modal/collection-order-management';
 import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
+import TablePaginationFooter from '@/components/ui/table-pagination-footer';
+import { COLLECTION_GROUP_ID_OPTIONS } from '@/const/collection';
 import { PATHS } from '@/const/paths';
 import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
 import { useCollectionExposureGroupList } from '@/hooks/query/collection';
 import { collectionKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import { useDialog } from '@/hooks/utils';
-import {
-    collectionExposureLocationLabel,
-    groupCollectionExposureByLocation,
-} from '@/utils/collection';
 
 import { ReactComponent as GridDotsIcon } from '@/icons/grid-dots.svg?react';
 import { ReactComponent as PencilSimpleIcon } from '@/icons/pencil-simple.svg?react';
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
-import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
     minWidth: 'min-w-[860px]',
     column: {
-        sortOrder: 'w-[150px]',
+        exposureLocation: 'w-[140px]',
+        sortOrder: 'w-[100px]',
         groupName: 'w-[180px]',
         collectionTitle: 'w-[180px]',
         display: 'w-[100px]',
@@ -42,14 +41,68 @@ const tableTh = {
     right: 'px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282]',
 } as const;
 
-const CollectionGroupList = () => {
-    const {
-        data: collectionExposureGroupListData = [],
-        isLoading: isCollectionExposureGroupListLoading,
-    } = useCollectionExposureGroupList();
+const EXPOSURE_LOCATION_SEARCH_PARAM = 'exposureLocation';
+const PAGE_SEARCH_PARAM = 'page';
+const PAGE_SIZE = 10;
 
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [groupNameKeyword, setGroupNameKeyword] = useState('');
+const COLLECTION_GROUP_EXPOSURE_FILTER_OPTIONS = [
+    { value: 'all', label: '전체 보기' },
+    ...COLLECTION_GROUP_ID_OPTIONS,
+];
+
+const CollectionGroupList = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = Number(searchParams.get(PAGE_SEARCH_PARAM)) || 1;
+
+    const exposureLocationFilter = useMemo(() => {
+        const raw = searchParams.get(EXPOSURE_LOCATION_SEARCH_PARAM);
+
+        if (!raw) {
+            return 'all';
+        }
+
+        if (COLLECTION_GROUP_ID_OPTIONS.some((o) => o.value === raw)) {
+            return raw;
+        }
+
+        return 'all';
+    }, [searchParams]);
+
+    const setExposureLocationFilter = useCallback(
+        (value: string) => {
+            setSearchParams(
+                (prev) => {
+                    const next = new URLSearchParams(prev);
+
+                    if (value === 'all') {
+                        next.delete(EXPOSURE_LOCATION_SEARCH_PARAM);
+                    } else {
+                        next.set(EXPOSURE_LOCATION_SEARCH_PARAM, value);
+                    }
+
+                    next.delete(PAGE_SEARCH_PARAM);
+
+                    return next;
+                },
+                { replace: true },
+            );
+        },
+        [setSearchParams],
+    );
+
+    const {
+        data: collectionExposureGroupListData,
+        isLoading: isCollectionExposureGroupListLoading,
+    } = useCollectionExposureGroupList({
+        params: {
+            page,
+            take: PAGE_SIZE,
+            ...(exposureLocationFilter !== 'all' && {
+                exposureLocation: exposureLocationFilter,
+            }),
+        },
+    });
 
     const openCollectionOrderOverlay = () => {
         overlay.open((props) => <CollectionOrderManagementModal {...props} />);
@@ -61,25 +114,13 @@ const CollectionGroupList = () => {
         ));
     };
 
-    const applySearchFilter = () => {
-        const keyword = inputRef.current?.value.trim() ?? '';
-        setGroupNameKeyword(keyword);
-    };
-
-    const collectionExposureGroupList = useMemo(() => {
-        if (groupNameKeyword === '') {
-            return collectionExposureGroupListData;
-        }
-
-        return collectionExposureGroupListData.filter((item) =>
-            item.groupName.includes(groupNameKeyword),
-        );
-    }, [collectionExposureGroupListData, groupNameKeyword]);
-
-    const groupedCollectionExposureGroups = useMemo(
-        () => groupCollectionExposureByLocation(collectionExposureGroupList),
-        [collectionExposureGroupList],
+    const collectionExposureGroupList = useMemo(
+        () => collectionExposureGroupListData?.data ?? [],
+        [collectionExposureGroupListData],
     );
+
+    const listTotalCount = collectionExposureGroupListData?.count ?? 0;
+    const listLastPage = collectionExposureGroupListData?.lastPage ?? 1;
 
     const queryClient = useQueryClient();
     const { openAsyncDialog, openDialog } = useDialog();
@@ -157,32 +198,38 @@ const CollectionGroupList = () => {
 
                 <div className='bg-white border border-[#e5e7eb] rounded-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)] overflow-hidden'>
                     <div className='border-b border-[#e5e7eb] px-4 py-4'>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                applySearchFilter();
-                            }}
-                            className='flex gap-2'
-                        >
-                            <div className='relative min-w-0 flex-1'>
-                                <span className='pointer-events-none absolute left-3 top-1/2 flex h-4 w-4 -translate-y-1/2 items-center justify-center text-[#717182]'>
-                                    <SearchIcon className='h-full w-full' />
-                                </span>
-                                <input
-                                    ref={inputRef}
-                                    type='search'
-                                    placeholder='그룹명으로 검색...'
-                                    className='w-full h-10 pl-10 pr-4 py-1 bg-[#f3f3f5] rounded-xl text-[14px] text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:bg-white transition-all'
+                        <div className='flex flex-wrap items-center gap-3'>
+                            <label
+                                htmlFor='collection-group-exposure-filter'
+                                className='shrink-0 text-sm font-medium text-[#364153]'
+                            >
+                                컬렉션 아이디
+                            </label>
+                            <div className='min-w-[220px] max-w-sm flex-1'>
+                                <Select
+                                    inputId='collection-group-exposure-filter'
+                                    options={
+                                        COLLECTION_GROUP_EXPOSURE_FILTER_OPTIONS
+                                    }
+                                    value={
+                                        COLLECTION_GROUP_EXPOSURE_FILTER_OPTIONS.find(
+                                            (opt) =>
+                                                opt.value ===
+                                                exposureLocationFilter,
+                                        ) ?? null
+                                    }
+                                    onChange={(option) => {
+                                        if (option) {
+                                            setExposureLocationFilter(
+                                                option.value,
+                                            );
+                                        }
+                                    }}
+                                    isSearchable={false}
+                                    placeholder='컬렉션 아이디를 선택하세요'
                                 />
                             </div>
-                            <button
-                                type='submit'
-                                className='flex shrink-0 items-center gap-1.5 rounded-lg border border-[#e5e7eb] bg-white px-4 text-sm font-medium text-[#364153] transition-colors hover:bg-gray-50'
-                            >
-                                <SearchIcon className='h-4 w-4 text-[#99a1af]' />
-                                검색
-                            </button>
-                        </form>
+                        </div>
                     </div>
 
                     <LoadingWrapper
@@ -196,9 +243,14 @@ const CollectionGroupList = () => {
                                 <thead>
                                     <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
                                         <th
+                                            className={`${tableLayout.column.exposureLocation} ${tableTh.left}`}
+                                        >
+                                            컬렉션 아이디
+                                        </th>
+                                        <th
                                             className={`${tableLayout.column.sortOrder} ${tableTh.left}`}
                                         >
-                                            그룹 아이디 (정렬 순서)
+                                            정렬 순서
                                         </th>
                                         <th
                                             className={`${tableLayout.column.groupName} ${tableTh.left}`}
@@ -226,127 +278,119 @@ const CollectionGroupList = () => {
                                     {isEmpty(collectionExposureGroupList) ? (
                                         <tr>
                                             <td
-                                                colSpan={5}
+                                                colSpan={6}
                                                 className='px-6 py-12 text-center text-sm text-[#6a7282]'
                                             >
-                                                {groupNameKeyword !== ''
-                                                    ? '검색 결과가 없습니다.'
-                                                    : '등록된 컬렉션 그룹이 없습니다.'}
+                                                등록된 컬렉션 그룹이 없습니다.
                                             </td>
                                         </tr>
                                     ) : (
-                                        groupedCollectionExposureGroups.map(
-                                            ([location, rows]) => (
-                                                <Fragment key={location}>
-                                                    <tr className='border-b border-[#e5e7eb] bg-[#f3f4f6]'>
-                                                        <td
-                                                            colSpan={5}
-                                                            className='px-6 py-2.5 text-xs font-semibold uppercase tracking-wide text-[#364153]'
+                                        collectionExposureGroupList.map(
+                                            (item) => (
+                                                <tr
+                                                    key={item.sno}
+                                                    className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors'
+                                                >
+                                                    <td className='px-6 py-5'>
+                                                        <span className='inline-block rounded-lg bg-[#f3f4f6] px-2.5 py-1 font-mono text-xs text-[#364153]'>
+                                                            {
+                                                                item.exposureLocation
+                                                            }
+                                                        </span>
+                                                    </td>
+                                                    <td className='px-6 py-5'>
+                                                        <span
+                                                            className={`font-mono text-sm tabular-nums ${
+                                                                item.sortOrder ===
+                                                                1
+                                                                    ? 'font-semibold text-black'
+                                                                    : 'font-medium text-[#6a7282]'
+                                                            }`}
                                                         >
-                                                            {collectionExposureLocationLabel(
-                                                                location,
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                    {rows.map((item) => (
-                                                        <tr
-                                                            key={item.sno}
-                                                            className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors'
+                                                            {item.sortOrder}
+                                                        </span>
+                                                    </td>
+
+                                                    <td className='max-w-0 px-6 py-5'>
+                                                        <div className='flex min-w-0 flex-col gap-1'>
+                                                            <Link
+                                                                to={PATHS.APP.COLLECTION_GROUP.DETAIL.replace(
+                                                                    ':sno',
+                                                                    item.sno.toString(),
+                                                                )}
+                                                                title={
+                                                                    item.groupName
+                                                                }
+                                                                className='truncate text-[15px] font-semibold text-[#ff6900] hover:underline'
+                                                            >
+                                                                {item.groupName}
+                                                            </Link>
+                                                            <span
+                                                                title={
+                                                                    item.description
+                                                                }
+                                                                className='truncate text-xs font-normal text-[#6a7282]'
+                                                            >
+                                                                {
+                                                                    item.description
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </td>
+
+                                                    <td className='max-w-0 px-6 py-5'>
+                                                        <span
+                                                            title={
+                                                                item.collection
+                                                                    .title
+                                                            }
+                                                            className='truncate text-sm font-medium text-[#364153]'
                                                         >
-                                                            <td className='px-6 py-5'>
-                                                                <span className='inline-block font-mono text-sm font-medium text-[#6a7282]'>
-                                                                    {
-                                                                        item.sortOrder
-                                                                    }
-                                                                </span>
-                                                            </td>
+                                                            {
+                                                                item.collection
+                                                                    .title
+                                                            }
+                                                        </span>
+                                                    </td>
 
-                                                            <td className='max-w-0 px-6 py-5'>
-                                                                <div className='flex min-w-0 flex-col gap-1'>
-                                                                    <Link
-                                                                        to={PATHS.APP.COLLECTION_GROUP.DETAIL.replace(
-                                                                            ':sno',
-                                                                            item.sno.toString(),
-                                                                        )}
-                                                                        title={
-                                                                            item.groupName
-                                                                        }
-                                                                        className='truncate text-[15px] font-semibold text-[#ff6900] hover:underline'
-                                                                    >
-                                                                        {
-                                                                            item.groupName
-                                                                        }
-                                                                    </Link>
-                                                                    <span
-                                                                        title={
-                                                                            item.description
-                                                                        }
-                                                                        className='truncate text-xs font-normal text-[#6a7282]'
-                                                                    >
-                                                                        {
-                                                                            item.description
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </td>
+                                                    <td className='px-6 py-5'>
+                                                        <DisplayVisibilityBadge
+                                                            isVisible={
+                                                                item.isDisplay
+                                                            }
+                                                        />
+                                                    </td>
 
-                                                            <td className='max-w-0 px-6 py-5'>
-                                                                <span
-                                                                    title={
-                                                                        item
-                                                                            .collection
-                                                                            .title
-                                                                    }
-                                                                    className='truncate text-sm font-medium text-[#364153]'
-                                                                >
-                                                                    {
-                                                                        item
-                                                                            .collection
-                                                                            .title
-                                                                    }
-                                                                </span>
-                                                            </td>
+                                                    <td className='px-6 py-5 text-right'>
+                                                        <div className='flex items-center justify-end gap-2'>
+                                                            <button
+                                                                type='button'
+                                                                className='flex h-8 w-8 items-center justify-center rounded-lg text-[#364153] transition-colors hover:bg-gray-100'
+                                                                aria-label='수정'
+                                                                onClick={() =>
+                                                                    openCreateCollectionGroupOverlay(
+                                                                        item.sno,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <PencilSimpleIcon className='h-4 w-4 text-[#364153]' />
+                                                            </button>
 
-                                                            <td className='px-6 py-5'>
-                                                                <DisplayVisibilityBadge
-                                                                    isVisible={
-                                                                        item.isDisplay
-                                                                    }
-                                                                />
-                                                            </td>
-
-                                                            <td className='px-6 py-5 text-right'>
-                                                                <div className='flex items-center justify-end gap-2'>
-                                                                    <button
-                                                                        type='button'
-                                                                        className='flex h-8 w-8 items-center justify-center rounded-lg text-[#364153] transition-colors hover:bg-gray-100'
-                                                                        aria-label='수정'
-                                                                        onClick={() =>
-                                                                            openCreateCollectionGroupOverlay(
-                                                                                item.sno,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <PencilSimpleIcon className='h-4 w-4 text-[#364153]' />
-                                                                    </button>
-
-                                                                    <button
-                                                                        type='button'
-                                                                        className='flex h-8 w-8 items-center justify-center rounded-lg text-[#f54900] transition-colors hover:bg-red-50'
-                                                                        aria-label='삭제'
-                                                                        onClick={() =>
-                                                                            handleDeleteCollectionExposureGroups(
-                                                                                item.sno,
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <TrashSimpleIcon className='h-4 w-4 text-[#f54900]' />
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </Fragment>
+                                                            <button
+                                                                type='button'
+                                                                className='flex h-8 w-8 items-center justify-center rounded-lg text-[#f54900] transition-colors hover:bg-red-50'
+                                                                aria-label='삭제'
+                                                                onClick={() =>
+                                                                    handleDeleteCollectionExposureGroups(
+                                                                        item.sno,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <TrashSimpleIcon className='h-4 w-4 text-[#f54900]' />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             ),
                                         )
                                     )}
@@ -355,6 +399,14 @@ const CollectionGroupList = () => {
                         </div>
                     </LoadingWrapper>
                 </div>
+
+                <TablePaginationFooter
+                    totalCount={listTotalCount}
+                    page={page}
+                    pageSize={PAGE_SIZE}
+                    lastPage={listLastPage}
+                    pageSearchParam={PAGE_SEARCH_PARAM}
+                />
             </div>
         </>
     );

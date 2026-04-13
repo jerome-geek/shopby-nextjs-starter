@@ -15,7 +15,7 @@ import {
 interface UseCollectionExposureGroupListParams<
     T = CollectionExposureGroupResponse,
 > {
-    params?: GetCollectionExposureGroupsParams;
+    params: GetCollectionExposureGroupsParams;
     options?: Omit<
         UseQueryOptions<
             CollectionExposureGroupResponse,
@@ -30,7 +30,7 @@ interface UseCollectionExposureGroupListParams<
 const useCollectionExposureGroupList = <T = CollectionExposureGroupResponse>({
     params,
     options,
-}: UseCollectionExposureGroupListParams<T> = {}) => {
+}: UseCollectionExposureGroupListParams<T>) => {
     return useQuery({
         queryKey: collectionKeys.list(params),
         queryFn: async () => {

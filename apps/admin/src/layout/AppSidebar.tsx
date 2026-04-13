@@ -8,6 +8,7 @@ import {
     ListIcon,
     ChefHatIcon,
     FolderIcon,
+    PlugInIcon,
 } from '@/icons';
 import { PATHS } from '@/const/paths';
 import { useSidebar } from '@/context/SidebarContext';
@@ -18,6 +19,14 @@ type NavItem = {
     path?: string;
     subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
+
+const settingsItems: NavItem[] = [
+    {
+        icon: <PlugInIcon />,
+        name: '레시피 설정',
+        path: PATHS.APP.RECIPE_SETTINGS,
+    },
+];
 
 const collectionItems: NavItem[] = [
     {
@@ -69,13 +78,15 @@ const AppSidebar: React.FC = () => {
 
     useEffect(() => {
         let submenuMatched = false;
-        ['collection', 'recipe', 'user'].forEach((menuType) => {
+        ['settings', 'collection', 'recipe', 'user'].forEach((menuType) => {
             const items =
-                menuType === 'collection'
-                    ? collectionItems
-                    : menuType === 'recipe'
-                      ? recipeItems
-                      : userItems;
+                menuType === 'settings'
+                    ? settingsItems
+                    : menuType === 'collection'
+                      ? collectionItems
+                      : menuType === 'recipe'
+                        ? recipeItems
+                        : userItems;
             items.forEach((nav, index) => {
                 if (nav.subItems) {
                     nav.subItems.forEach((subItem) => {
@@ -299,6 +310,22 @@ const AppSidebar: React.FC = () => {
             <div className='flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar'>
                 <nav className='mb-6 mt-4'>
                     <div className='flex flex-col gap-6'>
+                        <div>
+                            <h2
+                                className={`mb-2 px-3 text-[12px] font-semibold uppercase flex leading-[20px] text-gray-400 ${
+                                    !isExpanded && !isHovered
+                                        ? 'lg:justify-center'
+                                        : 'justify-start'
+                                }`}
+                            >
+                                {isExpanded || isHovered || isMobileOpen ? (
+                                    '설정'
+                                ) : (
+                                    <HorizontaLDots className='size-6' />
+                                )}
+                            </h2>
+                            {renderMenuItems(settingsItems, 'settings')}
+                        </div>
                         <div>
                             <h2
                                 className={`mb-2 px-3 text-[12px] font-semibold uppercase flex leading-[20px] text-gray-400 ${

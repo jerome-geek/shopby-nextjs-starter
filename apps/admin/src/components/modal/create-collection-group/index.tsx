@@ -1,7 +1,7 @@
 import { isEmpty } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import ErrorMessage from '@/components/form/ErrorMessage';
@@ -171,14 +171,21 @@ const CreateCollectionGroupModal = ({
         setKeyword(inputRef.current?.value ?? '');
     };
 
-    const { data: collectionListData = [] } = useSearchCollectionList({
+    const { data: collectionListData } = useSearchCollectionList({
         params: {
             keyword,
+            take: 100,
+            page: 1,
         },
         options: {
             enabled: !!keyword,
         },
     });
+
+    const collectionList = useMemo(
+        () => collectionListData?.data ?? [],
+        [collectionListData],
+    );
 
     const collectionSno = useWatch({
         control,
@@ -359,7 +366,7 @@ const CreateCollectionGroupModal = ({
                         </p>
 
                         <div className='mt-1.5 mb-1.5 flex flex-col overflow-hidden rounded-lg border border-[#e5e7eb] bg-white dark:border-gray-700 dark:bg-gray-900'>
-                            {isEmpty(collectionListData) ? (
+                            {isEmpty(collectionList) ? (
                                 <p className='px-3 py-4 text-center text-sm text-[#99a1af]'>
                                     검색 결과가 없습니다.
                                 </p>
@@ -371,7 +378,7 @@ const CreateCollectionGroupModal = ({
                                         field: { onChange, value },
                                     }) => (
                                         <>
-                                            {collectionListData.map(
+                                            {collectionList.map(
                                                 (item, index) => {
                                                     const checked =
                                                         value ===

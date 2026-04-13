@@ -1,18 +1,17 @@
 import { isEmpty } from '@fxts/core';
 import { overlay } from 'overlay-kit';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
 import CreateUserRecipeModal from '@/components/modal/create-user-recipe';
 import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
+import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
 import { useSearchRecipeList } from '@/hooks/query/recipe';
 
 import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
-import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
-import { ReactComponent as ChevronRightSmallIcon } from '@/icons/chevron-right-small.svg?react';
 import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
@@ -34,21 +33,32 @@ const tableTh = {
     right: 'px-6 py-3 text-right text-xs font-medium uppercase text-[#6a7282]',
 } as const;
 
+const PAGE_SEARCH_PARAM = 'page';
+const PAGE_SIZE = 10;
+
 const UserRecipeList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const keyword = searchParams.get('keyword') ?? '';
+    const page = Number(searchParams.get(PAGE_SEARCH_PARAM)) || 1;
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const {
-        data: searchRecipeListData = [],
-        isLoading: isSearchRecipeListLoading,
-    } = useSearchRecipeList({
-        params: {
-            keyword,
-        },
-    });
+    const { data: searchRecipeListData, isLoading: isSearchRecipeListLoading } =
+        useSearchRecipeList({
+            params: {
+                keyword,
+                page,
+                take: PAGE_SIZE,
+            },
+        });
+
+    const totalCount = searchRecipeListData?.count ?? 0;
+    const lastPage = searchRecipeListData?.lastPage ?? 1;
+
+    const searchRecipeList = useMemo(() => {
+        return searchRecipeListData?.data ?? [];
+    }, [searchRecipeListData]);
 
     const setQuery = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -172,7 +182,7 @@ const UserRecipeList = () => {
                                 </thead>
 
                                 <tbody>
-                                    {isEmpty(searchRecipeListData) ? (
+                                    {isEmpty(searchRecipeList) ? (
                                         <tr>
                                             <td
                                                 colSpan={6}
@@ -182,7 +192,7 @@ const UserRecipeList = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        searchRecipeListData?.map((item) => (
+                                        searchRecipeList.map((item) => (
                                             <tr
                                                 key={item.sno}
                                                 className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors group'
@@ -248,26 +258,13 @@ const UserRecipeList = () => {
                     </LoadingWrapper>
                 </div>
 
-                {/* 하단 푸터 (총 개수 + 페이지네이션) */}
-                <div className='flex items-center justify-between pb-10'>
-                    <p className='text-sm text-[#6a7282]'>
-                        총 12개 중 1-10개 표시
-                    </p>
-                    <div className='flex items-center gap-2'>
-                        <button className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#e5e7eb] bg-white text-[#6a7282] hover:bg-gray-50 disabled:opacity-50'>
-                            <ChevronLeftSmallIcon className='w-4 h-4' />
-                        </button>
-                        <button className='w-8 h-8 flex items-center justify-center rounded-lg bg-[#ff6900] text-white text-sm font-semibold'>
-                            1
-                        </button>
-                        <button className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#e5e7eb] bg-white text-sm font-medium text-[#6a7282] hover:bg-gray-50'>
-                            2
-                        </button>
-                        <button className='w-8 h-8 flex items-center justify-center rounded-lg border border-[#e5e7eb] bg-white text-[#6a7282] hover:bg-gray-50'>
-                            <ChevronRightSmallIcon className='w-4 h-4' />
-                        </button>
-                    </div>
-                </div>
+                <TablePaginationFooter
+                    totalCount={totalCount}
+                    page={page}
+                    pageSize={PAGE_SIZE}
+                    lastPage={lastPage}
+                    pageSearchParam={PAGE_SEARCH_PARAM}
+                />
             </div>
         </>
     );

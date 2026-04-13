@@ -10,19 +10,17 @@ import {
 } from '@fxts/core';
 
 import { RECIPE_GROUP_ID_OPTIONS } from '@/const/recipe';
-import type { ExposureLocation, RecipeExposureGroup } from '@/model/recipe';
+import type { RecipeExposureGroup } from '@/model/recipe';
 
-type ExposureLocationGroupTuple = [ExposureLocation, RecipeExposureGroup[]];
+type ExposureLocationGroupTuple = [string, RecipeExposureGroup[]];
 
-const EXPOSURE_LOCATION_ORDER: ExposureLocation[] = [
+const EXPOSURE_LOCATION_ORDER: string[] = [
     'recipe_group_1',
     'recipe_group_2',
     'recipe_group_3',
 ];
 
-export const exposureLocationLabel = (
-    exposureLocation: ExposureLocation,
-): string =>
+export const exposureLocationLabel = (exposureLocation: string): string =>
     pipe(
         RECIPE_GROUP_ID_OPTIONS,
         find((option) => option.value === exposureLocation),
@@ -41,7 +39,7 @@ export const groupByExposureLocation = (
         entries(grouped),
         map(
             ([key, groups]): ExposureLocationGroupTuple => [
-                key as ExposureLocation,
+                key as string,
                 sortBy((item) => item.sortOrder, groups),
             ],
         ),
