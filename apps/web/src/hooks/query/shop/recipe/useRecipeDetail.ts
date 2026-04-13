@@ -19,7 +19,11 @@ interface UseRecipeDetailParams<T = GetRecipeDetailResponse> {
     >;
 }
 
-const useRecipeDetail = ({ sno, memberNo, options }: UseRecipeDetailParams) => {
+const useRecipeDetail = <T = GetRecipeDetailResponse>({
+    sno,
+    memberNo,
+    options,
+}: UseRecipeDetailParams<T>) => {
     return useQuery({
         queryKey: recipeKeys.detail(sno, memberNo),
         queryFn: async () => {
