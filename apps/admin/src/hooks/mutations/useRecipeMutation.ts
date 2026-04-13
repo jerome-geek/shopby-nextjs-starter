@@ -5,10 +5,15 @@ import {
     CreateRecipeExposureGroupsBody,
     UpdateRecipeExposureGroupsBody,
     UpdateRecipeExposureGroupsSortOrderBody,
+    CreateUserRecipeBody,
 } from '@/model/recipe';
 
 const useRecipeMutation = () => {
     return {
+        createUserRecipe: useMutation({
+            mutationFn: async (data: CreateUserRecipeBody) =>
+                await recipe.createUserRecipe(data),
+        }),
         createRecipeExposureGroups: useMutation({
             mutationFn: async (data: CreateRecipeExposureGroupsBody) =>
                 await recipe.createRecipeExposureGroups(data),

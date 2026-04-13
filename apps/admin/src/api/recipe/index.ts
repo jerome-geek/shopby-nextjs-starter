@@ -1,5 +1,6 @@
 import { request } from '@/api/core/request';
 import {
+    CreateUserRecipeBody,
     GetRecipeExposureGroupsParams,
     CreateRecipeExposureGroupsBody,
     CreateRecipeExposureGroupsResponse,
@@ -13,6 +14,13 @@ import {
 } from '@/model/recipe';
 
 export const recipe = {
+    createUserRecipe: (data: CreateUserRecipeBody) => {
+        return request({
+            method: 'POST',
+            url: '/admin/recipe/create',
+            data,
+        });
+    },
     searchRecipes: (params: SearchRecipesParams) => {
         return request<SearchRecipesResponse>({
             method: 'GET',

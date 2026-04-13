@@ -35,8 +35,8 @@ export default function App() {
                 defaultOptions: {
                     queries: {
                         staleTime: 60 * 1000,
-                        refetchOnWindowFocus: import.meta.env.PROD,
-                        refetchOnMount: import.meta.env.PROD,
+                        refetchOnWindowFocus: false,
+                        refetchOnMount: true,
                         refetchOnReconnect: true,
                         retry: (failureCount, error) => {
                             if (import.meta.env.DEV) {

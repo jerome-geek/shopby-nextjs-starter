@@ -8,7 +8,7 @@ import {
     ListIcon,
     ChefHatIcon,
     FolderIcon,
-    PlugInIcon,
+    SettingsIcon,
 } from '@/icons';
 import { PATHS } from '@/const/paths';
 import { useSidebar } from '@/context/SidebarContext';
@@ -22,7 +22,7 @@ type NavItem = {
 
 const settingsItems: NavItem[] = [
     {
-        icon: <PlugInIcon />,
+        icon: <SettingsIcon />,
         name: '레시피 설정',
         path: PATHS.APP.RECIPE_SETTINGS,
     },
@@ -83,10 +83,10 @@ const AppSidebar: React.FC = () => {
                 menuType === 'settings'
                     ? settingsItems
                     : menuType === 'collection'
-                      ? collectionItems
-                      : menuType === 'recipe'
-                        ? recipeItems
-                        : userItems;
+                    ? collectionItems
+                    : menuType === 'recipe'
+                    ? recipeItems
+                    : userItems;
             items.forEach((nav, index) => {
                 if (nav.subItems) {
                     nav.subItems.forEach((subItem) => {
@@ -216,7 +216,11 @@ const AppSidebar: React.FC = () => {
                                     height:
                                         openSubmenu?.type === menuType &&
                                         openSubmenu?.index === index
-                                            ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                                            ? `${
+                                                  subMenuHeight[
+                                                      `${menuType}-${index}`
+                                                  ]
+                                              }px`
                                             : '0px',
                                 }}
                             >
@@ -278,8 +282,8 @@ const AppSidebar: React.FC = () => {
             isExpanded || isMobileOpen
                 ? 'w-[290px]'
                 : isHovered
-                  ? 'w-[290px]'
-                  : 'w-[90px]'
+                ? 'w-[290px]'
+                : 'w-[90px]'
         }
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0`}

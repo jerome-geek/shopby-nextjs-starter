@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { isEmpty } from '@fxts/core';
+import { filter, isEmpty, pipe, toArray } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 
 import ErrorMessage from '@/components/form/ErrorMessage';
@@ -30,6 +30,7 @@ import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useDialog } from '@/hooks/utils';
 import useApiError from '@/hooks/useApiError';
 import { recipeKeys } from '@/hooks/queryKeys';
+import { isProcessingRecipe } from '@/utils/recipe';
 
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
@@ -169,7 +170,15 @@ const CreateRecipeGroupModal = ({
     });
 
     const recipeList = useMemo(
-        () => recipeListData?.data ?? [],
+        () =>
+            pipe(
+                recipeListData?.data ?? [],
+                filter(
+                    (recipe) =>
+                        !isProcessingRecipe(recipe.title, recipe.authorName),
+                ),
+                toArray,
+            ),
         [recipeListData],
     );
 

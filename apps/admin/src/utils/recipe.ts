@@ -20,6 +20,17 @@ const EXPOSURE_LOCATION_ORDER: string[] = [
     'recipe_group_3',
 ];
 
+export const isProcessingRecipe = (
+    title: string,
+    authorName: string,
+): boolean => {
+    if (title === '레시피 생성 중' && authorName === null) {
+        return true;
+    }
+
+    return false;
+};
+
 export const exposureLocationLabel = (exposureLocation: string): string =>
     pipe(
         RECIPE_GROUP_ID_OPTIONS,

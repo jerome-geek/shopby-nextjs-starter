@@ -10,6 +10,7 @@ import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
 import { useSearchRecipeList } from '@/hooks/query/recipe';
+import { isProcessingRecipe } from '@/utils/recipe';
 
 import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
 import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
@@ -21,10 +22,9 @@ const tableLayout = {
     column: {
         recipe: '',
         author: 'w-[150px]',
-        source: 'w-[100px]',
-        bookmark: 'w-[80px]',
-        like: 'w-[80px]',
-        createdAt: 'w-[130px]',
+        source: 'w-[120px]',
+        bookmark: 'w-[90px]',
+        like: 'w-[90px]',
     },
 } as const;
 
@@ -44,13 +44,17 @@ const UserRecipeList = () => {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const params = useMemo(() => {
+        return {
+            keyword,
+            page,
+            take: PAGE_SIZE,
+        };
+    }, [keyword, page]);
+
     const { data: searchRecipeListData, isLoading: isSearchRecipeListLoading } =
         useSearchRecipeList({
-            params: {
-                keyword,
-                page,
-                take: PAGE_SIZE,
-            },
+            params,
         });
 
     const totalCount = searchRecipeListData?.count ?? 0;
@@ -173,11 +177,6 @@ const UserRecipeList = () => {
                                         >
                                             좋아요
                                         </th>
-                                        <th
-                                            className={`${tableLayout.column.createdAt} ${tableTh.right}`}
-                                        >
-                                            생성일
-                                        </th>
                                     </tr>
                                 </thead>
 
@@ -185,72 +184,108 @@ const UserRecipeList = () => {
                                     {isEmpty(searchRecipeList) ? (
                                         <tr>
                                             <td
-                                                colSpan={6}
+                                                colSpan={5}
                                                 className='px-6 py-12 text-center text-sm text-[#6a7282]'
                                             >
                                                 검색 결과가 없습니다.
                                             </td>
                                         </tr>
                                     ) : (
-                                        searchRecipeList.map((item) => (
-                                            <tr
-                                                key={item.sno}
-                                                className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors group'
-                                            >
-                                                <td className='px-6 py-6'>
-                                                    <div className='flex items-center gap-2'>
-                                                        <span className='text-lg'>
-                                                            <img
-                                                                src={
-                                                                    item.thumbnailUrl
-                                                                }
-                                                                alt={item.title}
-                                                                className='w-10 h-10 min-w-10 min-h-10 aspect-square rounded-xl object-cover'
-                                                                style={{
-                                                                    fontSize:
-                                                                        '10px',
-                                                                }}
-                                                            />
-                                                        </span>
-                                                        <Link
-                                                            to={PATHS.APP.USER_RECIPE.DETAIL.replace(
-                                                                ':sno',
-                                                                item.sno.toString(),
+                                        searchRecipeList.map((item) => {
+                                            const isProcessing =
+                                                isProcessingRecipe(
+                                                    item.title,
+                                                    item.authorName,
+                                                );
+
+                                            return (
+                                                <tr
+                                                    key={item.sno}
+                                                    className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors group'
+                                                >
+                                                    <td className='px-6 py-6'>
+                                                        <div className='flex items-center gap-2'>
+                                                            {isProcessing ? (
+                                                                <div className='flex items-center gap-2'>
+                                                                    <div className='h-4 w-4 rounded-full border-2 border-[#ff6900] border-t-[#dbdbdb] animate-spin' />
+                                                                    <span className='text-[15px] text-[#6a7282] whitespace-nowrap overflow-hidden text-ellipsis'>
+                                                                        {
+                                                                            item.title
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            ) : (
+                                                                <>
+                                                                    <span className='text-lg'>
+                                                                        <img
+                                                                            src={
+                                                                                item.thumbnailUrl
+                                                                            }
+                                                                            alt={
+                                                                                item.title
+                                                                            }
+                                                                            className='w-10 h-10 min-w-10 min-h-10 aspect-square rounded-xl object-cover'
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    '10px',
+                                                                            }}
+                                                                        />
+                                                                    </span>
+
+                                                                    <Link
+                                                                        to={PATHS.APP.USER_RECIPE.DETAIL.replace(
+                                                                            ':sno',
+                                                                            item.sno.toString(),
+                                                                        )}
+                                                                        className='text-[15px] font-bold text-[#ff6900] hover:underline whitespace-nowrap overflow-hidden text-ellipsis'
+                                                                    >
+                                                                        {
+                                                                            item.title
+                                                                        }
+                                                                    </Link>
+                                                                </>
                                                             )}
-                                                            className='text-[15px] font-bold text-[#ff6900] hover:underline whitespace-nowrap overflow-hidden text-ellipsis'
-                                                        >
-                                                            {item.title}
-                                                        </Link>
-                                                    </div>
-                                                </td>
-                                                <td className='px-6 py-6 text-[14px] text-[#364153]'>
-                                                    {item.authorName}
-                                                </td>
-                                                <td className='px-6 py-6'>
-                                                    <RecipeSourceBadge
-                                                        source={item.sourceType}
-                                                    />
-                                                </td>
-                                                <td className='px-6 py-6'>
-                                                    <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
-                                                        <BookmarkIcon className='w-4 h-4 text-[#6a7282]' />
-                                                        {/* {item.bookmarks.toLocaleString()} */}
-                                                        1
-                                                    </div>
-                                                </td>
-                                                <td className='px-6 py-6'>
-                                                    <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
-                                                        <HeartIcon className='w-4 h-4 text-[#6a7282]' />
-                                                        {/* {item.likes.toLocaleString()} */}
-                                                        1
-                                                    </div>
-                                                </td>
-                                                <td className='px-6 py-6 text-[14px] text-[#6a7282] text-right'>
-                                                    {/* {item.createdAt} */}
-                                                    2026-03-21
-                                                </td>
-                                            </tr>
-                                        ))
+                                                        </div>
+                                                    </td>
+                                                    <td className='px-6 py-6 text-[14px] text-[#364153]'>
+                                                        {isProcessing ? (
+                                                            <div className='flex items-center gap-2'>
+                                                                <span className='text-[#6a7282]'>
+                                                                    -
+                                                                </span>
+                                                            </div>
+                                                        ) : (
+                                                            item.authorName
+                                                        )}
+                                                    </td>
+                                                    <td className='px-6 py-6'>
+                                                        <RecipeSourceBadge
+                                                            source={
+                                                                item.sourceType
+                                                            }
+                                                        />
+                                                    </td>
+                                                    <td className='px-6 py-6'>
+                                                        <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
+                                                            <BookmarkIcon className='w-4 h-4 text-[#6a7282]' />
+                                                            {(
+                                                                item.bookmarkCount ??
+                                                                0
+                                                            ).toLocaleString()}
+                                                        </div>
+                                                    </td>
+                                                    <td className='px-6 py-6'>
+                                                        <div className='flex items-center gap-1.5 text-[14px] font-medium text-[#364153]'>
+                                                            <HeartIcon className='w-4 h-4 text-[#6a7282]' />
+                                                            {(
+                                                                item.likeCount ??
+                                                                0
+                                                            ).toLocaleString()}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
                                     )}
                                 </tbody>
                             </table>

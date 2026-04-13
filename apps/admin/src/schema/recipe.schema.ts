@@ -21,3 +21,12 @@ export const updateRecipeExposureGroupsSchema = z.object({
 export type UpdateRecipeExposureGroupsSchemaType = z.infer<
     typeof updateRecipeExposureGroupsSchema
 >;
+
+export const createUserRecipeSchema = z.object({
+    memberNo: z.number().min(1, '사용자를 입력해 주세요.'),
+    memberName: z.string().min(1, '사용자 이름을 입력해 주세요.'),
+    memberId: z.string().min(1, '사용자 아이디를 입력해 주세요.'),
+    url: z.string().min(1, '유튜브 / 인스타그램 URL을 입력해 주세요.'),
+});
+
+export type CreateUserRecipeSchemaType = z.infer<typeof createUserRecipeSchema>;

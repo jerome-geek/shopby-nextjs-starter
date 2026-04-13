@@ -1,23 +1,34 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import PageMeta from '@/components/common/PageMeta';
 import { Input, InputContainer, Label } from '@/components/form/input';
 import { Modal } from '@/components/ui/modal';
-import LoadingWrapper from '@/components/ui/loading-wrapper';
 import useLimitMutation from '@/hooks/mutations/useLimitMutation';
-import useLimitSettings from '@/hooks/query/limit/useLimitSettings';
+import { useLimitSettings } from '@/hooks/suspenseQuery/limit';
 import limitKeys from '@/hooks/queryKeys/limitKeys';
 import useApiError from '@/hooks/useApiError';
 import { useDialog } from '@/hooks/utils';
-import type { RecipeLimitExceptionRow } from '@/model/limit';
+import ErrorMessage from '@/components/form/ErrorMessage';
+import {
+    updateCreationLimitSchema,
+    UpdateCreationLimitSchemaType,
+} from '@/schema';
 
-import { PlugInIcon } from '@/icons';
-
+import { ReactComponent as SettingsIcon } from '@/icons/settings.svg?react';
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
+
+type RecipeLimitExceptionRow = {
+    id: string;
+    email: string;
+    name: string;
+    addedAt: string;
+};
 
 const INITIAL_EXCEPTIONS: RecipeLimitExceptionRow[] = [
     {
@@ -122,26 +133,30 @@ const RecipeSettings = () => {
     const { openAsyncDialog, openDialog } = useDialog();
     const { handleErrorDialog } = useApiError();
 
-    const { data: limitSettings, isLoading: isLimitLoading } =
-        useLimitSettings();
+    const { data: limitSettingsData } = useLimitSettings();
 
     const { updateCreationLimit } = useLimitMutation();
-
-    const [dailyLimit, setDailyLimit] = useState('');
-    const [monthlyLimit, setMonthlyLimit] = useState('');
     const [exceptions, setExceptions] =
         useState<RecipeLimitExceptionRow[]>(INITIAL_EXCEPTIONS);
 
     const searchRef = useRef<HTMLInputElement>(null);
     const [searchKeyword, setSearchKeyword] = useState('');
 
-    useEffect(() => {
-        if (!limitSettings) {
-            return;
-        }
-        setDailyLimit(String(limitSettings.dailyLimit));
-        setMonthlyLimit(String(limitSettings.monthlyLimit));
-    }, [limitSettings]);
+    const methods = useForm<UpdateCreationLimitSchemaType>({
+        resolver: zodResolver(updateCreationLimitSchema),
+        defaultValues: {
+            dailyLimit: limitSettingsData?.dailyLimit ?? 0,
+            monthlyLimit: limitSettingsData?.monthlyLimit ?? 0,
+        },
+    });
+
+    const {
+        control,
+        formState: { isDirty },
+        register,
+        handleSubmit,
+        reset,
+    } = methods;
 
     const filteredExceptions = useMemo(() => {
         if (searchKeyword === '') {
@@ -158,32 +173,29 @@ const RecipeSettings = () => {
         setSearchKeyword(searchRef.current?.value.trim() ?? '');
     };
 
-    const handleSaveLimits = () => {
-        const daily = Number(dailyLimit);
-        const monthly = Number(monthlyLimit);
-        if (
-            !Number.isFinite(daily) ||
-            !Number.isFinite(monthly) ||
-            daily < 0 ||
-            monthly < 0
-        ) {
-            openDialog({ message: '올바른 숫자를 입력해 주세요.' });
-            return;
-        }
+    const handleSaveLimits = handleSubmit((data) => {
+        updateCreationLimit.mutate(data, {
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: limitKeys.settings(),
+                });
 
-        updateCreationLimit.mutate(
-            { dailyLimit: daily, monthlyLimit: monthly },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({
-                        queryKey: limitKeys.settings(),
-                    });
-                    openDialog({ message: '설정이 저장되었습니다.' });
-                },
-                onError: (err) => handleErrorDialog(err),
+                openDialog({ message: '설정이 저장되었습니다.' });
+
+                reset(
+                    {
+                        dailyLimit: data?.dailyLimit ?? 0,
+                        monthlyLimit: data?.monthlyLimit ?? 0,
+                    },
+                    {
+                        keepFieldsRef: true,
+                        keepDirty: false,
+                    },
+                );
             },
-        );
-    };
+            onError: (err) => handleErrorDialog(err),
+        });
+    });
 
     const openAddException = () => {
         overlay.open((props) => (
@@ -233,78 +245,84 @@ const RecipeSettings = () => {
                     </p>
                 </div>
 
-                <LoadingWrapper
-                    isLoading={isLimitLoading}
-                    containerStyle={{ minHeight: 120 }}
-                >
-                    <div className='rounded-[14px] border border-[#e5e7eb] bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]'>
-                        <div className='mb-6 flex items-center gap-2'>
-                            <PlugInIcon className='h-5 w-5 shrink-0 text-[#ff6900]' />
-                            <h2 className='text-base font-semibold text-[#101828]'>
-                                레시피 생성 제한
-                            </h2>
-                        </div>
+                <div className='rounded-[14px] border border-[#e5e7eb] bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]'>
+                    <div className='mb-6 flex items-center gap-2'>
+                        <SettingsIcon className='h-5 w-5 shrink-0 text-[#ff6900]' />
+                        <h2 className='text-base font-semibold text-[#101828]'>
+                            레시피 생성 제한
+                        </h2>
+                    </div>
 
-                        <div className='grid gap-6 md:grid-cols-2'>
-                            <div className='flex flex-col gap-2'>
-                                <label className='text-sm font-medium text-[#364153]'>
-                                    하루 생성 가능한 레시피 수
-                                </label>
-                                <div className='flex items-center gap-2'>
-                                    <input
-                                        type='number'
-                                        min={0}
-                                        value={dailyLimit}
-                                        onChange={(e) =>
-                                            setDailyLimit(e.target.value)
-                                        }
-                                        className='h-10 w-full max-w-[200px] rounded-lg border border-[#e5e7eb] bg-white px-3 text-sm text-[#101828] focus:border-[#ff6900] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20'
-                                    />
-                                    <span className='text-sm text-[#6a7282]'>
-                                        개
-                                    </span>
-                                </div>
-                                <p className='text-xs text-[#6a7282]'>
-                                    회원이 하루에 만들 수 있는 레시피 수입니다.
-                                </p>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSaveLimits();
+                        }}
+                        className='grid gap-6 md:grid-cols-2'
+                    >
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm font-medium text-[#364153]'>
+                                하루 생성 가능한 레시피 수
+                            </label>
+                            <div className='flex items-center gap-2'>
+                                <Input
+                                    type='number'
+                                    min={0}
+                                    step={1}
+                                    {...register('dailyLimit')}
+                                    className='h-10 w-full max-w-[200px] rounded-lg border border-[#e5e7eb] bg-white px-3 text-sm text-[#101828] focus:border-[#ff6900] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20'
+                                />
+                                <span className='text-sm text-[#6a7282]'>
+                                    개
+                                </span>
                             </div>
 
-                            <div className='flex flex-col gap-2'>
-                                <label className='text-sm font-medium text-[#364153]'>
-                                    한달 생성 가능한 레시피 수
-                                </label>
-                                <div className='flex items-center gap-2'>
-                                    <input
-                                        type='number'
-                                        min={0}
-                                        value={monthlyLimit}
-                                        onChange={(e) =>
-                                            setMonthlyLimit(e.target.value)
-                                        }
-                                        className='h-10 w-full max-w-[200px] rounded-lg border border-[#e5e7eb] bg-white px-3 text-sm text-[#101828] focus:border-[#ff6900] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20'
-                                    />
-                                    <span className='text-sm text-[#6a7282]'>
-                                        개
-                                    </span>
-                                </div>
-                                <p className='text-xs text-[#6a7282]'>
-                                    회원이 한 달에 만들 수 있는 레시피 수입니다.
-                                </p>
-                            </div>
+                            <ErrorMessage name='dailyLimit' control={control} />
+
+                            <p className='text-xs text-[#6a7282]'>
+                                회원이 하루에 만들 수 있는 레시피 수입니다.
+                            </p>
                         </div>
 
-                        <div className='mt-6'>
+                        <div className='flex flex-col gap-2'>
+                            <label className='text-sm font-medium text-[#364153]'>
+                                한달 생성 가능한 레시피 수
+                            </label>
+                            <div className='flex items-center gap-2'>
+                                <Input
+                                    type='number'
+                                    min={0}
+                                    step={1}
+                                    {...register('monthlyLimit')}
+                                    className='h-10 w-full max-w-[200px] rounded-lg border border-[#e5e7eb] bg-white px-3 text-sm text-[#101828] focus:border-[#ff6900] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20'
+                                />
+                                <span className='text-sm text-[#6a7282]'>
+                                    개
+                                </span>
+                            </div>
+
+                            <ErrorMessage
+                                name='monthlyLimit'
+                                control={control}
+                            />
+
+                            <p className='text-xs text-[#6a7282]'>
+                                회원이 한 달에 만들 수 있는 레시피 수입니다.
+                            </p>
+                        </div>
+                        <div className='mt-2 md:col-span-2'>
                             <button
-                                type='button'
-                                onClick={handleSaveLimits}
-                                disabled={updateCreationLimit.isPending}
+                                type='submit'
+                                disabled={
+                                    updateCreationLimit.isPending || !isDirty
+                                }
                                 className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50'
                             >
                                 설정 저장
                             </button>
                         </div>
-                    </div>
-                </LoadingWrapper>
+                    </form>
+                </div>
 
                 <div className='rounded-[14px] border border-[#e5e7eb] bg-white shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]'>
                     <div className='flex flex-col gap-4 border-b border-[#e5e7eb] px-6 py-5 sm:flex-row sm:items-start sm:justify-between'>

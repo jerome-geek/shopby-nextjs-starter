@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router';
 import type { ErrorBoundaryFallbackProps } from '@suspensive/react';
 import { isAxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 import Button from '@/components/ui/button/Button';
 import { PATHS } from '@/const/paths';
@@ -10,6 +11,8 @@ export const AppErrorFallback = ({
     reset,
 }: ErrorBoundaryFallbackProps) => {
     const navigate = useNavigate();
+
+    const queryClient = useQueryClient();
 
     const axiosMessage = isAxiosError(error)
         ? (() => {
@@ -47,6 +50,7 @@ export const AppErrorFallback = ({
                         variant='primary'
                         onClick={() => {
                             reset();
+                            queryClient.resetQueries();
                         }}
                     >
                         다시 시도

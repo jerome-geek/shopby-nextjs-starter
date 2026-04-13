@@ -1,5 +1,12 @@
 import { PageParams, PageResponse } from '@/model/common';
 
+export interface CreateUserRecipeBody {
+    memberNo: number;
+    memberName: string;
+    memberId: string;
+    url: string;
+}
+
 export interface SearchRecipesParams extends PageParams {
     keyword: string;
 }
@@ -10,6 +17,8 @@ export interface Recipe {
     sourceType: string;
     thumbnailUrl: string;
     title: string;
+    bookmarkCount: number;
+    likeCount: number;
 }
 
 export type SearchRecipesResponse = PageResponse<Recipe>;
@@ -45,6 +54,8 @@ export interface RecipeExposureGroupDetailResponse {
         thumbnailUrl: string;
         sourceType: string;
         sortOrder: number;
+        likeCount: number;
+        bookmarkCount: number;
     }[];
 }
 
