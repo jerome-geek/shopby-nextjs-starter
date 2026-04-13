@@ -171,14 +171,14 @@ export interface RecipeStep {
 
 /** 재료에 연결된 쿠팡 상품 */
 export interface RecipeIngredientProduct {
-    productCacheSno: number | null;
-    productId: string | null;
-    name: string | null;
-    price: number | null;
-    imageUrl: string | null;
-    url: string | null;
-    status: string | null;
-    isRocket: boolean | null;
+    imageUrl: string;
+    isFreeShipping: boolean;
+    isRocket: boolean;
+    price: number;
+    productCacheSno: number;
+    productId: string;
+    status: RecipeStatus;
+    url: string;
 }
 
 /** 레시피 재료 */
@@ -231,6 +231,21 @@ export interface CollectionBookmarkResponse {
     bookmarkCount: number;
 }
 
+export interface CollectionInfo {
+    sno: number;
+    title: string;
+    description: string | null;
+    shareCode: string;
+    memberNo: number;
+    memberName: string | null;
+    recipeCount: number;
+    bookmarkCount: number;
+    bookmarked: boolean;
+    isDefault: boolean;
+}
+
+export type GetCollectionsResponse = CollectionInfo[];
+
 /** 북마크된 레시피 컬렉션 */
 export interface BookmarkedRecipeCollection {
     sno: number;
@@ -242,6 +257,7 @@ export interface BookmarkedRecipeCollection {
     recipeCount: number;
     bookmarkCount: number;
     bookmarked: boolean;
+    isDefault: boolean;
 }
 
 /** 노출 그룹 아이템 */

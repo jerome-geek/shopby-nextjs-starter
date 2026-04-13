@@ -19,6 +19,7 @@ import {
     SearchRecipesParams,
     SearchRecipesResponse,
     UpdateRecipeCollectionData,
+    GetCollectionsResponse,
 } from '@/models/shop/recipe';
 
 const recipe = {
@@ -129,7 +130,7 @@ const recipe = {
      *  - 사용자의 레시피 컬렉션 목록을 조회합니다
      */
     getCollections: (options?: AxiosRequestConfig) => {
-        return geekRequest<BookmarkedRecipeCollection[]>({
+        return geekRequest<GetCollectionsResponse>({
             method: 'GET',
             url: '/shop/recipe/collections',
             ...options,

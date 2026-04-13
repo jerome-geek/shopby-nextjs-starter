@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +14,7 @@ import {
 } from '@/components/ui/input';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
-import { isAxiosError } from 'axios';
+import { recipeKeys } from '@/hooks/queryKeys';
 
 type CollectionCreateModalProps = DefaultModalLayoutProps;
 
@@ -23,6 +25,8 @@ interface CollectionCreateFormData {
 
 export const CollectionCreateModal = (props: CollectionCreateModalProps) => {
     const { t } = useTranslation();
+
+    const queryClient = useQueryClient();
 
     const {
         register,
@@ -43,8 +47,6 @@ export const CollectionCreateModal = (props: CollectionCreateModalProps) => {
     } = useCollectionMutation();
 
     const onSubmit = handleSubmit((data) => {
-        console.log('🚀 ~ CollectionCreateModal ~ data:', data);
-
         createCollection(
             { data },
             {
@@ -53,6 +55,11 @@ export const CollectionCreateModal = (props: CollectionCreateModalProps) => {
                         message: t('새 컬렉션이 생성되었습니다.'),
                         variant: 'success',
                     });
+
+                    queryClient.invalidateQueries({
+                        queryKey: recipeKeys.collections(),
+                    });
+
                     props.close();
                 },
                 onError: (error) => {

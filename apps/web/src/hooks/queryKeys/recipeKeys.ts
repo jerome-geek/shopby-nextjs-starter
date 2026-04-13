@@ -9,6 +9,8 @@ const recipeKeys = {
 
     details: () => [...recipeKeys.all, 'detail'] as const,
     detail: (sno: number) => [...recipeKeys.details(), sno] as const,
+
+    collections: () => [...recipeKeys.all, 'collections'] as const,
 };
 
 // const reviewKeys = {
