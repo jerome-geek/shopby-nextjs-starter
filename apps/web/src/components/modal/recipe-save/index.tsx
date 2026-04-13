@@ -63,6 +63,9 @@ export const RecipeSaveModal = ({
             queryClient.invalidateQueries({
                 queryKey: recipeKeys.detail(recipeSno, memberNo),
             });
+            queryClient.invalidateQueries({
+                queryKey: recipeKeys.publicSearches(),
+            });
 
             addToast({
                 variant: 'success',

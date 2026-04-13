@@ -249,6 +249,8 @@ export const rankingSectionTitle = style([
 export const rankingList = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gridTemplateRows: 'repeat(3, auto)',
+    gridAutoFlow: 'column',
     rowGap: '10px',
     columnGap: '15px',
 

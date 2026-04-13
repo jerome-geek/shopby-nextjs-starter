@@ -3,7 +3,11 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import { Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { ModalLayout, DefaultModalLayoutProps, BottomSheetLayout } from '@/components/layout';
+import {
+    ModalLayout,
+    DefaultModalLayoutProps,
+    BottomSheetLayout,
+} from '@/components/layout';
 import { useResponsive } from '@/hooks/utils';
 import { collection } from '@/api/shop';
 import { vars } from '@/styles/theme.css';
@@ -58,7 +62,10 @@ export const RecipeCollectionCreateModal = ({
                     placeholder={t('컬렉션 이름을 입력하세요')}
                     value={newCollection.title}
                     onChange={(e) =>
-                        setNewCollection({ ...newCollection, title: e.target.value })
+                        setNewCollection({
+                            ...newCollection,
+                            title: e.target.value,
+                        })
                     }
                 />
             </div>
@@ -70,7 +77,10 @@ export const RecipeCollectionCreateModal = ({
                     placeholder={t('이 컬렉션에 대해 간단히 소개해 주세요')}
                     value={newCollection.desc}
                     onChange={(e) =>
-                        setNewCollection({ ...newCollection, desc: e.target.value })
+                        setNewCollection({
+                            ...newCollection,
+                            desc: e.target.value,
+                        })
                     }
                 />
             </div>
@@ -81,14 +91,24 @@ export const RecipeCollectionCreateModal = ({
                     <Tooltip.Provider delayDuration={200}>
                         <Tooltip.Root>
                             <Tooltip.Trigger asChild>
-                                <button className={styles.tooltipTrigger} type="button">
+                                <button
+                                    className={styles.tooltipTrigger}
+                                    type='button'
+                                >
                                     <Info size={16} />
                                 </button>
                             </Tooltip.Trigger>
                             <Tooltip.Portal>
-                                <Tooltip.Content className={styles.tooltipContent} sideOffset={5}>
-                                    {t('이 컬렉션에 공유하고 싶은 링크를 넣어 주세요')}
-                                    <Tooltip.Arrow fill={vars.color.gray['80']} />
+                                <Tooltip.Content
+                                    className={styles.tooltipContent}
+                                    sideOffset={5}
+                                >
+                                    {t(
+                                        '이 컬렉션에 공유하고 싶은 링크를 넣어 주세요',
+                                    )}
+                                    <Tooltip.Arrow
+                                        fill={vars.color.gray['80']}
+                                    />
                                 </Tooltip.Content>
                             </Tooltip.Portal>
                         </Tooltip.Root>
@@ -96,10 +116,13 @@ export const RecipeCollectionCreateModal = ({
                 </div>
                 <input
                     className={styles.input}
-                    placeholder="https://example.com"
+                    placeholder='https://example.com'
                     value={newCollection.link}
                     onChange={(e) =>
-                        setNewCollection({ ...newCollection, link: e.target.value })
+                        setNewCollection({
+                            ...newCollection,
+                            link: e.target.value,
+                        })
                     }
                 />
             </div>
@@ -108,7 +131,7 @@ export const RecipeCollectionCreateModal = ({
                 className={styles.submitButton}
                 data-active={isSubmitActive}
                 disabled={!isSubmitActive}
-                type="button"
+                type='button'
                 onClick={handleCreate}
             >
                 {t('컬렉션 만들기')}
@@ -135,7 +158,7 @@ export const RecipeCollectionCreateModal = ({
             close={close}
             unmount={unmount}
             title={t('새 컬렉션 만들기')}
-            size="small"
+            size='small'
         >
             {FormContent}
         </ModalLayout>

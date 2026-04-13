@@ -21,7 +21,7 @@ export const INTEGRATED_SEARCH_PAGE = {
 } as const;
 
 /** 레시피 탭 전용 take 값 */
-export const RECIPE_TAKE_PER_TAB = 6;
+export const RECIPE_TAKE_PER_TAB = 8;
 
 /** 컬렉션 탭 전용 take 값 */
-export const COLLECTION_TAKE_PER_TAB = 6;
+export const COLLECTION_TAKE_PER_TAB = 8;

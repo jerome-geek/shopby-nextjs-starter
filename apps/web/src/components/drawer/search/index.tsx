@@ -190,38 +190,100 @@ export const SearchDrawer = ({
                                     />
                                 </div>
 
-                                <Column
-                                    className={styles.productSectionContainer}
-                                >
-                                    <h3
-                                        className={`${styles.sectionTitle} ${styles.productSectionTitle}`}
+                                {filteredProducts.length > 0 && (
+                                    <Column
+                                        className={
+                                            styles.productSectionContainer
+                                        }
                                     >
-                                        추천 상품
-                                    </h3>
-                                    {isMobile ? (
-                                        <Swiper
-                                            className={styles.recommendSwiper}
-                                            slidesPerView={2.3}
-                                            spaceBetween={12}
-                                            onSlideChange={
-                                                handleRecommendSlideChange
-                                            }
-                                            slidesOffsetBefore={20}
-                                            slidesOffsetAfter={20}
+                                        <h3
+                                            className={`${styles.sectionTitle} ${styles.productSectionTitle}`}
                                         >
-                                            {filteredProducts.map((product) => (
-                                                <SwiperSlide
-                                                    key={product.productNo}
-                                                    className={
-                                                        styles.recommendSlide
-                                                    }
-                                                >
-                                                    <div
-                                                        className={
-                                                            styles.recommendCardWrap
-                                                        }
-                                                    >
+                                            추천 상품
+                                        </h3>
+                                        {isMobile ? (
+                                            <Swiper
+                                                className={
+                                                    styles.recommendSwiper
+                                                }
+                                                slidesPerView={2.3}
+                                                spaceBetween={12}
+                                                onSlideChange={
+                                                    handleRecommendSlideChange
+                                                }
+                                                slidesOffsetBefore={20}
+                                                slidesOffsetAfter={20}
+                                            >
+                                                {filteredProducts.map(
+                                                    (product) => (
+                                                        <SwiperSlide
+                                                            key={
+                                                                product.productNo
+                                                            }
+                                                            className={
+                                                                styles.recommendSlide
+                                                            }
+                                                        >
+                                                            <div
+                                                                className={
+                                                                    styles.recommendCardWrap
+                                                                }
+                                                            >
+                                                                <ProductCard
+                                                                    productNo={
+                                                                        product.productNo
+                                                                    }
+                                                                    productName={
+                                                                        product.productName
+                                                                    }
+                                                                    brandName={
+                                                                        product.brandName
+                                                                    }
+                                                                    brandNo={
+                                                                        product.brandNo
+                                                                    }
+                                                                    salePrice={
+                                                                        product.salePrice
+                                                                    }
+                                                                    immediateDiscountAmt={
+                                                                        product.immediateDiscountAmt
+                                                                    }
+                                                                    additionDiscountAmt={
+                                                                        product.additionDiscountAmt
+                                                                    }
+                                                                    imageUrlInfo={
+                                                                        product.imageUrlInfo as ImageUrlType[]
+                                                                    }
+                                                                    stickerInfos={
+                                                                        product.stickerInfos
+                                                                    }
+                                                                    likeCount={
+                                                                        product.likeCount
+                                                                    }
+                                                                    liked={
+                                                                        product.liked
+                                                                    }
+                                                                    reviewRating={
+                                                                        product.reviewRating
+                                                                    }
+                                                                    totalReviewCount={
+                                                                        product.totalReviewCount
+                                                                    }
+                                                                    isAdditionalDiscount
+                                                                />
+                                                            </div>
+                                                        </SwiperSlide>
+                                                    ),
+                                                )}
+                                            </Swiper>
+                                        ) : (
+                                            <div className={styles.productGrid}>
+                                                {filteredProducts.map(
+                                                    (product) => (
                                                         <ProductCard
+                                                            key={
+                                                                product.productNo
+                                                            }
                                                             productNo={
                                                                 product.productNo
                                                             }
@@ -263,68 +325,24 @@ export const SearchDrawer = ({
                                                             }
                                                             isAdditionalDiscount
                                                         />
-                                                    </div>
-                                                </SwiperSlide>
-                                            ))}
-                                        </Swiper>
-                                    ) : (
-                                        <div className={styles.productGrid}>
-                                            {filteredProducts.map((product) => (
-                                                <ProductCard
-                                                    key={product.productNo}
-                                                    productNo={
-                                                        product.productNo
-                                                    }
-                                                    productName={
-                                                        product.productName
-                                                    }
-                                                    brandName={
-                                                        product.brandName
-                                                    }
-                                                    brandNo={product.brandNo}
-                                                    salePrice={
-                                                        product.salePrice
-                                                    }
-                                                    immediateDiscountAmt={
-                                                        product.immediateDiscountAmt
-                                                    }
-                                                    additionDiscountAmt={
-                                                        product.additionDiscountAmt
-                                                    }
-                                                    imageUrlInfo={
-                                                        product.imageUrlInfo as ImageUrlType[]
-                                                    }
-                                                    stickerInfos={
-                                                        product.stickerInfos
-                                                    }
-                                                    likeCount={
-                                                        product.likeCount
-                                                    }
-                                                    liked={product.liked}
-                                                    reviewRating={
-                                                        product.reviewRating
-                                                    }
-                                                    totalReviewCount={
-                                                        product.totalReviewCount
-                                                    }
-                                                    isAdditionalDiscount
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
+                                                    ),
+                                                )}
+                                            </div>
+                                        )}
 
-                                    {!isMobile && (
-                                        <ObserverTarget
-                                            onIntersect={() => {
-                                                if (hasNextPage) {
-                                                    fetchNextPage();
-                                                }
-                                            }}
-                                            hasNextPage={hasNextPage}
-                                            totalCount={productTotalCount}
-                                        />
-                                    )}
-                                </Column>
+                                        {!isMobile && (
+                                            <ObserverTarget
+                                                onIntersect={() => {
+                                                    if (hasNextPage) {
+                                                        fetchNextPage();
+                                                    }
+                                                }}
+                                                hasNextPage={hasNextPage}
+                                                totalCount={productTotalCount}
+                                            />
+                                        )}
+                                    </Column>
+                                )}
                             </Column>
                         </div>
                     </motion.div>

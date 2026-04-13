@@ -152,15 +152,13 @@ const Search = () => {
         selectedTab === 'shopping' && !isTablet && mainCategoryNo !== 0;
 
     const recipeTabInfiniteEnabled =
-        selectedTab === 'integrated' ||
-        (selectedTab === 'recipe' && isTablet);
+        selectedTab === 'integrated' || (selectedTab === 'recipe' && isTablet);
     const recipeTabQueryEnabled = selectedTab === 'recipe' && !isTablet;
 
     const collectionTabInfiniteEnabled =
         selectedTab === 'integrated' ||
         (selectedTab === 'collection' && isTablet);
-    const collectionTabQueryEnabled =
-        selectedTab === 'collection' && !isTablet;
+    const collectionTabQueryEnabled = selectedTab === 'collection' && !isTablet;
 
     const {
         fetchNextPage: fetchNextProductPage,
@@ -234,57 +232,45 @@ const Search = () => {
         },
     });
 
-    const productList = useMemo(
-        () => {
-            if (selectedTab === 'shopping' && !isTablet) {
-                return productListData?.items ?? [];
-            }
+    const productList = useMemo(() => {
+        if (selectedTab === 'shopping' && !isTablet) {
+            return productListData?.items ?? [];
+        }
 
-            return (
-                infiniteProductListData?.pages.flatMap(
-                    (page) => page.data.items,
-                ) ?? []
-            );
-        },
-        [infiniteProductListData, isTablet, productListData?.items, selectedTab],
-    );
+        return (
+            infiniteProductListData?.pages.flatMap((page) => page.data.items) ??
+            []
+        );
+    }, [
+        infiniteProductListData,
+        isTablet,
+        productListData?.items,
+        selectedTab,
+    ]);
     const productTotalCount =
         selectedTab === 'shopping' && !isTablet
             ? productListData?.totalCount ?? 0
             : infiniteProductListData?.pages[0]?.data.totalCount ?? 0;
 
-    const recipeList = useMemo(
-        () => {
-            if (selectedTab === 'recipe' && !isTablet) {
-                return recipeData?.data ?? [];
-            }
+    const recipeList = useMemo(() => {
+        if (selectedTab === 'recipe' && !isTablet) {
+            return recipeData?.data ?? [];
+        }
 
-            return infiniteRecipeData?.pages.flatMap((page) => page.data) ?? [];
-        },
-        [infiniteRecipeData, isTablet, recipeData?.data, selectedTab],
-    );
+        return infiniteRecipeData?.pages.flatMap((page) => page.data) ?? [];
+    }, [infiniteRecipeData, isTablet, recipeData?.data, selectedTab]);
     const recipeTotalCount =
         selectedTab === 'recipe' && !isTablet
             ? recipeData?.count ?? 0
             : infiniteRecipeData?.pages[0]?.count ?? 0;
 
-    const collectionList = useMemo(
-        () => {
-            if (selectedTab === 'collection' && !isTablet) {
-                return collectionData?.data ?? [];
-            }
+    const collectionList = useMemo(() => {
+        if (selectedTab === 'collection' && !isTablet) {
+            return collectionData?.data ?? [];
+        }
 
-            return (
-                infiniteCollectionData?.pages.flatMap((page) => page.data) ?? []
-            );
-        },
-        [
-            collectionData?.data,
-            infiniteCollectionData,
-            isTablet,
-            selectedTab,
-        ],
-    );
+        return infiniteCollectionData?.pages.flatMap((page) => page.data) ?? [];
+    }, [collectionData?.data, infiniteCollectionData, isTablet, selectedTab]);
     const collectionTotalCount =
         selectedTab === 'collection' && !isTablet
             ? collectionData?.count ?? 0

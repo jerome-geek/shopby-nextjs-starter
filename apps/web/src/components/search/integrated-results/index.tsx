@@ -1,5 +1,6 @@
 import { isEmpty } from '@fxts/core';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { CollectionCard } from '@/components/collection/collection-card';
 import { NoResult } from '@/components/common/no-result';
@@ -80,11 +81,27 @@ export const IntegratedSearchResults = ({
                 </Row>
                 <Column style={{ gap: isMobile ? '20px' : '24px' }}>
                     {isEmpty(productList) ? (
-                        <NoResult
-                            className={styles.noResult}
-                            text='검색 결과가 없습니다.'
-                            isIconVisible={false}
-                        />
+                        <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                            <NoResult
+                                className={styles.noResult}
+                                text='검색 결과가 없습니다.'
+                                isIconVisible={false}
+                            />
+
+                            <Column gap='12px'>
+                                <h3 className={styles.productSectionTitle}>
+                                    이 상품은 어떠세요?
+                                </h3>
+                                <Swiper>
+                                    <SwiperSlide>
+                                        {/* <ProductCard
+                                            key={product.productNo}
+                                            {...product}
+                                        /> */}
+                                    </SwiperSlide>
+                                </Swiper>
+                            </Column>
+                        </Column>
                     ) : (
                         <div className={shoppingStyles.productList}>
                             {productList.map((product) => (
@@ -129,11 +146,27 @@ export const IntegratedSearchResults = ({
 
                 <Column style={{ gap: isMobile ? '20px' : '24px' }}>
                     {isEmpty(recipeList) ? (
-                        <NoResult
-                            className={styles.noResult}
-                            text='검색 결과가 없습니다.'
-                            isIconVisible={false}
-                        />
+                        <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                            <NoResult
+                                className={styles.noResult}
+                                text='검색 결과가 없습니다.'
+                                isIconVisible={false}
+                            />
+
+                            <Column gap='12px'>
+                                <h3 className={styles.productSectionTitle}>
+                                    이 레시피는 어떠세요?
+                                </h3>
+                                <Swiper>
+                                    <SwiperSlide>
+                                        {/* <ProductCard
+                                                 key={product.productNo}
+                                                 {...product}
+                                             /> */}
+                                    </SwiperSlide>
+                                </Swiper>
+                            </Column>
+                        </Column>
                     ) : (
                         <ul className={recipeStyles.recipeContainer}>
                             {recipeList.map((recipe) => (
@@ -175,11 +208,27 @@ export const IntegratedSearchResults = ({
 
                 <Column style={{ gap: isMobile ? '20px' : '24px' }}>
                     {isEmpty(collectionList) ? (
-                        <NoResult
-                            className={styles.noResult}
-                            text='검색 결과가 없습니다.'
-                            isIconVisible={false}
-                        />
+                        <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                            <NoResult
+                                className={styles.noResult}
+                                text='검색 결과가 없습니다.'
+                                isIconVisible={false}
+                            />
+
+                            <Column gap='12px'>
+                                <h3 className={styles.productSectionTitle}>
+                                    이 컬렉션은 어떠세요?
+                                </h3>
+                                <Swiper>
+                                    <SwiperSlide>
+                                        {/* <ProductCard
+                                                 key={product.productNo}
+                                                 {...product}
+                                             /> */}
+                                    </SwiperSlide>
+                                </Swiper>
+                            </Column>
+                        </Column>
                     ) : (
                         <ul className={collectionStyles.collectionContainer}>
                             {collectionList.map((collection) => (

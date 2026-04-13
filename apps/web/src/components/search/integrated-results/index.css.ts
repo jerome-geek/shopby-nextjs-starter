@@ -16,7 +16,18 @@ export const container = style({
     },
 });
 
-export const sectionTitle = style([textStyles.headingSemibold, {}]);
+export const sectionTitle = style([
+    textStyles.headingSemibold,
+    {
+        '@media': {
+            [media.desktop]: {
+                fontSize: '2.2rem',
+                lineHeight: '1.32',
+                letterSpacing: '-2%',
+            },
+        },
+    },
+]);
 
 export const allViewButton = style([
     textStyles.caption1Regular,
@@ -26,6 +37,14 @@ export const allViewButton = style([
         alignItems: 'center',
         gap: '2px',
         color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '1.4rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -65,6 +84,19 @@ export const noResult = style([
                 fontSize: '1.5rem',
                 lineHeight: '1.4',
                 letterSpacing: '-0.2%',
+            },
+        },
+    },
+]);
+
+export const productSectionTitle = style([
+    textStyles.headlineSemibold,
+    {
+        '@media': {
+            [media.desktop]: {
+                fontSize: '1.8rem',
+                lineHeight: '1.5',
+                letterSpacing: '-1.3%',
             },
         },
     },
