@@ -1,0 +1,204 @@
+import { isEmpty } from '@fxts/core';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
+
+import LoadingWrapper from '@/components/common/loading-wrapper';
+import { NoResult } from '@/components/common/no-result';
+import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import OptionText from '@/components/mypage/common/option-text';
+import * as styles from '@/components/mypage/review/reviewable-list/index.css';
+import { Button } from '@/components/ui';
+import Paging from '@/components/ui/paging';
+import { ORDER_STATUS_MAP } from '@/const/label';
+import { PATHS } from '@/const/paths';
+import { useReviewableProductList } from '@/hooks/query/display/review';
+import { useMypageQueryState } from '@/hooks/useMypageQueryState';
+import { useResponsive } from '@/hooks/utils';
+
+export const ReviewableListView = () => {
+    const { t } = useTranslation();
+
+    const { isMobile } = useResponsive();
+
+    const { router, startYmd, endYmd, pageNumber, pageSize, setQuery } =
+        useMypageQueryState();
+
+    const searchParams = useMemo(
+        () => ({
+            pageNumber,
+            pageSize,
+            hasTotalCount: true,
+            startDate: startYmd,
+            endDate: endYmd,
+        }),
+        [pageNumber, pageSize, startYmd, endYmd],
+    );
+
+    const {
+        data: isReviewableProductListData,
+        isLoading: isReviewableProductListLoading,
+    } = useReviewableProductList({
+        searchParams,
+    });
+
+    const reviewableProductList = useMemo(() => {
+        return isReviewableProductListData?.items ?? [];
+    }, [isReviewableProductListData]);
+
+    const totalCount = isReviewableProductListData?.totalCount ?? 0;
+
+    return (
+        <>
+            {!isMobile && (
+                <div
+                    className={card.headerRow}
+                    style={{ gridTemplateColumns: '1.6fr 0.8fr 0.8fr' }}
+                >
+                    <div className={card.headerCell}>{t('상품정보')}</div>
+                    <div className={card.headerCell}>{t('주문상태')}</div>
+                    <div className={card.headerCell}>{t('선택')}</div>
+                </div>
+            )}
+
+            <LoadingWrapper isLoading={isReviewableProductListLoading}>
+                {isEmpty(reviewableProductList) ? (
+                    <NoResult text={t('작성 가능한 리뷰가 없습니다.')} />
+                ) : (
+                    <ul>
+                        {reviewableProductList.map((item) => (
+                            <li
+                                key={`${item.orderNo}-${item.productNo}-${item.orderOptionNo}`}
+                                className={card.listItem}
+                                style={{
+                                    gridTemplateColumns: isMobile
+                                        ? '1fr'
+                                        : '1.6fr 0.8fr 0.8fr',
+                                }}
+                            >
+                                <div className={card.cellAlignStart}>
+                                    <div className={styles.productCell}>
+                                        <Link
+                                            href={`/products/${item.productNo}`}
+                                            prefetch={false}
+                                        >
+                                            <img
+                                                src={item.imageUrl}
+                                                alt={item.productName}
+                                                className={styles.image}
+                                                loading='lazy'
+                                            />
+                                        </Link>
+
+                                        <div className={styles.productText}>
+                                            <p className={styles.orderNo}>
+                                                {`${t('주문번호')} ${
+                                                    item.orderNo
+                                                }`}
+                                            </p>
+
+                                            {isMobile && (
+                                                <div className={card.cell}>
+                                                    <span
+                                                        className={
+                                                            item.orderStatusType ===
+                                                            'BUY_CONFIRM'
+                                                                ? styles.primaryStatus
+                                                                : styles.status
+                                                        }
+                                                    >
+                                                        {t(
+                                                            ORDER_STATUS_MAP[
+                                                                item.orderStatusType as keyof typeof ORDER_STATUS_MAP
+                                                            ] ??
+                                                                item.orderStatusType,
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            <p className={styles.productName}>
+                                                {item.productName}
+                                            </p>
+
+                                            <OptionText
+                                                optionName={item.optionName}
+                                                optionValue={item.optionValue}
+                                                productName={item.productName}
+                                                inputs={item.inputs}
+                                                orderCnt={item.orderCnt}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {!isMobile && (
+                                    <div className={card.cell}>
+                                        <span
+                                            className={
+                                                item.orderStatusType ===
+                                                'BUY_CONFIRM'
+                                                    ? styles.primaryStatus
+                                                    : styles.status
+                                            }
+                                        >
+                                            {t(
+                                                ORDER_STATUS_MAP[
+                                                    item.orderStatusType as keyof typeof ORDER_STATUS_MAP
+                                                ] ?? item.orderStatusType,
+                                            )}
+                                        </span>
+                                    </div>
+                                )}
+
+                                <div className={card.cell}>
+                                    <div className={styles.actionRow}>
+                                        <Button
+                                            frame='outlined'
+                                            variant='secondary'
+                                            type='button'
+                                            className={styles.writeButton}
+                                            onClick={() => {
+                                                router.push({
+                                                    pathname:
+                                                        PATHS.MYPAGE.REVIEWS.WRITE.replace(
+                                                            '[productNo]',
+                                                            String(
+                                                                item.productNo,
+                                                            ),
+                                                        ),
+                                                    query: {
+                                                        optionNo: String(
+                                                            item.optionNo,
+                                                        ),
+                                                        orderOptionNo: String(
+                                                            item.orderOptionNo,
+                                                        ),
+                                                        orderNo: String(
+                                                            item.orderNo,
+                                                        ),
+                                                    },
+                                                });
+                                            }}
+                                        >
+                                            {t('리뷰 작성')}
+                                        </Button>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+                <div className={card.paging}>
+                    <Paging
+                        currentPage={pageNumber}
+                        totalCount={totalCount}
+                        pageSize={pageSize}
+                        onPageClick={(page) => setQuery({ pageNumber: page })}
+                    />
+                </div>
+            </LoadingWrapper>
+        </>
+    );
+};

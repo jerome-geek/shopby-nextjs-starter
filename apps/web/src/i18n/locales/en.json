@@ -1,0 +1,13 @@
+{
+    "로그인": "Login",
+    "아이디": "ID",
+    "아이디를 입력해 주세요": "Please enter your ID",
+    "비밀번호": "Password",
+    "비밀번호를 입력해 주세요": "Please enter your password",
+    "아이디 저장": "Remember ID",
+    "로그인 중...": "Logging in...",
+    "회원가입": "Sign Up",
+    "아이디 찾기": "Find ID",
+    "비밀번호 찾기": "Find Password",
+    "비회원 배송조회": "Guest Order Tracking"
+}

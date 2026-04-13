@@ -1,0 +1,60 @@
+import {
+    InfiniteData,
+    useInfiniteQuery,
+    UseInfiniteQueryOptions,
+} from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+
+import { event } from '@/api/display';
+import eventKeys from '@/hooks/queryKeys/eventKeys';
+import type { GetEventsResponse, GetEventsV2Params } from '@/models/display/event';
+
+interface UseInfiniteEventListParams {
+    searchParams: GetEventsV2Params;
+    options?: Omit<
+        UseInfiniteQueryOptions<
+            GetEventsResponse,
+            AxiosError<ShopByErrorResponse>,
+            InfiniteData<GetEventsResponse>
+        >,
+        'queryKey' | 'queryFn' | 'getNextPageParam' | 'initialPageParam'
+    >;
+}
+
+const useInfiniteEventList = ({
+    searchParams,
+    options,
+}: UseInfiniteEventListParams) => {
+    return useInfiniteQuery<
+        GetEventsResponse,
+        AxiosError<ShopByErrorResponse>,
+        InfiniteData<GetEventsResponse>
+    >({
+        queryKey: eventKeys.infiniteList(searchParams),
+        initialPageParam: searchParams.page.number ?? 1,
+        queryFn: async ({ pageParam }) => {
+            const { data } = await event.getEventsV2({
+                ...searchParams,
+                page: {
+                    ...searchParams.page,
+                    number: Number(pageParam) || 1,
+                },
+            });
+
+            return data;
+        },
+        getNextPageParam: (lastPage, allPages) => {
+            const currentSize = allPages.reduce(
+                (acc, page) => acc + page.contents.length,
+                0,
+            );
+            if (currentSize >= lastPage.totalCount) {
+                return undefined;
+            }
+            return allPages.length + 1;
+        },
+        ...options,
+    });
+};
+
+export default useInfiniteEventList;

@@ -1,0 +1,148 @@
+import { style } from '@vanilla-extract/css';
+
+export const textStyles = {
+    display1Semibold: style({
+        fontSize: '3.6rem',
+        fontWeight: 700,
+        lineHeight: '1.32',
+        letterSpacing: '-2%',
+    }),
+    display2Bold: style({
+        fontSize: '3rem',
+        fontWeight: 700,
+        lineHeight: '1.32',
+        letterSpacing: '-2%',
+    }),
+    display2Semibold: style({
+        fontSize: '3rem',
+        fontWeight: 600,
+        lineHeight: '1.32',
+        letterSpacing: '-2%',
+    }),
+    title1Bold: style({
+        fontSize: '2.2rem',
+        fontWeight: 700,
+        lineHeight: '1.32',
+        letterSpacing: '-2%',
+    }),
+    title1Semibold: style({
+        fontSize: '2.2rem',
+        fontWeight: 600,
+        lineHeight: '1.32',
+        letterSpacing: '-2%',
+    }),
+    title2Semibold: style({
+        fontSize: '2rem',
+        fontWeight: 600,
+        lineHeight: '1.4',
+        letterSpacing: '-0.5%',
+    }),
+    headingBold: style({
+        fontSize: '1.8rem',
+        fontWeight: 700,
+        lineHeight: '1.5',
+        letterSpacing: '-1.3%',
+    }),
+    headingSemibold: style({
+        fontSize: '1.8rem',
+        fontWeight: 600,
+        lineHeight: '1.5',
+        letterSpacing: '-1.3%',
+    }),
+    headingMedium: style({
+        fontSize: '1.8rem',
+        fontWeight: 500,
+        lineHeight: '1.5',
+        letterSpacing: '-1.3%',
+    }),
+    headlineBold: style({
+        fontSize: '1.5rem',
+        fontWeight: 700,
+        lineHeight: '1.4',
+        letterSpacing: '-0.2%',
+    }),
+    headlineSemibold: style({
+        fontSize: '1.5rem',
+        fontWeight: 600,
+        lineHeight: '1.4',
+        letterSpacing: '-0.2%',
+    }),
+    headlineMedium: style({
+        fontSize: '1.5rem',
+        fontWeight: 500,
+        lineHeight: '1.4',
+        letterSpacing: '-0.2%',
+    }),
+    headlineRegular: style({
+        fontSize: '1.5rem',
+        fontWeight: 400,
+        lineHeight: '1.4',
+        letterSpacing: '-0.2%',
+    }),
+    body1Bold: style({
+        fontSize: '1.4rem',
+        fontWeight: 700,
+        lineHeight: '1.4',
+        letterSpacing: '-1.3%',
+    }),
+    body1Semibold: style({
+        fontSize: '1.4rem',
+        fontWeight: 600,
+        lineHeight: '1.4',
+        letterSpacing: '-1.3%',
+    }),
+    body1Medium: style({
+        fontSize: '1.4rem',
+        fontWeight: 500,
+        lineHeight: '1.4',
+        letterSpacing: '-2%',
+    }),
+    body1Regular: style({
+        fontSize: '1.4rem',
+        fontWeight: 400,
+        lineHeight: '1.4',
+        letterSpacing: '-2%',
+    }),
+    body2Semibold: style({
+        fontSize: '1.3rem',
+        fontWeight: 600,
+        lineHeight: '1.3',
+        letterSpacing: '-1.3%',
+    }),
+    body2Medium: style({
+        fontSize: '1.3rem',
+        fontWeight: 500,
+        lineHeight: '1.3',
+        letterSpacing: '-1.3%',
+    }),
+    body2Regular: style({
+        fontSize: '1.3rem',
+        fontWeight: 400,
+        lineHeight: '1.3',
+        letterSpacing: '-1.3%',
+    }),
+    caption1Semibold: style({
+        fontSize: '1.2rem',
+        fontWeight: 600,
+        lineHeight: '1.4',
+        letterSpacing: '-2%',
+    }),
+    caption1Regular: style({
+        fontSize: '1.2rem',
+        fontWeight: 400,
+        lineHeight: '1.4',
+        letterSpacing: '-2%',
+    }),
+    caption2Semibold: style({
+        fontSize: '1rem',
+        fontWeight: 600,
+        lineHeight: '1.4',
+        letterSpacing: '-0.2%',
+    }),
+    caption2Regular: style({
+        fontSize: '1rem',
+        fontWeight: 400,
+        lineHeight: '1.4',
+        letterSpacing: '-0.2%',
+    }),
+};

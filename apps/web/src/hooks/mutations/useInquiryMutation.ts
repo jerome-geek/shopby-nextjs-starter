@@ -1,0 +1,69 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import { useTranslation } from 'react-i18next';
+
+import { inquiry } from '@/api/manage';
+import { inquiryKeys } from '@/hooks/queryKeys';
+import { useToast } from '@/hooks/ui';
+import type {
+    UpdateInquiryData,
+    WriteInquiryData,
+} from '@/models/manage/inquiry';
+
+const useInquiryMutation = () => {
+    const { t } = useTranslation();
+    const { addToast } = useToast();
+    const queryClient = useQueryClient();
+
+    const invalidate = () => {
+        queryClient.invalidateQueries({
+            queryKey: inquiryKeys.all,
+            refetchType: 'all',
+        });
+    };
+
+    const onErrorHandler = (error: Error) => {
+        addToast({
+            message: t(
+                isAxiosError(error)
+                    ? error.response?.data.message
+                    : '알 수 없는 오류가 발생했습니다.',
+            ),
+            variant: 'error',
+        });
+    };
+
+    return {
+        register: useMutation({
+            mutationFn: async ({ data }: { data: WriteInquiryData }) =>
+                await inquiry.writeInquiry(data),
+            onSuccess: () => {
+                invalidate();
+            },
+            onError: onErrorHandler,
+        }),
+        update: useMutation({
+            mutationFn: async ({
+                inquiryNo,
+                data,
+            }: {
+                inquiryNo: number;
+                data: UpdateInquiryData;
+            }) => await inquiry.updateInquiry(inquiryNo, data),
+            onSuccess: () => {
+                invalidate();
+            },
+            onError: onErrorHandler,
+        }),
+        delete: useMutation({
+            mutationFn: async ({ inquiryNo }: { inquiryNo: number }) =>
+                await inquiry.deleteInquiry(inquiryNo),
+            onSuccess: () => {
+                invalidate();
+            },
+            onError: onErrorHandler,
+        }),
+    };
+};
+
+export default useInquiryMutation;

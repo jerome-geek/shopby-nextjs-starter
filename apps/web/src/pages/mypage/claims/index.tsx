@@ -1,0 +1,225 @@
+import { isEmpty } from '@fxts/core';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/router';
+
+import { MypageLayout } from '@/components/layout';
+import LoadingWrapper from '@/components/common/loading-wrapper';
+import { NoResult } from '@/components/common/no-result';
+import { ObserverTarget } from '@/components/common/observer-target';
+import Paging from '@/components/ui/paging';
+import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
+import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
+import { OrderOptions } from '@/components/mypage/orders/order-options';
+import {
+    useInfiniteMemberClaimList,
+    useMemberClaimList,
+} from '@/hooks/query/claim/member';
+import useProfile from '@/hooks/query/member/profile/useProfile';
+import { useResponsive } from '@/hooks/utils';
+import { ClaimType } from '@/models';
+import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import * as styles from './index.css';
+
+const Claims = () => {
+    const { isMobile } = useResponsive();
+    const { t } = useTranslation();
+    const router = useRouter();
+
+    const claimTabList = [
+        { value: 'ALL', label: t('전체') },
+        { value: 'CANCEL', label: t('취소') },
+        { value: 'EXCHANGE', label: t('교환') },
+        { value: 'RETURN', label: t('반품') },
+    ];
+
+    const claimType = String(router.query.claimType ?? '') || undefined;
+
+    const parseClaimType = useMemo((): ClaimType | undefined => {
+        switch (claimType) {
+            case 'CANCEL':
+                return 'CANCEL';
+            case 'EXCHANGE':
+                return 'EXCHANGE';
+            case 'RETURN':
+                return 'RETURN';
+            default:
+                return undefined;
+        }
+    }, [claimType]);
+
+    const startYmd = String(router.query.startYmd ?? '');
+    const endYmd = String(router.query.endYmd ?? '');
+
+    const parseSearchParams = {
+        pageNumber: Number(router.query.pageNumber) || 1,
+        pageSize: 10,
+        hasTotalCount: true,
+        startYmd,
+        endYmd,
+        claimTypes: parseClaimType ? [parseClaimType] : null,
+    };
+
+    const { data: profileData } = useProfile();
+
+    const { data: memberClaimListData, isLoading: isMemberClaimListLoading } =
+        useMemberClaimList({
+            memberNo: profileData?.memberNo || 0,
+            searchParams: parseSearchParams,
+            options: {
+                enabled: !isMobile,
+            },
+        });
+
+    const {
+        data: infiniteMemberClaimListData,
+        isLoading: isInfiniteMemberClaimListLoading,
+        hasNextPage,
+        fetchNextPage,
+    } = useInfiniteMemberClaimList({
+        memberNo: profileData?.memberNo || 0,
+        searchParams: parseSearchParams,
+        options: {
+            enabled: isMobile,
+        },
+    });
+
+    const myClaimList = useMemo(() => {
+        if (isMobile) {
+            return (
+                infiniteMemberClaimListData?.pages?.flatMap(
+                    (page) => page?.items || [],
+                ) ?? []
+            );
+        }
+
+        return memberClaimListData?.items ?? [];
+    }, [isMobile, infiniteMemberClaimListData, memberClaimListData]);
+
+    const totalCount = useMemo(() => {
+        if (isMobile) {
+            return infiniteMemberClaimListData?.pages[0]?.totalCount ?? 0;
+        }
+
+        return memberClaimListData?.totalCount ?? 0;
+    }, [isMobile, infiniteMemberClaimListData, memberClaimListData]);
+
+    const isLoading = isMobile
+        ? isInfiniteMemberClaimListLoading
+        : isMemberClaimListLoading;
+
+    const setQuery = (next: Record<string, string | number | undefined>) => {
+        void router.replace(
+            {
+                pathname: router.pathname,
+                query: {
+                    ...router.query,
+                    ...next,
+                },
+            },
+            undefined,
+            { shallow: true },
+        );
+    };
+
+    return (
+        <div className={card.container}>
+            <section className={card.section}>
+                <div className={card.toolbar}>
+                    <div className={card.toolbarTop}>
+                        <SegmentedToggle
+                            className={card.toggleGroup}
+                            buttonClassName={card.toggleButton}
+                            defaultValue={parseClaimType ?? 'ALL'}
+                            options={claimTabList}
+                            onChange={(value) => {
+                                setQuery({
+                                    claimType: value,
+                                });
+                            }}
+                        />
+
+                        <PeriodQueryFilter />
+                    </div>
+
+                    <div className={card.toolbarBottom}>
+                        <div className={card.metaRow}>
+                            <div className={card.metaRowLeft}>
+                                {startYmd && endYmd ? (
+                                    <span className={card.selectedRangeText}>
+                                        {startYmd} ~ {endYmd}
+                                    </span>
+                                ) : (
+                                    <span className={card.selectedRangeText}>
+                                        {t('최근 3개월')}
+                                    </span>
+                                )}
+
+                                <span className={card.count}>
+                                    {t('총 {{count}}개', {
+                                        count: totalCount,
+                                    })}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={card.list}>
+                    {!isMobile && (
+                        <div className={styles.listHeader}>
+                            <div className={styles.headerCellMain}>
+                                <span>{t('주문번호/주문일자/상품정보')}</span>
+                            </div>
+                            <div className={styles.headerCellCenter}>
+                                <span>{t('주문상태')}</span>
+                            </div>
+                            <div className={styles.headerCellCenter}>
+                                <span>{t('선택')}</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <LoadingWrapper isLoading={isLoading}>
+                        {!isEmpty(myClaimList) ? (
+                            <OrderOptions optionItems={myClaimList} />
+                        ) : (
+                            <NoResult
+                                text={t('취소/교환/반품 내역이 없습니다.')}
+                            />
+                        )}
+
+                        {isMobile ? (
+                            <ObserverTarget
+                                onIntersect={() => {
+                                    if (hasNextPage) {
+                                        fetchNextPage();
+                                    }
+                                }}
+                                hasNextPage={hasNextPage || false}
+                                totalCount={totalCount}
+                            />
+                        ) : (
+                            <div className={card.paging}>
+                                <Paging
+                                    totalCount={totalCount}
+                                    currentPage={parseSearchParams.pageNumber}
+                                    pageSize={parseSearchParams.pageSize}
+                                    onPageClick={(page) => {
+                                        setQuery({ pageNumber: page });
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </LoadingWrapper>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+Claims.getLayout = (page: React.ReactNode) => {
+    return <MypageLayout>{page}</MypageLayout>;
+};
+
+export default Claims;

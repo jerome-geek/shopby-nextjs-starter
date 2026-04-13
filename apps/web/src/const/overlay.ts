@@ -1,0 +1,16 @@
+export const OVERLAY_ID = {
+    OPTION_BOTTOM_SHEET: 'option-bottom-sheet',
+    BOTTOM_NAV_DRAWER: 'bottom-nav-drawer',
+    MENU_DRAWER: 'menu-drawer',
+    SEARCH_DRAWER: 'search-drawer',
+    CATEGORY_DROPDOWN: 'category-dropdown',
+    ADD_TO_CART: 'add-to-cart',
+    OVERSEAS_DELIVERABLE: 'overseas-deliverable',
+    QUERY_SELECTOR: 'query-selector',
+    PERIOD_BOTTOM_SHEET: 'period-list-bottom-sheet',
+    CALENDAR_BOTTOM_SHEET: 'calendar-list-bottom-sheet',
+    PI_RESTOCK_NOTICE_MODAL: 'pi-restock-notice-modal',
+    TOAST: 'toast',
+    LOADING: 'loading',
+    RECIPE_COLLECTION_CREATE: 'recipe-collection-create',
+};

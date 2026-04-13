@@ -1,0 +1,146 @@
+import { useRouter } from 'next/router';
+import { useCallback } from 'react';
+
+import { ProductListSearchInput } from '@/components/product-list/search-input';
+import {
+    COLLECTION_ORDER_QUERY_KEY,
+    COLLECTION_PAGE_QUERY_KEY,
+} from '@/const/search';
+import { CollectionSearchResults } from '@/components/search/collection-results';
+import { SearchMobileSort } from '@/components/search/mobile-sort';
+import { SearchTabNav } from '@/components/search/tab-nav';
+import { Row } from '@/components/ui/layout/flex';
+import { RECIPE_SORT_OPTIONS } from '@/const/recipe';
+import { useSearchTab } from '@/hooks/useSearchTab';
+import useInfinitePublicCollectionSearch from '@/hooks/query/shop/collection/useInfinitePublicCollectionSearch';
+import { useResponsive } from '@/hooks/utils';
+import * as styles from '@/pages/search/index.css';
+import { vars } from '@/styles/theme.css';
+import type { OrderDirectionType } from '@/models';
+import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
+
+type CollectionSearchViewProps = {
+    collectionSortOrder: OrderDirectionType;
+    collectionList: BookmarkedRecipeCollection[];
+    fetchNextCollectionPage: ReturnType<
+        typeof useInfinitePublicCollectionSearch
+    >['fetchNextPage'];
+    hasNextCollectionPage: boolean;
+    collectionTotalCount: number;
+    currentPage: number;
+    pageSize: number;
+};
+
+export const CollectionSearchView = ({
+    collectionSortOrder,
+    collectionList,
+    fetchNextCollectionPage,
+    hasNextCollectionPage,
+    collectionTotalCount,
+    currentPage,
+    pageSize,
+}: CollectionSearchViewProps) => {
+    const { isTablet } = useResponsive();
+
+    const router = useRouter();
+
+    const { setTab } = useSearchTab();
+
+    const replaceSearchQuery = useCallback(
+        (patch: Record<string, string>) => {
+            router.replace(
+                {
+                    pathname: router.pathname,
+                    query: { ...router.query, ...patch },
+                },
+                undefined,
+                { shallow: true },
+            );
+        },
+        [router],
+    );
+
+    return (
+        <div className={styles.container}>
+            {isTablet ? (
+                <div className={styles.mobileTopContainer}>
+                    <ProductListSearchInput
+                        syncKeywordFromUrl
+                        onBack={() => router.back()}
+                    />
+                    <SearchTabNav activeTab='collection' onTabChange={setTab} />
+                    <SearchMobileSort
+                        queryKey={COLLECTION_ORDER_QUERY_KEY}
+                        pageQueryKey={COLLECTION_PAGE_QUERY_KEY}
+                    />
+                    <div className={styles.totalCount}>
+                        <span className={styles.totalCountValue}>
+                            {collectionTotalCount}
+                        </span>
+                        개의 검색 결과
+                    </div>
+                </div>
+            ) : (
+                <aside className={styles.sideBar}>
+                    <SearchTabNav activeTab='collection' onTabChange={setTab} />
+                </aside>
+            )}
+
+            <section className={styles.contentArea}>
+                {!isTablet && (
+                    <Row
+                        justify='between'
+                        align='center'
+                        style={{
+                            paddingBottom: '12px',
+                            borderBottom: `1px solid ${vars.color.gray['20']}`,
+                        }}
+                    >
+                        <div className={styles.totalCount}>
+                            <span className={styles.totalCountValue}>
+                                {collectionTotalCount}
+                            </span>
+                            개의 검색 결과
+                        </div>
+
+                        <ul className={styles.sortList}>
+                            {RECIPE_SORT_OPTIONS.map((sortOption) => (
+                                <li key={sortOption.id}>
+                                    <button
+                                        type='button'
+                                        className={styles.sortListButton}
+                                        data-selected={
+                                            collectionSortOrder ===
+                                            sortOption.order
+                                                ? 'true'
+                                                : undefined
+                                        }
+                                        onClick={() =>
+                                            replaceSearchQuery({
+                                                [COLLECTION_ORDER_QUERY_KEY]:
+                                                    sortOption.order,
+                                                [COLLECTION_PAGE_QUERY_KEY]:
+                                                    '1',
+                                            })
+                                        }
+                                    >
+                                        {sortOption.name}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </Row>
+                )}
+
+                <CollectionSearchResults
+                    collectionList={collectionList}
+                    fetchNextPage={fetchNextCollectionPage}
+                    hasNextPage={hasNextCollectionPage}
+                    totalCount={collectionTotalCount}
+                    currentPage={currentPage}
+                    pageSize={pageSize}
+                />
+            </section>
+        </div>
+    );
+};
