@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 import Button from '@/components/ui/button/Button';
 import { DialogLayout, type DefaultDialogLayoutProps } from '@/layout/dialog';
 
@@ -23,6 +25,26 @@ const ConfirmDialog = ({
     overlayId,
     unmount,
 }: ConfirmDialogProps) => {
+    const confirmButtonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        const focusConfirm = () => {
+            confirmButtonRef.current?.focus();
+        };
+
+        const t0 = window.setTimeout(focusConfirm, 0);
+        const raf = window.requestAnimationFrame(focusConfirm);
+
+        return () => {
+            window.clearTimeout(t0);
+            window.cancelAnimationFrame(raf);
+        };
+    }, [isOpen]);
+
     return (
         <DialogLayout
             overlayId={overlayId}
@@ -53,6 +75,8 @@ const ConfirmDialog = ({
                         variant='primary'
                         size='sm'
                         className='w-full'
+                        autoFocus
+                        ref={confirmButtonRef}
                         onClick={() => {
                             if (confirm) {
                                 confirm();

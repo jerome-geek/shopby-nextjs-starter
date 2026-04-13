@@ -2,8 +2,8 @@ import { PageParams, PageResponse } from '@/model/common';
 
 export interface CreateUserRecipeBody {
     memberNo: number;
-    memberName: string;
-    memberId: string;
+    memberName?: string;
+    memberId?: string;
     url: string;
 }
 

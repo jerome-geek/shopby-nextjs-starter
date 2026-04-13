@@ -12,3 +12,12 @@ export const updateCreationLimitSchema = z.object({
 export type UpdateCreationLimitSchemaType = z.infer<
     typeof updateCreationLimitSchema
 >;
+
+export const createExceptionSchema = z.object({
+    memberNos: z
+        .array(z.number())
+        .min(1, '사용자를 1명 이상 선택해 주세요.'),
+    memo: z.string().optional(),
+});
+
+export type CreateExceptionSchemaType = z.infer<typeof createExceptionSchema>;

@@ -3,6 +3,9 @@ const limitKeys = {
 
     /** 생성 제한 설정 */
     settings: () => [...limitKeys.all, 'settings'] as const,
+
+    /** 예외 목록 */
+    exceptionLists: () => [...limitKeys.all, 'exceptions'] as const,
 };
 
 export default limitKeys;

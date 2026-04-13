@@ -13,7 +13,7 @@ import { useServerApiByPass } from '@/hooks/query/shopby';
 import { recipeKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import useDialog from '@/hooks/utils/useDialog';
-import { ModalLayout } from '@/layout/modal';
+import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
 import { MemberListResponse } from '@/model/shopby';
 import {
     createUserRecipeSchema,
@@ -22,21 +22,7 @@ import {
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import { MEMBER_SEARCH_TYPE_OPTIONS } from '@/const/recipe';
 
-interface MemberOption {
-    value: string;
-    label: string;
-    memberNo: number;
-    memberId: string;
-    memberName: string;
-}
-
-interface CreateUserRecipeModalProps {
-    isOpen: boolean;
-    close: () => void;
-    unmount: () => void;
-}
-
-const CreateUserRecipeModal = ({ ...props }: CreateUserRecipeModalProps) => {
+const CreateUserRecipeModal = ({ ...props }: DefaultModalLayoutProps) => {
     const { openAsyncDialog } = useDialog();
     const { handleErrorDialog } = useApiError();
 
@@ -88,7 +74,7 @@ const CreateUserRecipeModal = ({ ...props }: CreateUserRecipeModalProps) => {
             },
         });
 
-    const memberOptions: MemberOption[] = useMemo(() => {
+    const memberOptions = useMemo(() => {
         const rows = memberListData?.contents ?? [];
         return rows.map((m) => ({
             value: String(m.memberNo),
@@ -148,9 +134,7 @@ const CreateUserRecipeModal = ({ ...props }: CreateUserRecipeModalProps) => {
         >
             <div className='flex flex-col gap-4 pb-1'>
                 <InputContainer>
-                    <Label className='text-xs font-medium text-[#364153]'>
-                        사용자 아이디 <span className='text-[#ff6900]'>*</span>
-                    </Label>
+                    <Label isRequired>사용자</Label>
 
                     <div className='flex flex-col gap-2 sm:flex-row'>
                         <div className='sm:w-[120px]'>
@@ -177,7 +161,7 @@ const CreateUserRecipeModal = ({ ...props }: CreateUserRecipeModalProps) => {
                                 name='memberNo'
                                 control={control}
                                 render={() => (
-                                    <Select<MemberOption>
+                                    <Select
                                         options={memberOptions}
                                         value={
                                             memberOptions.find(
@@ -259,10 +243,7 @@ const CreateUserRecipeModal = ({ ...props }: CreateUserRecipeModalProps) => {
                 </InputContainer>
 
                 <InputContainer>
-                    <Label className='text-xs font-medium text-[#364153]'>
-                        유튜브 / 인스타그램 URL{' '}
-                        <span className='text-[#ff6900]'>*</span>
-                    </Label>
+                    <Label isRequired>유튜브 / 인스타그램 URL</Label>
 
                     <Input
                         type='text'

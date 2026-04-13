@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { forwardRef, ReactNode } from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode; // Button text or content
@@ -11,16 +11,20 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string; // Disabled state
 }
 
-const Button: React.FC<ButtonProps> = ({
-    children,
-    size = 'md',
-    variant = 'primary',
-    startIcon,
-    endIcon,
-    onClick,
-    className = '',
-    disabled = false,
-}) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+    {
+        children,
+        size = 'md',
+        variant = 'primary',
+        startIcon,
+        endIcon,
+        onClick,
+        className = '',
+        disabled = false,
+        ...rest
+    },
+    ref,
+) {
     // Size Classes
     const sizeClasses = {
         sm: 'px-4 py-3 text-sm',
@@ -37,6 +41,7 @@ const Button: React.FC<ButtonProps> = ({
 
     return (
         <button
+            ref={ref}
             className={`inline-flex items-center justify-center gap-2 rounded-lg transition ${className} ${
                 sizeClasses[size]
             } ${variantClasses[variant]} ${
@@ -44,6 +49,7 @@ const Button: React.FC<ButtonProps> = ({
             }`}
             onClick={onClick}
             disabled={disabled}
+            {...rest}
         >
             {startIcon && (
                 <span className='flex items-center'>{startIcon}</span>
@@ -52,6 +58,6 @@ const Button: React.FC<ButtonProps> = ({
             {endIcon && <span className='flex items-center'>{endIcon}</span>}
         </button>
     );
-};
+});
 
 export default Button;

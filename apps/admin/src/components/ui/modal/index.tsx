@@ -43,18 +43,6 @@ export const Modal: React.FC<ModalProps> = ({
         };
     }, [isOpen, close]);
 
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [isOpen]);
-
     const contentClasses = isFullscreen
         ? 'w-full h-full'
         : 'relative w-full min-w-90 rounded-3xl bg-white  dark:bg-gray-900';

@@ -24,8 +24,8 @@ export type UpdateRecipeExposureGroupsSchemaType = z.infer<
 
 export const createUserRecipeSchema = z.object({
     memberNo: z.number().min(1, '사용자를 입력해 주세요.'),
-    memberName: z.string().min(1, '사용자 이름을 입력해 주세요.'),
-    memberId: z.string().min(1, '사용자 아이디를 입력해 주세요.'),
+    memberName: z.string().optional(),
+    memberId: z.string().optional(),
     url: z.string().min(1, '유튜브 / 인스타그램 URL을 입력해 주세요.'),
 });
 

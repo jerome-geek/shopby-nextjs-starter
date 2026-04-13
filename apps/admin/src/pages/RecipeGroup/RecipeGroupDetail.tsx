@@ -251,12 +251,6 @@ const buildGroupInfoItems = (detail: RecipeExposureGroupDetailResponse) => [
                     <span className={infoLabelClass}>노출 상태</span>
                     <DisplayVisibilityBadge isVisible={detail.isDisplay} />
                 </div>
-                <div className='flex flex-col gap-1.5'>
-                    <span className={infoLabelClass}>생성일</span>
-                    <span className='text-sm font-normal text-[#364153]'>
-                        —
-                    </span>
-                </div>
             </div>
         ),
     },
