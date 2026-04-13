@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CSRLayout } from '@/components/layout';
-import { RecipeCollectionCreateModal } from '@/components/modal';
+import { CollectionCreateModal } from '@/components/modal';
 import RecipeScrapSummary from '@/components/recipe/scrap/summary';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useScrapCollections } from '@/hooks/query/shop/recipe';
@@ -132,8 +132,8 @@ const RecipeScrapPage = () => {
     };
 
     const openCollectionCreateModal = () => {
-        overlay.open((props) => <RecipeCollectionCreateModal {...props} />, {
-            overlayId: OVERLAY_ID.RECIPE_COLLECTION_CREATE,
+        overlay.open((props) => <CollectionCreateModal {...props} />, {
+            overlayId: OVERLAY_ID.COLLECTION_CREATE,
         });
     };
 
@@ -208,14 +208,6 @@ const RecipeScrapPage = () => {
                     </div>
                 </AnimatePresence>
             </div>
-
-            <button
-                className={styles.fab}
-                type='button'
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-                <ArrowUp size={24} />
-            </button>
         </div>
     );
 };

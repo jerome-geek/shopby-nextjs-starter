@@ -24,7 +24,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { recipe } from '@/api/shop';
 import {
-    RecipeCollectionCreateModal,
+    CollectionCreateModal,
     RecipeSaveModal,
 } from '@/components/modal';
 import { RecipeCommentSection } from '@/components/recipe';
@@ -318,14 +318,14 @@ const RecipeDetailPage = ({
                 {...props}
                 recipeSno={sno}
                 onAddCollection={() => {
-                    openRecipeCollectionCreateModal();
+                    openCollectionCreateModal();
                 }}
             />
         ));
     };
 
-    const openRecipeCollectionCreateModal = () => {
-        overlay.open((props) => <RecipeCollectionCreateModal {...props} />);
+    const openCollectionCreateModal = () => {
+        overlay.open((props) => <CollectionCreateModal {...props} />);
     };
 
     console.log('🚀 ~ RecipeDetailPage ~ recipeDetailData:', recipeDetailData);
@@ -652,19 +652,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             queryKey: recipeKeys.detail(sno, 0),
             queryFn: async () => {
                 const { data } = await recipe.getRecipeDetail(sno);
-                console.log('🚀 ~ getStaticProps ~ data:', data);
 
                 return data;
             },
         });
-    } catch (error: any) {
-        // error 타입을 any로 지정하여 unknown 에러 해결
-        console.error('API_FETCH_ERROR:', {
-            message: error.message,
-            status: error.response?.status,
-            url: error.config?.url,
-            data: error.response?.data,
-        });
+    } catch (error) {
+        console.error(error);
         return {
             notFound: true,
         };

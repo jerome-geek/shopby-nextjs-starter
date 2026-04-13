@@ -13,17 +13,17 @@ import { useRouter } from 'next/router';
 import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Paging from '@/components/ui/paging';
-import * as styles from '@/components/recipe/grid-section/index.css';
 import { FailedCard } from '@/components/recipe/grid-section/failed-card';
+import * as styles from '@/components/recipe/grid-section/index.css';
 import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
 import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
+import PagingV2 from '@/components/ui/paging-v2';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { vars } from '@/styles/theme.css';
 import { SearchRecipesParams } from '@/models/shop/recipe';
+import { vars } from '@/styles/theme.css';
 
 interface RecipeGridSectionProps {
     title: string;
@@ -45,7 +45,7 @@ const RecipeGridSectionContent = ({
 
     const [searchParams, setSearchParams] = useState<SearchRecipesParams>({
         page: 1,
-        take: 10,
+        take: 5,
         order: 'DESC',
     });
 
@@ -130,9 +130,7 @@ const RecipeGridSectionContent = ({
                         const isLoaded = loadedImages[r.sno] || !r.thumbnailUrl;
 
                         if (isProcessing) {
-                            return (
-                                <ProcessingCard key={r.sno} recipe={r} />
-                            );
+                            return <ProcessingCard key={r.sno} recipe={r} />;
                         }
 
                         if (isFailed) {
@@ -262,9 +260,9 @@ const RecipeGridSectionContent = ({
                     <ChevronRight size={14} />
                 </div>
             )} */}
-            {/* TODO: 페이징 디자인 추가 필요 */}
+
             {recipes.length > 0 && (
-                <Paging
+                <PagingV2
                     currentPage={Number(searchParams.page)}
                     totalCount={data?.count ?? 0}
                     pageSize={Number(searchParams.take)}

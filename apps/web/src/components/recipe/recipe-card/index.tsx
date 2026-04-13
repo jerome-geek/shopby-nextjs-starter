@@ -3,7 +3,7 @@ import { Bookmark, Clock, Users } from 'lucide-react';
 import Link from 'next/link';
 import { overlay } from 'overlay-kit';
 
-import { RecipeCollectionCreateModal } from '@/components/modal';
+import { CollectionCreateModal } from '@/components/modal';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import * as styles from '@/components/recipe/recipe-card/index.css';
 import { Column, Row } from '@/components/ui/layout/flex';
@@ -49,8 +49,8 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
 
     const { unBookmarkRecipe } = useRecipeMutation();
 
-    const openRecipeCollectionCreateModal = () => {
-        overlay.open((props) => <RecipeCollectionCreateModal {...props} />);
+    const openCollectionCreateModal = () => {
+        overlay.open((props) => <CollectionCreateModal {...props} />);
     };
 
     const openRecipeSaveModal = (recipe: GetRecipeDetailResponse) => {
@@ -59,7 +59,7 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 {...props}
                 recipeSno={recipe.sno}
                 onAddCollection={() => {
-                    openRecipeCollectionCreateModal();
+                    openCollectionCreateModal();
                 }}
             />
         ));
