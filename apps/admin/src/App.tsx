@@ -1,10 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { OverlayProvider } from 'overlay-kit';
-import { useState } from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router';
+import { OverlayProvider, useOverlayData } from 'overlay-kit';
+import { useEffect, useState } from 'react';
+import {
+    Route,
+    BrowserRouter as Router,
+    Routes,
+    useLocation,
+} from 'react-router';
 import { HttpStatusCode, isAxiosError } from 'axios';
+import { useScrollLock } from 'usehooks-ts';
+import { pipe, some, values } from '@fxts/core';
 
-import { ScrollToTop } from '@/components/common/ScrollToTop';
 import { PATHS } from '@/const/paths';
 import AppLayout from '@/layout/AppLayout';
 import SignIn from '@/pages/AuthPages/SignIn';
@@ -20,16 +26,6 @@ import UserRecipeDetail from '@/pages/UserRecipe/UserRecipeDetail';
 import NotFound from '@/pages/OtherPage/NotFound';
 import AuthLayout from '@/pages/AuthPages/AuthPageLayout';
 import { useAxiosInterceptor } from '@/hooks/utils';
-
-const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
-    const { isLoading } = useAxiosInterceptor();
-
-    if (!isLoading) {
-        return null;
-    }
-
-    return children;
-};
 
 export default function App() {
     const [queryClient] = useState(
@@ -74,7 +70,7 @@ export default function App() {
             <OverlayProvider>
                 <AxiosInterceptor>
                     <Router>
-                        <ScrollToTop />
+                        <Settings />
                         <Routes>
                             {/* Dashboard Layout */}
                             <Route element={<AppLayout />}>
@@ -137,3 +133,39 @@ export default function App() {
         </QueryClientProvider>
     );
 }
+
+const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
+    const { isLoading } = useAxiosInterceptor();
+
+    if (!isLoading) {
+        return null;
+    }
+
+    return children;
+};
+
+const Settings = () => {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+        });
+    }, [pathname]);
+
+    const overlayData = useOverlayData();
+
+    const isOverlayOpen = pipe(
+        overlayData,
+        values,
+        some((item) => item.isOpen),
+    );
+
+    useScrollLock({
+        autoLock: isOverlayOpen,
+    });
+
+    return null;
+};

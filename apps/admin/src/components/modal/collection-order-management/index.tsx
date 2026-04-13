@@ -6,49 +6,56 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { InputContainer, Label } from '@/components/form/input';
 import Select from '@/components/form/select/intdex';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
-import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
-import { useRecipeExposureGroupList } from '@/hooks/query/recipe';
-import recipeKeys from '@/hooks/queryKeys/recipeKeys';
+import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
+import { useCollectionExposureGroupList } from '@/hooks/query/collection';
+import { collectionKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import { ModalLayout } from '@/layout/modal';
-import type { ExposureLocation, RecipeExposureGroup } from '@/model/recipe';
-import { exposureLocationLabel, groupByExposureLocation } from '@/utils/recipe';
+import type { CollectionExposureGroup } from '@/model/collection';
+import {
+    collectionExposureLocationLabel,
+    groupCollectionExposureByLocation,
+} from '@/utils/collection';
 
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
 import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
 import { ReactComponent as DragHandleIcon } from '@/icons/drag-handle.svg?react';
 
-interface RecipeOrderManagementModalProps {
+interface CollectionOrderManagementModalProps {
     isOpen: boolean;
     close: () => void;
     unmount: () => void;
 }
 
-const RecipeOrderManagementModal = ({
+const CollectionOrderManagementModal = ({
     close,
     isOpen,
     ...props
-}: RecipeOrderManagementModalProps) => {
+}: CollectionOrderManagementModalProps) => {
     const queryClient = useQueryClient();
 
-    const { data: recipeExposureGroupListData = [], isLoading } =
-        useRecipeExposureGroupList();
+    const { data: collectionExposureGroupListData = [], isLoading } =
+        useCollectionExposureGroupList();
 
-    const { updateRecipeExposureGroupsSortOrder } = useRecipeMutation();
+    const { updateCollectionExposureGroupsSortOrder } = useCollectionMutation();
 
     const [selectedFilter, setSelectedFilter] = useState<string>('all');
-    const [orderData, setOrderData] = useState<ExposureLocationGroup[]>([]);
+    const [orderData, setOrderData] = useState<
+        CollectionExposureLocationGroup[]
+    >([]);
 
-    const initialGroupSnosByExposureLocation = useRef<
-        Map<ExposureLocation, number[]>
-    >(new Map());
+    const initialGroupSnosByExposureLocation = useRef<Map<string, number[]>>(
+        new Map(),
+    );
 
     useEffect(() => {
         if (!isOpen) {
             return;
         }
 
-        const grouped = groupByExposureLocation(recipeExposureGroupListData);
+        const grouped = groupCollectionExposureByLocation(
+            collectionExposureGroupListData,
+        );
         setOrderData(cloneGrouped(grouped));
         initialGroupSnosByExposureLocation.current = new Map(
             grouped.map(([exposureLocation, groups]) => [
@@ -56,12 +63,12 @@ const RecipeOrderManagementModal = ({
                 groups.map((group) => group.sno),
             ]),
         );
-    }, [isOpen, recipeExposureGroupListData]);
+    }, [isOpen, collectionExposureGroupListData]);
 
     const selectOptions = useMemo(() => {
         const fromData = orderData.map((section) => ({
             value: section.exposureLocation,
-            label: exposureLocationLabel(section.exposureLocation),
+            label: collectionExposureLocationLabel(section.exposureLocation),
         }));
         return [{ value: 'all', label: '전체 보기' }, ...fromData];
     }, [orderData]);
@@ -74,7 +81,7 @@ const RecipeOrderManagementModal = ({
               );
 
     const moveGroup = (
-        exposureLocation: ExposureLocation,
+        exposureLocation: string,
         fromIndex: number,
         toIndex: number,
     ) => {
@@ -92,8 +99,8 @@ const RecipeOrderManagementModal = ({
     };
 
     const reorderSection = (
-        exposureLocation: ExposureLocation,
-        nextGroups: RecipeExposureGroup[],
+        exposureLocation: string,
+        nextGroups: CollectionExposureGroup[],
     ) => {
         setOrderData((previous) =>
             previous.map((section) =>
@@ -107,7 +114,11 @@ const RecipeOrderManagementModal = ({
     const handleClose = () => {
         setSelectedFilter('all');
         setOrderData(
-            cloneGrouped(groupByExposureLocation(recipeExposureGroupListData)),
+            cloneGrouped(
+                groupCollectionExposureByLocation(
+                    collectionExposureGroupListData,
+                ),
+            ),
         );
         close();
     };
@@ -135,7 +146,7 @@ const RecipeOrderManagementModal = ({
 
             await Promise.all(
                 sectionsWithOrderChanged.map((section) =>
-                    updateRecipeExposureGroupsSortOrder.mutateAsync({
+                    updateCollectionExposureGroupsSortOrder.mutateAsync({
                         exposureLocation: section.exposureLocation,
                         groupSnos: section.groups.map((group) => group.sno),
                     }),
@@ -143,7 +154,7 @@ const RecipeOrderManagementModal = ({
             );
 
             queryClient.invalidateQueries({
-                queryKey: recipeKeys.all,
+                queryKey: collectionKeys.all,
                 refetchType: 'all',
             });
 
@@ -153,15 +164,15 @@ const RecipeOrderManagementModal = ({
         }
     };
 
-    const isPending = updateRecipeExposureGroupsSortOrder.isPending;
+    const isPending = updateCollectionExposureGroupsSortOrder.isPending;
 
     return (
         <ModalLayout
             {...props}
             isOpen={isOpen}
             close={close}
-            title='레시피 그룹 노출 순서 관리'
-            subtitle='같은 그룹 아이디(노출 위치) 안에서 레시피 노출 그룹의 정렬 순서를 바꿀 수 있습니다.'
+            title='컬렉션 그룹 노출 순서 관리'
+            subtitle='같은 그룹 아이디(노출 위치) 안에서 컬렉션 노출 그룹의 정렬 순서를 바꿀 수 있습니다.'
             footer={
                 <>
                     <button
@@ -178,7 +189,7 @@ const RecipeOrderManagementModal = ({
                         disabled={
                             isPending ||
                             isLoading ||
-                            recipeExposureGroupListData.length === 0
+                            collectionExposureGroupListData.length === 0
                         }
                         className='h-9 rounded-lg bg-[#ff6900] px-4 text-sm font-medium text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50'
                     >
@@ -212,7 +223,7 @@ const RecipeOrderManagementModal = ({
                 >
                     {isEmpty(displayedSections) ? (
                         <p className='py-8 text-center text-sm text-[#6a7282]'>
-                            등록된 레시피 노출 그룹이 없습니다.
+                            등록된 컬렉션 노출 그룹이 없습니다.
                         </p>
                     ) : (
                         <div className='flex max-h-[380px] flex-col gap-6 pt-1'>
@@ -247,7 +258,7 @@ const RecipeOrderManagementModal = ({
                                         }}
                                     >
                                         {section.groups.map((group, index) => (
-                                            <ReorderItem
+                                            <CollectionReorderItem
                                                 key={group.sno}
                                                 group={group}
                                                 index={index}
@@ -269,26 +280,26 @@ const RecipeOrderManagementModal = ({
     );
 };
 
-export default RecipeOrderManagementModal;
+export default CollectionOrderManagementModal;
 
-type ExposureLocationGroup = {
-    exposureLocation: ExposureLocation;
-    groups: RecipeExposureGroup[];
+type CollectionExposureLocationGroup = {
+    exposureLocation: string;
+    groups: CollectionExposureGroup[];
 };
 
-interface ReorderItemProps {
-    group: RecipeExposureGroup;
+interface CollectionReorderItemProps {
+    group: CollectionExposureGroup;
     index: number;
     total: number;
-    exposureLocation: ExposureLocation;
+    exposureLocation: string;
     onMove: (
-        exposureLocation: ExposureLocation,
+        exposureLocation: string,
         fromIndex: number,
         toIndex: number,
     ) => void;
 }
 
-const cloneGrouped = (tuples: [ExposureLocation, RecipeExposureGroup[]][]) =>
+const cloneGrouped = (tuples: [string, CollectionExposureGroup[]][]) =>
     tuples.map(([exposureLocation, groups]) => ({
         exposureLocation,
         groups: [...groups],
@@ -297,13 +308,13 @@ const cloneGrouped = (tuples: [ExposureLocation, RecipeExposureGroup[]][]) =>
 const areNumberSequencesEqual = (a: number[], b: number[]): boolean =>
     a.length === b.length && a.every((value, index) => value === b[index]);
 
-const ReorderItem = ({
+const CollectionReorderItem = ({
     group,
     index,
     total,
     exposureLocation,
     onMove,
-}: ReorderItemProps) => {
+}: CollectionReorderItemProps) => {
     const dragControls = useDragControls();
 
     return (
@@ -351,7 +362,11 @@ const ReorderItem = ({
                 <p className='truncate text-xs font-normal leading-4 text-[#6a7282] max-w-[200px] overflow-hidden text-ellipsis'>
                     {group.description?.trim()
                         ? group.description
-                        : `레시피 ${group.recipeCount}개 · sno ${group.sno}`}
+                        : `${
+                              group.collection.title
+                          } · 레시피 ${group.collection.recipeCount.toLocaleString()}개 · sno ${
+                              group.sno
+                          }`}
                 </p>
             </div>
 

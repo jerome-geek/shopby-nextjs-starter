@@ -18,13 +18,13 @@ import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react'
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
 const tableLayout = {
-    minWidth: 'min-w-[900px]',
+    minWidth: 'min-w-[860px]',
     column: {
         recipe: '',
         author: 'w-[150px]',
-        source: 'w-[150px]',
-        bookmark: 'w-[120px]',
-        like: 'w-[120px]',
+        source: 'w-[100px]',
+        bookmark: 'w-[80px]',
+        like: 'w-[80px]',
         createdAt: 'w-[130px]',
     },
 } as const;
@@ -105,7 +105,7 @@ const UserRecipeList = () => {
                             </span>
                             <input
                                 type='text'
-                                placeholder='레시피 키워드를 입력하세요.'
+                                placeholder='레시피명으로 검색...'
                                 defaultValue={keyword}
                                 ref={inputRef}
                                 className='w-full h-10 pl-10 pr-4 py-1 bg-[#f3f3f5] rounded-xl text-[14px] text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:bg-white transition-all'

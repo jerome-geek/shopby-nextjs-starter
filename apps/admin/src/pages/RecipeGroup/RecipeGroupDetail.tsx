@@ -5,13 +5,13 @@ import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility
 import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import { ExternalLinkIconButton } from '@/components/ui/button/ExternalLinkIconButton';
 import { PATHS } from '@/const/paths';
-import { useRecipeExposureGroupDetail } from '@/hooks/suspenseQuery/receipe';
+import { useRecipeExposureGroupDetail } from '@/hooks/suspenseQuery/recipe';
 import type { RecipeExposureGroupDetailResponse } from '@/model/recipe';
 
 import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
 
 const tableLayout = {
-    minWidth: 'min-w-[720px]',
+    minWidth: 'min-w-[860px]',
     column: {
         thumbnail: 'w-[90px]',
         title: '',

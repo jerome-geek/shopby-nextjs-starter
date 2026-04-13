@@ -12,25 +12,25 @@ import {
     RecipeExposureGroupResponse,
 } from '@/model/recipe';
 
-interface UseRecipeExposureGroupsParams<T = RecipeExposureGroupResponse> {
+interface UseRecipeExposureGroupListParams<T = RecipeExposureGroupResponse> {
     params?: GetRecipeExposureGroupsParams;
     options?: Omit<
         UseQueryOptions<
             RecipeExposureGroupResponse,
             AxiosError,
             T,
-            ReturnType<(typeof recipeKeys)['getRecipeExposureGroup']>
+            ReturnType<(typeof recipeKeys)['list']>
         >,
         'queryKey' | 'queryFn'
     >;
 }
 
-const useRecipeExposureGroups = <T = RecipeExposureGroupResponse>({
+const useRecipeExposureGroupList = <T = RecipeExposureGroupResponse>({
     params,
     options,
-}: UseRecipeExposureGroupsParams<T> = {}) => {
+}: UseRecipeExposureGroupListParams<T> = {}) => {
     return useQuery({
-        queryKey: recipeKeys.getRecipeExposureGroup(params),
+        queryKey: recipeKeys.list(params),
         queryFn: async () => {
             const { data } = await recipe.getRecipeExposureGroups(params);
 
@@ -41,4 +41,4 @@ const useRecipeExposureGroups = <T = RecipeExposureGroupResponse>({
     });
 };
 
-export default useRecipeExposureGroups;
+export default useRecipeExposureGroupList;

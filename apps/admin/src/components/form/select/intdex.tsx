@@ -96,8 +96,7 @@ function defaultClassNames<
             ),
         menuList: (state) =>
             clsx('flex flex-col gap-0.5 p-0', overridden?.menuList?.(state)),
-        menuPortal: (state) =>
-            clsx('!z-[100000]', overridden?.menuPortal?.(state)),
+        menuPortal: (state) => clsx(overridden?.menuPortal?.(state)),
         option: (state) =>
             clsx(
                 'cursor-pointer rounded-lg px-3 py-2.5 text-sm font-normal text-[#101828] transition-colors dark:text-gray-100',
@@ -146,10 +145,9 @@ function Select<
     menuPosition,
     ...rest
 }: AdminSelectProps<Option, IsMulti, Group>) {
-    const menuPortalTarget =
-        menuPortalTargetProp !== undefined
-            ? menuPortalTargetProp
-            : defaultMenuPortalTarget;
+    const menuPortalTarget = menuPortalTargetProp
+        ? menuPortalTargetProp
+        : defaultMenuPortalTarget;
 
     const mergedClassNames = defaultClassNames<Option, IsMulti, Group>(
         className,
@@ -187,6 +185,9 @@ function Select<
             menuPortalTarget={menuPortalTarget}
             components={mergedComponents}
             classNames={mergedClassNames}
+            styles={{
+                menuPortal: (base) => ({ ...base, zIndex: 100_000 }),
+            }}
         />
     );
 }

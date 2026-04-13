@@ -9,7 +9,7 @@ import {
     toArray,
 } from '@fxts/core';
 
-import { RECIPE_GROUP_ID_OPTIONS } from '@/const/receipe';
+import { RECIPE_GROUP_ID_OPTIONS } from '@/const/recipe';
 import type { ExposureLocation, RecipeExposureGroup } from '@/model/recipe';
 
 type ExposureLocationGroupTuple = [ExposureLocation, RecipeExposureGroup[]];

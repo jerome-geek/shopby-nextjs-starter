@@ -19,14 +19,14 @@ import {
     CreateRecipeExposureGroupsSchemaType,
     UpdateRecipeExposureGroupsSchemaType,
     updateRecipeExposureGroupsSchema,
-} from '@/schema/receipe.schema';
-import { RECIPE_GROUP_ID_OPTIONS } from '@/const/receipe';
+} from '@/schema/recipe.schema';
+import { RECIPE_GROUP_ID_OPTIONS } from '@/const/recipe';
 import {
     useRecipeExposureGroupDetail,
     useSearchRecipeList,
 } from '@/hooks/query/recipe';
 import type { Recipe, SearchRecipesResponse } from '@/model/recipe';
-import useRecipeMutation from '@/hooks/mutations/useReceipeMutation';
+import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useDialog } from '@/hooks/utils';
 import useApiError from '@/hooks/useApiError';
 import { recipeKeys } from '@/hooks/queryKeys';
@@ -205,7 +205,7 @@ const CreateRecipeGroupModal = ({
         }
 
         const list = currentSnos.filter((sno) => sno !== recipe.sno);
-        setValue('recipeSnos', list);
+        setValue('recipeSnos', list, { shouldDirty: true });
         setSelectedRecipes((prev) => prev.filter((r) => r.sno !== recipe.sno));
     };
 

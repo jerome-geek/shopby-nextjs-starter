@@ -16,7 +16,7 @@ interface UseSearchRecipeListParams<T = SearchRecipesResponse> {
             SearchRecipesResponse,
             AxiosError,
             T,
-            ReturnType<(typeof recipeKeys)['searchRecipe']>
+            ReturnType<(typeof recipeKeys)['searchList']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -27,7 +27,7 @@ const useSearchRecipeList = <T = SearchRecipesResponse>({
     options,
 }: UseSearchRecipeListParams<T>) => {
     return useQuery({
-        queryKey: recipeKeys.searchRecipe(params),
+        queryKey: recipeKeys.searchList(params),
         queryFn: async () => {
             const { data } = await recipe.searchRecipes(params);
 

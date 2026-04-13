@@ -122,7 +122,7 @@ export const ModalLayout: React.FC<ModalLayoutProps> = ({
                             </div>
                         )}
 
-                        <div className='min-h-0 max-h-[520px] flex-1 overflow-y-auto p-6'>
+                        <div className='min-h-0 max-h-[520px] flex-1 overflow-y-auto px-6 my-6'>
                             {children}
                         </div>
 

@@ -10,12 +10,9 @@ import RecipeOrderManagementModal from '@/components/modal/recipe-order-manageme
 import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import { PATHS } from '@/const/paths';
-import { useRecipeExposureGroups } from '@/hooks/query/recipe';
-import {
-    groupByExposureLocation,
-    exposureLocationLabel,
-} from '@/utils/receipe';
-import useRecipeMutation from '@/hooks/mutations/useReceipeMutation';
+import { useRecipeExposureGroupList } from '@/hooks/query/recipe';
+import { groupByExposureLocation, exposureLocationLabel } from '@/utils/recipe';
+import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { recipeKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import { useDialog } from '@/hooks/utils';
@@ -27,7 +24,7 @@ import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
-    minWidth: 'min-w-[960px]',
+    minWidth: 'min-w-[860px]',
     column: {
         sortOrder: 'w-[130px]',
         groupName: 'w-[180px] max-w-[280px]',
@@ -44,9 +41,9 @@ const tableTh = {
 
 const RecipeGroupList = () => {
     const {
-        data: recipeExposureGroupsData = [],
-        isLoading: isRecipeExposureGroupsLoading,
-    } = useRecipeExposureGroups();
+        data: recipeExposureGroupListData = [],
+        isLoading: isRecipeExposureGroupListLoading,
+    } = useRecipeExposureGroupList();
 
     const inputRef = useRef<HTMLInputElement>(null);
     const [groupNameKeyword, setGroupNameKeyword] = useState('');
@@ -68,15 +65,15 @@ const RecipeGroupList = () => {
 
     const recipeExposureGroupList = useMemo(() => {
         if (groupNameKeyword === '') {
-            return recipeExposureGroupsData;
+            return recipeExposureGroupListData;
         }
 
-        return recipeExposureGroupsData.filter(
+        return recipeExposureGroupListData.filter(
             (item) =>
                 item.groupName.includes(groupNameKeyword) ||
                 item.description.includes(groupNameKeyword),
         );
-    }, [recipeExposureGroupsData, groupNameKeyword]);
+    }, [recipeExposureGroupListData, groupNameKeyword]);
 
     const groupedRecipeExposureGroups = useMemo(
         () => groupByExposureLocation(recipeExposureGroupList),
@@ -191,7 +188,7 @@ const RecipeGroupList = () => {
                     </div>
 
                     <LoadingWrapper
-                        isLoading={isRecipeExposureGroupsLoading}
+                        isLoading={isRecipeExposureGroupListLoading}
                         containerStyle={{ minHeight: '50vh' }}
                     >
                         <div className='overflow-x-auto'>
