@@ -82,22 +82,22 @@ export const TimeSale = memo(
                     </div>
                     <Link
                         prefetch={false}
-                        href="/timeSale"
+                        href='/timeSale'
                         className={styles.viewAll}
                     >
                         전체보기
                         <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
+                            width='16'
+                            height='16'
+                            viewBox='0 0 24 24'
+                            fill='none'
                         >
                             <path
-                                d="M9 18l6-6-6-6"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                                d='M9 18l6-6-6-6'
+                                stroke='currentColor'
+                                strokeWidth='2'
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
                             />
                         </svg>
                     </Link>
@@ -135,7 +135,7 @@ export const TimeSale = memo(
                     ))}
                 </ul>
 
-                <Link href="/timesale" className={styles.moreLink}>
+                <Link href='/timesale' className={styles.moreLink}>
                     <span>{buttonLabel}</span> <ArrowRight />
                 </Link>
             </section>

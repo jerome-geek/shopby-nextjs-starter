@@ -421,9 +421,13 @@ const CreateCollectionGroupModal = ({
                                                                     {item.title}
                                                                 </p>
                                                                 <p className='text-xs leading-4 text-[#6a7282]'>
-                                                                    {
-                                                                        item.memberName
-                                                                    }
+                                                                    {item.memberName}
+                                                                    <span className='px-1 text-[#e5e7eb]'>
+                                                                        |
+                                                                    </span>
+                                                                    레시피{' '}
+                                                                    {item.recipeCount.toLocaleString()}
+                                                                    개
                                                                 </p>
                                                             </div>
                                                         </label>
@@ -465,6 +469,12 @@ const CreateCollectionGroupModal = ({
                                         </p>
                                         <p className='text-xs leading-4 text-[#6a7282]'>
                                             {selectedCollection.memberName}
+                                            <span className='px-1 text-[#e5e7eb]'>
+                                                |
+                                            </span>
+                                            레시피{' '}
+                                            {selectedCollection.recipeCount.toLocaleString()}
+                                            개
                                         </p>
                                     </div>
                                 </label>

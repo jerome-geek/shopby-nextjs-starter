@@ -64,7 +64,7 @@ function FooterContent() {
     );
 
     return (
-        <footer className={styles.footerContainer} id="footer">
+        <footer className={styles.footerContainer} id='footer'>
             <div className={styles.footerInner}>
                 <div className={styles.footerSection}>
                     <h3 className={styles.footerSectionTitle}>
@@ -126,11 +126,13 @@ function FooterContent() {
                             <Link
                                 key={link.label}
                                 href={link.href}
-                                className={clsx(
-                                    styles.bottomLink,
-                                    link.isHighlight &&
-                                        styles.bottomLinkHighlight,
-                                ) || undefined}
+                                className={
+                                    clsx(
+                                        styles.bottomLink,
+                                        link.isHighlight &&
+                                            styles.bottomLinkHighlight,
+                                    ) || undefined
+                                }
                                 target={link.target}
                             >
                                 {link.label}

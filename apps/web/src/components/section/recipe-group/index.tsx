@@ -1,16 +1,17 @@
 import { isEmpty } from '@fxts/core';
 
-import RecipeSection from '@/components/section/recipe';
+import RecipeSection from '@/components/section/recipe-group/recipe';
 import * as styles from '@/components/section/recipe-group/index.css';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import useRecipeExposureGroup from '@/hooks/suspenseQuery/shop/recipe/useRecipeExposureGroup';
-import * as recipeSectionStyle from '@/components/section/recipe/index.css';
+import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 
 type GroupId =
     | 'recipe_group_1'
     | 'recipe_group_2'
     | 'recipe_group_3'
-    | 'recipe_group_4';
+    | 'recipe_group_4'
+    | 'recipe_group_5';
 
 const RecipeSectionSkeleton = () => {
     return (

@@ -13,6 +13,7 @@ import useApiError from '@/hooks/useApiError';
 import { ModalLayout } from '@/layout/modal';
 import type { RecipeExposureGroup } from '@/model/recipe';
 import { exposureLocationLabel, groupByExposureLocation } from '@/utils/recipe';
+import { useDialog } from '@/hooks/utils';
 
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
 import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
@@ -30,6 +31,7 @@ const RecipeOrderManagementModal = ({
     ...props
 }: RecipeOrderManagementModalProps) => {
     const queryClient = useQueryClient();
+    const { openAsyncDialog } = useDialog();
 
     const { data: recipeExposureGroupListData, isLoading } =
         useRecipeExposureGroupList({
@@ -155,6 +157,10 @@ const RecipeOrderManagementModal = ({
             queryClient.invalidateQueries({
                 queryKey: recipeKeys.all,
                 refetchType: 'all',
+            });
+
+            await openAsyncDialog({
+                message: '레시피 그룹 노출 순서가 저장되었습니다.',
             });
 
             handleClose();

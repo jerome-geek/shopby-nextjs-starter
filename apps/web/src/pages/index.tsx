@@ -17,6 +17,12 @@ const RecipeGroupSection = dynamic(
         ssr: false,
     },
 );
+const CollectionGroupSection = dynamic(
+    () => import('@/components/section/collection-group'),
+    {
+        ssr: false,
+    },
+);
 
 export default function Home() {
     return (
@@ -37,6 +43,10 @@ export default function Home() {
             <div className={`${styles.main}`}>
                 {/* Full-width HeroBanner */}
                 <HeroBanner />
+
+                <LazyRender minHeight={300}>
+                    <CollectionGroupSection groupId='collection_group_1' />
+                </LazyRender>
 
                 <LazyRender minHeight={300}>
                     <RecipeGroupSection groupId='recipe_group_1' />

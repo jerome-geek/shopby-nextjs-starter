@@ -16,6 +16,7 @@ import {
     collectionExposureLocationLabel,
     groupCollectionExposureByLocation,
 } from '@/utils/collection';
+import { useDialog } from '@/hooks/utils';
 
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
 import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
@@ -33,6 +34,7 @@ const CollectionOrderManagementModal = ({
     ...props
 }: CollectionOrderManagementModalProps) => {
     const queryClient = useQueryClient();
+    const { openAsyncDialog } = useDialog();
 
     const { data: collectionExposureGroupListData, isLoading } =
         useCollectionExposureGroupList({
@@ -164,6 +166,10 @@ const CollectionOrderManagementModal = ({
             queryClient.invalidateQueries({
                 queryKey: collectionKeys.all,
                 refetchType: 'all',
+            });
+
+            await openAsyncDialog({
+                message: '컬렉션 그룹 노출 순서가 저장되었습니다.',
             });
 
             handleClose();

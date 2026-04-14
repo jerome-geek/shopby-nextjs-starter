@@ -1,7 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 
 import Link from 'next/link';
-import * as recipeSectionStyle from '@/components/section/recipe/index.css';
+import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 import { vars } from '@/styles/theme.css';
 import { normalizeImageUrl } from '@/utils/shopby';
 import { RecipeExposureGroupItem } from '@/models/shop/recipe';

@@ -19,6 +19,7 @@ const EXPOSURE_LOCATION_ORDER: string[] = [
     'recipe_group_2',
     'recipe_group_3',
     'recipe_group_4',
+    'recipe_group_5',
 ];
 
 export const isProcessingRecipe = (
