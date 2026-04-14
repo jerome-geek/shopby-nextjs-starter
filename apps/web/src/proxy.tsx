@@ -25,13 +25,27 @@ export function proxy(request: NextRequest) {
     const isGuestOnlyRoute = GUEST_ONLY_ROUTES.includes(pathname);
 
     if (isGuestOnlyRoute && isLoggedIn) {
-        return NextResponse.redirect(new URL(PATHS.MAIN, request.url));
+        const response = NextResponse.redirect(
+            new URL(PATHS.MAIN, request.url),
+        );
+        // [IMPORTANT] 뒤로가기 시 캐시된 페이지가 보이는 현상을 방지하기 위해 캐시 제어 헤더 추가
+        response.headers.set(
+            'Cache-Control',
+            'no-store, max-age=0, must-revalidate',
+        );
+        return response;
     }
 
     if (!isGuestOnlyRoute && !isLoggedIn) {
         const loginUrl = new URL(PATHS.AUTH.LOGIN, request.url);
         loginUrl.searchParams.set('returnUrl', pathname);
-        return NextResponse.redirect(loginUrl);
+        const response = NextResponse.redirect(loginUrl);
+        // 보호된 페이지에서도 로그아웃 후 뒤로가기 시 캐시된 정보가 보이는 것을 방지
+        response.headers.set(
+            'Cache-Control',
+            'no-store, max-age=0, must-revalidate',
+        );
+        return response;
     }
 
     return NextResponse.next();

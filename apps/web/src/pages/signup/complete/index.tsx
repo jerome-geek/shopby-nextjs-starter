@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
-import { AuthLayout } from '@/components/layout/auth';
+import { AuthLayout } from '@/components/layout';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/complete/index.css';
 import { Button } from '@/components/ui/button';
