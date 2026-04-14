@@ -71,13 +71,15 @@ const useAxiosInterceptor = () => {
             case Unauthorized: {
                 controller.abort('token-expiration');
 
-                await openAsyncDialog({
-                    message:
-                        '로그인 상태가 만료되었습니다.<br /> 다시 로그인해주세요.',
-                    iconType: 'auth',
-                    onConfirmReturnValue: true,
-                    onCloseReturnValue: false,
-                });
+                if (error.config?.url !== '/common/auth/logout') {
+                    await openAsyncDialog({
+                        message:
+                            '로그인 상태가 만료되었습니다.<br /> 다시 로그인해주세요.',
+                        iconType: 'auth',
+                        onConfirmReturnValue: true,
+                        onCloseReturnValue: false,
+                    });
+                }
 
                 accessTokenManager.clearToken();
 
