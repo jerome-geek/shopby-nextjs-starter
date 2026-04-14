@@ -1,5 +1,6 @@
 import { geekRequest } from '@/api/core/geekRequest';
 import {
+    CollectionExposureGroupResponse,
     CollectionListResponse,
     CreateCollectionRequest,
     SearchPublicCollectionParams,
@@ -52,6 +53,14 @@ const collection = {
             method: 'GET',
             url: '/shop/recipe/collections/public-search',
             params,
+        });
+    },
+
+    /** 컬렉션 노출 그룹 조회 */
+    getCollectionExposureGroup: (groupId: string) => {
+        return geekRequest<CollectionExposureGroupResponse>({
+            method: 'GET',
+            url: `/shop/recipe/collections/group/${groupId}`,
         });
     },
 

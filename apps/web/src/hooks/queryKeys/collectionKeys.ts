@@ -9,6 +9,10 @@ const collectionKeys = {
     publicSearchInfinite: (
         params: Omit<SearchPublicCollectionParams, 'page'>,
     ) => [...collectionKeys.publicSearches(), 'infinite', params] as const,
+
+    exposureGroups: () => [...collectionKeys.all, 'exposure-groups'] as const,
+    exposureGroup: (groupId: string) =>
+        [...collectionKeys.exposureGroups(), groupId] as const,
 };
 
 export default collectionKeys;
