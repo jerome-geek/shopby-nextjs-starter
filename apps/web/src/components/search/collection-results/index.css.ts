@@ -8,6 +8,12 @@ export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '60px',
+        },
+    },
 });
 
 export const collectionContainer = style({

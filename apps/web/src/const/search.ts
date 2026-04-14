@@ -9,7 +9,9 @@ export type SearchTabId = (typeof SEARCH_TABS)[number]['id'];
 
 export const TAB_QUERY_KEY = 'tab' as const;
 export const RECIPE_ORDER_QUERY_KEY = 'recipe.order' as const;
+export const RECIPE_SORT_BY_QUERY_KEY = 'recipe.sortBy' as const;
 export const COLLECTION_ORDER_QUERY_KEY = 'collection.order' as const;
+export const COLLECTION_SORT_BY_QUERY_KEY = 'collection.sortBy' as const;
 export const RECIPE_PAGE_QUERY_KEY = 'recipe.page' as const;
 export const COLLECTION_PAGE_QUERY_KEY = 'collection.page' as const;
 

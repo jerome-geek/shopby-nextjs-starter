@@ -5,10 +5,14 @@ import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { SearchMobileSort } from '@/components/search/mobile-sort';
 import { RecipeSearchResults } from '@/components/search/recipe-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
-import { RECIPE_ORDER_QUERY_KEY, RECIPE_PAGE_QUERY_KEY } from '@/const/search';
+import { RECIPE_SORT_OPTIONS, type RecipeSortBy } from '@/const/recipe';
 import { Row } from '@/components/ui/layout/flex';
+import {
+    RECIPE_ORDER_QUERY_KEY,
+    RECIPE_PAGE_QUERY_KEY,
+    RECIPE_SORT_BY_QUERY_KEY,
+} from '@/const/search';
 import { useSearchTab } from '@/hooks/useSearchTab';
-import { RECIPE_SORT_OPTIONS } from '@/const/recipe';
 import useInfinitePublicRecipeSearch from '@/hooks/query/shop/recipe/useInfinitePublicRecipeSearch';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/search/index.css';
@@ -18,6 +22,7 @@ import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 
 type RecipeSearchViewProps = {
     recipeSortOrder: OrderDirectionType;
+    recipeSortBy: RecipeSortBy;
     recipeList: GetRecipeDetailResponse[];
     fetchNextRecipePage: ReturnType<
         typeof useInfinitePublicRecipeSearch
@@ -30,6 +35,7 @@ type RecipeSearchViewProps = {
 
 export const RecipeSearchView = ({
     recipeSortOrder,
+    recipeSortBy,
     recipeList,
     fetchNextRecipePage,
     hasNextRecipePage,
@@ -67,8 +73,10 @@ export const RecipeSearchView = ({
                     />
                     <SearchTabNav activeTab='recipe' onTabChange={setTab} />
                     <SearchMobileSort
-                        queryKey={RECIPE_ORDER_QUERY_KEY}
+                        orderQueryKey={RECIPE_ORDER_QUERY_KEY}
+                        sortByQueryKey={RECIPE_SORT_BY_QUERY_KEY}
                         pageQueryKey={RECIPE_PAGE_QUERY_KEY}
+                        sortOptions={RECIPE_SORT_OPTIONS}
                     />
                     <div className={styles.totalCount}>
                         <span className={styles.totalCountValue}>
@@ -107,7 +115,8 @@ export const RecipeSearchView = ({
                                         type='button'
                                         className={styles.sortListButton}
                                         data-selected={
-                                            recipeSortOrder === sortOption.order
+                                            recipeSortOrder === sortOption.order &&
+                                            recipeSortBy === sortOption.sortBy
                                                 ? 'true'
                                                 : undefined
                                         }
@@ -115,6 +124,8 @@ export const RecipeSearchView = ({
                                             replaceSearchQuery({
                                                 [RECIPE_ORDER_QUERY_KEY]:
                                                     sortOption.order,
+                                                [RECIPE_SORT_BY_QUERY_KEY]:
+                                                    sortOption.sortBy,
                                                 [RECIPE_PAGE_QUERY_KEY]: '1',
                                             })
                                         }

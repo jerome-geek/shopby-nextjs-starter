@@ -5,12 +5,16 @@ import { ProductListSearchInput } from '@/components/product-list/search-input';
 import {
     COLLECTION_ORDER_QUERY_KEY,
     COLLECTION_PAGE_QUERY_KEY,
+    COLLECTION_SORT_BY_QUERY_KEY,
 } from '@/const/search';
 import { CollectionSearchResults } from '@/components/search/collection-results';
 import { SearchMobileSort } from '@/components/search/mobile-sort';
 import { SearchTabNav } from '@/components/search/tab-nav';
 import { Row } from '@/components/ui/layout/flex';
-import { RECIPE_SORT_OPTIONS } from '@/const/recipe';
+import {
+    COLLECTION_SORT_OPTIONS,
+    type CollectionSortBy,
+} from '@/const/recipe';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import useInfinitePublicCollectionSearch from '@/hooks/query/shop/collection/useInfinitePublicCollectionSearch';
 import { useResponsive } from '@/hooks/utils';
@@ -21,6 +25,7 @@ import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 
 type CollectionSearchViewProps = {
     collectionSortOrder: OrderDirectionType;
+    collectionSortBy: CollectionSortBy;
     collectionList: BookmarkedRecipeCollection[];
     fetchNextCollectionPage: ReturnType<
         typeof useInfinitePublicCollectionSearch
@@ -33,6 +38,7 @@ type CollectionSearchViewProps = {
 
 export const CollectionSearchView = ({
     collectionSortOrder,
+    collectionSortBy,
     collectionList,
     fetchNextCollectionPage,
     hasNextCollectionPage,
@@ -70,8 +76,10 @@ export const CollectionSearchView = ({
                     />
                     <SearchTabNav activeTab='collection' onTabChange={setTab} />
                     <SearchMobileSort
-                        queryKey={COLLECTION_ORDER_QUERY_KEY}
+                        orderQueryKey={COLLECTION_ORDER_QUERY_KEY}
+                        sortByQueryKey={COLLECTION_SORT_BY_QUERY_KEY}
                         pageQueryKey={COLLECTION_PAGE_QUERY_KEY}
+                        sortOptions={COLLECTION_SORT_OPTIONS}
                     />
                     <div className={styles.totalCount}>
                         <span className={styles.totalCountValue}>
@@ -104,14 +112,16 @@ export const CollectionSearchView = ({
                         </div>
 
                         <ul className={styles.sortList}>
-                            {RECIPE_SORT_OPTIONS.map((sortOption) => (
+                            {COLLECTION_SORT_OPTIONS.map((sortOption) => (
                                 <li key={sortOption.id}>
                                     <button
                                         type='button'
                                         className={styles.sortListButton}
                                         data-selected={
                                             collectionSortOrder ===
-                                            sortOption.order
+                                                sortOption.order &&
+                                            collectionSortBy ===
+                                                sortOption.sortBy
                                                 ? 'true'
                                                 : undefined
                                         }
@@ -119,6 +129,8 @@ export const CollectionSearchView = ({
                                             replaceSearchQuery({
                                                 [COLLECTION_ORDER_QUERY_KEY]:
                                                     sortOption.order,
+                                                [COLLECTION_SORT_BY_QUERY_KEY]:
+                                                    sortOption.sortBy,
                                                 [COLLECTION_PAGE_QUERY_KEY]:
                                                     '1',
                                             })

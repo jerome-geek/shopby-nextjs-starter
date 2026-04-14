@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
 import { RecipeCard } from '@/components/recipe/recipe-card';
-import { Paging } from '@/components/ui';
 import * as styles from '@/components/search/recipe-results/index.css';
+import PagingV2 from '@/components/ui/paging-v2';
 import { RECIPE_PAGE_QUERY_KEY } from '@/const/search';
 import useInfinitePublicRecipeSearch from '@/hooks/query/shop/recipe/useInfinitePublicRecipeSearch';
 import { useResponsive } from '@/hooks/utils';
@@ -61,7 +61,7 @@ export const RecipeSearchResults = ({
                     totalCount={totalCount}
                 />
             ) : (
-                <Paging
+                <PagingV2
                     currentPage={currentPage}
                     pageSize={pageSize}
                     totalCount={totalCount}

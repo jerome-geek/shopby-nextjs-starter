@@ -1,11 +1,11 @@
 import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
 
+import { CollectionCard } from '@/components/collection/collection-card';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
-import { CollectionCard } from '@/components/collection/collection-card';
-import { Paging } from '@/components/ui';
 import * as styles from '@/components/search/collection-results/index.css';
+import PagingV2 from '@/components/ui/paging-v2';
 import { COLLECTION_PAGE_QUERY_KEY } from '@/const/search';
 import useInfinitePublicCollectionSearch from '@/hooks/query/shop/collection/useInfinitePublicCollectionSearch';
 import { useResponsive } from '@/hooks/utils';
@@ -64,7 +64,7 @@ export const CollectionSearchResults = ({
                     totalCount={totalCount}
                 />
             ) : (
-                <Paging
+                <PagingV2
                     currentPage={currentPage}
                     pageSize={pageSize}
                     totalCount={totalCount}

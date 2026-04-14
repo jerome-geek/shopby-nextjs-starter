@@ -27,4 +27,6 @@ export interface SearchPublicCollectionParams {
     order?: 'ASC' | 'DESC';
     page?: number;
     take?: number;
+    /** 정렬 기준 */
+    sortBy: 'LATEST' | 'BOOKMARK_COUNT';
 }

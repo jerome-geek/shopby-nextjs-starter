@@ -9,14 +9,17 @@ import { IntegratedSearchView } from '@/components/search/integrated-search-view
 import { RecipeSearchView } from '@/components/search/recipe-search-view';
 import { ShoppingSearchView } from '@/components/search/shopping-search-view';
 import { Column } from '@/components/ui/layout/flex';
+import { type CollectionSortBy, type RecipeSortBy } from '@/const/recipe';
 import { SORT_OPTIONS } from '@/const/product';
 import {
     COLLECTION_ORDER_QUERY_KEY,
     COLLECTION_PAGE_QUERY_KEY,
+    COLLECTION_SORT_BY_QUERY_KEY,
     COLLECTION_TAKE_PER_TAB,
     INTEGRATED_SEARCH_PAGE,
     RECIPE_ORDER_QUERY_KEY,
     RECIPE_PAGE_QUERY_KEY,
+    RECIPE_SORT_BY_QUERY_KEY,
     RECIPE_TAKE_PER_TAB,
     SEARCH_TABS,
     TAB_QUERY_KEY,
@@ -46,7 +49,21 @@ const parseOrderDirectionParam = (
         return raw;
     }
 
-    return 'ASC';
+    return 'DESC';
+};
+
+const parseSortByParam = <TSortBy extends string>(
+    value: string | string[] | undefined,
+    options: readonly TSortBy[],
+    fallback: TSortBy,
+): TSortBy => {
+    const raw = Array.isArray(value) ? value[0] : value;
+
+    if (raw && options.includes(raw as TSortBy)) {
+        return raw as TSortBy;
+    }
+
+    return fallback;
 };
 
 const parseSearchTabParam = (
@@ -94,7 +111,9 @@ const Search = () => {
     const searchKeyword = appliedSearchParams.filter?.keywords ?? '';
 
     const recipeOrderQuery = router.query[RECIPE_ORDER_QUERY_KEY];
+    const recipeSortByQuery = router.query[RECIPE_SORT_BY_QUERY_KEY];
     const collectionOrderQuery = router.query[COLLECTION_ORDER_QUERY_KEY];
+    const collectionSortByQuery = router.query[COLLECTION_SORT_BY_QUERY_KEY];
     const recipePageQuery = router.query[RECIPE_PAGE_QUERY_KEY];
     const collectionPageQuery = router.query[COLLECTION_PAGE_QUERY_KEY];
 
@@ -105,6 +124,24 @@ const Search = () => {
     const collectionSortOrder = useMemo(
         () => parseOrderDirectionParam(collectionOrderQuery),
         [collectionOrderQuery],
+    );
+    const recipeSortBy = useMemo(
+        () =>
+            parseSortByParam<RecipeSortBy>(
+                recipeSortByQuery,
+                ['LATEST', 'BOOKMARK_COUNT', 'LIKE_COUNT'],
+                'LATEST',
+            ),
+        [recipeSortByQuery],
+    );
+    const collectionSortBy = useMemo(
+        () =>
+            parseSortByParam<CollectionSortBy>(
+                collectionSortByQuery,
+                ['LATEST', 'BOOKMARK_COUNT'],
+                'LATEST',
+            ),
+        [collectionSortByQuery],
     );
     const recipeCurrentPage = useMemo(
         () => parsePageParam(recipePageQuery),
@@ -186,6 +223,7 @@ const Search = () => {
         searchParams: {
             keyword: searchKeyword,
             order: recipeSortOrder,
+            sortBy: recipeSortBy,
             take: recipeTake,
         },
         options: {
@@ -197,6 +235,7 @@ const Search = () => {
         params: {
             keyword: searchKeyword,
             order: recipeSortOrder,
+            sortBy: recipeSortBy,
             page: recipeCurrentPage,
             take: recipeTake,
         },
@@ -213,6 +252,7 @@ const Search = () => {
         searchParams: {
             keyword: searchKeyword,
             order: collectionSortOrder,
+            sortBy: collectionSortBy,
             take: collectionTake,
         },
         options: {
@@ -224,6 +264,7 @@ const Search = () => {
         params: {
             keyword: searchKeyword,
             order: collectionSortOrder,
+            sortBy: collectionSortBy,
             page: collectionCurrentPage,
             take: collectionTake,
         },
@@ -300,6 +341,7 @@ const Search = () => {
                 return (
                     <RecipeSearchView
                         recipeSortOrder={recipeSortOrder}
+                        recipeSortBy={recipeSortBy}
                         recipeList={recipeList}
                         fetchNextRecipePage={fetchNextRecipePage}
                         hasNextRecipePage={hasNextRecipePage ?? false}
@@ -312,6 +354,7 @@ const Search = () => {
                 return (
                     <CollectionSearchView
                         collectionSortOrder={collectionSortOrder}
+                        collectionSortBy={collectionSortBy}
                         collectionList={collectionList}
                         fetchNextCollectionPage={fetchNextCollectionPage}
                         hasNextCollectionPage={hasNextCollectionPage ?? false}

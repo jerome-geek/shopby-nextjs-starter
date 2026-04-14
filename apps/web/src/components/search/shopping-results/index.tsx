@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
 import { ProductCard } from '@/components/product';
-import { Paging } from '@/components/ui';
+import PagingV2 from '@/components/ui/paging-v2';
 import * as styles from '@/components/search/shopping-results/index.css';
 import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
 import { useResponsive } from '@/hooks/utils';
@@ -60,7 +60,7 @@ export const ShoppingSearchResults = ({
                     totalCount={productTotalCount}
                 />
             ) : (
-                <Paging
+                <PagingV2
                     currentPage={currentPage}
                     pageSize={pageSize}
                     totalCount={productTotalCount}

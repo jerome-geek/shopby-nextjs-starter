@@ -4,7 +4,7 @@ import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
-export const container = style({
+export const collectionLink = style({
     display: 'flex',
     flexDirection: 'column',
     borderRadius: '8px',

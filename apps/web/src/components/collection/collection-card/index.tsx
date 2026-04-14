@@ -1,15 +1,16 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { Bookmark, ChefHat } from 'lucide-react';
+import Link from 'next/link';
 
 import * as styles from '@/components/collection/collection-card/index.css';
 import { useCollectionMutation } from '@/hooks/mutations';
+import { collectionKeys } from '@/hooks/queryKeys';
 import { useCustomDialog } from '@/hooks/ui/useCustomDialog';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
-import { collectionKeys } from '@/hooks/queryKeys';
 
 export interface CollectionCardProps {
     collection: BookmarkedRecipeCollection;
@@ -69,8 +70,10 @@ export const CollectionCard = ({ collection }: CollectionCardProps) => {
         }
     };
 
+    const detailHref = `/recipes/collections/${collection.shareCode}`;
+
     return (
-        <div className={styles.container}>
+        <Link href={detailHref} className={styles.collectionLink}>
             {hasImages ? (
                 <ul className={styles.imageList}>
                     {imageUrls.map((url, index) => (
@@ -120,7 +123,9 @@ export const CollectionCard = ({ collection }: CollectionCardProps) => {
                 </div>
 
                 <button
-                    onClick={() => {
+                    onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
                         onBookmarkToggle(collection);
                     }}
                 >
@@ -140,6 +145,6 @@ export const CollectionCard = ({ collection }: CollectionCardProps) => {
                     />
                 </button>
             </div>
-        </div>
+        </Link>
     );
 };

@@ -136,6 +136,8 @@ export interface SearchPublicRecipesParams {
     keyword?: string;
     /** 카테고리 번호 */
     categoryId?: number;
+    /** 정렬 기준 */
+    sortBy: 'LATEST' | 'BOOKMARK_COUNT' | 'LIKE_COUNT';
 }
 
 /** 전체 컬렉션 검색 파라미터 */

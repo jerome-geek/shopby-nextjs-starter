@@ -7,12 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { SortBottomSheet } from '@/components/bottom-sheet/sort';
 import * as mobileFilterStyles from '@/components/product-list/mobile-filter/index.css';
 import * as styles from '@/components/search/mobile-sort/index.css';
-import { RECIPE_SORT_OPTIONS } from '@/const/recipe';
+import type { SearchSortOption } from '@/const/recipe';
 import type { OrderDirectionType } from '@/models';
 
-export type SearchMobileSortProps = {
-    queryKey: string;
+type SearchMobileSortProps<TSortBy extends string> = {
+    orderQueryKey: string;
+    sortByQueryKey: string;
     pageQueryKey?: string;
+    sortOptions: SearchSortOption<TSortBy>[];
 };
 
 const parseOrderDirectionParam = (
@@ -24,29 +26,46 @@ const parseOrderDirectionParam = (
         return raw;
     }
 
-    return 'ASC';
+    return 'DESC';
 };
 
-export const SearchMobileSort = ({
-    queryKey,
+const parseSortByParam = <TSortBy extends string>(
+    value: string | string[] | undefined,
+    fallback: TSortBy,
+): TSortBy => {
+    const raw = Array.isArray(value) ? value[0] : value;
+
+    return raw ? (raw as TSortBy) : fallback;
+};
+
+export const SearchMobileSort = <TSortBy extends string>({
+    orderQueryKey,
+    sortByQueryKey,
     pageQueryKey,
-}: SearchMobileSortProps) => {
+    sortOptions,
+}: SearchMobileSortProps<TSortBy>) => {
     const { t } = useTranslation();
 
     const router = useRouter();
 
-    const orderQuery = router.query[queryKey];
+    const orderQuery = router.query[orderQueryKey];
+    const sortByQuery = router.query[sortByQueryKey];
 
     const sortOrder = useMemo(
         () => parseOrderDirectionParam(orderQuery),
         [orderQuery],
     );
+    const sortBy = useMemo(
+        () => parseSortByParam(sortByQuery, sortOptions[0].sortBy),
+        [sortByQuery, sortOptions],
+    );
 
     const selectedSortOption = useMemo(
         () =>
-            RECIPE_SORT_OPTIONS.find((o) => o.order === sortOrder) ??
-            RECIPE_SORT_OPTIONS[0],
-        [sortOrder],
+            sortOptions.find(
+                (o) => o.order === sortOrder && o.sortBy === sortBy,
+            ) ?? sortOptions[0],
+        [sortBy, sortOptions, sortOrder],
     );
 
     const sortLabel = t(selectedSortOption.name);
@@ -55,7 +74,7 @@ export const SearchMobileSort = ({
         overlay.open((props) => (
             <SortBottomSheet
                 {...props}
-                queryOptions={RECIPE_SORT_OPTIONS.map((o) => ({
+                queryOptions={sortOptions.map((o) => ({
                     id: o.id,
                     name: o.name,
                 }))}
@@ -64,9 +83,7 @@ export const SearchMobileSort = ({
                     name: selectedSortOption.name,
                 }}
                 onQueryChange={(option) => {
-                    const next = RECIPE_SORT_OPTIONS.find(
-                        (o) => o.id === option.id,
-                    );
+                    const next = sortOptions.find((o) => o.id === option.id);
 
                     if (!next) {
                         return;
@@ -77,7 +94,8 @@ export const SearchMobileSort = ({
                             pathname: router.pathname,
                             query: {
                                 ...router.query,
-                                [queryKey]: next.order,
+                                [orderQueryKey]: next.order,
+                                [sortByQueryKey]: next.sortBy,
                                 ...(pageQueryKey && { [pageQueryKey]: '1' }),
                             },
                         },
