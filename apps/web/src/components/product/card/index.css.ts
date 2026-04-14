@@ -1,4 +1,6 @@
-import { style, keyframes } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -154,3 +156,29 @@ export const statItem = style({
     alignItems: 'center',
     gap: '3px',
 });
+
+export const rank = style([
+    textStyles.caption1Semibold,
+    {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '24px',
+        height: '24px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        color: vars.color.white,
+        zIndex: 2,
+
+        '@media': {
+            [media.desktop]: {
+                width: '28px',
+                height: '28px',
+                fontSize: '1.4rem',
+                letterSpacing: '-1.3%',
+            },
+        },
+    },
+]);

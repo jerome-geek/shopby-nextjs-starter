@@ -74,10 +74,6 @@ export const useCategoryMenu = (categoryNoFromProps?: number) => {
     const depth3CategoryNo = selectedDepth3Category?.categoryNo;
     const depth4CategoryNo = selectedDepth4Category?.categoryNo;
 
-    const currentCategoryDepth2List = depth2CategoryList;
-    const currentCategoryDepth3List = depth3CategoryList;
-    const currentCategoryDepth4List = depth4CategoryList;
-
     return {
         categoryData,
         mainCategoryData,
@@ -92,8 +88,5 @@ export const useCategoryMenu = (categoryNoFromProps?: number) => {
         depth2CategoryList,
         depth3CategoryList,
         depth4CategoryList,
-        currentCategoryDepth2List,
-        currentCategoryDepth3List,
-        currentCategoryDepth4List,
     };
 };

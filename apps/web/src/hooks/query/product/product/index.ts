@@ -1,4 +1,5 @@
 import useBestSellerProductList from '@/hooks/query/product/product/useBestSellerProductList';
+import useInfiniteBestSellerProductList from '@/hooks/query/product/product/useInfiniteBestSellerProductList';
 import useFavoriteKeywords from '@/hooks/query/product/product/useFavoriteKeywords';
 import useGroupManagementCode from '@/hooks/query/product/product/useGroupManagementCode';
 import useProductDetail from '@/hooks/query/product/product/useProductDetail';
@@ -12,6 +13,7 @@ import useRelatedProductList from '@/hooks/query/product/product/useRelatedProdu
 
 export {
     useBestSellerProductList,
+    useInfiniteBestSellerProductList,
     useFavoriteKeywords,
     useGroupManagementCode,
     useProductDetail,

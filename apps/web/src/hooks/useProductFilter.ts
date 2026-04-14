@@ -256,6 +256,7 @@ export const useProductFilter = ({
             }),
             pageNumber: parseNumber(query.pageNumber) ?? 1,
             pageSize,
+            hasTotalCount: true,
             order: {
                 by: (getSingleValue(query.by) as OrderByType) ?? 'MD_RECOMMEND',
                 direction:

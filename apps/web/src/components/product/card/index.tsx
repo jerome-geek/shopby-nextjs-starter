@@ -28,6 +28,7 @@ interface ProductCardProps {
     additionDiscountAmt?: number;
     isAdditionalDiscount?: boolean;
     isHideLikeButton?: boolean;
+    rank?: number;
 }
 
 const ProductCard = ({
@@ -46,6 +47,7 @@ const ProductCard = ({
     additionDiscountAmt = 0,
     isAdditionalDiscount,
     isHideLikeButton = false,
+    rank,
 }: ProductCardProps) => {
     const { onLikeButtonClick } = useProductLike();
 
@@ -70,6 +72,8 @@ const ProductCard = ({
                         <ThumbnailBookmarkIcon isActive={liked} />
                     </button>
                 )}
+
+                {rank && <span className={styles.rank}>{rank}</span>}
             </Link>
 
             <ProductAdditionalDiscount type='thumbnail' productNo={productNo} />
