@@ -13,6 +13,7 @@ import { recipeKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui/useToast';
 import { vars } from '@/styles/theme.css';
 import { useProfile } from '@/hooks/query/member/profile';
+import { includes } from '@fxts/core';
 
 interface RecipeSaveModalProps {
     isOpen: boolean;
@@ -61,11 +62,17 @@ export const RecipeSaveModal = ({
             });
 
             queryClient.invalidateQueries({
-                queryKey: recipeKeys.detail(recipeSno, memberNo),
+                predicate: (query) => {
+                    return includes(query.queryKey[0], [
+                        ...recipeKeys.detail(recipeSno, memberNo),
+                        ...recipeKeys.publicSearches(),
+                    ]);
+                },
+                // queryKey: recipeKeys.detail(recipeSno, memberNo),
             });
-            queryClient.invalidateQueries({
-                queryKey: recipeKeys.publicSearches(),
-            });
+            // queryClient.invalidateQueries({
+            //     queryKey: recipeKeys.publicSearches(),
+            // });
 
             addToast({
                 variant: 'success',

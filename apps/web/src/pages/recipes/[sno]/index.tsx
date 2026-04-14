@@ -23,10 +23,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { recipe } from '@/api/shop';
-import {
-    CollectionCreateModal,
-    RecipeSaveModal,
-} from '@/components/modal';
+import { CollectionCreateModal, RecipeSaveModal } from '@/components/modal';
 import { RecipeCommentSection } from '@/components/recipe';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -232,7 +229,7 @@ const RecipeDetailPage = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
     const { addToast } = useToast();
 
-    const { openLoginDialog } = useCustomDialog();
+    const { openLoginDialog, openRecipeSave } = useCustomDialog();
 
     const queryClient = useQueryClient();
 
@@ -301,7 +298,7 @@ const RecipeDetailPage = ({
                 },
             );
         } else {
-            openRecipeSaveModal();
+            openRecipeSave();
         }
     };
 
@@ -310,18 +307,6 @@ const RecipeDetailPage = ({
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
-    };
-
-    const openRecipeSaveModal = () => {
-        overlay.open((props) => (
-            <RecipeSaveModal
-                {...props}
-                recipeSno={sno}
-                onAddCollection={() => {
-                    openCollectionCreateModal();
-                }}
-            />
-        ));
     };
 
     const openCollectionCreateModal = () => {

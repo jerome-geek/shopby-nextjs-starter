@@ -1,3 +1,5 @@
+import { isAxiosError } from 'axios';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 
 import { recipe } from '@/api/shop';
@@ -7,8 +9,20 @@ import {
     RegisterManualTempImagesData,
     BookmarkRecipeData,
 } from '@/models/shop/recipe';
+import { useToast } from '@/hooks/ui';
 
 const useRecipeMutation = () => {
+    const { t } = useTranslation();
+
+    const { addToast } = useToast();
+
+    const onMutationError = (error: Error) => {
+        const errorMessage = isAxiosError(error)
+            ? error.response?.data?.message || error.message
+            : t('저장 중 오류가 발생했습니다.');
+        addToast({ variant: 'error', message: errorMessage });
+    };
+
     return {
         /**
          * SNS URL로 레시피 생성
@@ -24,6 +38,7 @@ const useRecipeMutation = () => {
         upload: useMutation({
             mutationFn: async (formData: FormData) =>
                 await recipe.upload(formData),
+            onError: onMutationError,
         }),
 
         /**
@@ -35,6 +50,7 @@ const useRecipeMutation = () => {
             }: {
                 data: RegisterManualTempImagesData;
             }) => await recipe.registerManualTempImages(data),
+            onError: onMutationError,
         }),
 
         /**
@@ -42,6 +58,7 @@ const useRecipeMutation = () => {
          */
         deleteManualTempImages: useMutation({
             mutationFn: async () => await recipe.deleteManualTempImages(),
+            onError: onMutationError,
         }),
 
         /**
@@ -50,6 +67,7 @@ const useRecipeMutation = () => {
         createManualRecipe: useMutation({
             mutationFn: async ({ data }: { data: CreateManualRecipeData }) =>
                 await recipe.createManualRecipe(data),
+            onError: onMutationError,
         }),
 
         /**
@@ -58,6 +76,7 @@ const useRecipeMutation = () => {
         likeRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.likeRecipe(sno),
+            onError: onMutationError,
         }),
 
         /**
@@ -66,6 +85,7 @@ const useRecipeMutation = () => {
         unlikeRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.unlikeRecipe(sno),
+            onError: onMutationError,
         }),
 
         /**
@@ -79,6 +99,7 @@ const useRecipeMutation = () => {
                 sno: number;
                 data: BookmarkRecipeData;
             }) => await recipe.bookmarkRecipe(sno, data),
+            onError: onMutationError,
         }),
 
         /**
@@ -87,6 +108,7 @@ const useRecipeMutation = () => {
         unBookmarkRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.unBookmarkRecipe(sno),
+            onError: onMutationError,
         }),
     };
 };

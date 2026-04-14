@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Bookmark, BookmarkCheck, Heart, Share2, Users } from 'lucide-react';
 import type {
@@ -14,77 +15,11 @@ import { recipe } from '@/api/shop';
 import { PATHS } from '@/const/paths';
 import { useAuth } from '@/hooks/useAuth';
 import { useCustomDialog } from '@/hooks/ui';
-import { recipeKeys } from '@/hooks/queryKeys';
+import { collectionKeys, recipeKeys } from '@/hooks/queryKeys';
 import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
 import { useToast } from '@/hooks/ui/useToast';
-import { useRecipeMutation } from '@/hooks/mutations';
-import { useQueryClient } from '@tanstack/react-query';
-import * as styles from './index.css';
-
-// Mock 레시피 데이터 (컬렉션에 있는 레시피 상세 데이터가 별도 API 없이
-// recipeImageUrls 배열만 내려오므로, 카드 UI는 이미지를 활용하여 표시합니다)
-const MOCK_RECIPES = [
-    {
-        sno: 1,
-        title: '크림 까르보나라',
-        authorName: '이탈리아키친',
-        likeCount: 456,
-        bookmarkCount: 127,
-        thumbnailUrl: 'https://picsum.photos/400/533?random=1',
-        bookmarked: false,
-        liked: false,
-    },
-    {
-        sno: 2,
-        title: '매콤 떡볶이',
-        authorName: '분식왕',
-        likeCount: 890,
-        bookmarkCount: 234,
-        thumbnailUrl: 'https://picsum.photos/400/533?random=2',
-        bookmarked: true,
-        liked: false,
-    },
-    {
-        sno: 3,
-        title: '건강 그린 샐러드',
-        authorName: '다이어터',
-        likeCount: 312,
-        bookmarkCount: 89,
-        thumbnailUrl: 'https://picsum.photos/400/533?random=3',
-        bookmarked: false,
-        liked: true,
-    },
-    {
-        sno: 4,
-        title: '일본식 라멘',
-        authorName: '라멘마스터',
-        likeCount: 1024,
-        bookmarkCount: 456,
-        thumbnailUrl: 'https://picsum.photos/400/533?random=4',
-        bookmarked: false,
-        liked: false,
-    },
-    {
-        sno: 5,
-        title: '바나나 팬케이크',
-        authorName: '브런치러버',
-        likeCount: 567,
-        bookmarkCount: 178,
-        thumbnailUrl: 'https://picsum.photos/400/533?random=5',
-        bookmarked: false,
-        liked: false,
-    },
-    {
-        sno: 6,
-        title: '된장찌개',
-        authorName: '국민엄마',
-        likeCount: 2103,
-        bookmarkCount: 891,
-        thumbnailUrl: 'https://picsum.photos/400/533?random=6',
-        bookmarked: true,
-        liked: true,
-    },
-];
+import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
+import * as styles from '@/pages/recipes/collections/[shareCode]/index.css';
 
 // --- 컬렉션 상세 (데이터 연동) ---
 const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
@@ -96,6 +31,16 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
     const { data: collection } = useSharedCollection({ shareCode });
     console.log('🚀 ~ CollectionDetailContent ~ collection:', collection);
+
+    const {
+        bookmarkCollection: { mutate: bookmarkCollectionMutate },
+        unBookmarkCollection: { mutate: unBookmarkCollectionMutate },
+    } = useCollectionMutation();
+
+    const {
+        likeRecipe: { mutate: likeRecipeMutate },
+        unlikeRecipe: { mutate: unlikeRecipeMutate },
+    } = useRecipeMutation();
 
     const handleShare = async () => {
         const url = window.location.href;
@@ -110,20 +55,96 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
         }
     };
 
-    const handleBookmarkCollection = () => {
+    const handleBookmarkCollection = (
+        collectionSno: number,
+        bookmarked: boolean,
+    ) => {
         if (!isLogin) {
             openLoginDialog();
             return;
         }
-        // TODO: 컬렉션 북마크 mutation 연동
-        addToast({
-            message: t('컬렉션을 북마크했습니다.'),
-            variant: 'success',
-        });
+
+        if (bookmarked) {
+            unBookmarkCollectionMutate(
+                { collectionSno },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: collectionKeys.publicSearches(),
+                        });
+                        queryClient.invalidateQueries({
+                            queryKey: recipeKeys.sharedCollection(shareCode),
+                        });
+                        addToast({
+                            message: '북마크를 취소했습니다.',
+                            variant: 'success',
+                        });
+                    },
+                },
+            );
+        } else {
+            bookmarkCollectionMutate(
+                { collectionSno },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: collectionKeys.publicSearches(),
+                        });
+                        queryClient.invalidateQueries({
+                            queryKey: recipeKeys.sharedCollection(shareCode),
+                        });
+                        addToast({
+                            message: '북마크를 추가했습니다.',
+                            variant: 'success',
+                        });
+                    },
+                },
+            );
+        }
     };
 
-    // recipeImageUrls: 컬렉션에 담긴 레시피 이미지 미리보기 (최대 3개)
-    const previewImages = collection.recipeImageUrls?.slice(0, 3) ?? [];
+    const handleLikeRecipe = (sno: number, liked: boolean) => {
+        if (!isLogin) {
+            openLoginDialog();
+            return;
+        }
+
+        if (liked) {
+            unlikeRecipeMutate(
+                { sno },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: recipeKeys.sharedCollection(shareCode),
+                        });
+                    },
+                },
+            );
+        } else {
+            likeRecipeMutate(
+                { sno },
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: recipeKeys.sharedCollection(shareCode),
+                        });
+                    },
+                },
+            );
+        }
+    };
+
+    const recipes = collection.recipes ?? [];
+
+    // collection.recipes가 있으면 해당 썸네일을 사용하고, 없으면 recipeImageUrls를 사용합니다.
+    const previewImages =
+        recipes.length > 0
+            ? recipes
+                  .map((r) => r.thumbnailUrl)
+                  .filter((url): url is string => !!url)
+                  .slice(0, 3)
+            : (collection.recipeImageUrls?.slice(0, 3) ?? []);
+
     const hasImages = previewImages.length > 0;
 
     return (
@@ -209,7 +230,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             <span className={styles.metaItem}>
                                 <Bookmark size={14} />
                                 <span className={styles.metaItemStrong}>
-                                    {collection.bookmarkCount.toLocaleString()}
+                                    {collection.bookmarkCount}
                                 </span>
                             </span>
                         </div>
@@ -218,7 +239,12 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             <button
                                 className={styles.bookmarkButton}
                                 data-bookmarked={collection.bookmarked}
-                                onClick={handleBookmarkCollection}
+                                onClick={() =>
+                                    handleBookmarkCollection(
+                                        collection.sno,
+                                        collection.bookmarked,
+                                    )
+                                }
                                 id='btn-bookmark-collection'
                             >
                                 {collection.bookmarked ? (
@@ -254,13 +280,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                         </h2>
                     </div>
 
-                    {/* 
-                        현재 getSharedCollection API 응답에는 recipeImageUrls만 포함되어 있어
-                        레시피 상세 목록이 포함되지 않습니다.
-                        recipeCount > 0이면 Mock 데이터로 카드 레이아웃을 시연하고,
-                        실제 레시피 목록 API가 제공될 경우 MOCK_RECIPES를 실제 데이터로 교체하세요.
-                    */}
-                    {collection.recipeCount === 0 ? (
+                    {recipes.length === 0 ? (
                         <div className={styles.emptyState}>
                             <Bookmark size={40} />
                             <p className={styles.emptyStateText}>
@@ -269,10 +289,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                         </div>
                     ) : (
                         <div className={styles.recipeGrid}>
-                            {MOCK_RECIPES.slice(
-                                0,
-                                collection.recipeCount || 6,
-                            ).map((r) => (
+                            {recipes.map((r) => (
                                 <Link
                                     key={r.sno}
                                     href={PATHS.RECIPES.DETAIL.replace(
@@ -283,7 +300,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                                 >
                                     <div className={styles.recipeThumbWrapper}>
                                         <img
-                                            src={r.thumbnailUrl}
+                                            src={r.thumbnailUrl ?? ''}
                                             alt={r.title}
                                             className={styles.recipeThumb}
                                         />
@@ -315,26 +332,42 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                                             {r.title}
                                         </h3>
                                         <p className={styles.recipeAuthor}>
-                                            {r.authorName}
+                                            {r.authorName ??
+                                                r.memberName ??
+                                                t('익명')}
                                         </p>
                                         <div className={styles.recipeMeta}>
-                                            <span>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleLikeRecipe(
+                                                        r.sno,
+                                                        r.liked,
+                                                    );
+                                                }}
+                                                aria-label={t('좋아요')}
+                                                style={{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '3px',
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    padding: 0,
+                                                    cursor: 'pointer',
+                                                    color: 'inherit',
+                                                    font: 'inherit',
+                                                }}
+                                            >
                                                 <Heart
                                                     size={12}
-                                                    style={{
-                                                        display: 'inline',
-                                                        verticalAlign:
-                                                            'text-bottom',
-                                                        marginRight: '3px',
-                                                    }}
                                                     fill={
                                                         r.liked
                                                             ? 'currentColor'
                                                             : 'none'
                                                     }
                                                 />
-                                                {r.likeCount.toLocaleString()}
-                                            </span>
+                                                {r.likeCount}
+                                            </button>
                                         </div>
                                     </div>
                                 </Link>
@@ -437,6 +470,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         });
     } catch (error) {
         console.error('Failed to fetch shared collection:', error);
+
         return { notFound: true };
     }
 

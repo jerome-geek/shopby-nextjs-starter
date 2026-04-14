@@ -31,7 +31,7 @@ export const heroSection = style({
     '@media': {
         [media.desktop]: {
             flexDirection: 'row',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             gap: '48px',
             paddingTop: '48px',
         },
@@ -44,10 +44,6 @@ export const collageWrapper = style({
     borderRadius: '16px',
     overflow: 'hidden',
     background: vars.color.gray['10'],
-    display: 'grid',
-    gridTemplateColumns: '2fr 1fr',
-    gridTemplateRows: '1fr 1fr',
-    gap: '4px',
     flexShrink: 0,
 
     '@media': {
@@ -59,16 +55,15 @@ export const collageWrapper = style({
 });
 
 export const collageMain = style({
-    gridRow: '1 / 3',
     width: '100%',
     height: '100%',
-    objectFit: 'cover',
+    objectFit: 'fill',
 });
 
 export const collageSub = style({
     width: '100%',
     height: '100%',
-    objectFit: 'cover',
+    objectFit: 'fill',
 });
 
 export const collagePlaceholder = style({
@@ -86,6 +81,12 @@ export const heroInfo = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
+
+    '@media': {
+        [media.desktop]: {
+            paddingTop: '32px',
+        },
+    },
 });
 
 export const badge = style([
@@ -102,25 +103,17 @@ export const badge = style([
     },
 ]);
 
-export const collectionTitle = style({
-    fontSize: '28px',
-    fontWeight: '700',
-    color: vars.color.black,
-    lineHeight: 1.3,
-    letterSpacing: '-0.02em',
-
-    '@media': {
-        [media.desktop]: {
-            fontSize: '36px',
-        },
+export const collectionTitle = style([
+    textStyles.display1Semibold,
+    {
+        color: vars.color.black,
     },
-});
+]);
 
 export const collectionDescription = style([
-    textStyles.body1Regular,
+    textStyles.headingMedium,
     {
-        color: vars.color.gray['60'],
-        lineHeight: 1.6,
+        color: vars.color.gray['80'],
     },
 ]);
 
@@ -363,7 +356,7 @@ export const skeletonThumb = style([
     skeletonBar,
     {
         width: '100%',
-        aspectRatio: '3 / 4',
+        aspectRatio: '4 / 3',
         borderRadius: '8px',
     },
 ]);
