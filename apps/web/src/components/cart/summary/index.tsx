@@ -153,29 +153,32 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
                 </div>
             </div>
 
-            <Button
-                type='submit'
-                frame='solid'
-                variant='primary'
-                onClick={onPurchaseClick}
-                disabled={isCartPriceFetching || writeOrderSheetMutatePending}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                }}
-            >
-                {isCartPriceFetching ? (
-                    <Loader2 className={styles.spinner} />
-                ) : (
-                    <>
-                        {CURRENCY(totalAmt).format()} (
-                        {checkedCartNoList.length}
-                        개) 주문하기
-                    </>
-                )}
-            </Button>
+            <div className={styles.bottomSticky}>
+                <Button
+                    type='submit'
+                    frame='solid'
+                    variant='primary'
+                    onClick={onPurchaseClick}
+                    disabled={isCartPriceFetching || writeOrderSheetMutatePending}
+                    className={styles.orderButton}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                    }}
+                >
+                    {isCartPriceFetching ? (
+                        <Loader2 className={styles.spinner} />
+                    ) : (
+                        <>
+                            {CURRENCY(totalAmt).format()} (
+                            {checkedCartNoList.length}
+                            개) 주문하기
+                        </>
+                    )}
+                </Button>
+            </div>
         </aside>
     );
 };

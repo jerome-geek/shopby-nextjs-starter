@@ -7,15 +7,20 @@ import { textStyles } from '@/styles/typography.css';
 /* Right side summary layout */
 export const summaryArea = style({
     width: '100%',
+    order: 2,
+    padding: '24px 20px',
 
     '@media': {
         [media.desktop]: {
-            width: '486px',
+            width: '100%',
             position: 'sticky',
             top: '120px',
             display: 'flex',
             flexDirection: 'column',
             gap: '32px',
+            padding: 0,
+            gridColumn: '2 / 3',
+            gridRow: '1 / 3',
         },
     },
 });
@@ -23,6 +28,7 @@ export const summaryArea = style({
 export const summaryBox = style({
     display: 'flex',
     flexDirection: 'column',
+    gap: '16px',
 
     '@media': {
         [media.desktop]: {
@@ -34,6 +40,7 @@ export const summaryBox = style({
 export const summaryListContainer = style({
     display: 'flex',
     flexDirection: 'column',
+    gap: '12px',
 
     '@media': {
         [media.desktop]: {
@@ -56,7 +63,7 @@ export const spinner = style({
 
 
 export const summaryHeader = style([
-    textStyles.title1Semibold,
+    textStyles.headingSemibold,
     {
         color: vars.color.black,
     },
@@ -75,7 +82,7 @@ export const summaryRow = style({
 });
 
 export const summaryLabel = style([
-    textStyles.headlineRegular,
+    textStyles.body1Regular,
     {
         display: 'flex',
         alignItems: 'center',
@@ -85,9 +92,9 @@ export const summaryLabel = style([
 ]);
 
 export const summaryValue = style([
-    textStyles.headlineRegular,
+    textStyles.body1Regular,
     {
-        color: vars.color.black,
+        color: vars.color.gray['80'],
     },
 ]);
 
@@ -105,16 +112,16 @@ export const summaryDivider = style({
 });
 
 export const totalLabel = style([
-    textStyles.body1Semibold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.black,
     },
 ]);
 
 export const totalValue = style([
-    textStyles.display2Semibold,
+    textStyles.headingBold,
     {
-        color: vars.color.red,
+        color: vars.color.pink['100'],
     },
 ]);
 
@@ -127,18 +134,43 @@ export const priceRow = style([
     },
 ]);
 export const totalPriceTitle = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.black,
     },
 ]);
 
 export const totalPrice = style([
-    textStyles.title1Bold,
+    textStyles.headingBold,
     {
         color: vars.color.pink['100'],
     },
 ]);
+
+export const bottomSticky = style({
+    position: 'fixed',
+    bottom: 'calc(var(--bottom-nav-active-height, 64px) + env(safe-area-inset-bottom))',
+    left: 0,
+    width: '100%',
+    backgroundColor: vars.color.white,
+    padding: '12px 20px',
+    borderTop: `1px solid ${vars.color.gray['20']}`,
+    zIndex: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    transition: 'bottom 0.2s ease-in-out',
+
+    '@media': {
+        [media.tablet]: {
+            bottom: 'env(safe-area-inset-bottom)',
+        },
+        [media.desktop]: {
+            position: 'static',
+            padding: 0,
+            borderTop: 'none',
+        },
+    },
+});
 
 export const orderButton = style([
     textStyles.body1Semibold,

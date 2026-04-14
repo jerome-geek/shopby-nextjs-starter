@@ -117,7 +117,7 @@ export const content = style({
             gap: '32px',
             position: 'sticky',
             top: `calc(var(--header-height, ${globalVars.header.height}) + 20px)`,
-            width: '100%', // 고정 너비는 부모 Grid에서 관리
+            width: '100%',
         },
     },
 });
@@ -425,6 +425,13 @@ export const orderContainer = style({
     '@media': {
         [media.desktop]: {
             gap: '12px',
+            position: 'sticky',
+            bottom: 0,
+            backgroundColor: vars.color.white,
+            paddingTop: '12px',
+            zIndex: 1,
+            // 버튼 영역에 그림자를 주어 경계를 명확히 함
+            boxShadow: `0 -10px 10px -5px ${vars.color.white}`,
         },
     },
 });
@@ -437,6 +444,17 @@ export const optionContainer = style({
     '@media': {
         [media.desktop]: {
             gap: '24px',
+        },
+    },
+});
+
+export const detailsSection = style({
+    width: '100%',
+    gridColumn: '1 / span 2', // 데스크탑에서 양쪽 열을 모두 차지하도록 (Grid 사용 시)
+
+    '@media': {
+        [media.desktop]: {
+            padding: '0 20px',
         },
     },
 });

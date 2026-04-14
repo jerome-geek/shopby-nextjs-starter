@@ -1,14 +1,14 @@
 import { filter, flatMap, map, pipe, prop, toArray } from '@fxts/core';
 import { Minus, Plus, X } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CartSummary from '@/components/cart/summary';
 import { NoResult } from '@/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
-import ProductSection from '@/components/product-section';
+import Recommend from '@/components/cart/Recommend';
 import { InputCheckbox, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
@@ -154,8 +154,6 @@ const CartContent = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>{t('장바구니')}</h1>
-
             <div className={styles.contentWrapper}>
                 {/* Left Area: Cart List */}
                 <div className={styles.cartListArea} data-empty={isEmpty}>
@@ -212,284 +210,288 @@ const CartContent = () => {
                         <ul className={styles.cartList}>
                             {deliveryGroups.map((group, groupIdx) => {
                                 return (
-                                    <li
-                                        key={`group-${groupIdx}`}
-                                        className={styles.partnerGroup}
-                                    >
-                                        <div className={styles.partnerHeader}>
-                                            <InputLabel
-                                                isCheckbox
-                                                className={styles.partnerName}
+                                    <React.Fragment key={`group-${groupIdx}`}>
+                                        <li className={styles.partnerGroup}>
+                                            <div
+                                                className={styles.partnerHeader}
                                             >
-                                                <InputCheckbox
-                                                    checked={group.orderProducts.every(
-                                                        (p) =>
-                                                            p.orderProductOptions.every(
-                                                                (o) =>
-                                                                    checkedCartNoList.includes(
-                                                                        o.cartNo,
-                                                                    ),
-                                                            ),
-                                                    )}
-                                                    onCheckedChange={(
-                                                        checked,
-                                                    ) => {
-                                                        const groupCartNos =
-                                                            group.orderProducts.flatMap(
-                                                                (p) =>
-                                                                    p.orderProductOptions.map(
-                                                                        (o) =>
+                                                <InputLabel
+                                                    isCheckbox
+                                                    className={
+                                                        styles.partnerName
+                                                    }
+                                                >
+                                                    <InputCheckbox
+                                                        checked={group.orderProducts.every(
+                                                            (p) =>
+                                                                p.orderProductOptions.every(
+                                                                    (o) =>
+                                                                        checkedCartNoList.includes(
                                                                             o.cartNo,
-                                                                    ),
-                                                            );
-                                                        setCheckedCartNoList(
-                                                            (prev) =>
-                                                                checked
-                                                                    ? Array.from(
-                                                                          new Set(
-                                                                              [
-                                                                                  ...prev,
-                                                                                  ...groupCartNos,
-                                                                              ],
-                                                                          ),
-                                                                      )
-                                                                    : prev.filter(
-                                                                          (
-                                                                              no,
-                                                                          ) =>
-                                                                              !groupCartNos.includes(
-                                                                                  no,
+                                                                        ),
+                                                                ),
+                                                        )}
+                                                        onCheckedChange={(
+                                                            checked,
+                                                        ) => {
+                                                            const groupCartNos =
+                                                                group.orderProducts.flatMap(
+                                                                    (p) =>
+                                                                        p.orderProductOptions.map(
+                                                                            (
+                                                                                o,
+                                                                            ) =>
+                                                                                o.cartNo,
+                                                                        ),
+                                                                );
+                                                            setCheckedCartNoList(
+                                                                (prev) =>
+                                                                    checked
+                                                                        ? Array.from(
+                                                                              new Set(
+                                                                                  [
+                                                                                      ...prev,
+                                                                                      ...groupCartNos,
+                                                                                  ],
                                                                               ),
-                                                                      ),
-                                                        );
-                                                    }}
-                                                />
-                                                {group.partnerName}
-                                            </InputLabel>
-                                        </div>
+                                                                          )
+                                                                        : prev.filter(
+                                                                              (
+                                                                                  no,
+                                                                              ) =>
+                                                                                  !groupCartNos.includes(
+                                                                                      no,
+                                                                                  ),
+                                                                          ),
+                                                            );
+                                                        }}
+                                                    />
+                                                    {group.partnerName}
+                                                </InputLabel>
+                                            </div>
 
-                                        <ul className={styles.itemList}>
-                                            {group.orderProducts.map(
-                                                (product) =>
-                                                    product.orderProductOptions.map(
-                                                        (option) => (
-                                                            <li
-                                                                key={`${product.productNo}-${option.optionNo}`}
-                                                                className={
-                                                                    styles.cartItem
-                                                                }
-                                                            >
-                                                                <div
+                                            <ul className={styles.itemList}>
+                                                {group.orderProducts.map(
+                                                    (product) =>
+                                                        product.orderProductOptions.map(
+                                                            (option) => (
+                                                                <li
+                                                                    key={`${product.productNo}-${option.optionNo}`}
                                                                     className={
-                                                                        styles.itemCheckbox
-                                                                    }
-                                                                >
-                                                                    <InputCheckbox
-                                                                        checked={checkedCartNoList.includes(
-                                                                            option.cartNo,
-                                                                        )}
-                                                                        onCheckedChange={(
-                                                                            checked,
-                                                                        ) =>
-                                                                            handleSelectOption(
-                                                                                option.cartNo,
-                                                                                checked,
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                </div>
-
-                                                                <Link
-                                                                    className={
-                                                                        styles.itemImageLink
-                                                                    }
-                                                                    href={`${PATHS.PRODUCTS.MAIN}/${product.productNo}`}
-                                                                >
-                                                                    <img
-                                                                        src={
-                                                                            option.imageUrl ||
-                                                                            product.imageUrl
-                                                                        }
-                                                                        alt={
-                                                                            product.productName
-                                                                        }
-                                                                        className={
-                                                                            styles.itemImage
-                                                                        }
-                                                                    />
-                                                                </Link>
-
-                                                                <div
-                                                                    className={
-                                                                        styles.itemDetails
+                                                                        styles.cartItem
                                                                     }
                                                                 >
                                                                     <div
                                                                         className={
-                                                                            styles.itemTop
+                                                                            styles.itemCheckbox
                                                                         }
                                                                     >
-                                                                        <div
-                                                                            className={
-                                                                                styles.itemTextInfo
-                                                                            }
-                                                                        >
-                                                                            {product.brandName && (
-                                                                                <span
-                                                                                    className={
-                                                                                        styles.itemBrand
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        product.brandName
-                                                                                    }
-                                                                                </span>
+                                                                        <InputCheckbox
+                                                                            checked={checkedCartNoList.includes(
+                                                                                option.cartNo,
                                                                             )}
-                                                                            <span
-                                                                                className={
-                                                                                    styles.itemName
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    product.productName
-                                                                                }
-                                                                            </span>
-                                                                            {option.optionTitle && (
-                                                                                <span
-                                                                                    className={
-                                                                                        styles.itemOption
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        option.optionTitle
-                                                                                    }
-                                                                                </span>
-                                                                            )}
-                                                                        </div>
-                                                                        <button
-                                                                            type='button'
-                                                                            className={
-                                                                                styles.itemXButton
-                                                                            }
-                                                                            onClick={() =>
-                                                                                onDeleteButtonClick(
-                                                                                    [
-                                                                                        option.cartNo,
-                                                                                    ],
+                                                                            onCheckedChange={(
+                                                                                checked,
+                                                                            ) =>
+                                                                                handleSelectOption(
+                                                                                    option.cartNo,
+                                                                                    checked,
                                                                                 )
                                                                             }
-                                                                        >
-                                                                            <X
-                                                                                size={
-                                                                                    20
-                                                                                }
-                                                                            />
-                                                                        </button>
+                                                                        />
                                                                     </div>
 
                                                                     <div
                                                                         className={
-                                                                            styles.quantityController
+                                                                            styles.itemContent
                                                                         }
                                                                     >
-                                                                        <button
-                                                                            type='button'
+                                                                        <Link
                                                                             className={
-                                                                                styles.quantityButton
+                                                                                styles.itemImageLink
                                                                             }
+                                                                            href={`${PATHS.PRODUCTS.MAIN}/${product.productNo}`}
                                                                         >
-                                                                            <Minus
-                                                                                size={
-                                                                                    16
+                                                                            <img
+                                                                                src={
+                                                                                    option.imageUrl ||
+                                                                                    product.imageUrl
                                                                                 }
-                                                                            />
-                                                                        </button>
-                                                                        <span
-                                                                            className={
-                                                                                styles.quantityValue
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                option.orderCnt
-                                                                            }
-                                                                        </span>
-                                                                        <button
-                                                                            type='button'
-                                                                            className={
-                                                                                styles.quantityButton
-                                                                            }
-                                                                        >
-                                                                            <Plus
-                                                                                size={
-                                                                                    16
+                                                                                alt={
+                                                                                    product.productName
                                                                                 }
-                                                                            />
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <div
-                                                                        className={
-                                                                            styles.itemPriceArea
-                                                                        }
-                                                                    >
-                                                                        {option
-                                                                            .price
-                                                                            .immediateDiscountAmt >
-                                                                            0 && (
-                                                                            <span
                                                                                 className={
-                                                                                    styles.itemDiscount
+                                                                                    styles.itemImage
+                                                                                }
+                                                                            />
+                                                                        </Link>
+
+                                                                        <div
+                                                                            className={
+                                                                                styles.itemDetails
+                                                                            }
+                                                                        >
+                                                                            <div
+                                                                                className={
+                                                                                    styles.itemTextInfo
                                                                                 }
                                                                             >
-                                                                                {Math.floor(
-                                                                                    (option
-                                                                                        .price
-                                                                                        .immediateDiscountAmt /
+                                                                                {product.brandName && (
+                                                                                    <span
+                                                                                        className={
+                                                                                            styles.itemBrand
+                                                                                        }
+                                                                                    >
+                                                                                        {
+                                                                                            product.brandName
+                                                                                        }
+                                                                                    </span>
+                                                                                )}
+                                                                                <span
+                                                                                    className={
+                                                                                        styles.itemName
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        product.productName
+                                                                                    }
+                                                                                </span>
+                                                                                {option.optionTitle && (
+                                                                                    <span
+                                                                                        className={
+                                                                                            styles.itemOption
+                                                                                        }
+                                                                                    >
+                                                                                        {
+                                                                                            option.optionTitle
+                                                                                        }
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+
+                                                                            <div
+                                                                                className={
+                                                                                    styles.quantityController
+                                                                                }
+                                                                            >
+                                                                                <button
+                                                                                    type='button'
+                                                                                    className={
+                                                                                        styles.quantityButton
+                                                                                    }
+                                                                                >
+                                                                                    <Minus
+                                                                                        size={
+                                                                                            16
+                                                                                        }
+                                                                                    />
+                                                                                </button>
+                                                                                <span
+                                                                                    className={
+                                                                                        styles.quantityValue
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        option.orderCnt
+                                                                                    }
+                                                                                </span>
+                                                                                <button
+                                                                                    type='button'
+                                                                                    className={
+                                                                                        styles.quantityButton
+                                                                                    }
+                                                                                >
+                                                                                    <Plus
+                                                                                        size={
+                                                                                            16
+                                                                                        }
+                                                                                    />
+                                                                                </button>
+                                                                            </div>
+
+                                                                            <div
+                                                                                className={
+                                                                                    styles.itemPriceArea
+                                                                                }
+                                                                            >
+                                                                                {option
+                                                                                    .price
+                                                                                    .immediateDiscountAmt >
+                                                                                    0 && (
+                                                                                    <span
+                                                                                        className={
+                                                                                            styles.itemDiscount
+                                                                                        }
+                                                                                    >
+                                                                                        {Math.floor(
+                                                                                            (option
+                                                                                                .price
+                                                                                                .immediateDiscountAmt /
+                                                                                                option
+                                                                                                    .price
+                                                                                                    .standardAmt) *
+                                                                                                100,
+                                                                                        )}
+
+                                                                                        %
+                                                                                    </span>
+                                                                                )}
+                                                                                <span
+                                                                                    className={
+                                                                                        styles.itemPrice
+                                                                                    }
+                                                                                >
+                                                                                    {CURRENCY(
                                                                                         option
                                                                                             .price
-                                                                                            .standardAmt) *
-                                                                                        100,
-                                                                                )}
-
-                                                                                %
-                                                                            </span>
-                                                                        )}
-                                                                        <span
-                                                                            className={
-                                                                                styles.itemPrice
-                                                                            }
-                                                                        >
-                                                                            {CURRENCY(
-                                                                                option
-                                                                                    .price
-                                                                                    .buyAmt,
-                                                                            ).format()}
-                                                                        </span>
+                                                                                            .buyAmt,
+                                                                                    ).format()}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </li>
+
+                                                                    <button
+                                                                        type='button'
+                                                                        className={
+                                                                            styles.itemXButton
+                                                                        }
+                                                                        onClick={() =>
+                                                                            onDeleteButtonClick(
+                                                                                [
+                                                                                    option.cartNo,
+                                                                                ],
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <X
+                                                                            size={
+                                                                                16
+                                                                            }
+                                                                        />
+                                                                    </button>
+                                                                </li>
+                                                            ),
                                                         ),
-                                                    ),
-                                            )}
-                                        </ul>
-                                    </li>
+                                                )}
+                                            </ul>
+                                        </li>
+                                        <div className={styles.thickDivider} />
+                                    </React.Fragment>
                                 );
                             })}
                         </ul>
                     )}
-
-                    <div className={styles.recommendArea}>
-                        <h3 className={styles.recommendTitle}>
-                            {t('함께 구매하면 좋은 상품')}
-                        </h3>
-                        <ProductSection sectionId='CART' />
-                    </div>
                 </div>
 
                 {/* Right Area: Payment Summary Sticky Section */}
                 {!isEmpty && (
                     <CartSummary checkedCartNoList={checkedCartNoList} />
                 )}
+
+                <div className={styles.recommendArea}>
+                    <Recommend />
+                </div>
             </div>
         </div>
     );

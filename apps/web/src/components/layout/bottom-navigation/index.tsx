@@ -59,12 +59,18 @@ export default function BottomNavigation() {
     useMotionValueEvent(scrollY, 'change', handleScroll);
 
     useEffect(() => {
+        if (typeof document !== 'undefined') {
+            document.documentElement.style.setProperty(
+                '--bottom-nav-active-height',
+                hidden ? '0px' : '64px'
+            );
+        }
         return () => {
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
             }
         };
-    }, []);
+    }, [hidden]);
 
     const navItems = [
         {
