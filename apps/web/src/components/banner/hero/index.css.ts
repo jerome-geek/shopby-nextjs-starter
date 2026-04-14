@@ -66,7 +66,8 @@ export const slide = style({
     height: 'auto',
     borderRadius: '24px',
     overflow: 'hidden',
-    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition:
+        'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     opacity: 0.6,
     selectors: {
         '&.swiper-slide-active, &.swiper-slide-prev, &.swiper-slide-next': {
