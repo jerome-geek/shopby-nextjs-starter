@@ -27,9 +27,10 @@ export default function UserDropdown() {
                     <span className='text-sm font-medium leading-5 text-[#101828] dark:text-white/90'>
                         관리자
                     </span>
-                    <span className='text-xs leading-4 text-[#6a7282] dark:text-gray-400'>
+                    {/* TODO: 이메일 추가 */}
+                    {/* <span className='text-xs leading-4 text-[#6a7282] dark:text-gray-400'>
                         admin@jollypot.com
-                    </span>
+                    </span> */}
                 </div>
 
                 {/* 오렌지 원형 아바타 */}

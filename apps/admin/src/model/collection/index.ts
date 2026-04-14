@@ -1,4 +1,5 @@
 import { PageParams, PageResponse } from '@/model/common';
+import { RecipeDetail } from '@/model/recipe';
 
 export interface SearchCollectionsParams extends PageParams {
     keyword: string;
@@ -75,4 +76,15 @@ export type UpdateCollectionExposureGroupsResponse = CollectionExposureGroup;
 export interface UpdateCollectionExposureGroupsSortOrderBody {
     exposureLocation: string;
     groupSnos: number[];
+}
+
+export interface GetCollectionResponse {
+    sno: number;
+    title: string;
+    shareCode: string;
+    memberNo: number;
+    memberName: string;
+    recipes: RecipeDetail[];
+    bookmarked: boolean;
+    bookmarkCount: number;
 }

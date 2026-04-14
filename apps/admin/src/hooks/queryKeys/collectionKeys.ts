@@ -11,6 +11,10 @@ const collectionKeys = {
     list: (params: SearchCollectionsParams) =>
         [...collectionKeys.lists(), params] as const,
 
+    /** 컬렉션 상세 조회 */
+    details: () => [...collectionKeys.all, 'detail'] as const,
+    detail: (sno: number) => [...collectionKeys.details(), sno] as const,
+
     /** 컬렉션 노출 그룹 조회 */
     groupLists: () => [...collectionKeys.all, 'exposureGroups'] as const,
     groupList: (params?: GetCollectionExposureGroupsParams) =>

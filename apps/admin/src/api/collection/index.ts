@@ -11,6 +11,7 @@ import {
     UpdateCollectionExposureGroupsBody,
     UpdateCollectionExposureGroupsSortOrderBody,
     CreateUserCollectionBody,
+    GetCollectionResponse,
 } from '@/model/collection';
 
 export const collection = {
@@ -19,6 +20,12 @@ export const collection = {
             method: 'POST',
             url: '/admin/recipe/user-collections',
             data,
+        });
+    },
+    getCollection: (sno: number) => {
+        return request<GetCollectionResponse>({
+            method: 'GET',
+            url: `/admin/recipe/collections/${sno}`,
         });
     },
     searchCollections: (params: SearchCollectionsParams) => {

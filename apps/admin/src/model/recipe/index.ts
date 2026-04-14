@@ -23,7 +23,7 @@ export interface Recipe {
 
 export type SearchRecipesResponse = PageResponse<Recipe>;
 
-export interface GetRecipeResponse {
+export type RecipeDetail = {
     sno: number;
     memberNo: number;
     liked: boolean;
@@ -75,7 +75,9 @@ export interface GetRecipeResponse {
             isFreeShipping: boolean;
         };
     }[];
-}
+};
+
+export type GetRecipeResponse = RecipeDetail;
 export interface GetRecipeExposureGroupsParams extends PageParams {
     isDisplay?: boolean;
     exposureLocation?: string;

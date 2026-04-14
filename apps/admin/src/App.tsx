@@ -116,6 +116,12 @@ export default function App() {
                                     path={PATHS.APP.USER_RECIPE.DETAIL}
                                     element={<UserRecipeDetail />}
                                 />
+
+                                {/* Fallback Route */}
+                                <Route
+                                    path={PATHS.ERROR_400}
+                                    element={<NotFound />}
+                                />
                             </Route>
 
                             {/* Auth Layout */}
@@ -125,12 +131,6 @@ export default function App() {
                                     element={<SignIn />}
                                 />
                             </Route>
-
-                            {/* Fallback Route */}
-                            <Route
-                                path={PATHS.ERROR_400}
-                                element={<NotFound />}
-                            />
                         </Routes>
                     </Router>
                 </AxiosInterceptor>
