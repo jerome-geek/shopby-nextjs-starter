@@ -1,16 +1,13 @@
 import { isEmpty } from '@fxts/core';
-import { overlay } from 'overlay-kit';
 import { useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
-import CreateUserCollectionModal from '@/components/modal/create-user-collection';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
 import useSearchCollectionList from '@/hooks/query/collection/useSearchCollectionList';
 
-import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
 const tableLayout = {
@@ -78,9 +75,10 @@ const UserCollections = () => {
         });
     };
 
-    const openCreateUserCollectionModal = () => {
-        overlay.open((props) => <CreateUserCollectionModal {...props} />);
-    };
+    // TODO: 컬렉션 생성 모달 임시 주석 처리
+    // const openCreateUserCollectionModal = () => {
+    //     overlay.open((props) => <CreateUserCollectionModal {...props} />);
+    // };
 
     return (
         <>
@@ -100,13 +98,14 @@ const UserCollections = () => {
                     </div>
 
                     {/* 액션 버튼 */}
-                    <button
+                    {/* TODO: 컬렉션 생성 버튼 임시 주석 처리 */}
+                    {/* <button
                         onClick={openCreateUserCollectionModal}
                         className='flex h-9 items-center gap-2 rounded-lg bg-brand-500 px-3 text-sm font-medium text-white transition-colors hover:bg-brand-600'
                     >
                         <PlusSimpleIcon className='w-4 h-4 text-white' />
                         컬렉션 생성
-                    </button>
+                    </button> */}
                 </div>
 
                 {/* 테이블 카드 */}

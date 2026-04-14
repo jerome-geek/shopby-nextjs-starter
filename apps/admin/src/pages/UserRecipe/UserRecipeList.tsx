@@ -1,10 +1,8 @@
 import { isEmpty } from '@fxts/core';
-import { overlay } from 'overlay-kit';
 import { useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
-import CreateUserRecipeModal from '@/components/modal/create-user-recipe';
 import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
@@ -14,7 +12,6 @@ import { isProcessingRecipe } from '@/utils/recipe';
 
 import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
 import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
-import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
 const tableLayout = {
@@ -74,11 +71,12 @@ const UserRecipeList = () => {
         });
     };
 
-    const openCreateUserRecipeOverlay = () => {
-        overlay.open((props) => {
-            return <CreateUserRecipeModal {...props} />;
-        });
-    };
+    // TODO: 레시피 생성 모달 임시 주석 처리
+    // const openCreateUserRecipeOverlay = () => {
+    //     overlay.open((props) => {
+    //         return <CreateUserRecipeModal {...props} />;
+    //     });
+    // };
 
     return (
         <>
@@ -99,13 +97,14 @@ const UserRecipeList = () => {
                     </div>
 
                     {/* 액션 버튼 */}
-                    <button
+                    {/* TODO: 레시피 생성 버튼 임시 주석 처리 */}
+                    {/* <button
                         onClick={openCreateUserRecipeOverlay}
                         className='flex h-9 items-center gap-2 rounded-lg bg-brand-500 px-3 text-sm font-medium text-white transition-colors hover:bg-brand-600'
                     >
                         <PlusSimpleIcon className='w-4 h-4 text-white' />
                         레시피 생성
-                    </button>
+                    </button> */}
                 </div>
 
                 <div className='bg-white border border-[#e5e7eb] rounded-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] overflow-hidden'>
