@@ -115,9 +115,8 @@ export const CollectionRecipeCard = ({
                                     className={styles.IngredientListItem}
                                 >
                                     <span className={styles.IngredientName}>
-                                        · {ing.name}
+                                        {ing.name}
                                     </span>
-
                                     {!!ing.amount && (
                                         <>
                                             <span

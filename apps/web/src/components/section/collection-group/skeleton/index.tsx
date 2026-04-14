@@ -181,11 +181,11 @@ const CollectionSectionSkeleton = () => {
                 >
                     <div
                         className={styles.SkeletonBlockSoft}
-                        style={{ width: 160, height: 22 }}
+                        style={{ width: 140, height: 22 }}
                     />
                     <div
                         className={styles.SkeletonBlockSoft}
-                        style={{ width: 260, height: 18 }}
+                        style={{ width: 200, height: 18 }}
                     />
                 </div>
                 <div

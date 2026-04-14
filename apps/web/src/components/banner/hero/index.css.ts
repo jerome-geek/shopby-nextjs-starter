@@ -15,11 +15,13 @@ export const container = style({
     left: '50%',
     transform: 'translateX(-50%)',
     overflow: 'hidden',
-    padding: '0 20px',
+    padding: '0 20px 40px',
+    marginBottom: '-40px',
 
     '@media': {
         [media.desktop]: {
             padding: 0,
+            marginBottom: 0,
         },
     },
 });
@@ -72,7 +74,8 @@ export const slide = style({
     selectors: {
         '&.swiper-slide-active, &.swiper-slide-prev, &.swiper-slide-next': {
             opacity: 1,
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+            boxShadow:
+                '0px 20px 20px 0px rgba(91, 100, 91, 0.1), 0px 8px 10px 0px rgba(91, 100, 91, 0.15)',
         },
     },
 });

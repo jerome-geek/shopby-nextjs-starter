@@ -49,6 +49,9 @@ export const main = style({
             padding: '24px 0px',
             gap: '96px',
         },
+        [media.mobile]: {
+            padding: '12px 0 0',
+        },
     },
 });
 

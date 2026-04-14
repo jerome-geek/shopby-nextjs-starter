@@ -27,6 +27,14 @@ export const RecipeSectionTitle = style([
     textStyles.title1Bold,
     {
         color: vars.color.black,
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.8rem',
+                fontWeight: 600,
+                lineHeight: '1.5',
+                letterSpacing: '-1.3%',
+            },
+        },
     },
 ]);
 
@@ -34,6 +42,14 @@ export const RecipeSectionSubTitle = style([
     textStyles.headlineRegular,
     {
         color: vars.color.gray['60'],
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -43,6 +59,14 @@ export const DetailLink = style([
         color: vars.color.gray['60'],
         display: 'flex',
         gap: '4px',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 

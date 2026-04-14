@@ -2,6 +2,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { media } from '@/styles/media';
 
 export const RecipeLink = style({
     display: 'block',
@@ -45,12 +46,30 @@ export const RecipeTitle = style([
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.5rem',
+                fontWeight: 600,
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
+            },
+        },
     },
 ]);
 
 export const RecipeAuthor = style([
     textStyles.body2Regular,
-    { color: vars.color.gray['80'] },
+    {
+        color: vars.color.gray['80'],
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
+    },
 ]);
 
 export const RecipeMeta = style({
@@ -68,6 +87,14 @@ export const IconTimerText = style([
         alignItems: 'center',
         gap: '4px',
         color: vars.color.gray['80'],
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                fontWeight: 600,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -78,6 +105,14 @@ export const IconText = style([
         alignItems: 'center',
         gap: '4px',
         color: vars.color.gray['60'],
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -87,6 +122,11 @@ export const IngredientHeader = style({
     gap: '6px',
     marginBottom: '12px',
     height: '20px',
+    '@media': {
+        [media.mobile]: {
+            height: '17px',
+        },
+    },
 });
 
 export const IngredientTitle = style([
@@ -152,6 +192,14 @@ export const IngredientListItem = style([
         gap: '8px',
         height: '20px',
         alignContent: 'center',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.3rem',
+                lineHeight: '1.3',
+                letterSpacing: '-1.3%',
+                height: '17px',
+            },
+        },
     },
 ]);
 
@@ -159,6 +207,20 @@ export const IngredientName = style({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+    textDecoration: 'underline',
+
+    selectors: {
+        '&:before': {
+            content: '',
+            width: '3px',
+            height: '3px',
+            backgroundColor: vars.color.green['80'],
+            borderRadius: '50%',
+            display: 'inline-block',
+            marginRight: '6px',
+            marginBottom: '4px',
+        },
+    },
 });
 
 export const IngredientAmount = style({
@@ -181,7 +243,16 @@ export const StepSection = style({
 
 export const StepTitle = style([
     textStyles.body2Semibold,
-    { color: vars.color.black },
+    {
+        color: vars.color.black,
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.3rem',
+                lineHeight: '1.3',
+                letterSpacing: '-1.3%',
+            },
+        },
+    },
 ]);
 
 export const StepList = style({
@@ -229,6 +300,13 @@ export const StepText = style([
         display: '-webkit-box',
         WebkitLineClamp: 1,
         WebkitBoxOrient: 'vertical',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.3rem',
+                lineHeight: '1.3',
+                letterSpacing: '-1.3%',
+            },
+        },
     },
 ]);
 

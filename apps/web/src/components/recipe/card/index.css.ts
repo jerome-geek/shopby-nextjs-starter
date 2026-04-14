@@ -71,6 +71,13 @@ export const recipeTitle = style([
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
         height: '3em',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+                lineHeight: '1.4',
+                letterSpacing: '-1.3%',
+            },
+        },
     },
 ]);
 
@@ -78,6 +85,13 @@ export const recipeAuthor = style([
     textStyles.body1Regular,
     {
         color: vars.color.gray['60'],
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -113,6 +127,11 @@ export const recipeMeta = style([
         '@media': {
             [media.desktop]: {
                 gap: '12px',
+            },
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
             },
         },
     },

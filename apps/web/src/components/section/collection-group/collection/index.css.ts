@@ -9,6 +9,12 @@ export const Container = style({
     flexDirection: 'column',
     gap: '24px',
     width: '100%',
+
+    '@media': {
+        [media.mobile]: {
+            gap: '20px',
+        },
+    },
 });
 
 export const CollectionSectionHeader = style({
@@ -27,6 +33,14 @@ export const CollectionSectionTitle = style([
     textStyles.title1Bold,
     {
         color: vars.color.black,
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.8rem',
+                fontWeight: 600,
+                lineHeight: '1.5',
+                letterSpacing: '-1.3%',
+            },
+        },
     },
 ]);
 
@@ -34,6 +48,14 @@ export const CollectionSectionSubTitle = style([
     textStyles.headlineRegular,
     {
         color: vars.color.gray['60'],
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -43,6 +65,14 @@ export const DetailLink = style([
         color: vars.color.gray['60'],
         display: 'flex',
         gap: '4px',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
