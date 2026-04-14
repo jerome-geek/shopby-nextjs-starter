@@ -59,16 +59,43 @@ export const RecipeListItem = style({
     width: '100%',
 });
 
-export const RecipeImage = style({
+export const RecipeCardLink = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    width: '100%',
+    color: 'inherit',
+    textDecoration: 'none',
+});
+
+export const RecipeCardThumbWrapper = style({
     width: '100%',
     aspectRatio: '268/357',
     borderRadius: '8px',
+    overflow: 'hidden',
     objectFit: 'cover',
 
     '@media': {
         [media.mobile]: {
             aspectRatio: '160/213',
             borderRadius: '4px',
+        },
+    },
+});
+
+export const RecipeImage = style({
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    transition: 'transform 180ms ease-out',
+    willChange: 'transform',
+
+    selectors: {
+        [`${RecipeCardLink}:hover &`]: {
+            transform: 'scale(1.04)',
+        },
+        [`${RecipeCardLink}:focus-visible &`]: {
+            transform: 'scale(1.04)',
         },
     },
 });

@@ -3,7 +3,7 @@ import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
-import { TimerIcon } from '@/components/icons/TimerIcon-dev';
+import { TimerIcon } from '@/components/icons/TimerIcon';
 import { UsersIcon } from '@/components/icons/UsersIcon';
 import * as styles from '@/components/recipe/card/index.css';
 import { PATHS } from '@/const/paths';

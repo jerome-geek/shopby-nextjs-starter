@@ -151,9 +151,15 @@ const RecipeGroupDetail = () => {
                                                 </div>
                                             </td>
                                             <td className='px-6 py-4'>
-                                                <span className='text-[14px] font-medium text-[#101828]'>
+                                                <Link
+                                                    to={PATHS.APP.USER_RECIPE.DETAIL.replace(
+                                                        ':sno',
+                                                        String(recipe.recipeSno),
+                                                    )}
+                                                    className='text-[14px] font-medium text-[#101828] hover:text-[#ff6900] hover:underline'
+                                                >
                                                     {recipe.title}
-                                                </span>
+                                                </Link>
                                             </td>
                                             <td className='px-6 py-4'>
                                                 <span className='text-[14px] font-normal text-[#6a7282]'>
@@ -166,7 +172,12 @@ const RecipeGroupDetail = () => {
                                                     showIcon
                                                 />
                                             </td>
-                                            <td className='px-6 py-4 text-right'>
+                                            <td
+                                                className='px-6 py-4 text-right'
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                            >
                                                 <ExternalLinkIconButton />
                                             </td>
                                         </tr>

@@ -1,10 +1,11 @@
 import { ChevronRight } from 'lucide-react';
-
 import Link from 'next/link';
+
 import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 import { vars } from '@/styles/theme.css';
 import { normalizeImageUrl } from '@/utils/shopby';
 import { RecipeExposureGroupItem } from '@/models/shop/recipe';
+import { PATHS } from '@/const/paths';
 
 import { TimerIcon, PeopleIcon } from '@/components/icons';
 
@@ -16,7 +17,13 @@ const toMinutes = (durationSeconds?: number | null) => {
     return Math.ceil(durationSeconds / 60);
 };
 
-const RecipeSection = ({ group }: { group: RecipeExposureGroupItem }) => {
+const RecipeSection = ({
+    group,
+    groupNo,
+}: {
+    group: RecipeExposureGroupItem;
+    groupNo: number;
+}) => {
     return (
         <section className={recipeSectionStyle.Container}>
             <div className={recipeSectionStyle.RecipeSectionHeader}>
@@ -29,8 +36,11 @@ const RecipeSection = ({ group }: { group: RecipeExposureGroupItem }) => {
                     </p>
                 </div>
 
-                <Link href='/recipe' className={recipeSectionStyle.DetailLink}>
-                    자세히보기
+                <Link
+                    href={`${PATHS.RECIPES.MAIN}/groups/${groupNo}/${group.sno}`}
+                    className={recipeSectionStyle.DetailLink}
+                >
+                    전체보기
                     <ChevronRight
                         color={vars.color.gray['60']}
                         width='16'
@@ -46,83 +56,112 @@ const RecipeSection = ({ group }: { group: RecipeExposureGroupItem }) => {
                             key={recipe.sno}
                             className={recipeSectionStyle.RecipeListItem}
                         >
-                            {normalizeImageUrl(recipe.thumbnailUrl ?? '') && (
-                                <img
-                                    className={recipeSectionStyle.RecipeImage}
-                                    src={normalizeImageUrl(
-                                        recipe.thumbnailUrl ?? '',
-                                    )}
-                                    alt={recipe.title}
-                                />
-                            )}
-                            <div
-                                className={
-                                    recipeSectionStyle.RecipeContentsContainer
-                                }
+                            <Link
+                                href={`${PATHS.RECIPES.DETAIL.replace(
+                                    '[recipeNo]',
+                                    recipe.sno.toString(),
+                                )}`}
+                                className={recipeSectionStyle.RecipeCardLink}
                             >
-                                <div>
-                                    <h4
-                                        className={
-                                            recipeSectionStyle.RecipeTitle
-                                        }
-                                    >
-                                        {recipe.title}
-                                    </h4>
-                                    <p
-                                        className={
-                                            recipeSectionStyle.RecipeDescription
-                                        }
-                                    >
-                                        {recipe.authorName}
-                                    </p>
-                                </div>
-
-                                <ul
+                                <div
                                     className={
-                                        recipeSectionStyle.RecipeMetaList
+                                        recipeSectionStyle.RecipeCardThumbWrapper
                                     }
                                 >
-                                    <li
+                                    {normalizeImageUrl(
+                                        recipe.thumbnailUrl ?? '',
+                                    ) && (
+                                        <img
+                                            className={
+                                                recipeSectionStyle.RecipeImage
+                                            }
+                                            src={normalizeImageUrl(
+                                                recipe.thumbnailUrl ?? '',
+                                            )}
+                                            alt={recipe.title}
+                                        />
+                                    )}
+                                </div>
+
+                                <div
+                                    className={
+                                        recipeSectionStyle.RecipeContentsContainer
+                                    }
+                                >
+                                    <div>
+                                        <h4
+                                            className={
+                                                recipeSectionStyle.RecipeTitle
+                                            }
+                                        >
+                                            {recipe.title}
+                                        </h4>
+                                        <p
+                                            className={
+                                                recipeSectionStyle.RecipeDescription
+                                            }
+                                        >
+                                            {recipe.authorName}
+                                        </p>
+                                    </div>
+
+                                    <ul
                                         className={
-                                            recipeSectionStyle.RecipeMetaItem
+                                            recipeSectionStyle.RecipeMetaList
                                         }
                                     >
-                                        <TimerIcon
-                                            currentColor={vars.color.gray['80']}
-                                        />
-                                        <span
+                                        <li
                                             className={
-                                                recipeSectionStyle.RecipeMetaItemText
+                                                recipeSectionStyle.RecipeMetaItem
                                             }
-                                            style={{
-                                                color: vars.color.gray['80'],
-                                            }}
                                         >
-                                            {toMinutes(recipe.durationSeconds)}
-                                            분
-                                        </span>
-                                    </li>
-                                    <li
-                                        className={
-                                            recipeSectionStyle.RecipeMetaItem
-                                        }
-                                    >
-                                        <PeopleIcon
-                                            currentColor={vars.color.gray['60']}
-                                        />
-                                        <span
+                                            <TimerIcon
+                                                currentColor={
+                                                    vars.color.gray['80']
+                                                }
+                                            />
+                                            <span
+                                                className={
+                                                    recipeSectionStyle.RecipeMetaItemText
+                                                }
+                                                style={{
+                                                    color: vars.color.gray[
+                                                        '80'
+                                                    ],
+                                                }}
+                                            >
+                                                {toMinutes(
+                                                    recipe.durationSeconds,
+                                                )}
+                                                분
+                                            </span>
+                                        </li>
+                                        <li
                                             className={
-                                                recipeSectionStyle.RecipeMetaItemText
+                                                recipeSectionStyle.RecipeMetaItem
                                             }
-                                            style={{
-                                                color: vars.color.gray['60'],
-                                            }}
                                         >
-                                            {recipe.servings}인분
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
+                                            <PeopleIcon
+                                                currentColor={
+                                                    vars.color.gray['60']
+                                                }
+                                            />
+                                            <span
+                                                className={
+                                                    recipeSectionStyle.RecipeMetaItemText
+                                                }
+                                                style={{
+                                                    color: vars.color.gray[
+                                                        '60'
+                                                    ],
+                                                }}
+                                            >
+                                                {recipe.servings}인분
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </Link>
                         </li>
                     );
                 })}
