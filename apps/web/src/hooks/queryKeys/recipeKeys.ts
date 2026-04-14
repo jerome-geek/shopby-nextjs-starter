@@ -1,4 +1,7 @@
-import type { SearchPublicRecipesParams } from '@/models/shop/recipe';
+import type {
+    GetRecipeExposureGroupParams,
+    SearchPublicRecipesParams,
+} from '@/models/shop/recipe';
 import { SearchRecipesParams } from '@/models/shop/recipe';
 
 const recipeKeys = {
@@ -20,10 +23,13 @@ const recipeKeys = {
 
     collections: () => [...recipeKeys.all, 'collections'] as const,
 
-    sharedCollections: () =>
-        [...recipeKeys.all, 'shared-collection'] as const,
+    sharedCollections: () => [...recipeKeys.all, 'shared-collection'] as const,
     sharedCollection: (shareCode: string) =>
         [...recipeKeys.sharedCollections(), shareCode] as const,
+
+    exposureGroups: () => [...recipeKeys.all, 'exposure-groups'] as const,
+    exposureGroup: (groupId: string, params?: GetRecipeExposureGroupParams) =>
+        [...recipeKeys.exposureGroups(), groupId, params] as const,
 };
 
 export default recipeKeys;

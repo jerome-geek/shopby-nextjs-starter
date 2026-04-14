@@ -2,6 +2,9 @@
 
 import { useInView, UseInViewOptions } from 'motion/react';
 import { useRef, ReactNode } from 'react';
+import clsx from 'clsx';
+
+import * as styles from '@/components/common/lazy-render.css';
 
 interface LazyRenderProps {
     children: ReactNode;
@@ -32,11 +35,12 @@ function LazyRender({
     return (
         <div
             ref={ref}
+            className={clsx(
+                styles.wrapper,
+                isInView && styles.collapseWhenEmpty,
+            )}
             style={{
                 minHeight: isInView ? 'auto' : minHeight,
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
             }}
         >
             {isInView ? children : null}

@@ -2,6 +2,7 @@ export const RECIPE_GROUP_ID_OPTIONS = [
     { value: 'recipe_group_1', label: 'recipe_group_1' },
     { value: 'recipe_group_2', label: 'recipe_group_2' },
     { value: 'recipe_group_3', label: 'recipe_group_3' },
+    { value: 'recipe_group_4', label: 'recipe_group_4' },
 ];
 
 export const MEMBER_SEARCH_TYPE_OPTIONS: { value: string; label: string }[] = [

@@ -11,9 +11,12 @@ const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
 const Best = dynamic(() => import('@/components/section/best'), {
     ssr: false,
 });
-const RecipeSection = dynamic(() => import('@/components/section/recipe'), {
-    ssr: false,
-});
+const RecipeGroupSection = dynamic(
+    () => import('@/components/section/recipe-group'),
+    {
+        ssr: false,
+    },
+);
 
 export default function Home() {
     return (
@@ -36,10 +39,7 @@ export default function Home() {
                 <HeroBanner />
 
                 <LazyRender minHeight={300}>
-                    <div className={styles.recipeGrid}>
-                        <RecipeSection />
-                        <RecipeSection />
-                    </div>
+                    <RecipeGroupSection groupId='recipe_group_1' />
                 </LazyRender>
 
                 {/* 라이프 타임특가 */}
@@ -52,10 +52,7 @@ export default function Home() {
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
-                    <div className={styles.recipeGrid}>
-                        <RecipeSection />
-                        <RecipeSection />
-                    </div>
+                    <RecipeGroupSection groupId='recipe_group_2' />
                 </LazyRender>
 
                 {/* 키즈 타임특가 */}
@@ -68,10 +65,7 @@ export default function Home() {
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
-                    <div className={styles.recipeGrid}>
-                        <RecipeSection />
-                        <RecipeSection />
-                    </div>
+                    <RecipeGroupSection groupId='recipe_group_3' />
                 </LazyRender>
 
                 {/* 라이프 베스트 */}
@@ -79,7 +73,14 @@ export default function Home() {
                     <Best />
                 </LazyRender>
 
-                {/* <ProductSection /> */}
+                <LazyRender minHeight={300}>
+                    <RecipeGroupSection groupId='recipe_group_4' />
+                </LazyRender>
+
+                {/* 키즈 베스트 */}
+                <LazyRender minHeight={500}>
+                    <Best />
+                </LazyRender>
             </div>
         </>
     );

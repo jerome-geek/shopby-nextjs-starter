@@ -1,11 +1,14 @@
+import { globalStyle, style } from '@vanilla-extract/css';
+
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { style } from '@vanilla-extract/css';
+import { media } from '@/styles/media';
 
 export const Container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
+    width: '100%',
 });
 
 export const RecipeSectionHeader = style({
@@ -44,7 +47,8 @@ export const DetailLink = style([
 ]);
 
 export const RecipeList = style({
-    display: 'flex',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '24px',
 });
 
@@ -52,6 +56,21 @@ export const RecipeListItem = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
+    width: '100%',
+});
+
+export const RecipeImage = style({
+    width: '100%',
+    aspectRatio: '268/357',
+    borderRadius: '8px',
+    objectFit: 'cover',
+
+    '@media': {
+        [media.mobile]: {
+            aspectRatio: '160/213',
+            borderRadius: '4px',
+        },
+    },
 });
 
 export const RecipeContentsContainer = style({
@@ -64,6 +83,11 @@ export const RecipeTitle = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 1,
+        WebkitBoxOrient: 'vertical',
     },
 ]);
 
@@ -71,5 +95,23 @@ export const RecipeDescription = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['60'],
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 1,
+        WebkitBoxOrient: 'vertical',
     },
 ]);
+
+export const RecipeMetaList = style({
+    display: 'flex',
+    gap: '12px',
+});
+
+export const RecipeMetaItem = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+});
+
+export const RecipeMetaItemText = style([textStyles.body2Regular]);

@@ -23,3 +23,5 @@ export { StarMiniIcon } from '@/components/icons/StarMiniIcon';
 export { UserIcon } from '@/components/icons/UserIcon';
 export { CloseIcon } from '@/components/icons/Close';
 export { PlusIcon } from '@/components/icons/Plus';
+export { TimerIcon } from '@/components/icons/TimerIcon';
+export { PeopleIcon } from '@/components/icons/PeopleIcon';
