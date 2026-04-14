@@ -1,7 +1,11 @@
-import { isEmpty } from '@fxts/core';
+import { head, isEmpty } from '@fxts/core';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
 import CollectionSection from '@/components/section/collection-group/collection';
+import CollectionSectionSkeleton from '@/components/section/collection-group/skeleton';
+import { useCollectionExposureGroup } from '@/hooks/suspenseQuery/shop/collection';
+
+import 'swiper/css';
 
 type GroupId =
     | 'collection_group_1'
@@ -10,40 +14,34 @@ type GroupId =
     | 'collection_group_4'
     | 'collection_group_5';
 
-const CollectionSectionSkeleton = () => {
-    return <div></div>;
-};
-
-const CollectionGroupSectionSkeleton = () => {
-    return (
-        <section>
-            <CollectionSectionSkeleton />
-            <CollectionSectionSkeleton />
-        </section>
-    );
-};
-
 const CollectionGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
-    const data: never[] = [];
+    const { data: collectionExposureGroupData } = useCollectionExposureGroup({
+        groupId,
+    });
 
-    if (isEmpty(data)) {
+    const collectionGroup = head(collectionExposureGroupData?.groups ?? []);
+
+    const recipes = collectionGroup?.collection?.recipes ?? [];
+
+    if (!collectionGroup || isEmpty(recipes)) {
         return null;
     }
 
-    console.log('groupId', groupId);
+    const groupNo = Number(groupId.split('_')?.[2]) || 0;
 
     return (
         <section>
-            {data.map((group, index) => (
-                <CollectionSection key={index} group={group} />
-            ))}
+            <CollectionSection
+                collectionGroup={collectionGroup}
+                groupNo={groupNo}
+            />
         </section>
     );
 };
 
 const CollectionGroupSection = ({ groupId }: { groupId: GroupId }) => {
     return (
-        <FetchBoundary fallback={<CollectionGroupSectionSkeleton />}>
+        <FetchBoundary fallback={<CollectionSectionSkeleton />}>
             <CollectionGroupSectionContent groupId={groupId} />
         </FetchBoundary>
     );

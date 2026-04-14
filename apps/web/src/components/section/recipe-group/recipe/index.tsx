@@ -1,11 +1,10 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 import { PATHS } from '@/const/paths';
 import { RecipeExposureGroupItem } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
-
+import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 import { RecipeCard } from '@/components/recipe';
 
 const RecipeSection = ({
@@ -42,7 +41,11 @@ const RecipeSection = ({
 
             <ul className={recipeSectionStyle.RecipeList}>
                 {group?.recipes?.map((recipe) => {
-                    return <RecipeCard key={recipe.sno} recipe={recipe} />;
+                    return (
+                        <li key={recipe.sno}>
+                            <RecipeCard recipe={recipe} />
+                        </li>
+                    );
                 })}
             </ul>
         </section>

@@ -33,24 +33,26 @@ export interface SearchPublicCollectionParams {
     sortBy: 'LATEST' | 'BOOKMARK_COUNT';
 }
 
+export type CollectionExposureGroupItem = {
+    sno: number;
+    groupName: string;
+    description: string;
+    sortOrder: number;
+    isDisplay: boolean;
+    collection: {
+        sno: number;
+        title: string;
+        shareCode: string;
+        memberNo: number;
+        memberName: string;
+        bookmarked: boolean;
+        bookmarkCount: number;
+        recipes: GetRecipeDetailResponse[];
+    };
+};
+
 /** 컬렉션 노출 그룹 응답 */
 export interface CollectionExposureGroupResponse {
     groupId: string;
-    groups: {
-        sno: number;
-        groupName: string;
-        description: string;
-        sortOrder: number;
-        isDisplay: boolean;
-        collection: {
-            sno: number;
-            title: string;
-            shareCode: string;
-            memberNo: number;
-            memberName: string;
-            bookmarked: boolean;
-            bookmarkCount: number;
-            recipes: GetRecipeDetailResponse[];
-        };
-    }[];
+    groups: CollectionExposureGroupItem[];
 }

@@ -25,3 +25,4 @@ export { CloseIcon } from '@/components/icons/Close';
 export { PlusIcon } from '@/components/icons/Plus';
 export { TimerIcon } from '@/components/icons/TimerIcon';
 export { PeopleIcon } from '@/components/icons/PeopleIcon';
+export { CalorieIcon } from '@/components/icons/CalorieIcon';

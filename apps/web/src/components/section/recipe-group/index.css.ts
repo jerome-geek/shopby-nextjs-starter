@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
 
-import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
+import { media } from '@/styles/media';
 
 export const RecipeGroupSection = style({
     display: 'flex',
@@ -17,77 +17,85 @@ export const RecipeGroupSection = style({
     },
 });
 
-const skeletonBase = style({
-    background: vars.color.gray['10'],
+const shimmer = keyframes({
+    '0%': { backgroundPosition: '200% 0' },
+    '100%': { backgroundPosition: '-200% 0' },
+});
+
+export const SkeletonBlock = style({
     borderRadius: '8px',
+    backgroundColor: vars.color.gray['40'],
+});
+
+export const SkeletonBlockSoft = style({
+    borderRadius: '8px',
+    backgroundColor: vars.color.gray['20'],
+});
+
+export const SkeletonShimmer = style({
+    position: 'absolute',
+    inset: 0,
+    borderRadius: 'inherit',
+    background:
+        'linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0) 100%)',
+    backgroundSize: '200% 100%',
+    animation: `${shimmer} 1.8s infinite`,
 });
 
 export const SkeletonTitleBlock = style([
-    skeletonBase,
+    SkeletonBlockSoft,
     {
-        width: '160px',
+        width: '180px',
         height: '22px',
     },
 ]);
 
 export const SkeletonSubTitleBlock = style([
-    skeletonBase,
+    SkeletonBlockSoft,
     {
-        width: '220px',
+        width: '260px',
         height: '18px',
-        opacity: 0.75,
     },
 ]);
 
 export const SkeletonLinkBlock = style([
-    skeletonBase,
+    SkeletonBlockSoft,
     {
-        width: '92px',
+        width: '76px',
         height: '18px',
-        opacity: 0.65,
-    },
-]);
-
-export const SkeletonImage = style([
-    skeletonBase,
-    {
-        width: '100%',
-    },
-]);
-
-export const SkeletonTextLine = style([
-    skeletonBase,
-    {
-        height: '16px',
-        opacity: 0.75,
-    },
-]);
-
-export const SkeletonTextLineShort = style([
-    SkeletonTextLine,
-    {
-        width: '140px',
+        borderRadius: '999px',
     },
 ]);
 
 export const SkeletonTextLineLong = style([
-    SkeletonTextLine,
+    SkeletonBlockSoft,
     {
-        width: '200px',
+        width: '80%',
+        height: '14px',
+        borderRadius: '6px',
+    },
+]);
+
+export const SkeletonTextLineShort = style([
+    SkeletonBlockSoft,
+    {
+        width: '55%',
+        height: '14px',
+        borderRadius: '6px',
     },
 ]);
 
 export const SkeletonMetaRow = style({
     display: 'flex',
-    gap: '12px',
+    gap: '10px',
+    marginTop: '4px',
 });
 
 export const SkeletonMetaChip = style([
-    skeletonBase,
+    SkeletonBlockSoft,
     {
-        width: '72px',
-        height: '16px',
+        width: '56px',
+        height: '14px',
         borderRadius: '999px',
-        opacity: 0.6,
     },
 ]);

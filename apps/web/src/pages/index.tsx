@@ -44,9 +44,7 @@ export default function Home() {
                 {/* Full-width HeroBanner */}
                 <HeroBanner />
 
-                <LazyRender minHeight={300}>
-                    <CollectionGroupSection groupId='collection_group_1' />
-                </LazyRender>
+                <CollectionGroupSection groupId='collection_group_1' />
 
                 <LazyRender minHeight={300}>
                     <RecipeGroupSection groupId='recipe_group_1' />

@@ -251,7 +251,7 @@ export const skeletonCard = style({
     width: 'calc(100% / 1.2 - 2px)',
     aspectRatio: '320 / 427',
     borderRadius: '24px',
-    backgroundColor: vars.color.gray['40'],
+    backgroundColor: vars.color.gray['30'],
     position: 'relative',
     overflow: 'hidden',
 

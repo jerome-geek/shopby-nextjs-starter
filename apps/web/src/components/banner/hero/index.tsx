@@ -16,7 +16,7 @@ import type { Banner } from '@/models/display/banner';
 import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 import { extractBannerContents, normalizeImageUrl } from '@/utils/shopby';
 import * as styles from '@/components/banner/hero/index.css';
-import { useResponsive } from '@/hooks/utils';
+import { BREAKPOINTS } from '@/styles/media';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -34,7 +34,6 @@ function HeroBannerContent() {
         },
     });
 
-    const { isMobile } = useResponsive();
     const swiperRef = useRef<SwiperType | null>(null);
     const hasMultipleBanners = banners.length > 1;
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -43,19 +42,18 @@ function HeroBannerContent() {
     const swiperOptions: SwiperProps = useMemo(
         () => ({
             modules: [Autoplay, Navigation, Pagination, EffectCoverflow],
-            effect: isMobile ? 'coverflow' : 'slide',
-            coverflowEffect: isMobile
-                ? {
-                      rotate: 0,
-                      stretch: 0,
-                      depth: 60,
-                      scale: 0.95,
-                      modifier: 1,
-                      slideShadows: false,
-                  }
-                : undefined,
-            spaceBetween: isMobile ? 12 : 24,
-            slidesPerView: isMobile ? 1.2 : 3,
+            // NOTE: 반응형 옵션 변경은 Swiper breakpoints로 처리 (리마운트 방지)
+            effect: 'coverflow',
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 0,
+                depth: 60,
+                scale: 0.95,
+                modifier: 1,
+                slideShadows: false,
+            },
+            spaceBetween: 12,
+            slidesPerView: 1.2,
             centeredSlides: true,
             loop: hasMultipleBanners,
             watchSlidesProgress: true,
@@ -80,8 +78,42 @@ function HeroBannerContent() {
                 swiperRef.current = swiper;
                 setIsSwiperReady(true);
             },
+            onResize: (swiper) => {
+                // 리사이즈 시 레이아웃 재계산을 즉시 반영 (transition에 덜 영향 받게)
+                swiper.update();
+            },
+            onBreakpoint: (swiper) => {
+                // 브레이크포인트 전환 시 effect/레이아웃 갱신
+                swiper.update();
+            },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1.2,
+                    spaceBetween: 12,
+                    coverflowEffect: {
+                        rotate: 0,
+                        stretch: 0,
+                        depth: 60,
+                        scale: 0.95,
+                        modifier: 1,
+                        slideShadows: false,
+                    },
+                },
+                [BREAKPOINTS.SM]: {
+                    slidesPerView: 3,
+                    spaceBetween: 24,
+                    coverflowEffect: {
+                        rotate: 0,
+                        stretch: 0,
+                        depth: 0,
+                        scale: 1,
+                        modifier: 1,
+                        slideShadows: false,
+                    },
+                },
+            },
         }),
-        [isMobile, hasMultipleBanners, isAutoPlaying],
+        [hasMultipleBanners, isAutoPlaying],
     );
 
     const onAutoPlayButtonClick = () => {
@@ -123,7 +155,7 @@ function HeroBannerContent() {
                     )}
 
                     <Swiper
-                        key={`${banners.length}-${isMobile}`}
+                        key={`${banners.length}`}
                         {...swiperOptions}
                         style={{
                             ...swiperOptions.style,
