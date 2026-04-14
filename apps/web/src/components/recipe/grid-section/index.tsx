@@ -17,9 +17,10 @@ import { FailedCard } from '@/components/recipe/grid-section/failed-card';
 import * as styles from '@/components/recipe/grid-section/index.css';
 import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
 import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
+import { RecipeCard } from '@/components/recipe/card';
 import PagingV2 from '@/components/ui/paging-v2';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
-import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
+import { useSearchMyRecipeList } from '@/hooks/query/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { SearchRecipesParams } from '@/models/shop/recipe';
@@ -49,12 +50,11 @@ const RecipeGridSectionContent = ({
         order: 'DESC',
     });
 
-    const { data } = useSearchMyRecipeList({
+    const { data: searchMyRecipeListData, isPending } = useSearchMyRecipeList({
         searchParams,
     });
-    const recipes = data.data ?? [];
 
-    console.log('🚀 ~ RecipeGridSection ~ recipes:', recipes);
+    const recipeList = searchMyRecipeListData?.data ?? [];
 
     const handleImageLoad = (sno: number) => {
         setLoadedImages((prev) => ({ ...prev, [sno]: true }));
@@ -83,18 +83,22 @@ const RecipeGridSectionContent = ({
         );
     };
 
+    if (isPending) {
+        return <RecipeGridSkeleton />;
+    }
+
     return (
         <section className={styles.section}>
             <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>{t(title)}</h2>
-                {recipes.length > 0 && (
+                {recipeList.length > 0 && (
                     <div className={styles.viewAll} onClick={onViewAll}>
                         {t('전체보기')} <ChevronRight size={14} />
                     </div>
                 )}
             </div>
 
-            {recipes.length === 0 ? (
+            {recipeList.length === 0 ? (
                 <motion.div
                     className={styles.emptyState}
                     initial={{ opacity: 0, y: 10 }}
@@ -124,7 +128,7 @@ const RecipeGridSectionContent = ({
                 </motion.div>
             ) : (
                 <div className={styles.recipeGrid}>
-                    {recipes.map((r) => {
+                    {recipeList.map((r) => {
                         const isProcessing = r.recipeStatus === 'PROCESSING';
                         const isFailed = r.recipeStatus === 'FAILED';
                         const isLoaded = loadedImages[r.sno] || !r.thumbnailUrl;
@@ -138,133 +142,125 @@ const RecipeGridSectionContent = ({
                         }
 
                         return (
-                            <Link
-                                href={`/recipes/${r.sno}`}
-                                key={r.sno}
-                                className={styles.container}
-                            >
-                                <motion.div
-                                    whileHover={{ y: -4 }}
-                                    style={{
-                                        display: 'block',
-                                        textDecoration: 'none',
-                                    }}
-                                >
-                                    <div className={styles.recipeImgArea}>
-                                        {!isLoaded && (
-                                            <div
-                                                className={
-                                                    styles.skeletonThumbnail
-                                                }
-                                            >
-                                                <Loader2
-                                                    className={styles.spinner}
-                                                    size={24}
-                                                />
-                                            </div>
-                                        )}
-                                        {r.thumbnailUrl ? (
-                                            <motion.img
-                                                src={r.thumbnailUrl}
-                                                className={styles.productImg}
-                                                alt={r.title}
-                                                initial={{ opacity: 0 }}
-                                                animate={{
-                                                    opacity: isLoaded ? 1 : 0,
-                                                }}
-                                                onLoad={() =>
-                                                    handleImageLoad(r.sno)
-                                                }
-                                                style={{
-                                                    display: isLoaded
-                                                        ? 'block'
-                                                        : 'none',
-                                                }}
-                                            />
-                                        ) : (
-                                            <div
-                                                className={
-                                                    styles.skeletonThumbnail
-                                                }
-                                                style={{
-                                                    backgroundColor:
-                                                        vars.color.gray['10'],
-                                                }}
-                                            >
-                                                <ChefHat
-                                                    size={32}
-                                                    color={
-                                                        vars.color.gray['30']
-                                                    }
-                                                />
-                                            </div>
-                                        )}
-                                        <div
-                                            style={{
-                                                position: 'absolute',
-                                                top: '8px',
-                                                right: '8px',
-                                                zIndex: 2,
-                                            }}
-                                        >
-                                            <Bookmark
-                                                size={18}
-                                                fill={
-                                                    r.bookmarked
-                                                        ? vars.color.green['80']
-                                                        : vars.color.white
-                                                }
-                                                color={
-                                                    r.bookmarked
-                                                        ? vars.color.green['80']
-                                                        : vars.color.white
-                                                }
-                                            />
-                                        </div>
-                                    </div>
+                            <RecipeCard key={r.sno} recipe={r} />
+                            // <Link
+                            //     href={`/recipes/${r.sno}`}
+                            //     key={r.sno}
+                            //     className={styles.container}
+                            // >
+                            //     <motion.div
+                            //         whileHover={{ y: -4 }}
+                            //         style={{
+                            //             display: 'block',
+                            //             textDecoration: 'none',
+                            //         }}
+                            //     >
+                            //         <div className={styles.recipeImgArea}>
+                            //             {!isLoaded && (
+                            //                 <div
+                            //                     className={
+                            //                         styles.skeletonThumbnail
+                            //                     }
+                            //                 >
+                            //                     <Loader2
+                            //                         className={styles.spinner}
+                            //                         size={24}
+                            //                     />
+                            //                 </div>
+                            //             )}
+                            //             {r.thumbnailUrl ? (
+                            //                 <motion.img
+                            //                     src={r.thumbnailUrl}
+                            //                     className={styles.productImg}
+                            //                     alt={r.title}
+                            //                     initial={{ opacity: 0 }}
+                            //                     animate={{
+                            //                         opacity: isLoaded ? 1 : 0,
+                            //                     }}
+                            //                     onLoad={() =>
+                            //                         handleImageLoad(r.sno)
+                            //                     }
+                            //                     style={{
+                            //                         display: isLoaded
+                            //                             ? 'block'
+                            //                             : 'none',
+                            //                     }}
+                            //                 />
+                            //             ) : (
+                            //                 <div
+                            //                     className={
+                            //                         styles.skeletonThumbnail
+                            //                     }
+                            //                     style={{
+                            //                         backgroundColor:
+                            //                             vars.color.gray['10'],
+                            //                     }}
+                            //                 >
+                            //                     <ChefHat
+                            //                         size={32}
+                            //                         color={
+                            //                             vars.color.gray['30']
+                            //                         }
+                            //                     />
+                            //                 </div>
+                            //             )}
+                            //             <div
+                            //                 style={{
+                            //                     position: 'absolute',
+                            //                     top: '8px',
+                            //                     right: '8px',
+                            //                     zIndex: 2,
+                            //                 }}
+                            //             >
+                            //                 <Bookmark
+                            //                     size={18}
+                            //                     fill={
+                            //                         r.bookmarked
+                            //                             ? vars.color.green['80']
+                            //                             : vars.color.white
+                            //                     }
+                            //                     color={
+                            //                         r.bookmarked
+                            //                             ? vars.color.green['80']
+                            //                             : vars.color.white
+                            //                     }
+                            //                 />
+                            //             </div>
+                            //         </div>
 
-                                    <div className={styles.productInfo}>
-                                        <h3 className={styles.recipeTitle}>
-                                            {r.title}
-                                        </h3>
-                                        <span className={styles.recipeAuthor}>
-                                            {r.authorName || t('익명')}
-                                        </span>
-                                        <div className={styles.recipeMeta}>
-                                            <span className={styles.iconText}>
-                                                <Clock size={12} />{' '}
-                                                {Math.floor(
-                                                    (r.durationSeconds || 0) /
-                                                        60,
-                                                )}
-                                                {t('분')}
-                                            </span>
-                                            <span className={styles.iconText}>
-                                                <Users size={12} /> {r.servings}
-                                                {t('인분')}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </Link>
+                            //         <div className={styles.productInfo}>
+                            //             <h3 className={styles.recipeTitle}>
+                            //                 {r.title}
+                            //             </h3>
+                            //             <span className={styles.recipeAuthor}>
+                            //                 {r.authorName || t('익명')}
+                            //             </span>
+                            //             <div className={styles.recipeMeta}>
+                            //                 <span className={styles.iconText}>
+                            //                     <Clock size={12} />{' '}
+                            //                     {Math.floor(
+                            //                         (r.durationSeconds || 0) /
+                            //                             60,
+                            //                     )}
+                            //                     {t('분')}
+                            //                 </span>
+                            //                 <span className={styles.iconText}>
+                            //                     <Users size={12} /> {r.servings}
+                            //                     {t('인분')}
+                            //                 </span>
+                            //             </div>
+                            //         </div>
+                            //     </motion.div>
+                            // </Link>
                         );
                     })}
                 </div>
             )}
-            {/* {recipes.length > 0 && (
-                <div className={styles.pagination}>
-                    <span style={{ color: vars.color.black, fontWeight: 700 }}>
-                        1
-                    </span>
-                    <span>2</span>
-                    <ChevronRight size={14} />
-                </div>
-            )} */}
 
-            {recipes.length > 0 && (
+            {recipeList.length > 0 && (
                 <PagingV2
                     currentPage={Number(searchParams.page)}
-                    totalCount={data?.count ?? 0}
+                    totalCount={searchMyRecipeListData?.count ?? 0}
                     pageSize={Number(searchParams.take)}
                     onPageClick={(nextPage) =>
                         setSearchParams((prev) => ({

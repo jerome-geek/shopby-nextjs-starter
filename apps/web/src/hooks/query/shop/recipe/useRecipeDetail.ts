@@ -1,9 +1,13 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import {
+    keepPreviousData,
+    useQuery,
+    type UseQueryOptions,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { recipe } from '@/api/shop';
 import { recipeKeys } from '@/hooks/queryKeys';
-import { GetRecipeDetailResponse } from '@/models/shop/recipe';
+import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 
 interface UseRecipeDetailParams<T = GetRecipeDetailResponse> {
     sno: number;
@@ -33,6 +37,7 @@ const useRecipeDetail = <T = GetRecipeDetailResponse>({
         },
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10,
+        placeholderData: keepPreviousData,
         ...options,
     });
 };

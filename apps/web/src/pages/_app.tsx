@@ -20,11 +20,11 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import { ExternalScripts } from '@/components/common';
 import { DefaultLayout } from '@/components/layout';
 import { AppProviders } from '@/providers';
+import { env } from '@/configs/env';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
 import 'react-day-picker/dist/style.css';
-import { env } from '@/configs/env';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -42,7 +42,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
             new QueryClient({
                 defaultOptions: {
                     queries: {
-                        staleTime: 60 * 1000,
+                        staleTime: 1000 * 60 * 5,
+                        gcTime: 1000 * 60 * 10,
                         refetchOnWindowFocus:
                             process.env.NODE_ENV === 'production',
                         refetchOnMount: process.env.NODE_ENV === 'production',

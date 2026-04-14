@@ -23,7 +23,7 @@ export const recipeThumbWrapper = style({
     position: 'relative',
     width: '100%',
     aspectRatio: '3 / 4',
-    borderRadius: '4px',
+    borderRadius: '8px',
     overflow: 'hidden',
     background: vars.color.gray['10'],
 });
@@ -70,6 +70,7 @@ export const recipeTitle = style([
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
+        height: '3em',
     },
 ]);
 
