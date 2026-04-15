@@ -1,35 +1,40 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { pipe, some, values } from '@fxts/core';
+import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'motion/react';
+import { overlay, useOverlayData } from 'overlay-kit';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { CategoryDrawer } from '@/components/drawer/category';
+import * as styles from '@/components/layout/header/Menu.css';
+import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
+import { useResponsive } from '@/hooks/utils/useResponsive';
 import { GetCategoryResponse } from '@/models/display/category';
-import * as styles from './Menu.css';
 
 interface MenuProps {
     categoryData?: GetCategoryResponse;
 }
 
 const MenuIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <svg width='20' height='20' viewBox='0 0 24 24' fill='none'>
         <path
-            d="M3 12H21M3 6H21M3 18H21"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            d='M3 12H21M3 6H21M3 18H21'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
         />
     </svg>
 );
 
 const ArrowRightIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <svg width='20' height='20' viewBox='0 0 24 24' fill='none'>
         <path
-            d="M9 18L15 12L9 6"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            d='M9 18L15 12L9 6'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
         />
     </svg>
 );
@@ -57,7 +62,28 @@ export function Menu({ categoryData }: MenuProps) {
         );
     }, [rootCategories, activeCategoryNo]);
 
-    const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+    const { isMobile } = useResponsive();
+
+    const overlayData = useOverlayData();
+    const isMenuDrawerOpen = pipe(
+        overlayData,
+        values,
+        some((item) => item.id === OVERLAY_ID.CATEGORY_DRAWER),
+    );
+
+    const toggleDrawer = () => {
+        if (isMobile) {
+            if (isMenuDrawerOpen) {
+                overlay.close(OVERLAY_ID.CATEGORY_DRAWER);
+                return;
+            }
+            overlay.open((props) => <CategoryDrawer {...props} />, {
+                overlayId: OVERLAY_ID.CATEGORY_DRAWER,
+            });
+            return;
+        }
+        setIsDrawerOpen(!isDrawerOpen);
+    };
 
     // 스크롤 가능 여부 체크
     const checkScrollable = () => {
@@ -196,7 +222,7 @@ export function Menu({ categoryData }: MenuProps) {
             </div>
 
             <AnimatePresence>
-                {isDrawerOpen && (
+                {!isMobile && isDrawerOpen && (
                     <motion.div
                         className={styles.drawerContainer}
                         initial={{ opacity: 0, height: 0 }}
@@ -235,18 +261,18 @@ export function Menu({ categoryData }: MenuProps) {
                                         {activeCategoryNo ===
                                             category.categoryNo && (
                                             <svg
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
+                                                width='16'
+                                                height='16'
+                                                viewBox='0 0 24 24'
+                                                fill='none'
                                                 style={{ marginLeft: 'auto' }}
                                             >
                                                 <path
-                                                    d="M9 18L15 12L9 6"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
+                                                    d='M9 18L15 12L9 6'
+                                                    stroke='currentColor'
+                                                    strokeWidth='2'
+                                                    strokeLinecap='round'
+                                                    strokeLinejoin='round'
                                                 />
                                             </svg>
                                         )}
@@ -315,7 +341,7 @@ export function Menu({ categoryData }: MenuProps) {
                                         <button
                                             className={styles.scrollButton}
                                             onClick={handleScrollNext}
-                                            aria-label="Next"
+                                            aria-label='Next'
                                         >
                                             <ArrowRightIcon />
                                         </button>
