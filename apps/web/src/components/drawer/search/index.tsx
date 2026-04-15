@@ -62,9 +62,9 @@ export const SearchDrawer = ({
 
                     <motion.div
                         className={styles.container}
-                        initial={{ x: isMobile ? '-100%' : '100%' }}
+                        initial={{ x: '100%' }}
                         animate={{ x: 0 }}
-                        exit={{ x: isMobile ? '-100%' : '100%' }}
+                        exit={{ x: '100%' }}
                         transition={{
                             type: 'spring',
                             stiffness: 500,

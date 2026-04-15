@@ -109,6 +109,8 @@ export const CategoryDrawer = ({
                             })}
                         </div>
 
+                        <div>{/* TODO: 카테고리 영역 */}</div>
+
                         <div className={styles.content} data-lenis-prevent>
                             <FetchBoundary
                                 fallback={<RecommendProductsSkeleton />}

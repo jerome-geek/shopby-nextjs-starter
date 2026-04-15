@@ -208,15 +208,6 @@ export const sectionTitle = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
-
-        '@media': {
-            [media.desktop]: {
-                fontWeight: '700',
-                fontSize: '2.2rem',
-                lineHeight: '1.32',
-                letterSpacing: '-2%',
-            },
-        },
     },
 ]);
 
@@ -402,16 +393,6 @@ export const productSectionContainer = style({
             gap: '24px',
             borderTop: 'none',
             padding: '0',
-        },
-    },
-});
-
-/** 모바일에서 추천 상품 제목만 다른 섹션과 같은 인셋 */
-export const productSectionTitle = style({
-    padding: '0 20px',
-    '@media': {
-        [media.desktop]: {
-            padding: 0,
         },
     },
 });
