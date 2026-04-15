@@ -262,7 +262,7 @@ export const rankingList = style({
     },
 });
 
-export const rankingItemButton = style([
+export const rankingItemLink = style([
     textStyles.body1Regular,
     {
         width: '100%',

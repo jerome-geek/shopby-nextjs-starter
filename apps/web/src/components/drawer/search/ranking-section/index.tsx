@@ -101,7 +101,7 @@ export const RankingSection = ({
                                     <li key={`${item}-${sliceStart + index}`}>
                                         <Link
                                             className={
-                                                drawerStyles.rankingItemButton
+                                                drawerStyles.rankingItemLink
                                             }
                                             onClick={() => onItemClick(item)}
                                             href={{
