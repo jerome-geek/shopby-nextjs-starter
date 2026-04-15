@@ -1,16 +1,18 @@
-import { useState } from 'react';
-import Link from 'next/link';
 import { AnimatePresence, motion } from 'motion/react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
-import { DefaultModalLayoutProps } from '@/components/layout';
-import { BigCartIcon } from '@/components/icons';
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import * as styles from '@/components/drawer/category/index.css';
+import { QuickMenuSkeleton } from '@/components/drawer/category/quick-menu-skeleton';
+import { QuickMenuSwiper } from '@/components/drawer/category/quick-menu-swiper';
 import { RecommendProductsSection } from '@/components/drawer/search/recommend-products-section';
 import { RecommendProductsSkeleton } from '@/components/drawer/search/recommend-products-section/skeleton';
+import { BigCartIcon } from '@/components/icons';
+import { DefaultModalLayoutProps } from '@/components/layout';
+import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
-import * as styles from '@/components/drawer/category/index.css';
 
 type Tab = '쇼핑' | '레시피';
 const TABS: Tab[] = ['쇼핑', '레시피'];
@@ -62,6 +64,10 @@ export const CategoryDrawer = ({
                                 )}
                             </Link>
                         </div>
+
+                        <FetchBoundary fallback={<QuickMenuSkeleton />}>
+                            <QuickMenuSwiper onNavigate={close} />
+                        </FetchBoundary>
 
                         <div className={styles.tabBar}>
                             {TABS.map((tab) => {
