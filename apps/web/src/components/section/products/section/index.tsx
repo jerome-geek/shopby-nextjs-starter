@@ -3,7 +3,10 @@ import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 
-import { ProductsSearchResponse } from '@/models/product/product';
+import {
+    GetBestReviewProductsResponse,
+    ProductsSearchResponse,
+} from '@/models/product/product';
 import * as styles from '@/components/section/products/section/index.css';
 import { BREAKPOINTS } from '@/styles/media';
 import { ProductCard } from '@/components/product';
@@ -17,7 +20,7 @@ const Products = ({
 }: {
     title: string;
     description: string;
-    products: ProductsSearchResponse;
+    products: ProductsSearchResponse | GetBestReviewProductsResponse;
 }) => {
     const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(
         null,
@@ -70,7 +73,10 @@ const Products = ({
                 >
                     {products.items.map((product) => (
                         <SwiperSlide key={product.productNo}>
-                            <ProductCard {...product} />
+                            <ProductCard
+                                {...product}
+                                isTimeSaleEnabled={false}
+                            />
                         </SwiperSlide>
                     ))}
                 </Swiper>

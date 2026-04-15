@@ -1,11 +1,14 @@
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
+import { keepPreviousData } from '@tanstack/react-query';
 
 import { LazyRender } from '@/components/common';
+import { ObserverTarget } from '@/components/common/observer-target';
 import { ShopType } from '@/pages/shop/[slug]';
-import { useEventList } from '@/hooks/query/display/event';
-import ProductsSearch from '../products/search';
+import ProductsSearch from '@/components/section/products/search';
+import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
+import { GetEventsV2Params } from '@/models/display/event';
 
 const Best = dynamic(() => import('@/components/section/best'), {
     ssr: false,
@@ -13,6 +16,12 @@ const Best = dynamic(() => import('@/components/section/best'), {
 const Event = dynamic(() => import('@/components/section/event'), {
     ssr: false,
 });
+const BestReview = dynamic(
+    () => import('@/components/section/products/best-review'),
+    {
+        ssr: false,
+    },
+);
 
 const CATEGORY_NO = {
     kids: 1173127,
@@ -23,23 +32,49 @@ const SectionGroup = () => {
     const router = useRouter();
     const type = router.query.slug as ShopType;
 
-    const { data: eventListData } = useEventList({
-        searchParams: {
-            page: {
-                number: 1,
-                size: 7,
-            },
-            order: {
-                by: 'REGISTER_DATE',
-                direction: 'DESC',
-            },
-            categoryNos: [CATEGORY_NO[type]],
+    const searchParams: GetEventsV2Params = {
+        page: {
+            number: 1,
+            size: 7,
+        },
+        order: {
+            by: 'REGISTER_DATE',
+            direction: 'DESC',
+        },
+        categoryNos: [CATEGORY_NO[type]],
+    };
+
+    const {
+        data: infiniteEventListData,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
+    } = useInfiniteEventList({
+        searchParams,
+        options: {
+            placeholderData: keepPreviousData,
         },
     });
 
+    const eventList = useMemo(
+        () =>
+            infiniteEventListData?.pages?.flatMap((page) => page.contents) ??
+            [],
+        [infiniteEventListData],
+    );
+
     const eventNoList = useMemo(
-        () => eventListData?.contents?.map((event) => event.eventNo),
-        [eventListData],
+        () => eventList?.map((event) => event.eventNo),
+        [eventList],
+    );
+
+    const filteredEventNoList = useMemo(() => {
+        return eventNoList.slice(7);
+    }, [eventNoList]);
+
+    const totalCount = useMemo(
+        () => infiniteEventListData?.pages?.[0]?.totalCount ?? 0,
+        [infiniteEventListData],
     );
 
     return (
@@ -97,19 +132,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <ProductsSearch
-                    title='후기 좋은 순'
-                    description='실제 구매자들이 인정한 만족도 높은 상품'
-                    searchParams={{
-                        filter: {
-                            soldout: true,
-                        },
-                        order: {
-                            by: 'REVIEW',
-                            direction: 'DESC',
-                        },
-                    }}
-                />
+                <BestReview />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -139,6 +162,22 @@ const SectionGroup = () => {
             <LazyRender minHeight={400}>
                 <Event eventNo={eventNoList?.[6]} />
             </LazyRender>
+
+            {filteredEventNoList.map((eventNo) => (
+                <LazyRender minHeight={400} key={eventNo}>
+                    <Event eventNo={eventNo} />
+                </LazyRender>
+            ))}
+
+            <ObserverTarget
+                onIntersect={() => {
+                    if (!isFetchingNextPage && hasNextPage) {
+                        fetchNextPage();
+                    }
+                }}
+                hasNextPage={hasNextPage || false}
+                totalCount={totalCount}
+            />
         </>
     );
 };

@@ -8,7 +8,7 @@ import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
 import EventItem from '@/components/event/list/event-item';
 import { EVENT_LIST } from '@/const/event';
-import { useInfiniteEventList } from '@/hooks/query/display/event';
+import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import { useResponsive } from '@/hooks/utils';
 import { GetEventsV2Params } from '@/models/display';
 

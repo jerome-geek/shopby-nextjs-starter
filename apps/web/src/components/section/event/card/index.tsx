@@ -93,7 +93,10 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
                                         key={product.productNo}
                                         className={styles.productItem}
                                     >
-                                        <ProductCardRow {...product} />
+                                        <ProductCardRow
+                                            {...product}
+                                            isTimeSaleEnabled={false}
+                                        />
                                     </li>
                                 ),
                             )}

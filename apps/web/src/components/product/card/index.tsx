@@ -27,6 +27,7 @@ export interface ProductCardProps {
     isAdditionalDiscount?: boolean;
     isHideLikeButton?: boolean;
     rank?: number;
+    isTimeSaleEnabled?: boolean;
 }
 
 const ProductCard = ({
@@ -46,6 +47,7 @@ const ProductCard = ({
     isAdditionalDiscount,
     isHideLikeButton = false,
     rank,
+    isTimeSaleEnabled = true,
 }: ProductCardProps) => {
     const { onLikeButtonClick } = useProductLike();
 
@@ -74,7 +76,11 @@ const ProductCard = ({
                 {rank && <span className={styles.rank}>{rank}</span>}
             </Link>
 
-            <ProductAdditionalDiscount type='thumbnail' productNo={productNo} />
+            <ProductAdditionalDiscount
+                type='thumbnail'
+                productNo={productNo}
+                isTimeSaleEnabled={isTimeSaleEnabled}
+            />
 
             <div className={styles.productInfoContainer}>
                 <div className={styles.brandInfoWrapper}>

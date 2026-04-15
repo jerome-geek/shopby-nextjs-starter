@@ -4,7 +4,6 @@ import useEventList from '@/hooks/query/display/event/useEventList';
 import useEventProductSection from '@/hooks/query/display/event/useEventProductSection';
 import useEventsByProduct from '@/hooks/query/display/event/useEventsByProduct';
 import useEventsByEventNos from '@/hooks/query/display/event/useEventsByEventNos';
-import useInfiniteEventList from '@/hooks/query/display/event/useInfiniteEventList';
 
 export {
     useEvent,
@@ -13,5 +12,4 @@ export {
     useEventProductSection,
     useEventsByProduct,
     useEventsByEventNos,
-    useInfiniteEventList,
 };
