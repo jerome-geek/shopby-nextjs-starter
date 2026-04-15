@@ -1,22 +1,18 @@
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useCallback, useMemo, useState } from 'react';
-import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { useState } from 'react';
 
-import { ObserverTarget } from '@/components/common/observer-target';
+import FetchBoundary from '@/components/common/FetchBoundary';
 import * as styles from '@/components/drawer/search/index.css';
 import { RankingSection } from '@/components/drawer/search/ranking-section';
+import { RecommendProductsSection } from '@/components/drawer/search/recommend-products-section';
+import { RecommendProductsSkeleton } from '@/components/drawer/search/recommend-products-section/skeleton';
 import { DefaultModalLayoutProps } from '@/components/layout';
-import { ProductCard } from '@/components/product';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { Column } from '@/components/ui/layout/flex';
-import { useInfiniteProductSectionProductList } from '@/hooks/query/display/productSection';
 import { useFavoriteKeywords } from '@/hooks/query/product/product';
 import { useSearchKeyword } from '@/hooks/useSearchKeyword';
 import { useResponsive } from '@/hooks/utils';
-import { ImageUrlType } from '@/models/product';
 
 const DEFAULT_RECIPE_KEYWORDS = [
     '고든 램지 삼겹살 요리',
@@ -45,77 +41,6 @@ export const SearchDrawer = ({
     const { data: favoriteKeywordData = [] } = useFavoriteKeywords({
         size: 18,
     });
-
-    const {
-        data: infiniteProductSectionData,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useInfiniteProductSectionProductList({
-        sectionId: 'SEARCH_RECOMMEND',
-        searchParams: {
-            by: 'ADMIN_SETTING',
-            direction: 'DESC',
-            soldout: false,
-            saleStatus: 'RESERVATION_AND_ONSALE',
-            pageSize: 6,
-            hasOptionValues: false,
-            includeStopProduct: false,
-            hasTotalCount: true,
-        },
-    });
-
-    const productTotalCount =
-        infiniteProductSectionData?.pages[0]?.data.productTotalCount ?? 0;
-
-    const filteredProducts = useMemo(() => {
-        const products =
-            infiniteProductSectionData?.pages.flatMap(
-                (page) => page.data.products,
-            ) ?? [];
-
-        return products.map((product) => ({
-            ...product,
-            imageUrlInfo: product.imageUrlInfo?.map((img) => ({
-                url: img.url,
-                type: 'IMAGE_URL',
-            })),
-            stickerInfos:
-                product.stickerInfos?.map((sticker) => ({
-                    type: sticker.type,
-                    label: sticker.label,
-                    name: sticker.label,
-                })) || [],
-        }));
-    }, [infiniteProductSectionData]);
-
-    const handleRecommendSlideChange = useCallback(
-        (swiper: SwiperType) => {
-            if (!hasNextPage || isFetchingNextPage) {
-                return;
-            }
-
-            const total = filteredProducts.length;
-
-            if (total === 0) {
-                return;
-            }
-
-            const { activeIndex } = swiper;
-
-            const thresholdIndex = Math.max(0, total - 2);
-
-            if (activeIndex >= thresholdIndex) {
-                fetchNextPage();
-            }
-        },
-        [
-            fetchNextPage,
-            filteredProducts.length,
-            hasNextPage,
-            isFetchingNextPage,
-        ],
-    );
 
     const submitSearch = (value: string) => {
         if (searchByKeyword(value)) {
@@ -190,159 +115,11 @@ export const SearchDrawer = ({
                                     />
                                 </div>
 
-                                {filteredProducts.length > 0 && (
-                                    <Column
-                                        className={
-                                            styles.productSectionContainer
-                                        }
-                                    >
-                                        <h3
-                                            className={`${styles.sectionTitle} ${styles.productSectionTitle}`}
-                                        >
-                                            추천 상품
-                                        </h3>
-                                        {isMobile ? (
-                                            <Swiper
-                                                className={
-                                                    styles.recommendSwiper
-                                                }
-                                                slidesPerView={2.3}
-                                                spaceBetween={12}
-                                                onSlideChange={
-                                                    handleRecommendSlideChange
-                                                }
-                                                slidesOffsetBefore={20}
-                                                slidesOffsetAfter={20}
-                                            >
-                                                {filteredProducts.map(
-                                                    (product) => (
-                                                        <SwiperSlide
-                                                            key={
-                                                                product.productNo
-                                                            }
-                                                            className={
-                                                                styles.recommendSlide
-                                                            }
-                                                        >
-                                                            <div
-                                                                className={
-                                                                    styles.recommendCardWrap
-                                                                }
-                                                            >
-                                                                <ProductCard
-                                                                    productNo={
-                                                                        product.productNo
-                                                                    }
-                                                                    productName={
-                                                                        product.productName
-                                                                    }
-                                                                    brandName={
-                                                                        product.brandName
-                                                                    }
-                                                                    brandNo={
-                                                                        product.brandNo
-                                                                    }
-                                                                    salePrice={
-                                                                        product.salePrice
-                                                                    }
-                                                                    immediateDiscountAmt={
-                                                                        product.immediateDiscountAmt
-                                                                    }
-                                                                    additionDiscountAmt={
-                                                                        product.additionDiscountAmt
-                                                                    }
-                                                                    imageUrlInfo={
-                                                                        product.imageUrlInfo as ImageUrlType[]
-                                                                    }
-                                                                    stickerInfos={
-                                                                        product.stickerInfos
-                                                                    }
-                                                                    likeCount={
-                                                                        product.likeCount
-                                                                    }
-                                                                    liked={
-                                                                        product.liked
-                                                                    }
-                                                                    reviewRating={
-                                                                        product.reviewRating
-                                                                    }
-                                                                    totalReviewCount={
-                                                                        product.totalReviewCount
-                                                                    }
-                                                                    isAdditionalDiscount
-                                                                />
-                                                            </div>
-                                                        </SwiperSlide>
-                                                    ),
-                                                )}
-                                            </Swiper>
-                                        ) : (
-                                            <div className={styles.productGrid}>
-                                                {filteredProducts.map(
-                                                    (product) => (
-                                                        <ProductCard
-                                                            key={
-                                                                product.productNo
-                                                            }
-                                                            productNo={
-                                                                product.productNo
-                                                            }
-                                                            productName={
-                                                                product.productName
-                                                            }
-                                                            brandName={
-                                                                product.brandName
-                                                            }
-                                                            brandNo={
-                                                                product.brandNo
-                                                            }
-                                                            salePrice={
-                                                                product.salePrice
-                                                            }
-                                                            immediateDiscountAmt={
-                                                                product.immediateDiscountAmt
-                                                            }
-                                                            additionDiscountAmt={
-                                                                product.additionDiscountAmt
-                                                            }
-                                                            imageUrlInfo={
-                                                                product.imageUrlInfo as ImageUrlType[]
-                                                            }
-                                                            stickerInfos={
-                                                                product.stickerInfos
-                                                            }
-                                                            likeCount={
-                                                                product.likeCount
-                                                            }
-                                                            liked={
-                                                                product.liked
-                                                            }
-                                                            reviewRating={
-                                                                product.reviewRating
-                                                            }
-                                                            totalReviewCount={
-                                                                product.totalReviewCount
-                                                            }
-                                                            isAdditionalDiscount
-                                                        />
-                                                    ),
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {!isMobile && (
-                                            <ObserverTarget
-                                                onIntersect={() => {
-                                                    if (hasNextPage) {
-                                                        fetchNextPage();
-                                                    }
-                                                }}
-                                                hasNextPage={hasNextPage}
-                                                totalCount={productTotalCount}
-                                            />
-                                        )}
-                                    </Column>
-                                )}
+                                <FetchBoundary
+                                    fallback={<RecommendProductsSkeleton />}
+                                >
+                                    <RecommendProductsSection />
+                                </FetchBoundary>
                             </Column>
                         </div>
                     </motion.div>
