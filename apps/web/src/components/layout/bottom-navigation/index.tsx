@@ -64,7 +64,7 @@ export default function BottomNavigation() {
         if (typeof document !== 'undefined') {
             document.documentElement.style.setProperty(
                 '--bottom-nav-active-height',
-                hidden ? '0px' : '64px'
+                hidden ? '0px' : '64px',
             );
         }
         return () => {
@@ -89,12 +89,15 @@ export default function BottomNavigation() {
         },
         {
             label: t('만들기'),
-            href: '/create',
+            href: {
+                pathname: router.pathname,
+                query: { ...router.query, modal: 'recipe-create' },
+            },
             icon: CreateIcon,
         },
         {
             label: t('스크랩북'),
-            href: '/scrapbook',
+            href: PATHS.RECIPES.SCRAP,
             icon: ScrapIcon,
         },
         {
@@ -118,10 +121,14 @@ export default function BottomNavigation() {
             }}
         >
             {navItems.map(({ label, href, icon: Icon }) => {
-                const isActive = router.pathname === href;
+                const isActive =
+                    typeof href === 'string'
+                        ? router.pathname === href
+                        : router.query.modal === (href.query as any)?.modal;
+
                 return (
                     <Link
-                        key={href}
+                        key={label}
                         href={href}
                         className={clsx(styles.navItem, {
                             [styles.activeNavItem]: isActive,

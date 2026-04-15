@@ -1,17 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
 
-import { ModalLayout } from '@/components/layout';
+import { type DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-create-select/index.css';
-import { MODAL_QUERY_KEY } from '@/const/modal';
+import { useRecipeMutation } from '@/hooks/mutations';
 import { useCustomDialog } from '@/hooks/ui';
-import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 
-interface RecipeCreateSelectionProps {
-    isOpen: boolean;
-    close: () => void;
-    unmount: () => void;
-}
+type RecipeCreateSelectionProps = DefaultModalLayoutProps;
 
 export const RecipeCreateSelection = ({
     isOpen,
@@ -19,26 +13,20 @@ export const RecipeCreateSelection = ({
     unmount,
 }: RecipeCreateSelectionProps) => {
     const { t } = useTranslation();
-    const router = useRouter();
-    const { openRecipeUrlInput } = useCustomDialog();
+
+    const { openRecipeUrlInput, openRecipeImageUpload } = useCustomDialog();
 
     const {
         deleteManualTempImages: {
             mutateAsync: deleteManualTempImagesMutateAsync,
         },
     } = useRecipeMutation();
+
     const onManualCreateClick = async () => {
         try {
             await deleteManualTempImagesMutateAsync();
 
-            const newQuery = { ...router.query };
-            delete newQuery[MODAL_QUERY_KEY];
-            router.replace(
-                { pathname: router.pathname, query: newQuery },
-                undefined,
-                { shallow: true },
-            );
-            // props.close();
+            openRecipeImageUpload();
             close();
         } catch (error) {
             console.error(error);
