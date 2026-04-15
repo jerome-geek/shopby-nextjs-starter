@@ -23,12 +23,14 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const BANNER_ID = 'HERO-BANNER';
+const BANNER_ID_PREFIX = 'HERO-BANNER';
 
-function HeroBannerContent() {
+type HeroBannerType = 'HOME' | 'SHOP' | 'KIDS' | 'LIFE';
+
+function HeroBannerContent({ type }: { type: HeroBannerType }) {
     const { data: banners } = useBannerList<Banner[]>({
         type: 'id',
-        banners: [BANNER_ID],
+        banners: [`${BANNER_ID_PREFIX}-${type}`],
         options: {
             select: extractBannerContents,
         },
@@ -290,10 +292,10 @@ function HeroBannerSkeleton() {
     );
 }
 
-export function HeroBanner() {
+export function HeroBanner({ type }: { type: HeroBannerType }) {
     return (
         <Suspense fallback={<HeroBannerSkeleton />}>
-            <HeroBannerContent />
+            <HeroBannerContent type={type} />
         </Suspense>
     );
 }

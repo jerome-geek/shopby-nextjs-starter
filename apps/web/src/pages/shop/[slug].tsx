@@ -24,7 +24,7 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
     return (
         <div className={styles.main}>
             {/* Full-width HeroBanner */}
-            <HeroBanner />
+            <HeroBanner type={type === 'kids' ? 'KIDS' : 'LIFE'} />
 
             {/* 라이프 타임특가 */}
             <TimeSale
@@ -39,6 +39,7 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
                 }
             />
 
+            {/* 기획전 및 상품진열 그룹 */}
             <SectionGroup />
         </div>
     );

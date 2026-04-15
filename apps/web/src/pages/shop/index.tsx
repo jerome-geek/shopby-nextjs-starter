@@ -19,7 +19,7 @@ export default function ShopMain() {
     return (
         <div className={styles.main}>
             {/* Full-width HeroBanner */}
-            <HeroBanner />
+            <HeroBanner type='SHOP' />
 
             {/* 라이프 타임특가 */}
             <TimeSale
