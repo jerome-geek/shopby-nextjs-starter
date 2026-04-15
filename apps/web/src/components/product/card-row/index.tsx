@@ -1,35 +1,16 @@
 import Link from 'next/link';
+import { Bookmark } from 'lucide-react';
 
-import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
+import { ProductCardProps } from '@/components/product/card';
+import * as styles from '@/components/product/card-row/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
-import { StickerInfo } from '@/models/display';
-import { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
-import * as styles from '@/components/product/card/index.css';
+import { vars } from '@/styles/theme.css';
 
-export interface ProductCardProps {
-    productNo: number;
-    productName: string;
-    imageUrlInfo: ImageUrlType[];
-    brandNo: number;
-    brandName: string;
-    stickerInfos: StickerInfo[];
-    likeCount: number;
-    liked: boolean;
-    reviewRating: number;
-    totalReviewCount: number;
-    salePrice: number;
-    immediateDiscountAmt?: number;
-    additionDiscountAmt?: number;
-    isAdditionalDiscount?: boolean;
-    isHideLikeButton?: boolean;
-    rank?: number;
-}
-
-const ProductCard = ({
+const ProductCardRow = ({
     productNo,
     productName,
     imageUrlInfo,
@@ -62,23 +43,14 @@ const ProductCard = ({
                     className={styles.thumb}
                 />
 
-                {!isHideLikeButton && (
-                    <button
-                        className={styles.likeButton}
-                        onClick={onLikeButtonClick(productNo, liked)}
-                    >
-                        <ThumbnailBookmarkIcon isActive={liked} />
-                    </button>
-                )}
-
-                {rank && <span className={styles.rank}>{rank}</span>}
+                {!!rank && <span className={styles.rank}>{rank}</span>}
             </Link>
 
             <ProductAdditionalDiscount type='thumbnail' productNo={productNo} />
 
             <div className={styles.productInfoContainer}>
                 <div className={styles.brandInfoWrapper}>
-                    {brandName && (
+                    {!!brandName && (
                         <Link
                             prefetch={false}
                             href={`${PATHS.BRANDS.MAIN}/${brandNo}`}
@@ -136,8 +108,20 @@ const ProductCard = ({
                     </ul>
                 )}
             </div>
+
+            {!isHideLikeButton && (
+                <button
+                    className={styles.likeButton}
+                    onClick={onLikeButtonClick(productNo, liked)}
+                >
+                    <Bookmark
+                        size={20}
+                        fill={liked ? vars.color.green['100'] : 'none'}
+                    />
+                </button>
+            )}
         </article>
     );
 };
 
-export default ProductCard;
+export default ProductCardRow;

@@ -2,8 +2,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as collectionRecipeCardStyle from '@/components/collection/collection-recipe-card/index.css';
 import * as collectionSectionStyle from '@/components/section/collection-group/collection/index.css';
-import * as styles from '@/components/section/collection-group/index.css';
 import { useResponsive } from '@/hooks/utils/useResponsive';
+import Skeleton from '@/components/ui/Skeleton/Skeleton';
 
 import 'swiper/css';
 
@@ -22,66 +22,30 @@ const CollectionSectionSkeleton = () => {
             <article className={collectionRecipeCardStyle.CardContent}>
                 <div className={collectionRecipeCardStyle.CardHeader}>
                     <div className={collectionRecipeCardStyle.CardTitleArea}>
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: '75%', height: 16 }}
-                        />
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: '45%', height: 14 }}
-                        />
+                        <Skeleton width='75%' height={16} style={{ borderRadius: 8 }} />
+                        <Skeleton width='45%' height={14} style={{ borderRadius: 8 }} />
                     </div>
-                    <div
-                        className={styles.SkeletonBlockSoft}
-                        style={{ width: 20, height: 20, borderRadius: '50%' }}
-                    />
+                    <Skeleton width={20} height={20} circle />
                 </div>
 
                 <div className={collectionRecipeCardStyle.RecipeMeta}>
                     <span className={collectionRecipeCardStyle.IconTimerText}>
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: 14, height: 14, borderRadius: 4 }}
-                        />
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: 44, height: 14, borderRadius: 999 }}
-                        />
+                        <Skeleton width={14} height={14} style={{ borderRadius: 4 }} />
+                        <Skeleton width={44} height={14} style={{ borderRadius: 999 }} />
                     </span>
                     <span className={collectionRecipeCardStyle.IconText}>
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: 14, height: 14, borderRadius: 4 }}
-                        />
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: 44, height: 14, borderRadius: 999 }}
-                        />
+                        <Skeleton width={14} height={14} style={{ borderRadius: 4 }} />
+                        <Skeleton width={44} height={14} style={{ borderRadius: 999 }} />
                     </span>
                     <span className={collectionRecipeCardStyle.IconText}>
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: 14, height: 14, borderRadius: 4 }}
-                        />
-                        <div
-                            className={styles.SkeletonBlockSoft}
-                            style={{ width: 52, height: 14, borderRadius: 999 }}
-                        />
+                        <Skeleton width={14} height={14} style={{ borderRadius: 4 }} />
+                        <Skeleton width={52} height={14} style={{ borderRadius: 999 }} />
                     </span>
                 </div>
 
                 <div className={collectionRecipeCardStyle.IngredientContent}>
                     <div className={collectionRecipeCardStyle.RecipeThumbArea}>
-                        <div
-                            className={styles.SkeletonBlock}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                position: 'relative',
-                            }}
-                        >
-                            <div className={styles.SkeletonShimmer} />
-                        </div>
+                        <Skeleton width='100%' height='100%' style={{ borderRadius: 8 }} />
                     </div>
 
                     <div
@@ -94,22 +58,8 @@ const CollectionSectionSkeleton = () => {
                                 collectionRecipeCardStyle.IngredientHeader
                             }
                         >
-                            <div
-                                className={styles.SkeletonBlockSoft}
-                                style={{
-                                    width: 92,
-                                    height: 14,
-                                    borderRadius: 6,
-                                }}
-                            />
-                            <div
-                                className={styles.SkeletonBlockSoft}
-                                style={{
-                                    width: 13,
-                                    height: 13,
-                                    borderRadius: '50%',
-                                }}
-                            />
+                            <Skeleton width={92} height={14} style={{ borderRadius: 6 }} />
+                            <Skeleton width={13} height={13} circle />
                         </div>
 
                         <ul
@@ -123,12 +73,10 @@ const CollectionSectionSkeleton = () => {
                                     }
                                     style={{ gap: 8 }}
                                 >
-                                    <div
-                                        className={styles.SkeletonBlockSoft}
-                                        style={{
-                                            width: i % 2 === 0 ? '70%' : '60%',
-                                            height: 14,
-                                        }}
+                                    <Skeleton
+                                        width={i % 2 === 0 ? '70%' : '60%'}
+                                        height={14}
+                                        style={{ borderRadius: 8 }}
                                     />
                                 </li>
                             ))}
@@ -137,31 +85,18 @@ const CollectionSectionSkeleton = () => {
                 </div>
 
                 <div className={collectionRecipeCardStyle.StepSection}>
-                    <div
-                        className={styles.SkeletonBlockSoft}
-                        style={{ width: 140, height: 14, borderRadius: 6 }}
-                    />
+                    <Skeleton width={140} height={14} style={{ borderRadius: 6 }} />
                     <ul className={collectionRecipeCardStyle.StepList}>
                         {Array.from({ length: 3 }).map((_, i) => (
                             <li
                                 key={`${index}-step-${i}`}
                                 className={collectionRecipeCardStyle.StepItem}
                             >
-                                <div
-                                    className={styles.SkeletonBlockSoft}
-                                    style={{
-                                        width: 20,
-                                        height: 20,
-                                        borderRadius: '50%',
-                                    }}
-                                />
-                                <div
-                                    className={styles.SkeletonBlockSoft}
-                                    style={{
-                                        width: i === 0 ? '80%' : '70%',
-                                        height: 14,
-                                        borderRadius: 6,
-                                    }}
+                                <Skeleton width={20} height={20} circle />
+                                <Skeleton
+                                    width={i === 0 ? '80%' : '70%'}
+                                    height={14}
+                                    style={{ borderRadius: 6 }}
                                 />
                             </li>
                         ))}
@@ -179,18 +114,13 @@ const CollectionSectionSkeleton = () => {
                         collectionSectionStyle.CollectionSectionTitleContainer
                     }
                 >
-                    <div
-                        className={styles.SkeletonBlockSoft}
-                        style={{ width: 140, height: 22 }}
-                    />
-                    <div
-                        className={styles.SkeletonBlockSoft}
-                        style={{ width: 200, height: 18 }}
-                    />
+                    <Skeleton width={140} height={22} style={{ borderRadius: 8 }} />
+                    <Skeleton width={200} height={18} style={{ borderRadius: 8 }} />
                 </div>
-                <div
-                    className={styles.SkeletonBlockSoft}
-                    style={{ width: 76, height: 18, borderRadius: 999 }}
+                <Skeleton
+                    width={76}
+                    height={18}
+                    style={{ borderRadius: 999 }}
                 />
             </div>
 

@@ -1,16 +1,17 @@
 import * as recipeCardStyle from '@/components/recipe/card/index.css';
 import * as styles from '@/components/section/recipe-group/index.css';
 import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
+import Skeleton from '@/components/ui/Skeleton/Skeleton';
 
 const RecipeSectionSkeleton = () => {
     return (
         <section className={recipeSectionStyle.Container} aria-busy='true'>
             <div className={recipeSectionStyle.RecipeSectionHeader}>
                 <div className={recipeSectionStyle.RecipeSectionTitleContainer}>
-                    <div className={styles.SkeletonTitleBlock} />
-                    <div className={styles.SkeletonSubTitleBlock} />
+                    <Skeleton width={180} height={22} style={{ borderRadius: 8 }} />
+                    <Skeleton width={260} height={18} style={{ borderRadius: 8 }} />
                 </div>
-                <div className={styles.SkeletonLinkBlock} />
+                <Skeleton width={76} height={18} style={{ borderRadius: 999 }} />
             </div>
 
             <ul className={recipeSectionStyle.RecipeList}>
@@ -21,34 +22,35 @@ const RecipeSectionSkeleton = () => {
                             aria-hidden='true'
                         >
                             <div className={recipeCardStyle.recipeThumbWrapper}>
-                                <div
-                                    className={`${styles.SkeletonBlock} ${recipeCardStyle.recipeThumb}`}
-                                    style={{ position: 'relative' }}
-                                >
-                                    <div className={styles.SkeletonShimmer} />
-                                </div>
-                                <div
-                                    className={styles.SkeletonBlockSoft}
+                                <Skeleton
+                                    className={recipeCardStyle.recipeThumb}
+                                    width='100%'
+                                    height='100%'
+                                    style={{ position: 'absolute', inset: 0 }}
+                                />
+                                <Skeleton
+                                    width={32}
+                                    height={32}
+                                    circle
                                     style={{
                                         position: 'absolute',
                                         bottom: '10px',
                                         right: '10px',
-                                        width: 32,
-                                        height: 32,
-                                        borderRadius: '50%',
                                     }}
                                 />
                             </div>
 
                             <div className={recipeCardStyle.recipeInfo}>
                                 <div className={recipeCardStyle.recipeHeader}>
-                                    <div
-                                        className={styles.SkeletonTextLineLong}
-                                        style={{ width: '75%', height: 16 }}
+                                    <Skeleton
+                                        width='75%'
+                                        height={16}
+                                        style={{ borderRadius: 6 }}
                                     />
-                                    <div
-                                        className={styles.SkeletonTextLineShort}
-                                        style={{ width: '45%', height: 14 }}
+                                    <Skeleton
+                                        width='45%'
+                                        height={14}
+                                        style={{ borderRadius: 6 }}
                                     />
                                 </div>
 
@@ -58,17 +60,15 @@ const RecipeSectionSkeleton = () => {
                                             recipeCardStyle.recipeTimerMetaItem
                                         }
                                     >
-                                        <div
-                                            className={styles.SkeletonBlockSoft}
-                                            style={{
-                                                width: 14,
-                                                height: 14,
-                                                borderRadius: 4,
-                                            }}
+                                        <Skeleton
+                                            width={14}
+                                            height={14}
+                                            style={{ borderRadius: 4 }}
                                         />
-                                        <div
-                                            className={styles.SkeletonMetaChip}
-                                            style={{ width: 44 }}
+                                        <Skeleton
+                                            width={44}
+                                            height={14}
+                                            style={{ borderRadius: 999 }}
                                         />
                                     </li>
                                     <li
@@ -76,17 +76,15 @@ const RecipeSectionSkeleton = () => {
                                             recipeCardStyle.recipeServingsMetaItem
                                         }
                                     >
-                                        <div
-                                            className={styles.SkeletonBlockSoft}
-                                            style={{
-                                                width: 14,
-                                                height: 14,
-                                                borderRadius: 4,
-                                            }}
+                                        <Skeleton
+                                            width={14}
+                                            height={14}
+                                            style={{ borderRadius: 4 }}
                                         />
-                                        <div
-                                            className={styles.SkeletonMetaChip}
-                                            style={{ width: 44 }}
+                                        <Skeleton
+                                            width={44}
+                                            height={14}
+                                            style={{ borderRadius: 999 }}
                                         />
                                     </li>
                                 </ul>

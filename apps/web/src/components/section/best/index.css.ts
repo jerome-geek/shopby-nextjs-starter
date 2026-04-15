@@ -3,7 +3,7 @@ import { textStyles } from '@/styles/typography.css';
 import { style } from '@vanilla-extract/css';
 
 export const section = style({
-    padding: '40px 20px',
+    padding: '0',
     backgroundColor: vars.color.white,
     width: '100%',
     display: 'flex',
@@ -11,7 +11,6 @@ export const section = style({
     gap: '20px',
     '@media': {
         'screen and (min-width: 768px)': {
-            padding: '60px 40px',
             maxWidth: '1200px',
             margin: '0 auto',
         },

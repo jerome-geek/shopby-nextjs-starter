@@ -15,6 +15,21 @@ export const RecipeLink = style({
     width: '100%',
 });
 
+globalStyle(`${RecipeLink} a`, {
+    color: 'inherit',
+    textDecoration: 'none',
+});
+
+globalStyle(`${RecipeLink} a:hover`, {
+    cursor: 'pointer',
+});
+
+globalStyle(`${RecipeLink} a:focus-visible`, {
+    outline: `2px solid ${vars.color.green['80']}`,
+    outlineOffset: 2,
+    borderRadius: 4,
+});
+
 export const CardContent = style({
     padding: '16px',
     display: 'flex',
@@ -46,6 +61,7 @@ export const RecipeTitle = style([
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
+        transition: 'text-decoration-color 120ms ease, opacity 120ms ease',
         '@media': {
             [media.mobile]: {
                 fontSize: '1.5rem',
@@ -56,6 +72,11 @@ export const RecipeTitle = style([
         },
     },
 ]);
+
+globalStyle(`${RecipeLink} a:hover ${RecipeTitle}`, {
+    textDecoration: 'underline',
+    textDecorationColor: vars.color.gray['50'],
+});
 
 export const RecipeAuthor = style([
     textStyles.body2Regular,
@@ -170,6 +191,12 @@ export const RecipeThumb = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+    transition: 'transform 160ms ease, filter 160ms ease',
+});
+
+globalStyle(`${RecipeLink} a:hover ${RecipeThumb}`, {
+    transform: 'scale(1.02)',
+    filter: 'brightness(0.95)',
 });
 
 export const IngredientContainer = style({

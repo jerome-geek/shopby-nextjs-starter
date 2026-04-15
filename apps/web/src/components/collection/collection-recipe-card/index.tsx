@@ -15,6 +15,8 @@ export const CollectionRecipeCard = ({
 }: {
     recipe: GetRecipeDetailResponse;
 }) => {
+    const href = PATHS.RECIPES.DETAIL.replace('[recipeNo]', String(recipe.sno));
+
     const cookingMinutes = recipe.durationSeconds
         ? Math.floor(recipe.durationSeconds / 60)
         : 0;
@@ -27,24 +29,21 @@ export const CollectionRecipeCard = ({
     const { onBookmarkToggle } = useRecipeBookmark();
 
     const handleBookmark = async (e: MouseEvent) => {
-        e.preventDefault();
         e.stopPropagation();
 
         onBookmarkToggle({ sno: recipe.sno, bookmarked: recipe.bookmarked });
     };
 
     return (
-        <Link
-            href={PATHS.RECIPES.DETAIL.replace(
-                '[recipeNo]',
-                String(recipe.sno),
-            )}
-            className={styles.RecipeLink}
-        >
+        <div className={styles.RecipeLink}>
             <article className={styles.CardContent}>
                 <div className={styles.CardHeader}>
                     <div className={styles.CardTitleArea}>
-                        <h4 className={styles.RecipeTitle}>{recipe.title}</h4>
+                        <Link href={href} prefetch={false}>
+                            <h4 className={styles.RecipeTitle}>
+                                {recipe.title}
+                            </h4>
+                        </Link>
                         {author && (
                             <span className={styles.RecipeAuthor}>
                                 {author}
@@ -92,13 +91,15 @@ export const CollectionRecipeCard = ({
                 </div>
 
                 <div className={styles.IngredientContent}>
-                    <div className={styles.RecipeThumbArea}>
-                        <img
-                            src={recipe.thumbnailUrl ?? ''}
-                            className={styles.RecipeThumb}
-                            alt={recipe.title}
-                        />
-                    </div>
+                    <Link href={href} prefetch={false}>
+                        <div className={styles.RecipeThumbArea}>
+                            <img
+                                src={recipe.thumbnailUrl ?? ''}
+                                className={styles.RecipeThumb}
+                                alt={recipe.title}
+                            />
+                        </div>
+                    </Link>
 
                     <div className={styles.IngredientContainer}>
                         <div className={styles.IngredientHeader}>
@@ -168,6 +169,6 @@ export const CollectionRecipeCard = ({
                     </ul>
                 </div>
             </article>
-        </Link>
+        </div>
     );
 };

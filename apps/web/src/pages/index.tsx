@@ -46,9 +46,7 @@ export default function Home() {
 
                 <CollectionGroupSection groupId='collection_group_1' />
 
-                <LazyRender minHeight={300}>
-                    <RecipeGroupSection groupId='recipe_group_1' />
-                </LazyRender>
+                <RecipeGroupSection groupId='recipe_group_1' />
 
                 {/* 라이프 타임특가 */}
                 <LazyRender minHeight={400}>

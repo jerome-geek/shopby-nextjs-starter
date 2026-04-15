@@ -50,6 +50,7 @@ export const DialogLayout = ({
                         initial='init'
                         animate='show'
                         exit='hide'
+                        onClick={close}
                     />
                     <motion.div
                         className={styles.container}

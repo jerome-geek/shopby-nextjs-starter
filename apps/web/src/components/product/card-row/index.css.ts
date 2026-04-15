@@ -11,14 +11,20 @@ const fadeIn = keyframes({
 
 export const container = style({
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'stretch',
-    gap: '12px',
+    gap: '24px',
+    '@media': {
+        [media.mobile]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const thumbWrapper = style({
     display: 'block',
-    width: '100%',
+    width: '30%',
+    maxWidth: '128px',
     position: 'relative',
     aspectRatio: '1/1',
     backgroundColor: vars.color.gray[10],
@@ -26,6 +32,11 @@ export const thumbWrapper = style({
     overflow: 'hidden',
     contain: 'layout',
     transform: 'translateZ(0)',
+    '@media': {
+        [media.mobile]: {
+            width: '26.5%',
+        },
+    },
 });
 
 export const thumb = style({
@@ -36,10 +47,7 @@ export const thumb = style({
 });
 
 export const likeButton = style({
-    position: 'absolute',
-    bottom: '5px',
-    right: '6px',
-    zIndex: 1,
+    height: 'fit-content',
     border: 'none',
     cursor: 'pointer',
     backgroundColor: 'transparent',
@@ -48,55 +56,49 @@ export const likeButton = style({
 
 export const productInfoContainer = style({
     display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'stretch',
+    justifyContent: 'center',
     gap: '4px',
-    minHeight: '100px',
-    '@media': {
-        'screen and (min-width: 768px)': {
-            gap: '6px',
-            minHeight: '110px',
-        },
-    },
 });
 
 export const brandInfoWrapper = style({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
-    gap: 0,
-    minHeight: '48px',
-    '@media': {
-        'screen and (min-width: 768px)': {
-            gap: '4px',
-            minHeight: '56px',
-        },
-    },
+    gap: '4px',
 });
 
 export const brand = style([
-    textStyles.caption1Regular,
+    textStyles.body1Regular,
     {
         color: vars.color.gray[60],
         display: 'flex',
         alignItems: 'center',
-        fontSize: '1.2rem',
-        fontWeight: 600,
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
 export const productName = style([
-    textStyles.body2Medium,
+    textStyles.headlineMedium,
     {
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        color: vars.color.black,
         '@media': {
-            'screen and (min-width: 768px)': {
+            [media.mobile]: {
                 fontSize: '1.4rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
             },
         },
     },
@@ -107,13 +109,18 @@ export const priceWrapper = style({
     gap: '4px',
 });
 
-export const productPrice = style({
-    fontSize: '1.7rem',
-    fontWeight: '700',
-    lineHeight: '1.5',
-    letterSpacing: '-1.3%',
-    color: vars.color.black,
-});
+export const productPrice = style([
+    textStyles.headingBold,
+    {
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
+            },
+        },
+    },
+]);
 
 export const discountPrice = style({
     fontSize: '1.7rem',
@@ -127,6 +134,7 @@ export const stickerList = style({
     display: 'flex',
     gap: '2px',
     alignItems: 'center',
+    marginTop: '4px',
 });
 
 export const textSticker = style([

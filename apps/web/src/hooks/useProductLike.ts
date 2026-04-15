@@ -7,16 +7,20 @@ import {
     productKeys,
     productProfileKeys,
     productSectionKeys,
+    eventKeys,
 } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
 import useDialog from '@/hooks/utils/useDialog';
+import { useToast } from '@/hooks/ui';
 
 const useProductLike = () => {
     const { t } = useTranslation();
 
     const queryClient = useQueryClient();
 
-    const { openDialog, openLoginDialog } = useDialog();
+    const { openLoginDialog } = useDialog();
+
+    const { addToast } = useToast();
 
     const {
         like: { mutate: likeMutate },
@@ -57,16 +61,18 @@ const useProductLike = () => {
                                     ...productKeys.all,
                                     ...productSectionKeys.all,
                                     ...productProfileKeys.all,
+                                    ...eventKeys.all,
                                 ]),
                             refetchType: 'active',
                         });
 
-                        openDialog({
+                        addToast({
                             message: t(
                                 liked
                                     ? '좋아하는 상품에서 제거하였습니다.'
                                     : '좋아하는 상품에 추가하였습니다.',
                             ),
+                            variant: 'success',
                         });
                     },
                 },
