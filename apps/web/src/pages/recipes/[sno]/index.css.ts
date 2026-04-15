@@ -1,4 +1,5 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
+
 import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
 import { textStyles } from '@/styles/typography.css';
@@ -6,13 +7,13 @@ import { textStyles } from '@/styles/typography.css';
 export const container = style({
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '0 16px 40px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '40px',
+    gap: '48px',
 
     '@media': {
         [media.desktop]: {
+            padding: '0 16px 40px',
             gap: '60px',
         },
     },
@@ -22,7 +23,8 @@ export const container = style({
 export const headerArea = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px',
+    gap: '24px',
+
     '@media': {
         [media.desktop]: {
             flexDirection: 'row',
@@ -32,16 +34,16 @@ export const headerArea = style({
 });
 
 export const imageCarousel = style({
-    width: 'calc(100% + 32px)',
-    marginLeft: '-16px',
-    aspectRatio: '1/1',
-    borderRadius: '0',
+    width: 'calc(100% + 40px)',
+    margin: '0 -20px',
+    aspectRatio: '1 / 1',
     overflow: 'hidden',
     position: 'relative',
+
     '@media': {
         [media.desktop]: {
             width: '600px',
-            marginLeft: '0',
+            margin: '0',
             flexShrink: 0,
             borderRadius: '12px',
         },
@@ -58,6 +60,20 @@ export const headerInfo = style({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    gap: '16px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+            alignSelf: 'flex-start',
+        },
+    },
+});
+
+export const recipeInfo = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
 
     '@media': {
         [media.desktop]: {
@@ -145,6 +161,26 @@ export const metaList = style({
     },
 });
 
+export const IconTimerText = style([
+    textStyles.body2Semibold,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        color: vars.color.gray['80'],
+    },
+]);
+
+export const IconText = style([
+    textStyles.body2Regular,
+    {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        color: vars.color.gray['60'],
+    },
+]);
+
 export const durationMetaItem = style([
     textStyles.body1Semibold,
     {
@@ -176,6 +212,7 @@ export const sectionTitleRow = style({
 export const sectionContainer = style({
     display: 'flex',
     flexDirection: 'column',
+    gap: '20px',
 
     '@media': {
         [media.desktop]: {
@@ -198,8 +235,7 @@ export const ingredientsGrid = style({
     padding: 0,
     margin: 0,
     gridTemplateColumns: 'repeat(1, 1fr)',
-    gap: '0',
-    marginTop: '16px',
+    gap: '8px',
 
     '@media': {
         [media.desktop]: {
@@ -210,16 +246,30 @@ export const ingredientsGrid = style({
 });
 
 export const ingredientItem = style({
+    position: 'relative',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '8px 0',
     background: 'none',
+    paddingLeft: '13px',
+
+    selectors: {
+        '&::before': {
+            content: '""',
+            position: 'absolute',
+            left: '0',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '5px',
+            height: '5px',
+            borderRadius: '50%',
+            background: vars.color.green['80'],
+        },
+    },
+
     '@media': {
         [media.desktop]: {
-            padding: '12px 16px',
-            background: vars.color.gray['10'],
-            borderRadius: '8px',
+            padding: '4px 2px 4px 13px',
         },
     },
 });
@@ -289,26 +339,20 @@ export const stepList = style({
     listStyle: 'none',
     padding: 0,
     margin: 0,
-
-    '@media': {
-        [media.desktop]: { gap: '16px' },
-    },
+    gap: '16px',
 });
 
 export const stepItem = style({
     display: 'flex',
-    alignItems: 'center',
-
-    '@media': {
-        [media.desktop]: { gap: '12px' },
-    },
+    alignItems: 'flex-start',
+    gap: '12px',
 });
 
 export const stepNumber = style([
     textStyles.body1Semibold,
     {
-        width: '28px',
-        height: '28px',
+        width: '24px',
+        height: '24px',
         borderRadius: '50%',
         background: vars.color.green['80'],
         color: vars.color.white,
@@ -316,6 +360,13 @@ export const stepNumber = style([
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
+
+        '@media': {
+            [media.desktop]: {
+                width: '28px',
+                height: '28px',
+            },
+        },
     },
 ]);
 
@@ -354,30 +405,7 @@ export const stepImage = style({
 
 // --- Comments ---
 
-// --- Recommended ---
-export const recommendedGrid = style({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '24px',
-    '@media': {
-        [media.desktop]: {
-            gridTemplateColumns: 'repeat(4, 1fr)',
-        },
-    },
-});
-
-export const recipeCard = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    cursor: 'pointer',
-    marginBottom: '80px', // Footer 여백 확보
-    '@media': {
-        [media.desktop]: {
-            marginBottom: '0',
-        },
-    },
-});
+// --- Mobile Sticky Footer ---
 
 // TODO: 전역 BottomNavigation과 레이아웃이 겹칠 수 있으므로 추후 공통 레이아웃 작업 시 높이(bottom) 확인 필요
 export const mobileStickyFooter = style({
@@ -426,52 +454,11 @@ export const mobileActionButton = style([
     },
 ]);
 
-// (SVG 아이콘 색상은 컴포넌트 레벨에서 fill prop으로 제어함)
-
-export const recipeCardThumbWrapper = style({
-    position: 'relative',
-    width: '100%',
-    aspectRatio: '1/1',
-    borderRadius: '8px',
-    overflow: 'hidden',
-});
-
-export const recipeCardThumb = style({
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
-export const recipeCardBookmarkBtn = style({
-    position: 'absolute',
-    bottom: '8px',
-    right: '8px',
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%',
-    background: 'rgba(0,0,0,0.4)',
-    color: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+export const mobileDivider = style({
+    backgroundColor: vars.color.gray['20'],
+    height: '6px',
     border: 'none',
-    cursor: 'pointer',
-});
-
-export const recipeCardTitle = style({
-    fontSize: '16px',
-    fontWeight: 'bold',
-    color: vars.color.black,
-});
-
-export const recipeCardAuthor = style({
-    fontSize: '14px',
-    color: vars.color.gray['60'],
-});
-
-export const recipeCardMeta = style({
-    display: 'flex',
-    gap: '12px',
-    fontSize: '12px',
-    color: vars.color.gray['50'],
+    width: 'calc(100% + 40px)',
+    margin: '0 -20px',
+    padding: 0,
 });

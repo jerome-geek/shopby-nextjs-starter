@@ -168,7 +168,7 @@ export interface RecipeStep {
     stepNumber: number;
     description: string;
     stepImageUrl: string | null;
-    timestampSeconds: number | null;
+    timestampSeconds: number;
 }
 
 /** 재료에 연결된 쿠팡 상품 */

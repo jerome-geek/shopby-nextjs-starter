@@ -1,13 +1,13 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
+
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
 export const commentSection = style({
-    background: 'none',
-    padding: '0',
     display: 'flex',
     flexDirection: 'column',
+    gap: '20px',
 
     '@media': {
         [media.desktop]: {
@@ -36,10 +36,16 @@ export const commentCount = style([
 export const commentList = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
+    gap: '20px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
 });
 
 export const commentItem = style({
@@ -112,19 +118,20 @@ export const commentInputArea = style({
     flexDirection: 'column',
     backgroundColor: vars.color.ivory['10'],
     borderRadius: '8px',
-
-    '@media': {
-        [media.desktop]: {
-            gap: '14px',
-            padding: '20px 16px',
-        },
-    },
+    gap: '14px',
+    padding: '20px 16px',
 });
 
 export const commentTextArea = style({
     width: '100%',
     minHeight: '100px',
-    padding: '16px',
+    padding: '12px',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '16px',
+        },
+    },
 });
 
 export const commentToolbar = style({
@@ -137,12 +144,19 @@ export const attachButton = style([
     {
         display: 'flex',
         alignItems: 'center',
-        gap: '6px',
+        gap: '4px',
         borderRadius: '2px',
         cursor: 'pointer',
         color: vars.color.gray['80'],
         backgroundColor: vars.color.green['40'],
-        padding: '8px 10px',
+        padding: '6px 8px',
+
+        '@media': {
+            [media.desktop]: {
+                gap: '6px',
+                padding: '8px 10px',
+            },
+        },
     },
 ]);
 
@@ -154,9 +168,9 @@ export const submitButton = style([
         gap: '6px',
         borderRadius: '2px',
         cursor: 'pointer',
-        color: vars.color.white,
-        backgroundColor: vars.color.gray['80'],
-        padding: '8px 10px',
+        color: vars.color.gray['60'],
+        backgroundColor: vars.color.gray['20'],
+        padding: '6px 8px',
         border: 'none',
         transition: 'all 0.2s ease-in-out',
 
@@ -165,6 +179,12 @@ export const submitButton = style([
                 backgroundColor: vars.color.gray['20'],
                 color: vars.color.gray['40'],
                 cursor: 'not-allowed',
+            },
+        },
+
+        '@media': {
+            [media.desktop]: {
+                padding: '8px 10px',
             },
         },
     },

@@ -8,10 +8,11 @@ import { RecipePreviewImage } from '@/components/recipe/preview-image';
 import { TextArea } from '@/components/ui/input';
 import { useRecipeCommentMutation, useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
+import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import useFileUpload from '@/hooks/utils/useFileUpload';
-import { useCustomDialog } from '@/hooks/ui';
+import { isAxiosError } from 'axios';
 
 interface CommentInputProps {
     recipeSno: number;
@@ -123,9 +124,19 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
                 variant: 'success',
             });
         } catch (error) {
-            // 업로드 혹은 댓글 등록 실패 시
+            console.log('🚀 ~ handleSubmit ~ error:', error);
+            const message = isAxiosError(error)
+                ? (error.response?.data.message ??
+                  t(
+                      '댓글 등록에 실패했습니다.<br/>잠시 후 다시 시도해 주세요.',
+                  ))
+                : t(
+                      '댓글 등록에 실패했습니다.<br/>잠시 후 다시 시도해 주세요.',
+                  );
+
+            // TODO: 업로드 혹은 댓글 등록 실패 시
             addToast({
-                message: t('댓글 등록에 실패했습니다.'),
+                message,
                 variant: 'error',
             });
         }
