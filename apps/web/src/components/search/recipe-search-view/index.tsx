@@ -13,7 +13,7 @@ import {
     RECIPE_SORT_BY_QUERY_KEY,
 } from '@/const/search';
 import { useSearchTab } from '@/hooks/useSearchTab';
-import useInfinitePublicRecipeSearch from '@/hooks/query/shop/recipe/useInfinitePublicRecipeSearch';
+import useInfinitePublicRecipeSearch from '@/hooks/infiniteQuery/shop/recipe/useInfinitePublicRecipeSearch';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/search/index.css';
 import { vars } from '@/styles/theme.css';
@@ -115,7 +115,8 @@ export const RecipeSearchView = ({
                                         type='button'
                                         className={styles.sortListButton}
                                         data-selected={
-                                            recipeSortOrder === sortOption.order &&
+                                            recipeSortOrder ===
+                                                sortOption.order &&
                                             recipeSortBy === sortOption.sortBy
                                                 ? 'true'
                                                 : undefined

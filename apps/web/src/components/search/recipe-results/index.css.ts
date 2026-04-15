@@ -17,6 +17,9 @@ export const container = style({
 });
 
 export const recipeContainer = style({
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
     width: '100%',
     display: 'grid',
     gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',

@@ -16,7 +16,7 @@ import {
     useCategoriesByCode,
     useCategory,
 } from '@/hooks/query/display/category';
-import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
+import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import type { MultiLevelCategory } from '@/models/display';
 import type {
     ProductSearchParams,

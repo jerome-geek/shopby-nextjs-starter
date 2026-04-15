@@ -14,7 +14,7 @@ import { ProductListSideBar } from '@/components/product-list/side-bar';
 import { Paging } from '@/components/ui';
 import { SORT_OPTIONS } from '@/const/product';
 import { useProductList } from '@/hooks/query/product/product';
-import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
+import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useProductFilter } from '@/hooks/useProductFilter';
 import { useResponsive } from '@/hooks/utils';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';

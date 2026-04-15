@@ -7,7 +7,7 @@ import { SearchTabNav } from '@/components/search/tab-nav';
 import { ShoppingSearchResults } from '@/components/search/shopping-results';
 import { Row } from '@/components/ui/layout/flex';
 import { SORT_OPTIONS } from '@/const/product';
-import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
+import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/search/index.css';

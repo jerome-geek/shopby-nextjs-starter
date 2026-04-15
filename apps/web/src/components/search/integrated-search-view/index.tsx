@@ -5,7 +5,7 @@ import { IntegratedSearchResults } from '@/components/search/integrated-results'
 import { SearchTabNav } from '@/components/search/tab-nav';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { Row } from '@/components/ui/layout/flex';
-import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
+import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useInfinitePublicCollectionSearch } from '@/hooks/query/shop/collection';
 import { useInfinitePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 import { useResponsive } from '@/hooks/utils';

@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { AuthLayout } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { PATHS } from '@/const/paths';
+import { useProfile } from '@/hooks/query/member/profile';
+import { useAuth } from '@/hooks/useAuth';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/complete/index.css';
-import { Button } from '@/components/ui/button';
-import { useProfile } from '@/hooks/query/member/profile';
-import { isLoggedIn } from '@/utils/auth';
-import { PATHS } from '@/const/paths';
 
 import completeImage from '@/assets/register-completed.png';
 
@@ -17,9 +17,11 @@ const SignupComplete: NextPageWithLayout = () => {
 
     const router = useRouter();
 
+    const isLogin = useAuth();
+
     const { data: profileData } = useProfile({
         options: {
-            enabled: isLoggedIn(),
+            enabled: !!isLogin,
         },
     });
 

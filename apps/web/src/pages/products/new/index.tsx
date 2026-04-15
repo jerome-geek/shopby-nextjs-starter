@@ -14,7 +14,7 @@ import PagingV2 from '@/components/ui/paging-v2';
 import { PATHS } from '@/const/paths';
 import useCategoriesByCode from '@/hooks/query/display/category/useCategoriesByCode';
 import { useProductList } from '@/hooks/query/product/product';
-import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
+import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useResponsive } from '@/hooks/utils';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
 import { OrderByType, OrderDirectionType } from '@/models';
@@ -118,8 +118,8 @@ export default function NewProducts() {
     }, [infiniteProductListData, isMobile, productListData?.items]);
 
     const totalCount = isMobile
-        ? infiniteProductListData?.pages[0]?.data.totalCount ?? 0
-        : productListData?.totalCount ?? 0;
+        ? (infiniteProductListData?.pages[0]?.data.totalCount ?? 0)
+        : (productListData?.totalCount ?? 0);
 
     const isListLoading = isMobile
         ? isInfiniteProductListLoading

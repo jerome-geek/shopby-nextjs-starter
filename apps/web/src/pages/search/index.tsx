@@ -27,7 +27,7 @@ import {
 } from '@/const/search';
 import { useCategoriesByCode } from '@/hooks/query/display/category';
 import { useProductList } from '@/hooks/query/product/product';
-import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
+import { useInfiniteProductList } from '@/hooks/infiniteQuery/product/product';
 import {
     useInfinitePublicCollectionSearch,
     usePublicCollectionSearch,
@@ -290,8 +290,8 @@ const Search = () => {
     ]);
     const productTotalCount =
         selectedTab === 'shopping' && !isTablet
-            ? productListData?.totalCount ?? 0
-            : infiniteProductListData?.pages[0]?.data.totalCount ?? 0;
+            ? (productListData?.totalCount ?? 0)
+            : (infiniteProductListData?.pages[0]?.data.totalCount ?? 0);
 
     const recipeList = useMemo(() => {
         if (selectedTab === 'recipe' && !isTablet) {
@@ -302,8 +302,8 @@ const Search = () => {
     }, [infiniteRecipeData, isTablet, recipeData?.data, selectedTab]);
     const recipeTotalCount =
         selectedTab === 'recipe' && !isTablet
-            ? recipeData?.count ?? 0
-            : infiniteRecipeData?.pages[0]?.count ?? 0;
+            ? (recipeData?.count ?? 0)
+            : (infiniteRecipeData?.pages[0]?.count ?? 0);
 
     const collectionList = useMemo(() => {
         if (selectedTab === 'collection' && !isTablet) {
@@ -314,8 +314,8 @@ const Search = () => {
     }, [collectionData?.data, infiniteCollectionData, isTablet, selectedTab]);
     const collectionTotalCount =
         selectedTab === 'collection' && !isTablet
-            ? collectionData?.count ?? 0
-            : infiniteCollectionData?.pages[0]?.count ?? 0;
+            ? (collectionData?.count ?? 0)
+            : (infiniteCollectionData?.pages[0]?.count ?? 0);
 
     const integratedTotalCount = useMemo(
         () => productTotalCount + recipeTotalCount + collectionTotalCount,

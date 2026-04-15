@@ -1,17 +1,18 @@
+import { useTranslation } from 'react-i18next';
 import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
 
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
-import { RecipeCard } from '@/components/recipe/recipe-card';
 import * as styles from '@/components/search/recipe-results/index.css';
 import PagingV2 from '@/components/ui/paging-v2';
 import { RECIPE_PAGE_QUERY_KEY } from '@/const/search';
-import useInfinitePublicRecipeSearch from '@/hooks/query/shop/recipe/useInfinitePublicRecipeSearch';
+import { useInfinitePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 import { useResponsive } from '@/hooks/utils';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
+import { RecipeCard } from '@/components/recipe';
 
-type RecipeSearchResultsProps = {
+interface RecipeSearchResultsProps {
     recipeList: GetRecipeDetailResponse[];
     fetchNextPage: ReturnType<
         typeof useInfinitePublicRecipeSearch
@@ -20,7 +21,7 @@ type RecipeSearchResultsProps = {
     totalCount: number;
     currentPage: number;
     pageSize: number;
-};
+}
 
 export const RecipeSearchResults = ({
     recipeList,
@@ -30,24 +31,28 @@ export const RecipeSearchResults = ({
     currentPage,
     pageSize,
 }: RecipeSearchResultsProps) => {
+    const { t } = useTranslation();
+
     const { isTablet } = useResponsive();
 
     const router = useRouter();
 
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             {isEmpty(recipeList) ? (
                 <NoResult
                     className={styles.noResult}
-                    text='검색 결과가 없습니다.'
+                    text={t('검색 결과가 없습니다.')}
                     isIconVisible={false}
                 />
             ) : (
-                <div className={styles.recipeContainer}>
+                <ul className={styles.recipeContainer}>
                     {recipeList.map((recipe) => (
-                        <RecipeCard key={recipe.sno} recipe={recipe} />
+                        <li key={recipe.sno}>
+                            <RecipeCard recipe={recipe} />
+                        </li>
                     ))}
-                </div>
+                </ul>
             )}
 
             {isTablet ? (
@@ -80,6 +85,6 @@ export const RecipeSearchResults = ({
                     }}
                 />
             )}
-        </div>
+        </section>
     );
 };

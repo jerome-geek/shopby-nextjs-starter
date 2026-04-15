@@ -6,7 +6,7 @@ import { ObserverTarget } from '@/components/common/observer-target';
 import { ProductCard } from '@/components/product';
 import PagingV2 from '@/components/ui/paging-v2';
 import * as styles from '@/components/search/shopping-results/index.css';
-import useInfiniteProductList from '@/hooks/query/product/product/useInfiniteProductList';
+import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useResponsive } from '@/hooks/utils';
 import type { SearchProductItem } from '@/models/product/product';
 
