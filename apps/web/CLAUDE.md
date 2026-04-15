@@ -34,6 +34,7 @@ schema/     store/        styles/    types/   utils/
 
 **Prettier**: `tabWidth: 4, singleQuote: true, trailingComma: 'all', semi: true, jsxSingleQuote: true, printWidth: 80`
 
+- CSS: Mobile-first — 기본값은 모바일, 큰 화면은 `@media (min-width: ...)` 로 확장
 - Named Export 필수 (`export const ...`) — Default Export 금지
 - 절대 경로(`@/`) 필수 — 상대 경로 금지
 - 컴포넌트는 화살표 함수로 선언
