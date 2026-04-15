@@ -8,7 +8,7 @@ import { textStyles } from '@/styles/typography.css';
 export const container = style({
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '0 16px 120px',
+    padding: '0 0 120px',
     display: 'flex',
     flexDirection: 'column',
     gap: '40px',
