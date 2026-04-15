@@ -4,7 +4,7 @@ import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 
 import * as styles from '@/components/recipe/recommend/index.css';
 
-const RecipeRecommend = () => {
+export const RecipeRecommend = () => {
     const { t } = useTranslation();
 
     const { data: publicRecipeSearchData } = usePublicRecipeSearch({
@@ -36,5 +36,3 @@ const RecipeRecommend = () => {
         </section>
     );
 };
-
-export default RecipeRecommend;

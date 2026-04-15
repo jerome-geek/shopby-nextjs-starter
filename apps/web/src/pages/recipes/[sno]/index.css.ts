@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
@@ -33,6 +33,12 @@ export const headerArea = style({
     },
 });
 
+export const imageCarouselContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+});
+
 export const imageCarousel = style({
     width: 'calc(100% + 40px)',
     margin: '0 -20px',
@@ -54,6 +60,59 @@ export const carouselImage = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+});
+
+// --- Swiper 커스텀 ---
+globalStyle('.recipe-thumbnail-pagination', {
+    width: 'fit-content !important',
+    margin: '0 auto',
+    vars: {
+        '--swiper-pagination-color': vars.color.green['80'],
+        '--swiper-pagination-bullet-inactive-color': vars.color.gray['40'],
+        '--swiper-pagination-bullet-inactive-opacity': '1',
+        '--swiper-pagination-bullet-size': '6px',
+        '--swiper-pagination-bullet-horizontal-gap': '3px',
+    },
+});
+
+export const carouselNavButton = style({
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 10,
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    backgroundColor: vars.color.white,
+    boxShadow: '0 2px 12px rgba(0,0,0,0.18)',
+    border: 'none',
+    cursor: 'pointer',
+    display: 'none',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: vars.color.green['100'],
+    transition: 'box-shadow 0.2s ease, transform 0.2s ease',
+
+    selectors: {
+        '&:hover': {
+            boxShadow: '0 4px 20px rgba(0,0,0,0.22)',
+            transform: 'translateY(-50%) scale(1.05)',
+        },
+    },
+
+    '@media': {
+        [media.desktop]: {
+            display: 'flex',
+        },
+    },
+});
+
+export const carouselNavPrev = style({
+    left: '16px',
+});
+
+export const carouselNavNext = style({
+    right: '16px',
 });
 
 export const headerInfo = style({

@@ -32,6 +32,8 @@ export default function BottomNavigation() {
     const [hidden, setHidden] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    const isRecipeDetail = router.pathname === '/recipes/[sno]';
+
     const handleScroll = (latest: number) => {
         const scrollHeight = document.documentElement.scrollHeight;
         const clientHeight = document.documentElement.clientHeight;
@@ -71,6 +73,8 @@ export default function BottomNavigation() {
             }
         };
     }, [hidden]);
+
+    if (isRecipeDetail) return null;
 
     const navItems = [
         {

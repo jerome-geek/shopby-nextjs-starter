@@ -1,11 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import {
     Bookmark,
-    FlameIcon,
+    ChevronLeft,
+    ChevronRight,
     Heart,
-    MessageCircle,
     ShoppingCart,
 } from 'lucide-react';
 import type {
@@ -15,31 +14,40 @@ import type {
 } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { overlay } from 'overlay-kit';
-import { Suspense } from 'react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { filter, pipe, toArray } from '@fxts/core';
+import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper';
 
 import { recipe } from '@/api/shop';
-import { CollectionCreateModal, RecipeSaveModal } from '@/components/modal';
-import { RecipeCommentSection } from '@/components/recipe';
+import FetchBoundary from '@/components/common/FetchBoundary';
+import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
+import {
+    RecipeCommentSection,
+    RecipeDetailStickyFooter,
+    RecipeDetailStickyFooterSkeleton,
+    RecipeRecommend,
+} from '@/components/recipe';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
-import RecipeRecommend from '@/components/recipe/recommend';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
+import { vars } from '@/styles/theme.css';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { useResponsive } from '@/hooks/utils';
-import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
-import { vars } from '@/styles/theme.css';
-import FetchBoundary from '@/components/common/FetchBoundary';
+
+const HEADER_HEIGHT = 90;
+const HEADER_HEIGHT_MOBILE = 56;
+const SCROLL_OFFSET_MARGIN = 16;
 
 const RecipeDetailPage = ({
     sno,
@@ -54,16 +62,16 @@ const RecipeDetailPage = ({
     const queryClient = useQueryClient();
 
     const isLogin = useAuth();
-    console.log('🚀 ~ RecipeDetailPage ~ isLogin:', isLogin);
+
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo || 0;
 
     const { data: recipeDetailData } = useRecipeDetail({ sno, memberNo });
+    console.log('🚀 ~ RecipeDetailPage ~ recipeDetailData:', recipeDetailData);
+
     const cookingMinutes = recipeDetailData.durationSeconds
         ? Math.floor(recipeDetailData.durationSeconds / 60)
         : 0;
-
-    const { likeRecipe, unlikeRecipe, unBookmarkRecipe } = useRecipeMutation();
 
     const liked = !!recipeDetailData?.liked;
     const likeCount = recipeDetailData?.likeCount ?? 0;
@@ -72,7 +80,18 @@ const RecipeDetailPage = ({
     const bookmarkCount = recipeDetailData?.bookmarkCount ?? 0;
 
     const ingredients = recipeDetailData?.ingredients ?? [];
+    const imageList = pipe(
+        [
+            recipeDetailData.thumbnailUrl,
+            ...(recipeDetailData.steps?.map((s) => s.stepImageUrl) ?? []),
+        ],
+        filter((img): img is string => !!img),
+        toArray,
+    );
 
+    const swiperRef = useRef<SwiperType | null>(null);
+
+    const { likeRecipe, unlikeRecipe, unBookmarkRecipe } = useRecipeMutation();
     const onLikeToggle = () => {
         if (!isLogin) {
             openLoginDialog();
@@ -90,8 +109,8 @@ const RecipeDetailPage = ({
                     });
                     addToast({
                         message: liked
-                            ? '좋아요를 취소했습니다.'
-                            : '레시피를 좋아합니다.',
+                            ? t('좋아요를 취소했습니다.')
+                            : t('레시피를 좋아합니다.'),
                         variant: 'success',
                     });
                 },
@@ -114,7 +133,7 @@ const RecipeDetailPage = ({
                             queryKey: recipeKeys.detail(sno, memberNo),
                         });
                         addToast({
-                            message: '북마크를 취소했습니다.',
+                            message: t('북마크를 취소했습니다.'),
                             variant: 'success',
                         });
                     },
@@ -128,7 +147,17 @@ const RecipeDetailPage = ({
     const scrollToComments = () => {
         const element = document.getElementById('recipe-comments');
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            const headerHeight = isMobile
+                ? HEADER_HEIGHT_MOBILE
+                : HEADER_HEIGHT;
+
+            const top =
+                element.getBoundingClientRect().top +
+                window.scrollY -
+                headerHeight -
+                SCROLL_OFFSET_MARGIN;
+
+            window.scrollTo({ top, behavior: 'smooth' });
         }
     };
 
@@ -140,27 +169,46 @@ const RecipeDetailPage = ({
 
             {/* --- HEADER AREA --- */}
             <section className={styles.headerArea}>
-                <div className={styles.imageCarousel}>
-                    <Swiper
-                        modules={[Pagination, Navigation]}
-                        pagination={{ clickable: true }}
-                        navigation
-                        style={{ height: '100%', width: '100%' }}
-                    >
-                        {[recipeDetailData.thumbnailUrl].map((img, idx) => {
-                            if (img) {
-                                return (
-                                    <SwiperSlide key={idx}>
-                                        <img
-                                            src={img}
-                                            alt={`recipe image ${idx}`}
-                                            className={styles.carouselImage}
-                                        />
-                                    </SwiperSlide>
-                                );
-                            }
-                        })}
-                    </Swiper>
+                <div className={styles.imageCarouselContainer}>
+                    <div className={styles.imageCarousel}>
+                        <Swiper
+                            modules={[Pagination]}
+                            pagination={{
+                                clickable: true,
+                                el: '.recipe-thumbnail-pagination',
+                            }}
+                            onSwiper={(swiper) => {
+                                swiperRef.current = swiper;
+                            }}
+                            style={{ height: '100%', width: '100%' }}
+                        >
+                            {imageList.map((img, idx) => (
+                                <SwiperSlide key={idx}>
+                                    <img
+                                        src={img}
+                                        alt={`recipe image ${idx}`}
+                                        className={styles.carouselImage}
+                                    />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+
+                        <button
+                            className={`${styles.carouselNavButton} ${styles.carouselNavPrev}`}
+                            onClick={() => swiperRef.current?.slidePrev()}
+                            aria-label='이전 이미지'
+                        >
+                            <ChevronLeft size={24} strokeWidth={2} />
+                        </button>
+                        <button
+                            className={`${styles.carouselNavButton} ${styles.carouselNavNext}`}
+                            onClick={() => swiperRef.current?.slideNext()}
+                            aria-label='다음 이미지'
+                        >
+                            <ChevronRight size={24} strokeWidth={2} />
+                        </button>
+                    </div>
+                    <div className='recipe-thumbnail-pagination' />
                 </div>
 
                 <div className={styles.headerInfo}>
@@ -348,39 +396,18 @@ const RecipeDetailPage = ({
             </FetchBoundary>
 
             {/* --- MOBILE STICKY FOOTER --- */}
-            <footer className={styles.mobileStickyFooter}>
-                <button
-                    className={styles.mobileActionButton}
-                    onClick={onLikeToggle}
-                    data-active={liked}
-                    data-type='like'
-                >
-                    <Heart size={24} fill={liked ? 'currentColor' : 'none'} />
-                    <span>{likeCount}</span>
-                </button>
-
-                <button
-                    className={styles.mobileActionButton}
-                    onClick={scrollToComments}
-                >
-                    <MessageCircle size={24} />
-                    {/* <span>{recipeDetailData?.commentCount ?? 0}</span> */}
-                    <span>0</span>
-                </button>
-
-                <button
-                    className={styles.mobileActionButton}
-                    onClick={onBookmarkToggle}
-                    data-active={bookmarked}
-                    data-type='bookmark'
-                >
-                    <Bookmark
-                        size={24}
-                        fill={bookmarked ? 'currentColor' : 'none'}
-                    />
-                    <span>{bookmarkCount.toLocaleString()}</span>
-                </button>
-            </footer>
+            <FetchBoundary fallback={<RecipeDetailStickyFooterSkeleton />}>
+                <RecipeDetailStickyFooter
+                    recipeSno={Number(sno)}
+                    liked={liked}
+                    likeCount={likeCount}
+                    bookmarked={bookmarked}
+                    bookmarkCount={bookmarkCount}
+                    onLikeToggle={onLikeToggle}
+                    onBookmarkToggle={onBookmarkToggle}
+                    onCommentClick={scrollToComments}
+                />
+            </FetchBoundary>
         </div>
     );
 };
