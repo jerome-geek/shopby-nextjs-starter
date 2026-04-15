@@ -1,27 +1,26 @@
 import { useTranslation } from 'react-i18next';
 
-import { type DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
+import { type DefaultBottomSheetProps, BottomSheetLayout } from '@/components/layout';
 import { RecipeUrlInputContent } from '@/components/layer-contents/recipe-url-input';
 
-type RecipeUrlInputProps = DefaultModalLayoutProps;
+type RecipeUrlInputSheetProps = DefaultBottomSheetProps;
 
-export const RecipeUrlInput = ({
+export const RecipeUrlInputSheet = ({
     isOpen,
     close,
     unmount,
-}: RecipeUrlInputProps) => {
+}: RecipeUrlInputSheetProps) => {
     const { t } = useTranslation();
 
     return (
-        <ModalLayout
+        <BottomSheetLayout
             isOpen={isOpen}
             close={close}
             unmount={unmount}
             title={t('레시피 URL 입력')}
-            size='small'
-            width='480px'
+            isUnmountCondition={false}
         >
             <RecipeUrlInputContent close={close} />
-        </ModalLayout>
+        </BottomSheetLayout>
     );
 };

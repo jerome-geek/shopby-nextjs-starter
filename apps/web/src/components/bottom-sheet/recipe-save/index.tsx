@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { ModalLayout } from '@/components/layout';
+import { BottomSheetLayout } from '@/components/layout';
 import { RecipeSaveContent } from '@/components/layer-contents/recipe-save';
 
-interface RecipeSaveModalProps {
+interface RecipeSaveSheetProps {
     isOpen: boolean;
     close: () => void;
     unmount: () => void;
@@ -11,29 +11,28 @@ interface RecipeSaveModalProps {
     onAddCollection?: () => void;
 }
 
-export const RecipeSaveModal = ({
+export const RecipeSaveSheet = ({
     isOpen,
     close,
     unmount,
     recipeSno,
     onAddCollection,
-}: RecipeSaveModalProps) => {
+}: RecipeSaveSheetProps) => {
     const { t } = useTranslation();
 
     return (
-        <ModalLayout
+        <BottomSheetLayout
             isOpen={isOpen}
             close={close}
             unmount={unmount}
             title={t('레시피 저장')}
-            size='small'
-            width='540px'
+            isUnmountCondition={false}
         >
             <RecipeSaveContent
                 close={close}
                 recipeSno={recipeSno}
                 onAddCollection={onAddCollection}
             />
-        </ModalLayout>
+        </BottomSheetLayout>
     );
 };

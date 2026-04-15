@@ -1,27 +1,26 @@
 import { useTranslation } from 'react-i18next';
 
-import { type DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
+import { type DefaultBottomSheetProps, BottomSheetLayout } from '@/components/layout';
 import { RecipeCreateSelectionContent } from '@/components/layer-contents/recipe-create-select';
 
-type RecipeCreateSelectionProps = DefaultModalLayoutProps;
+type RecipeCreateSelectionSheetProps = DefaultBottomSheetProps;
 
-export const RecipeCreateSelection = ({
+export const RecipeCreateSelectionSheet = ({
     isOpen,
     close,
     unmount,
-}: RecipeCreateSelectionProps) => {
+}: RecipeCreateSelectionSheetProps) => {
     const { t } = useTranslation();
 
     return (
-        <ModalLayout
+        <BottomSheetLayout
             isOpen={isOpen}
             close={close}
             unmount={unmount}
             title={t('레시피 만들기')}
-            size='small'
-            width='540px'
+            isUnmountCondition={false}
         >
             <RecipeCreateSelectionContent close={close} />
-        </ModalLayout>
+        </BottomSheetLayout>
     );
 };

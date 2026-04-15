@@ -6,16 +6,38 @@ import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
+import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
 import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
+import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
+import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
 import { CollectionCreateModal } from '@/components/modal/collection-create';
 import { PATHS } from '@/const/paths';
+import { MODAL_QUERY_KEY } from '@/const/modal';
 import { vars } from '@/styles/theme.css';
+import { useResponsive } from '@/hooks/utils';
 
 export const useCustomDialog = () => {
     const { t } = useTranslation();
     const router = useRouter();
+    const { isMobile } = useResponsive();
+
+    const removeModalQuery = useCallback(
+        (originalClose: () => void) =>
+            () => {
+                if (router.query[MODAL_QUERY_KEY]) {
+                    const { [MODAL_QUERY_KEY]: _, ...restQuery } = router.query;
+                    router.replace(
+                        { query: restQuery },
+                        undefined,
+                        { shallow: true },
+                    );
+                }
+                originalClose();
+            },
+        [router],
+    );
 
     const openAddCartDialog = useCallback(async <T = boolean,>() => {
         return await overlay.openAsync<T>((props) => {
@@ -117,32 +139,73 @@ export const useCustomDialog = () => {
     );
 
     const openRecipeUrlInput = useCallback(() => {
-        overlay.open((props) => <RecipeUrlInput {...props} />);
-    }, []);
+        if (isMobile) {
+            overlay.open((props) => (
+                <RecipeUrlInputSheet
+                    {...props}
+                    close={removeModalQuery(props.close)}
+                />
+            ));
+        } else {
+            overlay.open((props) => (
+                <RecipeUrlInput
+                    {...props}
+                    close={removeModalQuery(props.close)}
+                />
+            ));
+        }
+    }, [isMobile, removeModalQuery]);
 
     const openRecipeImageUpload = useCallback(() => {
         overlay.open((props) => <RecipeImageUploadModal {...props} />);
     }, []);
 
     const openRecipeCreateSelection = useCallback(() => {
-        overlay.open((props) => <RecipeCreateSelection {...props} />);
-    }, []);
+        if (isMobile) {
+            overlay.open((props) => (
+                <RecipeCreateSelectionSheet
+                    {...props}
+                    close={removeModalQuery(props.close)}
+                />
+            ));
+        } else {
+            overlay.open((props) => (
+                <RecipeCreateSelection
+                    {...props}
+                    close={removeModalQuery(props.close)}
+                />
+            ));
+        }
+    }, [isMobile, removeModalQuery]);
 
     const openCollectionCreate = useCallback(() => {
         overlay.open((props) => <CollectionCreateModal {...props} />);
     }, []);
 
     const openRecipeSave = useCallback((recipeSno?: number) => {
-        overlay.open((props) => (
-            <RecipeSaveModal
-                {...props}
-                recipeSno={recipeSno}
-                onAddCollection={() => {
-                    openCollectionCreate();
-                }}
-            />
-        ));
-    }, [openCollectionCreate]);
+        const sharedProps = {
+            recipeSno,
+            onAddCollection: openCollectionCreate,
+        };
+
+        if (isMobile) {
+            overlay.open((props) => (
+                <RecipeSaveSheet
+                    {...props}
+                    {...sharedProps}
+                    close={removeModalQuery(props.close)}
+                />
+            ));
+        } else {
+            overlay.open((props) => (
+                <RecipeSaveModal
+                    {...props}
+                    {...sharedProps}
+                    close={removeModalQuery(props.close)}
+                />
+            ));
+        }
+    }, [isMobile, removeModalQuery, openCollectionCreate]);
 
     return {
         openAddCartDialog,
