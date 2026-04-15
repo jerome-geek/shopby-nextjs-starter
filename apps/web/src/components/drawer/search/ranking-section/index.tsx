@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -7,6 +8,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import * as drawerStyles from '@/components/drawer/search/index.css';
 import * as styles from '@/components/drawer/search/ranking-section/index.css';
 import { Column } from '@/components/ui/layout/flex';
+import { PATHS } from '@/const/paths';
+import {
+    COLLECTION_PAGE_QUERY_KEY,
+    RECIPE_PAGE_QUERY_KEY,
+} from '@/const/search';
 import { useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
@@ -93,11 +99,22 @@ export const RankingSection = ({
                             <ul className={drawerStyles.rankingList}>
                                 {pageItems.map((item, index) => (
                                     <li key={`${item}-${sliceStart + index}`}>
-                                        <button
+                                        <Link
                                             className={
                                                 drawerStyles.rankingItemButton
                                             }
                                             onClick={() => onItemClick(item)}
+                                            href={{
+                                                pathname: PATHS.SEARCH,
+                                                query: {
+                                                    keyword: item,
+                                                    pageNumber: '1',
+                                                    [RECIPE_PAGE_QUERY_KEY]:
+                                                        '1',
+                                                    [COLLECTION_PAGE_QUERY_KEY]:
+                                                        '1',
+                                                },
+                                            }}
                                         >
                                             <span
                                                 className={
@@ -113,7 +130,7 @@ export const RankingSection = ({
                                             >
                                                 {item}
                                             </span>
-                                        </button>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

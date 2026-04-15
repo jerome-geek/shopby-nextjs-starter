@@ -284,7 +284,10 @@ export const rankingItemButton = style([
 export const rankingNumber = style([
     textStyles.body1Medium,
     {
-        minWidth: '18px',
+        display: 'inline-flex',
+        flexShrink: 0,
+        justifyContent: 'flex-end',
+        minWidth: '2ch',
         color: vars.color.green['80'],
         fontVariantNumeric: 'tabular-nums',
 
