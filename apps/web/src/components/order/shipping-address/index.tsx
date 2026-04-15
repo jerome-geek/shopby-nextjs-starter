@@ -5,14 +5,17 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/shipping-address/index.css';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';
 import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
 import { ShippingAddressListModal } from '@/components/modal';
+import { ShippingAddressListBottomSheet } from '@/components/bottom-sheet/shipping-address-list';
 
 const ShippingAddress = () => {
     const { t } = useTranslation();
 
     const isLogin = useAuth();
+    const { isMobile } = useResponsive();
 
     const methods = useFormContext<PaymentReserveSchemaType>();
     const { control } = methods;
@@ -20,21 +23,35 @@ const ShippingAddress = () => {
     console.log('🚀 ~ ShippingAddress ~ shippingAddress:', shippingAddress);
 
     const handleSelectAddress = () => {
-        overlay.open(({ isOpen, close, unmount }) => (
-            <FormProvider {...methods}>
-                <ShippingAddressListModal
-                    isOpen={isOpen}
-                    onClose={close}
-                    unmount={unmount}
-                    currentAddressNo={shippingAddress.addressNo}
-                />
-            </FormProvider>
-        ));
+        if (isMobile) {
+            overlay.open(({ isOpen, close, unmount }) => (
+                <FormProvider {...methods}>
+                    <ShippingAddressListBottomSheet
+                        isOpen={isOpen}
+                        close={close}
+                        unmount={unmount}
+                        currentAddressNo={shippingAddress.addressNo}
+                    />
+                </FormProvider>
+            ));
+        } else {
+            overlay.open(({ isOpen, close, unmount }) => (
+                <FormProvider {...methods}>
+                    <ShippingAddressListModal
+                        isOpen={isOpen}
+                        onClose={close}
+                        unmount={unmount}
+                        currentAddressNo={shippingAddress.addressNo}
+                    />
+                </FormProvider>
+            ));
+        }
     };
 
     if (isLogin === null) {
         return null;
     }
+
 
     return (
         <section className={styles.container}>

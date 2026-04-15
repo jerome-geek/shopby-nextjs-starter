@@ -48,7 +48,6 @@ export const articleContent = style({
         [media.mobile]: {
             border: 'none',
             borderRadius: '0',
-            padding: '20px',
             width: '100%',
         },
     },
