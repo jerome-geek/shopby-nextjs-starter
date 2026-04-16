@@ -18,6 +18,7 @@ export type ProductListSearchInputProps = {
     placeholder?: string;
     autoFocus?: boolean;
     syncKeywordFromUrl?: boolean;
+    className?: string;
 };
 
 export const ProductListSearchInput = ({
@@ -26,6 +27,7 @@ export const ProductListSearchInput = ({
     placeholder = '레시피, 상품을 검색하세요',
     autoFocus = true,
     syncKeywordFromUrl = false,
+    className,
 }: ProductListSearchInputProps): ReactElement => {
     const { isMobile } = useResponsive();
 
@@ -79,7 +81,11 @@ export const ProductListSearchInput = ({
     };
 
     return (
-        <div className={styles.searchKeywordFormContainer}>
+        <div
+            className={[styles.searchKeywordFormContainer, className]
+                .filter(Boolean)
+                .join(' ')}
+        >
             {isMobile && onBack && (
                 <button
                     type='button'

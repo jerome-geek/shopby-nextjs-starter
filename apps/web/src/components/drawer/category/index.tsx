@@ -49,6 +49,7 @@ export const CategoryDrawer = ({
                                 onBack={close}
                                 searchAfterAction={close}
                                 autoFocus={false}
+                                className={styles.searchInputOverride}
                             />
                             <Link
                                 href={PATHS.CART}

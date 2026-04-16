@@ -14,13 +14,14 @@ export const drawer = style({
     position: 'fixed',
     top: 0,
     left: 0,
-    width: '100vw',
+    width: '100%',
     height: '100dvh',
     backgroundColor: vars.color.white,
     zIndex: 1002,
     display: 'flex',
     flexDirection: 'column',
     overflowY: 'hidden',
+    overflowX: 'hidden',
 });
 
 export const searchRow = style({
@@ -30,12 +31,20 @@ export const searchRow = style({
     gap: '12px',
 });
 
+export const searchInputOverride = style({
+    flex: 1,
+    width: 'auto',
+    flexShrink: 1,
+    paddingRight: 0,
+});
+
 export const cartButton = style({
     position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    marginRight: '20px',
     color: vars.color.black,
 });
 
@@ -102,5 +111,6 @@ export const activeIndicator = style({
 export const content = style({
     flex: 1,
     overflowY: 'auto',
+    overflowX: 'hidden',
     padding: '0 20px 24px',
 });
