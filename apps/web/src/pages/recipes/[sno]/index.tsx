@@ -1,3 +1,4 @@
+import { filter, pipe, toArray } from '@fxts/core';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import {
@@ -14,12 +15,11 @@ import type {
 } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { filter, pipe, toArray } from '@fxts/core';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Swiper as SwiperType } from 'swiper';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import type { Swiper as SwiperType } from 'swiper';
 
 import { recipe } from '@/api/shop';
 import FetchBoundary from '@/components/common/FetchBoundary';
@@ -34,8 +34,8 @@ import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
-import { useCustomDialog } from '@/hooks/ui';
-import { useToast } from '@/hooks/ui/useToast';
+import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useBookmark } from '@/hooks/recipe';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
@@ -57,7 +57,8 @@ const RecipeDetailPage = ({
     const { isMobile } = useResponsive();
 
     const { addToast } = useToast();
-    const { openLoginDialog, openRecipeSave } = useCustomDialog();
+    const { openLoginDialog } = useCustomDialog();
+    const { toggleRecipeBookmark } = useBookmark();
 
     const queryClient = useQueryClient();
 
@@ -67,7 +68,6 @@ const RecipeDetailPage = ({
     const memberNo = profileData?.memberNo || 0;
 
     const { data: recipeDetailData } = useRecipeDetail({ sno, memberNo });
-    console.log('🚀 ~ RecipeDetailPage ~ recipeDetailData:', recipeDetailData);
 
     const cookingMinutes = recipeDetailData.durationSeconds
         ? Math.floor(recipeDetailData.durationSeconds / 60)
@@ -91,7 +91,7 @@ const RecipeDetailPage = ({
 
     const swiperRef = useRef<SwiperType | null>(null);
 
-    const { likeRecipe, unlikeRecipe, unBookmarkRecipe } = useRecipeMutation();
+    const { likeRecipe, unlikeRecipe } = useRecipeMutation();
     const onLikeToggle = () => {
         if (!isLogin) {
             openLoginDialog();
@@ -104,9 +104,6 @@ const RecipeDetailPage = ({
             { sno },
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries({
-                        queryKey: recipeKeys.detail(sno, memberNo),
-                    });
                     addToast({
                         message: liked
                             ? t('좋아요를 취소했습니다.')
@@ -119,29 +116,7 @@ const RecipeDetailPage = ({
     };
 
     const onBookmarkToggle = () => {
-        if (!isLogin) {
-            openLoginDialog();
-            return;
-        }
-
-        if (bookmarked) {
-            unBookmarkRecipe.mutate(
-                { sno },
-                {
-                    onSuccess: () => {
-                        queryClient.invalidateQueries({
-                            queryKey: recipeKeys.detail(sno, memberNo),
-                        });
-                        addToast({
-                            message: t('북마크를 취소했습니다.'),
-                            variant: 'success',
-                        });
-                    },
-                },
-            );
-        } else {
-            openRecipeSave();
-        }
+        toggleRecipeBookmark({ sno, bookmarked });
     };
 
     const scrollToComments = () => {

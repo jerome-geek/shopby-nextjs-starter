@@ -12,11 +12,13 @@ import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
 import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
-import { CollectionCreateModal } from '@/components/modal/collection-create';
+import { CollectionFormModal } from '@/components/modal/collection-form';
+import { CollectionFormSheet } from '@/components/bottom-sheet/collection-form';
 import { PATHS } from '@/const/paths';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 import { vars } from '@/styles/theme.css';
 import { useResponsive } from '@/hooks/utils';
+import { OVERLAY_ID } from '@/const/overlay';
 
 export const useCustomDialog = () => {
     const { t } = useTranslation();
@@ -24,18 +26,15 @@ export const useCustomDialog = () => {
     const { isMobile } = useResponsive();
 
     const removeModalQuery = useCallback(
-        (originalClose: () => void) =>
-            () => {
-                if (router.query[MODAL_QUERY_KEY]) {
-                    const { [MODAL_QUERY_KEY]: _, ...restQuery } = router.query;
-                    router.replace(
-                        { query: restQuery },
-                        undefined,
-                        { shallow: true },
-                    );
-                }
-                originalClose();
-            },
+        (originalClose: () => void) => () => {
+            if (router.query[MODAL_QUERY_KEY]) {
+                const { [MODAL_QUERY_KEY]: _, ...restQuery } = router.query;
+                router.replace({ query: restQuery }, undefined, {
+                    shallow: true,
+                });
+            }
+            originalClose();
+        },
         [router],
     );
 
@@ -178,34 +177,70 @@ export const useCustomDialog = () => {
         }
     }, [isMobile, removeModalQuery]);
 
+    const openCollectionForm = useCallback(
+        ({ shareCode }: { shareCode?: string } = {}) => {
+            if (isMobile) {
+                overlay.open(
+                    (props) => (
+                        <CollectionFormSheet
+                            {...props}
+                            shareCode={shareCode}
+                            close={removeModalQuery(props.close)}
+                        />
+                    ),
+                    {
+                        overlayId: OVERLAY_ID.COLLECTION_FORM,
+                    },
+                );
+            } else {
+                overlay.open(
+                    (props) => (
+                        <CollectionFormModal
+                            {...props}
+                            shareCode={shareCode}
+                            close={removeModalQuery(props.close)}
+                        />
+                    ),
+                    {
+                        overlayId: OVERLAY_ID.COLLECTION_FORM,
+                    },
+                );
+            }
+        },
+        [isMobile, removeModalQuery],
+    );
+
     const openCollectionCreate = useCallback(() => {
-        overlay.open((props) => <CollectionCreateModal {...props} />);
-    }, []);
+        openCollectionForm();
+    }, [openCollectionForm]);
 
-    const openRecipeSave = useCallback((recipeSno?: number) => {
-        const sharedProps = {
-            recipeSno,
-            onAddCollection: openCollectionCreate,
-        };
+    const openRecipeSave = useCallback(
+        (recipeSno?: number) => {
+            const sharedProps = {
+                recipeSno,
+                onAddCollection: openCollectionCreate,
+            };
 
-        if (isMobile) {
-            overlay.open((props) => (
-                <RecipeSaveSheet
-                    {...props}
-                    {...sharedProps}
-                    close={removeModalQuery(props.close)}
-                />
-            ));
-        } else {
-            overlay.open((props) => (
-                <RecipeSaveModal
-                    {...props}
-                    {...sharedProps}
-                    close={removeModalQuery(props.close)}
-                />
-            ));
-        }
-    }, [isMobile, removeModalQuery, openCollectionCreate]);
+            if (isMobile) {
+                overlay.open((props) => (
+                    <RecipeSaveSheet
+                        {...props}
+                        {...sharedProps}
+                        close={removeModalQuery(props.close)}
+                    />
+                ));
+            } else {
+                overlay.open((props) => (
+                    <RecipeSaveModal
+                        {...props}
+                        {...sharedProps}
+                        close={removeModalQuery(props.close)}
+                    />
+                ));
+            }
+        },
+        [isMobile, removeModalQuery, openCollectionCreate],
+    );
 
     return {
         openAddCartDialog,
@@ -215,5 +250,6 @@ export const useCustomDialog = () => {
         openRecipeImageUpload,
         openRecipeSave,
         openCollectionCreate,
+        openCollectionForm,
     };
 };

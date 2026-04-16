@@ -15,6 +15,7 @@ import useReviewMutation from '@/hooks/mutations/useReviewMutation';
 import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
 import useRecipeCommentMutation from '@/hooks/mutations/useRecipeCommentMutation';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
+import useCommonMutation from '@/hooks/mutations/useCommonMutation';
 
 export {
     useBoardReplyMutation,
@@ -34,4 +35,5 @@ export {
     useCollectionMutation,
     useRecipeCommentMutation,
     useRecipeMutation,
+    useCommonMutation,
 };

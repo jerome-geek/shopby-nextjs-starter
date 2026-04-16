@@ -1,6 +1,7 @@
 import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { includes } from '@fxts/core';
 
 import { recipe } from '@/api/shop';
 import type {
@@ -10,12 +11,24 @@ import type {
     BookmarkRecipeData,
 } from '@/models/shop/recipe';
 import { useToast } from '@/hooks/ui';
-import common from '@/api/shop/common';
+import { recipeKeys, collectionKeys } from '@/hooks/queryKeys';
 
 const useRecipeMutation = () => {
     const { t } = useTranslation();
 
     const { addToast } = useToast();
+    const queryClient = useQueryClient();
+
+    const onMutationSuccess = () => {
+        return queryClient.invalidateQueries({
+            predicate: (query) => {
+                return includes(query.queryKey[0], [
+                    ...recipeKeys.all,
+                    ...collectionKeys.all,
+                ]);
+            },
+        });
+    };
 
     const onMutationError = (error: Error) => {
         const errorMessage = isAxiosError(error)
@@ -31,16 +44,10 @@ const useRecipeMutation = () => {
         createRecipe: useMutation({
             mutationFn: async ({ data }: { data: CreateRecipeData }) =>
                 await recipe.createRecipe(data),
-        }),
-
-        /**
-         * 공용 이미지 업로드 (Geek 백엔드)
-         */
-        upload: useMutation({
-            mutationFn: async (formData: FormData) =>
-                await common.upload(formData),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
+
 
         /**
          * 수동 레시피용 임시 이미지 등록
@@ -51,6 +58,7 @@ const useRecipeMutation = () => {
             }: {
                 data: RegisterManualTempImagesData;
             }) => await recipe.registerManualTempImages(data),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
 
@@ -59,6 +67,7 @@ const useRecipeMutation = () => {
          */
         deleteManualTempImages: useMutation({
             mutationFn: async () => await recipe.deleteManualTempImages(),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
 
@@ -68,6 +77,7 @@ const useRecipeMutation = () => {
         createManualRecipe: useMutation({
             mutationFn: async ({ data }: { data: CreateManualRecipeData }) =>
                 await recipe.createManualRecipe(data),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
 
@@ -77,6 +87,7 @@ const useRecipeMutation = () => {
         likeRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.likeRecipe(sno),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
 
@@ -86,6 +97,7 @@ const useRecipeMutation = () => {
         unlikeRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.unlikeRecipe(sno),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
 
@@ -100,6 +112,7 @@ const useRecipeMutation = () => {
                 sno: number;
                 data: BookmarkRecipeData;
             }) => await recipe.bookmarkRecipe(sno, data),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
 
@@ -109,6 +122,7 @@ const useRecipeMutation = () => {
         unBookmarkRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.unBookmarkRecipe(sno),
+            onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),
     };

@@ -261,8 +261,7 @@ export interface BookmarkedRecipeCollection {
     bookmarked: boolean;
     isDefault: boolean;
     recipeImageUrls: string[];
-    // TODO: TO CHECK
-    recipes: any[];
+    recipes: GetRecipeDetailResponse[];
 }
 
 /** 노출 그룹 아이템 */

@@ -109,8 +109,15 @@ function remove(key: string, opts?: CookieClearOptions) {
 export const accessTokenCookie = {
     get: (ctx?: CookieCtx) => read(COOKIE_KEYS.ACCESS_TOKEN, ctx),
 
-    set: (token: string, expires: number, opts?: CookieSetOptions) =>
-        write(COOKIE_KEYS.ACCESS_TOKEN, token, expires, opts),
+    set: (token: string, expires: number, opts?: CookieSetOptions) => {
+        /**
+         * [SECURITY & UX]
+         * 실제 토큰 만료 시간(expires)보다 쿠키의 수명을 1일(86400초) 더 길게 설정합니다.
+         * 이렇게 해야 토큰이 만료된 직후에도 인터셉터가 쿠키를 읽어 /oauth2로 갱신을 시도할 수 있습니다.
+         */
+        const buffer = 60 * 60 * 24; // 1일 추가
+        write(COOKIE_KEYS.ACCESS_TOKEN, token, expires + buffer, opts);
+    },
 
     /** 토큰 값을 유지한 채 만료 시간만 30분으로 갱신합니다 */
     update: (ctx?: CookieCtx) => {

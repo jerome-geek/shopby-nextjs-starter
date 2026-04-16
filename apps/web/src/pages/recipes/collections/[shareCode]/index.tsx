@@ -1,5 +1,14 @@
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import {
+    Bookmark,
+    BookmarkCheck,
+    EllipsisVertical,
+    Heart,
+    Share2,
+    Users,
+} from 'lucide-react';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
-import { Bookmark, BookmarkCheck, Heart, Share2, Users } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import type {
     GetStaticPaths,
     GetStaticProps,
@@ -19,14 +28,20 @@ import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import * as styles from '@/pages/recipes/collections/[shareCode]/index.css';
+import { useProfile } from '@/hooks/query/member/profile';
+import { useDialog } from '@/hooks/utils';
+import { useRouter } from 'next/router';
 
 // --- 컬렉션 상세 (데이터 연동) ---
 const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
     const { t } = useTranslation();
     const { addToast } = useToast();
     const isLogin = useAuth();
-    const { openLoginDialog } = useCustomDialog();
+    const { openAsyncDialog } = useDialog();
+    const { openCollectionForm, openLoginDialog } = useCustomDialog();
     const queryClient = useQueryClient();
+
+    const router = useRouter();
 
     const { data: collection } = useSharedCollection({ shareCode });
     console.log('🚀 ~ CollectionDetailContent ~ collection:', collection);
@@ -68,12 +83,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                 { collectionSno },
                 {
                     onSuccess: () => {
-                        queryClient.invalidateQueries({
-                            queryKey: collectionKeys.publicSearches(),
-                        });
-                        queryClient.invalidateQueries({
-                            queryKey: recipeKeys.sharedCollection(shareCode),
-                        });
                         addToast({
                             message: '북마크를 취소했습니다.',
                             variant: 'success',
@@ -86,12 +95,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                 { collectionSno },
                 {
                     onSuccess: () => {
-                        queryClient.invalidateQueries({
-                            queryKey: collectionKeys.publicSearches(),
-                        });
-                        queryClient.invalidateQueries({
-                            queryKey: recipeKeys.sharedCollection(shareCode),
-                        });
                         addToast({
                             message: '북마크를 추가했습니다.',
                             variant: 'success',
@@ -145,6 +148,51 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
             : (collection.recipeImageUrls?.slice(0, 3) ?? []);
 
     const hasImages = previewImages.length > 0;
+
+    const { data: profileData } = useProfile();
+    const isEditable = collection.memberNo === profileData?.memberNo;
+
+    const {
+        remove: { mutateAsync: removeCollectionMutateAsync },
+    } = useCollectionMutation();
+
+    const handleEditCollection = () => {
+        openCollectionForm({
+            shareCode: collection.shareCode,
+        });
+    };
+
+    const handleDeleteCollection = async () => {
+        if (!collection) {
+            return;
+        }
+
+        const isAgree = await openAsyncDialog({
+            message: `${collection.title} 컬렉션을 삭제하시겠습니까?`,
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+        console.log('🚀 ~ handleDeleteCollection ~ isAgree:', isAgree);
+
+        if (!isAgree) {
+            return;
+        }
+
+        try {
+            await removeCollectionMutateAsync({
+                collectionSno: collection.sno,
+            });
+
+            addToast({
+                variant: 'success',
+                message: `${collection.title} 컬렉션이 삭제되었습니다.`,
+            });
+
+            router.replace(PATHS.RECIPES.SCRAP);
+        } catch (error) {
+            // Error handled by mutation hook
+        }
+    };
 
     return (
         <>
@@ -200,9 +248,80 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             {t('레시피 컬렉션')}
                         </span>
 
-                        <h1 className={styles.collectionTitle}>
-                            {collection.title}
-                        </h1>
+                        <div className={styles.titleWrapper}>
+                            <h1 className={styles.collectionTitle}>
+                                {collection.title}
+                            </h1>
+
+                            {isEditable && (
+                                <DropdownMenu.Root>
+                                    <DropdownMenu.Trigger asChild>
+                                        <button
+                                            className={styles.moreButton}
+                                            aria-label={t('더보기')}
+                                        >
+                                            <EllipsisVertical size={20} />
+                                        </button>
+                                    </DropdownMenu.Trigger>
+
+                                    <DropdownMenu.Portal>
+                                        <DropdownMenu.Content
+                                            className={styles.dropdownContent}
+                                            sideOffset={5}
+                                            align='start'
+                                            asChild
+                                        >
+                                            <motion.div
+                                                initial={{
+                                                    opacity: 0,
+                                                    scale: 0.95,
+                                                    y: -10,
+                                                }}
+                                                animate={{
+                                                    opacity: 1,
+                                                    scale: 1,
+                                                    y: 0,
+                                                }}
+                                                exit={{
+                                                    opacity: 0,
+                                                    scale: 0.95,
+                                                    y: -10,
+                                                }}
+                                                transition={{
+                                                    type: 'spring',
+                                                    damping: 20,
+                                                    stiffness: 300,
+                                                }}
+                                            >
+                                                <DropdownMenu.Item
+                                                    className={
+                                                        styles.dropdownItem
+                                                    }
+                                                    onSelect={
+                                                        handleEditCollection
+                                                    }
+                                                >
+                                                    <Heart size={16} />{' '}
+                                                    {t('컬렉션 수정')}
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Item
+                                                    className={
+                                                        styles.dropdownItem
+                                                    }
+                                                    data-variant='danger'
+                                                    onSelect={
+                                                        handleDeleteCollection
+                                                    }
+                                                >
+                                                    <Bookmark size={16} />{' '}
+                                                    {t('컬렉션 삭제')}
+                                                </DropdownMenu.Item>
+                                            </motion.div>
+                                        </DropdownMenu.Content>
+                                    </DropdownMenu.Portal>
+                                </DropdownMenu.Root>
+                            )}
+                        </div>
 
                         {collection.description && (
                             <p className={styles.collectionDescription}>

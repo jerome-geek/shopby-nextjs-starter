@@ -46,7 +46,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                         gcTime: 1000 * 60 * 10,
                         refetchOnWindowFocus:
                             process.env.NODE_ENV === 'production',
-                        refetchOnMount: process.env.NODE_ENV === 'production',
+                        refetchOnMount: true,
                         refetchOnReconnect: true,
                         retry: (failureCount, error) => {
                             if (process.env.NODE_ENV === 'development') {

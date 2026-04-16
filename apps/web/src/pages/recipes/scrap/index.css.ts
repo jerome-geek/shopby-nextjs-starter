@@ -11,7 +11,8 @@ export const body2Regular = textStyles.body2Regular;
 export const container = style({
     display: 'flex',
     flexDirection: 'column',
-    padding: '16px',
+    gap: '24px',
+
     '@media': {
         [media.desktop]: {
             gap: '32px',
@@ -24,12 +25,6 @@ export const title = style([
     textStyles.display1Semibold,
     {
         color: vars.color.black,
-        fontSize: '24px',
-        '@media': {
-            [media.desktop]: {
-                fontSize: '32px',
-            },
-        },
     },
 ]);
 
@@ -68,20 +63,13 @@ export const titleContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-    marginBottom: '20px',
-    '@media': {
-        [media.desktop]: {
-            gap: '32px',
-            marginBottom: '40px',
-        },
-    },
 });
 
 export const tabList = style({
     display: 'flex',
     gap: '8px',
     overflowX: 'auto',
-    paddingBottom: '8px',
+    padding: '12px 0',
     msOverflowStyle: 'none',
     scrollbarWidth: 'none',
     selectors: {
@@ -503,6 +491,12 @@ export const detailMeta = style([
     { color: vars.color.gray['60'] },
 ]);
 
+export const viewToggleArea = style({
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: 'auto',
+});
+
 export const viewToggle = style({
     display: 'flex',
     backgroundColor: '#f2f5f1',
@@ -552,18 +546,22 @@ export const recipeDetailGrid = style({
     listStyle: 'none',
     padding: 0,
     margin: 0,
-    gridTemplateColumns: 'repeat(1, 1fr)',
-    gap: '24px',
+    gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+    gap: '48px 24px',
 
     '@media': {
+        'screen and (min-width: 769px)': {
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: '24px',
+        },
         [media.desktop]: {
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+            gap: '24px',
         },
     },
 });
 
 export const recipeDetailCard = style({
-    border: '1px solid red',
     backgroundColor: vars.color.ivory['10'],
     borderRadius: '8px',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',

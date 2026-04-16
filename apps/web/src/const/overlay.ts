@@ -12,5 +12,5 @@ export const OVERLAY_ID = {
     PI_RESTOCK_NOTICE_MODAL: 'pi-restock-notice-modal',
     TOAST: 'toast',
     LOADING: 'loading',
-    COLLECTION_CREATE: 'collection-create',
+    COLLECTION_FORM: 'collection-form',
 } as const;

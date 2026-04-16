@@ -1,6 +1,7 @@
-import { Bookmark } from 'lucide-react';
+import { Bookmark, MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import type { MouseEvent } from 'react';
+import { useState, useRef, useEffect, MouseEvent } from 'react';
 
 import * as styles from '@/components/collection/collection-recipe-card/index.css';
 import { PATHS } from '@/const/paths';
@@ -15,6 +16,9 @@ export const CollectionRecipeCard = ({
 }: {
     recipe: GetRecipeDetailResponse;
 }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
     const href = PATHS.RECIPES.DETAIL.replace('[recipeNo]', String(recipe.sno));
 
     const cookingMinutes = recipe.durationSeconds
@@ -28,6 +32,24 @@ export const CollectionRecipeCard = ({
 
     const { toggleRecipeBookmark } = useBookmark();
 
+    useEffect(() => {
+        const handleClickOutside = (event: globalThis.MouseEvent) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target as Node)
+            ) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        if (isMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isMenuOpen]);
+
     const handleBookmarkClick = async (e: MouseEvent) => {
         e.stopPropagation();
 
@@ -37,16 +59,93 @@ export const CollectionRecipeCard = ({
         });
     };
 
+    const toggleMenu = (e: MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setIsMenuOpen(!isMenuOpen);
+    };
+
     return (
         <div className={styles.RecipeLink}>
             <article className={styles.CardContent}>
                 <div className={styles.CardHeader}>
                     <div className={styles.CardTitleArea}>
-                        <Link href={href} prefetch={false}>
-                            <h4 className={styles.RecipeTitle}>
-                                {recipe.title}
-                            </h4>
-                        </Link>
+                        <div className={styles.TitleRow}>
+                            <Link
+                                href={href}
+                                prefetch={false}
+                                style={{ flex: 1, minWidth: 0 }}
+                            >
+                                <h4 className={styles.RecipeTitle}>
+                                    {recipe.title}
+                                </h4>
+                            </Link>
+
+                            <div
+                                style={{ position: 'relative' }}
+                                ref={menuRef}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button
+                                    className={styles.MoreButton}
+                                    onClick={toggleMenu}
+                                    type='button'
+                                    aria-label='더보기'
+                                >
+                                    <MoreVertical size={16} />
+                                </button>
+
+                                <AnimatePresence>
+                                    {isMenuOpen && (
+                                        <motion.div
+                                            initial={{
+                                                opacity: 0,
+                                                scale: 0.95,
+                                                y: -10,
+                                            }}
+                                            animate={{
+                                                opacity: 1,
+                                                scale: 1,
+                                                y: 0,
+                                            }}
+                                            exit={{
+                                                opacity: 0,
+                                                scale: 0.95,
+                                                y: -10,
+                                            }}
+                                            transition={{
+                                                type: 'spring',
+                                                damping: 20,
+                                                stiffness: 300,
+                                            }}
+                                            className={styles.ActionMenu}
+                                        >
+                                            <button
+                                                className={styles.MenuItem}
+                                                type='button'
+                                                onClick={() => {
+                                                    /* 수정 로직 */
+                                                    setIsMenuOpen(false);
+                                                }}
+                                            >
+                                                <Edit2 size={14} /> 수정하기
+                                            </button>
+                                            <button
+                                                className={styles.MenuItem}
+                                                data-variant='danger'
+                                                type='button'
+                                                onClick={() => {
+                                                    /* 삭제 로직 */
+                                                    setIsMenuOpen(false);
+                                                }}
+                                            >
+                                                <Trash2 size={14} /> 삭제하기
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </div>
                         {author && (
                             <span className={styles.RecipeAuthor}>
                                 {author}
@@ -154,7 +253,7 @@ export const CollectionRecipeCard = ({
                 </div>
 
                 <div className={styles.StepSection}>
-                    <h5 className={styles.StepTitle}>따라봐 How to Cook</h5>
+                    <h5 className={styles.StepTitle}>따라해봐 How to Cook</h5>
                     <ul className={styles.StepList}>
                         {steps.map((step, i) => (
                             <li

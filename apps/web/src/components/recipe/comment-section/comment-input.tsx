@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import * as styles from '@/components/recipe/comment-section/index.css';
 import { RecipePreviewImage } from '@/components/recipe/preview-image';
 import { TextArea } from '@/components/ui/input';
-import { useRecipeCommentMutation, useRecipeMutation } from '@/hooks/mutations';
+import { useCommonMutation, useRecipeCommentMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
@@ -40,7 +40,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
 
     const { createComment } = useRecipeCommentMutation();
 
-    const { upload } = useRecipeMutation();
+    const { upload } = useCommonMutation();
 
     const { data: profileData } = useProfile();
 

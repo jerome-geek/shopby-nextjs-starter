@@ -50,7 +50,81 @@ export const CardTitleArea = style({
     flexDirection: 'column',
     gap: '4px',
     minWidth: 0,
+    flex: 1,
 });
+
+export const TitleRow = style({
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: '8px',
+    position: 'relative',
+});
+
+export const MoreButton = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    borderRadius: '50%',
+    color: vars.color.gray['40'],
+    transition: 'all 0.2s ease',
+    cursor: 'pointer',
+    backgroundColor: 'transparent',
+    border: 'none',
+    selectors: {
+        '&:hover': {
+            backgroundColor: vars.color.gray['10'],
+            color: vars.color.gray['90'],
+        },
+        '&:active': {
+            transform: 'scale(0.92)',
+        },
+    },
+});
+
+export const ActionMenu = style({
+    position: 'absolute',
+    top: '28px',
+    right: '0',
+    zIndex: 100,
+    minWidth: '110px',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backdropFilter: 'blur(16px)',
+    borderRadius: '12px',
+    padding: '6px',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.4)',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+});
+
+export const MenuItem = style([
+    textStyles.body2Regular,
+    {
+        padding: '10px 12px',
+        borderRadius: '8px',
+        textAlign: 'left',
+        cursor: 'pointer',
+        color: vars.color.gray['90'],
+        transition: 'all 0.2s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        backgroundColor: 'transparent',
+        border: 'none',
+        selectors: {
+            '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            },
+            '&[data-variant="danger"]': {
+                color: '#ff4d4d',
+            },
+        },
+    },
+]);
 
 export const RecipeTitle = style([
     textStyles.headingSemibold,
@@ -152,9 +226,12 @@ export const IngredientHeader = style({
 
 export const IngredientTitle = style([
     textStyles.body2Semibold,
-    { color: vars.color.black, lineHeight: '13px' },
+    {
+        color: vars.color.gray['90'],
+    },
 ]);
 
+// TODO: 툴팁 추가
 export const InfoDot = style({
     width: 13,
     height: 13,
@@ -269,71 +346,74 @@ export const StepSection = style({
 });
 
 export const StepTitle = style([
-    textStyles.body2Semibold,
+    textStyles.body1Semibold,
     {
-        color: vars.color.black,
-        '@media': {
-            [media.mobile]: {
-                fontSize: '1.3rem',
-                lineHeight: '1.3',
-                letterSpacing: '-1.3%',
-            },
-        },
+        color: vars.color.gray['90'],
     },
 ]);
 
 export const StepList = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '8px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
+
+    '@media': {
+        [media.desktop]: {
+            gap: '10px',
+        },
+    },
 });
 
 export const StepItem = style({
     display: 'flex',
-    gap: '12px',
+    gap: '6px',
     alignItems: 'flex-start',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '8px',
+        },
+    },
 });
 
 export const StepNumber = style([
     textStyles.caption2Semibold,
     {
-        width: '20px',
-        height: '20px',
+        width: '17px',
+        height: '17px',
         aspectRatio: '1 / 1',
         minWidth: '20px',
         borderRadius: '50%',
-        backgroundColor: '#8da287',
+        backgroundColor: vars.color.green['80'],
+        color: vars.color.white,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
+
+        '@media': {
+            [media.desktop]: {
+                width: '20px',
+                height: '20px',
+            },
+        },
     },
 ]);
 
-globalStyle(`${StepNumber} > span`, {
-    color: vars.color.white,
-});
-
 export const StepText = style([
-    textStyles.body1Regular,
+    textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        minWidth: 0,
         display: '-webkit-box',
         WebkitLineClamp: 1,
         WebkitBoxOrient: 'vertical',
-        '@media': {
-            [media.mobile]: {
-                fontSize: '1.3rem',
-                lineHeight: '1.3',
-                letterSpacing: '-1.3%',
-            },
-        },
     },
 ]);
 

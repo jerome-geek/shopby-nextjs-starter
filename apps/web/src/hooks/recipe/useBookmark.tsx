@@ -1,13 +1,11 @@
-import { includes } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
-import { collectionKeys, recipeKeys } from '@/hooks/queryKeys';
+import { collectionKeys } from '@/hooks/queryKeys';
 import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 
 const useBookmark = () => {
     const { t } = useTranslation();
@@ -40,13 +38,6 @@ const useBookmark = () => {
                     { sno },
                     {
                         onSuccess: () => {
-                            queryClient.invalidateQueries({
-                                predicate: (query) =>
-                                    includes(query.queryKey[0], [
-                                        ...recipeKeys.all,
-                                    ]),
-                            });
-
                             addToast({
                                 message: t('북마크를 취소했습니다.'),
                                 variant: 'success',

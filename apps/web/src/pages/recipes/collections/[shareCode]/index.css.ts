@@ -103,10 +103,88 @@ export const badge = style([
     },
 ]);
 
+export const titleWrapper = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    width: '100%',
+});
+
 export const collectionTitle = style([
     textStyles.display1Semibold,
     {
         color: vars.color.black,
+        flexShrink: 1,
+    },
+]);
+
+export const moreButton = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '32px',
+    height: '32px',
+    borderRadius: '50%',
+    color: vars.color.gray['40'],
+    transition: 'all 0.2s ease',
+    cursor: 'pointer',
+    backgroundColor: 'transparent',
+    border: 'none',
+    outline: 'none',
+
+    ':hover': {
+        backgroundColor: vars.color.gray['10'],
+        color: vars.color.gray['90'],
+    },
+
+    ':active': {
+        transform: 'scale(0.92)',
+    },
+});
+
+export const dropdownContent = style({
+    zIndex: 1000,
+    minWidth: '160px',
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    backdropFilter: 'blur(16px)',
+    borderRadius: '12px',
+    padding: '6px',
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.08)',
+    border: '1px solid rgba(255, 255, 255, 0.4)',
+    animationDuration: '200ms',
+    animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+});
+
+export const dropdownItem = style([
+    textStyles.body1Regular,
+    {
+        padding: '10px 12px',
+        borderRadius: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        cursor: 'pointer',
+        color: vars.color.gray['80'],
+        outline: 'none',
+        border: 'none',
+        backgroundColor: 'transparent',
+        width: '100%',
+        transition: 'all 0.15s ease',
+
+        selectors: {
+            '&:hover, &[data-highlighted]': {
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                color: vars.color.black,
+                transform: 'translateX(2px)',
+            },
+            '&[data-variant="danger"]': {
+                color: '#ff4d4d',
+            },
+            '&[data-variant="danger"]:hover, &[data-variant="danger"][data-highlighted]': {
+                backgroundColor: 'rgba(255, 77, 77, 0.08)',
+                color: '#ff4d4d',
+            },
+        },
     },
 ]);
 
