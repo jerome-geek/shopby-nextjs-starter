@@ -1,4 +1,17 @@
 import {
+    PhotoReview,
+    ProductAdditionalDiscount,
+    ProductErrorState,
+    ProductMainImage,
+    ProductTabs,
+} from '@/components/product';
+import {
+    FlatProductOption,
+    MultiProductOption,
+    SelectedProductOption,
+} from '@/components/product-option';
+import { Button } from '@/components/ui/button';
+import {
     each,
     filter,
     includes,
@@ -20,19 +33,7 @@ import { useEffect, useMemo } from 'react';
 import { product } from '@/api/product';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import {
-    PhotoReview,
-    ProductAdditionalDiscount,
-    ProductMainImage,
-    ProductTabs,
-    ProductErrorState,
-} from '@/components/product';
-import {
-    FlatProductOption,
-    MultiProductOption,
-    SelectedProductOption,
-} from '@/components/product-option';
-import { Button } from '@/components/ui/button';
+import { ProductCouponModal } from '@/components/modal/product-coupon';
 import { OVERLAY_ID } from '@/const/overlay';
 import { toOrderSheetOption, toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
@@ -51,9 +52,9 @@ import * as styles from '@/pages/products/[productNo]/index.css';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
+
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { ProductCouponModal } from '@/components/modal/product-coupon';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -525,7 +526,7 @@ function ProductDetailView({
                 </div>
             </div>
 
-            <div className={styles.bottomBar}>
+            <div className={styles.bottomSticky}>
                 <button
                     className={styles.giftButton}
                     onClick={onGiftButtonClick}

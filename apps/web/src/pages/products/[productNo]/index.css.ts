@@ -7,7 +7,7 @@ import { globalVars } from '@/styles/global.css';
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
-    paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
+    paddingBottom: 'calc(var(--bottom-nav-active-height, 64px) + 80px + env(safe-area-inset-bottom))',
     maxWidth: '1200px',
     margin: '0 auto',
 
@@ -298,9 +298,9 @@ export const badgeActive = style({
     color: vars.color.white,
 });
 
-export const bottomBar = style({
+export const bottomSticky = style({
     position: 'fixed',
-    bottom: 0,
+    bottom: 'calc(var(--bottom-nav-active-height, 64px) + env(safe-area-inset-bottom))',
     left: 0,
     right: 0,
     backgroundColor: vars.color.white,
@@ -309,7 +309,7 @@ export const bottomBar = style({
     display: 'flex',
     gap: '12px',
     zIndex: 100,
-    paddingBottom: 'max(12px, env(safe-area-inset-bottom))', // For iOS Home Indicator
+    transition: 'bottom 0.2s ease-in-out',
 
     '@media': {
         [media.desktop]: {
