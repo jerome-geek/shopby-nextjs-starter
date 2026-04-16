@@ -3,6 +3,7 @@ import { includes } from '@fxts/core';
 import { clsx } from 'clsx';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
+import { useLenis } from 'lenis/react';
 
 import BottomNavigation from '@/components/layout/bottom-navigation';
 import { Footer } from '@/components/layout/footer';
@@ -23,6 +24,8 @@ interface LayoutProps {
 }
 
 export const DefaultLayout = ({ children, className }: LayoutProps) => {
+    const lenis = useLenis();
+
     useSbInit();
     useShopbyStatistics();
 
@@ -34,6 +37,10 @@ export const DefaultLayout = ({ children, className }: LayoutProps) => {
     // 페이지 이동 동작이 30분 동안 없을 경우 액세스토큰 쿠키 만료되어 자동 삭제 (로그아웃)
     useRouteChange(() => {
         overlay.closeAll();
+
+        if (lenis) {
+            lenis.scrollTo(0, { immediate: true });
+        }
 
         if (isLoggedIn()) {
             accessTokenCookie.update();
