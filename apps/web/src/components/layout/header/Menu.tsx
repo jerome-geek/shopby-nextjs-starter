@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { CategoryDrawer } from '@/components/drawer/category';
 import * as styles from '@/components/layout/header/Menu.css';
@@ -39,7 +40,40 @@ const ArrowRightIcon = () => (
     </svg>
 );
 
+export const MENU_LIST = [
+    {
+        label: '발견',
+        href: PATHS.SHOP.DISCOVERY,
+    },
+    {
+        label: '키즈',
+        href: PATHS.SHOP.KIDS,
+    },
+    {
+        label: '라이프',
+        href: PATHS.SHOP.LIFE,
+    },
+    {
+        label: '베스트',
+        href: PATHS.PRODUCTS.BEST,
+    },
+    {
+        label: '기획전',
+        href: PATHS.EVENTS.MAIN,
+    },
+    {
+        label: '신상품',
+        href: PATHS.PRODUCTS.NEW,
+    },
+    {
+        label: '특가',
+        href: PATHS.PRODUCTS.SALE,
+    },
+];
+
 export function Menu({ categoryData }: MenuProps) {
+    const router = useRouter();
+
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [selectedCategoryNo, setSelectedCategoryNo] = useState<number | null>(
         null,
@@ -165,59 +199,17 @@ export function Menu({ categoryData }: MenuProps) {
                 <div className={styles.separator} />
 
                 <ul className={styles.menuList}>
-                    <li>
-                        <Link
-                            href={PATHS.SHOP.DISCOVERY}
-                            className={styles.menuItem}
-                        >
-                            <span>발견</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={PATHS.SHOP.KIDS}
-                            className={styles.menuItem}
-                        >
-                            <span>키즈</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={PATHS.SHOP.LIFE}
-                            className={styles.menuItem}
-                        >
-                            <span>라이프</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={PATHS.PRODUCTS.BEST}
-                            className={styles.menuItem}
-                        >
-                            <span>베스트</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={PATHS.EVENTS.MAIN}
-                            className={styles.menuItem}
-                        >
-                            <span>기획전</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={PATHS.PRODUCTS.NEW}
-                            className={styles.menuItem}
-                        >
-                            <span>신상품</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href={PATHS.MAIN} className={styles.menuItem}>
-                            <span>특가</span>
-                        </Link>
-                    </li>
+                    {MENU_LIST.map((item) => (
+                        <li key={item.href}>
+                            <Link
+                                href={item.href}
+                                className={styles.menuItem}
+                                data-selected={item.href === router.asPath}
+                            >
+                                <span>{item.label}</span>
+                            </Link>
+                        </li>
+                    ))}
                 </ul>
             </div>
 
@@ -225,10 +217,14 @@ export function Menu({ categoryData }: MenuProps) {
                 {!isMobile && isDrawerOpen && (
                     <motion.div
                         className={styles.drawerContainer}
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        initial={{ height: 0 }}
+                        animate={{ height: 'auto' }}
+                        exit={{ height: 0 }}
+                        transition={{
+                            damping: 50,
+                            stiffness: 500,
+                            type: 'spring',
+                        }}
                         style={{ overflow: 'hidden' }} // 애니메이션 중 내용 넘침 방지
                     >
                         <div className={styles.drawerInner}>

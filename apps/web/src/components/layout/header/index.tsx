@@ -21,6 +21,7 @@ import {
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { vars } from '@/styles/theme.css';
+import MobileMenu from '@/components/layout/header/mobile-menu';
 
 import logoImage from '@/assets/logo.png';
 
@@ -162,6 +163,8 @@ export function Header() {
                     </ul>
                 </div>
             </div>
+
+            <MobileMenu />
         </header>
     );
 }

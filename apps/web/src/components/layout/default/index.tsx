@@ -14,7 +14,7 @@ import { PATHS } from '@/const/paths';
 import { useModalWatcher } from '@/hooks/common/useModalWatcher';
 import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 import { useHeaderHeight } from '@/hooks/ui';
-import { useRouteChange, useScrollLock } from '@/hooks/utils';
+import { usePage, useRouteChange, useScrollLock } from '@/hooks/utils';
 import { isLoggedIn } from '@/utils/auth';
 import { accessTokenCookie } from '@/utils/cookie';
 
@@ -32,6 +32,8 @@ export const DefaultLayout = ({ children, className }: LayoutProps) => {
     useScrollLock();
     useHeaderHeight();
     useModalWatcher();
+
+    const { isShopMainPage } = usePage();
 
     // NOTE : 페이지 이동 시 액세스토큰 만료 시간을 30분 연장하여 세션 유지 (로그인 상태 유지)
     // 페이지 이동 동작이 30분 동안 없을 경우 액세스토큰 쿠키 만료되어 자동 삭제 (로그아웃)
@@ -56,7 +58,7 @@ export const DefaultLayout = ({ children, className }: LayoutProps) => {
         <div className={clsx(styles.layout, className)}>
             <Header />
 
-            <main className={styles.main}>
+            <main className={isShopMainPage ? styles.shopMain : styles.main}>
                 <div className={styles.container}>{children}</div>
             </main>
 

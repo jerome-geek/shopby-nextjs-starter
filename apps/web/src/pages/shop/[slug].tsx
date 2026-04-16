@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { HeroBanner } from '@/components/banner/hero';
 import * as styles from '@/styles/Home.css';
 import SectionGroup from '@/components/section/group';
-import IconBannerSection from '@/components/banner/icon-banner-section';
+import IconBanner from '@/components/banner/icon';
 
 const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
     ssr: false,
@@ -29,7 +29,7 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
             {/* Full-width HeroBanner */}
             <section className={styles.heroBannerSection}>
                 <HeroBanner type={heroBannerType} />
-                <IconBannerSection type={heroBannerType} />
+                <IconBanner type={heroBannerType} />
             </section>
 
             {/* 라이프 타임특가 */}

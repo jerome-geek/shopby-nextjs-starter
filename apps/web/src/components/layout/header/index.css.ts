@@ -10,14 +10,17 @@ export const header = style({
     top: 0,
     left: 0,
     right: 0,
-    height: globalVars.header.mobileHeight,
     zIndex: 1000,
     backgroundColor: vars.color.white,
     borderBottom: `1px solid ${vars.color.gray['30']}`,
     padding: '0 20px',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
 
     '@media': {
         [media.desktop]: {
+            flexDirection: 'row',
             padding: 0,
             height: globalVars.header.height,
         },
@@ -25,25 +28,24 @@ export const header = style({
 });
 
 export const headerInner = style({
-    display: 'grid',
-    gridTemplateColumns: '1fr auto 1fr',
     alignItems: 'center',
-    maxWidth: '1200px',
-    height: '100%',
+    maxWidth: '1240px',
+    height: globalVars.header.mobileHeight,
     margin: '0 auto',
+    width: '100%',
+    padding: '0 20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '32px',
 
     '@media': {
         [media.tablet]: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: '32px',
-            gridTemplateColumns: 'none',
+            gap: '16px',
         },
-        [media.desktop]: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: '32px',
-            gridTemplateColumns: 'none',
+        [media.mobile]: {
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+            padding: 0,
         },
     },
 });
@@ -75,12 +77,12 @@ export const logo = style({
         [media.tablet]: {
             order: 1,
             justifyContent: 'flex-start',
-            marginRight: '32px',
+            marginRight: '16px',
         },
         [media.desktop]: {
             order: 1,
             justifyContent: 'flex-start',
-            marginRight: '32px',
+            marginRight: '16px',
         },
     },
 });

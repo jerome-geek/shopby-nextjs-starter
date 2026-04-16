@@ -1,115 +1,109 @@
-import { BANNER_ID } from '@/const/banner';
+import Link from 'next/link';
+import { Suspense, useMemo } from 'react';
+import { FreeMode } from 'swiper/modules';
+import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
+
+import { BANNER_ID_PREFIX, HeroBannerType } from '@/components/banner/hero';
+import * as styles from '@/components/banner/icon/index.css';
+import Skeleton from '@/components/ui/Skeleton/Skeleton';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
-import {
-    getBannerContentList,
-    sortAccounts,
-    splitBannersIntoTwoRows,
-} from '@/hooks/utils/banners';
-import { useMemo } from 'react';
+import type { Banner } from '@/models/display/banner';
+import { getLandingUrl } from '@/utils/banner';
+import { extractBannerContentsByAccountIndex } from '@/utils/shopby';
 
-import * as S from '@/components/banner/icon/index.css';
+import 'swiper/css';
+import 'swiper/css/free-mode';
 
-export default function IconBanner() {
-    const { data: bannerListData } = useBannerList({
-        banners: [BANNER_ID.MAIN_ICON],
-    });
-
-    const { mainBanners, subBannersList } = useMemo(() => {
-        if (!bannerListData || bannerListData.length === 0) {
-            return { mainBanners: [], subBannersList: [] };
-        }
-
-        const targetSection = bannerListData[0];
-        if (!targetSection || !targetSection.accounts) {
-            return { mainBanners: [], subBannersList: [] };
-        }
-
-        const sortedAccounts = sortAccounts(targetSection.accounts);
-
-        // 첫 번째 구좌 또는 구좌명이 'home'인 구좌 찾기
-        // 두 가지 조건 모두 체크하도록 구현 (하나는 주석 처리 가능)
-        const mainAccountIndex = sortedAccounts.findIndex(
-            (account, index) => account.accountName === 'home' || index === 0,
-        );
-
-        const mainAccount =
-            mainAccountIndex >= 0 ? sortedAccounts[mainAccountIndex] : null;
-
-        const mainBanners = mainAccount
-            ? getBannerContentList(mainAccount).filter(
-                  (banner) => banner.imageUrl,
-              )
-            : [];
-
-        // 나머지 구좌들
-        const subAccounts = sortedAccounts.filter(
-            (_, index) => index !== mainAccountIndex,
-        );
-
-        const subBannersList = subAccounts
-            .map((account) => getBannerContentList(account))
-            .map((bannerList) => bannerList.filter((banner) => banner.imageUrl))
-            .filter((bannerList) => bannerList.length > 0);
-
-        return { mainBanners, subBannersList };
-    }, [bannerListData]);
-    console.log('🚀 ~ IconBanner ~ bannerListData:', bannerListData);
-
-    const { firstRow, secondRow } = splitBannersIntoTwoRows(mainBanners);
-
-    const rows = [firstRow, secondRow].filter((row) => row.length > 0);
+const IconBannerSkeleton = () => {
+    const swiperSetting: SwiperProps = {
+        modules: [FreeMode],
+        freeMode: true,
+        slidesPerView: 'auto',
+        spaceBetween: 8,
+        allowTouchMove: false,
+    };
 
     return (
-        <>
-            {mainBanners.length > 0 && (
-                <section
-                    aria-label="메인 아이콘 배너 섹션"
-                    className={S.iconSection}
-                >
-                    {/* <MainIconBanner banners={mainBanners} /> */}
-                </section>
-            )}
-            {/* TODO: 메인 기준으로 임시 주석처리 - 하단 아이콘 배너 섹션 */}
-            {subBannersList.map((subBanners, index) => (
-                <section
-                    key={`sub-icon-banner-${index}`}
-                    aria-label={`${index + 1}번째 아이콘 배너 섹션`}
-                    className={S.iconSection}
-                >
-                    {/* <SubIconBanner banners={subBanners} /> */}
-                </section>
-            ))}
-
-            {mainBanners.length > 0 && (
-                <section
-                    aria-label="메인 아이콘 배너 섹션"
-                    className={S.iconSection}
-                >
-                    <ul className={S.bannerList}>
-                        {mainBanners.map((banner) => (
-                            <li key={banner.bannerNo} className={S.bannerItem}>
-                                {/* <BannerLink banner={banner} /> */}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            )}
-
-            {subBannersList.map((subBanners, index) => (
-                <section
-                    key={`sub-icon-banner-${index}`}
-                    className={S.iconSection}
-                    aria-label={`${index + 1}번째 아이콘 배너 섹션`}
-                >
-                    <ul className={S.bannerList}>
-                        {subBanners.map((banner) => (
-                            <li key={banner.bannerNo} className={S.bannerItem}>
-                                {/* <BannerLink banner={banner} /> */}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            ))}
-        </>
+        <section className={styles.section} aria-busy='true'>
+            <div className={styles.swiperContainer} aria-hidden='true'>
+                <Swiper {...swiperSetting}>
+                    {Array.from({ length: 6 }).map((_, i) => (
+                        <SwiperSlide key={i} style={{ width: 'auto' }}>
+                            <Skeleton
+                                className={styles.skeletonBanner}
+                                width={i % 2 === 0 ? 142 : 104}
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+        </section>
     );
-}
+};
+
+const IconBannerContent = ({ type }: { type: HeroBannerType }) => {
+    const { data: bannerListData } = useBannerList({
+        banners: [`${BANNER_ID_PREFIX}-${type}`],
+        options: {
+            select: (data) => extractBannerContentsByAccountIndex(data, 1),
+        },
+    });
+
+    const swiperSetting: SwiperProps = useMemo(
+        () => ({
+            modules: [FreeMode],
+            freeMode: true,
+            slidesPerView: 'auto',
+            spaceBetween: 8,
+        }),
+        [],
+    );
+
+    const renderSwiper = (list: Banner[]) => {
+        return (
+            <Swiper {...swiperSetting}>
+                {list.map((banner) => (
+                    <SwiperSlide
+                        key={banner.bannerNo}
+                        style={{ width: 'auto' }}
+                    >
+                        <Link
+                            href={getLandingUrl({
+                                landingUrl: banner.landingUrl,
+                                landingUrlType: banner.landingUrlType,
+                            })}
+                        >
+                            <img
+                                src={banner.imageUrl}
+                                alt={banner.name}
+                                className={styles.bannerImage}
+                            />
+                        </Link>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+        );
+    };
+
+    if (bannerListData.length === 0) {
+        return null;
+    }
+
+    return (
+        <section className={styles.section} aria-label='아이콘 배너'>
+            <div className={styles.swiperContainer}>
+                {renderSwiper(bannerListData)}
+            </div>
+        </section>
+    );
+};
+
+const IconBanner = ({ type }: { type: HeroBannerType }) => {
+    return (
+        <Suspense fallback={<IconBannerSkeleton />}>
+            <IconBannerContent type={type} />
+        </Suspense>
+    );
+};
+
+export default IconBanner;

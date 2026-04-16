@@ -13,7 +13,7 @@ import { generateDefaultSeo } from 'next-seo/pages';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { type ReactElement, type ReactNode, useState } from 'react';
+import { type ReactElement, type ReactNode, useMemo, useState } from 'react';
 import { Toaster } from 'sonner';
 import { HttpStatusCode, isAxiosError } from 'axios';
 
@@ -86,6 +86,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         description: 'Headless Commerce Example',
     });
 
+    const pathname = useMemo(() => {
+        return router.asPath.split('?')[0];
+    }, [router.asPath]);
+
     return (
         <>
             <ExternalScripts />
@@ -100,7 +104,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                                     <AnimatePresence mode='wait'>
                                         <motion.div
                                             // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
-                                            key={router.pathname}
+                                            key={pathname}
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -20 }}

@@ -22,6 +22,18 @@ export const main = style({
     },
 });
 
+export const shopMain = style({
+    flex: 1,
+    width: '100%',
+    paddingTop: globalVars.header.height,
+
+    '@media': {
+        [media.mobile]: {
+            paddingTop: globalVars.header.mobileShopMainHeight,
+        },
+    },
+});
+
 export const container = style({
     maxWidth: '1200px',
     margin: '0 auto',

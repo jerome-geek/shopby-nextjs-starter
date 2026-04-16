@@ -17,6 +17,7 @@ export const container = style({
         [media.tablet]: {
             order: 2,
             flex: 1,
+            gap: '12px',
         },
         [media.desktop]: {
             order: 2,
@@ -33,6 +34,7 @@ export const categoryButton = style({
     border: 'none',
     cursor: 'pointer',
     padding: 0,
+    minWidth: '20px',
 
     '@media': {
         [media.desktop]: {
@@ -85,7 +87,7 @@ export const menuListContainer = style({
     gap: '18px',
 
     '@media': {
-        '(max-width: 768px)': {
+        [media.mobile]: {
             display: 'none',
         },
     },
@@ -108,6 +110,13 @@ export const menuItem = style([
         ':hover': {
             color: vars.color.black,
         },
+
+        selectors: {
+            '&[data-selected="true"]': {
+                color: vars.color.black,
+                fontWeight: 700,
+            },
+        },
     },
 ]);
 
@@ -127,7 +136,6 @@ export const drawerContainer = style({
     backgroundColor: vars.color.white,
     borderBottom: `1px solid ${vars.color.gray['20']}`,
     zIndex: 100,
-    padding: '30px 0 50px',
     maxHeight: `calc(100vh - ${globalVars.header.mobileHeight})`,
     overflow: 'hidden',
     boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
@@ -143,7 +151,7 @@ export const drawerContainer = style({
 export const drawerInner = style({
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '0 24px',
+    padding: '30px 24px 50px',
     display: 'flex',
     gap: '60px',
     height: 'auto',

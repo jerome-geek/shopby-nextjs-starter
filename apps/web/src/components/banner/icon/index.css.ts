@@ -1,28 +1,74 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
+
 import { media } from '@/styles/media';
 
-export const iconSection = style({
-    margin: '30px 0 0 0',
+export const section = style({});
+
+export const swiperContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    alignItems: 'center',
+    marginLeft: -20,
+    width: 'calc(100% + 40px)',
 
     '@media': {
         [media.tablet]: {
-            margin: '36px 0 0 0',
+            marginLeft: 0,
+            width: '100%',
+        },
+        [media.desktop]: {
+            marginLeft: 0,
+            width: '100%',
         },
     },
 });
 
-// index.css.ts
-export const bannerList = style({
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '10px 8px',
-    maxWidth: '1200px', // 적절한 최대 너비
-    margin: '30px auto 0',
-    padding: 0, // ul 기본 패딩 제거
-    listStyle: 'none', // ul 기본 불렛 제거
+globalStyle(`${swiperContainer} .swiper`, {
+    width: '100%',
+    padding: '0 20px',
 });
-export const bannerItem = style({
-    flex: '0 0 auto',
-    // li 관련 스타일
+
+globalStyle(`${swiperContainer} .swiper-wrapper`, {
+    width: 'fit-content',
+});
+
+globalStyle(`${swiperContainer} .swiper`, {
+    '@media': {
+        [media.tablet]: { padding: 0 },
+        [media.desktop]: { padding: 0 },
+    },
+});
+
+export const bannerImage = style({
+    width: 'auto',
+    height: 40,
+    borderRadius: 4,
+    objectFit: 'contain',
+    display: 'block',
+
+    '@media': {
+        [media.tablet]: {
+            height: 48,
+        },
+        [media.desktop]: {
+            height: 48,
+        },
+    },
+});
+
+export const skeletonBanner = style({
+    width: 72,
+    height: 40,
+    borderRadius: 4,
+    display: 'block',
+
+    '@media': {
+        [media.tablet]: {
+            height: 48,
+        },
+        [media.desktop]: {
+            height: 48,
+        },
+    },
 });

@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import { HeroBanner } from '@/components/banner/hero';
-import IconBannerSection from '@/components/banner/icon-banner-section';
+import IconBanner from '@/components/banner/icon';
 import { LazyRender } from '@/components/common';
 import * as styles from '@/styles/Home.css';
 
@@ -22,7 +22,7 @@ export default function ShopMain() {
             {/* Full-width HeroBanner */}
             <section className={styles.heroBannerSection}>
                 <HeroBanner type='SHOP' />
-                <IconBannerSection type='SHOP' />
+                <IconBanner type='SHOP' />
             </section>
 
             {/* 라이프 타임특가 */}

@@ -177,6 +177,7 @@ export const globalVars = createGlobalTheme(':root', {
     header: {
         height: '90px',
         mobileHeight: '56px',
+        mobileShopMainHeight: '106px',
     },
     input: { checkboxSize: '16px' },
 });

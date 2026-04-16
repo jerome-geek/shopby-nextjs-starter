@@ -8,6 +8,7 @@ import useKcpCertification from '@/hooks/utils/useKcpCertification';
 import useScrollLock from '@/hooks/utils/useScrollLock';
 import useGlobal from '@/hooks/utils/useGlobal';
 import useFileUpload from '@/hooks/utils/useFileUpload';
+import usePage from '@/hooks/utils/usePage';
 
 export {
     useKeyDown,
@@ -20,4 +21,5 @@ export {
     useScrollLock,
     useGlobal,
     useFileUpload,
+    usePage,
 };
