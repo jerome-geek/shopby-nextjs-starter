@@ -1,37 +1,82 @@
-import { Bookmark, Plus } from 'lucide-react';
+import { Bookmark, LayoutGrid, List, Plus } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutGrid, List } from 'lucide-react';
 
-import * as styles from '@/pages/recipes/scrap/index.css';
-import { vars } from '@/styles/theme.css';
-import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
 import { RecipeCard } from '@/components/recipe/card';
-import { CollectionRecipeCard } from '@/components/collection/collection-recipe-card';
+import {
+    CollectionRecipeCard,
+    CollectionMoreMenu,
+} from '@/components/collection';
+import { useCollectionMutation } from '@/hooks/mutations';
+import { useProfile } from '@/hooks/query/member/profile';
+import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
+import { useCustomDialog } from '@/hooks/ui';
+import { useDialog } from '@/hooks/utils';
+import { vars } from '@/styles/theme.css';
+import * as styles from '@/pages/recipes/scrap/index.css';
+import { PATHS } from '@/const/paths';
+
+interface RecipeScrapDetailProps {
+    shareCode: string;
+    title: string;
+}
 
 /**
  * 스크랩 상세 레이아웃 (개별 카테고리 탭용)
  */
 export const RecipeScrapDetail = ({
-    sno,
     shareCode,
     title,
-}: {
-    sno: number;
-    shareCode: string;
-    title: string;
-}) => {
+}: RecipeScrapDetailProps) => {
     const { t } = useTranslation();
     const [viewMode, setViewMode] = useState<'grid' | 'details'>('details');
 
+    const router = useRouter();
+    const { openCollectionForm } = useCustomDialog();
+    const { openAsyncDialog } = useDialog();
+
+    const { data: profileData } = useProfile();
     const { data: sharedCollectionData } = useSharedCollection({
         shareCode,
     });
 
-    const recipeList = sharedCollectionData?.recipes || [];
+    const {
+        remove: { mutateAsync: removeCollectionMutateAsync },
+    } = useCollectionMutation();
 
-    if (recipeList.length === 0) {
+    const recipeList = sharedCollectionData?.recipes || [];
+    const isEditable =
+        !!profileData &&
+        sharedCollectionData?.memberNo === profileData?.memberNo;
+    const isRecipeListVisible = recipeList.length !== 0;
+
+    const handleEditCollection = () => {
+        if (!sharedCollectionData) return;
+        openCollectionForm({ shareCode: sharedCollectionData.shareCode });
+    };
+
+    const handleDeleteCollection = async () => {
+        if (!sharedCollectionData) return;
+
+        const isAgree = await openAsyncDialog({
+            message: t('정말로 이 컬렉션을 삭제하시겠습니까?'),
+            type: 'confirm',
+            confirmText: t('삭제'),
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (isAgree) {
+            await removeCollectionMutateAsync({
+                collectionSno: sharedCollectionData.sno,
+            });
+            router.replace(PATHS.RECIPES.SCRAP);
+        }
+    };
+
+    if (!isRecipeListVisible) {
         return (
             <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -109,23 +154,12 @@ export const RecipeScrapDetail = ({
                         <h2 className={styles.detailTitle}>
                             {t(sharedCollectionData?.title || title)}
                         </h2>
-                        <button
-                            type='button'
-                            style={{
-                                background: 'none',
-                                border: 'none',
-                                cursor: 'pointer',
-                                padding: '4px',
-                            }}
-                        >
-                            <Plus
-                                size={18}
-                                style={{
-                                    transform: 'rotate(45deg)',
-                                    color: vars.color.gray['40'],
-                                }}
+                        {isEditable && (
+                            <CollectionMoreMenu
+                                onEdit={handleEditCollection}
+                                onDelete={handleDeleteCollection}
                             />
-                        </button>
+                        )}
                     </div>
 
                     <p className={styles.detailSubtitle}>

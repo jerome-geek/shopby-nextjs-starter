@@ -47,21 +47,18 @@ const RecipeScrapPage = () => {
         return (router.query.shareCode as string) || 'all';
     }, [router.isReady, router.query.shareCode]);
 
-    const activeTabId = useMemo(() => {
-        const activeTab = tabs.find((tab) => tab.shareCode === activeShareCode);
-        return activeTab?.sno || 0;
+    const activeTab = useMemo(() => {
+        return tabs.find((tab) => tab.shareCode === activeShareCode);
     }, [tabs, activeShareCode]);
 
     // 탭 변경 시 URL 업데이트
-    const handleTabChange = (shareCode: string, sno: number) => {
+    const handleTabChange = (shareCode: string) => {
         const query = { ...router.query };
 
         if (shareCode === 'all') {
             delete query.shareCode;
-            delete query.sno;
         } else {
             query.shareCode = shareCode;
-            query.sno = String(sno);
         }
 
         router.push(
@@ -94,9 +91,7 @@ const RecipeScrapPage = () => {
                             aria-controls={`tabpanel-scrap`}
                             className={styles.tabItem}
                             data-active={activeShareCode === tab.shareCode}
-                            onClick={() =>
-                                handleTabChange(tab.shareCode, tab.sno)
-                            }
+                            onClick={() => handleTabChange(tab.shareCode)}
                             whileTap={{ scale: 0.96 }}
                         >
                             {activeShareCode === tab.shareCode && (
@@ -137,13 +132,8 @@ const RecipeScrapPage = () => {
                             <RecipeScrapSummary />
                         ) : (
                             <RecipeScrapDetail
-                                sno={activeTabId}
                                 shareCode={activeShareCode}
-                                title={
-                                    tabs.find(
-                                        (t) => t.shareCode === activeShareCode,
-                                    )?.label || ''
-                                }
+                                title={activeTab?.label || ''}
                             />
                         )}
                     </div>

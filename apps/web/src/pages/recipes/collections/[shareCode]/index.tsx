@@ -1,14 +1,5 @@
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import {
-    Bookmark,
-    BookmarkCheck,
-    EllipsisVertical,
-    Heart,
-    Share2,
-    Users,
-} from 'lucide-react';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
-import { AnimatePresence, motion } from 'motion/react';
+import { Bookmark, BookmarkCheck, Heart, Share2, Users } from 'lucide-react';
 import type {
     GetStaticPaths,
     GetStaticProps,
@@ -20,16 +11,17 @@ import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { collection } from '@/api/shop';
+import { CollectionMoreMenu } from '@/components/collection';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
+import { useProfile } from '@/hooks/query/member/profile';
 import { collectionKeys, recipeKeys } from '@/hooks/queryKeys';
 import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
-import * as styles from '@/pages/recipes/collections/[shareCode]/index.css';
-import { useProfile } from '@/hooks/query/member/profile';
 import { useDialog } from '@/hooks/utils';
+import * as styles from '@/pages/recipes/collections/[shareCode]/index.css';
 import { useRouter } from 'next/router';
 
 // --- 컬렉션 상세 (데이터 연동) ---
@@ -44,7 +36,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
     const router = useRouter();
 
     const { data: collection } = useSharedCollection({ shareCode });
-    console.log('🚀 ~ CollectionDetailContent ~ collection:', collection);
 
     const {
         bookmarkCollection: { mutate: bookmarkCollectionMutate },
@@ -254,72 +245,10 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             </h1>
 
                             {isEditable && (
-                                <DropdownMenu.Root>
-                                    <DropdownMenu.Trigger asChild>
-                                        <button
-                                            className={styles.moreButton}
-                                            aria-label={t('더보기')}
-                                        >
-                                            <EllipsisVertical size={20} />
-                                        </button>
-                                    </DropdownMenu.Trigger>
-
-                                    <DropdownMenu.Portal>
-                                        <DropdownMenu.Content
-                                            className={styles.dropdownContent}
-                                            sideOffset={5}
-                                            align='start'
-                                            asChild
-                                        >
-                                            <motion.div
-                                                initial={{
-                                                    opacity: 0,
-                                                    scale: 0.95,
-                                                    y: -10,
-                                                }}
-                                                animate={{
-                                                    opacity: 1,
-                                                    scale: 1,
-                                                    y: 0,
-                                                }}
-                                                exit={{
-                                                    opacity: 0,
-                                                    scale: 0.95,
-                                                    y: -10,
-                                                }}
-                                                transition={{
-                                                    type: 'spring',
-                                                    damping: 20,
-                                                    stiffness: 300,
-                                                }}
-                                            >
-                                                <DropdownMenu.Item
-                                                    className={
-                                                        styles.dropdownItem
-                                                    }
-                                                    onSelect={
-                                                        handleEditCollection
-                                                    }
-                                                >
-                                                    <Heart size={16} />{' '}
-                                                    {t('컬렉션 수정')}
-                                                </DropdownMenu.Item>
-                                                <DropdownMenu.Item
-                                                    className={
-                                                        styles.dropdownItem
-                                                    }
-                                                    data-variant='danger'
-                                                    onSelect={
-                                                        handleDeleteCollection
-                                                    }
-                                                >
-                                                    <Bookmark size={16} />{' '}
-                                                    {t('컬렉션 삭제')}
-                                                </DropdownMenu.Item>
-                                            </motion.div>
-                                        </DropdownMenu.Content>
-                                    </DropdownMenu.Portal>
-                                </DropdownMenu.Root>
+                                <CollectionMoreMenu
+                                    onEdit={handleEditCollection}
+                                    onDelete={handleDeleteCollection}
+                                />
                             )}
                         </div>
 
