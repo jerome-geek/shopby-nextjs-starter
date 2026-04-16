@@ -101,3 +101,16 @@ export const productSectionTitle = style([
         },
     },
 ]);
+
+export const collectionRecommendContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+
+    '@media': {
+        [media.desktop]: {
+            flexDirection: 'row',
+            gap: '22px',
+        },
+    },
+});

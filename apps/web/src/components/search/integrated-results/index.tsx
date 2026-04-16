@@ -1,14 +1,19 @@
 import { isEmpty } from '@fxts/core';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 import { CollectionCard } from '@/components/collection/collection-card';
+import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
 import { ProductCard } from '@/components/product';
 import { RecipeCard } from '@/components/recipe/card';
+import { CollectionRecommendSection } from '@/components/search/collection-recommend-section';
 import * as collectionStyles from '@/components/search/collection-results/index.css';
 import * as styles from '@/components/search/integrated-results/index.css';
+import { RecipeRecommendSection } from '@/components/search/recipe-recommend-section';
 import * as recipeStyles from '@/components/search/recipe-results/index.css';
+import { ShoppingRecommendSection } from '@/components/search/shopping-recommend-section';
+import { ShoppingRecommendSectionSkeleton } from '@/components/search/shopping-recommend-section/skeleton';
 import * as shoppingStyles from '@/components/search/shopping-results/index.css';
 import { Column, Row } from '@/components/ui/layout/flex';
 import { useInfiniteProductList } from '@/hooks/infiniteQuery/product/product';
@@ -55,7 +60,7 @@ export const IntegratedSearchResults = ({
     collectionFetchNextPage,
     collectionHasNextPage,
 }: IntegratedSearchResultsProps) => {
-    const { isMobile } = useResponsive();
+    const { isTablet } = useResponsive();
 
     const hasMoreShopping = !isEmpty(productList) && shoppingHasNextPage;
     const hasMoreRecipe = !isEmpty(recipeList) && recipeHasNextPage;
@@ -63,7 +68,7 @@ export const IntegratedSearchResults = ({
 
     return (
         <div className={styles.container}>
-            <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+            <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                 <Row justify='between'>
                     <h3 className={styles.sectionTitle}>쇼핑</h3>
                     <button
@@ -79,28 +84,20 @@ export const IntegratedSearchResults = ({
                         />
                     </button>
                 </Row>
-                <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                     {isEmpty(productList) ? (
-                        <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                        <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                             <NoResult
                                 className={styles.noResult}
                                 text='검색 결과가 없습니다.'
                                 isIconVisible={false}
                             />
-
-                            <Column gap='12px'>
-                                <h3 className={styles.productSectionTitle}>
-                                    이 상품은 어떠세요?
-                                </h3>
-                                <Swiper>
-                                    <SwiperSlide>
-                                        {/* <ProductCard
-                                            key={product.productNo}
-                                            {...product}
-                                        /> */}
-                                    </SwiperSlide>
-                                </Swiper>
-                            </Column>
+                            <FetchBoundary
+                                fallback={<ShoppingRecommendSectionSkeleton />}
+                            >
+                                <ShoppingRecommendSection
+                                />
+                            </FetchBoundary>
                         </Column>
                     ) : (
                         <div className={shoppingStyles.productList}>
@@ -125,9 +122,9 @@ export const IntegratedSearchResults = ({
                 </Column>
             </Column>
 
-            {isMobile && <div className={styles.divider} />}
+            {isTablet && <div className={styles.divider} />}
 
-            <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+            <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                 <Row justify='between'>
                     <h3 className={styles.sectionTitle}>레시피</h3>
                     <button
@@ -144,28 +141,17 @@ export const IntegratedSearchResults = ({
                     </button>
                 </Row>
 
-                <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                     {isEmpty(recipeList) ? (
-                        <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                        <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                             <NoResult
                                 className={styles.noResult}
                                 text='검색 결과가 없습니다.'
                                 isIconVisible={false}
                             />
-
-                            <Column gap='12px'>
-                                <h3 className={styles.productSectionTitle}>
-                                    이 레시피는 어떠세요?
-                                </h3>
-                                <Swiper>
-                                    <SwiperSlide>
-                                        {/* <ProductCard
-                                                 key={product.productNo}
-                                                 {...product}
-                                             /> */}
-                                    </SwiperSlide>
-                                </Swiper>
-                            </Column>
+                            <RecipeRecommendSection
+                                enabled={isEmpty(recipeList)}
+                            />
                         </Column>
                     ) : (
                         <ul className={recipeStyles.recipeContainer}>
@@ -187,9 +173,9 @@ export const IntegratedSearchResults = ({
                 </Column>
             </Column>
 
-            {isMobile && <div className={styles.divider} />}
+            {isTablet && <div className={styles.divider} />}
 
-            <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+            <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                 <Row justify='between'>
                     <h3 className={styles.sectionTitle}>컬렉션</h3>
                     <button
@@ -206,28 +192,17 @@ export const IntegratedSearchResults = ({
                     </button>
                 </Row>
 
-                <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                     {isEmpty(collectionList) ? (
-                        <Column style={{ gap: isMobile ? '20px' : '24px' }}>
+                        <Column style={{ gap: isTablet ? '20px' : '24px' }}>
                             <NoResult
                                 className={styles.noResult}
                                 text='검색 결과가 없습니다.'
                                 isIconVisible={false}
                             />
-
-                            <Column gap='12px'>
-                                <h3 className={styles.productSectionTitle}>
-                                    이 컬렉션은 어떠세요?
-                                </h3>
-                                <Swiper>
-                                    <SwiperSlide>
-                                        {/* <ProductCard
-                                                 key={product.productNo}
-                                                 {...product}
-                                             /> */}
-                                    </SwiperSlide>
-                                </Swiper>
-                            </Column>
+                            <CollectionRecommendSection
+                                enabled={isEmpty(collectionList)}
+                            />
                         </Column>
                     ) : (
                         <ul className={collectionStyles.collectionContainer}>

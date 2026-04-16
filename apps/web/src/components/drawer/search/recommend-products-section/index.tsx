@@ -14,7 +14,7 @@ export const RecommendProductsSection = () => {
     const { isMobile } = useResponsive();
 
     const { data: filteredProducts } = useProductSectionProductList({
-        sectionId: 'SEARCH_RECOMMEND',
+        sectionId: 'RECOMMEND_01',
         searchParams: {
             by: 'ADMIN_SETTING',
             direction: 'DESC',
