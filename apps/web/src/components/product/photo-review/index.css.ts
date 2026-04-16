@@ -18,6 +18,7 @@ export const photoReviewSection = style({
             gap: '12px',
             marginLeft: 0,
             width: '100%',
+            overflow: 'visible',
         },
     },
 });

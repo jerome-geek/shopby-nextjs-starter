@@ -120,6 +120,21 @@ export const content = style({
             position: 'sticky',
             top: `calc(var(--header-height, ${globalVars.header.height}) + 20px)`,
             width: '100%',
+            overflow: 'auto',
+            maxHeight: `calc(100vh - var(--header-height, ${globalVars.header.height}) - 40px)`,
+            paddingRight: '20px',
+            marginRight: '-20px',
+            marginLeft: '0px',
+
+            selectors: {
+                '&::-webkit-scrollbar': {
+                    width: '4px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: vars.color.gray['30'],
+                    borderRadius: '10px',
+                },
+            },
         },
     },
 });
@@ -434,8 +449,6 @@ export const orderContainer = style({
     '@media': {
         [media.desktop]: {
             gap: '12px',
-            position: 'sticky',
-            bottom: 0,
             backgroundColor: vars.color.white,
             paddingTop: '12px',
             zIndex: 1,

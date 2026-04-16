@@ -46,7 +46,7 @@ const useBookmark = () => {
                     },
                 );
             } else {
-                openRecipeSave();
+                openRecipeSave(sno);
             }
         },
         [

@@ -348,7 +348,7 @@ function ProductDetailView({
                     )}
                 </div>
 
-                <div className={styles.content}>
+                <div className={styles.content} data-lenis-prevent>
                     <header className={styles.header}>
                         <div className={styles.titleInfo}>
                             {brand && (
