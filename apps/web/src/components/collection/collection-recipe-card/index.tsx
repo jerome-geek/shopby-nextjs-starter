@@ -1,21 +1,20 @@
-import { Bookmark, MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { Bookmark, Edit2, MoreVertical, Trash2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import { useState, useRef, useEffect, MouseEvent } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import * as styles from '@/components/collection/collection-recipe-card/index.css';
+import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
 import { PATHS } from '@/const/paths';
 import { useBookmark } from '@/hooks/recipe';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
-import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
-
-export const CollectionRecipeCard = ({
-    recipe,
-}: {
+interface CollectionRecipeCardProps {
     recipe: GetRecipeDetailResponse;
-}) => {
+}
+
+export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -81,6 +80,7 @@ export const CollectionRecipeCard = ({
                                 </h4>
                             </Link>
 
+                            {/* TODO: CollectionMoreMenu 컴포넌트 대체 */}
                             <div
                                 style={{ position: 'relative' }}
                                 ref={menuRef}
@@ -95,6 +95,7 @@ export const CollectionRecipeCard = ({
                                     <MoreVertical size={16} />
                                 </button>
 
+                                {/* TODO: 레시피 수정 페이지 이동 및 삭제 모달 띄우기 */}
                                 <AnimatePresence>
                                     {isMenuOpen && (
                                         <motion.div
