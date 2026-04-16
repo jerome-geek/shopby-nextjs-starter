@@ -392,6 +392,15 @@ export const toolCard = style({
 });
 
 // --- Steps ---
+const STEP_NUMBER_SIZE = 24;
+const STEP_LINE_HEIGHT = 28;
+const STEP_MARGIN_TOP = (STEP_LINE_HEIGHT - STEP_NUMBER_SIZE) / 2;
+
+const STEP_NUMBER_SIZE_DESKTOP = 28;
+const STEP_LINE_HEIGHT_DESKTOP = 34;
+const STEP_MARGIN_TOP_DESKTOP =
+    (STEP_LINE_HEIGHT_DESKTOP - STEP_NUMBER_SIZE_DESKTOP) / 2;
+
 export const stepList = style({
     display: 'flex',
     flexDirection: 'column',
@@ -410,8 +419,8 @@ export const stepItem = style({
 export const stepNumber = style([
     textStyles.body1Semibold,
     {
-        width: '24px',
-        height: '24px',
+        width: `${STEP_NUMBER_SIZE}px`,
+        height: `${STEP_NUMBER_SIZE}px`,
         borderRadius: '50%',
         background: vars.color.green['80'],
         color: vars.color.white,
@@ -419,24 +428,32 @@ export const stepNumber = style([
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
+        marginTop: `${STEP_MARGIN_TOP}px`,
 
         '@media': {
             [media.desktop]: {
-                width: '28px',
-                height: '28px',
+                width: `${STEP_NUMBER_SIZE_DESKTOP}px`,
+                height: `${STEP_NUMBER_SIZE_DESKTOP}px`,
+                marginTop: `${STEP_MARGIN_TOP_DESKTOP}px`,
             },
         },
     },
 ]);
 
 export const stepContent = style({
-    // flex: 1,
+    flex: 1,
 });
 
 export const stepDescription = style([
     textStyles.headlineRegular,
     {
         color: vars.color.gray['80'],
+        lineHeight: `${STEP_LINE_HEIGHT}px`,
+        '@media': {
+            [media.desktop]: {
+                lineHeight: `${STEP_LINE_HEIGHT_DESKTOP}px`,
+            },
+        },
     },
 ]);
 
