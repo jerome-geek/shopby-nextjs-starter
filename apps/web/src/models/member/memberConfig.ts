@@ -1,4 +1,4 @@
-import { ExtraInfoType, MemberJoinConfigType } from '@/models';
+import type { ExtraInfoType, MemberJoinConfigType } from '@/models';
 
 export interface GetMemberExtraInfoResponse {
     /** 회원정보 추가항목 목록 */

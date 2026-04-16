@@ -70,15 +70,15 @@ const useRecipeBookmark = () => {
     );
 
     const toggleCollectionBookmark = useCallback(
-        (collection: BookmarkedRecipeCollection) => {
+        ({ sno, bookmarked }: { sno: number; bookmarked: boolean }) => {
             if (!isLogin) {
                 openLoginDialog();
                 return;
             }
 
-            if (collection.bookmarked) {
+            if (bookmarked) {
                 unBookmarkCollectionMutate(
-                    { collectionSno: collection.sno },
+                    { collectionSno: sno },
                     {
                         onSuccess: () => {
                             queryClient.invalidateQueries({
@@ -93,7 +93,7 @@ const useRecipeBookmark = () => {
                 );
             } else {
                 bookmarkCollectionMutate(
-                    { collectionSno: collection.sno },
+                    { collectionSno: sno },
                     {
                         onSuccess: () => {
                             queryClient.invalidateQueries({

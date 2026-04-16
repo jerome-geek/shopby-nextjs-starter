@@ -1,4 +1,4 @@
-import { OrderRequestStatusType } from '@/models';
+import type { OrderRequestStatusType } from '@/models';
 import dayjs from 'dayjs';
 
 export const orderMap = {

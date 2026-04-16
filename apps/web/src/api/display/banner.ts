@@ -3,7 +3,7 @@ import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
 import { shopbyRequest } from '@/api/core/request';
-import {
+import type {
     GetBannerExtraInfosParams,
     GetBannerExtraInfosResponse,
     GetBannersByIdsResponse,

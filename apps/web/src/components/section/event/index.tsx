@@ -5,7 +5,7 @@ import FetchBoundary from '@/components/common/FetchBoundary';
 import EventCard from '@/components/section/event/card';
 import EventSectionSkeleton from '@/components/section/event/skeleton';
 import { eventKeys } from '@/hooks/queryKeys';
-import { GetEventResponse } from '@/models/display/event';
+import type { GetEventResponse } from '@/models/display/event';
 
 const EventCardContent = ({ event }: { event: GetEventResponse }) => {
     if (!event) {

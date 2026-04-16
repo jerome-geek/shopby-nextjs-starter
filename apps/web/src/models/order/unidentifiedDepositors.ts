@@ -1,4 +1,4 @@
-import { OrderBannerDisplayType } from '@/models';
+import type { OrderBannerDisplayType } from '@/models';
 
 export interface GetUnidentifiedDepositorsParams {
     /** 쇼핑몰 번호 */

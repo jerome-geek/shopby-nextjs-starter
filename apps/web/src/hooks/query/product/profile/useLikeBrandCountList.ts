@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetLikeBrandsCountParams,
     GetLikeBrandsCountResponse,
 } from '@/models/product/profile';

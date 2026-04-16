@@ -1,4 +1,4 @@
-import { GetCommentsParams } from '@/models/shop/comment';
+import type { GetCommentsParams } from '@/models/shop/comment';
 
 const commentKeys = {
     all: ['comment'] as const,

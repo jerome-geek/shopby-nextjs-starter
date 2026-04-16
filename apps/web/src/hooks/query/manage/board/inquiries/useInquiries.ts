@@ -6,7 +6,7 @@ import {
 import type { AxiosError } from 'axios';
 
 import { inquiry } from '@/api/manage';
-import {
+import type {
     GetInquiriesParams,
     GetInquiriesResponse,
 } from '@/models/manage/inquiry';

@@ -6,7 +6,7 @@ import { SingleValue } from 'react-select';
 import { Select } from '@/components/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useResponsive } from '@/hooks/utils';
-import { MultiLevelOption } from '@/models/product/productOption';
+import type { MultiLevelOption } from '@/models/product/productOption';
 
 interface MultiProductOptionProps {
     productNo: number;

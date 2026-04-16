@@ -4,7 +4,7 @@ import { memo, useMemo } from 'react';
 
 import { ProductCard, CountdownTimer } from '@/components/product';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
-import { ImageUrlType } from '@/models/product';
+import type { ImageUrlType } from '@/models/product';
 import * as styles from '@/components/section/timeSale/index.css';
 
 interface TimeSaleProps {

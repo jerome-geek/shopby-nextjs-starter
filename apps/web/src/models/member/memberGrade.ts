@@ -1,4 +1,4 @@
-import { SupplyType } from '@/models';
+import type { SupplyType } from '@/models';
 
 export interface GetMemberGradeParams {
     /** 회원 등급 번호 리스트 (미 입력 시 쇼핑몰에 등록된 모든 그룹 정보를 조회합니다.) (Example : 1,2,3) */

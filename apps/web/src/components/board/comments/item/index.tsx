@@ -11,8 +11,8 @@ import { useBoardReplyMutation } from '@/hooks/mutations';
 import { useBoardConfig } from '@/hooks/query/manage/board';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useDialog } from '@/hooks/utils';
-import { AuthorityConfigType } from '@/models';
-import { ReplyList, UpdateArticleData } from '@/models/manage/board';
+import type { AuthorityConfigType } from '@/models';
+import type { ReplyList, UpdateArticleData } from '@/models/manage/board';
 
 const CommentItem = ({
     reply,

@@ -1,4 +1,4 @@
-import {
+import type {
     BannerDisplayType,
     EventProductOrder,
     EventProgressStatusType,
@@ -9,14 +9,14 @@ import {
     OrderDirectionType,
     ProductSaleStatusType,
 } from '@/models';
-import {
+import type {
     EventContent,
     EventCouponInfo,
     EventOrder,
     EventSection,
     EventTopInfo,
 } from '@/models/display';
-import { ProductItem, RentalInfo } from '@/models/product';
+import type { ProductItem, RentalInfo } from '@/models/product';
 
 export interface GetEventsParams {
     /** 검색어 (태그 명) */

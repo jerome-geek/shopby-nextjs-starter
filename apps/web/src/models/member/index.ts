@@ -1,4 +1,4 @@
-import { MemberStatsType, Sex, ShopbyJoinAgreementTypes } from '@/models';
+import type { MemberStatsType, Sex, ShopbyJoinAgreementTypes } from '@/models';
 
 export interface ProfileBody {
     birthday?: string;

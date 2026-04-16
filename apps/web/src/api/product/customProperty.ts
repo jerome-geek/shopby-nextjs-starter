@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetCustomPropertiesResponse } from '@/models/product/customProperty';
+import type { GetCustomPropertiesResponse } from '@/models/product/customProperty';
 
 const customProperty = {
     /**

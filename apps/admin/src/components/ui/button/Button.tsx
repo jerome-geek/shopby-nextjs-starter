@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, type ReactNode } from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode; // Button text or content

@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
-import {
+import type {
     SearchEventsByEventNosParams,
     SearchEventsByEventNosResponse,
 } from '@/models/display/event';

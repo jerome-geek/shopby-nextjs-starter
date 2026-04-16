@@ -1,5 +1,5 @@
 import type { GetEventInfoParams } from '@/models/display';
-import {
+import type {
     GetEventParams,
     GetEventProductDisplaySectionParams,
     GetEventsParams,

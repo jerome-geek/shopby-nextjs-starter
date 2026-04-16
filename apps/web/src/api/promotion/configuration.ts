@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetCouponConfigurationResponse } from '@/models/promotion/configuration';
+import type { GetCouponConfigurationResponse } from '@/models/promotion/configuration';
 
 const configuration = {
     getConfig: (options?: AxiosRequestConfig) => {

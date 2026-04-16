@@ -7,7 +7,7 @@ import { useMall } from '@/hooks/query/admin/mall';
 import type { GetCategoryResponse } from '@/models/display/category';
 import type { CartList, OrderDetailResponse } from '@/models/order';
 import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
-import {
+import type {
     ProductDetailResponse,
     ProductsSearchResponse,
 } from '@/models/product/product';

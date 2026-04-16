@@ -1,4 +1,4 @@
-import {
+import type {
     ArticleRegisterType,
     AuthorityConfigType,
     BoardAuthorityType,
@@ -8,7 +8,7 @@ import {
     OrderDirectionType,
     ProductInquiryReportType,
 } from '@/models';
-import {
+import type {
     BoardCategory,
     DisplayType,
     ImagesType,

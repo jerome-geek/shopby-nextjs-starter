@@ -6,7 +6,7 @@ import {
 import type { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
-import {
+import type {
     GetMyProductInquiriesParams,
     GetMyProductInquiriesResponse,
 } from '@/models/display/productInquiry';

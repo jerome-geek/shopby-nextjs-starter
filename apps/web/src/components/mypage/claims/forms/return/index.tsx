@@ -23,7 +23,7 @@ import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOpt
 import useOrderOptionEstimate from '@/hooks/query/claim/member/useOrderOptionEstimate';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal } from '@/hooks/utils';
-import { RequestReturnMultipleOptionsData } from '@/models/claim/member';
+import type { RequestReturnMultipleOptionsData } from '@/models/claim/member';
 import {
     claimReturnSchema,
     ClaimReturnSchemaType,

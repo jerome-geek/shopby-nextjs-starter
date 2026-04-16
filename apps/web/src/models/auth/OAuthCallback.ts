@@ -1,4 +1,4 @@
-import { ClientPlatformType, NcpOpenIdProviderType } from '@/models';
+import type { ClientPlatformType, NcpOpenIdProviderType } from '@/models';
 
 export interface OpenLoginPageParams {
     /** 클라이언트 아이디 */

@@ -7,7 +7,7 @@ import { InputCheckbox } from '@/components/ui/input/checkbox';
 import { InputField } from '@/components/ui/input/field';
 import { Select } from '@/components/ui/input/select';
 import { BANK_MAP } from '@/const/label';
-import { PayType } from '@/models';
+import type { PayType } from '@/models';
 
 export const ClaimBankInfo = ({ payType }: { payType?: Nullable<PayType> }) => {
     const { t } = useTranslation();

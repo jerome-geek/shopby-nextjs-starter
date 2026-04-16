@@ -2,7 +2,7 @@ import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { shippingAddress } from '@/api/order';
-import {
+import type {
     GetPagedShippingAddressListResponse,
     GetPagedShippingAddressParams,
 } from '@/models/order/shippingAddress';

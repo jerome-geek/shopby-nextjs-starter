@@ -1,4 +1,4 @@
-import { EventTopInfo } from '@/models/display';
+import type { EventTopInfo } from '@/models/display';
 import * as styles from '@/components/event/detail/event-top/index.css';
 
 interface EventTopProps {

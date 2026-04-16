@@ -1,9 +1,9 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { ClaimType, OrderRequestType } from '@/models';
-import { OrderDetailResponse, TokenIssueData } from '@/models/order';
-import {
+import type { ClaimType, OrderRequestType } from '@/models';
+import type { OrderDetailResponse, TokenIssueData } from '@/models/order';
+import type {
     GetCartData,
     GetCartParams,
     GetCartResponse,
@@ -13,7 +13,7 @@ import {
     UpdateDeliveryInfoData,
     UpdateDeliveryInfoParams,
 } from '@/models/order/guestOrder';
-import {
+import type {
     GetOrderDetailParams,
     RequestCashReceiptData,
 } from '@/models/order/myOrder';

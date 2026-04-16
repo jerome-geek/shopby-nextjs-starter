@@ -1,4 +1,4 @@
-import {
+import type {
     AdminType,
     DisplayStatusType,
     InquirySearchType,
@@ -7,8 +7,8 @@ import {
     ProductInquiryType,
     ProviderType,
 } from '@/models';
-import { TagValue } from '@/models/display';
-import { ImageUrlType } from '@/models/product';
+import type { TagValue } from '@/models/display';
+import type { ImageUrlType } from '@/models/product';
 
 export type BoardImageType = 'NONE' | 'PRODUCT_MAIN_IMAGE';
 

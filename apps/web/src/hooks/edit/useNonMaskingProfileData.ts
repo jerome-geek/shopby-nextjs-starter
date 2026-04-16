@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { profileKeys } from '@/hooks/queryKeys';
-import { GetProfileResponse } from '@/models/member/profile';
+import type { GetProfileResponse } from '@/models/member/profile';
 
 type NonMaskingProfileError = Error & { status?: number; code?: string };
 

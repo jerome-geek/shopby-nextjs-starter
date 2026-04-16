@@ -5,7 +5,7 @@ import { Swiper, SwiperClass, SwiperProps, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/product/main-image/index.css';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
-import { ChannelType } from '@/models';
+import type { ChannelType } from '@/models';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';

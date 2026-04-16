@@ -8,7 +8,7 @@ import { ObserverTarget } from '@/components/common/observer-target';
 import { ShopType } from '@/pages/shop/[slug]';
 import ProductsSearch from '@/components/section/products/search';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
-import { GetEventsV2Params } from '@/models/display/event';
+import type { GetEventsV2Params } from '@/models/display/event';
 
 const Best = dynamic(() => import('@/components/section/best'), {
     ssr: false,

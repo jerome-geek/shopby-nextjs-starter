@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { address } from '@/api/manage';
 import { addressKeys } from '@/hooks/queryKeys';
-import {
+import type {
     SearchAddressParams,
     SearchAddressResponse,
 } from '@/models/manage/address';

@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { geekRequest } from '@/api/core/geekRequest';
-import {
+import type {
     CommentResponse,
     CreateCommentRequest,
     GetCommentsParams,

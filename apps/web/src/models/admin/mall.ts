@@ -1,4 +1,4 @@
-import {
+import type {
     AccumulationDisplayFormatType,
     AccumulationGivePointType,
     AuthenticationTimeType,
@@ -32,8 +32,8 @@ import {
     ProductReviewReportType,
     SupplyType,
 } from '@/models';
-import { ShopByPlan } from '@/models/admin';
-import { Category } from '@/models/display';
+import type { ShopByPlan } from '@/models/admin';
+import type { Category } from '@/models/display';
 
 export interface Grade {
     /** 적립금 자동지급 */

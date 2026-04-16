@@ -2,7 +2,7 @@ import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
 import type { SearchDate } from '@/models/common';
-import {
+import type {
     GetAllProductInquiriesParams,
     GetAllProductInquiriesResponse,
     GetMyProductInquiriesParams,

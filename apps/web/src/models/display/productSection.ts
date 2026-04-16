@@ -1,4 +1,4 @@
-import {
+import type {
     AccumulationUnitType,
     BrandNameType,
     DeliveryConditionType,
@@ -12,7 +12,7 @@ import {
     SaleStatusType,
     StickerInfoType,
 } from '@/models';
-import {
+import type {
     CustomProperties,
     HasCoupons,
     ProductItem,

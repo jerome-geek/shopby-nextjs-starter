@@ -8,7 +8,7 @@ import type { AxiosError } from 'axios';
 
 import { memberClaim } from '@/api/claim';
 import claimsKeys from '@/hooks/queryKeys/claimsKeys';
-import {
+import type {
     GetClaimListParams,
     GetClaimListResponse,
 } from '@/models/claim/member';

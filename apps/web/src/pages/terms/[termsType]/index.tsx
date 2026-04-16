@@ -1,5 +1,5 @@
 import { entries, filter, head, isUndefined, map, pipe } from '@fxts/core';
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
+import { GetStaticPaths, type GetStaticProps, InferGetStaticPropsType } from 'next';
 import { generateNextSeo } from 'next-seo/pages';
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import TermsHistorySelect from '@/components/terms/historySelect';
 import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { useTermHistory, useTermList } from '@/hooks/query/manage/terms';
-import { ShopbyTermHistoryTypes, ShopbyTermsTypes } from '@/models';
+import type { ShopbyTermHistoryTypes, ShopbyTermsTypes } from '@/models';
 import * as styles from '@/pages/terms/[termsType]/index.css';
 import { useSearchParams } from 'next/navigation';
 

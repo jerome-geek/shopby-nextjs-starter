@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
+import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
 
 const orderConfiguration = {
     /**

@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { accumulation } from '@/api/manage';
 import accumulationKeys from '@/hooks/queryKeys/accumulationKeys';
-import {
+import type {
     GetExpirationAccumulationListParams,
     GetExpirationAccumulationListResponse,
 } from '@/models/manage/accumulation';

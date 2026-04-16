@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { isMobile } from 'react-device-detect';
 import Link from 'next/link';
 import dayjs from 'dayjs';
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 
 // import { authCookieManager } from '@/utils/cookie';
 import { useAuth } from '@/hooks/useAuth';
 import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
 import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
 import * as styles from '@/pages/order/complete/index.css';
-import { OrderDetailResponse } from '@/models/order';
+import type { OrderDetailResponse } from '@/models/order';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 
 /**

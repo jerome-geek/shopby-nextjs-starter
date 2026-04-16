@@ -1,5 +1,5 @@
 import { outlinedButton } from '@/components/ui/button/style.css';
-import { OutlinedButtonProps } from '@/components/ui/button/types';
+import type { OutlinedButtonProps } from '@/components/ui/button/types';
 
 const OutlinedButton = ({
     children,

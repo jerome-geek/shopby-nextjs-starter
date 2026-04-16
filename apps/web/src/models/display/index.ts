@@ -1,5 +1,5 @@
 export * from './event';
-import {
+import type {
     AllianceRefererType,
     BannerDisplayType,
     CouponSubType,
@@ -23,8 +23,8 @@ import {
     StickerInfoType,
 } from '@/models';
 
-import { HasCoupons, Price, ReservationData } from '@/models/product';
-import {
+import type { HasCoupons, Price, ReservationData } from '@/models/product';
+import type {
     CouponStatus,
     DateInfo,
     DiscountInfo,

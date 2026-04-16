@@ -5,7 +5,7 @@ import { includes } from '@fxts/core';
 
 import { orderSheet } from '@/api/order';
 import { orderSheetKeys, ordersKeys } from '@/hooks/queryKeys';
-import {
+import type {
     CouponApplyData,
     GetAppliedCouponPriceData,
     GetCalculatedOrderSheetData,

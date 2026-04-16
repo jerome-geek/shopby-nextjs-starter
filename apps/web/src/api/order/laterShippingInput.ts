@@ -1,8 +1,8 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { OrderDetailResponse } from '@/models/order';
-import {
+import type { OrderDetailResponse } from '@/models/order';
+import type {
     GetAreaFeesParams,
     GetAreaFeesResponse,
     GetLaterOrderDetailParams,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useInView, UseInViewOptions } from 'motion/react';
-import { useRef, ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import clsx from 'clsx';
 
 import * as styles from '@/components/common/lazy-render.css';

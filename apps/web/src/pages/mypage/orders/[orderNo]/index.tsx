@@ -13,7 +13,7 @@ import { PATHS } from '@/const/paths';
 import useOrderDetail from '@/hooks/query/order/myOrder/useOrderDetail';
 import useOrderConfiguration from '@/hooks/query/order/orderConfiguration/useOrderConfiguration';
 import { useResponsive } from '@/hooks/utils';
-import {
+import type {
     AdditionalPayInfo,
     CashReceiptInfo,
     ReceiptInfo,

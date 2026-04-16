@@ -1,7 +1,7 @@
 import { includes } from '@fxts/core';
 import { useScript } from 'usehooks-ts';
 
-import { PgType } from '@/models';
+import type { PgType } from '@/models';
 
 const usePG = ({ pgType }: { pgType?: PgType } = {}) => {
     useScript('https://shop-api.e-ncp.com/payments/ncp_pay.js');

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
-import {
+import type {
     WriteProductInquiryData,
     UpdateProductInquiryData,
 } from '@/models/display/productInquiry';

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as styles from '@/components/recipe/comment-section/index.css';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useAuth } from '@/hooks/useAuth';
-import { CommentResponse } from '@/models/shop/comment';
+import type { CommentResponse } from '@/models/shop/comment';
 
 interface CommentItemProps {
     comment: CommentResponse;

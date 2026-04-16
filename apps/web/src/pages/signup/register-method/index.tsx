@@ -1,5 +1,5 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { GetStaticProps } from 'next';
+import type { GetStaticProps } from 'next';
 
 import { banner } from '@/api/display';
 import SocialLoginList from '@/components/auth/social-login-list';

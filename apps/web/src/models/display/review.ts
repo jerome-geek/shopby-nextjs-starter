@@ -1,11 +1,11 @@
-import {
+import type {
     ImageUrlType,
     OrderDirectionType,
     ReportReasonCdType,
     ReviewOrderByType,
     SearchType,
 } from '@/models';
-import {
+import type {
     BoardConfigType,
     BoardImageType,
     PhotoReviewDisplayType,

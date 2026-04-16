@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { comment } from '@/api/shop';
 import { commentKeys } from '@/hooks/queryKeys';
-import {
+import type {
     CreateCommentRequest,
     UpdateCommentRequest,
 } from '@/models/shop/comment';

@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { UploadImageResponse } from '@/models/storage';
+import type { UploadImageResponse } from '@/models/storage';
 
 const image = {
     /**

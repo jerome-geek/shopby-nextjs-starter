@@ -1,4 +1,4 @@
-import { ClaimType } from '@/models';
+import type { ClaimType } from '@/models';
 import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
 const guestOrderKeys = {

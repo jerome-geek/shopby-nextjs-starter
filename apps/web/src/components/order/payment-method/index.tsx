@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Select, InputField } from '@/components/ui/input';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
-import { PayType, PgType } from '@/models';
+import type { PayType, PgType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';
 
 import * as styles from '@/components/order/payment-method/index.css';

@@ -1,4 +1,4 @@
-import {
+import type {
     CycleType,
     DayOfWeekCycleType,
     DaysOfWeekType,
@@ -12,7 +12,7 @@ import {
     PayType,
     ShippingAreaType,
 } from '@/models';
-import {
+import type {
     AddressRequest,
     AppliedCoupons,
     AvailablePayType,

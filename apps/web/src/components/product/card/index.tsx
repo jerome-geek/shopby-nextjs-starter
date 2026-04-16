@@ -4,8 +4,8 @@ import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon'
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
-import { StickerInfo } from '@/models/display';
-import { ImageUrlType } from '@/models/product';
+import type { StickerInfo } from '@/models/display';
+import type { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
 import * as styles from '@/components/product/card/index.css';

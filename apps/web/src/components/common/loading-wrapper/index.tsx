@@ -1,5 +1,5 @@
 import { AnimatePresence, Transition } from 'motion/react';
-import { ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { isArray } from '@fxts/core';
 import { motion } from 'motion/react';
 

@@ -1,4 +1,4 @@
-import { ShopbyTermHistoryTypes, ShopbyTermsTypes } from '@/models';
+import type { ShopbyTermHistoryTypes, ShopbyTermsTypes } from '@/models';
 
 export interface GetTermListParams {
     termsTypes: ShopbyTermsTypes[];

@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';

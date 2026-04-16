@@ -1,8 +1,8 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { ApplyCouponParams, ApplyCouponResponse } from '@/models/order';
-import {
+import type { ApplyCouponParams, ApplyCouponResponse } from '@/models/order';
+import type {
     CouponApplyData,
     CouponApplyResponse,
     GetAppliedCouponPriceData,

@@ -1,4 +1,4 @@
-import { FreeGiftOptionCountType, LimitedMemberType } from '@/models';
+import type { FreeGiftOptionCountType, LimitedMemberType } from '@/models';
 
 export interface GetFreeGiftConditionByOrderAmountParams {
     /** 주문금액 */

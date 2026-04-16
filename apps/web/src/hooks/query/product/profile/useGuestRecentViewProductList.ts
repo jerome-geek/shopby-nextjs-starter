@@ -2,7 +2,7 @@ import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
-import {
+import type {
     GetGuestRecentViewProductsParams,
     GetRecentViewProductsResponse,
 } from '@/models/product/profile';

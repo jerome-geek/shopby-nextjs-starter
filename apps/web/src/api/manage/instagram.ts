@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetFeedsResponse } from '@/models/manage/instagram';
+import type { GetFeedsResponse } from '@/models/manage/instagram';
 
 const instagram = {
     /**

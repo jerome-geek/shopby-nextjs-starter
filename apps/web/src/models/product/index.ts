@@ -1,4 +1,4 @@
-import {
+import type {
     AccumulationUnitType,
     BrandNameType,
     CertificationType,
@@ -20,7 +20,7 @@ import {
     ShippingAreaType,
     WarehouseAddressType,
 } from '@/models';
-import { StickerInfo } from '@/models/display';
+import type { StickerInfo } from '@/models/display';
 
 export interface GroupCodeParams {
     groupManagementCodes: string[];

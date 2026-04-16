@@ -3,7 +3,7 @@ import { UseFormReset } from 'react-hook-form';
 
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useMall } from '@/hooks/query/admin/mall';
-import { GetProfileResponse } from '@/models/member/profile';
+import type { GetProfileResponse } from '@/models/member/profile';
 import { UpdateProfileSchemaType } from '@/schema/profile.schema';
 import { useDialog, useGlobal, useKcpCertification } from '@/hooks/utils';
 import { profile } from '@/api/member';

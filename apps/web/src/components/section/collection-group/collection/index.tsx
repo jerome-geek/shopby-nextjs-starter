@@ -7,7 +7,7 @@ import { CollectionRecipeCard } from '@/components/collection/collection-recipe-
 import * as styles from '@/components/section/collection-group/collection/index.css';
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils/useResponsive';
-import { CollectionExposureGroupItem } from '@/models/shop/collection';
+import type { CollectionExposureGroupItem } from '@/models/shop/collection';
 import { vars } from '@/styles/theme.css';
 
 import 'swiper/css';

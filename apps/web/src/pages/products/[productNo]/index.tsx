@@ -13,7 +13,7 @@ import {
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { type GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo } from 'react';
 
@@ -46,7 +46,7 @@ import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
-import { ChannelType } from '@/models';
+import type { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo]/index.css';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';

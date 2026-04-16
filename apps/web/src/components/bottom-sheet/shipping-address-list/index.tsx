@@ -9,7 +9,7 @@ import * as styles from '@/components/bottom-sheet/shipping-address-list/index.c
 import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
-import { Address } from '@/models/order/shippingAddress';
+import type { Address } from '@/models/order/shippingAddress';
 import { PaymentReserveSchemaType } from '@/schema';
 
 

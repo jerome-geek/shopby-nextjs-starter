@@ -21,7 +21,7 @@ import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 import { addressKeys } from '@/hooks/queryKeys';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
-import { Address } from '@/models/order/shippingAddress';
+import type { Address } from '@/models/order/shippingAddress';
 import {
     getRegisterShippingAddressSchema,
     type RegisterShippingAddressSchemaType,

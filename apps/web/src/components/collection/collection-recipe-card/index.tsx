@@ -1,6 +1,6 @@
 import { Bookmark } from 'lucide-react';
 import Link from 'next/link';
-import { MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 
 import * as styles from '@/components/collection/collection-recipe-card/index.css';
 import { PATHS } from '@/const/paths';

@@ -26,7 +26,7 @@ import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGues
 import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
-import { ClaimType } from '@/models';
+import type { ClaimType } from '@/models';
 import type { ClaimSchemaMapType } from '@/schema/claim.schema';
 
 interface ClaimReturnWayProps {

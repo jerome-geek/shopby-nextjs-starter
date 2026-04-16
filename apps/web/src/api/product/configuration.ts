@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetNaverShoppingConfigurationResponse } from '@/models/product/configuration';
+import type { GetNaverShoppingConfigurationResponse } from '@/models/product/configuration';
 
 const configuration = {
     /**

@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { myOrder } from '@/api/order';
 import ordersKeys from '@/hooks/queryKeys/ordersKeys';
-import {
+import type {
     GetOrderListParams,
     GetOrderListResponse,
 } from '@/models/order/myOrder';

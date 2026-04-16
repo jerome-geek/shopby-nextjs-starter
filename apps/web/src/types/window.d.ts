@@ -1,7 +1,7 @@
-import { KakaoSDK } from '@/types/kakao';
-import { PlatformType } from '@/models';
-import { CartList, OrderDetailResponse } from '@/models/order';
-import { ProductDetailResponse } from '@/models/product';
+import type { KakaoSDK } from '@/types/kakao';
+import type { PlatformType } from '@/models';
+import type { CartList, OrderDetailResponse } from '@/models/order';
+import type { ProductDetailResponse } from '@/models/product';
 
 // 모듈 형식으로 선언하여 TypeScript 충돌 방지
 export {};

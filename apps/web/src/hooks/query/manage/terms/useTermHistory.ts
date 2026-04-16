@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios';
 
 import { terms } from '@/api/manage';
 import { termsKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetTermHistoryParams,
     GetTermsHistoryResponse,
 } from '@/models/manage/terms';

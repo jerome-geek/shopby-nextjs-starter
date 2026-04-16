@@ -6,7 +6,7 @@ import { filter, isEmpty, pipe, toArray } from '@fxts/core';
 import * as styles from '@/components/mypage/orders/order-options-item.css';
 import { NextActionButton } from '@/components/mypage/orders/next-action-button';
 import { PATHS } from '@/const/paths';
-import { OrderOption, NextAction } from '@/models/order';
+import type { OrderOption, NextAction } from '@/models/order';
 import { useResponsive } from '@/hooks/utils';
 import { CURRENCY } from '@/utils/currency';
 

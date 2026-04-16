@@ -2,7 +2,7 @@ import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 import { PATHS } from '@/const/paths';
-import { RecipeExposureGroupItem } from '@/models/shop/recipe';
+import type { RecipeExposureGroupItem } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 import { RecipeCard } from '@/components/recipe';

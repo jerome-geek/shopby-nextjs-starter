@@ -1,4 +1,4 @@
-import { MemberTargetType } from '@/models';
+import type { MemberTargetType } from '@/models';
 
 export interface GetAdditionalDiscountParams {
     /** 상품번호 */

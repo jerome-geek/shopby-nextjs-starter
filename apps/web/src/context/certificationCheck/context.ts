@@ -1,4 +1,4 @@
-import { AuthenticationType } from '@/models';
+import type { AuthenticationType } from '@/models';
 import { createContext } from 'react';
 
 interface CertificationCheckContextType {

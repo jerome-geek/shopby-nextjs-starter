@@ -1,4 +1,4 @@
-import {
+import type {
     GetCalculatedOrderSheetData,
     GetOrderSheetParams,
 } from '@/models/order/orderSheet';

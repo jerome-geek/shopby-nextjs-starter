@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
+import type { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 
 const memberConfig = {
     /**

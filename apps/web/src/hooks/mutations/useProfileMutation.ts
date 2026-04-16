@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
 import { useDialog } from '@/hooks/utils';
-import {
+import type {
     CheckPasswordData,
     CreateProfileData,
     DeleteProfileParams,

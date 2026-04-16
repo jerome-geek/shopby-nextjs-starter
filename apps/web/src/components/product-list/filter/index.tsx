@@ -11,7 +11,7 @@ import { PRICE_FILTER_OPTIONS } from '@/const/product';
 import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductSearchSummary } from '@/hooks/query/product/product';
 import { useProductFilter } from '@/hooks/useProductFilter';
-import { GetProductSearchSummaryParams } from '@/models/product/product';
+import type { GetProductSearchSummaryParams } from '@/models/product/product';
 
 export type ProductListFilterProps = {
     categoryNo?: number;

@@ -1,6 +1,6 @@
 import { terms } from '@/api/manage';
 import { termsKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetTermListByPostData,
     GetTermListResponse,
 } from '@/models/manage/terms';

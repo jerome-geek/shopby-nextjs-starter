@@ -17,7 +17,7 @@ import { useProductList } from '@/hooks/query/product/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useResponsive } from '@/hooks/utils';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
-import { OrderByType, OrderDirectionType } from '@/models';
+import type { OrderByType, OrderDirectionType } from '@/models';
 import * as styles from '@/pages/products/best/index.css';
 
 const PAGE_SIZE = 20;

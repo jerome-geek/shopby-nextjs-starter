@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { isNull } from '@fxts/core';
 

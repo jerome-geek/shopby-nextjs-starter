@@ -1,5 +1,5 @@
-import { ClaimType } from '@/models';
-import {
+import type { ClaimType } from '@/models';
+import type {
     GetOrderDetailParams,
     GetOrderListParams,
     GetOrderStatusSummaryParams,

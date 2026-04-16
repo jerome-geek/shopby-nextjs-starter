@@ -12,7 +12,7 @@ import {
     useMyOrderMutation,
 } from '@/hooks/mutations';
 import useDialog from '@/hooks/utils/useDialog';
-import { NextActionType } from '@/models';
+import type { NextActionType } from '@/models';
 import type { CancelClaimData } from '@/models/claim/guest';
 import { useAuth } from '@/hooks/useAuth';
 

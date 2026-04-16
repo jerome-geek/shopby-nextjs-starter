@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 
 import { collection } from '@/api/shop';
-import {
+import type {
     CreateCollectionData,
     UpdateCollectionRequest,
 } from '@/models/shop/collection';

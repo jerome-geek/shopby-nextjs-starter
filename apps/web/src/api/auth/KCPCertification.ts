@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import {
+import type {
     AuthenticateAdultParams,
     AuthenticateAdultResponse,
     GetKCPCertificationResultParams,

@@ -1,4 +1,4 @@
-import { DeviceType, PageType } from '@/models';
+import type { DeviceType, PageType } from '@/models';
 
 export interface GetExternalScriptsParams {
     /** 페이지타입 리스트. "," 구분자 복수개 요청 가능 */

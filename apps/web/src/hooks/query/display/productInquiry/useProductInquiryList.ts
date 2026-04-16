@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetProductInquiriesParams,
     GetProductInquiriesResponse,
 } from '@/models/display/productInquiry';

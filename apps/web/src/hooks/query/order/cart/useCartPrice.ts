@@ -8,7 +8,7 @@ import { isEmpty } from '@fxts/core';
 
 import { cart } from '@/api/order';
 import { cartKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetSelectedCartPriceParams,
     GetSelectedCartPriceResponse,
 } from '@/models/order/cart';

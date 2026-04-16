@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useResponsive } from '@/hooks/utils';
 import useClaim from '@/hooks/utils/useClaim';
-import { NextActionType } from '@/models';
+import type { NextActionType } from '@/models';
 
 export interface NextActionButtonProps {
     nextActionType: NextActionType;

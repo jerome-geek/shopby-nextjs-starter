@@ -9,7 +9,7 @@ import {
     InputFieldContainer,
     InputLabel,
 } from '@/components/ui/input';
-import { CheckPasswordData } from '@/models/member/profile';
+import type { CheckPasswordData } from '@/models/member/profile';
 
 export interface PasswordCheckOverlayProps {
     onConfirm: (password: string) => Promise<boolean>;

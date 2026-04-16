@@ -1,4 +1,4 @@
-import { Brand, FlatCategory, MultiLevelCategory } from '@/models/display';
+import type { Brand, FlatCategory, MultiLevelCategory } from '@/models/display';
 
 export interface GetCategoriesParams {
     /** 카테고리명 */

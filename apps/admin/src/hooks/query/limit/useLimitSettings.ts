@@ -1,5 +1,5 @@
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import limitKeys from '@/hooks/queryKeys/limitKeys';
 import { limit } from '@/api/limit';

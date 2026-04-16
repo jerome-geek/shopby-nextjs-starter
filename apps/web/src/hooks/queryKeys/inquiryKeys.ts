@@ -1,4 +1,4 @@
-import {
+import type {
     GetInquiriesParams,
     GetInquiryTypesParams,
 } from '@/models/manage/inquiry';

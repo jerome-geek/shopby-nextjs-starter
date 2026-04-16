@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { type GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
@@ -25,7 +25,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { boardKeys } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import { GetArticleV2Params } from '@/models/manage/board';
+import type { GetArticleV2Params } from '@/models/manage/board';
 import * as styles from '@/pages/boards/[boardNo]/[articleNo]/index.css';
 import { accessTokenCookie } from '@/utils/cookie';
 

@@ -2,7 +2,7 @@
 // import { useCallback } from 'react';
 
 // import { useOrderSheet } from '@/hooks/suspenseQuery/orderSheet';
-// import { PayType, PgType } from '@/models';
+// import type { PayType, PgType } from '@/models';
 
 // type PaymentValidationResult =
 //     | { ok: true; message?: never }

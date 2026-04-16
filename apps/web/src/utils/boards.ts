@@ -1,6 +1,6 @@
-import { BoardAuthorityType } from '@/models';
-import { BoardConfigs } from '@/models/manage/board';
-import { GetProfileResponse } from '@/models/member/profile';
+import type { BoardAuthorityType } from '@/models';
+import type { BoardConfigs } from '@/models/manage/board';
+import type { GetProfileResponse } from '@/models/member/profile';
 
 /**
  * 게시판 글쓰기 권한 확인

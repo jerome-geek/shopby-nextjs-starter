@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetArticleListParams,
     GetArticleListResponse,
 } from '@/models/manage/board';

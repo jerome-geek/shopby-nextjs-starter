@@ -1,4 +1,4 @@
-import {
+import type {
     AdditionalPayType,
     BankType,
     CardCodeType,
@@ -39,7 +39,7 @@ import {
     ShippingAreaType,
     TaxType,
 } from '@/models';
-import { ImageUrlInfo } from '@/models/claim';
+import type { ImageUrlInfo } from '@/models/claim';
 
 /** 상품쿠폰 */
 export interface ProductCoupon {

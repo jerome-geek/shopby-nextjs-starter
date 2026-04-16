@@ -18,7 +18,7 @@ import {
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
 import { DEFAULT_ORDER_TAB_TYPES } from '@/const/order';
-import { OrderRequestStatusType } from '@/models';
+import type { OrderRequestStatusType } from '@/models';
 import { OrderOptions } from '@/components/mypage/orders/order-options';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 

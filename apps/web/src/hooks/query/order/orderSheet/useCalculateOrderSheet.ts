@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { orderSheet } from '@/api/order';
 import { orderSheetKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetCalculatedOrderSheetData,
     GetCalculatedOrderSheetResponse,
 } from '@/models/order/orderSheet';

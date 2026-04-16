@@ -1,7 +1,7 @@
-import { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 
 import { geekRequest } from '@/api/core/geekRequest';
-import {
+import type {
     CollectionExposureGroupResponse,
     GetCollectionListResponse,
     CreateCollectionData,
@@ -10,7 +10,7 @@ import {
     SearchCollectionsResponse,
     SharedRecipeCollection,
 } from '@/models/shop/collection';
-import { CollectionBookmarkResponse } from '@/models/shop/recipe';
+import type { CollectionBookmarkResponse } from '@/models/shop/recipe';
 
 const collection = {
     /**

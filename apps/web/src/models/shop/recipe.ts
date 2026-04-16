@@ -1,6 +1,6 @@
-import { GeekResponse, ShopByResponse } from '@/models/api/response';
-import { Nullable } from '@/models/common';
-import { OrderDirectionType } from '@/models';
+import type { GeekResponse, ShopByResponse } from '@/models/api/response';
+import type { Nullable } from '@/models/common';
+import type { OrderDirectionType } from '@/models';
 
 // ===== Request Types =====
 

@@ -1,8 +1,8 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import member from '@/api/claim/member';
-import { GetClaimDetailByClaimNoResponse } from '@/models/claim/member';
+import type { GetClaimDetailByClaimNoResponse } from '@/models/claim/member';
 import claimsKeys from '@/hooks/queryKeys/claimsKeys';
 
 interface UseClaimDetailParams<T = GetClaimDetailByClaimNoResponse> {

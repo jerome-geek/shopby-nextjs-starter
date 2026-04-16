@@ -1,9 +1,9 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { memberClaim } from '@/api/claim';
 import { ordersKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetOrderOptionDetailForClaimParams,
     GetOrderOptionDetailForClaimResponse,
 } from '@/models/claim/member';

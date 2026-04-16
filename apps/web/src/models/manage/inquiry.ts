@@ -1,10 +1,10 @@
-import {
+import type {
     InquiryStatusType,
     InquirySearchType,
     ImageDisplayType,
     BoardDisplayType,
 } from '@/models';
-import { InquiryAnswer, File, InquiryInfo } from '@/models/manage';
+import type { InquiryAnswer, File, InquiryInfo } from '@/models/manage';
 
 export type InquiryDirection = 'ADMIN' | 'CREATED_ASC' | 'CREATED_DESC';
 

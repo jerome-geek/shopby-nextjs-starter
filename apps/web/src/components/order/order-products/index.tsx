@@ -1,4 +1,4 @@
-import { DeliveryGroup } from '@/models/order/orderSheet';
+import type { DeliveryGroup } from '@/models/order/orderSheet';
 import { CURRENCY } from '@/utils/currency';
 import * as styles from '@/components/order/order-products/index.css';
 

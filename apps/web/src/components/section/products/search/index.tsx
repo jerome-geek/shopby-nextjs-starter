@@ -1,5 +1,5 @@
 import { useProductList } from '@/hooks/suspenseQuery/product/product';
-import { ProductSearchParams } from '@/models/product/product';
+import type { ProductSearchParams } from '@/models/product/product';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import Products from '@/components/section/products/section';
 import ProductsSectionSkeleton from '@/components/section/products/section/skeleton';

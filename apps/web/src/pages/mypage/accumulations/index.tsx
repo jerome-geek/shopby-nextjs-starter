@@ -16,7 +16,7 @@ import useAccumulationList from '@/hooks/query/manage/accumulation/useAccumulati
 import useAccumulationSummary from '@/hooks/query/manage/accumulation/useAccumulationSummary';
 import useWaitingAccumulation from '@/hooks/query/manage/accumulation/useWaitingAccumulation';
 import { useResponsive } from '@/hooks/utils';
-import { AccumulationReasonType } from '@/models';
+import type { AccumulationReasonType } from '@/models';
 import * as styles from '@/pages/mypage/accumulations/index.css';
 import { POINT } from '@/utils/currency';
 

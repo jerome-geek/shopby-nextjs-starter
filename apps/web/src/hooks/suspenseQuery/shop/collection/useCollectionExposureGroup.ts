@@ -2,7 +2,7 @@ import {
     useSuspenseQuery,
     type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { collection } from '@/api/shop';
 import { collectionKeys } from '@/hooks/queryKeys';

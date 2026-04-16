@@ -1,4 +1,4 @@
-import {
+import type {
     AccumulationUnitType,
     BrandNameType,
     CategoryOperatorType,
@@ -33,8 +33,8 @@ import {
     SearchShippingAreaType,
     ShippingAreaType,
 } from '@/models';
-import { StickerInfo } from '@/models/display';
-import {
+import type { StickerInfo } from '@/models/display';
+import type {
     AccumulationInfo,
     AccumulationUseInfo,
     DeliveryConditionInfo,

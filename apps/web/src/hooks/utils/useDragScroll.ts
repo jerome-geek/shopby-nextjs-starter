@@ -1,4 +1,4 @@
-import { RefObject, useRef } from 'react';
+import { type RefObject, useRef } from 'react';
 
 interface UseDragScrollOptions {
     /** 스크롤 속도 (기본값: 2) */

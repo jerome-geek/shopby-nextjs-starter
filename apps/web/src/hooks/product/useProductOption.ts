@@ -19,7 +19,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useProductOptionList } from '@/hooks/query/product/product';
 import { productKeys } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
-import {
+import type {
     FlatOption,
     MultiLevelOption,
     ProductOptionResponse,

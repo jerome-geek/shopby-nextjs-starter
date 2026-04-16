@@ -1,4 +1,4 @@
-import {
+import type {
     CouponSubType,
     CouponTargetType,
     CouponType,

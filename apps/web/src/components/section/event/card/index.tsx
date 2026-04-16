@@ -7,7 +7,7 @@ import * as styles from '@/components/section/event/card/index.css';
 import { EventProductsSkeleton } from '@/components/section/event/skeleton';
 import { useEventProductSection } from '@/hooks/query/display/event';
 import { useResponsive } from '@/hooks/utils';
-import { GetEventResponse } from '@/models/display/event';
+import type { GetEventResponse } from '@/models/display/event';
 
 const EventCard = ({ event }: { event: GetEventResponse }) => {
     const { isMobile } = useResponsive();

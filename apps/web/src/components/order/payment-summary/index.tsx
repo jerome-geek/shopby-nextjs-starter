@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import TermDialog from '@/components/ui/dialog/term';
 import { InputCheckbox } from '@/components/ui/input';
 import { useOrderSheetCalculate } from '@/hooks/order';
-import { OrderTermsType } from '@/models';
+import type { OrderTermsType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';
 import { CURRENCY } from '@/utils/currency';
 

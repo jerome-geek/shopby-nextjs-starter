@@ -8,7 +8,7 @@ import { type AxiosError, isAxiosError } from 'axios';
 
 // import { request } from '@/api/core';
 import { guestOrder } from '@/api/order';
-import {
+import type {
     GetCartData,
     GetCartParams,
     GetCartResponse,

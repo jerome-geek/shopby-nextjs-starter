@@ -1,9 +1,9 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { recipe } from '@/api/shop';
 import { recipeKeys } from '@/hooks/queryKeys';
-import {
+import type {
     SearchPublicRecipesParams,
     SearchRecipesResponse,
 } from '@/models/shop/recipe';

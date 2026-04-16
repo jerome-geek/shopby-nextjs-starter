@@ -2,7 +2,7 @@ import type {
     GetRecipeExposureGroupParams,
     SearchPublicRecipesParams,
 } from '@/models/shop/recipe';
-import { SearchRecipesParams } from '@/models/shop/recipe';
+import type { SearchRecipesParams } from '@/models/shop/recipe';
 
 const recipeKeys = {
     all: ['recipe'] as const,

@@ -21,7 +21,10 @@ export const CollectionCard = ({ collection }: CollectionCardProps) => {
     const handleBookmarkClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        toggleCollectionBookmark(collection);
+        toggleCollectionBookmark({
+            sno: collection.sno,
+            bookmarked: collection.bookmarked,
+        });
     };
 
     const href = PATHS.RECIPES.COLLECTIONS.replace(

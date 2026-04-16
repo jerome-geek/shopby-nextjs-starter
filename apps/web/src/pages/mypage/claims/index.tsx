@@ -17,7 +17,7 @@ import {
 } from '@/hooks/query/claim/member';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
-import { ClaimType } from '@/models';
+import type { ClaimType } from '@/models';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import * as styles from './index.css';
 

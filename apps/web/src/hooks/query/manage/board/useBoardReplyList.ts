@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetRepliesByBoardNoParams,
     GetRepliesByBoardNoResponse,
 } from '@/models/manage/board';

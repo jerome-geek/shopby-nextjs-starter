@@ -6,7 +6,7 @@ import { memberClaim } from '@/api/claim';
 import { useDialog } from '@/hooks/utils';
 import type { CancelOptionsData } from '@/models/claim';
 import type { CancelClaimData } from '@/models/claim/guest';
-import {
+import type {
     CheckFreeGiftSatisfyData,
     RequestExchangeData,
     RequestReturnMultipleOptionsData,

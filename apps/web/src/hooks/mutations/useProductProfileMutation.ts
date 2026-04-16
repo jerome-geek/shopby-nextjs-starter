@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { includes } from '@fxts/core';
 
 import { productProfile } from '@/api/product';
-import {
+import type {
     DeleteRecentViewProductsParams,
     GetRecentViewProductsResponse,
     RegisterRecentViewProductData,

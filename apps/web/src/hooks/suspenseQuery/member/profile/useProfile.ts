@@ -2,11 +2,11 @@ import {
     UseSuspenseQueryOptions,
     useSuspenseQuery,
 } from '@tanstack/react-query';
-import { AxiosError, RawAxiosRequestHeaders } from 'axios';
+import type { AxiosError, RawAxiosRequestHeaders } from 'axios';
 
 import { profile } from '@/api/member';
 import { profileKeys } from '@/hooks/queryKeys';
-import { GetProfileResponse } from '@/models/member/profile';
+import type { GetProfileResponse } from '@/models/member/profile';
 
 interface UseProfileParams<T = GetProfileResponse> {
     headers?: RawAxiosRequestHeaders;

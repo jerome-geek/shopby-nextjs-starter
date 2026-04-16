@@ -9,7 +9,7 @@ import {
 } from '@fxts/core';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
-import { ReactElement, useContext, useMemo, useState } from 'react';
+import { type ReactElement, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { shopbyRequest } from '@/api/core/request';

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
-import {
+import type {
     DeleteArticleData,
     PostArticleParams,
     UpdateArticleData,

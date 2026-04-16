@@ -1,5 +1,5 @@
-import { CountryCdType, OrderRequestType } from '@/models';
-// import { RawAxiosRequestHeaders } from 'axios';
+import type { CountryCdType, OrderRequestType } from '@/models';
+// import type { RawAxiosRequestHeaders } from 'axios';
 
 export interface GetAreaFeesParams {
     /** 배송비 템플릿 번호 */

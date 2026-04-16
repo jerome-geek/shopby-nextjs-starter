@@ -1,4 +1,4 @@
-import { BrandNameType } from '@/models';
+import type { BrandNameType } from '@/models';
 
 export interface GetBrandsParams extends Paging {
     filter?: {

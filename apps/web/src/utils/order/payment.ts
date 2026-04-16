@@ -1,10 +1,10 @@
 import { getPlatform } from '@/api/core/utils';
 import { env } from '@/configs/env';
 import { PATHS } from '@/const/paths';
-import { NaverPayOrderSheetItem } from '@/models/order/naverPay';
+import type { NaverPayOrderSheetItem } from '@/models/order/naverPay';
 import { accessTokenCookie } from '@/utils/cookie';
 
-// import { NaverPayOrderSheetItem } from '@/models/order';
+// import type { NaverPayOrderSheetItem } from '@/models/order';
 // import { getPlatform } from '@/utils';
 // import { authCookieManager } from '@/utils/cookie';
 // import { checkLogin } from '@/utils/users';

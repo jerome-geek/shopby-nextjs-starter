@@ -1,4 +1,4 @@
-import { OrderStatusType, PayType, PreviousOrderSearchType } from '@/models';
+import type { OrderStatusType, PayType, PreviousOrderSearchType } from '@/models';
 
 export interface GetPreviousOrdersParams {
     /** 검색 타입 */

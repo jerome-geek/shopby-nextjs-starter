@@ -2,7 +2,7 @@ import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
 import { ONE_WEEK } from '@/const/time';
-import {
+import type {
     GetClosedEventsParams,
     GetClosedEventsResponse,
     GetEventByIdParams,

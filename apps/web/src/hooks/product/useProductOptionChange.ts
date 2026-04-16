@@ -1,6 +1,6 @@
 import { SingleValue } from 'react-select';
 
-import { FlatOption, MultiLevelOption } from '@/models/product/productOption';
+import type { FlatOption, MultiLevelOption } from '@/models/product/productOption';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { toSelectedOption } from '@/helpers/product';
 

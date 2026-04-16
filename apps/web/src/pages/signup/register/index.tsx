@@ -11,7 +11,7 @@ import {
 } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +40,7 @@ import { useMyApp } from '@/hooks/myapp';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useSignupInitialize } from '@/hooks/signup';
 import { useDialog, useGlobal } from '@/hooks/utils';
-import { NcpOpenIdProviderType } from '@/models';
+import type { NcpOpenIdProviderType } from '@/models';
 import { NextPageWithLayout } from '@/pages/_app';
 import { createSignupFormSchema, SignupFormSchemaType } from '@/schema';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';

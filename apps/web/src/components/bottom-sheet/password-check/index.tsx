@@ -13,7 +13,7 @@ import {
     InputFieldContainer,
     InputLabel,
 } from '@/components/ui/input';
-import { CheckPasswordData } from '@/models/member/profile';
+import type { CheckPasswordData } from '@/models/member/profile';
 
 interface PasswordCheckBottomSheetProps
     extends DefaultModalLayoutProps, PasswordCheckOverlayProps {}

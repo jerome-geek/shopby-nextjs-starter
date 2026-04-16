@@ -3,7 +3,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
 import { InputCheckbox } from '@/components/ui/input/checkbox';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
-import { ClaimableOption } from '@/models/claim';
+import type { ClaimableOption } from '@/models/claim';
 
 interface ClaimOrderOptionsProps {
     orderOptionList: ClaimableOption[];

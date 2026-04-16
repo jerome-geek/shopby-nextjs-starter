@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios';
 
 import { banner } from '@/api/display';
 import { bannerKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetBannerExtraInfosParams,
     GetBannerExtraInfosResponse,
 } from '@/models/display/banner';

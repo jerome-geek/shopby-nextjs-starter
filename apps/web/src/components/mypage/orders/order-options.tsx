@@ -4,8 +4,8 @@ import Link from 'next/link';
 import * as styles from '@/components/mypage/orders/order-options.css';
 import { OrderOptionsItem } from './order-options-item';
 import { PATHS } from '@/const/paths';
-import { OrderItems } from '@/models/order/myOrder';
-import { MemberClaim } from '@/models/claim';
+import type { OrderItems } from '@/models/order/myOrder';
+import type { MemberClaim } from '@/models/claim';
 
 export const OrderOptions = ({
     optionItems,

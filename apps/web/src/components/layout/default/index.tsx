@@ -2,7 +2,7 @@ import { overlay } from 'overlay-kit';
 import { includes } from '@fxts/core';
 import { clsx } from 'clsx';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useLenis } from 'lenis/react';
 
 import BottomNavigation from '@/components/layout/bottom-navigation';

@@ -1,5 +1,5 @@
 import Link, { LinkProps } from 'next/link';
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, type ReactNode } from 'react';
 import * as styles from './view-all-link.css';
 
 interface ViewAllLinkProps extends LinkProps {

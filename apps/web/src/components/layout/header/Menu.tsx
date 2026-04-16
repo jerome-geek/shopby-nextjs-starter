@@ -9,7 +9,7 @@ import * as styles from '@/components/layout/header/Menu.css';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils/useResponsive';
-import { GetCategoryResponse } from '@/models/display/category';
+import type { GetCategoryResponse } from '@/models/display/category';
 
 interface MenuProps {
     categoryData?: GetCategoryResponse;

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/terms/historySelect/index.css';
 import { Select } from '@/components/ui/input';
-import { TermHistory } from '@/models/manage/terms';
+import type { TermHistory } from '@/models/manage/terms';
 
 interface TermsHistorySelectProps {
     historyList: TermHistory[];

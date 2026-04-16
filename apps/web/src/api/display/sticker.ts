@@ -1,7 +1,7 @@
-import { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetStickersResponse } from '@/models/display/sticker';
+import type { GetStickersResponse } from '@/models/display/sticker';
 
 const sticker = {
     /**

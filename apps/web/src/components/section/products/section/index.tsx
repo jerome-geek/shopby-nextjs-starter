@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
 
-import {
+import type {
     GetBestReviewProductsResponse,
     ProductsSearchResponse,
 } from '@/models/product/product';

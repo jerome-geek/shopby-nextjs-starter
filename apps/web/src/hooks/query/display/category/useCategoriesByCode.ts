@@ -8,7 +8,7 @@ import type { AxiosError } from 'axios';
 
 import { category } from '@/api/display';
 import { categoryKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetCategoriesByManagementCodeData,
     GetCategoriesByManagementCodeResponse,
 } from '@/models/display/category';

@@ -1,4 +1,4 @@
-import { KakaoShareSettings } from '@/types/kakao';
+import type { KakaoShareSettings } from '@/types/kakao';
 
 /**
  * @param {string} copiedLink option 복사버튼 클릭시 공유 할 링크

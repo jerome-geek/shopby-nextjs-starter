@@ -15,7 +15,7 @@ import { CLAIM_TYPE_MAP } from '@/const/label';
 import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
 import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
 import { useAuth } from '@/hooks/useAuth';
-import { ClaimType } from '@/models';
+import type { ClaimType } from '@/models';
 
 interface ClaimReasonProps {
     orderOptionNo: number;

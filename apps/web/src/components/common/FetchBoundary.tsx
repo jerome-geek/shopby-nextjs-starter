@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Suspense } from '@suspensive/react';
 
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';

@@ -2,7 +2,7 @@ import type { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
 import { shopbyRequest } from '@/api/core/request';
-import {
+import type {
     Get1depthCategoryResponse,
     GetCategoriesByManagementCodeData,
     GetCategoriesByManagementCodeResponse,

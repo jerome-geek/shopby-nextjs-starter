@@ -7,7 +7,7 @@ import {
     bankType,
     orderStatusType,
 } from '@/schema/common.schema';
-import { ClaimType } from '@/models';
+import type { ClaimType } from '@/models';
 import { UploadFileBlob } from '@/hooks/useFileUpload';
 
 const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';

@@ -1,4 +1,4 @@
-import { LocalCode, SexCode } from '@/models';
+import type { LocalCode, SexCode } from '@/models';
 
 export interface AuthenticateAdultParams {
     /** 본인인증 키 */

@@ -1,4 +1,4 @@
-import { RecipeExposureGroupResponse } from '@/models/shop/recipe';
+import type { RecipeExposureGroupResponse } from '@/models/shop/recipe';
 
 export const MOCK_DATA: RecipeExposureGroupResponse = {
     groupId: '1',

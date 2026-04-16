@@ -18,7 +18,7 @@ import {
     InputCheckbox,
     Select,
 } from '@/components/ui/input';
-import { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
+import type { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 import { SignupFormSchemaType } from '@/schema';
 import * as styles from '@/components/signup/member-config/index.css';
 

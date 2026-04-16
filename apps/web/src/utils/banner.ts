@@ -1,7 +1,7 @@
 import { pipe, reduce } from '@fxts/core';
 
-import { BrowserTargetType } from '@/models';
-import { LandingUrlType } from '@/models/display/banner';
+import type { BrowserTargetType } from '@/models';
+import type { LandingUrlType } from '@/models/display/banner';
 
 export const getLinkTarget = (target: BrowserTargetType) =>
     target === 'CURRENT' ? '_self' : '_blank';

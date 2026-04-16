@@ -4,7 +4,7 @@ import { isAxiosError } from 'axios';
 import { cart, guestOrder } from '@/api/order';
 import { cartKeys } from '@/hooks/queryKeys';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import {
+import type {
     DeleteCartParams,
     RegisterCartData,
     UpdateCartData,

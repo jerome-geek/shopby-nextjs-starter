@@ -1,4 +1,4 @@
-import {
+import type {
     CashReceiptIssuePurposeType,
     CashReceiptKeyType,
     ClaimType,
@@ -11,7 +11,7 @@ import {
     PgType,
     RequestCashReceiptResultType,
 } from '@/models';
-import {
+import type {
     FirstOrderAmount,
     LastOrderAmount,
     NextAction,

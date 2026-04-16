@@ -8,12 +8,12 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ReactLenis } from 'lenis/react';
 import { AnimatePresence, motion } from 'motion/react';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import { generateDefaultSeo } from 'next-seo/pages';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ReactElement, ReactNode, useState } from 'react';
+import { type ReactElement, type ReactNode, useState } from 'react';
 import { Toaster } from 'sonner';
 import { HttpStatusCode, isAxiosError } from 'axios';
 

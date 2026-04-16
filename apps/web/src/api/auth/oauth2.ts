@@ -1,11 +1,11 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import {
+import type {
     IssueOpenIdAccessTokenData,
     IssueOpenIdAccessTokenResponse,
 } from '@/models/auth/authentication';
-import {
+import type {
     IssueAccessTokenData,
     IssueAccessTokenResponse,
     RefreshOpenIdAccessTokenResponse,

@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { InputFieldContainer, InputLabel } from '@/components/ui/input';
 import { useMall } from '@/hooks/query/admin/mall';
-import { MemberJoinConfig } from '@/models/admin/mall';
+import type { MemberJoinConfig } from '@/models/admin/mall';
 
 interface WithMemberJoinConfigProps {
     children?: ReactNode;

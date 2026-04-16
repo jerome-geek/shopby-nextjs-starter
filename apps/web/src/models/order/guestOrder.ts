@@ -1,4 +1,4 @@
-import {
+import type {
     CashReceiptIssuePurposeType,
     CashReceiptKeyType,
     CashReceiptResultType,
@@ -7,7 +7,7 @@ import {
     OrderRequestType,
     ReplyType,
 } from '@/models';
-import {
+import type {
     CartPriceInfo,
     DeliveryGroup,
     InvalidProduct,

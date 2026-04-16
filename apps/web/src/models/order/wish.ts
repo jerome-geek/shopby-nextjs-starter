@@ -1,5 +1,5 @@
-import { OptionType } from '@/models';
-import { OptionInputs } from '@/models/order';
+import type { OptionType } from '@/models';
+import type { OptionInputs } from '@/models/order';
 
 export interface GetWishListResponse {
     /** 가격 정보 */

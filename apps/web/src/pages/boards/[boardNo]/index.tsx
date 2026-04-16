@@ -27,7 +27,7 @@ import {
 } from '@/hooks/query/manage/board';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import { PostDirection } from '@/models/manage';
+import type { PostDirection } from '@/models/manage';
 import type { PostItem } from '@/models/manage/board';
 import * as styles from '@/pages/boards/[boardNo]/index.css';
 import { BREAKPOINTS } from '@/styles/media';

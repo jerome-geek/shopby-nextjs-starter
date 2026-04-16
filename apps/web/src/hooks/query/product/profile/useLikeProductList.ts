@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { productProfile } from '@/api/product';
 import { productProfileKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetLikeProductsParams,
     GetLikeProductsResponse,
 } from '@/models/product/profile';

@@ -8,7 +8,7 @@ import type { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
 import { reviewKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetProductReviewListResponse,
     GetProductReviewListParams,
 } from '@/models/display/review';

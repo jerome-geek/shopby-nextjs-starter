@@ -7,7 +7,7 @@ import type { AxiosError } from 'axios';
 
 import { inquiry } from '@/api/manage';
 import { inquiryKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetInquiriesParams,
     GetInquiriesResponse,
 } from '@/models/manage/inquiry';

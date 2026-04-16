@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { GetHolidayParams, GetHolidayResponse } from '@/models/manage/holiday';
+import type { GetHolidayParams, GetHolidayResponse } from '@/models/manage/holiday';
 
 /**
  * 요청한 달에 해당하는 공휴일 조회하기

@@ -1,4 +1,4 @@
-import { Nullable } from '@/models/common';
+import type { Nullable } from '@/models/common';
 
 /** ShopBy API 에러 응답 타입 */
 export interface ShopByErrorResponse {

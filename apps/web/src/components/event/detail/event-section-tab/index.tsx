@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import * as styles from './index.css';
-import { EventSection } from '@/models/display';
+import type { EventSection } from '@/models/display';
 
 interface EventSectionTabProps {
     sectionTabList: EventSection[];

@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 
 import { HeroBanner } from '@/components/banner/hero';

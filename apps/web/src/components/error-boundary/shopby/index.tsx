@@ -6,7 +6,7 @@ import {
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 

@@ -1,11 +1,11 @@
-import {
+import type {
     ClaimReasonType,
     ClaimType,
     ClaimValidationType,
     ResponsibleObjectType,
     ReturnWayType,
 } from '@/models';
-import { CancelOptionsData } from '@/models/claim';
+import type { CancelOptionsData } from '@/models/claim';
 
 export interface UpdateReturnAccountData {
     /** 계좌소유자명 (nullable) */

@@ -2,7 +2,7 @@ import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
-import {
+import type {
     GetReviewableProductsParams,
     GetReviewableProductsResponse,
 } from '@/models/display/review';

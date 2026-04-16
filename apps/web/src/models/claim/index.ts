@@ -1,4 +1,4 @@
-import {
+import type {
     AdditionalPayType,
     BankType,
     ClaimReasonType,
@@ -16,7 +16,7 @@ import {
     ReturnWayType,
     ShippingAreaType,
 } from '@/models';
-import {
+import type {
     DeliveryAmtInfo,
     NextAction,
     OrderStatusDate,

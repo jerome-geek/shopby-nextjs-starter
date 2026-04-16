@@ -1,4 +1,4 @@
-import { PgType, ShopSpecificationFields } from '@/models';
+import type { PgType, ShopSpecificationFields } from '@/models';
 
 export interface GetOrderConfigsResponse {
     /** pg사 */

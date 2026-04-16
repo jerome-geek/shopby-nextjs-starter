@@ -1,4 +1,4 @@
-import { BannerDisplayType, BrowserTargetType } from '@/models';
+import type { BannerDisplayType, BrowserTargetType } from '@/models';
 
 export type DisplayType = 'SEQUENTIAL' | 'RANDOM';
 

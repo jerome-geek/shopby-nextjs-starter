@@ -1,11 +1,11 @@
-import {
+import type {
     ChannelType,
     CouponSubType,
     CouponTargetType,
     CouponType,
     SearchDateType,
 } from '@/models';
-import {
+import type {
     Coupon,
     CouponStatus,
     DateInfo,

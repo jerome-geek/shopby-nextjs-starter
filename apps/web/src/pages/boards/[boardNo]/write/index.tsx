@@ -28,8 +28,8 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { UploadFileBlob } from '@/hooks/utils/useFileUpload';
-import { ImagesType } from '@/models/manage';
-import { PostArticleParams } from '@/models/manage/board';
+import type { ImagesType } from '@/models/manage';
+import type { PostArticleParams } from '@/models/manage/board';
 import * as styles from '@/pages/boards/[boardNo]/write/index.css';
 import {
     articleWriteSchema,

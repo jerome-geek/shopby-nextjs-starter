@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';

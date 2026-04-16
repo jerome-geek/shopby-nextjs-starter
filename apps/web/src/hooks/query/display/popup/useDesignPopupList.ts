@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios';
 
 import { popup } from '@/api/display';
 import popupKeys from '@/hooks/queryKeys/popupKeys';
-import {
+import type {
     DesignPopupData,
     GetDesignPopupResponse,
 } from '@/models/display/popup';

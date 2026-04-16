@@ -1,4 +1,4 @@
-import { AuthType, CertificatedUsage } from '@/models';
+import type { AuthType, CertificatedUsage } from '@/models';
 
 export interface CertificatedNumber {
     type: AuthType;

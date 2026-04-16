@@ -3,10 +3,10 @@ import {
     useQuery,
     UseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { memberClaim } from '@/api/claim';
-import {
+import type {
     GetClaimListParams,
     GetClaimListResponse,
 } from '@/models/claim/member';

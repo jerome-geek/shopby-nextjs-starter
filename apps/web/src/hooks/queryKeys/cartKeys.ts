@@ -1,4 +1,4 @@
-import {
+import type {
     GetCartListParams,
     GetSelectedCartPriceParams,
 } from '@/models/order/cart';

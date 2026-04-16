@@ -3,11 +3,11 @@ import {
     useInfiniteQuery,
     UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { address } from '@/api/manage';
 import { addressKeys } from '@/hooks/queryKeys';
-import {
+import type {
     SearchAddressParams,
     SearchAddressResponse,
 } from '@/models/manage/address';

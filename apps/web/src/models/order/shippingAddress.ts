@@ -1,4 +1,4 @@
-import { AddressType, CountryCdType, OptionYnType } from '@/models';
+import type { AddressType, CountryCdType, OptionYnType } from '@/models';
 
 export interface Address {
     /** 성 (nullable) */

@@ -1,4 +1,4 @@
-import {
+import type {
     AccumulationUnitType,
     BrandNameType,
     CustomPropertiesPropType,
@@ -8,7 +8,7 @@ import {
     ProductSectionSaleStatusType,
     ProductType,
 } from '@/models';
-import { StickerInfo } from '@/models/display';
+import type { StickerInfo } from '@/models/display';
 import {
     AccumulationInfo,
     DeliveryConditionInfo,

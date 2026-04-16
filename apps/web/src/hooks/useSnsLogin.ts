@@ -10,7 +10,7 @@ import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/query/admin/mall';
 // import { useMyApp } from '@/hooks/myapp';
 import useDialog from '@/hooks/utils/useDialog';
-import { NcpOpenIdProviderType } from '@/models';
+import type { NcpOpenIdProviderType } from '@/models';
 // import { shopbyTokenStorage } from '@/utils/storage';
 import {
     AppleIcon,

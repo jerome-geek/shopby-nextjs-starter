@@ -1,4 +1,4 @@
-import { StickerInfoType } from '@/models';
+import type { StickerInfoType } from '@/models';
 
 export interface Sticker {
     /** 스티커 명 */

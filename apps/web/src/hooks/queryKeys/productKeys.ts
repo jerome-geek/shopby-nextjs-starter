@@ -1,4 +1,4 @@
-import {
+import type {
     GetBestSellerProductsParams,
     GetGroupManagementCodesData,
     GetProductDetailParams,
@@ -9,7 +9,7 @@ import {
     GetBestReviewProductsParams,
 } from '@/models/product/product';
 import type { GetProductOptionParams } from '@/models/product/productOption';
-import {
+import type {
     GetLikeBrandsCountParams,
     GetLikeProductsParams,
 } from '@/models/product/profile';

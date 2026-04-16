@@ -1,5 +1,5 @@
 import { textButtonStyle } from '@/components/ui/button/style.css';
-import { TextButtonProps } from '@/components/ui/button/types';
+import type { TextButtonProps } from '@/components/ui/button/types';
 
 export default function TextButton({
     children,

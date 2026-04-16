@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/input';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import { useDialog } from '@/hooks/utils';
-import { ReportArticleData } from '@/models/manage/board';
+import type { ReportArticleData } from '@/models/manage/board';
 
 interface ReportModalProps extends DefaultModalLayoutProps {
     boardNo: string;

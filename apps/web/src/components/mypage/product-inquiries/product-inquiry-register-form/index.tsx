@@ -37,7 +37,7 @@ import type {
     UpdateProductInquiryData,
     WriteProductInquiryData,
 } from '@/models/display/productInquiry';
-import { SearchProductItem } from '@/models/product/product';
+import type { SearchProductItem } from '@/models/product/product';
 import {
     productInquiryFormSchema,
     type ProductInquiryFormSchemaType,

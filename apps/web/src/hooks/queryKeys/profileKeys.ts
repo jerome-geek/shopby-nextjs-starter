@@ -1,4 +1,4 @@
-import { RawAxiosRequestHeaders } from 'axios';
+import type { RawAxiosRequestHeaders } from 'axios';
 
 const profileKeys = {
     all: ['profile'] as const,

@@ -2,11 +2,11 @@ import {
     useSuspenseQuery,
     type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { comment } from '@/api/shop';
 import { commentKeys } from '@/hooks/queryKeys';
-import { GetCommentsParams, GetCommentsResponse } from '@/models/shop/comment';
+import type { GetCommentsParams, GetCommentsResponse } from '@/models/shop/comment';
 
 interface UseRecipeCommentListParams<T = GetCommentsResponse> {
     params: GetCommentsParams;

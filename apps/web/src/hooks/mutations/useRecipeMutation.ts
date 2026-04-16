@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 
 import { recipe } from '@/api/shop';
-import {
+import type {
     CreateManualRecipeData,
     CreateRecipeData,
     RegisterManualTempImagesData,

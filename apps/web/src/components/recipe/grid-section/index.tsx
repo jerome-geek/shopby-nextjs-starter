@@ -14,7 +14,7 @@ import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { useSearchMyRecipeList } from '@/hooks/query/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { SearchRecipesParams } from '@/models/shop/recipe';
+import type { SearchRecipesParams } from '@/models/shop/recipe';
 
 export const RecipeGridSection = () => {
     const { t } = useTranslation();

@@ -18,8 +18,8 @@ import { PATHS } from '@/const/paths';
 import { useProductInquiryMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';
 import useDialog from '@/hooks/utils/useDialog';
-import { GetMallResponse } from '@/models/admin/mall';
-import { WriteProductInquiryData } from '@/models/display/productInquiry';
+import type { GetMallResponse } from '@/models/admin/mall';
+import type { WriteProductInquiryData } from '@/models/display/productInquiry';
 import * as styles from '@/components/ui/dialog/product-inquiry/index.css';
 import { DialogLayout, DefaultDialogProps } from '@/components/layout';
 

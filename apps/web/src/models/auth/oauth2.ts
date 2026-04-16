@@ -1,4 +1,4 @@
-import { NcpOpenIdProviderType } from '@/models';
+import type { NcpOpenIdProviderType } from '@/models';
 
 export interface UpdateAccessTokenResponse {
     /** 액세스 토큰 만료까지 남은 시간(초) */

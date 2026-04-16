@@ -1,4 +1,4 @@
-import { SnsShareImageType } from '@/models/marketing';
+import type { SnsShareImageType } from '@/models/marketing';
 
 export interface GetSnsShareConfigParams {
     /** 상품 번호 */

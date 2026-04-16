@@ -1,4 +1,4 @@
-import {
+import type {
     GetMyProductInquiriesParams,
     GetProductInquiriesParams,
 } from '@/models/display/productInquiry';

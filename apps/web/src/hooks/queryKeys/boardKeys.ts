@@ -1,4 +1,4 @@
-import {
+import type {
     GetArticleListParams,
     GetArticleParams,
     GetArticleV2Params,

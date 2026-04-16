@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios';
 
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
-import {
+import type {
     GetArticleV2Params,
     GetArticleV2Response,
 } from '@/models/manage/board';

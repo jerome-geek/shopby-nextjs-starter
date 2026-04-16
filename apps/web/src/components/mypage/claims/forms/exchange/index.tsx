@@ -24,7 +24,7 @@ import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOpt
 import useOrderOptionEstimate from '@/hooks/query/claim/member/useOrderOptionEstimate';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal } from '@/hooks/utils';
-import { RequestExchangeData } from '@/models/claim/member';
+import type { RequestExchangeData } from '@/models/claim/member';
 import {
     claimExchangeSchema,
     ClaimExchangeSchemaType,

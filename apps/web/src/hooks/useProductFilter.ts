@@ -3,8 +3,8 @@ import { ParsedUrlQuery, ParsedUrlQueryInput } from 'querystring';
 import { useCallback, useMemo, useState } from 'react';
 
 import { PRICE_FILTER_OPTIONS } from '@/const/product';
-import { OrderByType, OrderDirectionType } from '@/models';
-import { ProductSearchParams } from '@/models/product/product';
+import type { OrderByType, OrderDirectionType } from '@/models';
+import type { ProductSearchParams } from '@/models/product/product';
 
 type PriceFilterId = (typeof PRICE_FILTER_OPTIONS)[number]['id'] | 'custom';
 

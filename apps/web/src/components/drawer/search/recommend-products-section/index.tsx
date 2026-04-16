@@ -6,7 +6,7 @@ import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import { useProductSectionProductList } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
-import { ImageUrlType } from '@/models/product';
+import type { ImageUrlType } from '@/models/product';
 
 import 'swiper/css';
 

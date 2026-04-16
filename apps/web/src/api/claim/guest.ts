@@ -1,13 +1,13 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import {
+import type {
     CancelOptionsData,
     ClaimPriceInfo,
     EstimatedRefundPriceData,
     ReturnSingleOptionData,
 } from '@/models/claim';
-import {
+import type {
     CancelClaimData,
     CancelClaimOptionData,
     CancelLaterInputShippingOrderParams,
@@ -15,7 +15,7 @@ import {
     GetClaimOptionPriceParams,
     UpdateReturnAccountData,
 } from '@/models/claim/guest';
-import {
+import type {
     CheckFreeGiftSatisfyData,
     CheckFreeGiftSatisfyResponse,
     GetClaimDetailByClaimNoResponse,

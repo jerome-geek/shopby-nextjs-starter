@@ -1,4 +1,4 @@
-import { GeekResponse } from '@/models/api/response';
+import type { GeekResponse } from '@/models/api/response';
 
 export type CommentContentType = 'MAGAZINE' | 'BOARD' | 'RECIPE';
 

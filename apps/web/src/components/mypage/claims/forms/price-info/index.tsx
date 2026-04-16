@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ClaimPriceInfo as ClaimPriceInfoType } from '@/models/claim';
+import type { ClaimPriceInfo as ClaimPriceInfoType } from '@/models/claim';
 import { CURRENCY } from '@/utils/currency';
 import ClaimBankInfo from '@/components/mypage/claims/forms/bank-info';
 

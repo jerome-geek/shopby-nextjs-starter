@@ -1,6 +1,6 @@
-import { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { UAParser } from 'ua-parser-js';
-import { ClientPlatformType } from '@/models';
+import type { ClientPlatformType } from '@/models';
 import { env } from '@/configs/env';
 
 export const DEFAULT_API_RETRY_BACKOFF_LIMIT = 3 * 1000;

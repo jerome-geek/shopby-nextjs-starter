@@ -1,4 +1,4 @@
-import {
+import type {
     CashReceiptIssuePurposeType,
     CashReceiptKeyType,
     CountryCdType,
@@ -8,7 +8,7 @@ import {
     PayType,
     PgType,
 } from '@/models';
-import { Products } from '@/models/order';
+import type { Products } from '@/models/order';
 
 export interface FreeGift {
     /** 옵션번호 */

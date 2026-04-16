@@ -5,7 +5,7 @@ import { UseFormReset } from 'react-hook-form';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useKCPCertificationResult } from '@/hooks/query/auth';
 import { useProfile } from '@/hooks/query/member/profile';
-import { NcpOpenIdProviderType } from '@/models';
+import type { NcpOpenIdProviderType } from '@/models';
 import { SignupFormSchemaType } from '@/schema';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 
