@@ -283,7 +283,3 @@ export interface RecipeExposureGroupResponse {
 
 /** 페이징 포함 레시피 응답 */
 export type SearchRecipesResponse = GeekResponse<GetRecipeDetailResponse>;
-
-/** 페이징 포함 컬렉션 검색 응답 (레시피 공개검색과 동일한 Geek 페이징 필드) */
-export type SearchCollectionsResponse =
-    GeekResponse<BookmarkedRecipeCollection>;

@@ -1,28 +1,39 @@
-import { GetRecipeDetailResponse } from '@/models/shop/recipe';
+    BookmarkedRecipeCollection,
+    GetRecipeDetailResponse,
+} from '@/models/shop/recipe';
 
-export interface CreateCollectionRequest {
+export interface CreateCollectionData {
     title: string;
     description?: string;
 }
+
+export interface SharedRecipeCollection extends RecipeCollection {
+    recipes: GetRecipeDetailResponse[];
+}
+
+export interface RecipeCollection {
+    sno: number;
+    title: string;
+    description: string;
+    shareCode: string;
+    isDefault: boolean;
+    memberNo: number;
+    memberName: string;
+    recipeCount: number;
+    recipeImageUrls: string[];
+    bookmarkCount: number;
+    bookmarked: boolean;
+    ownershipType: 'OWNED';
+    editable: boolean;
+    deletable: boolean;
+}
+
+export type GetCollectionListResponse = RecipeCollection[];
 
 export interface UpdateCollectionRequest {
     title?: string;
     description?: string;
 }
-
-export interface RecipeCollection {
-    deletable: boolean;
-    description: Nullable<string>;
-    editable: boolean;
-    isDefault: boolean;
-    ownershipType: 'OWNED';
-    recipeCount: number;
-    shareCode: string;
-    sno: number;
-    title: string;
-}
-
-export type CollectionListResponse = RecipeCollection[];
 
 export interface SearchPublicCollectionParams {
     keyword?: string;
@@ -32,6 +43,10 @@ export interface SearchPublicCollectionParams {
     /** 정렬 기준 */
     sortBy: 'LATEST' | 'BOOKMARK_COUNT';
 }
+
+/** 페이징 포함 컬렉션 검색 응답 (레시피 공개검색과 동일한 Geek 페이징 필드) */
+export type SearchCollectionsResponse =
+    GeekResponse<BookmarkedRecipeCollection>;
 
 export type CollectionExposureGroupItem = {
     sno: number;

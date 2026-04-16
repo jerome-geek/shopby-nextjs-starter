@@ -1,20 +1,22 @@
+import { AxiosRequestConfig } from 'axios';
+
 import { geekRequest } from '@/api/core/geekRequest';
 import {
     CollectionExposureGroupResponse,
-    CollectionListResponse,
-    CreateCollectionRequest,
+    GetCollectionListResponse,
+    CreateCollectionData,
     SearchPublicCollectionParams,
     UpdateCollectionRequest,
-} from '@/models/shop/collection';
-import {
-    CollectionBookmarkResponse,
     SearchCollectionsResponse,
-} from '@/models/shop/recipe';
-import { AxiosRequestConfig } from 'axios';
+    SharedRecipeCollection,
+} from '@/models/shop/collection';
+import { CollectionBookmarkResponse } from '@/models/shop/recipe';
 
 const collection = {
-    /** 컬렉션 생성 */
-    create: (data: CreateCollectionRequest) => {
+    /**
+     * 컬렉션 생성
+     */
+    create: (data: CreateCollectionData) => {
         return geekRequest({
             method: 'POST',
             url: '/shop/recipe/collections',
@@ -24,7 +26,7 @@ const collection = {
 
     /** 내 컬렉션 목록 조회 */
     getList: () => {
-        return geekRequest<CollectionListResponse>({
+        return geekRequest<GetCollectionListResponse>({
             method: 'GET',
             url: '/shop/recipe/collections',
         });
@@ -47,7 +49,9 @@ const collection = {
         });
     },
 
-    /** 공개 컬렉션 검색 */
+    /**
+     * 전체 컬렉션 검색
+     */
     searchPublic: (params: SearchPublicCollectionParams) => {
         return geekRequest<SearchCollectionsResponse>({
             method: 'GET',
@@ -90,6 +94,28 @@ const collection = {
         return geekRequest<CollectionBookmarkResponse>({
             method: 'DELETE',
             url: `/shop/recipe/collections/${collectionSno}/bookmark`,
+            ...options,
+        });
+    },
+
+    /**
+     * 공유 컬렉션 상세 조회
+     */
+    getShared: (shareCode: string, options?: AxiosRequestConfig) => {
+        return geekRequest<SharedRecipeCollection>({
+            method: 'GET',
+            url: `/shop/recipe/collections/shared/${shareCode}`,
+            ...options,
+        });
+    },
+
+    /**
+     * 북마크한 컬렉션 목록 조회
+     */
+    getBookmarkedList: (options?: AxiosRequestConfig) => {
+        return geekRequest<RecipeCollection[]>({
+            method: 'GET',
+            url: '/shop/recipe/bookmark-collections',
             ...options,
         });
     },

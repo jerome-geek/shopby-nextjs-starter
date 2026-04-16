@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { collection } from '@/api/shop';
 import {
-    CreateCollectionRequest,
+    CreateCollectionData,
     UpdateCollectionRequest,
 } from '@/models/shop/collection';
 import { useToast } from '@/hooks/ui';
@@ -23,7 +23,7 @@ const useCollectionMutation = () => {
 
     return {
         create: useMutation({
-            mutationFn: async ({ data }: { data: CreateCollectionRequest }) =>
+            mutationFn: async ({ data }: { data: CreateCollectionData }) =>
                 await collection.create(data),
             onError: onMutationError,
         }),

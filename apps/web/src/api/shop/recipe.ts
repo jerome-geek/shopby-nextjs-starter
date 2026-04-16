@@ -4,7 +4,6 @@ import { geekRequest } from '@/api/core/geekRequest';
 import {
     BookmarkRecipeData,
     BookmarkedRecipeCollection,
-    CollectionBookmarkResponse,
     CreateManualRecipeData,
     CreateRecipeCollectionData,
     CreateRecipeData,
@@ -109,55 +108,6 @@ const recipe = {
         });
     },
 
-    /**
-     * 레시피 컬렉션 생성
-     *  - 레시피를 담을 컬렉션을 생성합니다
-     */
-    createCollection: (
-        data: CreateRecipeCollectionData,
-        options?: AxiosRequestConfig,
-    ) => {
-        return geekRequest({
-            method: 'POST',
-            url: '/shop/recipe/collections',
-            data,
-            ...options,
-        });
-    },
-
-    /**
-     * 레시피 컬렉션 목록 조회
-     *  - 사용자의 레시피 컬렉션 목록을 조회합니다
-     */
-    getCollections: (options?: AxiosRequestConfig) => {
-        return geekRequest<GetCollectionsResponse>({
-            method: 'GET',
-            url: '/shop/recipe/collections',
-            ...options,
-        });
-    },
-
-    /**
-     * 레시피 컬렉션 수정
-     *  - 컬렉션 이름 및 설명을 수정합니다
-     */
-    updateCollection: (
-        collectionSno: number,
-        data: UpdateRecipeCollectionData,
-        options?: AxiosRequestConfig,
-    ) => {
-        return geekRequest({
-            method: 'PATCH',
-            url: `/shop/recipe/collections/${collectionSno}`,
-            data,
-            ...options,
-        });
-    },
-
-    /**
-     * 레시피 컬렉션 삭제
-     *  - 컬렉션을 삭제합니다
-     */
     deleteCollection: (collectionSno: number, options?: AxiosRequestConfig) => {
         return geekRequest({
             method: 'DELETE',
@@ -166,29 +116,6 @@ const recipe = {
         });
     },
 
-    /**
-     * 공유 컬렉션 상세 조회
-     *  - 공유 코드로 다른 사용자의 컬렉션을 조회합니다
-     */
-    getSharedCollection: (shareCode: string, options?: AxiosRequestConfig) => {
-        return geekRequest<BookmarkedRecipeCollection>({
-            method: 'GET',
-            url: `/shop/recipe/collections/shared/${shareCode}`,
-            ...options,
-        });
-    },
-
-    /**
-     * 북마크한 컬렉션 목록 조회
-     *  - 사용자가 북마크한 컬렉션 목록을 조회합니다
-     */
-    getBookmarkedCollections: (options?: AxiosRequestConfig) => {
-        return geekRequest<BookmarkedRecipeCollection[]>({
-            method: 'GET',
-            url: '/shop/recipe/bookmark-collections',
-            ...options,
-        });
-    },
 
     /**
      * 상위 영역별 사용자 레시피 그룹 조회
