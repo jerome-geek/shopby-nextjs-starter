@@ -14,7 +14,10 @@ import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 import type { Banner } from '@/models/display/banner';
 import { getLandingUrl, getLinkTarget } from '@/utils/banner';
-import { extractBannerContents, normalizeImageUrl } from '@/utils/shopby';
+import {
+    extractBannerContentsByAccountIndex,
+    normalizeImageUrl,
+} from '@/utils/shopby';
 import * as styles from '@/components/banner/hero/index.css';
 import { BREAKPOINTS } from '@/styles/media';
 
@@ -23,16 +26,15 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const BANNER_ID_PREFIX = 'HERO-BANNER';
-
-type HeroBannerType = 'HOME' | 'SHOP' | 'KIDS' | 'LIFE';
+export type HeroBannerType = 'HOME' | 'SHOP' | 'KIDS' | 'LIFE';
+export const BANNER_ID_PREFIX = 'MAIN-BANNER';
 
 function HeroBannerContent({ type }: { type: HeroBannerType }) {
     const { data: banners } = useBannerList<Banner[]>({
         type: 'id',
         banners: [`${BANNER_ID_PREFIX}-${type}`],
         options: {
-            select: extractBannerContents,
+            select: (data) => extractBannerContentsByAccountIndex(data, 0),
         },
     });
 

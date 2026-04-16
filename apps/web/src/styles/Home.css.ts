@@ -55,6 +55,18 @@ export const main = style({
     },
 });
 
+export const heroBannerSection = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '32px',
+    width: '100%',
+    '@media': {
+        [media.mobile]: {
+            gap: '24px',
+        },
+    },
+});
+
 export const primary = style({
     background: textPrimary,
     color: background,

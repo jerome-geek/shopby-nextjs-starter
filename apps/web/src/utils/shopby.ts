@@ -27,14 +27,39 @@ export function extractBannerContents(data: GetBannersResponse): Banner[] {
         return [];
     }
 
-    // pipe(
-    //     bannerSection.accounts,
-    //     sort(a => a.displayOrder),
-    //     toArray
-    // )
-
-    // 원본 데이터 불변성 유지를 위해 복사 후 정렬 ([...array].sort())
     return [...bannerSection.accounts]
+        .sort(
+            (a: BannerAccount, b: BannerAccount) =>
+                a.displayOrder - b.displayOrder,
+        )
+        .flatMap((account: BannerAccount) =>
+            [...account.banners].sort(
+                (a: Banner, b: Banner) => a.displayOrder - b.displayOrder,
+            ),
+        );
+}
+
+/** 배너 > 구좌(accountIndex) > 콘텐츠 3계층에서 콘텐츠(Banner[]) 추출 */
+export function extractBannerContentsByAccountIndex(
+    data: GetBannersResponse,
+    accountIndex: number,
+): Banner[] {
+    if (!data || data.length === 0) {
+        return [];
+    }
+
+    const bannerSection = data[0];
+    if (!bannerSection?.accounts) {
+        return [];
+    }
+
+    const account = bannerSection.accounts?.[accountIndex];
+
+    if (!account) {
+        return [];
+    }
+
+    return [account]
         .sort(
             (a: BannerAccount, b: BannerAccount) =>
                 a.displayOrder - b.displayOrder,
