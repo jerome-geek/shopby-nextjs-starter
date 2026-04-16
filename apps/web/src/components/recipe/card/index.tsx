@@ -17,13 +17,13 @@ interface RecipeCardProps {
 export const RecipeCard = ({ recipe }: RecipeCardProps) => {
     const { t } = useTranslation();
 
-    const { onBookmarkToggle } = useRecipeBookmark();
+    const { toggleRecipeBookmark } = useRecipeBookmark();
 
-    const handleBookmark = async (e: MouseEvent) => {
+    const handleBookmarkClick = async (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
-        onBookmarkToggle({ sno: recipe.sno, bookmarked: recipe.bookmarked });
+        toggleRecipeBookmark({ sno: recipe.sno, bookmarked: recipe.bookmarked });
     };
 
     const cookingTime = recipe.durationSeconds
@@ -46,7 +46,7 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 />
                 <button
                     className={styles.recipeBookmarkButton}
-                    onClick={handleBookmark}
+                    onClick={handleBookmarkClick}
                     type='button'
                     aria-label={
                         recipe.bookmarked ? t('북마크 해제') : t('북마크 추가')

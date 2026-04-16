@@ -26,12 +26,15 @@ export const CollectionRecipeCard = ({
     const ingredients = recipe.ingredients ?? [];
     const steps = recipe.steps ?? [];
 
-    const { onBookmarkToggle } = useRecipeBookmark();
+    const { toggleRecipeBookmark } = useRecipeBookmark();
 
-    const handleBookmark = async (e: MouseEvent) => {
+    const handleBookmarkClick = async (e: MouseEvent) => {
         e.stopPropagation();
 
-        onBookmarkToggle({ sno: recipe.sno, bookmarked: recipe.bookmarked });
+        toggleRecipeBookmark({
+            sno: recipe.sno,
+            bookmarked: recipe.bookmarked,
+        });
     };
 
     return (
@@ -53,7 +56,7 @@ export const CollectionRecipeCard = ({
 
                     <button
                         className={styles.BookmarkIcon}
-                        onClick={handleBookmark}
+                        onClick={handleBookmarkClick}
                         type='button'
                         aria-label={
                             recipe.bookmarked ? '북마크 해제' : '북마크 추가'

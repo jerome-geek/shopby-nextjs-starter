@@ -3,7 +3,9 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
+import FetchBoundary from '@/components/common/FetchBoundary';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
+import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
 import * as styles from '@/components/recipe/scrap/summary/index.css';
 import { PATHS } from '@/const/paths';
 import { useScrapCollections } from '@/hooks/query/shop/recipe';
@@ -32,10 +34,7 @@ const RecipeScrapSummary = () => {
 
                 <div className={styles.collectionGrid}>
                     {collections.map((c) => (
-                        <motion.div
-                            key={c.sno}
-                            whileHover={{ y: -8 }}
-                        >
+                        <motion.div key={c.sno} whileHover={{ y: -8 }}>
                             <Link
                                 href={PATHS.RECIPES.COLLECTIONS.replace(
                                     '[shareCode]',
@@ -157,7 +156,10 @@ const RecipeScrapSummary = () => {
             </section> */}
 
             {/* 레시피 섹션 */}
-            <RecipeGridSection title='레시피' />
+            {/* TODO: 페이징처리를 위해 useQuery를 사용해서 내부적으로 skeleton보여줘야함 */}
+            <FetchBoundary>
+                <RecipeGridSection />
+            </FetchBoundary>
         </motion.div>
     );
 };

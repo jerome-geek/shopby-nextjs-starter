@@ -1,14 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { Bookmark, ChefHat } from 'lucide-react';
 import Link from 'next/link';
 
 import * as styles from '@/components/collection/collection-card/index.css';
-import { useCollectionMutation } from '@/hooks/mutations';
-import { collectionKeys } from '@/hooks/queryKeys';
-import { useCustomDialog } from '@/hooks/ui/useCustomDialog';
-import { useToast } from '@/hooks/ui/useToast';
-import { useAuth } from '@/hooks/useAuth';
+import { PATHS } from '@/const/paths';
+import { useRecipeBookmark } from '@/hooks/recipe';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
@@ -17,63 +13,24 @@ export interface CollectionCardProps {
 }
 
 export const CollectionCard = ({ collection }: CollectionCardProps) => {
-    const isLogin = useAuth();
-
-    const { addToast } = useToast();
-
-    const { openLoginDialog } = useCustomDialog();
-
-    const queryClient = useQueryClient();
-
     const imageUrls = collection.recipeImageUrls.filter(Boolean);
     const hasImages = imageUrls.length > 0;
 
-    const { bookmarkCollection, unBookmarkCollection } =
-        useCollectionMutation();
+    const { toggleCollectionBookmark } = useRecipeBookmark();
 
-    const onBookmarkToggle = (collection: BookmarkedRecipeCollection) => {
-        if (!isLogin) {
-            openLoginDialog();
-            return;
-        }
-
-        if (collection.bookmarked) {
-            unBookmarkCollection.mutate(
-                { collectionSno: collection.sno },
-                {
-                    onSuccess: () => {
-                        queryClient.invalidateQueries({
-                            queryKey: collectionKeys.publicSearches(),
-                        });
-                        addToast({
-                            message: '북마크를 취소했습니다.',
-                            variant: 'success',
-                        });
-                    },
-                },
-            );
-        } else {
-            bookmarkCollection.mutate(
-                { collectionSno: collection.sno },
-                {
-                    onSuccess: () => {
-                        queryClient.invalidateQueries({
-                            queryKey: collectionKeys.publicSearches(),
-                        });
-                        addToast({
-                            message: '북마크를 추가했습니다.',
-                            variant: 'success',
-                        });
-                    },
-                },
-            );
-        }
+    const handleBookmarkClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleCollectionBookmark(collection);
     };
 
-    const detailHref = `/recipes/collections/${collection.shareCode}`;
+    const href = PATHS.RECIPES.COLLECTIONS.replace(
+        '[shareCode]',
+        collection.shareCode,
+    );
 
     return (
-        <Link href={detailHref} className={styles.collectionLink}>
+        <Link href={href} className={styles.collectionLink}>
             {hasImages ? (
                 <ul className={styles.imageList}>
                     {imageUrls.map((url, index) => (
@@ -122,13 +79,7 @@ export const CollectionCard = ({ collection }: CollectionCardProps) => {
                     </div>
                 </div>
 
-                <button
-                    onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        onBookmarkToggle(collection);
-                    }}
-                >
+                <button onClick={handleBookmarkClick} type='button'>
                     <Bookmark
                         size={24}
                         strokeWidth={1.5}

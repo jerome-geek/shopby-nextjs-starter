@@ -1,40 +1,22 @@
-import {
-    Bookmark,
-    ChefHat,
-    ChevronRight,
-    CirclePlusIcon,
-    Clock,
-    Loader2,
-    Users,
-} from 'lucide-react';
+import { ChefHat, CirclePlusIcon } from 'lucide-react';
 import { motion } from 'motion/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { RecipeCard } from '@/components/recipe/card';
 import { FailedCard } from '@/components/recipe/grid-section/failed-card';
 import * as styles from '@/components/recipe/grid-section/index.css';
 import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
 import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
-import { RecipeCard } from '@/components/recipe/card';
 import PagingV2 from '@/components/ui/paging-v2';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { useSearchMyRecipeList } from '@/hooks/query/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { SearchRecipesParams } from '@/models/shop/recipe';
-import { vars } from '@/styles/theme.css';
 
-interface RecipeGridSectionProps {
-    title: string;
-    onViewAll?: () => void;
-}
-
-const RecipeGridSectionContent = ({
-    title,
-    onViewAll,
-}: RecipeGridSectionProps) => {
+export const RecipeGridSection = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const isLogin = useAuth();
@@ -53,6 +35,10 @@ const RecipeGridSectionContent = ({
     const { data: searchMyRecipeListData, isPending } = useSearchMyRecipeList({
         searchParams,
     });
+    console.log(
+        '🚀 ~ RecipeGridSection ~ searchMyRecipeListData:',
+        searchMyRecipeListData,
+    );
 
     const recipeList = searchMyRecipeListData?.data ?? [];
 
@@ -90,12 +76,12 @@ const RecipeGridSectionContent = ({
     return (
         <section className={styles.section}>
             <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>{t(title)}</h2>
-                {recipeList.length > 0 && (
+                <h2 className={styles.sectionTitle}>{t('레시피')}</h2>
+                {/* {recipeList.length > 0 && (
                     <div className={styles.viewAll} onClick={onViewAll}>
                         {t('전체보기')} <ChevronRight size={14} />
                     </div>
-                )}
+                )} */}
             </div>
 
             {recipeList.length === 0 ? (
@@ -271,13 +257,5 @@ const RecipeGridSectionContent = ({
                 />
             )}
         </section>
-    );
-};
-
-export const RecipeGridSection = (props: RecipeGridSectionProps) => {
-    return (
-        <Suspense fallback={<RecipeGridSkeleton />}>
-            <RecipeGridSectionContent {...props} />
-        </Suspense>
     );
 };
