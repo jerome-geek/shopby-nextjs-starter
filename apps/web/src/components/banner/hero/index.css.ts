@@ -66,7 +66,7 @@ export const swiper = style({
 export const slide = style({
     aspectRatio: '320 / 427',
     height: 'auto',
-    borderRadius: '24px',
+    borderRadius: '12px',
     overflow: 'hidden',
     transition:
         'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -76,6 +76,12 @@ export const slide = style({
             opacity: 1,
             boxShadow:
                 '0px 20px 20px 0px rgba(91, 100, 91, 0.1), 0px 8px 10px 0px rgba(91, 100, 91, 0.15)',
+        },
+    },
+
+    '@media': {
+        [media.mobile]: {
+            borderRadius: '8px',
         },
     },
 });
@@ -119,11 +125,18 @@ export const cardTitle = style([
     textStyles.display2Bold,
     {
         color: vars.color.white,
+        fontSize: 'clamp(2rem, 2.5vw, 3rem)',
+
+        '@media': {
+            [media.mobile]: {
+                fontSize: '3rem',
+            },
+        },
     },
 ]);
 
 export const cardDescription = style([
-    textStyles.body1Regular,
+    textStyles.headlineRegular,
     {
         color: vars.color.white,
     },
@@ -252,9 +265,9 @@ export const skeletonWrapper = style({
 
 export const skeletonCard = style({
     flexShrink: 0,
-    width: 'calc(100% / 1.2 - 2px)',
+    width: 'calc(100% / 1.05 - 2px)',
     aspectRatio: '320 / 427',
-    borderRadius: '24px',
+    borderRadius: '8px',
     backgroundColor: vars.color.gray['30'],
     position: 'relative',
     overflow: 'hidden',
@@ -275,6 +288,7 @@ export const skeletonCard = style({
 
     '@media': {
         '(min-width: 768px)': {
+            borderRadius: '12px',
             width: 'calc((100% - 48px) / 3)',
             transform: 'none',
 

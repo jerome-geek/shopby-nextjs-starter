@@ -10,6 +10,7 @@ import { SearchDrawer } from '@/components/drawer/search';
 import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
 import * as styles from '@/components/layout/header/index.css';
 import { Menu } from '@/components/layout/header/Menu';
+import MobileMenu from '@/components/layout/header/mobile-menu';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
@@ -21,7 +22,6 @@ import {
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { vars } from '@/styles/theme.css';
-import MobileMenu from '@/components/layout/header/mobile-menu';
 
 import logoImage from '@/assets/logo.png';
 

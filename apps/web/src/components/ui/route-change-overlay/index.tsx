@@ -53,7 +53,7 @@ export const RouteChangeOverlay = () => {
                         width: '100%',
                         height: '100%',
                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        zIndex: 1000,
+                        zIndex: 10000,
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',

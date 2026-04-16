@@ -57,7 +57,7 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
                 slideShadows: false,
             },
             spaceBetween: 12,
-            slidesPerView: 1.2,
+            slidesPerView: 1.05,
             centeredSlides: true,
             loop: hasMultipleBanners,
             watchSlidesProgress: true,
@@ -92,7 +92,7 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
             },
             breakpoints: {
                 0: {
-                    slidesPerView: 1.2,
+                    slidesPerView: 1.05,
                     spaceBetween: 12,
                     coverflowEffect: {
                         rotate: 0,
@@ -159,7 +159,6 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
                     )}
 
                     <Swiper
-                        key={`${banners.length}`}
                         {...swiperOptions}
                         style={{
                             ...swiperOptions.style,

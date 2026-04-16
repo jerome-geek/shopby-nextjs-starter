@@ -12,7 +12,6 @@ export const header = style({
     right: 0,
     zIndex: 1000,
     backgroundColor: vars.color.white,
-    borderBottom: `1px solid ${vars.color.gray['30']}`,
     padding: '0 20px',
     display: 'flex',
     alignItems: 'center',
@@ -20,6 +19,7 @@ export const header = style({
 
     '@media': {
         [media.desktop]: {
+            borderBottom: `1px solid ${vars.color.gray['30']}`,
             flexDirection: 'row',
             padding: 0,
             height: globalVars.header.height,
