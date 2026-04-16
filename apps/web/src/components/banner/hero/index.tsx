@@ -201,9 +201,10 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
                                                     banner.nameColor ||
                                                     '#ffffff',
                                             }}
-                                        >
-                                            {banner.name}
-                                        </h3>
+                                            dangerouslySetInnerHTML={{
+                                                __html: banner.name,
+                                            }}
+                                        />
                                         {banner.description && (
                                             <p
                                                 className={
@@ -214,9 +215,10 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
                                                         banner.descriptionColor ||
                                                         '#ffffff',
                                                 }}
-                                            >
-                                                {banner.description}
-                                            </p>
+                                                dangerouslySetInnerHTML={{
+                                                    __html: banner.description,
+                                                }}
+                                            />
                                         )}
                                     </div>
                                 </Link>
