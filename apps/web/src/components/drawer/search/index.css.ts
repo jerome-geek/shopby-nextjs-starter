@@ -205,9 +205,13 @@ export const productListContainer = style({
 });
 
 export const sectionTitle = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.black,
+        padding: '0 20px',
+        fontSize: '1.8rem', // Figma: 18px
+        lineHeight: 1.5,
+        letterSpacing: '-1.3%',
     },
 ]);
 
@@ -366,11 +370,28 @@ export const productGrid = style({
 });
 
 export const recommendSwiper = style({
-    width: '100%',
+    width: 'calc(100% - 40px)',
+    paddingRight: '20px',
+    display: 'flex',
+    overflowX: 'auto',
+    gap: '16px',
+    marginLeft: '20px',
+    boxSizing: 'content-box',
+    scrollSnapType: 'x mandatory',
+    WebkitOverflowScrolling: 'touch',
+    scrollbarWidth: 'none',
+    selectors: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 });
 
 export const recommendSlide = style({
+    flex: '0 0 auto',
+    width: '144px',
     height: 'auto',
+    scrollSnapAlign: 'start',
 });
 
 export const recommendCardWrap = style({

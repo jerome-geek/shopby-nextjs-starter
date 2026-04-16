@@ -86,7 +86,7 @@ export const brand = style([
 ]);
 
 export const productName = style([
-    textStyles.body2Medium,
+    textStyles.body1Medium,
     {
         display: '-webkit-box',
         WebkitLineClamp: 2,
@@ -107,21 +107,19 @@ export const priceWrapper = style({
     gap: '4px',
 });
 
-export const productPrice = style({
-    fontSize: '1.7rem',
-    fontWeight: '700',
-    lineHeight: '1.5',
-    letterSpacing: '-1.3%',
-    color: vars.color.black,
-});
+export const productPrice = style([
+    textStyles.headlineBold,
+    {
+        color: vars.color.black,
+    },
+]);
 
-export const discountPrice = style({
-    fontSize: '1.7rem',
-    fontWeight: '700',
-    lineHeight: '1.5',
-    letterSpacing: '-1.3%',
-    color: vars.color.red,
-});
+export const discountPrice = style([
+    textStyles.headlineBold,
+    {
+        color: vars.color.pink['100'],
+    },
+]);
 
 export const stickerList = style({
     display: 'flex',

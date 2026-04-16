@@ -1,14 +1,10 @@
 import { map, pipe, toArray } from '@fxts/core';
-import { Swiper, SwiperSlide } from 'swiper/react';
-
 import * as styles from '@/components/drawer/search/index.css';
 import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import { useProductSectionProductList } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
 import type { ImageUrlType } from '@/models/product';
-
-import 'swiper/css';
 
 export const RecommendProductsSection = () => {
     const { isMobile } = useResponsive();
@@ -65,17 +61,9 @@ export const RecommendProductsSection = () => {
             <h3 className={styles.sectionTitle}>추천 상품</h3>
 
             {isMobile ? (
-                <Swiper
-                    className={styles.recommendSwiper}
-                    style={{
-                        // marginLeft: 0, marginRight: '-20px'
-                        overflow: 'visible',
-                    }}
-                    slidesPerView={2.3}
-                    spaceBetween={12}
-                >
+                <div className={styles.recommendSwiper}>
                     {filteredProducts.map((product) => (
-                        <SwiperSlide
+                        <div
                             key={product.productNo}
                             className={styles.recommendSlide}
                         >
@@ -103,9 +91,9 @@ export const RecommendProductsSection = () => {
                                     isAdditionalDiscount
                                 />
                             </div>
-                        </SwiperSlide>
+                        </div>
                     ))}
-                </Swiper>
+                </div>
             ) : (
                 <div className={styles.productGrid}>
                     {filteredProducts.map((product) => (
