@@ -1,3 +1,3 @@
-import useRecipeBookmark from '@/hooks/recipe/useRecipeBookmark';
+import useBookmark from '@/hooks/recipe/useBookmark';
 
-export { useRecipeBookmark };
+export { useBookmark };

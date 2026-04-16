@@ -1,5 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { Bookmark, BookmarkCheck, Heart, Share2, Users } from 'lucide-react';
 import type {
     GetStaticPaths,
@@ -11,14 +10,14 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { recipe } from '@/api/shop';
+import { collection } from '@/api/shop';
 import { PATHS } from '@/const/paths';
-import { useAuth } from '@/hooks/useAuth';
-import { useCustomDialog } from '@/hooks/ui';
+import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
 import { collectionKeys, recipeKeys } from '@/hooks/queryKeys';
 import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
+import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
-import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
+import { useAuth } from '@/hooks/useAuth';
 import * as styles from '@/pages/recipes/collections/[shareCode]/index.css';
 
 // --- 컬렉션 상세 (데이터 연동) ---
@@ -462,9 +461,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     try {
         await queryClient.fetchQuery({
-            queryKey: recipeKeys.sharedCollection(shareCode),
+            queryKey: collectionKeys.detail(shareCode),
             queryFn: async () => {
-                const { data } = await recipe.getSharedCollection(shareCode);
+                const { data } = await collection.getShared(shareCode);
+
                 return data;
             },
         });

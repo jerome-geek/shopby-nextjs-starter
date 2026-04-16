@@ -10,6 +10,7 @@ import type {
     BookmarkRecipeData,
 } from '@/models/shop/recipe';
 import { useToast } from '@/hooks/ui';
+import common from '@/api/shop/common';
 
 const useRecipeMutation = () => {
     const { t } = useTranslation();
@@ -37,7 +38,7 @@ const useRecipeMutation = () => {
          */
         upload: useMutation({
             mutationFn: async (formData: FormData) =>
-                await recipe.upload(formData),
+                await common.upload(formData),
             onError: onMutationError,
         }),
 

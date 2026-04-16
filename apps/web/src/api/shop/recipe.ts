@@ -1,24 +1,20 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { geekRequest } from '@/api/core/geekRequest';
+import { SearchCollectionsResponse } from '@/models/shop/collection';
 import type {
     BookmarkRecipeData,
-    BookmarkedRecipeCollection,
     CreateManualRecipeData,
-    CreateRecipeCollectionData,
     CreateRecipeData,
     CreateRecipeResponse,
-    GetRecipeExposureGroupParams,
     GetRecipeDetailResponse,
+    GetRecipeExposureGroupParams,
     RecipeExposureGroupResponse,
     RegisterManualTempImagesData,
-    SearchCollectionsResponse,
     SearchPublicCollectionsParams,
     SearchPublicRecipesParams,
     SearchRecipesParams,
     SearchRecipesResponse,
-    UpdateRecipeCollectionData,
-    GetCollectionsResponse,
 } from '@/models/shop/recipe';
 
 const recipe = {
@@ -115,7 +111,6 @@ const recipe = {
             ...options,
         });
     },
-
 
     /**
      * 상위 영역별 사용자 레시피 그룹 조회

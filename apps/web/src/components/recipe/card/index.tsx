@@ -7,7 +7,7 @@ import { TimerIcon } from '@/components/icons/TimerIcon';
 import { UsersIcon } from '@/components/icons/UsersIcon';
 import * as styles from '@/components/recipe/card/index.css';
 import { PATHS } from '@/const/paths';
-import { useRecipeBookmark } from '@/hooks/recipe';
+import { useBookmark } from '@/hooks/recipe';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 
 interface RecipeCardProps {
@@ -17,13 +17,16 @@ interface RecipeCardProps {
 export const RecipeCard = ({ recipe }: RecipeCardProps) => {
     const { t } = useTranslation();
 
-    const { toggleRecipeBookmark } = useRecipeBookmark();
+    const { toggleRecipeBookmark } = useBookmark();
 
     const handleBookmarkClick = async (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
-        toggleRecipeBookmark({ sno: recipe.sno, bookmarked: recipe.bookmarked });
+        toggleRecipeBookmark({
+            sno: recipe.sno,
+            bookmarked: recipe.bookmarked,
+        });
     };
 
     const cookingTime = recipe.durationSeconds

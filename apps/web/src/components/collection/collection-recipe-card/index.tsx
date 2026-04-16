@@ -4,7 +4,7 @@ import type { MouseEvent } from 'react';
 
 import * as styles from '@/components/collection/collection-recipe-card/index.css';
 import { PATHS } from '@/const/paths';
-import { useRecipeBookmark } from '@/hooks/recipe';
+import { useBookmark } from '@/hooks/recipe';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
@@ -26,7 +26,7 @@ export const CollectionRecipeCard = ({
     const ingredients = recipe.ingredients ?? [];
     const steps = recipe.steps ?? [];
 
-    const { toggleRecipeBookmark } = useRecipeBookmark();
+    const { toggleRecipeBookmark } = useBookmark();
 
     const handleBookmarkClick = async (e: MouseEvent) => {
         e.stopPropagation();

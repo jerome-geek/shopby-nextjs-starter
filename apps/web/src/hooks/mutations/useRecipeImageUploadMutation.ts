@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import recipe from '@/api/shop/recipe';
 import { useRecipeManualStore } from '@/store/useRecipeManualStore';
+import common from '@/api/shop/common';
 
 /**
  * blob URL(string)을 File 객체로 변환합니다.
@@ -42,7 +43,7 @@ const useRecipeImageUploadMutation = () => {
                 files.map((file) => {
                     const formData = new FormData();
                     formData.append('file', file);
-                    return recipe.upload(formData);
+                    return common.upload(formData);
                 }),
             );
 

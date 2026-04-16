@@ -261,7 +261,7 @@ const Search = () => {
     });
 
     const { data: collectionData } = usePublicCollectionSearch({
-        params: {
+        searchParams: {
             keyword: searchKeyword,
             order: collectionSortOrder,
             sortBy: collectionSortBy,

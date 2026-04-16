@@ -15,6 +15,8 @@ const collectionKeys = {
     exposureGroups: () => [...collectionKeys.all, 'exposure-groups'] as const,
     exposureGroup: (groupId: string) =>
         [...collectionKeys.exposureGroups(), groupId] as const,
+
+    detail: (shareCode: string) => [...collectionKeys.all, shareCode] as const,
 };
 
 export default collectionKeys;

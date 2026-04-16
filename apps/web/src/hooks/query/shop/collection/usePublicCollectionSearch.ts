@@ -3,11 +3,13 @@ import type { AxiosError } from 'axios';
 
 import { collection } from '@/api/shop';
 import { collectionKeys } from '@/hooks/queryKeys';
-import type { SearchPublicCollectionParams } from '@/models/shop/collection';
-import type { SearchCollectionsResponse } from '@/models/shop/recipe';
+import type {
+    SearchCollectionsResponse,
+    SearchPublicCollectionParams,
+} from '@/models/shop/collection';
 
 interface UsePublicCollectionSearchParams<T = SearchCollectionsResponse> {
-    params: SearchPublicCollectionParams;
+    searchParams: SearchPublicCollectionParams;
     options?: Omit<
         UseQueryOptions<
             SearchCollectionsResponse,
@@ -20,13 +22,13 @@ interface UsePublicCollectionSearchParams<T = SearchCollectionsResponse> {
 }
 
 const usePublicCollectionSearch = <T = SearchCollectionsResponse>({
-    params,
+    searchParams,
     options,
 }: UsePublicCollectionSearchParams<T>) => {
     return useQuery({
-        queryKey: collectionKeys.publicSearch(params),
+        queryKey: collectionKeys.publicSearch(searchParams),
         queryFn: async () => {
-            const { data } = await collection.searchPublic(params);
+            const { data } = await collection.searchPublic(searchParams);
 
             return data;
         },

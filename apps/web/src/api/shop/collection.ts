@@ -9,6 +9,7 @@ import type {
     UpdateCollectionRequest,
     SearchCollectionsResponse,
     SharedRecipeCollection,
+    GetBookmarkedCollectionListResponse,
 } from '@/models/shop/collection';
 import type { CollectionBookmarkResponse } from '@/models/shop/recipe';
 
@@ -69,6 +70,17 @@ const collection = {
     },
 
     /**
+     * 공유 컬렉션 상세 조회
+     */
+    getShared: (shareCode: string, options?: AxiosRequestConfig) => {
+        return geekRequest<SharedRecipeCollection>({
+            method: 'GET',
+            url: `/shop/recipe/collections/shared/${shareCode}`,
+            ...options,
+        });
+    },
+
+    /**
      * 컬렉션 북마크 추가
      *  - 다른 사용자의 컬렉션을 북마크합니다
      */
@@ -99,21 +111,10 @@ const collection = {
     },
 
     /**
-     * 공유 컬렉션 상세 조회
-     */
-    getShared: (shareCode: string, options?: AxiosRequestConfig) => {
-        return geekRequest<SharedRecipeCollection>({
-            method: 'GET',
-            url: `/shop/recipe/collections/shared/${shareCode}`,
-            ...options,
-        });
-    },
-
-    /**
      * 북마크한 컬렉션 목록 조회
      */
     getBookmarkedList: (options?: AxiosRequestConfig) => {
-        return geekRequest<RecipeCollection[]>({
+        return geekRequest<GetBookmarkedCollectionListResponse>({
             method: 'GET',
             url: '/shop/recipe/bookmark-collections',
             ...options,

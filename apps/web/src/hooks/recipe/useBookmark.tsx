@@ -9,7 +9,7 @@ import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 
-const useRecipeBookmark = () => {
+const useBookmark = () => {
     const { t } = useTranslation();
 
     const isLogin = useAuth();
@@ -125,4 +125,4 @@ const useRecipeBookmark = () => {
     };
 };
 
-export default useRecipeBookmark;
+export default useBookmark;

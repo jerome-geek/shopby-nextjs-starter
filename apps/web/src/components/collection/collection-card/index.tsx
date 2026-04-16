@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import * as styles from '@/components/collection/collection-card/index.css';
 import { PATHS } from '@/const/paths';
-import { useRecipeBookmark } from '@/hooks/recipe';
+import { useBookmark } from '@/hooks/recipe';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
@@ -16,7 +16,7 @@ export const CollectionCard = ({ collection }: CollectionCardProps) => {
     const imageUrls = collection.recipeImageUrls.filter(Boolean);
     const hasImages = imageUrls.length > 0;
 
-    const { toggleCollectionBookmark } = useRecipeBookmark();
+    const { toggleCollectionBookmark } = useBookmark();
 
     const handleBookmarkClick = (e: React.MouseEvent) => {
         e.preventDefault();

@@ -1,3 +1,5 @@
+import { GeekResponse } from '@/models/api/response';
+import {
     BookmarkedRecipeCollection,
     GetRecipeDetailResponse,
 } from '@/models/shop/recipe';
@@ -71,3 +73,5 @@ export interface CollectionExposureGroupResponse {
     groupId: string;
     groups: CollectionExposureGroupItem[];
 }
+
+export type GetBookmarkedCollectionListResponse = BookmarkedRecipeCollection[];

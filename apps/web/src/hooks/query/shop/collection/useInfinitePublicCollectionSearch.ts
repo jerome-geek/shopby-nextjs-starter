@@ -8,8 +8,10 @@ import type { AxiosError } from 'axios';
 
 import { collection } from '@/api/shop';
 import { collectionKeys } from '@/hooks/queryKeys';
-import type { SearchPublicCollectionParams } from '@/models/shop/collection';
-import type { SearchCollectionsResponse } from '@/models/shop/recipe';
+import type {
+    SearchCollectionsResponse,
+    SearchPublicCollectionParams,
+} from '@/models/shop/collection';
 
 type CollectionPublicSearchParams = Omit<
     SearchPublicCollectionParams,

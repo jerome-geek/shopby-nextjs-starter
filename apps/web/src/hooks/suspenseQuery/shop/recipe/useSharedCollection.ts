@@ -4,8 +4,8 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { recipe } from '@/api/shop';
-import { recipeKeys } from '@/hooks/queryKeys';
+import { collection } from '@/api/shop';
+import { collectionKeys } from '@/hooks/queryKeys';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 
 interface UseSharedCollectionParams<T = BookmarkedRecipeCollection> {
@@ -15,7 +15,7 @@ interface UseSharedCollectionParams<T = BookmarkedRecipeCollection> {
             BookmarkedRecipeCollection,
             AxiosError<ShopByErrorResponse>,
             T,
-            ReturnType<(typeof recipeKeys)['sharedCollection']>
+            ReturnType<(typeof collectionKeys)['detail']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -26,9 +26,10 @@ const useSharedCollection = <T = BookmarkedRecipeCollection>({
     options,
 }: UseSharedCollectionParams<T>) => {
     return useSuspenseQuery({
-        queryKey: recipeKeys.sharedCollection(shareCode),
+        queryKey: collectionKeys.detail(shareCode),
         queryFn: async () => {
-            const { data } = await recipe.getSharedCollection(shareCode);
+            const { data } = await collection.getShared(shareCode);
+
             return data;
         },
         staleTime: 1000 * 60 * 5,
