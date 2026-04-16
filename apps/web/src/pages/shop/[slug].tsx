@@ -1,13 +1,20 @@
 import { GetServerSideProps } from 'next';
-import React from 'react';
-import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+import { HeroBanner } from '@/components/banner/hero';
+import * as styles from '@/styles/Home.css';
+import SectionGroup from '@/components/section/group';
+
+const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
+    ssr: false,
+});
 
 const SHOP_TYPES = {
     LIFE: 'life',
     KIDS: 'kids',
 } as const;
 
-type ShopType = (typeof SHOP_TYPES)[keyof typeof SHOP_TYPES];
+export type ShopType = (typeof SHOP_TYPES)[keyof typeof SHOP_TYPES];
 
 interface ShopMainPageProps {
     type: ShopType;
@@ -15,61 +22,25 @@ interface ShopMainPageProps {
 
 export default function ShopMainPage({ type }: ShopMainPageProps) {
     return (
-        <div style={{ padding: '40px', textAlign: 'center' }}>
-            <h1>쇼핑몰 메인 - {type.toUpperCase()}</h1>
-            <p>
-                현재 페이지 타입: <strong>{type}</strong>
-            </p>
-            <nav
-                style={{
-                    marginTop: '20px',
-                    display: 'flex',
-                    gap: '10px',
-                    justifyContent: 'center',
-                }}
-            >
-                <Link
-                    href="/shop"
-                    style={{
-                        color: 'black',
-                        textDecoration: 'none'
-                    }}
-                >
-                    발견
-                </Link>
-                <Link
-                    href="/shop/life"
-                    style={{
-                        color: type === 'life' ? 'blue' : 'black',
-                        fontWeight: type === 'life' ? 'bold' : 'normal',
-                    }}
-                >
-                    라이프
-                </Link>
-                <Link
-                    href="/shop/kids"
-                    style={{
-                        color: type === 'kids' ? 'blue' : 'black',
-                        fontWeight: type === 'kids' ? 'bold' : 'normal',
-                    }}
-                >
-                    키즈
-                </Link>
-            </nav>
-            <div
-                style={{
-                    marginTop: '50px',
-                    border: '1px dashed #ccc',
-                    padding: '100px',
-                }}
-            >
-                {type === 'life' && (
-                    <div>🌿 라이프 탭 전용 콘텐츠 (인테리어, 주방용품 등)</div>
-                )}
-                {type === 'kids' && (
-                    <div>👶 키즈 탭 전용 콘텐츠 (장난감, 육아용품 등)</div>
-                )}
-            </div>
+        <div className={styles.main}>
+            {/* Full-width HeroBanner */}
+            <HeroBanner type={type === 'kids' ? 'KIDS' : 'LIFE'} />
+
+            {/* 라이프 타임특가 */}
+            <TimeSale
+                sectionId={
+                    type === SHOP_TYPES.LIFE ? 'TIMESALE-LIFE' : 'TIMESALE-KIDS'
+                }
+                title='오늘만 특가'
+                buttonLabel={
+                    type === SHOP_TYPES.LIFE
+                        ? '라이프 타임특가 더보기'
+                        : '키즈 타임특가 더보기'
+                }
+            />
+
+            {/* 기획전 및 상품진열 그룹 */}
+            <SectionGroup />
         </div>
     );
 }

@@ -13,7 +13,21 @@ import {
     ShoppingIcon,
 } from '@/components/icons/footer';
 import * as styles from '@/components/layout/bottom-navigation/index.css';
+import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { PATHS } from '@/const/paths';
+import { useCustomDialog } from '@/hooks/ui';
+import { useAuth } from '@/hooks/useAuth';
+
+type NavItem = {
+    label: string;
+    href: string | null;
+    icon: React.ComponentType<{
+        width: number;
+        height: number;
+        currentColor?: string;
+    }>;
+    onClick?: () => void;
+};
 
 // UX 설정을 위한 상수값
 const SCROLL_THRESHOLD_PX = {
@@ -29,6 +43,8 @@ export default function BottomNavigation() {
     const { t } = useTranslation();
     const router = useRouter();
     const { scrollY } = useScroll();
+    const isLogin = useAuth();
+    const { openLoginDialog } = useCustomDialog();
     const [hidden, setHidden] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -64,7 +80,7 @@ export default function BottomNavigation() {
         if (typeof document !== 'undefined') {
             document.documentElement.style.setProperty(
                 '--bottom-nav-active-height',
-                hidden ? '0px' : '64px'
+                hidden ? '0px' : '64px',
             );
         }
         return () => {
@@ -76,32 +92,41 @@ export default function BottomNavigation() {
 
     if (isRecipeDetail) return null;
 
-    const navItems = [
-        {
-            label: t('홈'),
-            href: PATHS.MAIN,
-            icon: HomeIcon,
-        },
-        {
-            label: t('쇼핑'),
-            href: PATHS.SHOP.DISCOVERY,
-            icon: ShoppingIcon,
-        },
+    const handleCreateClick = () => {
+        if (!isLogin) {
+            const [basePath, existingSearch] = router.asPath.split('?');
+            const params = new URLSearchParams(existingSearch);
+            params.set(MODAL_QUERY_KEY, MODAL_TYPE.RECIPE_CREATE);
+            openLoginDialog(`${basePath}?${params.toString()}`);
+            return;
+        }
+
+        router.replace(
+            {
+                query: {
+                    ...router.query,
+                    [MODAL_QUERY_KEY]: MODAL_TYPE.RECIPE_CREATE,
+                },
+            },
+            undefined,
+            { shallow: true },
+        );
+    };
+
+    const isCreateActive =
+        router.query[MODAL_QUERY_KEY] === MODAL_TYPE.RECIPE_CREATE;
+
+    const navItems: NavItem[] = [
+        { label: t('홈'), href: PATHS.MAIN, icon: HomeIcon },
+        { label: t('쇼핑'), href: PATHS.SHOP.DISCOVERY, icon: ShoppingIcon },
         {
             label: t('만들기'),
-            href: '/create',
+            href: null,
             icon: CreateIcon,
+            onClick: handleCreateClick,
         },
-        {
-            label: t('스크랩북'),
-            href: '/scrapbook',
-            icon: ScrapIcon,
-        },
-        {
-            label: t('마이'),
-            href: PATHS.MYPAGE.MAIN,
-            icon: MyPageIcon,
-        },
+        { label: t('스크랩북'), href: PATHS.RECIPES.SCRAP, icon: ScrapIcon },
+        { label: t('마이'), href: PATHS.MYPAGE.MAIN, icon: MyPageIcon },
     ];
 
     return (
@@ -117,12 +142,35 @@ export default function BottomNavigation() {
                 ease: 'easeInOut',
             }}
         >
-            {navItems.map(({ label, href, icon: Icon }) => {
-                const isActive = router.pathname === href;
+            {navItems.map(({ label, href, icon: Icon, onClick }) => {
+                const isActive = onClick
+                    ? isCreateActive
+                    : router.pathname === href;
+
+                if (onClick) {
+                    return (
+                        <button
+                            key={label}
+                            type='button'
+                            className={clsx(styles.navItem, {
+                                [styles.activeNavItem]: isActive,
+                            })}
+                            onClick={onClick}
+                        >
+                            <Icon
+                                width={ICON_SIZE_PX}
+                                height={ICON_SIZE_PX}
+                                currentColor={isActive ? 'black' : undefined}
+                            />
+                            <span className={styles.navLabel}>{label}</span>
+                        </button>
+                    );
+                }
+
                 return (
                     <Link
-                        key={href}
-                        href={href}
+                        key={label}
+                        href={href!}
                         className={clsx(styles.navItem, {
                             [styles.activeNavItem]: isActive,
                         })}

@@ -35,12 +35,19 @@ export const RecommendProductsSection = () => {
                             product.imageUrlInfo &&
                             pipe(
                                 product.imageUrlInfo,
-                                map((img) => ({ url: img.url, type: 'IMAGE_URL' })),
+                                map((img) => ({
+                                    url: img.url,
+                                    type: 'IMAGE_URL',
+                                })),
                                 toArray,
                             ),
                         stickerInfos: pipe(
                             product.stickerInfos ?? [],
-                            map(({ type, label }) => ({ type, label, name: label })),
+                            map(({ type, label }) => ({
+                                type,
+                                label,
+                                name: label,
+                            })),
                             toArray,
                         ),
                     })),
@@ -55,19 +62,17 @@ export const RecommendProductsSection = () => {
 
     return (
         <Column className={styles.productSectionContainer}>
-            <h3
-                className={`${styles.sectionTitle} ${styles.productSectionTitle}`}
-            >
-                추천 상품
-            </h3>
+            <h3 className={styles.sectionTitle}>추천 상품</h3>
 
             {isMobile ? (
                 <Swiper
                     className={styles.recommendSwiper}
+                    style={{
+                        // marginLeft: 0, marginRight: '-20px'
+                        overflow: 'visible',
+                    }}
                     slidesPerView={2.3}
                     spaceBetween={12}
-                    slidesOffsetBefore={20}
-                    slidesOffsetAfter={20}
                 >
                     {filteredProducts.map((product) => (
                         <SwiperSlide

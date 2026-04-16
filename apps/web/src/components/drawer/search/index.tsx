@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
 import * as styles from '@/components/drawer/search/index.css';
@@ -11,20 +11,8 @@ import { DefaultModalLayoutProps } from '@/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { Column } from '@/components/ui/layout/flex';
 import { useFavoriteKeywords } from '@/hooks/query/product/product';
-import { useSearchKeyword } from '@/hooks/useSearchKeyword';
+import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 import { useResponsive } from '@/hooks/utils';
-
-const DEFAULT_RECIPE_KEYWORDS = [
-    '고든 램지 삼겹살 요리',
-    '최강록 셰프 라면',
-    '밥도둑 한가인 삼겹살 강된장',
-    '돈까스 김치나베',
-    '맛있는 멍게 토마토 비빔 파스타',
-    '두부 샐러드',
-    '백종원 김치찌개',
-    '저당 닭가슴살 샌드위치',
-    '집밥 오므라이스',
-];
 
 export const SearchDrawer = ({
     isOpen,
@@ -36,17 +24,26 @@ export const SearchDrawer = ({
     const [recipePage, setRecipePage] = useState(1);
     const [productPage, setProductPage] = useState(1);
 
-    const { searchByKeyword } = useSearchKeyword();
+    const { data: recipeData } = usePublicRecipeSearch({
+        params: {
+            order: 'DESC',
+            sortBy: 'BOOKMARK_COUNT',
+            page: 1,
+            take: 18,
+        },
+    });
+
+    const recipeKeywords = useMemo(() => {
+        return (
+            recipeData?.data
+                ?.map((recipe) => recipe.title?.trim())
+                .filter((title): title is string => Boolean(title)) ?? []
+        );
+    }, [recipeData?.data]);
 
     const { data: favoriteKeywordData = [] } = useFavoriteKeywords({
         size: 18,
     });
-
-    const submitSearch = (value: string) => {
-        if (searchByKeyword(value)) {
-            close();
-        }
-    };
 
     return (
         <AnimatePresence onExitComplete={unmount}>
@@ -65,9 +62,9 @@ export const SearchDrawer = ({
 
                     <motion.div
                         className={styles.container}
-                        initial={{ x: isMobile ? '-100%' : '100%' }}
+                        initial={{ x: '100%' }}
                         animate={{ x: 0 }}
-                        exit={{ x: isMobile ? '-100%' : '100%' }}
+                        exit={{ x: '100%' }}
                         transition={{
                             type: 'spring',
                             stiffness: 500,
@@ -100,10 +97,10 @@ export const SearchDrawer = ({
                                 <div className={styles.drawerContentInset}>
                                     <RankingSection
                                         title='지금 많이 찾는 레시피'
-                                        items={DEFAULT_RECIPE_KEYWORDS}
+                                        items={recipeKeywords}
                                         page={recipePage}
                                         onPageChange={setRecipePage}
-                                        onItemClick={submitSearch}
+                                        onItemClick={close}
                                     />
 
                                     <RankingSection
@@ -111,7 +108,7 @@ export const SearchDrawer = ({
                                         items={favoriteKeywordData}
                                         page={productPage}
                                         onPageChange={setProductPage}
-                                        onItemClick={submitSearch}
+                                        onItemClick={close}
                                     />
                                 </div>
 

@@ -1,7 +1,10 @@
+import { SuspenseQuery } from '@suspensive/react-query';
+
+import { event } from '@/api/display';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import EventCard from '@/components/section/event/card';
 import EventSectionSkeleton from '@/components/section/event/skeleton';
-import { useEventById } from '@/hooks/suspenseQuery/display/event';
+import { eventKeys } from '@/hooks/queryKeys';
 import { GetEventResponse } from '@/models/display/event';
 
 const EventCardContent = ({ event }: { event: GetEventResponse }) => {
@@ -12,14 +15,23 @@ const EventCardContent = ({ event }: { event: GetEventResponse }) => {
     return <EventCard event={event} />;
 };
 
-const Event = ({ index }: { index: number }) => {
-    const { data: eventByIdData } = useEventById({
-        eventId: `SHOP_MAIN_${index}`,
-    });
+const Event = ({ index, eventNo }: { index?: number; eventNo?: number }) => {
+    const eventKey = (index ? `SHOP_MAIN_${index}` : eventNo) || 0;
+
+    if (!eventKey) {
+        return null;
+    }
 
     return (
         <FetchBoundary fallback={<EventSectionSkeleton />}>
-            <EventCardContent event={eventByIdData} />
+            <SuspenseQuery
+                queryKey={eventKeys.detail(eventKey)}
+                queryFn={() => event.getEvent(eventKey)}
+            >
+                {({ data }) => {
+                    return <EventCardContent event={data.data} />;
+                }}
+            </SuspenseQuery>
         </FetchBoundary>
     );
 };

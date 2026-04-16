@@ -33,17 +33,19 @@ export const RecommendProductsSkeleton = () => {
             <Skeleton
                 width={80}
                 height={22}
-                style={{ borderRadius: '4px', margin: isMobile ? '0 20px' : 0 }}
-                className={styles.productSectionTitle}
+                style={{ borderRadius: '4px' }}
+                className={styles.sectionTitle}
             />
 
             {isMobile ? (
                 <Swiper
                     className={styles.recommendSwiper}
+                    style={{
+                        // marginLeft: 0, marginRight: '-20px'
+                        overflow: 'visible',
+                    }}
                     slidesPerView={2.3}
                     spaceBetween={12}
-                    slidesOffsetBefore={20}
-                    slidesOffsetAfter={20}
                 >
                     {Array.from({ length: 3 }).map((_, i) => (
                         <SwiperSlide key={i} className={styles.recommendSlide}>

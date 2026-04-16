@@ -1,5 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { media } from '@/styles/media';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -40,18 +41,19 @@ export const imageWrapper = style({
 });
 
 export const contentWrapper = style({
+    display: 'block',
     '@media': {
-        [`screen and (min-width: ${MOBILE_BREAKPOINT}px)`]: {
+        [media.mobile]: {
             display: 'none',
         },
     },
 });
 
 export const mobileContentWrapper = style({
-    display: 'none',
+    display: 'block',
     '@media': {
-        [`screen and (min-width: ${MOBILE_BREAKPOINT}px)`]: {
-            display: 'block',
+        [media.desktop]: {
+            display: 'none',
         },
     },
 });

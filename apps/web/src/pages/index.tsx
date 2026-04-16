@@ -42,7 +42,7 @@ export default function Home() {
 
             <div className={`${styles.main}`}>
                 {/* Full-width HeroBanner */}
-                <HeroBanner />
+                <HeroBanner type='HOME' />
 
                 <CollectionGroupSection groupId='collection_group_1' />
 

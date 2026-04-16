@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
 import { head, isEmpty } from '@fxts/core';
+import { useMemo } from 'react';
 
+import { NoResult } from '@/components/common/no-result';
 import ProductCardRow from '@/components/product/card-row';
 import * as styles from '@/components/section/event/card/index.css';
+import { EventProductsSkeleton } from '@/components/section/event/skeleton';
 import { useEventProductSection } from '@/hooks/query/display/event';
 import { useResponsive } from '@/hooks/utils';
 import { GetEventResponse } from '@/models/display/event';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
 
 const EventCard = ({ event }: { event: GetEventResponse }) => {
     const { isMobile } = useResponsive();
@@ -77,29 +77,30 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
             <div className={styles.contentWrapper}>
                 {isMobile ? null : textRender()}
 
-                <LoadingWrapper isLoading={isEventProductSectionLoading}>
-                    {isEmpty(eventProductSectionData?.products) ? (
-                        <NoResult
-                            text='진열된 상품이 없습니다.'
-                            style={{
-                                height: isMobile ? '100px' : '200px',
-                            }}
-                        />
-                    ) : (
-                        <ul className={styles.productList}>
-                            {eventProductSectionData?.products.map(
-                                (product) => (
-                                    <li
-                                        key={product.productNo}
-                                        className={styles.productItem}
-                                    >
-                                        <ProductCardRow {...product} />
-                                    </li>
-                                ),
-                            )}
-                        </ul>
-                    )}
-                </LoadingWrapper>
+                {isEventProductSectionLoading ? (
+                    <EventProductsSkeleton />
+                ) : isEmpty(eventProductSectionData?.products) ? (
+                    <NoResult
+                        text='진열된 상품이 없습니다.'
+                        style={{
+                            height: isMobile ? '268px' : '280px',
+                        }}
+                    />
+                ) : (
+                    <ul className={styles.productList}>
+                        {eventProductSectionData?.products.map((product) => (
+                            <li
+                                key={product.productNo}
+                                className={styles.productItem}
+                            >
+                                <ProductCardRow
+                                    {...product}
+                                    isTimeSaleEnabled={false}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );

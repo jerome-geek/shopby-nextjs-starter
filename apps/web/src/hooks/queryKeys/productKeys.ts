@@ -6,6 +6,7 @@ import {
     GetProductsInfoByProductNosData,
     GetProductsShippingInfoParams,
     ProductSearchParams,
+    GetBestReviewProductsParams,
 } from '@/models/product/product';
 import type { GetProductOptionParams } from '@/models/product/productOption';
 import {
@@ -26,6 +27,12 @@ const productKeys = {
     /** 베스트 상품 리스트 조회 */
     bestList: (memberNo: number, searchParams: GetBestSellerProductsParams) =>
         [...productKeys.lists(), 'best', memberNo, searchParams] as const,
+
+    bestReviewList: (
+        memberNo: number,
+        searchParams: GetBestReviewProductsParams,
+    ) =>
+        [...productKeys.lists(), 'bestReview', memberNo, searchParams] as const,
 
     /** 상품 리스트 조회 (무한스크롤)) */
     infiniteList: (memberNo: number, searchParams: ProductSearchParams) =>

@@ -8,15 +8,18 @@ import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount'
 interface ProductAdditionalDiscountProps {
     type: 'thumbnail' | 'detail';
     productNo: number;
+    isTimeSaleEnabled?: boolean;
 }
 
 const ProductAdditionalDiscount = ({
     type,
     productNo,
+    isTimeSaleEnabled = true,
 }: ProductAdditionalDiscountProps) => {
     const { data, isError } = useAdditionalDiscount({
         searchParams: { productNo },
         options: {
+            enabled: isTimeSaleEnabled,
             throwOnError: false,
             staleTime: 1000 * 60 * 5, // 5 minutes stale time to avoid frequent refetches
         },

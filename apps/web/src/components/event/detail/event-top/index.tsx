@@ -1,11 +1,28 @@
 import { EventTopInfo } from '@/models/display';
-import * as styles from './index.css';
+import * as styles from '@/components/event/detail/event-top/index.css';
 
 interface EventTopProps {
     label: string;
     top: EventTopInfo;
     promotionText?: string;
 }
+
+// NOTE: id="thumbnail" 요소를 제거하는 함수
+const stripThumbnailElement = (html: string) => {
+    if (!html) {
+        return html;
+    }
+
+    const voidTagRemoved = html.replace(
+        /<([a-zA-Z][\w:-]*)\b[^>]*\bid\s*=\s*["']thumbnail["'][^>]*>/gi,
+        '',
+    );
+
+    return voidTagRemoved.replace(
+        /<([a-zA-Z][\w:-]*)\b[^>]*\bid\s*=\s*["']thumbnail["'][^>]*>[\s\S]*?<\/\1>/gi,
+        '',
+    );
+};
 
 const EventTop = ({ label, top, promotionText }: EventTopProps) => {
     return (
@@ -24,7 +41,9 @@ const EventTop = ({ label, top, promotionText }: EventTopProps) => {
                         {top.pc.type === 'HTML' && (
                             <div
                                 className={styles.htmlContent}
-                                dangerouslySetInnerHTML={{ __html: top.pc.url }}
+                                dangerouslySetInnerHTML={{
+                                    __html: stripThumbnailElement(top.pc.url),
+                                }}
                             />
                         )}
                     </div>
@@ -42,7 +61,9 @@ const EventTop = ({ label, top, promotionText }: EventTopProps) => {
                             <div
                                 className={styles.htmlContent}
                                 dangerouslySetInnerHTML={{
-                                    __html: top.mobile.url,
+                                    __html: stripThumbnailElement(
+                                        top.mobile.url,
+                                    ),
                                 }}
                             />
                         )}

@@ -59,8 +59,9 @@ export const cartBadge = style([
 export const tabBar = style({
     display: 'flex',
     gap: '8px',
-    padding: '16px 20px',
+    padding: '12px 20px',
     flexShrink: 0,
+    border: `1px solid ${vars.color.gray['20']}`,
 });
 
 export const tabItem = style([

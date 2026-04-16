@@ -208,15 +208,6 @@ export const sectionTitle = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
-
-        '@media': {
-            [media.desktop]: {
-                fontWeight: '700',
-                fontSize: '2.2rem',
-                lineHeight: '1.32',
-                letterSpacing: '-2%',
-            },
-        },
     },
 ]);
 
@@ -262,7 +253,7 @@ export const rankingList = style({
     },
 });
 
-export const rankingItemButton = style([
+export const rankingItemLink = style([
     textStyles.body1Regular,
     {
         width: '100%',
@@ -284,7 +275,10 @@ export const rankingItemButton = style([
 export const rankingNumber = style([
     textStyles.body1Medium,
     {
-        minWidth: '18px',
+        display: 'inline-flex',
+        flexShrink: 0,
+        justifyContent: 'flex-end',
+        minWidth: '2ch',
         color: vars.color.green['80'],
         fontVariantNumeric: 'tabular-nums',
 
@@ -399,16 +393,6 @@ export const productSectionContainer = style({
             gap: '24px',
             borderTop: 'none',
             padding: '0',
-        },
-    },
-});
-
-/** 모바일에서 추천 상품 제목만 다른 섹션과 같은 인셋 */
-export const productSectionTitle = style({
-    padding: '0 20px',
-    '@media': {
-        [media.desktop]: {
-            padding: 0,
         },
     },
 });

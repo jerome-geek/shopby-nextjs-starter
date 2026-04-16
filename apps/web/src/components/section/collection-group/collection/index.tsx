@@ -43,7 +43,10 @@ const CollectionSection = ({
                 </div>
 
                 <Link
-                    href={`${PATHS.RECIPES.MAIN}/groups/${groupNo}/${collectionGroup.sno}`}
+                    href={`${PATHS.RECIPES.COLLECTIONS.replace(
+                        '[shareCode]',
+                        collectionGroup.collection.shareCode,
+                    )}`}
                     className={styles.DetailLink}
                 >
                     전체보기

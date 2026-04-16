@@ -27,6 +27,7 @@ const ProductCardRow = ({
     isAdditionalDiscount,
     isHideLikeButton = false,
     rank,
+    isTimeSaleEnabled = true,
 }: ProductCardProps) => {
     const { onLikeButtonClick } = useProductLike();
 
@@ -46,7 +47,11 @@ const ProductCardRow = ({
                 {!!rank && <span className={styles.rank}>{rank}</span>}
             </Link>
 
-            <ProductAdditionalDiscount type='thumbnail' productNo={productNo} />
+            <ProductAdditionalDiscount
+                type='thumbnail'
+                productNo={productNo}
+                isTimeSaleEnabled={isTimeSaleEnabled}
+            />
 
             <div className={styles.productInfoContainer}>
                 <div className={styles.brandInfoWrapper}>
