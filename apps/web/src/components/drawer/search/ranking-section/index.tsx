@@ -1,4 +1,3 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
@@ -8,13 +7,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import * as drawerStyles from '@/components/drawer/search/index.css';
 import * as styles from '@/components/drawer/search/ranking-section/index.css';
 import { Column } from '@/components/ui/layout/flex';
+import { PagingV3 } from '@/components/ui/paging-v3';
 import { PATHS } from '@/const/paths';
 import {
     COLLECTION_PAGE_QUERY_KEY,
     RECIPE_PAGE_QUERY_KEY,
 } from '@/const/search';
 import { useResponsive } from '@/hooks/utils';
-import { vars } from '@/styles/theme.css';
 
 const RANKING_ITEMS_PER_PAGE = 6;
 
@@ -22,6 +21,7 @@ interface RankingSectionProps {
     title: string;
     items: string[];
     page: number;
+    totalPages?: number;
     onPageChange: (page: number) => void;
     onItemClick: (keyword: string) => void;
 }
@@ -30,6 +30,7 @@ export const RankingSection = ({
     title,
     items,
     page,
+    totalPages,
     onPageChange,
     onItemClick,
 }: RankingSectionProps) => {
@@ -37,19 +38,29 @@ export const RankingSection = ({
 
     const swiperRef = useRef<SwiperType | null>(null);
 
-    const totalPages = Math.max(
+    const resolvedTotalPages = Math.max(
         1,
-        Math.ceil(items.length / RANKING_ITEMS_PER_PAGE),
+        totalPages ?? Math.ceil(items.length / RANKING_ITEMS_PER_PAGE),
     );
-    const currentPage = Math.min(page, totalPages);
+    const currentPage = Math.min(page, resolvedTotalPages);
     const isPrevDisabled = currentPage <= 1;
-    const isNextDisabled = currentPage >= totalPages;
+    const isNextDisabled = currentPage >= resolvedTotalPages;
+    const isServerPaginated = typeof totalPages === 'number';
+    const serverSlidePages = [
+        !isPrevDisabled ? currentPage - 1 : null,
+        currentPage,
+        !isNextDisabled ? currentPage + 1 : null,
+    ].filter((value): value is number => value !== null);
 
     const pageToSlideIndex = (page: number) => page - 1;
 
     const slideIndexToPage = (slideIndex: number) => slideIndex + 1;
 
     useEffect(() => {
+        if (isServerPaginated) {
+            return;
+        }
+
         const swiper = swiperRef.current;
 
         if (!swiper) {
@@ -61,11 +72,18 @@ export const RankingSection = ({
         if (swiper.activeIndex !== slideIndex) {
             swiper.slideTo(slideIndex, 0);
         }
-    }, [currentPage, items.length, totalPages]);
+    }, [currentPage, isServerPaginated, items.length, resolvedTotalPages]);
 
     const goToPage = (targetPage: number) => {
-        onPageChange(targetPage);
-        swiperRef.current?.slideTo(pageToSlideIndex(targetPage), 0);
+        const safePage = Math.min(
+            Math.max(targetPage, 1),
+            resolvedTotalPages,
+        );
+        onPageChange(safePage);
+
+        if (!isServerPaginated) {
+            swiperRef.current?.slideTo(pageToSlideIndex(safePage), 0);
+        }
     };
 
     return (
@@ -73,27 +91,55 @@ export const RankingSection = ({
             <h3 className={drawerStyles.rankingSectionTitle}>{title}</h3>
 
             <Swiper
-                key={`${title}-${items.length}`}
+                key={
+                    isServerPaginated
+                        ? `${title}-${items.length}-${currentPage}`
+                        : `${title}-${items.length}`
+                }
                 className={styles.rankingSwiper}
                 slidesPerView={1}
                 spaceBetween={0}
-                initialSlide={Math.min(
-                    pageToSlideIndex(currentPage),
-                    totalPages - 1,
-                )}
+                initialSlide={
+                    isServerPaginated
+                        ? serverSlidePages.indexOf(currentPage)
+                        : Math.min(
+                              pageToSlideIndex(currentPage),
+                              resolvedTotalPages - 1,
+                          )
+                }
                 onSwiper={(swiper) => {
                     swiperRef.current = swiper;
                 }}
                 onSlideChange={(swiper) => {
+                    if (isServerPaginated) {
+                        const targetPage = serverSlidePages[swiper.activeIndex];
+
+                        if (
+                            targetPage !== undefined &&
+                            targetPage !== currentPage
+                        ) {
+                            onPageChange(targetPage);
+                        }
+                        return;
+                    }
+
                     onPageChange(slideIndexToPage(swiper.activeIndex));
                 }}
             >
-                {Array.from({ length: totalPages }).map((_, pageIdx) => {
-                    const sliceStart = pageIdx * RANKING_ITEMS_PER_PAGE;
-                    const pageItems = items.slice(
-                        sliceStart,
-                        sliceStart + RANKING_ITEMS_PER_PAGE,
-                    );
+                {Array.from({
+                    length: isServerPaginated
+                        ? serverSlidePages.length
+                        : resolvedTotalPages,
+                }).map((_, pageIdx) => {
+                    const sliceStart = isServerPaginated
+                        ? (currentPage - 1) * RANKING_ITEMS_PER_PAGE
+                        : pageIdx * RANKING_ITEMS_PER_PAGE;
+                    const pageItems = isServerPaginated
+                        ? items
+                        : items.slice(
+                              sliceStart,
+                              sliceStart + RANKING_ITEMS_PER_PAGE,
+                          );
                     return (
                         <SwiperSlide key={`page-${pageIdx}`}>
                             <ul className={drawerStyles.rankingList}>
@@ -145,53 +191,30 @@ export const RankingSection = ({
                     role='tablist'
                     aria-label={`${title} 페이지`}
                 >
-                    {Array.from({ length: totalPages }).map((_, dotIdx) => {
-                        const isActive = dotIdx === currentPage - 1;
-                        return (
-                            <button
-                                key={`dot-${dotIdx}`}
-                                role='tab'
-                                aria-selected={isActive}
-                                aria-label={`${dotIdx + 1} / ${totalPages}`}
-                                data-active={isActive}
-                                className={styles.dotButton}
-                                onClick={() => goToPage(dotIdx + 1)}
-                            />
-                        );
-                    })}
+                    {Array.from({ length: resolvedTotalPages }).map(
+                        (_, dotIdx) => {
+                            const isActive = dotIdx === currentPage - 1;
+                            return (
+                                <button
+                                    key={`dot-${dotIdx}`}
+                                    role='tab'
+                                    aria-selected={isActive}
+                                    aria-label={`${dotIdx + 1} / ${resolvedTotalPages}`}
+                                    data-active={isActive}
+                                    className={styles.dotButton}
+                                    onClick={() => goToPage(dotIdx + 1)}
+                                />
+                            );
+                        },
+                    )}
                 </div>
             ) : (
-                <div className={drawerStyles.pagination}>
-                    <button
-                        className={drawerStyles.paginationButton}
-                        disabled={isPrevDisabled}
-                        onClick={() => goToPage(currentPage - 1)}
-                        aria-label={`${title} 이전 페이지`}
-                    >
-                        <ChevronLeft size={16} color={vars.color.gray['60']} />
-                    </button>
-
-                    <span className={drawerStyles.paginationText}>
-                        <span className={drawerStyles.paginationCurrent}>
-                            {currentPage}
-                        </span>
-                        <span className={drawerStyles.paginationSeparator}>
-                            /
-                        </span>
-                        <span className={drawerStyles.paginationTotal}>
-                            {totalPages}
-                        </span>
-                    </span>
-
-                    <button
-                        className={drawerStyles.paginationButton}
-                        disabled={isNextDisabled}
-                        onClick={() => goToPage(currentPage + 1)}
-                        aria-label={`${title} 다음 페이지`}
-                    >
-                        <ChevronRight size={16} />
-                    </button>
-                </div>
+                <PagingV3
+                    currentPage={currentPage}
+                    totalCount={resolvedTotalPages * RANKING_ITEMS_PER_PAGE}
+                    pageSize={RANKING_ITEMS_PER_PAGE}
+                    onPageClick={goToPage}
+                />
             )}
         </Column>
     );
