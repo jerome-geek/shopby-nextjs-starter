@@ -1,4 +1,5 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
+
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
@@ -7,13 +8,14 @@ import { globalVars } from '@/styles/global.css';
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
-    paddingBottom: 'calc(var(--bottom-nav-active-height, 64px) + 80px + env(safe-area-inset-bottom))',
+    paddingBottom:
+        'calc(var(--bottom-nav-active-height, 64px) + 80px + env(safe-area-inset-bottom))',
     maxWidth: '1200px',
     margin: '0 auto',
 
     '@media': {
         [media.desktop]: {
-            padding: '40px 20px',
+            padding: '40px 0',
         },
     },
 });
@@ -25,13 +27,11 @@ export const mainSection = style({
 
     '@media': {
         [media.desktop]: {
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) 450px',
-            gap: '40px',
+            display: 'flex',
+            flexDirection: 'row',
+            // gridTemplateColumns: 'minmax(0, 1fr) 450px',
+            gap: '48px',
             alignItems: 'flex-start',
-        },
-        'screen and (min-width: 1280px)': {
-            gap: '60px',
         },
     },
 });
@@ -45,6 +45,7 @@ export const leftColumn = style({
     '@media': {
         [media.desktop]: {
             flex: 1,
+            maxWidth: '666px',
         },
     },
 });
@@ -114,6 +115,7 @@ export const content = style({
 
     '@media': {
         [media.desktop]: {
+            maxWidth: '487px',
             gap: '32px',
             position: 'sticky',
             top: `calc(var(--header-height, ${globalVars.header.height}) + 20px)`,
@@ -149,7 +151,7 @@ export const priceInfo = style({
 
 export const actionButtons = style({
     display: 'flex',
-    gap: '12px',
+    gap: '8px',
 });
 
 export const cartButton = style({
@@ -307,23 +309,30 @@ export const bottomSticky = style({
     borderTop: `1px solid ${vars.color.gray[20]}`,
     padding: '12px 20px',
     display: 'flex',
-    gap: '12px',
+    gap: '6px',
     zIndex: 100,
     transition: 'bottom 0.2s ease-in-out',
 
     '@media': {
+        [media.tablet]: {
+            bottom: 0,
+        },
         [media.desktop]: {
             display: 'none',
         },
     },
 });
 
+globalStyle(`${bottomSticky} > button`, {
+    height: '53px',
+});
+
 export const giftButton = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '63px',
-    height: '63px',
+    width: '53px',
+    height: '53px',
     border: `1px solid ${vars.color.gray['50']}`,
     borderRadius: '4px',
     backgroundColor: vars.color.white,

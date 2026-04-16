@@ -35,7 +35,7 @@ export const shopMain = style({
 });
 
 export const container = style({
-    maxWidth: '1200px',
+    maxWidth: '1240px',
     margin: '0 auto',
     padding: '24px 20px 40px',
     width: '100%',

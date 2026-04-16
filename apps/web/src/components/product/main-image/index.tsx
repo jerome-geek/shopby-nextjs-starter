@@ -75,9 +75,9 @@ const ProductMainImage = ({
             modules: [FreeMode, Thumbs],
             freeMode: true,
             watchSlidesProgress: true,
-            slidesPerView: 4,
+            slidesPerView: 'auto',
             direction: 'horizontal',
-            spaceBetween: 12,
+            spaceBetween: 16,
             slideToClickedSlide: true,
         }),
         [],
@@ -108,7 +108,7 @@ const ProductMainImage = ({
                                     <div className={styles.imageWrapper}>
                                         <img
                                             src={url}
-                                            alt=""
+                                            alt=''
                                             className={styles.thumbnail}
                                         />
                                     </div>
@@ -131,7 +131,7 @@ const ProductMainImage = ({
                     <Swiper
                         {...thumbsSwiperSettings}
                         onSwiper={setThumbsSwiper}
-                        direction="vertical"
+                        direction='vertical'
                         className={styles.thumbsSwiper}
                     >
                         {imageUrls.map((url, index) => {
@@ -152,7 +152,7 @@ const ProductMainImage = ({
                                     >
                                         <img
                                             src={url}
-                                            alt=""
+                                            alt=''
                                             className={styles.thumbImage}
                                         />
                                     </div>

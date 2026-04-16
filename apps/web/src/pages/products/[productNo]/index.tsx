@@ -70,7 +70,7 @@ function ProductDetailView({
 }: ProductDetailViewProps) {
     const isLogin = useAuth();
 
-    const { isMobile } = useResponsive();
+    const { isMobile, isTablet } = useResponsive();
 
     const { openAddCartDialog } = useCustomDialog();
 
@@ -337,13 +337,15 @@ function ProductDetailView({
                         />
                     </div>
 
-                    <div style={{ marginTop: '40px' }}>
-                        <ProductTabs
-                            reviewCount={counter.reviewCnt || 0}
-                            inquiryCount={counter.inquiryCnt || 0}
-                            productContent={productContent}
-                        />
-                    </div>
+                    {!isTablet && (
+                        <div style={{ marginTop: '40px' }}>
+                            <ProductTabs
+                                reviewCount={counter.reviewCnt || 0}
+                                inquiryCount={counter.inquiryCnt || 0}
+                                productContent={productContent}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.content}>
@@ -456,74 +458,88 @@ function ProductDetailView({
 
                     <PhotoReview images={baseInfo.imageUrlInfo} />
 
-                    <hr className={styles.optionDivider} />
+                    {!isTablet && (
+                        <>
+                            <hr className={styles.optionDivider} />
 
-                    <div className={styles.optionContainer}>
-                        {isFlatOptionUsed && (
-                            <FlatProductOption
-                                productNo={productNo}
-                                onChange={onFlatOptionChange}
-                            />
-                        )}
+                            <div className={styles.optionContainer}>
+                                {isFlatOptionUsed && (
+                                    <FlatProductOption
+                                        productNo={productNo}
+                                        onChange={onFlatOptionChange}
+                                    />
+                                )}
 
-                        {isMultiLevelOptionUsed && (
-                            <MultiProductOption
-                                productNo={productNo}
-                                onChange={onMultiOptionChange}
-                            />
-                        )}
+                                {isMultiLevelOptionUsed && (
+                                    <MultiProductOption
+                                        productNo={productNo}
+                                        onChange={onMultiOptionChange}
+                                    />
+                                )}
 
-                        <SelectedProductOption
-                            isRemovable={!isDefaultOptionUsed}
-                        />
+                                <SelectedProductOption
+                                    isRemovable={!isDefaultOptionUsed}
+                                />
 
-                        {/* <SelectedProductOption
-                            selectedOptionList={filteredSelectedOptionList}
-                            onOptionDeleteClick={onOptionDeleteClickV2}
-                            onPlusClick={onPlusClick}
-                            onMinusClick={onMinusClick}
-                            onChangeProductCount={onChangeProductCount}
-                            getSelectedOptionValue={getSelectedOptionValue}
-                            textOptionList={textOptionInputs['OPTION'] ?? []}
-                            onInputOptionChange={onInputOptionChange}
-                        /> */}
-                    </div>
+                                {/* <SelectedProductOption
+        selectedOptionList={filteredSelectedOptionList}
+        onOptionDeleteClick={onOptionDeleteClickV2}
+        onPlusClick={onPlusClick}
+        onMinusClick={onMinusClick}
+        onChangeProductCount={onChangeProductCount}
+        getSelectedOptionValue={getSelectedOptionValue}
+        textOptionList={textOptionInputs['OPTION'] ?? []}
+        onInputOptionChange={onInputOptionChange}
+    /> */}
+                            </div>
 
-                    <div className={styles.orderContainer}>
-                        <hr className={styles.buttonDivider} />
+                            <div className={styles.orderContainer}>
+                                <hr className={styles.buttonDivider} />
 
-                        <div className={styles.totalPriceContainer}>
-                            <p className={styles.totalPriceTitle}>
-                                총 상품금액
-                            </p>
-                            <p className={styles.totalPrice}>
-                                {CURRENCY(totalPrice).format()}
-                            </p>
-                        </div>
+                                <div className={styles.totalPriceContainer}>
+                                    <p className={styles.totalPriceTitle}>
+                                        총 상품금액
+                                    </p>
+                                    <p className={styles.totalPrice}>
+                                        {CURRENCY(totalPrice).format()}
+                                    </p>
+                                </div>
 
-                        <div className={styles.actionButtons}>
-                            <button
-                                className={styles.giftButtonDesktop}
-                                onClick={onGiftButtonClick}
-                            >
-                                <Gift size={24} />
-                            </button>
-                            <Button
-                                frame='outlined'
-                                onClick={onCartButtonClick}
-                            >
-                                장바구니
-                            </Button>
-                            <Button
-                                frame='solid'
-                                variant='primary'
-                                onClick={onOrderButtonClick}
-                            >
-                                구매하기
-                            </Button>
-                        </div>
-                    </div>
+                                <div className={styles.actionButtons}>
+                                    <button
+                                        className={styles.giftButtonDesktop}
+                                        onClick={onGiftButtonClick}
+                                    >
+                                        <Gift size={24} />
+                                    </button>
+                                    <Button
+                                        frame='outlined'
+                                        onClick={onCartButtonClick}
+                                    >
+                                        장바구니
+                                    </Button>
+                                    <Button
+                                        frame='solid'
+                                        variant='primary'
+                                        onClick={onOrderButtonClick}
+                                    >
+                                        구매하기
+                                    </Button>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
+
+                {isTablet && (
+                    <div style={{ marginTop: '4px' }}>
+                        <ProductTabs
+                            reviewCount={counter.reviewCnt || 0}
+                            inquiryCount={counter.inquiryCnt || 0}
+                            productContent={productContent}
+                        />
+                    </div>
+                )}
             </div>
 
             <div className={styles.bottomSticky}>

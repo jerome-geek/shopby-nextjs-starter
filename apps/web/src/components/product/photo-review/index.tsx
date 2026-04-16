@@ -56,7 +56,6 @@ export default function PhotoReview({ images }: PhotoReviewProps) {
                 <Swiper
                     slidesPerView={3.2}
                     spaceBetween={12}
-                    style={{ padding: '0 20px' }}
                     breakpoints={{
                         1024: {
                             slidesPerView: 5,
@@ -71,14 +70,14 @@ export default function PhotoReview({ images }: PhotoReviewProps) {
                         >
                             <img
                                 src={review.imageUrl}
-                                alt="리뷰 이미지"
+                                alt='리뷰 이미지'
                                 className={styles.photoReviewImage}
                             />
                             <div className={styles.photoReviewRating}>
                                 <Star
                                     size={14}
-                                    fill="#E2808F"
-                                    stroke="#E2808F"
+                                    fill='#E2808F'
+                                    stroke='#E2808F'
                                 />
                                 <span>{review.rating}</span>
                             </div>

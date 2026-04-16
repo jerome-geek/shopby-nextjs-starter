@@ -1,7 +1,12 @@
-import { useState } from 'react';
+import { isNumber } from '@fxts/core';
+import { useLenis } from 'lenis/react';
+import { motion } from 'motion/react';
+import { useCallback, useState } from 'react';
 
+import ProductContents from '@/components/product/product-tabs/contents';
 import * as styles from '@/components/product/product-tabs/index.css';
 import RelatedProductList from '@/components/product/related-product-list';
+import { useResponsive } from '@/hooks/utils';
 
 interface ProductTabsProps {
     reviewCount?: number;
@@ -17,59 +22,155 @@ export default function ProductTabs({
     const [activeTab, setActiveTab] = useState<'info' | 'review' | 'inquiry'>(
         'info',
     );
+    const lenis = useLenis();
+
+    const { isTablet } = useResponsive();
+
+    // NOTE: apps/web/src/styles/global.css.ts 의 globalVars.header 값을 기준으로 사용
+    const pcOffsetPx = 90;
+    const mobileOffsetPx = 56;
+    const tabButtonHeight = 45;
+
+    const scrollToSection = useCallback(
+        (value: 'info' | 'review' | 'inquiry', immediate: boolean = false) => {
+            const headerHeight = isTablet ? mobileOffsetPx : pcOffsetPx;
+            const offset = -(headerHeight + tabButtonHeight);
+
+            lenis?.scrollTo(`#product-tab-${value}`, {
+                offset,
+                duration: 0.9,
+                immediate,
+            });
+        },
+        [isTablet, mobileOffsetPx, pcOffsetPx, lenis],
+    );
+
+    const handleTabClick = (value: 'info' | 'review' | 'inquiry') => {
+        scrollToSection(value);
+    };
+
+    useLenis(() => {
+        const headerHeight = isTablet ? mobileOffsetPx : pcOffsetPx;
+        const threshold = headerHeight + tabButtonHeight + 8;
+
+        const infoEl = document.getElementById('product-tab-info');
+        const reviewEl = document.getElementById('product-tab-review');
+        const inquiryEl = document.getElementById('product-tab-inquiry');
+
+        if (!infoEl || !reviewEl || !inquiryEl) {
+            return;
+        }
+
+        const reviewTop = reviewEl.getBoundingClientRect().top;
+        const inquiryTop = inquiryEl.getBoundingClientRect().top;
+
+        setActiveTab((prev) => {
+            const next =
+                inquiryTop <= threshold
+                    ? 'inquiry'
+                    : reviewTop <= threshold
+                    ? 'review'
+                    : 'info';
+            return prev === next ? prev : next;
+        });
+    });
+
+    const tabList = [
+        {
+            label: '상품 정보',
+            value: 'info',
+            onClick: () => handleTabClick('info'),
+        },
+        {
+            label: '리뷰',
+            value: 'review',
+            count: reviewCount,
+            onClick: () => handleTabClick('review'),
+        },
+        {
+            label: '상품 문의',
+            value: 'inquiry',
+            count: inquiryCount,
+            onClick: () => handleTabClick('inquiry'),
+        },
+    ];
 
     return (
-        <div>
+        <>
             <div className={styles.tabsContainer}>
-                <button
-                    className={`${styles.tabButton} ${activeTab === 'info' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('info')}
-                >
-                    상품 정보
-                </button>
-                <button
-                    className={`${styles.tabButton} ${activeTab === 'review' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('review')}
-                >
-                    리뷰 ({reviewCount})
-                </button>
-                <button
-                    className={`${styles.tabButton} ${activeTab === 'inquiry' ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab('inquiry')}
-                >
-                    상품 문의 ({inquiryCount})
-                </button>
+                {tabList.map((tab) => (
+                    <button
+                        key={tab.value}
+                        className={`${styles.tabButton}`}
+                        role='tab'
+                        onClick={tab.onClick}
+                        aria-selected={activeTab === tab.value}
+                    >
+                        {`${tab.label} ${
+                            isNumber(tab.count) ? `(${tab.count})` : ''
+                        }`}
+                        {activeTab === tab.value && (
+                            <motion.div
+                                layoutId='active-tab'
+                                className={styles.activeTabIndicator}
+                                initial={{
+                                    y: 'none',
+                                }}
+                                animate={{
+                                    y: 'none',
+                                }}
+                                transition={{
+                                    type: 'spring',
+                                    stiffness: 380,
+                                    damping: 30,
+                                }}
+                            />
+                        )}
+                    </button>
+                ))}
             </div>
 
             <div className={styles.tabContentContainer}>
-                {activeTab === 'info' && (
-                    <div className={styles.descriptionSection}>
-                        <h3 className={styles.descriptionTitle}>상품 설명</h3>
-                        <div
-                            className={styles.descriptionText}
-                            dangerouslySetInnerHTML={{
-                                __html: productContent || '',
-                            }}
-                        />
-                    </div>
-                )}
-                {activeTab === 'review' && (
-                    <div className={styles.descriptionSection}>
-                        <p className={styles.descriptionText}>
-                            리뷰 영역을 구현 중입니다.
-                        </p>
-                    </div>
-                )}
-                {activeTab === 'inquiry' && (
-                    <div className={styles.descriptionSection}>
-                        <p className={styles.descriptionText}>
-                            상품 문의 영역을 구현 중입니다.
-                        </p>
-                    </div>
-                )}
+                <div
+                    id='product-tab-info'
+                    className={styles.descriptionSection}
+                >
+                    <ProductContents
+                        content={productContent}
+                        onClick={() => scrollToSection('info', true)}
+                    />
+                </div>
+
+                <div
+                    id='product-tab-review'
+                    className={styles.descriptionSection}
+                >
+                    <p className={styles.descriptionText}>
+                        리뷰 영역을 구현 중입니다.
+                    </p>
+                    <div
+                        style={{
+                            height: '1000px',
+                        }}
+                    ></div>
+                </div>
+
+                <div
+                    id='product-tab-inquiry'
+                    className={styles.descriptionSection}
+                >
+                    <p className={styles.descriptionText}>
+                        상품 문의 영역을 구현 중입니다.
+                    </p>
+                    <div
+                        style={{
+                            height: '1000px',
+                        }}
+                    ></div>
+                </div>
             </div>
 
             <RelatedProductList />
-        </div>
+        </>
     );
 }

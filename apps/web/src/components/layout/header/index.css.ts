@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
@@ -18,6 +18,9 @@ export const header = style({
     flexDirection: 'column',
 
     '@media': {
+        [media.tablet]: {
+            borderBottom: `1px solid ${vars.color.gray['30']}`,
+        },
         [media.desktop]: {
             borderBottom: `1px solid ${vars.color.gray['30']}`,
             flexDirection: 'row',
@@ -69,22 +72,33 @@ export const logo = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '107px',
-    height: '40px',
+    width: '90px',
+    height: '21px',
     flexShrink: 0,
+    position: 'relative',
 
     '@media': {
         [media.tablet]: {
             order: 1,
             justifyContent: 'flex-start',
             marginRight: '16px',
+            width: '90px',
+            height: '21px',
         },
         [media.desktop]: {
             order: 1,
             justifyContent: 'flex-start',
             marginRight: '16px',
+            width: '107px',
+            height: '40px',
         },
     },
+});
+
+globalStyle(`${logo} > img`, {
+    width: '100%',
+    height: '100%',
+    objectFit: 'contain',
 });
 
 export const recipeButton = style([

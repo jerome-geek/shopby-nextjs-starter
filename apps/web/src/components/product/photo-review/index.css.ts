@@ -1,4 +1,5 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
+
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
@@ -7,13 +8,16 @@ export const photoReviewSection = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
-    width: '100%',
     minWidth: 0,
     overflow: 'hidden',
+    marginLeft: '-20px',
+    width: 'calc(100% + 40px)',
 
     '@media': {
         [media.desktop]: {
             gap: '12px',
+            marginLeft: 0,
+            width: '100%',
         },
     },
 });
@@ -21,7 +25,6 @@ export const photoReviewSection = style({
 export const photoReviewList = style({
     width: '100%',
     minWidth: 0,
-    margin: '0 -20px',
 
     '@media': {
         [media.desktop]: {
@@ -30,10 +33,27 @@ export const photoReviewList = style({
     },
 });
 
+globalStyle(`${photoReviewList} .swiper`, {
+    padding: '0 20px',
+
+    '@media': {
+        [media.desktop]: {
+            padding: 0,
+        },
+    },
+});
+
 export const photoReviewTitle = style([
     textStyles.headingSemibold,
     {
         color: vars.color.gray['90'],
+        padding: '0 20px',
+
+        '@media': {
+            [media.desktop]: {
+                padding: 0,
+            },
+        },
     },
 ]);
 

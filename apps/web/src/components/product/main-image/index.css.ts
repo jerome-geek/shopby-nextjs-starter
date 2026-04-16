@@ -21,13 +21,13 @@ export const swiperWrapper = style({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    maxWidth: '650px',
     gap: '16px',
 
     '@media': {
         [media.desktop]: {
             flexDirection: 'row',
             alignItems: 'flex-start',
+            maxWidth: '666px',
         },
     },
 });
@@ -56,11 +56,11 @@ export const imageWrapper = style({
     position: 'relative',
     overflow: 'hidden',
     margin: '0 auto',
-    borderRadius: '8px',
 
     '@media': {
         [media.desktop]: {
             maxWidth: '564px',
+            borderRadius: '8px',
         },
     },
 });
@@ -78,7 +78,7 @@ export const thumbsSwiperContainer = style({
     '@media': {
         [media.desktop]: {
             display: 'block',
-            width: '70px',
+            width: '86px',
             height: '564px', // 메인 이미지 높이에 맞춤
             flexShrink: 0,
         },
@@ -96,7 +96,7 @@ export const thumbSlide = style({
 });
 
 export const thumbImageWrapper = style({
-    width: '70px',
+    width: '100%',
     aspectRatio: '1 / 1',
     cursor: 'pointer',
     position: 'relative',

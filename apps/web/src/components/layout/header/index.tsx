@@ -95,13 +95,7 @@ export function Header() {
                 <Menu categoryData={categoryData} />
 
                 <Link href={PATHS.MAIN} className={styles.logo}>
-                    <Image
-                        src={logoImage}
-                        alt='Jolly pot'
-                        width={107}
-                        height={40}
-                        priority
-                    />
+                    <Image src={logoImage} alt='Jolly pot' fill priority />
                 </Link>
 
                 <div className={styles.utilitySection}>
@@ -132,7 +126,11 @@ export function Header() {
                                 href={PATHS.RECIPES.SCRAP}
                                 className={styles.iconLink}
                             >
-                                <BookmarkIcon width={24} height={24} />
+                                <BookmarkIcon
+                                    width={24}
+                                    height={24}
+                                    strokeWidth={1.5}
+                                />
                             </Link>
                         </li>
                         <li>
