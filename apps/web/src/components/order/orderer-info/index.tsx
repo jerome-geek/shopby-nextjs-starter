@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 
 import * as styles from '@/components/order/orderer-info/index.css';
-import ErrorMessage from '@/components/ui/form/error-message';
+import { errorMessage } from '@/components/ui/form/error-message/index.css';
 import {
     InputField,
     InputFieldContainer,
@@ -11,19 +11,26 @@ import {
 } from '@/components/ui/input';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PaymentReserveSchemaType } from '@/schema';
+import { PhonePrefixType } from '@/schema/common.schema';
+
+import { useAuth } from '@/hooks/useAuth';
+import { ErrorMessage } from '@/components/ui/form';
 
 const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
 
 const OrdererInfo = () => {
     const { t } = useTranslation();
+    const isLogin = useAuth();
 
     const { register, control, setValue } =
         useFormContext<PaymentReserveSchemaType>();
 
-    const receiverContact1Prefix =
+    const { errors } = useFormState({ control });
+
+    const ordererContact1Prefix =
         useWatch({
             control,
-            name: 'shippingAddress.receiverContact1.prefix',
+            name: 'orderer.ordererContact1.prefix',
         }) || '010';
 
     return (
@@ -76,13 +83,13 @@ const OrdererInfo = () => {
                         <Select
                             options={PHONE_PREFIX_NUMBER_LIST}
                             value={PHONE_PREFIX_NUMBER_LIST.find(
-                                (o) => o.value === receiverContact1Prefix,
+                                (o) => o.value === ordererContact1Prefix,
                             )}
                             onChange={(option) => {
                                 if (option) {
                                     setValue(
                                         'orderer.ordererContact1.prefix',
-                                        option.value as any,
+                                        option.value as PhonePrefixType,
                                         { shouldDirty: true },
                                     );
                                 }
@@ -101,7 +108,43 @@ const OrdererInfo = () => {
                             {...register('orderer.ordererContact1.suffix')}
                         />
                     </div>
+                    {!!(
+                        errors.orderer?.ordererContact1?.prefix?.message ||
+                        errors.orderer?.ordererContact1?.middle?.message ||
+                        errors.orderer?.ordererContact1?.suffix?.message
+                    ) && (
+                        <p className={errorMessage}>
+                            {t('휴대폰 번호를 입력해주세요.')}
+                        </p>
+                    )}
                 </InputFieldContainer>
+
+                {!isLogin && (
+                    <>
+                        <InputFieldContainer>
+                            <InputLabel isRequired>{t('비밀번호')}</InputLabel>
+                            <InputField
+                                type='password'
+                                placeholder={t(
+                                    '8~12자 이내(영문/숫자/특수문자 조합)',
+                                )}
+                                {...register('tempPassword')}
+                            />
+                            <ErrorMessage name='tempPassword' />
+                        </InputFieldContainer>
+                        <InputFieldContainer>
+                            <InputLabel isRequired>
+                                {t('비밀번호 확인')}
+                            </InputLabel>
+                            <InputField
+                                type='password'
+                                placeholder={t('비밀번호 다시 입력')}
+                                {...register('tempPasswordCheck')}
+                            />
+                            <ErrorMessage name='tempPasswordCheck' />
+                        </InputFieldContainer>
+                    </>
+                )}
             </div>
         </section>
     );

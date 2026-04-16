@@ -25,6 +25,7 @@ import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 import { useSb } from '@/hooks/libs/shopby';
 import payment from '@/utils/order/payment';
 import { useDialog } from '@/hooks/utils';
+import { useMemo } from 'react';
 
 const OrderSheetPage = () => {
     const router = useRouter();
@@ -34,13 +35,19 @@ const OrderSheetPage = () => {
     const { isMyApp } = useMyApp();
 
     const isKorean = process.env.NEXT_PUBLIC_LOCALE === 'ko';
-    const paymentSchema = getPaymentSchema({
-        isLogin: !!isLogin,
-        isGlobalMall: !isKorean,
-    });
+    const paymentSchema = useMemo(
+        () =>
+            getPaymentSchema({
+                isLogin: !!isLogin,
+                isGlobalMall: !isKorean,
+            }),
+        [isLogin, isKorean],
+    );
 
     const methods = useForm<PaymentReserveSchemaType>({
         resolver: zodResolver(paymentSchema),
+        mode: 'all',
+        reValidateMode: 'onChange',
         defaultValues: {
             orderSheetNo,
             orderer: {
@@ -184,13 +191,17 @@ const OrderSheetContent = ({
 
                     <ShippingAddress />
 
-                    <hr className={styles.contentDivider} />
+                    {isLogin && (
+                        <>
+                            <hr className={styles.contentDivider} />
 
-                    <Coupon />
+                            <Coupon />
 
-                    <hr className={styles.contentDivider} />
+                            <hr className={styles.contentDivider} />
 
-                    <Accumulation />
+                            <Accumulation />
+                        </>
+                    )}
 
                     <hr className={styles.contentDivider} />
 

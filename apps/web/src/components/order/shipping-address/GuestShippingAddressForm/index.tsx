@@ -56,8 +56,6 @@ const GuestShippingAddressForm = () => {
         name: 'shippingAddress.receiverAddress',
     });
 
-    console.log('🚀 ~ GuestShippingAddressForm ~ ordererName:', ordererName);
-
     const [isSameAsOrderer, setIsSameAsOrderer] = useState(false);
 
     const deliveryRequestOptions = [

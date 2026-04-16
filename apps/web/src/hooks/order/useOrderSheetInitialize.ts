@@ -84,7 +84,7 @@ const useOrderSheetInitialize = ({
 
         const lastPayType = orderSheetData.lastPayType;
         const availablePayTypes = orderSheetData.availablePayTypes;
-        const mainAddress = orderSheetData.orderSheetAddress.mainAddress;
+        const mainAddress = orderSheetData.orderSheetAddress?.mainAddress;
         const tradeBankAccountInfos = orderSheetData.tradeBankAccountInfos;
 
         const pgType = pipe(
@@ -116,19 +116,19 @@ const useOrderSheetInitialize = ({
                     receiverFirstName: '',
                     receiverLastName: '',
 
-                    countryCd: mainAddress.countryCd || 'KR',
-                    addressNo: mainAddress.addressNo || 0,
-                    addressName: mainAddress.addressName || '',
-                    receiverName: mainAddress.receiverName || '',
+                    countryCd: mainAddress?.countryCd || 'KR',
+                    addressNo: mainAddress?.addressNo || 0,
+                    addressName: mainAddress?.addressName || '',
+                    receiverName: mainAddress?.receiverName || '',
                     receiverContact1: parsePhoneStringByHyphen(
-                        mainAddress.receiverContact1,
+                        mainAddress?.receiverContact1,
                     ),
-                    receiverAddress: mainAddress.receiverAddress || '',
+                    receiverAddress: mainAddress?.receiverAddress || '',
                     receiverJibunAddress:
-                        mainAddress.receiverJibunAddress || '',
+                        mainAddress?.receiverJibunAddress || '',
                     receiverDetailAddress:
-                        mainAddress.receiverDetailAddress || '',
-                    receiverZipCd: mainAddress.receiverZipCd || '',
+                        mainAddress?.receiverDetailAddress || '',
+                    receiverZipCd: mainAddress?.receiverZipCd || '',
                 },
                 agreementTermsAgrees: pipe(
                     orderSheetData,
@@ -146,7 +146,7 @@ const useOrderSheetInitialize = ({
                     : undefined,
                 applyCashReceipt: orderSheetData.applyCashReceiptForAccount,
             }),
-            // { keepFieldsRef: true },
+            { keepFieldsRef: true },
         );
     }, [orderSheetData, setValue, orderConfigurationData, reset]);
 
