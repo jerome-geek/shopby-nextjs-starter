@@ -5,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
-import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
 import * as styles from '@/components/recipe/scrap/summary/index.css';
 import { PATHS } from '@/const/paths';
-import { useScrapCollections } from '@/hooks/query/shop/recipe';
+import { useCollectionList } from '@/hooks/query/shop/collection';
 import { useCustomDialog } from '@/hooks/ui';
 import { vars } from '@/styles/theme.css';
 
@@ -18,7 +17,8 @@ import { vars } from '@/styles/theme.css';
 const RecipeScrapSummary = () => {
     const { t } = useTranslation();
     const { openCollectionCreate } = useCustomDialog();
-    const { data: collections = [] } = useScrapCollections();
+    const { data: collections = [] } = useCollectionList();
+    console.log('🚀 ~ RecipeScrapSummary ~ collections:', collections);
 
     return (
         <motion.div

@@ -3,6 +3,8 @@ import type { SearchPublicCollectionParams } from '@/models/shop/collection';
 const collectionKeys = {
     all: ['collection'] as const,
 
+    list: () => [...collectionKeys.all, 'list'] as const,
+
     publicSearches: () => [...collectionKeys.all, 'public-search'] as const,
     publicSearch: (params: SearchPublicCollectionParams) =>
         [...collectionKeys.publicSearches(), params] as const,

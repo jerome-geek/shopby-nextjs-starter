@@ -1,5 +1,5 @@
 import { map, pipe, prepend, sort, toArray } from '@fxts/core';
-import { ArrowUp, Bookmark, Plus } from 'lucide-react';
+import { Bookmark, Plus } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
@@ -10,7 +10,7 @@ import { CSRLayout } from '@/components/layout';
 import { CollectionCreateModal } from '@/components/modal';
 import RecipeScrapSummary from '@/components/recipe/scrap/summary';
 import { OVERLAY_ID } from '@/const/overlay';
-import { useScrapCollections } from '@/hooks/query/shop/recipe';
+import { useCollectionList } from '@/hooks/query/shop/collection';
 import * as styles from '@/pages/recipes/scrap/index.css';
 import { vars } from '@/styles/theme.css';
 
@@ -88,7 +88,7 @@ const RecipeScrapPage = () => {
 
     // 컬렉션 API 조회
     const { data: tabs = [{ sno: 0, id: 'all', label: '전체' }] } =
-        useScrapCollections({
+        useCollectionList({
             options: {
                 select: (data) =>
                     pipe(

@@ -1,13 +1,16 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import {
+    useSuspenseQuery,
+    type UseSuspenseQueryOptions,
+} from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { collection } from '@/api/shop';
-import type { GetCollectionListResponse } from '@/models/shop/collection';
 import { collectionKeys } from '@/hooks/queryKeys';
+import type { GetCollectionListResponse } from '@/models/shop/collection';
 
 interface UseCollectionListParams<T = GetCollectionListResponse> {
     options?: Omit<
-        UseQueryOptions<
+        UseSuspenseQueryOptions<
             GetCollectionListResponse,
             AxiosError<ShopByErrorResponse>,
             T,
@@ -20,7 +23,7 @@ interface UseCollectionListParams<T = GetCollectionListResponse> {
 const useCollectionList = <T = GetCollectionListResponse>({
     options,
 }: UseCollectionListParams<T> = {}) => {
-    return useQuery({
+    return useSuspenseQuery({
         queryKey: collectionKeys.list(),
         queryFn: async () => {
             const { data } = await collection.getList();
