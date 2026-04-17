@@ -51,7 +51,7 @@ export const dropdownItem = style({
             color: vars.color.pink['80'],
         },
         '&[data-variant="danger"][data-highlighted]': {
-            backgroundColor: vars.color.pink['10'],
+            backgroundColor: vars.color.pink['20'],
             color: vars.color.pink['100'],
         },
     },
