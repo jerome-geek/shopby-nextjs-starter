@@ -115,7 +115,7 @@ export const TimeSale = memo(
                             rows: 2,
                             fill: 'row',
                         }}
-                        slidesPerView={3.2}
+                        slidesPerView={3}
                         spaceBetween={4}
                         breakpoints={{
                             [BREAKPOINTS.SM]: {

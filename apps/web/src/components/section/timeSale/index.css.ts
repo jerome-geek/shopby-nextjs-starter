@@ -149,5 +149,12 @@ export const moreLink = style([
                 opacity: 0.8,
             },
         },
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
+            },
+        },
     },
 ]);
