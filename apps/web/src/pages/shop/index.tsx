@@ -43,7 +43,7 @@ export default function ShopMain() {
 
             {/* 라이프 베스트 */}
             <LazyRender minHeight={500}>
-                <Best />
+                <Best type='LIFE' />
             </LazyRender>
 
             {/* 영상(기획전) */}
@@ -53,7 +53,7 @@ export default function ShopMain() {
 
             {/* 키즈 베스트 */}
             <LazyRender minHeight={500}>
-                <Best />
+                <Best type='KIDS' />
             </LazyRender>
 
             {/* 영상(기획전) */}

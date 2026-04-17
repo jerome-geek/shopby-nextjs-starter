@@ -68,7 +68,7 @@ export default function Home() {
 
                 {/* 라이프 베스트 */}
                 <LazyRender minHeight={500}>
-                    <Best />
+                    <Best type='LIFE' />
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -77,7 +77,7 @@ export default function Home() {
 
                 {/* 키즈 베스트 */}
                 <LazyRender minHeight={500}>
-                    <Best />
+                    <Best type='KIDS' />
                 </LazyRender>
             </div>
         </>

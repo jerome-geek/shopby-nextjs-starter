@@ -1,6 +1,8 @@
+import { globalStyle, style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { style } from '@vanilla-extract/css';
 
 export const section = style({
     padding: '0',
@@ -8,11 +10,11 @@ export const section = style({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '24px',
+
     '@media': {
-        'screen and (min-width: 768px)': {
-            maxWidth: '1200px',
-            margin: '0 auto',
+        [media.mobile]: {
+            gap: '20px',
         },
     },
 });
@@ -57,12 +59,28 @@ export const categoryList = style({
     display: 'flex',
     gap: '8px',
     overflowX: 'auto',
-    paddingBottom: '24px',
     msOverflowStyle: 'none',
     scrollbarWidth: 'none',
+    marginBottom: '8px',
+
     selectors: {
         '&::-webkit-scrollbar': {
             display: 'none',
+        },
+    },
+    '@media': {
+        [media.mobile]: {
+            marginBottom: '0',
+            marginLeft: '-20px',
+            width: 'calc(100% + 40px)',
+        },
+    },
+});
+
+globalStyle(`${categoryList} > .swiper`, {
+    '@media': {
+        [media.mobile]: {
+            padding: '0 20px',
         },
     },
 });
@@ -88,7 +106,6 @@ export const categoryTabActive = style({
 
 export const swiperContainer = style({
     width: '100%',
-    paddingBottom: '40px !important',
 });
 
 export const productGridItem = style({
@@ -134,17 +151,33 @@ export const moreLink = style([
                 opacity: 0.8,
             },
         },
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
+            },
+        },
     },
 ]);
 
-export const emptyMessage = style({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    padding: '40px 0',
-    color: vars.color.gray[60],
-    fontSize: '14px',
-    backgroundColor: vars.color.gray[10],
-    borderRadius: '4px',
-});
+export const emptyMessage = style([
+    textStyles.headlineRegular,
+    {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        padding: '40px 0',
+        color: vars.color.gray[60],
+        backgroundColor: vars.color.gray[10],
+        borderRadius: '4px',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
+    },
+]);

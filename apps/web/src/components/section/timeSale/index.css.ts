@@ -1,13 +1,20 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const section = style({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '24px',
+
+    '@media': {
+        [media.mobile]: {
+            gap: '20px',
+        },
+    },
 });
 
 export const header = style({
@@ -89,6 +96,33 @@ export const timerBadge = style({
     fontSize: '12px',
     fontWeight: 700,
     zIndex: 2,
+});
+
+export const swiperContainer = style({
+    width: '100%',
+
+    '@media': {
+        [media.mobile]: {
+            marginLeft: '-20px',
+            width: 'calc(100% + 40px)',
+        },
+        [media.tablet]: {
+            marginLeft: '-20px',
+            width: 'calc(100% + 40px)',
+        },
+    },
+});
+
+globalStyle(`${swiperContainer} .swiper`, {
+    width: '100%',
+    '@media': {
+        [media.mobile]: {
+            padding: '0 20px',
+        },
+        [media.tablet]: {
+            padding: '0 20px',
+        },
+    },
 });
 
 export const productItem = style({

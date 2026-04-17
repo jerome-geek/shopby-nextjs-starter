@@ -1,11 +1,14 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { memo, useMemo } from 'react';
+import { Grid } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { CountdownTimer, ProductCard } from '@/components/product';
 import * as styles from '@/components/section/timeSale/index.css';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
 import type { ImageUrlType } from '@/models/product';
+import { BREAKPOINTS } from '@/styles/media';
 
 interface TimeSaleProps {
     title?: string;
@@ -105,37 +108,65 @@ export const TimeSale = memo(
                     </Link>
                 </div>
 
-                <ul className={styles.productGrid}>
-                    {filteredProducts.map((product) => (
-                        <li
-                            key={product.productNo}
-                            className={styles.productItem}
-                        >
-                            <ProductCard
-                                productNo={product.productNo}
-                                productName={product.productName}
-                                brandName={product.brandName}
-                                brandNo={product.brandNo}
-                                salePrice={product.salePrice}
-                                immediateDiscountAmt={
-                                    product.immediateDiscountAmt
-                                }
-                                additionDiscountAmt={
-                                    product.additionDiscountAmt
-                                }
-                                imageUrlInfo={
-                                    product.imageUrlInfo as ImageUrlType[]
-                                }
-                                stickerInfos={product.stickerInfos}
-                                likeCount={product.likeCount}
-                                liked={product.liked}
-                                reviewRating={product.reviewRating}
-                                totalReviewCount={product.totalReviewCount}
-                                isAdditionalDiscount
-                            />
-                        </li>
-                    ))}
-                </ul>
+                <div className={styles.swiperContainer}>
+                    <Swiper
+                        modules={[Grid]}
+                        grid={{
+                            rows: 2,
+                            fill: 'row',
+                        }}
+                        slidesPerView={3.2}
+                        spaceBetween={4}
+                        breakpoints={{
+                            [BREAKPOINTS.SM]: {
+                                slidesPerView: 4.2,
+                                spaceBetween: 16,
+                                grid: {
+                                    rows: 2,
+                                    fill: 'row',
+                                },
+                            },
+                            [BREAKPOINTS.MD]: {
+                                slidesPerView: 6,
+                                spaceBetween: 16,
+                                grid: {
+                                    rows: 2,
+                                    fill: 'row',
+                                },
+                            },
+                        }}
+                    >
+                        {filteredProducts.map((product) => (
+                            <SwiperSlide
+                                key={product.productNo}
+                                className={styles.productItem}
+                            >
+                                <ProductCard
+                                    productNo={product.productNo}
+                                    productName={product.productName}
+                                    brandName={product.brandName}
+                                    brandNo={product.brandNo}
+                                    salePrice={product.salePrice}
+                                    immediateDiscountAmt={
+                                        product.immediateDiscountAmt
+                                    }
+                                    additionDiscountAmt={
+                                        product.additionDiscountAmt
+                                    }
+                                    imageUrlInfo={
+                                        product.imageUrlInfo as ImageUrlType[]
+                                    }
+                                    stickerInfos={product.stickerInfos}
+                                    likeCount={product.likeCount}
+                                    liked={product.liked}
+                                    reviewRating={product.reviewRating}
+                                    totalReviewCount={product.totalReviewCount}
+                                    isAdditionalDiscount
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
 
                 <Link href='/timesale' className={styles.moreLink}>
                     <span>{buttonLabel}</span> <ArrowRight />

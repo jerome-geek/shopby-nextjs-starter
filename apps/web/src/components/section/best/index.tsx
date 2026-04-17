@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -8,39 +8,37 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { ArrowIcon } from '@/components/icons/ArrowIcon';
 import ProductCard from '@/components/product/card';
 import * as styles from '@/components/section/best/index.css';
+import { CATEGORY_CODE } from '@/const/category';
 import { PATHS } from '@/const/paths';
-import {
-    useCategoriesByCode,
-    useCategory,
-} from '@/hooks/query/display/category';
+import { useCategoryAll } from '@/hooks/query/display/category';
 import { useBestSellerProductList } from '@/hooks/query/product/product';
+import { BREAKPOINTS } from '@/styles/media';
 
 import 'swiper/css';
 import 'swiper/css/grid';
 import 'swiper/css/pagination';
-import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 
-export default function Best() {
+export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
     const { t } = useTranslation();
 
-    // TODO: 메인페이지에 필요한 코드들을 서버에서 조회해서 클라이언트로 넘겨줄 수 있도록, 실시간으로 반영 가능한지 체크
-    const { data: categoriesByCodeData } = useCategoriesByCode({
-        data: { codes: ['BEST'] },
-    });
+    const { data: categoryData } = useCategoryAll();
 
-    const displayCategoryNo = categoriesByCodeData?.[0].displayCategoryNo || 0;
+    const mainCategory = useMemo(() => {
+        return categoryData?.multiLevelCategories?.find(
+            (category) => category.managementCode === CATEGORY_CODE.MAIN,
+        );
+    }, [categoryData]);
 
-    const { data: categoryData } = useCategory({
-        categoryNo: displayCategoryNo,
-        options: {
-            enabled: displayCategoryNo !== 0,
-        },
-    });
+    const currentCategory = useMemo(() => {
+        return mainCategory?.children?.find(
+            (category) => category.managementCode === CATEGORY_CODE[type],
+        );
+    }, [mainCategory, type]);
 
     const [selectedCategory, setSelectedCategory] = useState(0);
+
     const activeCategory =
-        selectedCategory ||
-        (categoryData?.flatCategories[0]?.depth2CategoryNo ?? 0);
+        selectedCategory || (currentCategory?.categoryNo ?? 0);
 
     const { data: bestSellerProductListData } = useBestSellerProductList({
         searchParams: {
@@ -59,7 +57,9 @@ export default function Best() {
         <section className={styles.section}>
             <div className={styles.header}>
                 <div className={styles.titleWrapper}>
-                    <h2 className={styles.title}>{t('베스트 랭킹')}</h2>
+                    <h2 className={styles.title}>
+                        {t(type === 'KIDS' ? '키즈 베스트' : '라이프 베스트')}
+                    </h2>
                     <p className={styles.subtitle}>
                         {t('지금 가장 많이 찾는 아이템')}
                     </p>
@@ -67,34 +67,70 @@ export default function Best() {
 
                 <Link href={PATHS.PRODUCTS.BEST} className={styles.viewAll}>
                     {t('전체보기')}
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <svg width='16' height='16' viewBox='0 0 24 24' fill='none'>
                         <path
-                            d="M9 18l6-6-6-6"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                            d='M9 18l6-6-6-6'
+                            stroke='currentColor'
+                            strokeWidth='2'
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
                         />
                     </svg>
                 </Link>
             </div>
 
             <div className={styles.categoryList}>
-                {categoryData?.flatCategories.map((category) => (
-                    <button
-                        key={category.depth2CategoryNo}
-                        className={`${styles.categoryTab} ${
-                            activeCategory === category.depth2CategoryNo
-                                ? styles.categoryTabActive
-                                : ''
-                        }`}
-                        onClick={() =>
-                            setSelectedCategory(category.depth2CategoryNo)
-                        }
-                    >
-                        {category.depth2Label}
-                    </button>
-                ))}
+                <Swiper
+                    slidesPerView='auto'
+                    spaceBetween={4}
+                    watchOverflow
+                    breakpoints={{
+                        [BREAKPOINTS.SM]: {
+                            spaceBetween: 6,
+                        },
+                    }}
+                    style={{
+                        width: '100%',
+                    }}
+                >
+                    <SwiperSlide style={{ width: 'auto' }}>
+                        <button
+                            className={`${styles.categoryTab} ${
+                                activeCategory === currentCategory?.categoryNo
+                                    ? styles.categoryTabActive
+                                    : ''
+                            }`}
+                            onClick={() =>
+                                setSelectedCategory(
+                                    currentCategory?.categoryNo ?? 0,
+                                )
+                            }
+                        >
+                            전체
+                        </button>
+                    </SwiperSlide>
+
+                    {currentCategory?.children.map((category) => (
+                        <SwiperSlide
+                            key={category.categoryNo}
+                            style={{ width: 'auto' }}
+                        >
+                            <button
+                                key={category.categoryNo}
+                                className={`${styles.categoryTab} ${
+                                    activeCategory === category.categoryNo
+                                        ? styles.categoryTabActive
+                                        : ''
+                                }`}
+                                onClick={() =>
+                                    setSelectedCategory(category.categoryNo)
+                                }
+                            >
+                                {category.label}
+                            </button>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
 
             <div className={styles.swiperContainer}>
@@ -154,9 +190,9 @@ export default function Best() {
                 )}
             </div>
 
-            <Link href="/best" className={styles.moreLink}>
+            <Link href='/best' className={styles.moreLink}>
                 {t('베스트 랭킹 더보기')}
-                <ArrowIcon direction="right" />
+                <ArrowIcon direction='right' />
             </Link>
         </section>
     );

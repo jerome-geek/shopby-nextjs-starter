@@ -89,7 +89,7 @@ const SectionGroup = () => {
             <Event eventNo={eventNoList?.[0]} />
 
             <LazyRender minHeight={500}>
-                <Best />
+                <Best type={type === 'kids' ? 'KIDS' : 'LIFE'} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
