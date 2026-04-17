@@ -145,18 +145,21 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
     return (
         <div className={styles.commentInputArea}>
             {previewUrls.length > 0 && (
-                <div className={styles.commentImages}>
+                <ul className={styles.commentImages}>
                     {previewUrls.map((url, index) => (
-                        <RecipePreviewImage
-                            key={url}
-                            sno={index}
-                            url={url}
-                            onDeleteButtonClick={() =>
-                                deleteUploadFileImage(uploadFile[index].name!)
-                            }
-                        />
+                        <li key={url} className={styles.commentImageItem}>
+                            <RecipePreviewImage
+                                sno={index}
+                                url={url}
+                                onDeleteButtonClick={() =>
+                                    deleteUploadFileImage(
+                                        uploadFile[index].name!,
+                                    )
+                                }
+                            />
+                        </li>
                     ))}
-                </div>
+                </ul>
             )}
             <TextArea
                 className={styles.commentTextArea}

@@ -50,35 +50,39 @@ export const previewImage = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    borderRadius: '4px',
+    borderRadius: '12px',
 });
 
 export const deleteButtonWrapper = style({
     position: 'absolute',
-    top: '-12px',
-    right: '-12px',
-    width: '28px',
-    height: '28px',
+    top: '-6px',
+    right: '-6px',
+    width: '24px',
+    height: '24px',
     borderRadius: '50%',
     backgroundColor: vars.color.white,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
+    border: '1px solid rgba(0, 0, 0, 0.05)',
+    zIndex: 11,
     transition: 'all 0.2s ease',
 
     selectors: {
         '&:hover': {
             transform: 'scale(1.1)',
+            backgroundColor: vars.color.gray['10'],
         },
     },
 });
 
 export const deleteButton = style({
-    width: '22px',
-    height: '22px',
+    width: '100%',
+    height: '100%',
     borderRadius: '50%',
-    backgroundColor: vars.color.gray['50'],
-    color: vars.color.white,
+    backgroundColor: 'transparent',
+    color: vars.color.gray['40'],
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

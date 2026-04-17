@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const commentSection = style({
     display: 'flex',
@@ -51,9 +51,16 @@ export const commentList = style({
 export const commentItem = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
-    paddingBottom: '24px',
+    gap: '6px',
+    paddingBottom: '20px',
     borderBottom: `1px solid ${vars.color.gray['20']}`,
+
+    '@media': {
+        [media.desktop]: {
+            gap: '8px',
+            paddingBottom: '24px',
+        },
+    },
 });
 
 export const commentHeader = style({
@@ -64,18 +71,19 @@ export const commentHeader = style({
 export const commentAuthorInfo = style({
     display: 'flex',
     alignItems: 'center',
-
-    '@media': {
-        [media.desktop]: {
-            gap: '8px',
-        },
-    },
+    gap: '8px',
 });
 
 export const commentAuthor = style([
-    textStyles.headlineSemibold,
+    textStyles.body1Semibold,
     {
         color: vars.color.gray['90'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineSemibold,
+            },
+        },
     },
 ]);
 
@@ -86,31 +94,60 @@ export const commentDate = style([
     },
 ]);
 
-export const commentReportBtn = style({
-    color: vars.color.gray['40'],
-    fontSize: '12px',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-});
+export const commentReportBtn = style([
+    textStyles.caption2Regular,
+    {
+        color: vars.color.gray['60'],
 
-export const commentText = style({
-    fontSize: '15px',
-    lineHeight: '1.5',
-    color: vars.color.gray['80'],
-});
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.caption1Regular,
+            },
+        },
+    },
+]);
+
+export const commentText = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
+    },
+]);
 
 export const commentImages = style({
     display: 'flex',
     gap: '8px',
-    marginTop: '8px',
+    marginTop: '12px',
+    overflowX: 'auto',
+    listStyle: 'none',
+    padding: 0,
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    selectors: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 });
 
-export const commentImage = style({
-    width: '100px',
-    height: '100px',
-    borderRadius: '8px',
-    objectFit: 'cover',
+export const commentImageItem = style({
+    position: 'relative',
+    flexShrink: 0,
+    width: '88px',
+    height: '88px',
+
+    '@media': {
+        [media.desktop]: {
+            width: '98px',
+            height: '98px',
+        },
+    },
 });
 
 export const commentInputArea = style({

@@ -2,6 +2,7 @@ import dayjs from '@/utils/dayjs';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/comment-section/index.css';
+import { RecipePreviewImage } from '@/components/recipe/preview-image';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useAuth } from '@/hooks/useAuth';
 import type { CommentResponse } from '@/models/shop/comment';
@@ -49,16 +50,16 @@ export const CommentItem = ({ comment, onDelete }: CommentItemProps) => {
             </header>
             <p className={styles.commentText}>{comment.comment}</p>
             {images.length > 0 && (
-                <div className={styles.commentImages}>
+                <ul className={styles.commentImages}>
                     {images.map((url, index) => (
-                        <img
+                        <li
                             key={`${comment.sno}-${index}`}
-                            src={url}
-                            alt={`comment attachment ${index}`}
-                            className={styles.commentImage}
-                        />
+                            className={styles.commentImageItem}
+                        >
+                            <RecipePreviewImage sno={index} url={url} />
+                        </li>
                     ))}
-                </div>
+                </ul>
             )}
         </article>
     );
