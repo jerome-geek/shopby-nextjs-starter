@@ -9,6 +9,7 @@ import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import EventContents from '@/components/event/detail/event-contents';
 import EventErrorState from '@/components/event/detail/event-error-state';
 import EventProductSection from '@/components/event/detail/event-product-section';
 import EventSectionTab from '@/components/event/detail/event-section-tab';
@@ -21,7 +22,6 @@ import {
     GetEventProductDisplaySectionResponse,
 } from '@/models/display';
 import * as styles from '@/pages/events/[eventNo].css';
-import EventContents from '@/components/event/detail/event-contents';
 
 const EventDetailView = ({
     eventNo,
@@ -100,8 +100,6 @@ const EventDetailView = ({
             return;
         }
     }, [visibleSections, eventNo, productSectionSearchParams, queryClient]);
-
-    console.log(eventData);
 
     return (
         <div className={styles.pageContainer}>

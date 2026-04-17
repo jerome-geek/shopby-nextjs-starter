@@ -1,6 +1,8 @@
 import { globalStyle, style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
+
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -83,28 +85,34 @@ export const topContent = style({
     },
 });
 
-export const topTitle = style({
-    fontSize: '2.2rem',
-    fontWeight: 600,
-    letterSpacing: '-0.02em',
-    color: vars.color.black,
-    '@media': {
-        [`screen and (min-width: ${MOBILE_BREAKPOINT}px)`]: {
-            fontSize: '3rem',
+export const topTitle = style([
+    textStyles.display1Semibold,
+    {
+        color: vars.color.black,
+        '@media': {
+            [media.mobile]: {
+                fontSize: '2.2rem',
+                lineHeight: '1.32',
+                letterSpacing: '-2%',
+            },
         },
     },
-});
+]);
 
-export const topDescription = style({
-    fontSize: '1.4rem',
-    color: vars.color.gray[80],
-    lineHeight: '1.4',
-    '@media': {
-        [`screen and (min-width: ${MOBILE_BREAKPOINT}px)`]: {
-            fontSize: '1.5rem',
+export const topDescription = style([
+    textStyles.headingMedium,
+    {
+        color: vars.color.gray[80],
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+                fontWeight: 400,
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
         },
     },
-});
+]);
 
 export const htmlContent = style({
     width: '100%',

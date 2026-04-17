@@ -1,10 +1,12 @@
 import { head, isEmpty } from '@fxts/core';
+import Link from 'next/link';
 import { useMemo } from 'react';
 
 import { NoResult } from '@/components/common/no-result';
 import ProductCardRow from '@/components/product/card-row';
 import * as styles from '@/components/section/event/card/index.css';
 import { EventProductsSkeleton } from '@/components/section/event/skeleton';
+import { PATHS } from '@/const/paths';
 import { useEventProductSection } from '@/hooks/query/display/event';
 import { useResponsive } from '@/hooks/utils';
 import type { GetEventResponse } from '@/models/display/event';
@@ -55,7 +57,16 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
     const textRender = () => {
         return (
             <div className={styles.textWrapper}>
-                <p className={styles.title}>{event.label}</p>
+                <Link
+                    href={PATHS.EVENTS.DETAIL.replace(
+                        '[eventKey]',
+                        event.eventNo.toString(),
+                    )}
+                    prefetch={false}
+                >
+                    <p className={styles.title}>{event.label}</p>
+                </Link>
+
                 <p className={styles.description}>{event.promotionText}</p>
             </div>
         );
@@ -64,11 +75,19 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
     return (
         <div className={styles.container}>
             <div className={styles.imageWrapper}>
-                <img
-                    src={isMobile ? parseThumbnail.mo : parseThumbnail.pc}
-                    alt={'기획전 썸네일 이미지'}
-                    className={styles.image}
-                />
+                <Link
+                    href={PATHS.EVENTS.DETAIL.replace(
+                        '[eventKey]',
+                        event.eventNo.toString(),
+                    )}
+                    prefetch={false}
+                >
+                    <img
+                        src={isMobile ? parseThumbnail.mo : parseThumbnail.pc}
+                        alt={'기획전 썸네일 이미지'}
+                        className={styles.image}
+                    />
+                </Link>
 
                 {isMobile ? (
                     <div className={styles.fadeWrapper}>{textRender()}</div>

@@ -1,6 +1,9 @@
 import { clsx } from 'clsx';
-import * as styles from './index.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import * as styles from '@/components/event/detail/event-section-tab/index.css';
 import type { EventSection } from '@/models/display';
+import { BREAKPOINTS } from '@/styles/media';
 
 interface EventSectionTabProps {
     sectionTabList: EventSection[];
@@ -15,39 +18,65 @@ const EventSectionTab = ({
 }: EventSectionTabProps) => {
     return (
         <nav className={styles.stickyTabWrapper} aria-label='기획전 섹션 탭'>
-            <div className={styles.tabInner}>
-                <button
-                    className={clsx(
-                        styles.sectionTabButton,
-                        activeSectionNo === null &&
-                            styles.sectionTabButtonActive,
-                    )}
-                    onClick={() => onTabClick(null)}
-                    aria-pressed={activeSectionNo === null}
+            <Swiper
+                className={styles.tabInner}
+                slidesPerView='auto'
+                spaceBetween={4}
+                breakpoints={{
+                    [BREAKPOINTS.SM]: {
+                        spaceBetween: 6,
+                    },
+                }}
+            >
+                <SwiperSlide
+                    style={{
+                        width: 'auto',
+                    }}
                 >
-                    전체
-                </button>
+                    <button
+                        className={clsx(
+                            styles.sectionTabButton,
+                            activeSectionNo === null &&
+                                styles.sectionTabButtonActive,
+                        )}
+                        onClick={() => onTabClick(null)}
+                        aria-pressed={activeSectionNo === null}
+                    >
+                        전체
+                    </button>
+                </SwiperSlide>
+
                 {sectionTabList.map((tab) => {
                     return (
-                        <button
+                        <SwiperSlide
                             key={tab.sectionNo}
-                            className={clsx(
-                                styles.sectionTabButton,
-                                activeSectionNo === tab.sectionNo &&
-                                    styles.sectionTabButtonActive,
-                            )}
-                            onClick={() => onTabClick(tab.sectionNo)}
-                            aria-pressed={activeSectionNo === tab.sectionNo}
+                            style={{
+                                width: 'auto',
+                            }}
                         >
-                            {tab.label === '' && tab.imageUrl ? (
-                                <img src={tab.imageUrl} alt='섹션 탭 이미지' />
-                            ) : (
-                                <span>{tab.label}</span>
-                            )}
-                        </button>
+                            <button
+                                key={tab.sectionNo}
+                                className={clsx(
+                                    styles.sectionTabButton,
+                                    activeSectionNo === tab.sectionNo &&
+                                        styles.sectionTabButtonActive,
+                                )}
+                                onClick={() => onTabClick(tab.sectionNo)}
+                                aria-pressed={activeSectionNo === tab.sectionNo}
+                            >
+                                {tab.label === '' && tab.imageUrl ? (
+                                    <img
+                                        src={tab.imageUrl}
+                                        alt='섹션 탭 이미지'
+                                    />
+                                ) : (
+                                    <span>{tab.label}</span>
+                                )}
+                            </button>
+                        </SwiperSlide>
                     );
                 })}
-            </div>
+            </Swiper>
         </nav>
     );
 };

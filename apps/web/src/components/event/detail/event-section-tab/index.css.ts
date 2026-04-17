@@ -1,4 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 
 export const stickyTabWrapper = style({
@@ -6,6 +8,21 @@ export const stickyTabWrapper = style({
     top: 0,
     zIndex: 10,
     marginBottom: '12px',
+
+    '@media': {
+        [media.mobile]: {
+            marginLeft: '-20px',
+            width: 'calc(100% + 40px)',
+        },
+    },
+});
+
+globalStyle(`${stickyTabWrapper} .swiper`, {
+    '@media': {
+        [media.mobile]: {
+            padding: '0 20px',
+        },
+    },
 });
 
 export const tabInner = style({

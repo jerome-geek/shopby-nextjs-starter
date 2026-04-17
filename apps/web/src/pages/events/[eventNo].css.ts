@@ -1,4 +1,6 @@
 import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 
 export const pageContainer = style({
@@ -44,21 +46,19 @@ export const divisor = style({
     },
 });
 
-const MOBILE_BREAKPOINT = 768;
-
 export const productsSection = style({
-    padding: '24px 16px',
-    margin: 0,
     listStyle: 'none',
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '36px 15px',
+    padding: '40px 0 0',
+    gridTemplateColumns: 'repeat(5, 1fr)',
+    gap: '48px 25px',
+    margin: 0,
 
     '@media': {
-        [`screen and (min-width: ${MOBILE_BREAKPOINT}px)`]: {
-            padding: '40px 0 0',
-            gridTemplateColumns: 'repeat(5, 1fr)',
-            gap: '48px 25px',
+        [media.mobile]: {
+            padding: '20px 0',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '36px 15px',
         },
     },
 });
