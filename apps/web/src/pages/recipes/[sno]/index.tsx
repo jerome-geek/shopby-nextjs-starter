@@ -1,4 +1,4 @@
-import { filter, pipe, toArray } from '@fxts/core';
+import { filter, pipe, toArray, uniq } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import {
@@ -84,6 +84,7 @@ const RecipeDetailPage = ({
             ...(recipeDetailData.steps?.map((s) => s.stepImageUrl) ?? []),
         ],
         filter((img): img is string => !!img),
+        uniq,
         toArray,
     );
 

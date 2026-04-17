@@ -177,7 +177,7 @@ const RecipeWritePage = () => {
     }, [tempImages, setValue]);
 
     const {
-        createManualRecipe: { mutate: createManualRecipeMutation },
+        createManualRecipe: { mutateAsync: createManualRecipeAsync },
     } = useRecipeMutation();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -266,8 +266,6 @@ const RecipeWritePage = () => {
         }
 
         try {
-            addToast({ message: t('레시피를 등록 중입니다...') });
-
             const mainImage = tempImages.find((img) => img.sortOrder === 1);
 
             const finalData = {
@@ -275,32 +273,21 @@ const RecipeWritePage = () => {
                 thumbnailTempImageSno: mainImage?.sno ?? tempImages[0].sno,
             };
 
-            createManualRecipeMutation(
-                {
-                    data: finalData,
-                },
-                {
-                    onSuccess: (res) => {
-                        console.log('🚀 ~ onSubmit ~ res:', res);
-                        addToast({ message: t('레시피가 등록되었습니다.') });
-                        clearTempImages();
-                        router.push(`/recipes/${res.data.sno}`);
-                    },
-                    onError: (error) => {
-                        addToast({
-                            message: t(
-                                isAxiosError(error)
-                                    ? error.response?.data.message
-                                    : '알 수 없는 오류가 발생했습니다.',
-                            ),
-                            variant: 'error',
-                        });
-                    },
-                },
-            );
-        } catch {
+            const { data: responseData } = await createManualRecipeAsync({
+                data: finalData,
+            });
+            console.log('🚀 ~ onSubmit ~ responseData:', responseData);
+
+            addToast({ message: t('레시피가 등록되었습니다.') });
+            clearTempImages();
+            router.replace(`/recipes/${responseData.sno}`);
+        } catch (error) {
             addToast({
-                message: t('레시피 등록 중 오류가 발생했습니다.'),
+                message: t(
+                    isAxiosError(error)
+                        ? error.response?.data.message
+                        : '레시피 등록 중 오류가 발생했습니다.',
+                ),
                 variant: 'error',
             });
         }
