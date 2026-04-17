@@ -52,16 +52,12 @@ export default function Seo({
         <Head>
             {/* ── 기본 메타 태그 ── */}
             {title && <title>{title}</title>}
-            {description && (
-                <meta name='description' content={description} />
-            )}
+            {description && <meta name='description' content={description} />}
             {keywords && <meta name='keywords' content={keywords} />}
             {author && <meta name='author' content={author} />}
 
             {/* ── 크롤링 및 인덱싱 제어 ── */}
-            {noindex && (
-                <meta name='robots' content='noindex, nofollow' />
-            )}
+            {noindex && <meta name='robots' content='noindex, nofollow' />}
             {/* Canonical: URL 파라미터로 인한 중복 페이지 방지 */}
             {url && <link rel='canonical' href={url} />}
 
@@ -96,10 +92,7 @@ export default function Seo({
                         />
                     )}
                     {brandName && (
-                        <meta
-                            property='product:brand'
-                            content={brandName}
-                        />
+                        <meta property='product:brand' content={brandName} />
                     )}
                 </>
             )}

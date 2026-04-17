@@ -1,43 +1,23 @@
-import type { Dispatch, SetStateAction } from 'react';
-import { useEffect } from 'react';
-
 import ProductCard from '@/components/product/card';
-import { useEventProductSection } from '@/hooks/query/display/event';
+import { useEventProductSection } from '@/hooks/suspenseQuery/display/event';
+import { GetEventProductDisplaySectionParams } from '@/models/display';
 
 interface EventProductSectionProps {
     eventNo: number;
     sectionNo: number;
-    setSectionList: Dispatch<SetStateAction<number[]>>;
+    searchParams: GetEventProductDisplaySectionParams;
 }
 
 const EventProductSection = ({
     eventNo,
     sectionNo,
-    setSectionList,
+    searchParams,
 }: EventProductSectionProps) => {
     const { data } = useEventProductSection({
         eventNo,
         sectionNo,
-        searchParams: {
-            pageNumber: 1,
-            pageSize: 30,
-            order: 'ADMIN_SETTING',
-            saleStatus: 'RESERVATION_AND_ONSALE',
-            includeStopProduct: true,
-        },
+        searchParams,
     });
-
-    useEffect(() => {
-        if (!data || data.products.length === 0) {
-            return;
-        }
-        setSectionList((prev) => {
-            if (prev.includes(sectionNo)) {
-                return prev;
-            }
-            return [...prev, sectionNo];
-        });
-    }, [data, sectionNo, setSectionList]);
 
     if (!data || data.products.length === 0) {
         return null;

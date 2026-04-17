@@ -13,10 +13,6 @@ const EventSectionTab = ({
     activeSectionNo,
     onTabClick,
 }: EventSectionTabProps) => {
-    if (sectionTabList.length <= 1) {
-        return null;
-    }
-
     return (
         <nav className={styles.stickyTabWrapper} aria-label='기획전 섹션 탭'>
             <div className={styles.tabInner}>
