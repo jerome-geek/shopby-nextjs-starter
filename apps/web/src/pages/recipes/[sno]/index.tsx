@@ -60,8 +60,6 @@ const RecipeDetailPage = ({
     const { openLoginDialog } = useCustomDialog();
     const { toggleRecipeBookmark } = useBookmark();
 
-    const queryClient = useQueryClient();
-
     const isLogin = useAuth();
 
     const { data: profileData } = useProfile();

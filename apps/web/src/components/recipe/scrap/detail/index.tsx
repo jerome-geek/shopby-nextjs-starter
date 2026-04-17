@@ -1,22 +1,23 @@
-import { Bookmark, LayoutGrid, List, Plus } from 'lucide-react';
+import { Bookmark } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RecipeCard } from '@/components/recipe/card';
 import {
-    CollectionRecipeCard,
     CollectionMoreMenu,
+    CollectionRecipeCard,
 } from '@/components/collection';
+import { Grid2X2, Row2 } from '@/components/icons';
+import { RecipeCard } from '@/components/recipe/card';
+import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
-import { useDialog } from '@/hooks/utils';
-import { vars } from '@/styles/theme.css';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/scrap/index.css';
-import { PATHS } from '@/const/paths';
+import { vars } from '@/styles/theme.css';
 
 interface RecipeScrapDetailProps {
     shareCode: string;
@@ -31,7 +32,10 @@ export const RecipeScrapDetail = ({
     title,
 }: RecipeScrapDetailProps) => {
     const { t } = useTranslation();
-    const [viewMode, setViewMode] = useState<'grid' | 'details'>('details');
+
+    const { isMobile } = useResponsive();
+
+    const [viewMode, setViewMode] = useState<'grid' | 'row'>('row');
 
     const router = useRouter();
     const { openCollectionForm } = useCustomDialog();
@@ -176,16 +180,16 @@ export const RecipeScrapDetail = ({
                     <button
                         className={styles.viewToggle}
                         onClick={() =>
-                            setViewMode((v) =>
-                                v === 'details' ? 'grid' : 'details',
-                            )
+                            setViewMode((v) => (v === 'row' ? 'grid' : 'row'))
                         }
                         type='button'
                     >
                         <motion.div
                             className={styles.toggleActiveBg}
                             initial={false}
-                            animate={{ x: viewMode === 'details' ? 0 : 42 }}
+                            animate={{
+                                x: viewMode === 'row' ? 0 : isMobile ? 26 : 38,
+                            }}
                             transition={{
                                 type: 'spring',
                                 stiffness: 400,
@@ -193,22 +197,36 @@ export const RecipeScrapDetail = ({
                             }}
                         />
                         <div className={styles.toggleItem}>
-                            <List
-                                size={18}
-                                color={
-                                    viewMode === 'details'
+                            <Row2
+                                width={isMobile ? 16 : 24}
+                                height={isMobile ? 16 : 24}
+                                strokeColor={
+                                    viewMode === 'row'
+                                        ? vars.color.white
+                                        : vars.color.gray['20']
+                                }
+                                strokeWidth={1}
+                                fillColor={
+                                    viewMode === 'row'
                                         ? vars.color.black
-                                        : vars.color.gray['30']
+                                        : vars.color.gray['50']
                                 }
                             />
                         </div>
                         <div className={styles.toggleItem}>
-                            <LayoutGrid
-                                size={18}
-                                color={
+                            <Grid2X2
+                                width={isMobile ? 16 : 24}
+                                height={isMobile ? 16 : 24}
+                                strokeColor={
+                                    viewMode === 'grid'
+                                        ? vars.color.white
+                                        : vars.color.gray['20']
+                                }
+                                strokeWidth={1.5}
+                                fillColor={
                                     viewMode === 'grid'
                                         ? vars.color.black
-                                        : vars.color.gray['30']
+                                        : vars.color.gray['50']
                                 }
                             />
                         </div>

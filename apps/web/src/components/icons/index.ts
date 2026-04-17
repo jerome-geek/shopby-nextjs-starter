@@ -26,3 +26,5 @@ export { PlusIcon } from '@/components/icons/Plus';
 export { TimerIcon } from '@/components/icons/TimerIcon';
 export { PeopleIcon } from '@/components/icons/PeopleIcon';
 export { CalorieIcon } from '@/components/icons/CalorieIcon';
+export { Grid2X2 } from '@/components/icons/Grid2X2';
+export { Row2 } from '@/components/icons/Row2';

@@ -500,8 +500,8 @@ export const viewToggleArea = style({
 export const viewToggle = style({
     display: 'flex',
     backgroundColor: '#f2f5f1',
-    padding: '4px',
-    borderRadius: '100px',
+    padding: '2px',
+    borderRadius: '36px',
     gap: '2px',
     position: 'relative',
     border: '1px solid rgba(0, 0, 0, 0.02)',
@@ -517,27 +517,41 @@ export const viewToggle = style({
 });
 
 export const toggleItem = style({
-    width: '40px',
-    height: '32px',
+    width: '24px',
+    height: '24px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '100px',
+    borderRadius: '36px',
     position: 'relative',
     zIndex: 1,
     pointerEvents: 'none', // 부모 버튼의 클릭을 방해하지 않도록 처리
+
+    '@media': {
+        [media.desktop]: {
+            width: '36px',
+            height: '36px',
+        },
+    },
 });
 
 export const toggleActiveBg = style({
     position: 'absolute',
-    top: '4px',
-    left: '4px',
-    width: '40px',
-    height: '32px',
-    borderRadius: '100px',
+    top: '2px',
+    left: '2px',
+    width: '24px',
+    height: '24px',
+    borderRadius: '24px',
     backgroundColor: vars.color.white,
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
     zIndex: 0,
+
+    '@media': {
+        [media.desktop]: {
+            width: '36px',
+            height: '36px',
+        },
+    },
 });
 
 /* Recipe Detail Card */
