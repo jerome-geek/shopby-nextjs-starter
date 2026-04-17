@@ -74,50 +74,58 @@ const RecipeScrapPage = () => {
     return (
         <div className={styles.container}>
             <div className={styles.titleContainer}>
-                {!isMobile && <h1 className={styles.title}>{t('스크랩북')}</h1>}
+                <div className={styles.titleArea}>
+                    {!isMobile && (
+                        <h1 className={styles.title}>{t('스크랩북')}</h1>
+                    )}
 
-                <div
-                    role='tablist'
-                    aria-label={t('스크랩 컬렉션')}
-                    className={styles.tabList}
-                >
-                    {tabs.map((tab) => (
-                        <motion.button
-                            key={tab.shareCode}
-                            type='button'
-                            role='tab'
-                            id={`tab-${tab.shareCode}`}
-                            aria-selected={activeShareCode === tab.shareCode}
-                            aria-controls={`tabpanel-scrap`}
-                            className={styles.tabItem}
-                            data-active={activeShareCode === tab.shareCode}
-                            onClick={() => handleTabChange(tab.shareCode)}
-                            whileTap={{ scale: 0.96 }}
-                        >
-                            {activeShareCode === tab.shareCode && (
-                                <motion.div
-                                    layoutId='active-tab'
-                                    className={styles.activeIndicator}
-                                    transition={{
-                                        type: 'spring',
-                                        stiffness: 380,
-                                        damping: 30,
-                                    }}
-                                />
-                            )}
-                            <span style={{ position: 'relative', zIndex: 1 }}>
-                                {t(tab.label)}
-                            </span>
-                        </motion.button>
-                    ))}
-                    <button
-                        type='button'
-                        className={styles.addCollectionButton}
-                        onClick={openCollectionCreate}
-                        aria-label={t('컬렉션 추가')}
+                    <div
+                        role='tablist'
+                        aria-label={t('스크랩 컬렉션')}
+                        className={styles.tabList}
                     >
-                        <Plus size={16} />
-                    </button>
+                        {tabs.map((tab) => (
+                            <motion.button
+                                key={tab.shareCode}
+                                type='button'
+                                role='tab'
+                                id={`tab-${tab.shareCode}`}
+                                aria-selected={
+                                    activeShareCode === tab.shareCode
+                                }
+                                aria-controls={`tabpanel-scrap`}
+                                className={styles.tabItem}
+                                data-active={activeShareCode === tab.shareCode}
+                                onClick={() => handleTabChange(tab.shareCode)}
+                                whileTap={{ scale: 0.96 }}
+                            >
+                                {activeShareCode === tab.shareCode && (
+                                    <motion.div
+                                        layoutId='active-tab'
+                                        className={styles.activeIndicator}
+                                        transition={{
+                                            type: 'spring',
+                                            stiffness: 380,
+                                            damping: 30,
+                                        }}
+                                    />
+                                )}
+                                <span
+                                    style={{ position: 'relative', zIndex: 1 }}
+                                >
+                                    {t(tab.label)}
+                                </span>
+                            </motion.button>
+                        ))}
+                        <button
+                            type='button'
+                            className={styles.addCollectionButton}
+                            onClick={openCollectionCreate}
+                            aria-label={t('컬렉션 추가')}
+                        >
+                            <Plus size={16} />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -142,7 +150,6 @@ const RecipeScrapPage = () => {
         </div>
     );
 };
-
 
 RecipeScrapPage.getLayout = (page: React.ReactNode) => {
     return <CSRLayout>{page}</CSRLayout>;

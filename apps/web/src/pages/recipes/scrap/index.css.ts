@@ -17,6 +17,11 @@ export const container = style({
         [media.desktop]: {
             gap: '32px',
             padding: '40px 0',
+            maxWidth: '1200px',
+            margin: '0 auto',
+        },
+        [media.mobile]: {
+            padding: '24px 20px',
         },
     },
 });
@@ -33,6 +38,8 @@ export const headerTop = style({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+    maxWidth: '1200px',
+    margin: '0 auto',
 });
 
 export const headerIcons = style({
@@ -60,9 +67,24 @@ export const cartBadge = style([
 ]);
 
 export const titleContainer = style({
+    width: '100vw',
+    position: 'relative',
+    left: '50%',
+    right: '50%',
+    marginLeft: '-50vw',
+    marginRight: '-50vw',
+    borderBottom: `1px solid ${vars.color.gray['20']}`,
+    backgroundColor: vars.color.white,
+    paddingTop: '20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
+});
+
+export const titleArea = style({
+    maxWidth: '1200px',
+    width: '100%',
+    margin: '0 auto',
 });
 
 export const tabList = style({
@@ -72,6 +94,7 @@ export const tabList = style({
     padding: '12px 0',
     msOverflowStyle: 'none',
     scrollbarWidth: 'none',
+
     selectors: {
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -451,17 +474,34 @@ export const primaryButton = style([
 export const detailContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '32px',
-    marginTop: '20px',
+    gap: '60px',
+    padding: '32px 0',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '60px',
+        },
+    },
 });
 
 export const detailHeader = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    borderBottom: `1px solid ${vars.color.gray['10']}`,
-    paddingBottom: '24px',
     gap: '12px',
+});
+
+export const detailTitleContainer = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '6px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '4px',
+        },
+    },
 });
 
 export const detailTitleArea = style({
@@ -482,12 +522,12 @@ export const detailTitle = style([
 ]);
 
 export const detailSubtitle = style([
-    textStyles.headlineRegular,
+    textStyles.body2Regular,
     { color: vars.color.gray['80'] },
 ]);
 
 export const detailMeta = style([
-    textStyles.body2Regular,
+    textStyles.caption1Regular,
     { color: vars.color.gray['60'] },
 ]);
 
@@ -760,4 +800,34 @@ export const recipeLink = style({
     textDecoration: 'none',
     color: 'inherit',
     height: '100%',
+});
+
+/* Empty State */
+export const emptyContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '80px 0',
+    width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '120px 0',
+        },
+    },
+});
+
+export const emptyIconWrapper = style({
+    width: '80px',
+    height: '80px',
+    borderRadius: '24px',
+    backgroundColor: '#f2f5f1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#8da287',
+    marginBottom: '24px',
+    boxShadow: '0 8px 24px rgba(141, 162, 135, 0.12)',
+    border: '1px solid rgba(255, 255, 255, 0.6)',
+    backdropFilter: 'blur(10px)',
 });

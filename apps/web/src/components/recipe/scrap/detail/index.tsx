@@ -1,5 +1,5 @@
 import { Bookmark } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, Variants } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -80,64 +80,23 @@ export const RecipeScrapDetail = ({
         }
     };
 
-    if (!isRecipeListVisible) {
-        return (
-            <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                style={{
-                    padding: '100px 0',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '20px',
-                    textAlign: 'center',
-                }}
-            >
-                <div
-                    style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '20px',
-                        backgroundColor: '#f2f5f1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#8da287',
-                    }}
-                >
-                    <Bookmark size={32} />
-                </div>
-                <div>
-                    <h3 className={styles.headingBold}>{t(title)}</h3>
-                    <p
-                        className={styles.body2Regular}
-                        style={{
-                            color: vars.color.gray['40'],
-                            marginTop: '8px',
-                        }}
-                    >
-                        {t('아직 스크랩된 아이템이 없습니다.')}
-                        <br />
-                        {t('마음에 드는 레시피를 담아보세요!')}
-                    </p>
-                </div>
-                <button
-                    className={styles.primaryButton}
-                    style={{
-                        width: 'auto',
-                        padding: '14px 32px',
-                        marginTop: '20px',
-                    }}
-                    type='button'
-                >
-                    {t('탐색하러 가기')}
-                </button>
-            </motion.div>
-        );
-    }
+    const containerVariants: Variants = {
+        initial: { opacity: 0, y: 10 },
+        animate: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                staggerChildren: 0.1,
+                ease: [0.16, 1, 0.3, 1],
+            },
+        },
+    };
+
+    const itemVariants: Variants = {
+        initial: { opacity: 0, y: 15 },
+        animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    };
 
     return (
         <motion.div
@@ -148,13 +107,7 @@ export const RecipeScrapDetail = ({
         >
             <div className={styles.detailHeader}>
                 <div className={styles.detailTitleArea}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                        }}
-                    >
+                    <div className={styles.detailTitleContainer}>
                         <h2 className={styles.detailTitle}>
                             {t(sharedCollectionData?.title || title)}
                         </h2>
@@ -171,8 +124,7 @@ export const RecipeScrapDetail = ({
                     </p>
 
                     <p className={styles.detailMeta}>
-                        By {sharedCollectionData?.memberName} ·{' '}
-                        {recipeList.length}개
+                        {`By ${sharedCollectionData?.memberName} · ${recipeList.length}개`}
                     </p>
                 </div>
 
@@ -234,23 +186,85 @@ export const RecipeScrapDetail = ({
                 </div>
             </div>
 
-            <ul
-                className={
-                    viewMode === 'grid'
-                        ? styles.recipeGrid
-                        : styles.recipeDetailGrid
-                }
-            >
-                {recipeList.map((recipe) => (
-                    <li key={recipe.sno}>
-                        {viewMode === 'grid' ? (
-                            <RecipeCard recipe={recipe} />
-                        ) : (
-                            <CollectionRecipeCard recipe={recipe} />
-                        )}
-                    </li>
-                ))}
-            </ul>
+            {isRecipeListVisible ? (
+                <ul
+                    className={
+                        viewMode === 'grid'
+                            ? styles.recipeGrid
+                            : styles.recipeDetailGrid
+                    }
+                >
+                    {recipeList.map((recipe) => (
+                        <li key={recipe.sno}>
+                            {viewMode === 'grid' ? (
+                                <RecipeCard recipe={recipe} />
+                            ) : (
+                                <CollectionRecipeCard recipe={recipe} />
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <motion.div
+                    variants={containerVariants}
+                    initial='initial'
+                    animate='animate'
+                    className={styles.emptyContainer}
+                >
+                    <motion.div
+                        variants={itemVariants}
+                        className={styles.emptyIconWrapper}
+                    >
+                        <Bookmark size={32} />
+                    </motion.div>
+
+                    <motion.div
+                        variants={itemVariants}
+                        style={{ textAlign: 'center' }}
+                    >
+                        <h3
+                            className={styles.headingBold}
+                            style={{
+                                fontSize: '20px',
+                                letterSpacing: '-0.02em',
+                            }}
+                        >
+                            {t('아직 담긴 레시피가 없어요')}
+                        </h3>
+                        <p
+                            className={styles.body2Regular}
+                            style={{
+                                color: vars.color.gray['40'],
+                                marginTop: '12px',
+                                lineHeight: '1.6',
+                            }}
+                        >
+                            {t('원하는 레시피를 찾아 스크랩하고')}
+                            <br />
+                            {t('나만의 맛있는 컬렉션을 완성해 보세요!')}
+                        </p>
+                    </motion.div>
+
+                    <motion.button
+                        variants={itemVariants}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={styles.primaryButton}
+                        style={{
+                            width: 'auto',
+                            padding: '16px 40px',
+                            marginTop: '12px',
+                            borderRadius: '16px',
+                            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)',
+                        }}
+                        type='button'
+                        // TODO:어떤 페이지로 이동할지 체크 필요
+                        onClick={() => router.push(PATHS.RECIPES.MAIN)}
+                    >
+                        {t('탐색하러 가기')}
+                    </motion.button>
+                </motion.div>
+            )}
         </motion.div>
     );
 };
