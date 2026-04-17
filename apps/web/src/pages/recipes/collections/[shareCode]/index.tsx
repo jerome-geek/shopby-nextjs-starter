@@ -1,3 +1,4 @@
+import { filter, map, pipe, take, toArray } from '@fxts/core';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { Bookmark, BookmarkCheck, Heart, Share2, Users } from 'lucide-react';
 import type {
@@ -7,6 +8,7 @@ import type {
 } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,7 +24,6 @@ import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/collections/[shareCode]/index.css';
-import { useRouter } from 'next/router';
 
 // --- 컬렉션 상세 (데이터 연동) ---
 const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
@@ -35,7 +36,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
     const router = useRouter();
 
-    const { data: collection } = useSharedCollection({ shareCode });
+    const { data: sharedCollectionData } = useSharedCollection({ shareCode });
 
     const {
         bookmarkCollection: { mutate: bookmarkCollectionMutate },
@@ -50,7 +51,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
     const handleShare = async () => {
         const url = window.location.href;
         if (navigator.share) {
-            await navigator.share({ title: collection.title, url });
+            await navigator.share({ title: sharedCollectionData.title, url });
         } else {
             await navigator.clipboard.writeText(url);
             addToast({
@@ -127,21 +128,21 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
         }
     };
 
-    const recipes = collection.recipes ?? [];
+    const recipes = sharedCollectionData.recipes ?? [];
 
-    // collection.recipes가 있으면 해당 썸네일을 사용하고, 없으면 recipeImageUrls를 사용합니다.
-    const previewImages =
-        recipes.length > 0
-            ? recipes
-                  .map((r) => r.thumbnailUrl)
-                  .filter((url): url is string => !!url)
-                  .slice(0, 3)
-            : (collection.recipeImageUrls?.slice(0, 3) ?? []);
+    // sharedCollectionData.recipes가 있으면 해당 썸네일을 사용하고, 없으면 recipeImageUrls를 사용합니다.
+    const previewImages = pipe(
+        recipes,
+        map((r) => r.thumbnailUrl),
+        filter((url): url is string => !!url),
+        take(3),
+        toArray,
+    );
 
     const hasImages = previewImages.length > 0;
 
     const { data: profileData } = useProfile();
-    const isEditable = collection.memberNo === profileData?.memberNo;
+    const isEditable = sharedCollectionData.memberNo === profileData?.memberNo;
 
     const {
         remove: { mutateAsync: removeCollectionMutateAsync },
@@ -149,7 +150,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
     const handleEditCollection = () => {
         openCollectionForm({
-            shareCode: collection.shareCode,
+            shareCode: sharedCollectionData.shareCode,
         });
     };
 
@@ -159,7 +160,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
         }
 
         const isAgree = await openAsyncDialog({
-            message: `${collection.title} 컬렉션을 삭제하시겠습니까?`,
+            message: `${sharedCollectionData.title} 컬렉션을 삭제하시겠습니까?`,
             onConfirmReturnValue: true,
             onCloseReturnValue: false,
         });
@@ -171,12 +172,12 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
         try {
             await removeCollectionMutateAsync({
-                collectionSno: collection.sno,
+                collectionSno: sharedCollectionData.sno,
             });
 
             addToast({
                 variant: 'success',
-                message: `${collection.title} 컬렉션이 삭제되었습니다.`,
+                message: `${sharedCollectionData.title} 컬렉션이 삭제되었습니다.`,
             });
 
             router.replace(PATHS.RECIPES.SCRAP);
@@ -188,12 +189,12 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
     return (
         <>
             <Head>
-                <title>{collection.title} | JollyPot</title>
+                <title>{sharedCollectionData.title} | JollyPot</title>
                 <meta
                     name='description'
                     content={
-                        collection.description ??
-                        `${collection.memberName ?? ''}님의 레시피 컬렉션`
+                        sharedCollectionData.description ??
+                        `${sharedCollectionData.memberName ?? ''}님의 레시피 컬렉션`
                     }
                 />
             </Head>
@@ -208,7 +209,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                                 <img
                                     src={previewImages[0]}
                                     className={styles.collageMain}
-                                    alt={collection.title}
+                                    alt={sharedCollectionData.title}
                                 />
                                 {previewImages[1] && (
                                     <img
@@ -241,7 +242,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
                         <div className={styles.titleWrapper}>
                             <h1 className={styles.collectionTitle}>
-                                {collection.title}
+                                {sharedCollectionData.title}
                             </h1>
 
                             {isEditable && (
@@ -252,9 +253,9 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             )}
                         </div>
 
-                        {collection.description && (
+                        {sharedCollectionData.description && (
                             <p className={styles.collectionDescription}>
-                                {collection.description}
+                                {sharedCollectionData.description}
                             </p>
                         )}
 
@@ -262,14 +263,15 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             <span className={styles.metaItem}>
                                 <Users size={14} />
                                 <span className={styles.metaItemStrong}>
-                                    {collection.memberName ?? t('익명')}
+                                    {sharedCollectionData.memberName ??
+                                        t('익명')}
                                 </span>
                             </span>
                             <span className={styles.divider}>·</span>
                             <span className={styles.metaItem}>
                                 {t('레시피')}{' '}
                                 <span className={styles.metaItemStrong}>
-                                    {collection.recipeCount}
+                                    {sharedCollectionData.recipes.length || 0}
                                 </span>
                                 {t('개')}
                             </span>
@@ -277,7 +279,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             <span className={styles.metaItem}>
                                 <Bookmark size={14} />
                                 <span className={styles.metaItemStrong}>
-                                    {collection.bookmarkCount}
+                                    {sharedCollectionData.bookmarkCount}
                                 </span>
                             </span>
                         </div>
@@ -285,21 +287,23 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                         <div className={styles.actionRow}>
                             <button
                                 className={styles.bookmarkButton}
-                                data-bookmarked={collection.bookmarked}
+                                data-bookmarked={
+                                    sharedCollectionData.bookmarked
+                                }
                                 onClick={() =>
                                     handleBookmarkCollection(
-                                        collection.sno,
-                                        collection.bookmarked,
+                                        sharedCollectionData.sno,
+                                        sharedCollectionData.bookmarked,
                                     )
                                 }
                                 id='btn-bookmark-collection'
                             >
-                                {collection.bookmarked ? (
+                                {sharedCollectionData.bookmarked ? (
                                     <BookmarkCheck size={18} />
                                 ) : (
                                     <Bookmark size={18} />
                                 )}
-                                {collection.bookmarked
+                                {sharedCollectionData.bookmarked
                                     ? t('북마크됨')
                                     : t('컬렉션 북마크')}
                             </button>
@@ -322,7 +326,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                         <h2 className={styles.sectionTitle}>
                             {t('레시피 목록')}
                             <span className={styles.recipeCount}>
-                                {collection.recipeCount}
+                                {sharedCollectionData.recipes.length || 0}
                             </span>
                         </h2>
                     </div>

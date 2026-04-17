@@ -3,13 +3,13 @@ import type { AxiosRequestConfig } from 'axios';
 import { geekRequest } from '@/api/core/geekRequest';
 import type {
     CollectionExposureGroupResponse,
-    GetCollectionListResponse,
     CreateCollectionData,
+    GetBookmarkedCollectionListResponse,
+    GetCollectionListResponse,
+    GetSharedRecipeCollectionResponse,
+    SearchCollectionsResponse,
     SearchPublicCollectionParams,
     UpdateCollectionRequest,
-    SearchCollectionsResponse,
-    SharedRecipeCollection,
-    GetBookmarkedCollectionListResponse,
 } from '@/models/shop/collection';
 import type { CollectionBookmarkResponse } from '@/models/shop/recipe';
 
@@ -73,7 +73,7 @@ const collection = {
      * 공유 컬렉션 상세 조회
      */
     getShared: (shareCode: string, options?: AxiosRequestConfig) => {
-        return geekRequest<SharedRecipeCollection>({
+        return geekRequest<GetSharedRecipeCollectionResponse>({
             method: 'GET',
             url: `/shop/recipe/collections/shared/${shareCode}`,
             ...options,

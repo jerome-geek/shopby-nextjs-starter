@@ -3,12 +3,17 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
+import { CollectionMoreMenu } from '@/components/collection';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
 import * as styles from '@/components/recipe/scrap/summary/index.css';
 import { PATHS } from '@/const/paths';
+import { useCollectionMutation } from '@/hooks/mutations';
+import { useProfile } from '@/hooks/query/member/profile';
 import { useCollectionList } from '@/hooks/query/shop/collection';
+import useBookmark from '@/hooks/recipe/useBookmark';
 import { useCustomDialog } from '@/hooks/ui';
+import { useDialog } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
 /**
@@ -16,9 +21,41 @@ import { vars } from '@/styles/theme.css';
  */
 const RecipeScrapSummary = () => {
     const { t } = useTranslation();
-    const { openCollectionCreate } = useCustomDialog();
-    const { data: collections = [] } = useCollectionList();
-    console.log('🚀 ~ RecipeScrapSummary ~ collections:', collections);
+
+    const { openAsyncDialog } = useDialog();
+    const { openCollectionCreate, openCollectionForm } = useCustomDialog();
+
+    const { data: profileData } = useProfile();
+    const { data: collectionListData = [] } = useCollectionList();
+    console.log(
+        '🚀 ~ RecipeScrapSummary ~ collectionListData:',
+        collectionListData,
+    );
+    const { toggleCollectionBookmark } = useBookmark();
+
+    const {
+        remove: { mutateAsync: removeCollectionMutateAsync },
+    } = useCollectionMutation();
+
+    const handleEditCollection = (shareCode: string) => {
+        openCollectionForm({ shareCode });
+    };
+
+    const handleDeleteCollection = async (sno: number) => {
+        const isAgree = await openAsyncDialog({
+            message: t('정말로 이 컬렉션을 삭제하시겠습니까?'),
+            type: 'confirm',
+            confirmText: t('삭제'),
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (isAgree) {
+            await removeCollectionMutateAsync({
+                collectionSno: sno,
+            });
+        }
+    };
 
     return (
         <motion.div
@@ -33,7 +70,7 @@ const RecipeScrapSummary = () => {
                 <h2 className={styles.sectionTitle}>{t('컬렉션')}</h2>
 
                 <div className={styles.collectionGrid}>
-                    {collections.map((c) => (
+                    {collectionListData.map((c) => (
                         <motion.div key={c.sno} whileHover={{ y: -8 }}>
                             <Link
                                 href={PATHS.RECIPES.COLLECTIONS.replace(
@@ -42,32 +79,94 @@ const RecipeScrapSummary = () => {
                                 )}
                                 className={styles.collectionCard}
                             >
-                                <div className={styles.collagePlaceholder}>
-                                    <Bookmark
-                                        size={32}
-                                        fill={vars.color.green['80']}
-                                        color={vars.color.green['80']}
-                                    />
-                                </div>
+                                {c.recipeImageUrls &&
+                                c.recipeImageUrls.length > 0 ? (
+                                    <div className={styles.collageGrid}>
+                                        {c.recipeImageUrls
+                                            .slice(0, 5)
+                                            .map((url, idx) => (
+                                                <img
+                                                    key={idx}
+                                                    src={url}
+                                                    className={
+                                                        styles.collageImage
+                                                    }
+                                                    alt={`${c.title} ${idx}`}
+                                                />
+                                            ))}
+                                    </div>
+                                ) : (
+                                    <div className={styles.collagePlaceholder}>
+                                        <Bookmark
+                                            size={32}
+                                            fill={vars.color.green['80']}
+                                            color={vars.color.green['80']}
+                                        />
+                                    </div>
+                                )}
                                 <div className={styles.collectionInfo}>
                                     <div className={styles.collectionTitleArea}>
                                         <h3 className={styles.collectionTitle}>
                                             {c.title}
                                         </h3>
-                                        <Bookmark
-                                            size={18}
-                                            fill={vars.color.green['80']}
-                                            color={vars.color.green['80']}
-                                        />
+                                        <p className={styles.collectionDesc}>
+                                            {c.description}
+                                        </p>
+                                        <p className={styles.collectionFooter}>
+                                            By {c.memberName || t('나')} ·{' '}
+                                            {c.recipeCount}
+                                            {t('개')}
+                                        </p>
                                     </div>
-                                    <p className={styles.collectionDesc}>
-                                        {c.description}
-                                    </p>
-                                    <p className={styles.collectionFooter}>
-                                        By {c.memberName || t('나')} ·{' '}
-                                        {c.recipeCount}
-                                        {t('개')}
-                                    </p>
+
+                                    <div className={styles.buttonContainer}>
+                                        {profileData?.memberNo ===
+                                            c.memberNo && (
+                                            <CollectionMoreMenu
+                                                onEdit={() =>
+                                                    handleEditCollection(
+                                                        c.shareCode,
+                                                    )
+                                                }
+                                                onDelete={() =>
+                                                    handleDeleteCollection(
+                                                        c.sno,
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                        <button
+                                            type='button'
+                                            className={styles.bookmarkButton}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                toggleCollectionBookmark({
+                                                    sno: c.sno,
+                                                    bookmarked: c.bookmarked,
+                                                });
+                                            }}
+                                        >
+                                            <Bookmark
+                                                size={24}
+                                                strokeWidth={1.5}
+                                                fill={
+                                                    c.bookmarked
+                                                        ? vars.color.green[
+                                                              '100'
+                                                          ]
+                                                        : 'none'
+                                                }
+                                                color={
+                                                    c.bookmarked
+                                                        ? vars.color.green[
+                                                              '100'
+                                                          ]
+                                                        : vars.color.gray['40']
+                                                }
+                                            />
+                                        </button>
+                                    </div>
                                 </div>
                             </Link>
                         </motion.div>

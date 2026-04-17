@@ -1,6 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Bookmark, EllipsisVertical, Heart } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +24,14 @@ export const CollectionMoreMenu = ({
     return (
         <DropdownMenu.Root open={open} onOpenChange={setOpen}>
             <DropdownMenu.Trigger asChild>
-                <button className={styles.moreButton} aria-label={t('더보기')}>
+                <button
+                    className={styles.moreButton}
+                    aria-label={t('더보기')}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }}
+                >
                     <EllipsisVertical size={20} />
                 </button>
             </DropdownMenu.Trigger>
@@ -47,11 +54,13 @@ export const CollectionMoreMenu = ({
                                     damping: 20,
                                     stiffness: 300,
                                 }}
+                                onClick={(e) => e.stopPropagation()}
                             >
                                 <DropdownMenu.Item
                                     className={styles.dropdownItem}
                                     onSelect={(e) => {
                                         e.preventDefault();
+                                        e.stopPropagation();
                                         setOpen(false);
                                         onEdit();
                                     }}
@@ -63,6 +72,7 @@ export const CollectionMoreMenu = ({
                                     data-variant='danger'
                                     onSelect={(e) => {
                                         e.preventDefault();
+                                        e.stopPropagation();
                                         setOpen(false);
                                         onDelete();
                                     }}

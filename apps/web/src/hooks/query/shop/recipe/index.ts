@@ -3,6 +3,7 @@ import usePublicRecipeSearch from '@/hooks/query/shop/recipe/usePublicRecipeSear
 import useRecipeDetail from '@/hooks/query/shop/recipe/useRecipeDetail';
 import useRecipeExposureGroup from '@/hooks/query/shop/recipe/useRecipeExposureGroup';
 import useSearchMyRecipeList from '@/hooks/query/shop/recipe/useSearchMyRecipeList';
+import useSharedCollection from '@/hooks/query/shop/recipe/useSharedCollection';
 
 export {
     useInfinitePublicRecipeSearch,
@@ -10,4 +11,5 @@ export {
     useRecipeDetail,
     useRecipeExposureGroup,
     useSearchMyRecipeList,
+    useSharedCollection,
 };

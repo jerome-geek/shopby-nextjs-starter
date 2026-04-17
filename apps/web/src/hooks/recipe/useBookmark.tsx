@@ -75,6 +75,9 @@ const useBookmark = () => {
                             queryClient.invalidateQueries({
                                 queryKey: collectionKeys.publicSearches(),
                             });
+                            queryClient.invalidateQueries({
+                                queryKey: collectionKeys.list(),
+                            });
                             addToast({
                                 message: t('북마크를 취소했습니다.'),
                                 variant: 'success',
@@ -89,6 +92,9 @@ const useBookmark = () => {
                         onSuccess: () => {
                             queryClient.invalidateQueries({
                                 queryKey: collectionKeys.publicSearches(),
+                            });
+                            queryClient.invalidateQueries({
+                                queryKey: collectionKeys.list(),
                             });
                             addToast({
                                 message: t('북마크를 추가했습니다.'),

@@ -1,7 +1,4 @@
-import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { collection } from '@/api/shop';
@@ -11,7 +8,7 @@ import type { GetSharedRecipeCollectionResponse } from '@/models/shop/collection
 interface UseSharedCollectionParams<T = GetSharedRecipeCollectionResponse> {
     shareCode: string;
     options?: Omit<
-        UseSuspenseQueryOptions<
+        UseQueryOptions<
             GetSharedRecipeCollectionResponse,
             AxiosError,
             T,
@@ -25,7 +22,7 @@ const useSharedCollection = <T = GetSharedRecipeCollectionResponse>({
     shareCode,
     options,
 }: UseSharedCollectionParams<T>) => {
-    return useSuspenseQuery({
+    return useQuery({
         queryKey: collectionKeys.detail(shareCode),
         queryFn: async () => {
             const { data } = await collection.getShared(shareCode);

@@ -9,7 +9,16 @@ export interface CreateCollectionData {
     description?: string;
 }
 
-export interface SharedRecipeCollection extends RecipeCollection {
+export interface GetSharedRecipeCollectionResponse {
+    sno: number;
+    title: string;
+    description: string;
+    shareCode: string;
+    memberNo: number;
+    memberName: string;
+    isDefault: boolean;
+    bookmarked: boolean;
+    bookmarkCount: number;
     recipes: GetRecipeDetailResponse[];
 }
 

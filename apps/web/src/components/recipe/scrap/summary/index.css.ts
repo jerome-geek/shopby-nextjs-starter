@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const headingBold = textStyles.headingBold;
 export const body2Semibold = textStyles.body2Semibold;
@@ -166,18 +166,11 @@ export const collectionGrid = style({
     gap: '16px',
     '@media': {
         [media.desktop]: {
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
             gap: '24px',
         },
     },
 });
-
-export const collectionTitle = style([
-    textStyles.headlineMedium,
-    {
-        color: vars.color.gray['90'],
-    },
-]);
 
 export const collectionCard = style({
     display: 'block',
@@ -198,48 +191,57 @@ export const collectionCard = style({
 });
 
 export const collageGrid = style({
-    display: 'grid',
-    gridTemplateColumns: '1.5fr 1fr',
-    gridTemplateRows: 'repeat(2, 80px)',
-    gap: '2px',
+    display: 'flex',
+    width: '100%',
+    height: '110px',
+    backgroundColor: vars.color.gray['10'],
     '@media': {
         [media.desktop]: {
-            gridTemplateRows: 'repeat(2, 100px)',
+            height: '130px',
+        },
+    },
+});
+
+export const collageImage = style({
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    objectFit: 'cover',
+    borderRight: `1px solid ${vars.color.white}`,
+    selectors: {
+        '&:last-child': {
+            borderRight: 'none',
         },
     },
 });
 
 export const collagePlaceholder = style({
-    height: '160px',
+    height: '110px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: vars.color.green['40'],
     '@media': {
         [media.desktop]: {
-            height: '200px',
+            height: '130px',
         },
     },
-});
-
-export const collageMain = style({
-    gridRow: '1 / span 2',
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
-export const collageSub = style({
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
 });
 
 export const collectionInfo = style({
     padding: '16px',
     display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+});
+
+export const collectionTitleArea = style({
+    flex: 1,
+    minWidth: 0,
+    overflow: 'hidden', // 텍스트가 아이콘 영역을 절대 침범하지 못하도록 함
+    display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '8px',
 
     '@media': {
         [media.desktop]: {
@@ -248,16 +250,25 @@ export const collectionInfo = style({
     },
 });
 
-export const collectionTitleArea = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-});
+export const collectionTitle = style([
+    textStyles.headlineMedium,
+    {
+        color: vars.color.gray['90'],
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        width: '100%',
+    },
+]);
 
 export const collectionDesc = style([
     textStyles.body1Regular,
     {
         color: vars.color.gray['80'],
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        width: '100%',
     },
 ]);
 
@@ -265,8 +276,41 @@ export const collectionFooter = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['60'],
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
 ]);
+
+export const buttonContainer = style({
+    display: 'flex',
+    gap: '2px',
+    flexShrink: 0, // 아이콘 영역이 좁아지는 것을 절대 방지
+    marginLeft: '12px',
+    alignItems: 'center',
+    '@media': {
+        [media.desktop]: {
+            gap: '4px',
+        },
+    },
+});
+
+export const bookmarkButton = style({
+    background: 'none',
+    border: 'none',
+    padding: '4px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'transform 0.2s ease',
+    zIndex: 2,
+    selectors: {
+        '&:active': {
+            transform: 'scale(0.9)',
+        },
+    },
+});
 
 export const createButton = style([
     textStyles.headingSemibold,
