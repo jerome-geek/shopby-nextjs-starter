@@ -1,6 +1,8 @@
 import { each, join, map, pipe, toArray } from '@fxts/core';
+import { isAxiosError } from 'axios';
 import { Image as ImageIcon } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/comment-section/index.css';
@@ -12,10 +14,13 @@ import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import useFileUpload from '@/hooks/utils/useFileUpload';
-import { isAxiosError } from 'axios';
 
 interface CommentInputProps {
     recipeSno: number;
+}
+
+interface CommentForm {
+    comment: string;
 }
 
 export const CommentInput = ({ recipeSno }: CommentInputProps) => {
@@ -26,7 +31,14 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
     const { addToast } = useToast();
     const { openLoginDialog, openImageDetail } = useCustomDialog();
 
-    const [commentText, setCommentText] = useState('');
+    const { register, handleSubmit, reset, watch, formState } =
+        useForm<CommentForm>({
+            defaultValues: {
+                comment: '',
+            },
+        });
+
+    const commentValue = watch('comment');
 
     const {
         uploadFile,
@@ -64,7 +76,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
         };
     }, [previewUrls]);
 
-    const handleSubmit = async () => {
+    const onSubmit = handleSubmit(async (data) => {
         if (!isLogin) {
             addToast({
                 message: t('로그인 후 이용 가능합니다.'),
@@ -73,7 +85,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
             return;
         }
 
-        if (!commentText.trim()) {
+        if (!data.comment.trim()) {
             addToast({
                 message: t('댓글 내용을 입력해주세요.'),
                 variant: 'error',
@@ -109,7 +121,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
                 data: {
                     contentType: 'BOARD',
                     contentSno: recipeSno,
-                    comment: commentText,
+                    comment: data.comment,
                     memberId: profileData.memberId,
                     memberNo: profileData.memberNo,
                     attachment,
@@ -117,7 +129,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
             });
 
             // 3. 전체 성공 시 UI 초기화 및 토스트 출력
-            setCommentText('');
+            reset();
             setUploadFile([]);
             addToast({
                 message: t('댓글이 등록되었습니다.'),
@@ -140,7 +152,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
                 variant: 'error',
             });
         }
-    };
+    });
 
     return (
         <div className={styles.commentInputArea}>
@@ -173,8 +185,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
                         ? t('댓글을 남겨주세요.')
                         : t('로그인 후 이용 가능합니다.')
                 }
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
+                {...register('comment')}
                 onClick={handleTextAreaClick}
                 readOnly={!isLogin}
             />
@@ -198,12 +209,13 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
                 </label>
                 <button
                     className={styles.submitButton}
-                    onClick={handleSubmit}
+                    onClick={onSubmit}
                     disabled={
                         !isLogin ||
                         createComment.isPending ||
                         upload.isPending ||
-                        commentText === ''
+                        !commentValue ||
+                        !commentValue.trim()
                     }
                 >
                     {t('등록하기')}

@@ -1,5 +1,5 @@
 import { filter, pipe, toArray } from '@fxts/core';
-import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import {
     Bookmark,
@@ -33,9 +33,9 @@ import {
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { recipeKeys } from '@/hooks/queryKeys';
+import { useBookmark } from '@/hooks/recipe';
 import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog, useToast } from '@/hooks/ui';
-import { useBookmark } from '@/hooks/recipe';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
@@ -134,6 +134,8 @@ const RecipeDetailPage = ({
         }
     };
 
+    const isSwiperEnabled = imageList.length > 1;
+
     return (
         <div className={styles.container}>
             <Head>
@@ -146,6 +148,7 @@ const RecipeDetailPage = ({
                     <div className={styles.imageCarousel}>
                         <Swiper
                             modules={[Pagination]}
+                            enabled={isSwiperEnabled}
                             pagination={{
                                 clickable: true,
                                 el: '.recipe-thumbnail-pagination',
@@ -165,23 +168,32 @@ const RecipeDetailPage = ({
                                 </SwiperSlide>
                             ))}
                         </Swiper>
-
-                        <button
-                            className={`${styles.carouselNavButton} ${styles.carouselNavPrev}`}
-                            onClick={() => swiperRef.current?.slidePrev()}
-                            aria-label='이전 이미지'
-                        >
-                            <ChevronLeft size={24} strokeWidth={2} />
-                        </button>
-                        <button
-                            className={`${styles.carouselNavButton} ${styles.carouselNavNext}`}
-                            onClick={() => swiperRef.current?.slideNext()}
-                            aria-label='다음 이미지'
-                        >
-                            <ChevronRight size={24} strokeWidth={2} />
-                        </button>
+                        {isSwiperEnabled && (
+                            <>
+                                <button
+                                    className={`${styles.carouselNavButton} ${styles.carouselNavPrev}`}
+                                    onClick={() =>
+                                        swiperRef.current?.slidePrev()
+                                    }
+                                    aria-label='이전 이미지'
+                                >
+                                    <ChevronLeft size={24} strokeWidth={2} />
+                                </button>
+                                <button
+                                    className={`${styles.carouselNavButton} ${styles.carouselNavNext}`}
+                                    onClick={() =>
+                                        swiperRef.current?.slideNext()
+                                    }
+                                    aria-label='다음 이미지'
+                                >
+                                    <ChevronRight size={24} strokeWidth={2} />
+                                </button>
+                            </>
+                        )}
                     </div>
-                    <div className='recipe-thumbnail-pagination' />
+                    {isSwiperEnabled && (
+                        <div className='recipe-thumbnail-pagination' />
+                    )}
                 </div>
 
                 <div className={styles.headerInfo}>
