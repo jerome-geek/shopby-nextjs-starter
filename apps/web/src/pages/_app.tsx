@@ -1,3 +1,4 @@
+import { includes } from '@fxts/core';
 import {
     HydrationBoundary,
     QueryClient,
@@ -6,6 +7,7 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { HttpStatusCode, isAxiosError } from 'axios';
 import { ReactLenis } from 'lenis/react';
 import { AnimatePresence, motion } from 'motion/react';
 import type { NextPage } from 'next';
@@ -15,12 +17,11 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { type ReactElement, type ReactNode, useMemo, useState } from 'react';
 import { Toaster } from 'sonner';
-import { HttpStatusCode, isAxiosError } from 'axios';
 
 import { ExternalScripts } from '@/components/common';
 import { DefaultLayout } from '@/components/layout';
-import { AppProviders } from '@/providers';
 import { env } from '@/configs/env';
+import { AppProviders } from '@/providers';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
@@ -53,12 +54,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                                 return false;
                             }
 
-                            if (
-                                isAxiosError(error) &&
-                                error.response?.status ===
-                                    HttpStatusCode.BadRequest
-                            ) {
-                                return false;
+                            if (isAxiosError(error)) {
+                                const status = error.response?.status;
+                                if (
+                                    includes(status, [
+                                        HttpStatusCode.BadRequest,
+                                        HttpStatusCode.NotFound,
+                                        HttpStatusCode.Forbidden,
+                                        HttpStatusCode.Unauthorized,
+                                    ])
+                                ) {
+                                    return false;
+                                }
                             }
 
                             // AbortError는 재시도하지 않음
