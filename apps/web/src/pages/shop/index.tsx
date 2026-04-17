@@ -26,22 +26,14 @@ export default function ShopMain() {
             </section>
 
             {/* 라이프 타임특가 */}
-            <TimeSale
-                sectionId='TIMESALE-LIFE'
-                title='오늘만 특가'
-                buttonLabel='라이프 타임특가 더보기'
-            />
+            <TimeSale title='라이프 타임특가' type='LIFE' />
 
             {/* 영상(기획전) */}
             <Event index={1} />
 
             {/* 키즈 타임특가 */}
             <LazyRender minHeight={400}>
-                <TimeSale
-                    sectionId='TIMESALE-KIDS'
-                    title='오늘만 특가'
-                    buttonLabel='키즈 타임특가 더보기'
-                />
+                <TimeSale title='키즈 타임특가' type='KIDS' />
             </LazyRender>
 
             {/* 영상(기획전) */}

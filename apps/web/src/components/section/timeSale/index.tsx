@@ -2,25 +2,27 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { memo, useMemo } from 'react';
 
-import { ProductCard, CountdownTimer } from '@/components/product';
+import { CountdownTimer, ProductCard } from '@/components/product';
+import * as styles from '@/components/section/timeSale/index.css';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
 import type { ImageUrlType } from '@/models/product';
-import * as styles from '@/components/section/timeSale/index.css';
 
 interface TimeSaleProps {
-    sectionId?: string;
     title?: string;
     subtitle?: string;
-    buttonLabel?: string;
+    type?: 'KIDS' | 'LIFE';
 }
 
 export const TimeSale = memo(
     ({
-        sectionId = 'TIMESALE-LIFE',
         title = '오늘만 특가',
         subtitle = '매일 오전 10시 새 업데이트',
-        buttonLabel = '라이프 타임특가 더보기',
+        type = 'KIDS',
     }: TimeSaleProps) => {
+        const sectionId = type === 'KIDS' ? 'TIMESALE_KIDS' : 'TIMESALE_LIFE';
+        const buttonLabel =
+            type === 'KIDS' ? '키즈 타임특가 더보기' : '라이프 타임특가 더보기';
+
         const { data: productSectionProductListData } =
             useProductSectionProductList({
                 sectionId,

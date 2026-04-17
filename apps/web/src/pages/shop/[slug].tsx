@@ -2,9 +2,9 @@ import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 
 import { HeroBanner } from '@/components/banner/hero';
-import * as styles from '@/styles/Home.css';
-import SectionGroup from '@/components/section/group';
 import IconBanner from '@/components/banner/icon';
+import SectionGroup from '@/components/section/group';
+import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
     ssr: false,
@@ -32,18 +32,7 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
                 <IconBanner type={heroBannerType} />
             </section>
 
-            {/* 라이프 타임특가 */}
-            <TimeSale
-                sectionId={
-                    type === SHOP_TYPES.LIFE ? 'TIMESALE-LIFE' : 'TIMESALE-KIDS'
-                }
-                title='오늘만 특가'
-                buttonLabel={
-                    type === SHOP_TYPES.LIFE
-                        ? '라이프 타임특가 더보기'
-                        : '키즈 타임특가 더보기'
-                }
-            />
+            <TimeSale type={heroBannerType} title={'오늘만 특가'} />
 
             {/* 기획전 및 상품진열 그룹 */}
             <SectionGroup />

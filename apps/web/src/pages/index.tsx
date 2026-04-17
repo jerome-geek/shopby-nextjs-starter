@@ -50,11 +50,7 @@ export default function Home() {
 
                 {/* 라이프 타임특가 */}
                 <LazyRender minHeight={400}>
-                    <TimeSale
-                        sectionId='TIMESALE-LIFE'
-                        title='오늘만 특가'
-                        buttonLabel='라이프 타임특가 더보기'
-                    />
+                    <TimeSale type='LIFE' title='라이프 타임특가' />
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -63,11 +59,7 @@ export default function Home() {
 
                 {/* 키즈 타임특가 */}
                 <LazyRender minHeight={400}>
-                    <TimeSale
-                        sectionId='TIMESALE-KIDS'
-                        title='키즈 타임특가'
-                        buttonLabel='키즈 타임특가 더보기'
-                    />
+                    <TimeSale type='KIDS' title='키즈 타임특가' />
                 </LazyRender>
 
                 <LazyRender minHeight={300}>

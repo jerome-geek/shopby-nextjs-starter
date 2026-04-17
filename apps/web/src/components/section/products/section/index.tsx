@@ -1,26 +1,23 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-import type {
-    GetBestReviewProductsResponse,
-    ProductsSearchResponse,
-} from '@/models/product/product';
+import { ProductCard } from '@/components/product';
+import type { ProductCardProps } from '@/components/product/card';
 import * as styles from '@/components/section/products/section/index.css';
 import { BREAKPOINTS } from '@/styles/media';
-import { ProductCard } from '@/components/product';
 
 import 'swiper/css';
 
 const Products = ({
     title,
     description,
-    products,
+    products = [],
 }: {
     title: string;
     description: string;
-    products: ProductsSearchResponse | GetBestReviewProductsResponse;
+    products: ProductCardProps[];
 }) => {
     const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(
         null,
@@ -71,7 +68,7 @@ const Products = ({
                         width: '100%',
                     }}
                 >
-                    {products.items.map((product) => (
+                    {products.map((product) => (
                         <SwiperSlide key={product.productNo}>
                             <ProductCard
                                 {...product}
