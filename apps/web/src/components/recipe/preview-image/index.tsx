@@ -36,9 +36,9 @@ export const RecipePreviewImage = ({
             ref={setNodeRef}
             style={style}
             className={styles.container}
-            onClick={onClick}
             {...attributes}
             {...listeners}
+            onClick={onClick}
         >
             {isMain && <span className={styles.mainBadge}>{t('대표')}</span>}
             <img

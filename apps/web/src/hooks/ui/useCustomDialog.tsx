@@ -1,24 +1,25 @@
 import { ShoppingCart } from 'lucide-react';
-import { overlay } from 'overlay-kit';
 import { useRouter } from 'next/router';
+import { overlay } from 'overlay-kit';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ConfirmDialog from '@/components/ui/dialog/confirm';
-import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
-import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
-import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
-import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
-import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
-import { RecipeSaveModal } from '@/components/modal/recipe-save';
-import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
-import { CollectionFormModal } from '@/components/modal/collection-form';
 import { CollectionFormSheet } from '@/components/bottom-sheet/collection-form';
-import { PATHS } from '@/const/paths';
+import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
+import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
+import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
+import { ImageDetailModal } from '@/components/modal';
+import { CollectionFormModal } from '@/components/modal/collection-form';
+import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
+import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
+import { RecipeSaveModal } from '@/components/modal/recipe-save';
+import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
+import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { MODAL_QUERY_KEY } from '@/const/modal';
-import { vars } from '@/styles/theme.css';
-import { useResponsive } from '@/hooks/utils';
 import { OVERLAY_ID } from '@/const/overlay';
+import { PATHS } from '@/const/paths';
+import { useResponsive } from '@/hooks/utils';
+import { vars } from '@/styles/theme.css';
 
 export const useCustomDialog = () => {
     const { t } = useTranslation();
@@ -159,6 +160,10 @@ export const useCustomDialog = () => {
         overlay.open((props) => <RecipeImageUploadModal {...props} />);
     }, []);
 
+    const openImageDetail = useCallback((src: string) => {
+        overlay.open((props) => <ImageDetailModal {...props} src={src} />);
+    }, []);
+
     const openRecipeCreateSelection = useCallback(() => {
         if (isMobile) {
             overlay.open((props) => (
@@ -251,5 +256,6 @@ export const useCustomDialog = () => {
         openRecipeSave,
         openCollectionCreate,
         openCollectionForm,
+        openImageDetail,
     };
 };

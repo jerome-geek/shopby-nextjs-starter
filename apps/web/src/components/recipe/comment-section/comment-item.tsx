@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as styles from '@/components/recipe/comment-section/index.css';
 import { RecipePreviewImage } from '@/components/recipe/preview-image';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useAuth } from '@/hooks/useAuth';
+import { useCustomDialog } from '@/hooks/ui';
 import type { CommentResponse } from '@/models/shop/comment';
 
 interface CommentItemProps {
@@ -14,14 +14,10 @@ interface CommentItemProps {
 
 export const CommentItem = ({ comment, onDelete }: CommentItemProps) => {
     const { t } = useTranslation();
-    const isLogin = useAuth();
-    const { data: profile } = useProfile({
-        options: {
-            enabled: !!isLogin,
-        },
-    });
+    const { data: profileData } = useProfile();
+    const { openImageDetail } = useCustomDialog();
 
-    const isAuthor = isLogin && profile?.memberNo === comment.memberNo;
+    const isAuthor = profileData?.memberNo === comment.memberNo;
 
     const images = comment.attachment ? comment.attachment.split('|') : [];
 
@@ -53,10 +49,14 @@ export const CommentItem = ({ comment, onDelete }: CommentItemProps) => {
                 <ul className={styles.commentImages}>
                     {images.map((url, index) => (
                         <li
-                            key={`${comment.sno}-${index}`}
+                            key={`recipe-comment-${comment.sno}-${index}`}
                             className={styles.commentImageItem}
                         >
-                            <RecipePreviewImage sno={index} url={url} />
+                            <RecipePreviewImage
+                                sno={index}
+                                url={url}
+                                onClick={() => openImageDetail(url)}
+                            />
                         </li>
                     ))}
                 </ul>

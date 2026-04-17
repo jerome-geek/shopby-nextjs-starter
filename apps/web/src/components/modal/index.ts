@@ -7,3 +7,4 @@ export * from '@/components/modal/coupon-register';
 export * from '@/components/modal/period-range-picker';
 export * from '@/components/modal/collection-form';
 export * from '@/components/modal/recipe-save';
+export * from '@/components/modal/image-detail';

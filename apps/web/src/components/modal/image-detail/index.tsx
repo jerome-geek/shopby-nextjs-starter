@@ -1,5 +1,5 @@
-import { motion } from 'motion/react';
-import { AnimatePresence } from 'motion/react';
+import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 import { DefaultModalLayoutProps } from '@/components/layout';
 import * as styles from '@/components/modal/image-detail/index.css';
@@ -40,22 +40,30 @@ export const ImageDetailModal = ({
                         className={styles.modalContainer}
                         initial={{
                             opacity: 0,
-                            scale: 0.95,
+                            scale: 0.9,
                             x: '-50%',
-                            y: '-52%',
+                            y: '-50%',
                         }}
                         animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-                        exit={{ opacity: 0, scale: 0.95, x: '-50%', y: '-52%' }}
-                        transition={{ duration: 0.2, ease: 'easeOut' }}
+                        exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+                        transition={{
+                            type: 'spring',
+                            stiffness: 400,
+                            damping: 30,
+                        }}
                         data-lenis-prevent
                     >
+                        <button
+                            className={styles.closeBtn}
+                            onClick={close}
+                            aria-label='Close'
+                        >
+                            <X size={20} />
+                        </button>
                         <img
                             src={src}
-                            alt='image'
-                            style={{
-                                width: 'auto',
-                                maxWidth: 'none',
-                            }}
+                            alt='image detail'
+                            className={styles.image}
                         />
                     </motion.div>
                 </div>

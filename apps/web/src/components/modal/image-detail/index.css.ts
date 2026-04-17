@@ -9,7 +9,9 @@ export const dimmed = style({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
     zIndex: 1000,
 });
 
@@ -18,13 +20,47 @@ export const modalContainer = style({
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
-    backgroundColor: vars.color.white,
+    backgroundColor: 'transparent',
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 1000,
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
-    borderRadius: '4px',
+    borderRadius: '12px',
     maxWidth: '90%',
     maxHeight: '90%',
-    overflow: 'auto',
+    overflow: 'visible',
+    outline: 'none',
 });
+
+export const image = style({
+    maxWidth: '100%',
+    maxHeight: '80vh',
+    objectFit: 'contain',
+    borderRadius: '8px',
+});
+
+export const closeBtn = style({
+    position: 'absolute',
+    top: '-40px',
+    right: 0,
+    width: '32px',
+    height: '32px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backdropFilter: 'blur(4px)',
+    color: vars.color.white,
+    borderRadius: '50%',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    selectors: {
+        '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            transform: 'scale(1.1)',
+        },
+    },
+});
+

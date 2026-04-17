@@ -24,7 +24,7 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
     const isLogin = useAuth();
 
     const { addToast } = useToast();
-    const { openLoginDialog } = useCustomDialog();
+    const { openLoginDialog, openImageDetail } = useCustomDialog();
 
     const [commentText, setCommentText] = useState('');
 
@@ -147,7 +147,12 @@ export const CommentInput = ({ recipeSno }: CommentInputProps) => {
             {previewUrls.length > 0 && (
                 <ul className={styles.commentImages}>
                     {previewUrls.map((url, index) => (
-                        <li key={url} className={styles.commentImageItem}>
+                        <li
+                            key={url}
+                            className={styles.commentImageItem}
+                            onClick={() => openImageDetail(url)}
+                            style={{ cursor: 'pointer' }}
+                        >
                             <RecipePreviewImage
                                 sno={index}
                                 url={url}

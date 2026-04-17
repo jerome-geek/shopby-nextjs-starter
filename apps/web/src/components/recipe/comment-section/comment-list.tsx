@@ -30,8 +30,10 @@ export const CommentList = ({ recipeSno }: CommentListProps) => {
     const { removeComment } = useRecipeCommentMutation();
     const handleDelete = async (commentSno: number) => {
         const isConfirmed = await openAsyncDialog({
-            message: t('댓글을 삭제하시겠습니까?'),
             type: 'confirm',
+            message: t('댓글을 삭제하시겠습니까?'),
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
         });
 
         if (!isConfirmed) {
