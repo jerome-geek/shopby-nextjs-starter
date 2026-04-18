@@ -220,7 +220,7 @@ export const metaList = style({
     },
 });
 
-export const IconTimerText = style([
+export const iconTimerText = style([
     textStyles.body2Semibold,
     {
         display: 'flex',
@@ -230,7 +230,7 @@ export const IconTimerText = style([
     },
 ]);
 
-export const IconText = style([
+export const iconText = style([
     textStyles.body2Regular,
     {
         display: 'flex',

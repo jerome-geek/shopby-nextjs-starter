@@ -16,14 +16,14 @@ export const container = style({
     },
 });
 
-export const CommentsTitle = style([
+export const commentsTitle = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
     },
 ]);
 
-export const CommentsCount = style({
+export const commentsCount = style({
     color: vars.color.gray['60'],
 });
 

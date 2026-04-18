@@ -245,18 +245,18 @@ const RecipeDetailPage = ({
                     </div>
 
                     <div className={styles.metaList}>
-                        <span className={styles.IconTimerText}>
+                        <span className={styles.iconTimerText}>
                             <TimerIcon currentColor={vars.color.gray['80']} />
                             {cookingMinutes > 0 ? `${cookingMinutes}분` : '-'}
                         </span>
-                        <span className={styles.IconText}>
+                        <span className={styles.iconText}>
                             <PeopleIcon currentColor={vars.color.gray['60']} />
                             {recipeDetailData.servings
                                 ? `${recipeDetailData.servings}인분`
                                 : '-'}
                         </span>
 
-                        <span className={styles.IconText}>
+                        <span className={styles.iconText}>
                             <CalorieIcon currentColor={vars.color.gray['60']} />
                             {!!recipeDetailData.caloriesPerServingKcal
                                 ? `${recipeDetailData.caloriesPerServingKcal} kcal`

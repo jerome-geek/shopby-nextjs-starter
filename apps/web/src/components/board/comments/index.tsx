@@ -86,9 +86,9 @@ const Comments = ({ boardNo, articleNo, categoryNo }: CommentsProps) => {
 
     return (
         <div className={styles.container}>
-            <strong className={styles.CommentsTitle}>
+            <strong className={styles.commentsTitle}>
                 댓글
-                <span className={styles.CommentsCount}>{` ${totalCount}`}</span>
+                <span className={styles.commentsCount}>{` ${totalCount}`}</span>
             </strong>
 
             {totalCount > 0 && (

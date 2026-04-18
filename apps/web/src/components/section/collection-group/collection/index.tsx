@@ -12,13 +12,15 @@ import { vars } from '@/styles/theme.css';
 
 import 'swiper/css';
 
+interface CollectionSectionProps {
+    collectionGroup: CollectionExposureGroupItem;
+    groupNo: number;
+}
+
 const CollectionSection = ({
     collectionGroup,
     groupNo,
-}: {
-    collectionGroup: CollectionExposureGroupItem;
-    groupNo: number;
-}) => {
+}: CollectionSectionProps) => {
     const { isMobile, isTablet } = useResponsive();
 
     const filteredRecipes = useMemo(

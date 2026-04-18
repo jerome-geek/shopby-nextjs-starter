@@ -1,12 +1,16 @@
-import { Bookmark, Edit2, MoreVertical, Trash2 } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { Bookmark } from 'lucide-react';
 import Link from 'next/link';
-import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/recipe/detail-card/index.css';
+import { CollectionMoreMenu } from '@/components/collection/collection-more-menu';
 import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
+import * as styles from '@/components/recipe/detail-card/index.css';
 import { PATHS } from '@/const/paths';
 import { useBookmark } from '@/hooks/recipe';
+import { useToast } from '@/hooks/ui';
+import { useDialog } from '@/hooks/utils';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
@@ -15,8 +19,15 @@ interface RecipeDetailCardProps {
 }
 
 export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
+    const { t } = useTranslation();
+    const router = useRouter();
+    const { openAsyncDialog } = useDialog();
+    const { addToast } = useToast();
+    const { toggleRecipeBookmark: toggleBookmark } = useBookmark();
+
+    const isExcludedPath = ['/', '/shop', '/kids', '/life'].includes(
+        router.pathname,
+    );
 
     const href = PATHS.RECIPES.DETAIL.replace('[recipeNo]', String(recipe.sno));
 
@@ -29,39 +40,33 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
     const ingredients = recipe.ingredients ?? [];
     const steps = recipe.steps ?? [];
 
-    const { toggleRecipeBookmark } = useBookmark();
+    const handleEdit = () => {
+        router.push(`${PATHS.RECIPES.WRITE}?recipeNo=${recipe.sno}`);
+    };
 
-    useEffect(() => {
-        const handleClickOutside = (event: globalThis.MouseEvent) => {
-            if (
-                menuRef.current &&
-                !menuRef.current.contains(event.target as Node)
-            ) {
-                setIsMenuOpen(false);
-            }
-        };
+    const handleDelete = async () => {
+        const isConfirmed = await openAsyncDialog({
+            type: 'confirm',
+            message: t('레시피를 삭제하시겠습니까?'),
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
 
-        if (isMenuOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
+        if (isConfirmed) {
+            toggleBookmark({
+                sno: recipe.sno,
+                bookmarked: true,
+            });
         }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isMenuOpen]);
+    };
 
     const handleBookmarkClick = async (e: MouseEvent) => {
         e.stopPropagation();
 
-        toggleRecipeBookmark({
+        toggleBookmark({
             sno: recipe.sno,
             bookmarked: recipe.bookmarked,
         });
-    };
-
-    const toggleMenu = (e: MouseEvent) => {
-        e.stopPropagation();
-        e.preventDefault();
-        setIsMenuOpen(!isMenuOpen);
     };
 
     return (
@@ -79,73 +84,13 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                                     {recipe.title}
                                 </h4>
                             </Link>
-
-                            {/* TODO: CollectionMoreMenu 컴포넌트 대체 */}
-                            <div
-                                style={{ position: 'relative' }}
-                                ref={menuRef}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <button
-                                    className={styles.moreButton}
-                                    onClick={toggleMenu}
-                                    type='button'
-                                    aria-label='더보기'
-                                >
-                                    <MoreVertical size={16} />
-                                </button>
-
-                                {/* TODO: 레시피 수정 페이지 이동 및 삭제 모달 띄우기 */}
-                                <AnimatePresence>
-                                    {isMenuOpen && (
-                                        <motion.div
-                                            initial={{
-                                                opacity: 0,
-                                                scale: 0.95,
-                                                y: -10,
-                                            }}
-                                            animate={{
-                                                opacity: 1,
-                                                scale: 1,
-                                                y: 0,
-                                            }}
-                                            exit={{
-                                                opacity: 0,
-                                                scale: 0.95,
-                                                y: -10,
-                                            }}
-                                            transition={{
-                                                type: 'spring',
-                                                damping: 20,
-                                                stiffness: 300,
-                                            }}
-                                            className={styles.actionMenu}
-                                        >
-                                            <button
-                                                className={styles.menuItem}
-                                                type='button'
-                                                onClick={() => {
-                                                    /* 수정 로직 */
-                                                    setIsMenuOpen(false);
-                                                }}
-                                            >
-                                                <Edit2 size={14} /> 수정하기
-                                            </button>
-                                            <button
-                                                className={styles.menuItem}
-                                                data-variant='danger'
-                                                type='button'
-                                                onClick={() => {
-                                                    /* 삭제 로직 */
-                                                    setIsMenuOpen(false);
-                                                }}
-                                            >
-                                                <Trash2 size={14} /> 삭제하기
-                                            </button>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
+                            // TODO:레시피 수정 필요
+                            {!isExcludedPath && (
+                                <CollectionMoreMenu
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                />
+                            )}
                         </div>
                         {author && (
                             <span className={styles.recipeAuthor}>
