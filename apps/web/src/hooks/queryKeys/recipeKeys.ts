@@ -9,7 +9,7 @@ const recipeKeys = {
 
     lists: () => [...recipeKeys.all, 'list'] as const,
     list: (params?: SearchRecipesParams) =>
-        [...recipeKeys.lists(), params] as const,
+        [...recipeKeys.lists(), params ?? null] as const,
 
     publicSearches: () => [...recipeKeys.all, 'public-search'] as const,
     publicSearch: (params: SearchPublicRecipesParams) =>
@@ -18,7 +18,7 @@ const recipeKeys = {
         [...recipeKeys.publicSearches(), 'infinite', params] as const,
 
     details: () => [...recipeKeys.all, 'detail'] as const,
-    detail: (sno: number, memberNo: number) =>
+    detail: (sno: number, memberNo: number | string) =>
         [...recipeKeys.details(), sno, memberNo] as const,
 
     collections: () => [...recipeKeys.all, 'collections'] as const,
@@ -29,7 +29,7 @@ const recipeKeys = {
 
     exposureGroups: () => [...recipeKeys.all, 'exposure-groups'] as const,
     exposureGroup: (groupId: string, params?: GetRecipeExposureGroupParams) =>
-        [...recipeKeys.exposureGroups(), groupId, params] as const,
+        [...recipeKeys.exposureGroups(), groupId, params ?? null] as const,
 };
 
 export default recipeKeys;

@@ -1,10 +1,10 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
-export const Container = style({
+export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
@@ -17,19 +17,19 @@ export const Container = style({
     },
 });
 
-export const CollectionSectionHeader = style({
+export const collectionSectionHeader = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
 });
 
-export const CollectionSectionTitleContainer = style({
+export const collectionSectionTitleContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
 });
 
-export const CollectionSectionTitle = style([
+export const collectionSectionTitle = style([
     textStyles.title1Bold,
     {
         color: vars.color.black,
@@ -44,7 +44,7 @@ export const CollectionSectionTitle = style([
     },
 ]);
 
-export const CollectionSectionSubTitle = style([
+export const collectionSectionSubTitle = style([
     textStyles.headlineRegular,
     {
         color: vars.color.gray['60'],
@@ -59,24 +59,18 @@ export const CollectionSectionSubTitle = style([
     },
 ]);
 
-export const DetailLink = style([
+export const detailLink = style([
     textStyles.body1Regular,
     {
         color: vars.color.gray['60'],
         display: 'flex',
+        alignItems: 'center',
+        lineHeight: 1,
         gap: '4px',
-        '@media': {
-            [media.mobile]: {
-                fontSize: '1.2rem',
-                fontWeight: 400,
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
-            },
-        },
     },
 ]);
 
-export const RecipeList = style({
+export const recipeList = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '24px',
@@ -89,12 +83,12 @@ export const RecipeList = style({
     },
 });
 
-export const RecipeListItem = style({
+export const recipeListItem = style({
     display: 'grid',
     width: '100%',
 });
 
-export const RecipeListSwiperContainer = style({
+export const recipeListSwiperContainer = style({
     marginLeft: '-20px',
     width: 'calc(100% + 40px)',
 });

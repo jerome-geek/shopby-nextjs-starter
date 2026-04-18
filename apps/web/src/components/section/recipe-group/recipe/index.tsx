@@ -1,36 +1,42 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
+import { RecipeCard } from '@/components/recipe';
+import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 import { PATHS } from '@/const/paths';
+import { useRecipeExposureGroup } from '@/hooks/suspenseQuery/shop/recipe';
 import type { RecipeExposureGroupItem } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
-import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
-import { RecipeCard } from '@/components/recipe';
 
-const RecipeSection = ({
-    group,
-    groupNo,
-}: {
+interface RecipeSectionProps {
     group: RecipeExposureGroupItem;
     groupNo: number;
-}) => {
+}
+
+const RecipeSection = ({ group, groupNo }: RecipeSectionProps) => {
+    console.log('🚀 ~ RecipeSection ~ groupNo:', groupNo);
+    const { data } = useRecipeExposureGroup({
+        groupId: `recipe_group_${groupNo}`,
+    });
+    console.log('🚀 ~ RecipeSection ~ data:', data);
+
     return (
-        <section className={recipeSectionStyle.Container}>
-            <div className={recipeSectionStyle.RecipeSectionHeader}>
-                <div className={recipeSectionStyle.RecipeSectionTitleContainer}>
-                    <h3 className={recipeSectionStyle.RecipeSectionTitle}>
+        <section className={recipeSectionStyle.container}>
+            <div className={recipeSectionStyle.recipeSectionHeader}>
+                <div className={recipeSectionStyle.recipeSectionTitleContainer}>
+                    <h3 className={recipeSectionStyle.recipeSectionTitle}>
                         {group.groupName}
                     </h3>
-                    <p className={recipeSectionStyle.RecipeSectionSubTitle}>
+                    <p className={recipeSectionStyle.recipeSectionSubTitle}>
                         {group.description}
                     </p>
                 </div>
 
                 <Link
                     href={`${PATHS.RECIPES.MAIN}/groups/${groupNo}/${group.sno}`}
-                    className={recipeSectionStyle.DetailLink}
+                    className={recipeSectionStyle.detailLink}
                 >
-                    전체보기
+                    <span>전체보기</span>
                     <ChevronRight
                         color={vars.color.gray['60']}
                         width='16'
@@ -39,7 +45,7 @@ const RecipeSection = ({
                 </Link>
             </div>
 
-            <ul className={recipeSectionStyle.RecipeList}>
+            <ul className={recipeSectionStyle.recipeList}>
                 {group?.recipes?.map((recipe) => {
                     return (
                         <li key={recipe.sno}>

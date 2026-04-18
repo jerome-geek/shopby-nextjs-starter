@@ -1,3 +1,4 @@
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { ChefHat, Share2 } from 'lucide-react';
 import type {
     GetStaticPaths,
@@ -8,13 +9,15 @@ import Head from 'next/head';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { recipe } from '@/api/shop';
 import { RecipeCard } from '@/components/recipe';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
+import { recipeKeys } from '@/hooks/queryKeys';
 import { useRecipeExposureGroup } from '@/hooks/suspenseQuery/shop/recipe';
 import { useToast } from '@/hooks/ui/useToast';
 import * as styles from '@/pages/recipes/groups/[groupId]/[sno]/index.css';
-import { MOCK_DATA } from '@/pages/recipes/groups/[groupId]/mock';
 
-// --- 그룹 상세 (데이터 연동) ---
+// --- 그룹 상세 화면 ---
 const RecipeGroupContent = ({
     groupId,
     sno,
@@ -25,17 +28,20 @@ const RecipeGroupContent = ({
     const { t } = useTranslation();
     const { addToast } = useToast();
 
-    // TODO: API 연결 시 아래 주석 해제 후 MOCK_DATA 제거
+    // 1. API 데이터 연동 (groupId 형식이 'recipe_group_N' 임을 보장)
     const { data: recipeExposureGroupData } = useRecipeExposureGroup({
-        groupId,
+        groupId: `recipe_group_${groupId}`,
     });
     console.log(
         '🚀 ~ RecipeGroupContent ~ recipeExposureGroupData:',
         recipeExposureGroupData,
     );
-    const data = MOCK_DATA;
 
-    const group = data.groups[0];
+    // 2. sno를 기반으로 해당 그룹 필터링
+    const group = recipeExposureGroupData.groups?.find(
+        (g) => String(g.sno) === sno,
+    );
+    console.log('🚀 ~ RecipeGroupContent ~ group:', group);
     if (!group) return null;
 
     const recipes = group.recipes ?? [];
@@ -137,7 +143,6 @@ const RecipeGroupContent = ({
                         </ul>
                     )}
                 </section>
-
             </div>
         </>
     );
@@ -220,27 +225,31 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         return { notFound: true };
     }
 
-    // TODO: API 연결 시 아래 주석 해제
-    // const queryClient = new QueryClient();
-    // try {
-    //     await queryClient.fetchQuery({
-    //         queryKey: recipeKeys.group(groupId),
-    //         queryFn: async () => {
-    //             const { data } = await recipe.getRecipeExposureGroup(groupId);
-    //             return data;
-    //         },
-    //     });
-    // } catch {
-    //     return { notFound: true };
-    // }
+    const queryClient = new QueryClient();
+    const formattedGroupId = `recipe_group_${groupId}`;
+
+    try {
+        await queryClient.fetchQuery({
+            queryKey: recipeKeys.exposureGroup(formattedGroupId),
+            queryFn: async () => {
+                const { data } =
+                    await recipe.getRecipeExposureGroup(formattedGroupId);
+
+                return data;
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        return { notFound: true };
+    }
 
     return {
         props: {
             groupId,
             sno,
-            // dehydratedState: dehydrate(queryClient),  // TODO: API 연결 시 주석 해제
+            dehydratedState: dehydrate(queryClient),
         },
-        revalidate: 60 * 60,
+        revalidate: ONE_HOUR_IN_SECONDS,
     };
 };
 

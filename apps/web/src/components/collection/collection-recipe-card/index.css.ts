@@ -4,7 +4,7 @@ import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
 
-export const RecipeLink = style({
+export const recipeLink = style({
     display: 'block',
     textDecoration: 'none',
     color: 'inherit',
@@ -15,29 +15,29 @@ export const RecipeLink = style({
     width: '100%',
 });
 
-globalStyle(`${RecipeLink} a`, {
+globalStyle(`${recipeLink} a`, {
     color: 'inherit',
     textDecoration: 'none',
 });
 
-globalStyle(`${RecipeLink} a:hover`, {
+globalStyle(`${recipeLink} a:hover`, {
     cursor: 'pointer',
 });
 
-globalStyle(`${RecipeLink} a:focus-visible`, {
+globalStyle(`${recipeLink} a:focus-visible`, {
     outline: `2px solid ${vars.color.green['80']}`,
     outlineOffset: 2,
     borderRadius: 4,
 });
 
-export const CardContent = style({
+export const cardContent = style({
     padding: '16px',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
 });
 
-export const CardHeader = style({
+export const cardHeader = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
@@ -45,7 +45,7 @@ export const CardHeader = style({
     marginBottom: '12px',
 });
 
-export const CardTitleArea = style({
+export const cardTitleArea = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
@@ -53,7 +53,7 @@ export const CardTitleArea = style({
     flex: 1,
 });
 
-export const TitleRow = style({
+export const titleRow = style({
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
@@ -61,7 +61,7 @@ export const TitleRow = style({
     position: 'relative',
 });
 
-export const MoreButton = style({
+export const moreButton = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -84,7 +84,7 @@ export const MoreButton = style({
     },
 });
 
-export const ActionMenu = style({
+export const actionMenu = style({
     position: 'absolute',
     top: '28px',
     right: '0',
@@ -101,7 +101,7 @@ export const ActionMenu = style({
     overflow: 'hidden',
 });
 
-export const MenuItem = style([
+export const menuItem = style([
     textStyles.body2Regular,
     {
         padding: '10px 12px',
@@ -126,7 +126,7 @@ export const MenuItem = style([
     },
 ]);
 
-export const RecipeTitle = style([
+export const recipeTitle = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
@@ -147,12 +147,12 @@ export const RecipeTitle = style([
     },
 ]);
 
-globalStyle(`${RecipeLink} a:hover ${RecipeTitle}`, {
+globalStyle(`${recipeLink} a:hover ${recipeTitle}`, {
     textDecoration: 'underline',
     textDecorationColor: vars.color.gray['50'],
 });
 
-export const RecipeAuthor = style([
+export const recipeAuthor = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
@@ -167,7 +167,7 @@ export const RecipeAuthor = style([
     },
 ]);
 
-export const RecipeMeta = style({
+export const recipeMeta = style({
     display: 'flex',
     gap: '12px',
     fontSize: '13px',
@@ -175,7 +175,7 @@ export const RecipeMeta = style({
     marginBottom: '20px',
 });
 
-export const IconTimerText = style([
+export const iconTimerText = style([
     textStyles.body2Semibold,
     {
         display: 'flex',
@@ -193,7 +193,7 @@ export const IconTimerText = style([
     },
 ]);
 
-export const IconText = style([
+export const iconText = style([
     textStyles.body2Regular,
     {
         display: 'flex',
@@ -211,7 +211,7 @@ export const IconText = style([
     },
 ]);
 
-export const IngredientHeader = style({
+export const ingredientHeader = style({
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
@@ -224,7 +224,7 @@ export const IngredientHeader = style({
     },
 });
 
-export const IngredientTitle = style([
+export const ingredientTitle = style([
     textStyles.body2Semibold,
     {
         color: vars.color.gray['90'],
@@ -232,7 +232,7 @@ export const IngredientTitle = style([
 ]);
 
 // TODO: 툴팁 추가
-export const InfoDot = style({
+export const infoDot = style({
     width: 13,
     height: 13,
     borderRadius: '50%',
@@ -245,7 +245,7 @@ export const InfoDot = style({
     flexShrink: 0,
 });
 
-export const IngredientContent = style({
+export const ingredientContent = style({
     display: 'flex',
     gap: '16px',
     marginBottom: '16px',
@@ -253,7 +253,7 @@ export const IngredientContent = style({
     borderBottom: `1px solid ${vars.color.gray['20']}`,
 });
 
-export const RecipeThumbArea = style({
+export const recipeThumbArea = style({
     width: '100%',
     maxWidth: '137px',
     maxHeight: '182px',
@@ -264,31 +264,31 @@ export const RecipeThumbArea = style({
     backgroundColor: vars.color.gray['10'],
 });
 
-export const RecipeThumb = style({
+export const recipeThumb = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
     transition: 'transform 160ms ease, filter 160ms ease',
 });
 
-globalStyle(`${RecipeLink} a:hover ${RecipeThumb}`, {
+globalStyle(`${recipeLink} a:hover ${recipeThumb}`, {
     transform: 'scale(1.02)',
     filter: 'brightness(0.95)',
 });
 
-export const IngredientContainer = style({
+export const ingredientContainer = style({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
 });
 
-export const IngredientList = style({
+export const ingredientList = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '6px',
 });
 
-export const IngredientListItem = style([
+export const ingredientListItem = style([
     textStyles.body1Regular,
     {
         color: vars.color.gray['80'],
@@ -307,7 +307,7 @@ export const IngredientListItem = style([
     },
 ]);
 
-export const IngredientName = style({
+export const ingredientName = style({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
@@ -327,11 +327,11 @@ export const IngredientName = style({
     },
 });
 
-export const IngredientAmount = style({
+export const ingredientAmount = style({
     flexShrink: 0,
 });
 
-export const MoreText = style([
+export const moreText = style([
     textStyles.caption1Regular,
     {
         color: vars.color.gray['60'],
@@ -339,20 +339,20 @@ export const MoreText = style([
     },
 ]);
 
-export const StepSection = style({
+export const stepSection = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
 });
 
-export const StepTitle = style([
+export const stepTitle = style([
     textStyles.body1Semibold,
     {
         color: vars.color.gray['90'],
     },
 ]);
 
-export const StepList = style({
+export const stepList = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
@@ -367,7 +367,7 @@ export const StepList = style({
     },
 });
 
-export const StepItem = style({
+export const stepItem = style({
     display: 'flex',
     gap: '6px',
     alignItems: 'flex-start',
@@ -379,7 +379,7 @@ export const StepItem = style({
     },
 });
 
-export const StepNumber = style([
+export const stepNumber = style([
     textStyles.caption2Semibold,
     {
         width: '17px',
@@ -403,7 +403,7 @@ export const StepNumber = style([
     },
 ]);
 
-export const StepText = style([
+export const stepText = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
@@ -417,7 +417,7 @@ export const StepText = style([
     },
 ]);
 
-export const BookmarkIcon = style({
+export const bookmarkIcon = style({
     flexShrink: 0,
     color: vars.color.green['100'],
 });

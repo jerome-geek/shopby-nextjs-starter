@@ -1,64 +1,68 @@
 import { style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
-export const Container = style({
+export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
     width: '100%',
 });
 
-export const RecipeSectionHeader = style({
+export const recipeSectionHeader = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
 });
 
-export const RecipeSectionTitleContainer = style({
+export const recipeSectionTitleContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '2px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '4px',
+        },
+    },
 });
 
-export const RecipeSectionTitle = style([
-    textStyles.title1Bold,
+export const recipeSectionTitle = style([
+    textStyles.headingSemibold,
     {
         color: vars.color.black,
+
         '@media': {
-            [media.mobile]: {
-                fontSize: '1.8rem',
-                fontWeight: 600,
-                lineHeight: '1.5',
-                letterSpacing: '-1.3%',
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
             },
         },
     },
 ]);
 
-export const RecipeSectionSubTitle = style([
-    textStyles.headlineRegular,
+export const recipeSectionSubTitle = style([
+    textStyles.caption1Regular,
     {
         color: vars.color.gray['60'],
+
         '@media': {
-            [media.mobile]: {
-                fontSize: '1.2rem',
-                fontWeight: 400,
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
+            [media.desktop]: {
+                ...textStyleTokens.headlineRegular,
             },
         },
     },
 ]);
 
-export const DetailLink = style([
+export const detailLink = style([
     textStyles.body1Regular,
     {
         color: vars.color.gray['60'],
         display: 'flex',
+        alignItems: 'center',
         gap: '4px',
+
         '@media': {
             [media.mobile]: {
                 fontSize: '1.2rem',
@@ -70,7 +74,7 @@ export const DetailLink = style([
     },
 ]);
 
-export const RecipeList = style({
+export const recipeList = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '24px',
@@ -82,14 +86,14 @@ export const RecipeList = style({
     },
 });
 
-export const RecipeListItem = style({
+export const recipeListItem = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
     width: '100%',
 });
 
-export const RecipeImage = style({
+export const recipeImage = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
@@ -97,7 +101,7 @@ export const RecipeImage = style({
     willChange: 'transform',
 });
 
-export const RecipeContentsContainer = style({
+export const recipeContentsContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',

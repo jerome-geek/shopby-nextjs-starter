@@ -65,17 +65,17 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
     };
 
     return (
-        <div className={styles.RecipeLink}>
-            <article className={styles.CardContent}>
-                <div className={styles.CardHeader}>
-                    <div className={styles.CardTitleArea}>
-                        <div className={styles.TitleRow}>
+        <div className={styles.recipeLink}>
+            <article className={styles.cardContent}>
+                <div className={styles.cardHeader}>
+                    <div className={styles.cardTitleArea}>
+                        <div className={styles.titleRow}>
                             <Link
                                 href={href}
                                 prefetch={false}
                                 style={{ flex: 1, minWidth: 0 }}
                             >
-                                <h4 className={styles.RecipeTitle}>
+                                <h4 className={styles.recipeTitle}>
                                     {recipe.title}
                                 </h4>
                             </Link>
@@ -87,7 +87,7 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <button
-                                    className={styles.MoreButton}
+                                    className={styles.moreButton}
                                     onClick={toggleMenu}
                                     type='button'
                                     aria-label='더보기'
@@ -119,10 +119,10 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                                                 damping: 20,
                                                 stiffness: 300,
                                             }}
-                                            className={styles.ActionMenu}
+                                            className={styles.actionMenu}
                                         >
                                             <button
-                                                className={styles.MenuItem}
+                                                className={styles.menuItem}
                                                 type='button'
                                                 onClick={() => {
                                                     /* 수정 로직 */
@@ -132,7 +132,7 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                                                 <Edit2 size={14} /> 수정하기
                                             </button>
                                             <button
-                                                className={styles.MenuItem}
+                                                className={styles.menuItem}
                                                 data-variant='danger'
                                                 type='button'
                                                 onClick={() => {
@@ -148,14 +148,14 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                             </div>
                         </div>
                         {author && (
-                            <span className={styles.RecipeAuthor}>
+                            <span className={styles.recipeAuthor}>
                                 {author}
                             </span>
                         )}
                     </div>
 
                     <button
-                        className={styles.BookmarkIcon}
+                        className={styles.bookmarkIcon}
                         onClick={handleBookmarkClick}
                         type='button'
                         aria-label={
@@ -165,7 +165,7 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                     >
                         <Bookmark
                             size={20}
-                            className={styles.BookmarkIcon}
+                            className={styles.bookmarkIcon}
                             fill={
                                 recipe.bookmarked
                                     ? vars.color.green['100']
@@ -175,17 +175,17 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                     </button>
                 </div>
 
-                <div className={styles.RecipeMeta}>
-                    <span className={styles.IconTimerText}>
+                <div className={styles.recipeMeta}>
+                    <span className={styles.iconTimerText}>
                         <TimerIcon currentColor={vars.color.gray['80']} />
                         {cookingMinutes > 0 ? `${cookingMinutes}분` : '-'}
                     </span>
-                    <span className={styles.IconText}>
+                    <span className={styles.iconText}>
                         <PeopleIcon currentColor={vars.color.gray['60']} />
                         {recipe.servings ? `${recipe.servings}인분` : '-'}
                     </span>
 
-                    <span className={styles.IconText}>
+                    <span className={styles.iconText}>
                         <CalorieIcon currentColor={vars.color.gray['60']} />
                         {!!recipe.caloriesPerServingKcal
                             ? `${recipe.caloriesPerServingKcal} kcal`
@@ -193,32 +193,32 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                     </span>
                 </div>
 
-                <div className={styles.IngredientContent}>
+                <div className={styles.ingredientContent}>
                     <Link href={href} prefetch={false}>
-                        <div className={styles.RecipeThumbArea}>
+                        <div className={styles.recipeThumbArea}>
                             <img
                                 src={recipe.thumbnailUrl ?? ''}
-                                className={styles.RecipeThumb}
+                                className={styles.recipeThumb}
                                 alt={recipe.title}
                             />
                         </div>
                     </Link>
 
-                    <div className={styles.IngredientContainer}>
-                        <div className={styles.IngredientHeader}>
-                            <h5 className={styles.IngredientTitle}>
+                    <div className={styles.ingredientContainer}>
+                        <div className={styles.ingredientHeader}>
+                            <h5 className={styles.ingredientTitle}>
                                 요리 재료 List
                             </h5>
-                            <div className={styles.InfoDot}>i</div>
+                            <div className={styles.infoDot}>i</div>
                         </div>
 
-                        <ul className={styles.IngredientList}>
+                        <ul className={styles.ingredientList}>
                             {ingredients.slice(0, 6).map((ing, i) => (
                                 <li
                                     key={`${recipe.sno}-ing-${i}`}
-                                    className={styles.IngredientListItem}
+                                    className={styles.ingredientListItem}
                                 >
-                                    <span className={styles.IngredientName}>
+                                    <span className={styles.ingredientName}>
                                         {ing.name}
                                     </span>
                                     {!!ing.amount && (
@@ -234,7 +234,7 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                                             </span>
                                             <span
                                                 className={
-                                                    styles.IngredientAmount
+                                                    styles.ingredientAmount
                                                 }
                                             >
                                                 {ing.amount}
@@ -246,25 +246,25 @@ export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
                         </ul>
 
                         {ingredients.length > 6 ? (
-                            <p className={styles.MoreText}>
+                            <p className={styles.moreText}>
                                 {`외 ${ingredients.length - 6}개...`}
                             </p>
                         ) : null}
                     </div>
                 </div>
 
-                <div className={styles.StepSection}>
-                    <h5 className={styles.StepTitle}>따라해봐 How to Cook</h5>
-                    <ul className={styles.StepList}>
+                <div className={styles.stepSection}>
+                    <h5 className={styles.stepTitle}>따라해봐 How to Cook</h5>
+                    <ul className={styles.stepList}>
                         {steps.map((step, i) => (
                             <li
                                 key={`${recipe.sno}-step-${i}`}
-                                className={styles.StepItem}
+                                className={styles.stepItem}
                             >
-                                <div className={styles.StepNumber}>
+                                <div className={styles.stepNumber}>
                                     <span>{i + 1}</span>
                                 </div>
-                                <p className={styles.StepText}>
+                                <p className={styles.stepText}>
                                     {step.description}
                                 </p>
                             </li>

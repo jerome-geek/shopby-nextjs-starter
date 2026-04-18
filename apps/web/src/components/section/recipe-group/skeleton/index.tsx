@@ -5,16 +5,32 @@ import Skeleton from '@/components/ui/Skeleton/Skeleton';
 
 const RecipeSectionSkeleton = () => {
     return (
-        <section className={recipeSectionStyle.Container} aria-busy='true'>
-            <div className={recipeSectionStyle.RecipeSectionHeader}>
-                <div className={recipeSectionStyle.RecipeSectionTitleContainer}>
-                    <Skeleton width={180} height={22} style={{ borderRadius: 8 }} />
-                    <Skeleton width={260} height={18} style={{ borderRadius: 8 }} />
+        <section className={recipeSectionStyle.container} aria-busy='true'>
+            <div className={recipeSectionStyle.recipeSectionHeader}>
+                <div
+                    className={
+                        recipeSectionStyle.recipeSectionTitleContainer
+                    }
+                >
+                    <Skeleton
+                        width={180}
+                        height={22}
+                        style={{ borderRadius: 8 }}
+                    />
+                    <Skeleton
+                        width={260}
+                        height={18}
+                        style={{ borderRadius: 8 }}
+                    />
                 </div>
-                <Skeleton width={76} height={18} style={{ borderRadius: 999 }} />
+                <Skeleton
+                    width={76}
+                    height={18}
+                    style={{ borderRadius: 999 }}
+                />
             </div>
 
-            <ul className={recipeSectionStyle.RecipeList}>
+            <ul className={recipeSectionStyle.recipeList}>
                 {Array.from({ length: 2 }).map((_, idx) => (
                     <li key={idx}>
                         <div
@@ -99,7 +115,7 @@ const RecipeSectionSkeleton = () => {
 
 const RecipeGroupSectionSkeleton = () => {
     return (
-        <section className={styles.RecipeGroupSection}>
+        <section className={styles.recipeGroupSection}>
             <RecipeSectionSkeleton />
             <RecipeSectionSkeleton />
         </section>

@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 
-export const RecipeGroupSection = style({
+export const recipeGroupSection = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '48px',

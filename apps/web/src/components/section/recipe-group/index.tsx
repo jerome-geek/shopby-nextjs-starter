@@ -28,7 +28,7 @@ const RecipeGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
     const groupNo = Number(groupId.split('_')?.[2]) || 0;
 
     return (
-        <section className={styles.RecipeGroupSection}>
+        <section className={styles.recipeGroupSection}>
             {data.groups.slice(0, count).map((group) => (
                 <RecipeSection
                     key={group.sno}

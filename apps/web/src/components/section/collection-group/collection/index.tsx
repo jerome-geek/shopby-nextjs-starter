@@ -31,13 +31,13 @@ const CollectionSection = ({
     );
 
     return (
-        <section className={styles.Container}>
-            <div className={styles.CollectionSectionHeader}>
-                <div className={styles.CollectionSectionTitleContainer}>
-                    <h3 className={styles.CollectionSectionTitle}>
+        <section className={styles.container}>
+            <div className={styles.collectionSectionHeader}>
+                <div className={styles.collectionSectionTitleContainer}>
+                    <h3 className={styles.collectionSectionTitle}>
                         {collectionGroup.groupName}
                     </h3>
-                    <p className={styles.CollectionSectionSubTitle}>
+                    <p className={styles.collectionSectionSubTitle}>
                         {collectionGroup.description}
                     </p>
                 </div>
@@ -47,9 +47,9 @@ const CollectionSection = ({
                         '[shareCode]',
                         collectionGroup.collection.shareCode,
                     )}`}
-                    className={styles.DetailLink}
+                    className={styles.detailLink}
                 >
-                    전체보기
+                    <span>전체보기</span>
                     <ChevronRight
                         color={vars.color.gray['60']}
                         width='16'
@@ -59,7 +59,7 @@ const CollectionSection = ({
             </div>
 
             {isMobile ? (
-                <div className={styles.RecipeListSwiperContainer}>
+                <div className={styles.recipeListSwiperContainer}>
                     <Swiper
                         slidesPerView={1.2}
                         spaceBetween={12}
@@ -83,12 +83,12 @@ const CollectionSection = ({
                     </Swiper>
                 </div>
             ) : (
-                <ul className={styles.RecipeList}>
+                <ul className={styles.recipeList}>
                     {filteredRecipes.map((recipe) => {
                         return (
                             <li
                                 key={recipe.sno}
-                                className={styles.RecipeListItem}
+                                className={styles.recipeListItem}
                             >
                                 <CollectionRecipeCard recipe={recipe} />
                             </li>
