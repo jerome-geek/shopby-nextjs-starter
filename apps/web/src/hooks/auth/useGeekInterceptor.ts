@@ -2,11 +2,15 @@ import axios from 'axios';
 import { useEffect } from 'react';
 
 import { geekRequest } from '@/api/core/geekRequest';
+import { handle401Error } from '@/api/core/authInterceptor';
 import { logOnDev } from '@/api/core/utils';
 import { env } from '@/configs/env';
+import { useHandleSessionExpired } from '@/hooks/auth/useHandleSessionExpired';
 import { accessTokenCookie } from '@/utils/cookie';
 
 const useGeekInterceptor = () => {
+    const { handleSessionExpired } = useHandleSessionExpired();
+
     useEffect(() => {
         const requestInterceptor = geekRequest.interceptors.request.use(
             (config) => {
@@ -51,6 +55,14 @@ const useGeekInterceptor = () => {
                     `[GEEK] ${method?.toUpperCase()} ${url} | Error ${status}`,
                     'red',
                 );
+
+                if (status === 401) {
+                    return handle401Error(
+                        error,
+                        geekRequest,
+                        handleSessionExpired,
+                    );
+                }
 
                 return Promise.reject(error);
             },

@@ -3,8 +3,8 @@ import { type ReactNode } from 'react';
 
 import { CertificationCheckProvider } from '@/context/certificationCheck';
 import { useSilentRefresh } from '@/hooks/auth/useSilentRefresh';
-import useAxiosInterceptor from '@/hooks/useAxiosInterceptor';
-import useGeekInterceptor from '@/hooks/useGeekInterceptor';
+import useAxiosInterceptor from '@/hooks/auth/useAxiosInterceptor';
+import useGeekInterceptor from '@/hooks/auth/useGeekInterceptor';
 
 function InterceptorSetup({ children }: { children: ReactNode }) {
     useGeekInterceptor();
