@@ -3,18 +3,18 @@ import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
-import * as styles from '@/components/collection/collection-recipe-card/index.css';
+import * as styles from '@/components/recipe/detail-card/index.css';
 import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
 import { PATHS } from '@/const/paths';
 import { useBookmark } from '@/hooks/recipe';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
-interface CollectionRecipeCardProps {
+interface RecipeDetailCardProps {
     recipe: GetRecipeDetailResponse;
 }
 
-export const CollectionRecipeCard = ({ recipe }: CollectionRecipeCardProps) => {
+export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 

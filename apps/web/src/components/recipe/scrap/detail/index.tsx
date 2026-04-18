@@ -4,12 +4,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-    CollectionMoreMenu,
-    CollectionRecipeCard,
-} from '@/components/collection';
+import { CollectionMoreMenu } from '@/components/collection';
 import { Grid2X2, Row2 } from '@/components/icons';
-import { RecipeCard } from '@/components/recipe/card';
+import { RecipeCard, RecipeDetailCard } from '@/components/recipe';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -199,7 +196,7 @@ export const RecipeScrapDetail = ({
                             {viewMode === 'grid' ? (
                                 <RecipeCard recipe={recipe} />
                             ) : (
-                                <CollectionRecipeCard recipe={recipe} />
+                                <RecipeDetailCard recipe={recipe} />
                             )}
                         </li>
                     ))}

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { CollectionRecipeCard } from '@/components/collection/collection-recipe-card';
+import { RecipeDetailCard } from '@/components/recipe/detail-card';
 import * as styles from '@/components/section/collection-group/collection/index.css';
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils/useResponsive';
@@ -76,7 +76,7 @@ const CollectionSection = ({
                                         height: 'auto',
                                     }}
                                 >
-                                    <CollectionRecipeCard recipe={recipe} />
+                                    <RecipeDetailCard recipe={recipe} />
                                 </SwiperSlide>
                             );
                         })}
@@ -90,7 +90,7 @@ const CollectionSection = ({
                                 key={recipe.sno}
                                 className={styles.recipeListItem}
                             >
-                                <CollectionRecipeCard recipe={recipe} />
+                                <RecipeDetailCard recipe={recipe} />
                             </li>
                         );
                     })}

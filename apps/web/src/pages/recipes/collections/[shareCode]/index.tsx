@@ -1,23 +1,23 @@
 import { filter, map, pipe, take, toArray } from '@fxts/core';
-import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
-import { Bookmark, BookmarkCheck, Heart, Share2, Users } from 'lucide-react';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { Bookmark, BookmarkCheck, Share2, Users } from 'lucide-react';
 import type {
     GetStaticPaths,
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { collection } from '@/api/shop';
+import { RecipeDetailCard } from '@/components/recipe/detail-card';
 import { CollectionMoreMenu } from '@/components/collection';
 import { PATHS } from '@/const/paths';
-import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
+import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
-import { collectionKeys, recipeKeys } from '@/hooks/queryKeys';
+import { collectionKeys } from '@/hooks/queryKeys';
 import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
@@ -32,7 +32,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
     const isLogin = useAuth();
     const { openAsyncDialog } = useDialog();
     const { openCollectionForm, openLoginDialog } = useCustomDialog();
-    const queryClient = useQueryClient();
 
     const router = useRouter();
 
@@ -42,11 +41,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
         bookmarkCollection: { mutate: bookmarkCollectionMutate },
         unBookmarkCollection: { mutate: unBookmarkCollectionMutate },
     } = useCollectionMutation();
-
-    const {
-        likeRecipe: { mutate: likeRecipeMutate },
-        unlikeRecipe: { mutate: unlikeRecipeMutate },
-    } = useRecipeMutation();
 
     const handleShare = async () => {
         const url = window.location.href;
@@ -97,37 +91,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
         }
     };
 
-    const handleLikeRecipe = (sno: number, liked: boolean) => {
-        if (!isLogin) {
-            openLoginDialog();
-            return;
-        }
-
-        if (liked) {
-            unlikeRecipeMutate(
-                { sno },
-                {
-                    onSuccess: () => {
-                        queryClient.invalidateQueries({
-                            queryKey: recipeKeys.sharedCollection(shareCode),
-                        });
-                    },
-                },
-            );
-        } else {
-            likeRecipeMutate(
-                { sno },
-                {
-                    onSuccess: () => {
-                        queryClient.invalidateQueries({
-                            queryKey: recipeKeys.sharedCollection(shareCode),
-                        });
-                    },
-                },
-            );
-        }
-    };
-
     const recipes = sharedCollectionData.recipes ?? [];
 
     // sharedCollectionData.recipes가 있으면 해당 썸네일을 사용하고, 없으면 recipeImageUrls를 사용합니다.
@@ -164,7 +127,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
             onConfirmReturnValue: true,
             onCloseReturnValue: false,
         });
-        console.log('🚀 ~ handleDeleteCollection ~ isAgree:', isAgree);
 
         if (!isAgree) {
             return;
@@ -341,87 +303,10 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                     ) : (
                         <div className={styles.recipeGrid}>
                             {recipes.map((r) => (
-                                <Link
+                                <RecipeDetailCard
                                     key={r.sno}
-                                    href={PATHS.RECIPES.DETAIL.replace(
-                                        '[recipeNo]',
-                                        r.sno.toString(),
-                                    )}
-                                    className={styles.recipeCard}
-                                >
-                                    <div className={styles.recipeThumbWrapper}>
-                                        <img
-                                            src={r.thumbnailUrl ?? ''}
-                                            alt={r.title}
-                                            className={styles.recipeThumb}
-                                        />
-                                        <button
-                                            className={
-                                                styles.recipeBookmarkBadge
-                                            }
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                if (!isLogin) {
-                                                    openLoginDialog();
-                                                }
-                                            }}
-                                            aria-label={t('북마크')}
-                                        >
-                                            <Bookmark
-                                                size={14}
-                                                fill={
-                                                    r.bookmarked
-                                                        ? 'currentColor'
-                                                        : 'none'
-                                                }
-                                            />
-                                        </button>
-                                    </div>
-
-                                    <div>
-                                        <h3 className={styles.recipeTitle}>
-                                            {r.title}
-                                        </h3>
-                                        <p className={styles.recipeAuthor}>
-                                            {r.authorName ??
-                                                r.memberName ??
-                                                t('익명')}
-                                        </p>
-                                        <div className={styles.recipeMeta}>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    handleLikeRecipe(
-                                                        r.sno,
-                                                        r.liked,
-                                                    );
-                                                }}
-                                                aria-label={t('좋아요')}
-                                                style={{
-                                                    display: 'inline-flex',
-                                                    alignItems: 'center',
-                                                    gap: '3px',
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    padding: 0,
-                                                    cursor: 'pointer',
-                                                    color: 'inherit',
-                                                    font: 'inherit',
-                                                }}
-                                            >
-                                                <Heart
-                                                    size={12}
-                                                    fill={
-                                                        r.liked
-                                                            ? 'currentColor'
-                                                            : 'none'
-                                                    }
-                                                />
-                                                {r.likeCount}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </Link>
+                                    recipe={r}
+                                />
                             ))}
                         </div>
                     )}
