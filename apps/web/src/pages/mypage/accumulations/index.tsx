@@ -432,8 +432,8 @@ export const MypageAccumulation = () => {
     );
 };
 
-MypageAccumulation.getLayout = (page: React.ReactNode) => {
-    return <MypageLayout>{page}</MypageLayout>;
-};
+MypageAccumulation.getLayout = (page: React.ReactNode) => (
+    <MypageLayout>{page}</MypageLayout>
+);
 
 export default MypageAccumulation;

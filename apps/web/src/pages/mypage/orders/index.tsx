@@ -257,8 +257,8 @@ export const Orders = () => {
     );
 };
 
-Orders.getLayout = (page: React.ReactNode) => {
-    return <MypageLayout>{page}</MypageLayout>;
-};
+Orders.getLayout = (page: React.ReactNode) => (
+    <MypageLayout>{page}</MypageLayout>
+);
 
 export default Orders;

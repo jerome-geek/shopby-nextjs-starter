@@ -11,13 +11,14 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
+import LoadingWrapper from '@/components/common/loading-wrapper';
+import { CSRLayout } from '@/components/layout/csr';
+import * as styles from '@/components/layout/mypage/index.css';
 import type { MypageMenuList } from '@/components/mypage/side-navigation';
 import { MypageSideNavigation } from '@/components/mypage/side-navigation';
 import { PATHS } from '@/const/paths';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
 import useResponsive from '@/hooks/utils/useResponsive';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import * as styles from '@/components/layout/mypage/index.css';
 import { getPathTitle } from '@/utils/path';
 
 export type { MypageMenuList };
@@ -126,29 +127,31 @@ export const MypageLayout = memo(function MypageLayout({
     );
 
     return (
-        <MypageMenuContext.Provider value={menuList}>
-            <div className={clsx(styles.container, className)}>
-                {!isMobile && <MypageSideNavigation menuList={menuList} />}
+        <CSRLayout>
+            <MypageMenuContext.Provider value={menuList}>
+                <div className={clsx(styles.container, className)}>
+                    {!isMobile && <MypageSideNavigation menuList={menuList} />}
 
-                <section className={styles.sectionContainer}>
-                    {pageName && !isMobile && (
-                        <div className={styles.titleContainer}>
-                            <h2 className={styles.title}>{pageName}</h2>
-                        </div>
-                    )}
+                    <section className={styles.sectionContainer}>
+                        {pageName && !isMobile && (
+                            <div className={styles.titleContainer}>
+                                <h2 className={styles.title}>{pageName}</h2>
+                            </div>
+                        )}
 
-                    <FetchBoundary
-                        fallback={
-                            <LoadingWrapper isLoading={true}>
-                                <span />
-                            </LoadingWrapper>
-                        }
-                    >
-                        <div className={styles.content}>{children}</div>
-                    </FetchBoundary>
-                </section>
-            </div>
-        </MypageMenuContext.Provider>
+                        <FetchBoundary
+                            fallback={
+                                <LoadingWrapper isLoading={true}>
+                                    <span />
+                                </LoadingWrapper>
+                            }
+                        >
+                            <div className={styles.content}>{children}</div>
+                        </FetchBoundary>
+                    </section>
+                </div>
+            </MypageMenuContext.Provider>
+        </CSRLayout>
     );
 });
 

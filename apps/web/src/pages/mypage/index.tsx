@@ -34,6 +34,4 @@ export default function MypageMain() {
     );
 }
 
-MypageMain.getLayout = (page: React.ReactNode) => {
-    return <MypageLayout>{page}</MypageLayout>;
-};
+MypageMain.getLayout = (page: React.ReactNode) => <MypageLayout>{page}</MypageLayout>;
