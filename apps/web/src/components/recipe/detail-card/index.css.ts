@@ -5,13 +5,15 @@ import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
 
 export const recipeLink = style({
-    display: 'block',
+    display: 'flex',
+    flexDirection: 'column',
     textDecoration: 'none',
     color: 'inherit',
     height: '100%',
     backgroundColor: vars.color.ivory['10'],
     borderRadius: '8px',
     overflow: 'hidden',
+    padding: '16px',
     width: '100%',
 });
 
@@ -30,12 +32,6 @@ globalStyle(`${recipeLink} a:focus-visible`, {
     borderRadius: 4,
 });
 
-export const cardContent = style({
-    padding: '16px',
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-});
 
 export const cardHeader = style({
     display: 'flex',

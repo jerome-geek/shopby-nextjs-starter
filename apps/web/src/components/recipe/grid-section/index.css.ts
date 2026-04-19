@@ -1,7 +1,7 @@
-import { style, keyframes } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
+import { keyframes, style } from '@vanilla-extract/css';
 
 const shimmer = keyframes({
     '0%': { backgroundPosition: '-200% 0' },
@@ -16,9 +16,11 @@ const rotate = keyframes({
 export const section = style({
     display: 'flex',
     flexDirection: 'column',
+    gap: '20px',
+
     '@media': {
         [media.desktop]: {
-            gap: '16px',
+            gap: '24px',
         },
     },
 });
@@ -30,8 +32,16 @@ export const sectionHeader = style({
 });
 
 export const sectionTitle = style([
-    textStyles.title1Bold,
-    { color: vars.color.black },
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
+            },
+        },
+    },
 ]);
 
 export const viewAll = style([
@@ -49,12 +59,25 @@ export const recipeGrid = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '12px',
+
     '@media': {
         [media.desktop]: {
             gridTemplateColumns: 'repeat(5, 1fr)',
             gap: '20px',
         },
     },
+});
+
+export const swiperContainer = style({
+    margin: '0 -20px',
+    padding: '0 20px',
+    width: 'calc(100% + 40px)',
+    overflow: 'hidden',
+});
+
+export const swiperSlide = style({
+    width: '160px',
+    height: 'auto',
 });
 
 export const recipeImgArea = style({

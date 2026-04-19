@@ -15,9 +15,10 @@ import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
 import ConfirmDialog from '@/components/ui/dialog/confirm';
-import { MODAL_QUERY_KEY } from '@/const/modal';
+import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
+import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
@@ -25,6 +26,7 @@ export const useCustomDialog = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
+    const isLogin = useAuth();
 
     const removeModalQuery = useCallback(
         (originalClose: () => void) => () => {
@@ -138,7 +140,53 @@ export const useCustomDialog = () => {
         [t, router],
     );
 
-    const openRecipeUrlInput = useCallback(() => {
+    /**
+     * 인증이 필요한 액션을 위한 내부 게이트웨이
+     */
+    const withRequiredAuth = useCallback(
+        (action: (...args: any[]) => void, modalType?: string) => {
+            return (...args: any[]) => {
+                if (isLogin) {
+                    return action(...args);
+                }
+
+                // 첫 번째 인자가 이벤트 객체인지 확인
+                const e =
+                    args[0] instanceof Object && 'preventDefault' in args[0]
+                        ? (args[0] as React.MouseEvent | React.FormEvent)
+                        : undefined;
+
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                const [basePath, existingSearch] = router.asPath.split('?');
+                const searchParams = new URLSearchParams(existingSearch);
+
+                if (modalType) {
+                    searchParams.set(MODAL_QUERY_KEY, modalType);
+
+                    // 특정 모달에 필요한 추가 파라미터 보존 (예: 레시피 저장 시 sno)
+                    if (
+                        modalType === MODAL_TYPE.RECIPE_SAVE &&
+                        typeof args[0] === 'number'
+                    ) {
+                        searchParams.set('recipeSno', String(args[0]));
+                    }
+                }
+
+                const returnUrl = searchParams.toString()
+                    ? `${basePath}?${searchParams.toString()}`
+                    : basePath;
+
+                openLoginDialog(returnUrl);
+            };
+        },
+        [isLogin, router, openLoginDialog],
+    );
+
+    const _openRecipeUrlInput = useCallback(() => {
         if (isMobile) {
             overlay.open((props) => (
                 <RecipeUrlInputSheet
@@ -156,15 +204,25 @@ export const useCustomDialog = () => {
         }
     }, [isMobile, removeModalQuery]);
 
-    const openRecipeImageUpload = useCallback(() => {
+    const openRecipeUrlInput = withRequiredAuth(
+        _openRecipeUrlInput,
+        MODAL_TYPE.RECIPE_URL_INPUT,
+    );
+
+    const _openRecipeImageUpload = useCallback(() => {
         overlay.open((props) => <RecipeImageUploadModal {...props} />);
     }, []);
+
+    const openRecipeImageUpload = withRequiredAuth(
+        _openRecipeImageUpload,
+        MODAL_TYPE.RECIPE_IMAGE_UPLOAD,
+    );
 
     const openImageDetail = useCallback((src: string) => {
         overlay.open((props) => <ImageDetailModal {...props} src={src} />);
     }, []);
 
-    const openRecipeCreateSelection = useCallback(() => {
+    const _openRecipeCreateSelection = useCallback(() => {
         if (isMobile) {
             overlay.open((props) => (
                 <RecipeCreateSelectionSheet
@@ -182,7 +240,12 @@ export const useCustomDialog = () => {
         }
     }, [isMobile, removeModalQuery]);
 
-    const openCollectionForm = useCallback(
+    const openRecipeCreateSelection = withRequiredAuth(
+        _openRecipeCreateSelection,
+        MODAL_TYPE.RECIPE_CREATE,
+    );
+
+    const _openCollectionForm = useCallback(
         ({ shareCode }: { shareCode?: string } = {}) => {
             if (isMobile) {
                 overlay.open(
@@ -215,11 +278,16 @@ export const useCustomDialog = () => {
         [isMobile, removeModalQuery],
     );
 
+    const openCollectionForm = withRequiredAuth(
+        _openCollectionForm,
+        MODAL_TYPE.COLLECTION_FORM,
+    );
+
     const openCollectionCreate = useCallback(() => {
         openCollectionForm();
     }, [openCollectionForm]);
 
-    const openRecipeSave = useCallback(
+    const _openRecipeSave = useCallback(
         (recipeSno?: number) => {
             const sharedProps = {
                 recipeSno,
@@ -247,6 +315,11 @@ export const useCustomDialog = () => {
         [isMobile, removeModalQuery, openCollectionCreate],
     );
 
+    const openRecipeSave = withRequiredAuth(
+        _openRecipeSave,
+        MODAL_TYPE.RECIPE_SAVE,
+    );
+
     return {
         openAddCartDialog,
         openLoginDialog,
@@ -257,5 +330,6 @@ export const useCustomDialog = () => {
         openCollectionCreate,
         openCollectionForm,
         openImageDetail,
+        withRequiredAuth,
     };
 };

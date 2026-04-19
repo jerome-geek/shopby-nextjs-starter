@@ -1,20 +1,12 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
-import { collectionKeys } from '@/hooks/queryKeys';
 import { useCustomDialog, useToast } from '@/hooks/ui';
-import { useAuth } from '@/hooks/useAuth';
 
 const useBookmark = () => {
     const { t } = useTranslation();
 
-    const isLogin = useAuth();
-
-    const queryClient = useQueryClient();
-
-    const { openLoginDialog, openRecipeSave } = useCustomDialog();
+    const { openRecipeSave, withRequiredAuth } = useCustomDialog();
 
     const { addToast } = useToast();
 
@@ -26,13 +18,8 @@ const useBookmark = () => {
         unBookmarkCollection: { mutate: unBookmarkCollectionMutate },
     } = useCollectionMutation();
 
-    const toggleRecipeBookmark = useCallback(
+    const toggleRecipeBookmark = withRequiredAuth(
         ({ sno, bookmarked }: { sno: number; bookmarked: boolean }) => {
-            if (!isLogin) {
-                openLoginDialog();
-                return;
-            }
-
             if (bookmarked) {
                 unBookmarkRecipeMutate(
                     { sno },
@@ -49,35 +36,15 @@ const useBookmark = () => {
                 openRecipeSave(sno);
             }
         },
-        [
-            t,
-            addToast,
-            isLogin,
-            openLoginDialog,
-            openRecipeSave,
-            queryClient,
-            unBookmarkRecipeMutate,
-        ],
     );
 
-    const toggleCollectionBookmark = useCallback(
+    const toggleCollectionBookmark = withRequiredAuth(
         ({ sno, bookmarked }: { sno: number; bookmarked: boolean }) => {
-            if (!isLogin) {
-                openLoginDialog();
-                return;
-            }
-
             if (bookmarked) {
                 unBookmarkCollectionMutate(
                     { collectionSno: sno },
                     {
                         onSuccess: () => {
-                            queryClient.invalidateQueries({
-                                queryKey: collectionKeys.publicSearches(),
-                            });
-                            queryClient.invalidateQueries({
-                                queryKey: collectionKeys.list(),
-                            });
                             addToast({
                                 message: t('북마크를 취소했습니다.'),
                                 variant: 'success',
@@ -90,12 +57,6 @@ const useBookmark = () => {
                     { collectionSno: sno },
                     {
                         onSuccess: () => {
-                            queryClient.invalidateQueries({
-                                queryKey: collectionKeys.publicSearches(),
-                            });
-                            queryClient.invalidateQueries({
-                                queryKey: collectionKeys.list(),
-                            });
                             addToast({
                                 message: t('북마크를 추가했습니다.'),
                                 variant: 'success',
@@ -105,15 +66,6 @@ const useBookmark = () => {
                 );
             }
         },
-        [
-            t,
-            addToast,
-            isLogin,
-            openLoginDialog,
-            queryClient,
-            bookmarkCollectionMutate,
-            unBookmarkCollectionMutate,
-        ],
     );
 
     return {

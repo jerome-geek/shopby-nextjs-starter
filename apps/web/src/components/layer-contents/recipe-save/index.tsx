@@ -1,13 +1,13 @@
+import { includes } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { includes } from '@fxts/core';
 import { Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/recipe-save/index.css';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
-import { useCollectionList } from '@/hooks/query/shop/collection';
 import { useProfile } from '@/hooks/query/member/profile';
+import { useCollectionList } from '@/hooks/query/shop/collection';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui/useToast';
 import { vars } from '@/styles/theme.css';
@@ -21,6 +21,8 @@ export const RecipeSaveContent = ({
     recipeSno?: number;
     onAddCollection?: () => void;
 }) => {
+    console.log('🚀 ~ RecipeSaveContent ~ recipeSno:', recipeSno);
+
     const { t } = useTranslation();
     const queryClient = useQueryClient();
     const { bookmarkRecipe } = useRecipeMutation();

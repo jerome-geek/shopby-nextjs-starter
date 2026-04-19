@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import type { GetServerSideProps } from 'next';
+import { useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/router';
 
 import { MypageLayout } from '@/components/layout';
@@ -10,6 +9,13 @@ import { PATHS } from '@/const/paths';
 const MypageReviewModifyPage = () => {
     const router = useRouter();
     const reviewNo = Number(router.query.reviewNo) || 0;
+    const productNo = Number(router.query.productNo) || 0;
+
+    useEffect(() => {
+        if (router.isReady && (!reviewNo || !productNo)) {
+            void router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+        }
+    }, [router.isReady, reviewNo, productNo]);
 
     return (
         <div className={card.container}>
@@ -18,22 +24,6 @@ const MypageReviewModifyPage = () => {
             </section>
         </div>
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const reviewNo = Number(ctx.params?.reviewNo) || 0;
-    const productNo = Number(ctx.query.productNo) || 0;
-
-    if (!reviewNo || !productNo) {
-        return {
-            redirect: {
-                destination: PATHS.MYPAGE.REVIEWS.MAIN,
-                permanent: false,
-            },
-        };
-    }
-
-    return { props: {} };
 };
 
 MypageReviewModifyPage.getLayout = (page: ReactNode) => {

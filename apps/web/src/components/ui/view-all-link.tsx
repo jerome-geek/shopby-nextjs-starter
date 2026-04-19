@@ -1,6 +1,8 @@
 import Link, { LinkProps } from 'next/link';
 import { CSSProperties, type ReactNode } from 'react';
-import * as styles from './view-all-link.css';
+
+import * as styles from '@/components/ui/view-all-link.css';
+import { PATHS } from '@/const/paths';
 
 interface ViewAllLinkProps extends LinkProps {
     children: ReactNode;
@@ -18,7 +20,7 @@ interface ViewAllLinkProps extends LinkProps {
 }
 
 export const ViewAllLink = ({
-    href = '/',
+    href = PATHS.MAIN,
     children,
     className,
     color = '#888',
@@ -51,4 +53,4 @@ export const ViewAllLink = ({
             {children}
         </Link>
     );
-}
+};

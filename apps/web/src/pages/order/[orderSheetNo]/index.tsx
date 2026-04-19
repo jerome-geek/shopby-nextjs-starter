@@ -1,4 +1,3 @@
-import type { GetServerSideProps } from 'next';
 import { HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
@@ -13,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useMyApp } from '@/hooks/myapp';
 import { useOrderSheetInitialize } from '@/hooks/order';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
+import { CSRLayout } from '@/components/layout';
 
 import OrderPaymentSummary from '@/components/order/payment-summary';
 import PaymentMethod from '@/components/order/payment-method';
@@ -79,15 +79,20 @@ const OrderSheetPage = () => {
         },
     });
 
+    if (router.isReady && !orderSheetNo) {
+        void router.replace('/');
+        return null;
+    }
+
     return (
         <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
             <FormProvider {...methods}>
-                {isLogin !== null && (
+                <CSRLayout>
                     <OrderSheetContent
                         orderSheetNo={orderSheetNo}
                         isLogin={isLogin}
                     />
-                )}
+                </CSRLayout>
             </FormProvider>
         </ShopbyApiErrorBoundary>
     );
@@ -213,18 +218,6 @@ const OrderSheetContent = ({
             </div>
         </form>
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-    const orderSheetNo = params?.orderSheetNo as string;
-
-    if (!orderSheetNo) {
-        return { notFound: true };
-    }
-
-    return {
-        props: { orderSheetNo },
-    };
 };
 
 export default OrderSheetPage;

@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const headingBold = textStyles.headingBold;
 export const body2Semibold = textStyles.body2Semibold;
@@ -11,10 +11,11 @@ export const body2Regular = textStyles.body2Regular;
 export const container = style({
     display: 'flex',
     flexDirection: 'column',
-    padding: '16px',
+    gap: '48px',
+
     '@media': {
         [media.desktop]: {
-            gap: '32px',
+            gap: '96px',
             padding: '40px 0',
         },
     },
@@ -117,18 +118,10 @@ export const tabItem = style([
     },
 ]);
 
-export const activeIndicator = style({
-    position: 'absolute',
-    inset: 0,
-    borderRadius: '100px',
-    backgroundColor: '#8da287', // 레퍼런스의 세이지 그린 톤
-    zIndex: -1,
-    boxShadow: '0 4px 12px rgba(141, 162, 135, 0.3)',
-});
-
 export const section = style({
     display: 'flex',
     flexDirection: 'column',
+    gap: '20px',
 
     '@media': {
         [media.desktop]: {
@@ -137,15 +130,17 @@ export const section = style({
     },
 });
 
-export const sectionHeader = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-});
-
 export const sectionTitle = style([
-    textStyles.title1Bold,
-    { color: vars.color.black },
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
+            },
+        },
+    },
 ]);
 
 export const viewAll = style([
@@ -160,10 +155,21 @@ export const viewAll = style([
 ]);
 
 /* Collection Styles */
+export const collectionItem = style({
+    minWidth: 0,
+    width: '100%',
+    listStyle: 'none',
+});
+
 export const collectionGrid = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(1, 1fr)',
-    gap: '16px',
+    gap: '12px',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    width: '100%',
+
     '@media': {
         [media.desktop]: {
             gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
@@ -179,6 +185,7 @@ export const collectionCard = style({
     borderRadius: '16px',
     overflow: 'hidden',
     backgroundColor: vars.color.white,
+    width: '100%',
     border: '1px solid rgba(0, 0, 0, 0.05)',
     transition: 'box-shadow 0.3s ease',
     cursor: 'pointer',
@@ -313,11 +320,11 @@ export const bookmarkButton = style({
 });
 
 export const createButton = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         width: '100%',
         maxWidth: '588px',
-        padding: '18px 0',
+        padding: '16px 0',
         margin: '0 auto',
         borderRadius: '4px',
         border: `1px solid ${vars.color.gray['50']}`,
@@ -328,6 +335,13 @@ export const createButton = style([
         justifyContent: 'center',
         gap: '8px',
         cursor: 'pointer',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingSemibold,
+                padding: '16px 0',
+            },
+        },
     },
 ]);
 

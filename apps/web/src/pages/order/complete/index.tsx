@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { isMobile } from 'react-device-detect';
 import Link from 'next/link';
 import dayjs from 'dayjs';
-import type { GetServerSideProps } from 'next';
 
 // import { authCookieManager } from '@/utils/cookie';
 import { useAuth } from '@/hooks/useAuth';
@@ -13,6 +12,7 @@ import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuest
 import * as styles from '@/pages/order/complete/index.css';
 import type { OrderDetailResponse } from '@/models/order';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import { CSRLayout } from '@/components/layout';
 
 /**
  * [회원 주문 내역 렌더러]
@@ -305,16 +305,20 @@ const OrderFail = () => {
     );
 };
 
-interface OrderCompleteProps {
-    orderNo: string;
-    result: 'SUCCESS' | 'FAIL';
-    guestToken?: string;
-}
-
-const OrderComplete = ({ orderNo, result, guestToken }: OrderCompleteProps) => {
+const OrderComplete = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const isLogin = useAuth();
+
+    const {
+        orderNo,
+        result = 'SUCCESS',
+        guestToken = null,
+    } = router.query as {
+        orderNo: string;
+        result: 'SUCCESS' | 'FAIL';
+        guestToken?: string;
+    };
 
     // useEffect(() => {
     //     if (guestToken) {
@@ -331,31 +335,23 @@ const OrderComplete = ({ orderNo, result, guestToken }: OrderCompleteProps) => {
         }
     }, []);
 
-    if (!router.isReady) return null;
+    if (router.isReady && !orderNo && result === 'SUCCESS') {
+        void router.replace('/');
+        return null;
+    }
 
     return (
-        <div
-            style={{
-                minHeight: '100vh',
-                background: '#fff',
-                display: 'flex',
-                justifyContent: 'center',
-            }}
-        >
-            {result === 'SUCCESS' && orderNo ? (
-                <ShopbyApiErrorBoundary
-                    fallback={
-                        <div
-                            style={{
-                                padding: '100px',
-                                textAlign: 'center',
-                            }}
-                        >
-                            {t('데이터를 불러오는 중 오류가 발생했습니다.')}
-                        </div>
-                    }
-                >
-                    <Suspense
+        <CSRLayout>
+            <div
+                style={{
+                    minHeight: '100vh',
+                    background: '#fff',
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
+                {result === 'SUCCESS' && orderNo ? (
+                    <ShopbyApiErrorBoundary
                         fallback={
                             <div
                                 style={{
@@ -363,42 +359,35 @@ const OrderComplete = ({ orderNo, result, guestToken }: OrderCompleteProps) => {
                                     textAlign: 'center',
                                 }}
                             >
-                                {t('로딩 중...')}
+                                {t('데이터를 불러오는 중 오류가 발생했습니다.')}
                             </div>
                         }
                     >
-                        {isLogin ? (
-                            <MemberOrderContent orderNo={orderNo} />
-                        ) : (
-                            <GuestOrderContent orderNo={orderNo} />
-                        )}
-                    </Suspense>
-                </ShopbyApiErrorBoundary>
-            ) : (
-                <OrderFail />
-            )}
-        </div>
+                        <Suspense
+                            fallback={
+                                <div
+                                    style={{
+                                        padding: '100px',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {t('로딩 중...')}
+                                </div>
+                            }
+                        >
+                            {isLogin ? (
+                                <MemberOrderContent orderNo={orderNo} />
+                            ) : (
+                                <GuestOrderContent orderNo={orderNo} />
+                            )}
+                        </Suspense>
+                    </ShopbyApiErrorBoundary>
+                ) : (
+                    <OrderFail />
+                )}
+            </div>
+        </CSRLayout>
     );
-};
-
-/**
- * 서버 사이드에서 경로의 유효성(orderNo 유무)만 체크하고
- * 실제 데이터 페칭은 클라이언트 Suspense에서 처리합니다.
- */
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-    const { orderNo, result = 'SUCCESS', guestToken = null } = query;
-
-    if (!orderNo) {
-        return { notFound: true };
-    }
-
-    return {
-        props: {
-            orderNo,
-            result,
-            guestToken,
-        },
-    };
 };
 
 export default OrderComplete;

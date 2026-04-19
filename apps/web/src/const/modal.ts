@@ -5,6 +5,7 @@ export const MODAL_TYPE = {
     RECIPE_IMAGE_UPLOAD: 'recipe-image-upload',
     RECIPE_URL_INPUT: 'recipe-url-input',
     RECIPE_SAVE: 'recipe-save',
+    COLLECTION_FORM: 'collection-form',
 } as const;
 
 export type ModalType = typeof MODAL_TYPE[keyof typeof MODAL_TYPE];

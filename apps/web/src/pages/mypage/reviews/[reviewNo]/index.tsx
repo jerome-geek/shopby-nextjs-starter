@@ -3,8 +3,7 @@ import dayjs from 'dayjs';
 import { overlay } from 'overlay-kit';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import type { GetServerSideProps } from 'next';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
@@ -36,6 +35,12 @@ export const MypageReviewDetail = () => {
 
     const productNo = Number(router.query.productNo) || 0;
     const reviewNo = Number(router.query.reviewNo) || 0;
+
+    useEffect(() => {
+        if (router.isReady && (!productNo || !reviewNo)) {
+            void router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+        }
+    }, [router.isReady, productNo, reviewNo]);
 
     const { data: productReviewData, isFetched: isProductReviewFetched } =
         useProductReview({
@@ -268,22 +273,6 @@ export const MypageReviewDetail = () => {
             </section>
         </div>
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const reviewNo = Number(ctx.params?.reviewNo) || 0;
-    const productNo = Number(ctx.query.productNo) || 0;
-
-    if (!reviewNo || !productNo) {
-        return {
-            redirect: {
-                destination: PATHS.MYPAGE.REVIEWS.MAIN,
-                permanent: false,
-            },
-        };
-    }
-
-    return { props: {} };
 };
 
 MypageReviewDetail.getLayout = (page: ReactNode) => {

@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const headingBold = textStyles.headingBold;
 export const body2Semibold = textStyles.body2Semibold;
@@ -12,6 +12,7 @@ export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
+    padding: '24px 0',
 
     '@media': {
         [media.desktop]: {
@@ -19,9 +20,6 @@ export const container = style({
             padding: '40px 0',
             maxWidth: '1200px',
             margin: '0 auto',
-        },
-        [media.mobile]: {
-            padding: '24px 20px',
         },
     },
 });

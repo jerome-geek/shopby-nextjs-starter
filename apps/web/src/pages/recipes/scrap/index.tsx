@@ -2,7 +2,7 @@ import { map, pipe, prepend, sort, toArray } from '@fxts/core';
 import { Plus } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CSRLayout } from '@/components/layout';
@@ -10,17 +10,17 @@ import { RecipeScrapDetail } from '@/components/recipe/scrap/detail';
 import RecipeScrapSummary from '@/components/recipe/scrap/summary';
 import { useCollectionList } from '@/hooks/query/shop/collection';
 import { useCustomDialog } from '@/hooks/ui';
-import * as styles from '@/pages/recipes/scrap/index.css';
 import { useResponsive } from '@/hooks/utils';
+import * as styles from '@/pages/recipes/scrap/index.css';
 
 const RecipeScrapPage = () => {
     const { t } = useTranslation();
 
-    const { isMobile } = useResponsive();
-
     const router = useRouter();
 
-    const { openCollectionCreate } = useCustomDialog();
+    const { openCollectionForm } = useCustomDialog();
+    const { isMobile } = useResponsive();
+
 
     // 컬렉션 API 조회
     const { data: tabs = [{ sno: 0, shareCode: 'all', label: '전체' }] } =
@@ -120,10 +120,10 @@ const RecipeScrapPage = () => {
                         <button
                             type='button'
                             className={styles.addCollectionButton}
-                            onClick={openCollectionCreate}
+                            onClick={() => openCollectionForm()}
                             aria-label={t('컬렉션 추가')}
                         >
-                            <Plus size={16} />
+                            <Plus size={isMobile ? 16 : 20} />
                         </button>
                     </div>
                 </div>

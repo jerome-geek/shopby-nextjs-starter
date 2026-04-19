@@ -11,6 +11,7 @@ export const useModalWatcher = () => {
         openRecipeImageUpload,
         openRecipeUrlInput,
         openRecipeSave,
+        openCollectionForm,
     } = useCustomDialog();
 
     const openedModalTypeRef = useRef<string | null>(null);
@@ -19,6 +20,7 @@ export const useModalWatcher = () => {
         openRecipeImageUpload,
         openRecipeUrlInput,
         openRecipeSave,
+        openCollectionForm,
     });
 
     useEffect(() => {
@@ -27,6 +29,7 @@ export const useModalWatcher = () => {
             openRecipeImageUpload,
             openRecipeUrlInput,
             openRecipeSave,
+            openCollectionForm,
         };
     });
 
@@ -60,14 +63,23 @@ export const useModalWatcher = () => {
             return;
         }
 
-        // 5. 레시피 저장 모달 처리
         if (modalType === MODAL_TYPE.RECIPE_SAVE) {
             openedModalTypeRef.current = modalType;
-            handlersRef.current.openRecipeSave();
+            const recipeSno = query.recipeSno
+                ? Number(query.recipeSno)
+                : undefined;
+            handlersRef.current.openRecipeSave(recipeSno);
             return;
         }
 
-        // 6. 쿼리가 사라졌다면 Ref 초기화 (닫힘 감지)
+        // 6. 컬렉션 폼 모달 처리
+        if (modalType === MODAL_TYPE.COLLECTION_FORM) {
+            openedModalTypeRef.current = modalType;
+            handlersRef.current.openCollectionForm();
+            return;
+        }
+
+        // 7. 쿼리가 사라졌다면 Ref 초기화 (닫힘 감지)
         if (!modalType) {
             openedModalTypeRef.current = null;
         }

@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import type { GetServerSideProps } from 'next';
+import { useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/router';
 
 import { MypageLayout } from '@/components/layout';
@@ -9,7 +8,16 @@ import { PATHS } from '@/const/paths';
 
 export const MypageReviewWrite = () => {
     const router = useRouter();
+    const productNo = Number(router.query.productNo) || 0;
+    const optionNo = Number(router.query.optionNo) || 0;
+    const orderOptionNo = Number(router.query.orderOptionNo) || 0;
     const orderNo = String(router.query.orderNo) || '';
+
+    useEffect(() => {
+        if (router.isReady && (!productNo || !optionNo || !orderOptionNo)) {
+            void router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+        }
+    }, [router.isReady, productNo, optionNo, orderOptionNo]);
 
     return (
         <div className={card.container}>
@@ -25,20 +33,3 @@ MypageReviewWrite.getLayout = (page: ReactNode) => {
 };
 
 export default MypageReviewWrite;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const productNo = Number(context.params?.productNo) || 0;
-    const optionNo = Number(context.query.optionNo) || 0;
-    const orderOptionNo = Number(context.query.orderOptionNo) || 0;
-
-    if (!productNo || !optionNo || !orderOptionNo) {
-        return {
-            redirect: {
-                destination: PATHS.MYPAGE.REVIEWS.MAIN,
-                permanent: false,
-            },
-        };
-    }
-
-    return { props: {} };
-};

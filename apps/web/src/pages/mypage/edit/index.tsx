@@ -1,93 +1,39 @@
-import { useEffect, useState } from 'react';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
-import type { GetServerSideProps } from 'next';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import { isNull } from '@fxts/core';
 
 import { MypageLayout } from '@/components/layout';
 import { CheckAccountForm } from '@/components/mypage/edit/check-account-form';
 import { EditForm } from '@/components/mypage/edit/edit-form';
-import { profile } from '@/api/member';
 import { PATHS } from '@/const/paths';
-import { profileKeys } from '@/hooks/queryKeys';
 
-export const MypageEdit = ({
-    isAuthenticated,
-}: {
-    isAuthenticated?: boolean;
-}) => {
+export const MypageEdit = () => {
     const router = useRouter();
 
-    const token = router.query.token as string;
-
-    useEffect(() => {
-        if (isAuthenticated && token) {
-            router.replace({
-                pathname: PATHS.MYPAGE.EDIT,
-                query: {},
-            });
-        }
-    }, [token, isAuthenticated]);
-
     const [password, setPassword] = useState<string | 'SOCIAL_LOGIN' | null>(
-        () => (isAuthenticated ? 'SOCIAL_LOGIN' : null),
+        () => {
+            if (typeof window === 'undefined') return null;
+            const url = new URL(window.location.href);
+            return url.searchParams.get('token') ? 'SOCIAL_LOGIN' : null;
+        },
     );
 
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('token')) {
+            router.replace(PATHS.MYPAGE.EDIT, undefined, { shallow: true });
+        }
+    }, [router]);
+
     return !isNull(password) ? (
-        <EditForm password={password} setPassword={setPassword} />
+        <EditForm password={password} setPassword={(p) => setPassword(p)} />
     ) : (
-        <CheckAccountForm setPassword={setPassword} />
+        <CheckAccountForm setPassword={(p) => setPassword(p)} />
     );
 };
 
-MypageEdit.getLayout = (page: React.ReactNode) => {
+MypageEdit.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
 
 export default MypageEdit;
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-    const queryClient = new QueryClient();
-
-    const token = query.token as string;
-
-    if (!token) {
-        return {
-            props: {},
-        };
-    }
-
-    try {
-        const headers = {
-            'Shop-By-Authorization': `Bearer ${token}`,
-        };
-
-        const profileData = await queryClient.fetchQuery({
-            queryKey: profileKeys.getProfile({}),
-            queryFn: async () => {
-                const { data } = await profile.getProfile({
-                    headers,
-                });
-
-                return data;
-            },
-        });
-
-        if (profileData.providerType) {
-            return {
-                props: {
-                    isAuthenticated: true,
-                    dehydratedState: dehydrate(queryClient),
-                },
-            };
-        }
-    } catch {
-        return {
-            props: {},
-        };
-    }
-
-    return {
-        props: {},
-    };
-};
