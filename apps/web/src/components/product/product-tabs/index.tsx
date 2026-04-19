@@ -4,24 +4,31 @@ import { motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
 import ProductContents from '@/components/product/product-tabs/contents';
+import DutyInfo from '@/components/product/product-tabs/duty-info';
 import * as styles from '@/components/product/product-tabs/index.css';
+import PopularProducts from '@/components/product/product-tabs/popular-products';
+import RelatedProducts from '@/components/product/product-tabs/related-products';
 import RelatedProductList from '@/components/product/related-product-list';
 import { useResponsive } from '@/hooks/utils';
+import { ProductDetailResponse } from '@/models/product/product';
 
 interface ProductTabsProps {
     reviewCount?: number;
     inquiryCount?: number;
     productContent?: string;
+    productDetailData: ProductDetailResponse;
 }
 
 export default function ProductTabs({
     reviewCount = 0,
     inquiryCount = 0,
     productContent,
+    productDetailData,
 }: ProductTabsProps) {
     const [activeTab, setActiveTab] = useState<'info' | 'review' | 'inquiry'>(
         'info',
     );
+
     const lenis = useLenis();
 
     const { isTablet } = useResponsive();
@@ -139,6 +146,17 @@ export default function ProductTabs({
                         content={productContent}
                         onClick={() => scrollToSection('info', true)}
                     />
+
+                    <div className={styles.infoContainer}>
+                        <DutyInfo
+                            dutyInfo={productDetailData.baseInfo.dutyInfo}
+                        />
+                    </div>
+                </div>
+
+                <div className={styles.productsContainer}>
+                    <PopularProducts />
+                    <RelatedProducts />
                 </div>
 
                 <div

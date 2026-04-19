@@ -1,9 +1,9 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
+import { globalVars } from '@/styles/global.css';
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
-import { globalVars } from '@/styles/global.css';
 
 export const container = style({
     backgroundColor: vars.color.white,
@@ -451,7 +451,7 @@ export const orderContainer = style({
             gap: '12px',
             backgroundColor: vars.color.white,
             paddingTop: '12px',
-            zIndex: 1,
+            paddingBottom: '12px',
             // 버튼 영역에 그림자를 주어 경계를 명확히 함
             boxShadow: `0 -10px 10px -5px ${vars.color.white}`,
         },

@@ -1,9 +1,9 @@
-import { style, globalStyle } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const tabsContainer = style({
     display: 'flex',
@@ -72,12 +72,63 @@ export const tabContentContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '120px',
+
+    '@media': {
+        [media.mobile]: {
+            gap: '102px',
+        },
+    },
+});
+
+globalStyle(`${tabContentContainer} > div:after`, {
+    content: '""',
+    position: 'absolute',
+    bottom: '-60px',
+    left: 0,
+    width: '100%',
+    height: '1px',
+    backgroundColor: vars.color.gray['20'],
+
+    '@media': {
+        [media.mobile]: {
+            bottom: '-51px',
+            height: '8px',
+            marginLeft: '-20px',
+            width: 'calc(100% + 40px)',
+        },
+    },
 });
 
 export const descriptionSection = style({
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     gap: '32px',
+});
+
+export const infoContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
+});
+
+export const productsContainer = style({
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '32px',
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
 });
 
 export const descriptionText = style([

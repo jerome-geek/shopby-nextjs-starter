@@ -1365,6 +1365,12 @@ export interface RelatedProductInfo {
     stickers: StickerInfo[];
     /** 상품 번호 */
     productNo: number;
+    /** 좋아요 여부 */
+    liked: boolean;
+    /** 상품평 평균점 */
+    reviewRating: number;
+    /** 총 리뷰 수 */
+    totalReviewCount: number;
 }
 
 export type GetRelatedProductsResponse = RelatedProductInfo[];

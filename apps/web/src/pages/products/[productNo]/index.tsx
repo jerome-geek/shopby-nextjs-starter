@@ -80,10 +80,6 @@ function ProductDetailView({
         productNo,
         searchParams,
     });
-    console.log(
-        '🚀 ~ ProductDetailView ~ productDetailData:',
-        productDetailData,
-    );
 
     const { baseInfo, price, counter, brand } = productDetailData;
 
@@ -343,6 +339,7 @@ function ProductDetailView({
                                 reviewCount={counter.reviewCnt || 0}
                                 inquiryCount={counter.inquiryCnt || 0}
                                 productContent={productContent}
+                                productDetailData={productDetailData}
                             />
                         </div>
                     )}
@@ -537,6 +534,7 @@ function ProductDetailView({
                             reviewCount={counter.reviewCnt || 0}
                             inquiryCount={counter.inquiryCnt || 0}
                             productContent={productContent}
+                            productDetailData={productDetailData}
                         />
                     </div>
                 )}
