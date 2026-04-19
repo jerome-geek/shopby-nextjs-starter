@@ -284,14 +284,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
                 {/* --- Recipe Grid Section --- */}
                 <section className={styles.recipeSection}>
-                    <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>
-                            {t('레시피 목록')}
-                            <span className={styles.recipeCount}>
-                                {sharedCollectionData.recipes.length || 0}
-                            </span>
-                        </h2>
-                    </div>
 
                     {recipes.length === 0 ? (
                         <div className={styles.emptyState}>
@@ -344,10 +336,6 @@ const CollectionDetailSkeleton = () => (
             </div>
         </section>
         <section className={styles.recipeSection}>
-            <div
-                className={styles.skeletonBar}
-                style={{ width: 140, height: 28 }}
-            />
             <div className={styles.recipeGrid}>
                 {Array.from({ length: 6 }).map((_, i) => (
                     <div

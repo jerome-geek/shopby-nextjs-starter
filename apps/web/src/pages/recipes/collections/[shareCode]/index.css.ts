@@ -310,12 +310,12 @@ export const recipeCount = style([
 
 export const recipeGrid = style({
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '16px 12px',
+    gridTemplateColumns: 'repeat(1, 1fr)',
+    gap: '24px',
 
     '@media': {
         [media.desktop]: {
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '32px 24px',
         },
     },
