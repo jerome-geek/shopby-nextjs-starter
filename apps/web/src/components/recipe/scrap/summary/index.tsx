@@ -8,12 +8,11 @@ import { CollectionMoreMenu } from '@/components/collection';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
 import * as styles from '@/components/recipe/scrap/summary/index.css';
-import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useCollectionList } from '@/hooks/query/shop/collection';
-import useBookmark from '@/hooks/recipe/useBookmark';
+import { useBookmark } from '@/hooks/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
@@ -24,12 +23,8 @@ import { vars } from '@/styles/theme.css';
 const RecipeScrapSummary = () => {
     const { t } = useTranslation();
 
-    const {
-        openAsyncDialog,
-        openCollectionCreate,
-        openCollectionForm,
-        withRequiredAuth,
-    } = useCustomDialog();
+    const { openAsyncDialog } = useDialog();
+    const { openCollectionForm, withRequiredAuth } = useCustomDialog();
     const { isMobile } = useResponsive();
 
     const { data: profileData } = useProfile();

@@ -15,139 +15,137 @@ const CollectionSectionSkeleton = () => {
     });
 
     const CardSkeleton = ({ index }: { index: number }) => (
-        <div
+        <article
             className={recipeDetailCardStyle.recipeLink}
             aria-hidden='true'
         >
-            <article className={recipeDetailCardStyle.cardContent}>
-                <div className={recipeDetailCardStyle.cardHeader}>
-                    <div className={recipeDetailCardStyle.cardTitleArea}>
-                        <Skeleton
-                            width='75%'
-                            height={16}
-                            style={{ borderRadius: 8 }}
-                        />
-                        <Skeleton
-                            width='45%'
-                            height={14}
-                            style={{ borderRadius: 8 }}
-                        />
-                    </div>
-                    <Skeleton width={20} height={20} circle />
+            <div className={recipeDetailCardStyle.cardHeader}>
+                <div className={recipeDetailCardStyle.cardTitleArea}>
+                    <Skeleton
+                        width='75%'
+                        height={16}
+                        style={{ borderRadius: 8 }}
+                    />
+                    <Skeleton
+                        width='45%'
+                        height={14}
+                        style={{ borderRadius: 8 }}
+                    />
+                </div>
+                <Skeleton width={20} height={20} circle />
+            </div>
+
+            <div className={recipeDetailCardStyle.recipeMeta}>
+                <span className={recipeDetailCardStyle.iconTimerText}>
+                    <Skeleton
+                        width={14}
+                        height={14}
+                        style={{ borderRadius: 4 }}
+                    />
+                    <Skeleton
+                        width={44}
+                        height={14}
+                        style={{ borderRadius: 999 }}
+                    />
+                </span>
+                <span className={recipeDetailCardStyle.iconText}>
+                    <Skeleton
+                        width={14}
+                        height={14}
+                        style={{ borderRadius: 4 }}
+                    />
+                    <Skeleton
+                        width={44}
+                        height={14}
+                        style={{ borderRadius: 999 }}
+                    />
+                </span>
+                <span className={recipeDetailCardStyle.iconText}>
+                    <Skeleton
+                        width={14}
+                        height={14}
+                        style={{ borderRadius: 4 }}
+                    />
+                    <Skeleton
+                        width={52}
+                        height={14}
+                        style={{ borderRadius: 999 }}
+                    />
+                </span>
+            </div>
+
+            <div className={recipeDetailCardStyle.ingredientContent}>
+                <div className={recipeDetailCardStyle.recipeThumbArea}>
+                    <Skeleton
+                        width='100%'
+                        height='100%'
+                        style={{ borderRadius: 8 }}
+                    />
                 </div>
 
-                <div className={recipeDetailCardStyle.recipeMeta}>
-                    <span className={recipeDetailCardStyle.iconTimerText}>
-                        <Skeleton
-                            width={14}
-                            height={14}
-                            style={{ borderRadius: 4 }}
-                        />
-                        <Skeleton
-                            width={44}
-                            height={14}
-                            style={{ borderRadius: 999 }}
-                        />
-                    </span>
-                    <span className={recipeDetailCardStyle.iconText}>
-                        <Skeleton
-                            width={14}
-                            height={14}
-                            style={{ borderRadius: 4 }}
-                        />
-                        <Skeleton
-                            width={44}
-                            height={14}
-                            style={{ borderRadius: 999 }}
-                        />
-                    </span>
-                    <span className={recipeDetailCardStyle.iconText}>
-                        <Skeleton
-                            width={14}
-                            height={14}
-                            style={{ borderRadius: 4 }}
-                        />
-                        <Skeleton
-                            width={52}
-                            height={14}
-                            style={{ borderRadius: 999 }}
-                        />
-                    </span>
-                </div>
-
-                <div className={recipeDetailCardStyle.ingredientContent}>
-                    <div className={recipeDetailCardStyle.recipeThumbArea}>
-                        <Skeleton
-                            width='100%'
-                            height='100%'
-                            style={{ borderRadius: 8 }}
-                        />
-                    </div>
-
+                <div
+                    className={
+                        recipeDetailCardStyle.ingredientContainer
+                    }
+                >
                     <div
                         className={
-                            recipeDetailCardStyle.ingredientContainer
+                            recipeDetailCardStyle.ingredientHeader
                         }
                     >
-                        <div
-                            className={
-                                recipeDetailCardStyle.ingredientHeader
-                            }
-                        >
-                            <Skeleton
-                                width={92}
-                                height={14}
-                                style={{ borderRadius: 6 }}
-                            />
-                            <Skeleton width={13} height={13} circle />
-                        </div>
-
-                        <ul
-                            className={recipeDetailCardStyle.ingredientList}
-                        >
-                            {Array.from({ length: 6 }).map((_, i) => (
-                                <li
-                                    key={`${index}-ing-${i}`}
-                                    className={
-                                        recipeDetailCardStyle.ingredientListItem
-                                    }
-                                    style={{ gap: 8 }}
-                                >
-                                    <Skeleton
-                                        width={i % 2 === 0 ? '70%' : '60%'}
-                                        height={14}
-                                        style={{ borderRadius: 8 }}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
+                        <Skeleton
+                            width={92}
+                            height={14}
+                            style={{ borderRadius: 6 }}
+                        />
+                        <Skeleton width={13} height={13} circle />
                     </div>
-                </div>
 
-                <div className={recipeDetailCardStyle.stepSection}>
-                    <Skeleton
-                        width={140}
-                        height={14}
-                        style={{ borderRadius: 6 }}
-                    />
-                    <ul className={recipeDetailCardStyle.stepList}>
-                        {Array.from({ length: 3 }).map((_, i) => (
+                    <ul
+                        className={recipeDetailCardStyle.ingredientList}
+                    >
+                        {Array.from({ length: 6 }).map((_, i) => (
                             <li
-                                key={`${index}-step-${i}`}
-                                className={recipeDetailCardStyle.stepItem}
+                                key={`${index}-ing-${i}`}
+                                className={
+                                    recipeDetailCardStyle.ingredientListItem
+                                }
+                                style={{ gap: 8 }}
                             >
-                                <Skeleton width={20} height={20} circle />
                                 <Skeleton
-                                    width={i === 0 ? '80%' : '70%'}
+                                    width={i % 2 === 0 ? '70%' : '60%'}
                                     height={14}
-                                    style={{ borderRadius: 6 }}
+                                    style={{ borderRadius: 8 }}
                                 />
                             </li>
                         ))}
                     </ul>
                 </div>
-            </article>
-        </div>
+            </div>
+
+            <div className={recipeDetailCardStyle.stepSection}>
+                <Skeleton
+                    width={140}
+                    height={14}
+                    style={{ borderRadius: 6 }}
+                />
+                <ul className={recipeDetailCardStyle.stepList}>
+                    {Array.from({ length: 3 }).map((_, i) => (
+                        <li
+                            key={`${index}-step-${i}`}
+                            className={recipeDetailCardStyle.stepItem}
+                        >
+                            <Skeleton width={20} height={20} circle />
+                            <Skeleton
+                                width={i === 0 ? '80%' : '70%'}
+                                height={14}
+                                style={{ borderRadius: 6 }}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </article>
     );
 
     return (
