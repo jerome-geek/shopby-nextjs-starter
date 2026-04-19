@@ -1,7 +1,5 @@
-import { style } from '@vanilla-extract/css';
-import { recipe } from '@vanilla-extract/recipes';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const dimmed = style({
     position: 'fixed',
@@ -34,7 +32,7 @@ export const modalContainer = style({
 });
 
 export const image = style({
-    maxWidth: '100%',
+    maxWidth: '85vw',
     maxHeight: '80vh',
     objectFit: 'contain',
     borderRadius: '8px',
@@ -63,4 +61,3 @@ export const closeBtn = style({
         },
     },
 });
-

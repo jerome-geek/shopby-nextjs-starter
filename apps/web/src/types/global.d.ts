@@ -40,6 +40,8 @@ interface SearchDateTime {
 interface Paging {
     pageNumber?: number;
     pageSize?: number;
+    size?: number;
+    page?: number;
     hasTotalCount?: boolean;
 }
 

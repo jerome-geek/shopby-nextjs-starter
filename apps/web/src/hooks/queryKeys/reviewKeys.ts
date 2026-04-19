@@ -2,8 +2,8 @@ import type {
     GetMyProductReviewsParams,
     GetPhotoReviewListParams,
     GetProductReviewCommentsParams,
-    GetReviewableProductsParams,
     GetProductReviewListParams,
+    GetReviewableProductsParams,
 } from '@/models/display/review';
 
 const reviewKeys = {
@@ -22,8 +22,11 @@ const reviewKeys = {
         [...reviewKeys.details(), productNo, reviewNo] as const,
 
     comments: () => [...reviewKeys.all, 'comments'] as const,
-    comment: (searchParams: GetProductReviewCommentsParams) =>
-        [...reviewKeys.comments(), searchParams] as const,
+    comment: (
+        productNo: number,
+        reviewNo: number,
+        searchParams: GetProductReviewCommentsParams,
+    ) => [...reviewKeys.comments(), productNo, reviewNo, searchParams] as const,
 
     myReviewedLists: () => [...reviewKeys.all, 'myReviewedList'] as const,
     myReviewedList: (searchParams: GetMyProductReviewsParams) =>

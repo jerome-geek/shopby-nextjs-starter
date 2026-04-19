@@ -8,6 +8,7 @@ import DutyInfo from '@/components/product/product-tabs/duty-info';
 import * as styles from '@/components/product/product-tabs/index.css';
 import PopularProducts from '@/components/product/product-tabs/popular-products';
 import RelatedProducts from '@/components/product/product-tabs/related-products';
+import Review from '@/components/product/product-tabs/review';
 import RelatedProductList from '@/components/product/related-product-list';
 import { useResponsive } from '@/hooks/utils';
 import { ProductDetailResponse } from '@/models/product/product';
@@ -163,14 +164,7 @@ export default function ProductTabs({
                     id='product-tab-review'
                     className={styles.descriptionSection}
                 >
-                    <p className={styles.descriptionText}>
-                        리뷰 영역을 구현 중입니다.
-                    </p>
-                    <div
-                        style={{
-                            height: '1000px',
-                        }}
-                    ></div>
+                    <Review onClick={() => scrollToSection('review', true)} />
                 </div>
 
                 <div

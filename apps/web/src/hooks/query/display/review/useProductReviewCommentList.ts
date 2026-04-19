@@ -9,34 +9,39 @@ import type { AxiosError } from 'axios';
 import { review } from '@/api/display';
 import { reviewKeys } from '@/hooks/queryKeys';
 import type {
+    GetProductReviewCommentResponse,
     GetProductReviewListParams,
-    GetProductReviewListResponse,
 } from '@/models/display/review';
 
-interface UseProductReviewListParams<T = GetProductReviewListResponse> {
+interface UseProductReviewCommentListParams<
+    T = GetProductReviewCommentResponse,
+> {
     productNo: number;
+    reviewNo: number;
     searchParams: GetProductReviewListParams;
     options?: Omit<
         UseQueryOptions<
-            GetProductReviewListResponse,
+            GetProductReviewCommentResponse,
             AxiosError<ShopByErrorResponse>,
             T,
-            ReturnType<(typeof reviewKeys)['list']>
+            ReturnType<(typeof reviewKeys)['comment']>
         >,
         'queryKey' | 'queryFn'
     >;
 }
 
-const useProductReviewList = <T = GetProductReviewListResponse>({
+const useProductReviewCommentList = <T = GetProductReviewCommentResponse>({
     productNo,
+    reviewNo,
     searchParams,
     options,
-}: UseProductReviewListParams<T>) => {
+}: UseProductReviewCommentListParams<T>) => {
     return useQuery({
-        queryKey: reviewKeys.list(productNo, searchParams),
+        queryKey: reviewKeys.comment(productNo, reviewNo, searchParams),
         queryFn: async () => {
-            const { data } = await review.getProductReviewList(
+            const { data } = await review.getProductReviewComments(
                 productNo,
+                reviewNo,
                 searchParams,
             );
 
@@ -48,4 +53,4 @@ const useProductReviewList = <T = GetProductReviewListResponse>({
     });
 };
 
-export default useProductReviewList;
+export default useProductReviewCommentList;
