@@ -4,12 +4,14 @@ import dayjs from 'dayjs';
 import { MessageCircle, ThumbsUp } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
+import { PhotoReviewListBottomSheet } from '@/components/bottom-sheet/photo-review-list';
 import { ReviewReportBottomSheet } from '@/components/bottom-sheet/review-report';
 import { NoResult } from '@/components/common/no-result';
 import { StarIcon } from '@/components/icons/StarIcon';
 import { ImageDetailModal } from '@/components/modal/image-detail';
+import { PhotoReviewListModal } from '@/components/modal/photo-review-list';
 import { ReviewReportModal } from '@/components/modal/review-report';
 import Comments from '@/components/product/product-tabs/review/comments';
 import * as styles from '@/components/product/product-tabs/review/index.css';
@@ -24,7 +26,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 5;
+export const PHOTO_PAGE_SIZE = 12;
 
 const Review = ({ onClick }: { onClick: () => void }) => {
     const router = useRouter();
@@ -46,6 +49,11 @@ const Review = ({ onClick }: { onClick: () => void }) => {
 
     const { data: photoReviewListData } = usePhotoReviewList({
         productNo,
+        searchParams: {
+            pageNumber: 1,
+            pageSize: PHOTO_PAGE_SIZE,
+            hasTotalCount: true,
+        },
     });
 
     const { data: productReviewListData } = useProductReviewList({
@@ -63,12 +71,8 @@ const Review = ({ onClick }: { onClick: () => void }) => {
 
     const isRecommendPending = recommend.isPending || cancelRecommend.isPending;
 
-    const photoUrls = useMemo(() => {
-        const contents = photoReviewListData?.contents ?? [];
-        return contents.flatMap((c) => c?.urls ?? []).filter(Boolean);
-    }, [photoReviewListData]);
-
     const reviews = productReviewListData?.items ?? [];
+    const photoReviews = photoReviewListData?.contents ?? [];
     const totalCount = Number(productReviewListData?.totalCount) || 0;
     const rate = Number(productReviewListData?.rate) || 0;
 
@@ -92,6 +96,24 @@ const Review = ({ onClick }: { onClick: () => void }) => {
 
     const openImageOverlay = (src: string) => {
         overlay.open((props) => <ImageDetailModal src={src} {...props} />);
+    };
+
+    const openPhotoReviewListOverlay = (reviewNo: number) => {
+        overlay.open((props) =>
+            isMobile ? (
+                <PhotoReviewListBottomSheet
+                    productNo={productNo}
+                    reviewNo={reviewNo}
+                    {...props}
+                />
+            ) : (
+                <PhotoReviewListModal
+                    productNo={productNo}
+                    reviewNo={reviewNo}
+                    {...props}
+                />
+            ),
+        );
     };
 
     const [openCommentsReviewNo, setOpenCommentsReviewNo] = useState(0);
@@ -194,56 +216,46 @@ const Review = ({ onClick }: { onClick: () => void }) => {
                     <Stars rate={rate} />
                 </div>
 
-                {!isEmpty(photoUrls) && (
+                {!isEmpty(photoReviews) && (
                     <div
                         className={styles.photoRow}
                         aria-label='포토 리뷰 미리보기'
                     >
-                        {photoUrls
+                        {photoReviews
                             .slice(0, PHOTO_WIDGET_COUNT)
-                            .map((url, idx) => (
+                            .map((review, idx) => (
                                 <div
-                                    key={`${url}-${idx}`}
+                                    key={`${review.reviewNo}-${idx}`}
                                     className={styles.photoTile}
                                 >
-                                    {idx === PHOTO_WIDGET_COUNT - 1 ? (
-                                        <button
-                                            type='button'
-                                            className={styles.moreTileButton}
-                                            onClick={() => {
-                                                // TODO: 포토리뷰 모아보기/모달 연결 시 교체
-                                            }}
-                                        >
-                                            <img
-                                                className={styles.photoImg}
-                                                src={url}
-                                                alt='포토 리뷰 이미지'
-                                                loading='lazy'
-                                            />
+                                    <button
+                                        type='button'
+                                        className={styles.moreTileButton}
+                                        onClick={() => {
+                                            openPhotoReviewListOverlay(
+                                                idx === PHOTO_WIDGET_COUNT - 1
+                                                    ? 0
+                                                    : review.reviewNo,
+                                            );
+                                        }}
+                                    >
+                                        <img
+                                            className={styles.photoImg}
+                                            src={review.urls?.[0] ?? ''}
+                                            alt='포토 리뷰 이미지'
+                                            loading='lazy'
+                                        />
+                                        {idx === PHOTO_WIDGET_COUNT - 1 && (
                                             <div
                                                 className={
                                                     styles.moreTileButtonText
                                                 }
                                             >
-                                                <span
-                                                    style={{
-                                                        fontWeight: 400,
-                                                        marginRight: '4px',
-                                                    }}
-                                                >
-                                                    +
-                                                </span>
+                                                <span>+</span>
                                                 더보기
                                             </div>
-                                        </button>
-                                    ) : (
-                                        <img
-                                            className={styles.photoImg}
-                                            src={url}
-                                            alt='포토 리뷰 이미지'
-                                            loading='lazy'
-                                        />
-                                    )}
+                                        )}
+                                    </button>
                                 </div>
                             ))}
                     </div>

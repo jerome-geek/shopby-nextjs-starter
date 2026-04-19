@@ -1,5 +1,5 @@
-import { keyframes, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { keyframes, style } from '@vanilla-extract/css';
 
 const spin = keyframes({
     '0%': { transform: 'rotate(0deg)' },
@@ -32,4 +32,12 @@ export const spinner = style({
     background: 'transparent',
     borderLeftColor: vars.color.gray[40],
     animation: `${spin} 1s linear infinite`,
+});
+
+export const loadedContainer = style({
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
 });

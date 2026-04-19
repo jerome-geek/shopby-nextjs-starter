@@ -453,7 +453,7 @@ function ProductDetailView({
                         </div>
                     </div>
 
-                    <PhotoReview images={baseInfo.imageUrlInfo} />
+                    <PhotoReview />
 
                     {!isTablet && (
                         <>

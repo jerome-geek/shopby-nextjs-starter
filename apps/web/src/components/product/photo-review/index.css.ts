@@ -1,8 +1,8 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const photoReviewSection = style({
     display: 'flex',
@@ -65,11 +65,19 @@ export const photoReviewItem = style({
     height: 'auto',
 });
 
-export const photoReviewImage = style({
+export const photoReviewImageButton = style({
     width: '100%',
     aspectRatio: '1 / 1',
+    height: 'fit-content',
     objectFit: 'cover',
     borderRadius: '8px',
+    overflow: 'hidden',
+});
+
+export const photoReviewImage = style({
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
 });
 
 export const photoReviewRating = style([

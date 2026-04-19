@@ -12,12 +12,6 @@ interface ReviewReportBottomSheetProps extends DefaultBottomSheetProps {
     reviewNo: number;
 }
 
-export const REPORT_REASON_OPTIONS = [
-    { value: 'COPYRIGHT', label: '저작권 침해' },
-    { value: 'SLANDER', label: '비방' },
-    { value: 'ETC', label: '기타사유' },
-];
-
 export const ReviewReportBottomSheet = ({
     productNo,
     reviewNo,

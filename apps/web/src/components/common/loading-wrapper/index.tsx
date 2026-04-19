@@ -1,7 +1,6 @@
-import { AnimatePresence, Transition } from 'motion/react';
-import { type ReactNode, useState } from 'react';
 import { isArray } from '@fxts/core';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion, Transition } from 'motion/react';
+import { type ReactNode, useState } from 'react';
 
 import * as styles from '@/components/common/loading-wrapper/index.css';
 
@@ -71,6 +70,7 @@ const LoadingWrapper = ({
                 <motion.div
                     key='loaded-container'
                     id='loaded-wrapper-container'
+                    className={styles.loadedContainer}
                     initial={{
                         opacity: 0,
                         height: isLoadedAnimation
