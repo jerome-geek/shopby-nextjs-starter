@@ -21,7 +21,7 @@ interface BottomSheetProps extends DefaultBottomSheetProps {
     isCloseButton?: boolean;
     isUnmountCondition?: boolean;
     children: React.ReactNode | React.ReactNode[];
-    footerButtonList?: React.ReactNode[];
+    footerButtonList?: React.ReactNode[] | React.ReactNode;
     bottom?: number;
     lockTargetId?: string;
     zIndex?: number;
@@ -172,9 +172,11 @@ export const BottomSheetLayout = ({
 
                 {footerButtonList && (
                     <div className={styles.bottomSheetFooter}>
-                        {footerButtonList.map((button, index) => (
-                            <Fragment key={index}>{button}</Fragment>
-                        ))}
+                        {isArray(footerButtonList)
+                            ? footerButtonList.map((button, index) => (
+                                  <Fragment key={index}>{button}</Fragment>
+                              ))
+                            : footerButtonList}
                     </div>
                 )}
             </motion.div>

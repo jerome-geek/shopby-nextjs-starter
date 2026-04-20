@@ -1,3 +1,4 @@
+import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
 import {
     PhotoReview,
     ProductAdditionalDiscount,
@@ -147,8 +148,11 @@ function ProductDetailView({
     const openOptionBottomSheet = () => {
         overlay.open(
             (props) => (
-                // <OptionSelectBottomSheet {...props} productNo={productNo} />
-                <></>
+                <OptionSelectBottomSheet
+                    {...props}
+                    productNo={productNo}
+                    channelType={searchParams.channelType}
+                />
             ),
             {
                 overlayId: OVERLAY_ID.OPTION_BOTTOM_SHEET,
@@ -223,15 +227,27 @@ function ProductDetailView({
     const { addToast } = useToast();
 
     const onGiftButtonClick = () => {
-        addToast({
-            message: '장바구니에 상품을 담았습니다',
-            link: { label: '바로가기', href: '/cart' },
-        });
-
         if (isMobile && !isOptionBottomSheetOpen) {
             openOptionBottomSheet();
             return;
         }
+
+        if (selectedOptionList.length === 0) {
+            addToast({ message: '옵션을 선택해 주세요.' });
+            return;
+        }
+
+        writeOrderSheetMutate({
+            data: {
+                products: pipe(
+                    selectedOptionList,
+                    map((a) => toOrderSheetOption(a, searchParams.channelType)),
+                    toArray,
+                ),
+                productCoupons: [],
+            },
+            type: 'gift',
+        });
     };
 
     const onCartButtonClick = () => {

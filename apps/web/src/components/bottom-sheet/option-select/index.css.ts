@@ -1,115 +1,105 @@
-// import styled from 'styled-components';
+import { style } from '@vanilla-extract/css';
+import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
-// import DefaultButton from '@/components/Common/Button/DefaultButton';
-// import { fontSize, fontWeight } from '@/styles/mixin';
-// import { theme } from '@/styles/theme';
+export const container = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+    padding: '8px 0 10px',
+});
 
-// const Container = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     gap: 8px;
-//     height: 100%;
-// `;
+export const optionLabel = style([
+    textStyles.body1Semibold,
+    {
+        color: vars.color.gray['90'],
+        fontSize: '15px',
+        marginBottom: '4px',
+    },
+]);
 
-// const InnerContainer = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     gap: 12px;
-// `;
+export const required = style({
+    color: vars.color.pink['100'],
+    marginLeft: '2px',
+});
 
-// const OptionContainer = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     gap: 20px;
-// `;
+export const optionContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+    padding: '0 0 20px',
+});
 
-// const TextOptionInputContainer = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     gap: 12px;
-// `;
+export const totalPriceContainer = style({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0 0 16px',
+});
 
-// const CloseButton = styled.button`
-//     width: 56px;
-//     height: 4px;
-//     border-radius: 999px;
-//     background-color: ${({ theme }) => theme.gray500};
-//     opacity: 0.4;
-// `;
+export const priceLabel = style([
+    textStyles.headingSemibold,
+    {
+        fontSize: '15px',
+    },
+]);
 
-// const RestockButton = styled(DefaultButton)`
-//     width: fit-content;
-//     height: 26px;
-//     ${fontSize(12)};
-//     background-color: ${theme.black};
-//     color: ${theme.white};
-//     margin-left: auto;
-//     border-radius: 0;
-// `;
+export const priceValue = style([
+    textStyles.title1Bold,
+    {
+        color: vars.color.pink['100'],
+    },
+]);
 
-// const SelectOptionText = styled.p`
-//     ${fontSize(14)}
-//     color: ${({ theme }) => theme.accentForeground};
-// `;
+export const giftButton = style({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '53px',
+    height: '53px',
+    border: `1px solid ${vars.color.gray['50']}`,
+    borderRadius: '4px',
+    backgroundColor: vars.color.white,
+    flex: 'none !important',
+});
 
-// const ButtonContainer = styled.div`
-//     display: flex;
-//     gap: 8px;
-//     width: 100%;
+export const cartButton = style({
+    flex: 1,
+    borderColor: `${vars.color.gray['50']} !important`,
+    color: `${vars.color.black} !important`,
+    borderRadius: '4px !important',
+    height: '53px !important',
+});
 
-//     > button {
-//         flex: 1;
-//     }
-// `;
+export const buyButton = style({
+    flex: 1,
+    backgroundColor: `${vars.color.pink['80']} !important`,
+    color: `${vars.color.white} !important`,
+    borderRadius: '4px !important',
+    height: '53px !important',
+    border: 'none !important',
+});
 
-// const TotalPriceContainer = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     gap: 8px;
-//     margin-top: 4px;
-//     margin-bottom: 20px;
-// `;
+export const footerStickyWrapper = style({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    gap: '12px',
+});
 
-// const TotalPriceInnerContainer = styled.div`
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     width: 100%;
-// `;
+export const footerButtonsContainer = style({
+    display: 'flex',
+    gap: '6px',
+    width: '100%',
+});
 
-// const DeliveryPriceLabel = styled.label`
-//     ${fontSize(14)};
-//     line-height: 20px;
-//     ${fontWeight.medium};
-//     color: ${({ theme }) => theme.accentForeground};
-// `;
-
-// const DeliveryPriceText = styled.p`
-//     ${fontSize(14)};
-//     line-height: 20px;
-//     ${fontWeight.medium};
-//     color: ${({ theme }) => theme.accentForeground};
-// `;
-
-// const PriceLabel = styled.label`
-//     ${fontSize(16)};
-//     line-height: 20px;
-//     ${fontWeight.medium};
-// `;
-
-// export const OptionSelectBottomSheetStyle = {
-//     Container,
-//     InnerContainer,
-//     OptionContainer,
-//     TextOptionInputContainer,
-//     CloseButton,
-//     RestockButton,
-//     SelectOptionText,
-//     ButtonContainer,
-//     TotalPriceContainer,
-//     TotalPriceInnerContainer,
-//     DeliveryPriceLabel,
-//     DeliveryPriceText,
-//     PriceLabel,
-// };
+export const relativeMenu = style({
+    position: 'relative !important' as 'relative',
+    boxShadow: 'none',
+    border: `1px solid ${vars.color.gray['50']}`,
+    borderRadius: '4px',
+    marginTop: '1px',
+    animation: 'none',
+    maxHeight: '200px',
+    overflowY: 'auto',
+});

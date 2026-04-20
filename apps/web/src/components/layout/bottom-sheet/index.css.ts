@@ -110,7 +110,7 @@ export const bottomSheetFooter = style({
     display: 'flex',
     alignItems: 'center',
     gap: 8,
-    padding: '12px 20px 20px',
+    padding: '12px 20px 60px',
     borderTop: `1px solid ${vars.color.gray['20']}`,
 });
 

@@ -1,178 +1,223 @@
-// import { filter, flatMap, head, isEmpty, pipe } from '@fxts/core';
-// import { overlay } from 'overlay-kit';
+import { includes, map, pipe, sum, toArray } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 
-// import { OptionSelectBottomSheetStyle as S } from '@/components/BottomSheet/OptionSelect/index.styled';
-// import * as Input from '@/components/Common/Input';
-// import BottomSheetLayout, {
-//     DefaultBottomSheetProps,
-// } from '@/components/Layout/BottomSheet';
-// import ExtraInput from '@/components/Product/ExtraInput';
-// import {
-//     FlatProductOption,
-//     MultiProductOption,
-//     RequiredProductOption,
-//     SelectedProductOption,
-// } from '@/components/ProductOption';
-// import { OVERLAY_ID } from '@/const/overlay';
-// import useProduct from '@/hooks/product/useProduct';
-// import useProductOption from '@/hooks/product/useProductOption';
-// import useProductOptionChange from '@/hooks/product/useProductOptionChange';
-// import { useResponsive } from '@/hooks/utils';
+import * as styles from '@/components/bottom-sheet/option-select/index.css';
+import {
+    BottomSheetLayout,
+    type DefaultModalLayoutProps,
+} from '@/components/layout';
+import {
+    FlatProductOption,
+    MultiProductOption,
+    SelectedProductOption,
+} from '@/components/product-option';
+import { Button } from '@/components/ui/button';
+import { toOrderSheetOption } from '@/helpers/product';
+import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
+import { useProductOption, useProductOptionChange } from '@/hooks/product';
+import { cartKeys } from '@/hooks/queryKeys';
+import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useAuth } from '@/hooks/useAuth';
+import type { ChannelType } from '@/models';
+import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { Gift } from 'lucide-react';
+import { CURRENCY } from '@/utils/currency';
 
-// interface OptionSelectBottomSheetProps extends DefaultBottomSheetProps {
-//     productNo: number;
-// }
+export interface OptionSelectBottomSheetProps extends DefaultModalLayoutProps {
+    productNo: number;
+    channelType?: ChannelType;
+}
 
-// const OptionSelectBottomSheet = ({
-//     productNo,
-//     ...props
-// }: OptionSelectBottomSheetProps) => {
-//     const { isTablet } = useResponsive();
+export const OptionSelectBottomSheet = ({
+    productNo,
+    channelType,
+    isOpen,
+    close,
+    unmount,
+}: OptionSelectBottomSheetProps) => {
+    const isLogin = useAuth();
+    const queryClient = useQueryClient();
+    const { openAddCartDialog } = useCustomDialog();
 
-//     const { productDetailData } = useProduct({
-//         productNo,
-//     });
+    const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
+        useProductOption({
+            productNo,
+        });
 
-//     const {
-//         isRequiredOptionUsed,
-//         isFlatOptionUsed,
-//         isMultiLevelOptionUsed,
-//         getSelectedOptionValue,
-//         textOptionInputs,
-//         selectedOptionList,
-//         productTextOptionInputs,
-//         filteredSelectedOptionList,
-//     } = useProductOption({
-//         productNo,
-//     });
+    const { onFlatOptionChange, onMultiOptionChange } = useProductOptionChange({
+        productNo,
+    });
 
-//     const {
-//         onFlatOptionChange,
-//         onMultiOptionChange,
-//         onRequiredOptionChange,
-//         onOptionDeleteClick,
-//         onMinusClick,
-//         onPlusClick,
-//         onChangeProductCount,
-//         onInputOptionChange,
-//     } = useProductOptionChange({
-//         productNo,
-//     });
+    const { selectedOptionList, clearOptions } = useProductOptionStore();
 
-//     const onOptionDeleteClickV2 = (optionNo: number) => {
-//         onOptionDeleteClick(optionNo);
-//     };
+    const totalPrice = pipe(
+        selectedOptionList,
+        map((option) => option.buyPrice * option.orderCnt),
+        sum,
+    );
 
-//     const onClose = () => {
-//         overlay.closeAll();
-//     };
+    const {
+        register: { mutate: registerCartMutate },
+    } = useCartMutation();
 
-//     const getInputOptionValue = (inputNo: number) => {
-//         return pipe(
-//             selectedOptionList,
-//             flatMap((a) => a.optionInputs),
-//             filter((c) => c && c.inputNo === inputNo),
-//             head,
-//             (d) => d?.inputValue || '',
-//         );
-//     };
+    const onCartButtonClick = () => {
+        if (isLogin) {
+            registerCartMutate(
+                {
+                    data: pipe(
+                        selectedOptionList,
+                        map((a) => toOrderSheetOption(a, channelType)),
+                        toArray,
+                    ),
+                },
+                {
+                    onSuccess: () => {
+                        close();
+                        openAddCartDialog();
 
-//     return (
-//         <BottomSheetLayout
-//             {...props}
-//             overlayId={OVERLAY_ID.OPTION_BOTTOM_SHEET}
-//             isCloseButton={false}
-//             bottom={0}
-//             isUnmountCondition={!isTablet}
-//             close={onClose}
-//             footerButtonList={[<button></button>]}
-//         >
-//             <S.Container>
-//                 <S.SelectOptionText>제품 옵션(필수)</S.SelectOptionText>
-//                 <S.InnerContainer>
-//                     <S.OptionContainer>
-//                         {isFlatOptionUsed && (
-//                             <FlatProductOption
-//                                 productNo={productNo}
-//                                 onChange={onFlatOptionChange}
-//                             />
-//                         )}
+                        queryClient.invalidateQueries({
+                            predicate: (query) => {
+                                return includes(query.queryKey[0], [
+                                    ...cartKeys.all,
+                                ]);
+                            },
+                        });
 
-//                         {isMultiLevelOptionUsed && (
-//                             <MultiProductOption
-//                                 productNo={productNo}
-//                                 onChange={onMultiOptionChange}
-//                             />
-//                         )}
+                        if (!isDefaultOptionUsed) {
+                            clearOptions();
+                        }
+                    },
+                },
+            );
+        } else {
+            // NOTE: 비회원 장바구니 로직 추후 구현
+            close();
+        }
+    };
 
-//                         {isRequiredOptionUsed && (
-//                             <RequiredProductOption
-//                                 productNo={productNo}
-//                                 onChange={onRequiredOptionChange}
-//                             />
-//                         )}
+    const {
+        write: { mutate: writeOrderSheetMutate },
+    } = useOrderSheetMutation();
 
-//                         <SelectedProductOption
-//                             customProperties={
-//                                 productDetailData?.baseInfo.customPropertise ||
-//                                 []
-//                             }
-//                             selectedOptionList={filteredSelectedOptionList}
-//                             onOptionDeleteClick={onOptionDeleteClickV2}
-//                             onPlusClick={onPlusClick}
-//                             onMinusClick={onMinusClick}
-//                             onChangeProductCount={onChangeProductCount}
-//                             getSelectedOptionValue={getSelectedOptionValue}
-//                             textOptionList={textOptionInputs['OPTION']}
-//                             onInputOptionChange={onInputOptionChange}
-//                         />
+    const { addToast } = useToast();
+    const onOrderButtonClick = () => {
+        if (selectedOptionList.length === 0) {
+            addToast({ message: '옵션을 선택해 주세요.' });
+            return;
+        }
 
-//                         {!isEmpty(productTextOptionInputs) && (
-//                             <S.TextOptionInputContainer>
-//                                 {productTextOptionInputs.map(
-//                                     ({ inputNo, inputLabel, required }) => {
-//                                         return (
-//                                             <Input.Container
-//                                                 key={`text-option-input-product-${inputNo}`}
-//                                             >
-//                                                 <Input.Label
-//                                                     isRequired={required}
-//                                                 >
-//                                                     {inputLabel}
-//                                                 </Input.Label>
-//                                                 <Input.Field
-//                                                     type='text'
-//                                                     required={required}
-//                                                     data-input-no={inputNo}
-//                                                     data-input-label={
-//                                                         inputLabel
-//                                                     }
-//                                                     data-product-no={productNo}
-//                                                     placeholder={`${inputLabel}을 입력해주세요.`}
-//                                                     defaultValue={getInputOptionValue(
-//                                                         inputNo,
-//                                                     )}
-//                                                     onBlur={onInputOptionChange}
-//                                                 />
-//                                             </Input.Container>
-//                                         );
-//                                     },
-//                                 )}
-//                             </S.TextOptionInputContainer>
-//                         )}
+        writeOrderSheetMutate(
+            {
+                data: {
+                    products: pipe(
+                        selectedOptionList,
+                        map((a) => toOrderSheetOption(a, channelType)),
+                        toArray,
+                    ),
+                    productCoupons: [],
+                },
+            },
+            {
+                onSuccess: () => {
+                    close();
+                },
+            },
+        );
+    };
 
-//                         <ExtraInput />
-//                     </S.OptionContainer>
-//                 </S.InnerContainer>
-//             </S.Container>
-//             <div
-//                 style={{
-//                     width: '100%',
-//                     height: '100px',
-//                 }}
-//             />
-//         </BottomSheetLayout>
-//     );
-// };
+    const onGiftButtonClick = () => {
+        if (selectedOptionList.length === 0) {
+            addToast({ message: '옵션을 선택해 주세요.' });
+            return;
+        }
 
-// export default OptionSelectBottomSheet;
+        writeOrderSheetMutate(
+            {
+                data: {
+                    products: pipe(
+                        selectedOptionList,
+                        map((a) => toOrderSheetOption(a, channelType)),
+                        toArray,
+                    ),
+                    productCoupons: [],
+                },
+                type: 'gift',
+            },
+            {
+                onSuccess: () => {
+                    close();
+                },
+            },
+        );
+    };
+
+    return (
+        <BottomSheetLayout
+            isOpen={isOpen}
+            close={close}
+            unmount={unmount}
+            title='옵션 선택'
+            footerButtonList={
+                <div className={styles.footerStickyWrapper}>
+                    <div className={styles.totalPriceContainer}>
+                        <p className={styles.priceLabel}>총 상품금액</p>
+                        <p className={styles.priceValue}>
+                            {CURRENCY(totalPrice).format()}
+                        </p>
+                    </div>
+                    <div className={styles.footerButtonsContainer}>
+                        <button
+                            className={styles.giftButton}
+                            onClick={onGiftButtonClick}
+                        >
+                            <Gift size={24} color='#333' />
+                        </button>
+                        <Button
+                            key='cart'
+                            className={styles.cartButton}
+                            frame='outlined'
+                            onClick={onCartButtonClick}
+                        >
+                            장바구니
+                        </Button>
+                        <Button
+                            key='buy'
+                            className={styles.buyButton}
+                            frame='solid'
+                            variant='primary'
+                            onClick={onOrderButtonClick}
+                        >
+                            구매하기
+                        </Button>
+                    </div>
+                </div>
+            }
+        >
+            <div className={styles.container}>
+                <div className={styles.optionContainer} data-lenis-prevent>
+                    {isFlatOptionUsed && (
+                        <FlatProductOption
+                            productNo={productNo}
+                            onChange={onFlatOptionChange}
+                            classNames={{
+                                menu: () => styles.relativeMenu,
+                            }}
+                        />
+                    )}
+
+                    {isMultiLevelOptionUsed && (
+                        <MultiProductOption
+                            productNo={productNo}
+                            onChange={onMultiOptionChange}
+                            classNames={{
+                                menu: () => styles.relativeMenu,
+                            }}
+                        />
+                    )}
+
+                    <SelectedProductOption isRemovable={!isDefaultOptionUsed} />
+                </div>
+            </div>
+        </BottomSheetLayout>
+    );
+};

@@ -1,8 +1,9 @@
 import { pipe, prop, sortBy, toArray } from '@fxts/core';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SingleValue } from 'react-select';
+import { Props, SingleValue } from 'react-select';
 
+import * as bottomSheetStyles from '@/components/bottom-sheet/option-select/index.css';
 import { Select } from '@/components/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useResponsive } from '@/hooks/utils';
@@ -12,12 +13,14 @@ interface FlatProductOptionProps {
     productNo: number;
     onChange: (option: SingleValue<FlatOption>) => void;
     checkOptionDisabled?: (option: FlatOption) => boolean;
+    classNames?: Props<FlatOption>['classNames'];
 }
 
 const FlatProductOption = ({
     productNo,
     onChange,
     checkOptionDisabled,
+    classNames,
 }: FlatProductOptionProps) => {
     const { t } = useTranslation();
 
@@ -49,17 +52,24 @@ const FlatProductOption = ({
     };
 
     return (
-        <Select
-            value={selected}
-            options={options}
-            placeholder={t('옵션을 선택해 주세요.')}
-            getOptionLabel={getFlatOptionLabel}
-            getOptionValue={(option) => option.value}
-            isOptionDisabled={checkOptionDisabled ?? isOptionDisabled}
-            onChange={onOptionChange}
-            menuPlacement={isMobile ? 'bottom' : 'auto'}
-            maxMenuHeight={200}
-        />
+        <div>
+            <p className={bottomSheetStyles.optionLabel}>
+                {t('옵션')}{' '}
+                <span className={bottomSheetStyles.required}>*</span>
+            </p>
+            <Select
+                value={selected}
+                options={options}
+                placeholder={t('옵션을 선택해 주세요.')}
+                getOptionLabel={getFlatOptionLabel}
+                getOptionValue={(option) => option.value}
+                isOptionDisabled={checkOptionDisabled ?? isOptionDisabled}
+                onChange={(v) => onOptionChange(v as SingleValue<FlatOption>)}
+                menuPlacement={isMobile ? 'bottom' : 'auto'}
+                maxMenuHeight={200}
+                classNames={classNames}
+            />
+        </div>
     );
 };
 
