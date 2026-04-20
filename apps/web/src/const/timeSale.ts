@@ -16,7 +16,14 @@ export const TAB_OPTIONS = [
 
 export const TIME_SALE_TYPES = TAB_OPTIONS.map(({ value }) => value);
 
-export const STATUS_OPTIONS = [
+export type TimeSaleStatusOption = {
+    label: string;
+    value: TimeSaleStatus;
+    description: string;
+    showTimer: boolean;
+};
+
+export const STATUS_OPTIONS: TimeSaleStatusOption[] = [
     {
         label: '오늘 오픈',
         value: 'today-open',
