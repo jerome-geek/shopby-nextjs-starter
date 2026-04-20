@@ -1,5 +1,5 @@
-import { useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect, type ReactNode } from 'react';
 
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
@@ -11,13 +11,17 @@ export const MypageReviewWrite = () => {
     const productNo = Number(router.query.productNo) || 0;
     const optionNo = Number(router.query.optionNo) || 0;
     const orderOptionNo = Number(router.query.orderOptionNo) || 0;
-    const orderNo = String(router.query.orderNo) || '';
+    const orderNo = String(router.query.orderNo ?? '') || '';
 
     useEffect(() => {
-        if (router.isReady && (!productNo || !optionNo || !orderOptionNo)) {
-            void router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+        if (!router.isReady) {
+            return;
         }
-    }, [router.isReady, productNo, optionNo, orderOptionNo]);
+
+        if (!productNo || !optionNo || !orderOptionNo || !orderNo) {
+            router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+        }
+    }, [router.isReady]);
 
     return (
         <div className={card.container}>

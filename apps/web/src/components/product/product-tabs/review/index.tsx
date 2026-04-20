@@ -16,6 +16,7 @@ import { ReviewReportModal } from '@/components/modal/review-report';
 import Comments from '@/components/product/product-tabs/review/comments';
 import * as styles from '@/components/product/product-tabs/review/index.css';
 import PagingV2 from '@/components/ui/paging-v2';
+import { PATHS } from '@/const/paths';
 import { useReviewMutation } from '@/hooks/mutations';
 import {
     usePhotoReviewList,
@@ -65,7 +66,12 @@ const Review = ({ onClick }: { onClick: () => void }) => {
         },
     });
 
-    const { recommend, cancelRecommend, cancelReport } = useReviewMutation({
+    const {
+        recommend,
+        cancelRecommend,
+        cancelReport,
+        delete: deleteReview,
+    } = useReviewMutation({
         productNo,
     });
 
@@ -206,6 +212,30 @@ const Review = ({ onClick }: { onClick: () => void }) => {
         }
     };
 
+    const handleDeleteReview = async (reviewNo: number) => {
+        const isAgree = await openAsyncDialog({
+            type: 'confirm',
+            message: '리뷰를 삭제하시겠습니까?',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (!isAgree) {
+            return;
+        }
+
+        try {
+            await deleteReview.mutateAsync({ reviewNo });
+
+            addToast({
+                message: '리뷰가 삭제되었습니다.',
+                variant: 'success',
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <section className={styles.container}>
             <div className={styles.headerContainer}>
@@ -291,6 +321,34 @@ const Review = ({ onClick }: { onClick: () => void }) => {
 
                                     <div className={styles.metaRight}>
                                         <span className={styles.metaText}>
+                                            {r.myReview && (
+                                                <>
+                                                    <button
+                                                        type='button'
+                                                        onClick={() => {
+                                                            router.push({
+                                                                pathname: `${PATHS.MYPAGE.REVIEWS.MAIN}/modify/${r.reviewNo}`,
+                                                                query: {
+                                                                    productNo,
+                                                                },
+                                                            });
+                                                        }}
+                                                    >
+                                                        수정
+                                                    </button>
+                                                    <span>•</span>
+                                                    <button
+                                                        type='button'
+                                                        onClick={() =>
+                                                            handleDeleteReview(
+                                                                r.reviewNo,
+                                                            )
+                                                        }
+                                                    >
+                                                        삭제
+                                                    </button>
+                                                </>
+                                            )}
                                             <span>{writer}</span>
                                             <span>•</span>
                                             <span>{dateText}</span>

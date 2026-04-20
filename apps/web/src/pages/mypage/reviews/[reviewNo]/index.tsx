@@ -1,27 +1,27 @@
 import { isEmpty } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { overlay } from 'overlay-kit';
+import { Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { overlay } from 'overlay-kit';
 import { useEffect, type ReactNode } from 'react';
-import { Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from '@tanstack/react-query';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { MypageLayout } from '@/components/layout';
 import { ImageDetailModal } from '@/components/modal/image-detail';
-import OptionText from '@/components/mypage/common/option-text';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import OptionText from '@/components/mypage/common/option-text';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
 import { useReviewMutation } from '@/hooks/mutations';
 import { useProductReview } from '@/hooks/query/display/review';
-import { useDialog } from '@/hooks/utils';
-import * as styles from '@/pages/mypage/reviews/[reviewNo]/index.css';
+import { reviewKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui/useToast';
 import useApiError from '@/hooks/useApiError';
-import { reviewKeys } from '@/hooks/queryKeys';
+import { useDialog } from '@/hooks/utils';
+import * as styles from '@/pages/mypage/reviews/[reviewNo]/index.css';
 
 export const MypageReviewDetail = () => {
     const { t } = useTranslation();
@@ -38,9 +38,9 @@ export const MypageReviewDetail = () => {
 
     useEffect(() => {
         if (router.isReady && (!productNo || !reviewNo)) {
-            void router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+            router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
         }
-    }, [router.isReady, productNo, reviewNo]);
+    }, [router.isReady]);
 
     const { data: productReviewData, isFetched: isProductReviewFetched } =
         useProductReview({

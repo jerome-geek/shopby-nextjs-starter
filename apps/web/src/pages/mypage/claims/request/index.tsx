@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MypageLayout } from '@/components/layout';
@@ -7,8 +7,8 @@ import { ClaimCancelForm } from '@/components/mypage/claims/forms/cancel';
 import { ClaimExchangeForm } from '@/components/mypage/claims/forms/exchange';
 import { ClaimReturnForm } from '@/components/mypage/claims/forms/return';
 import { CLAIM_TYPE_MAP } from '@/const/label';
-import { useDialog } from '@/hooks/utils';
 import { PATHS } from '@/const/paths';
+import { useDialog } from '@/hooks/utils';
 
 export const ClaimRequest = () => {
     const { t } = useTranslation();

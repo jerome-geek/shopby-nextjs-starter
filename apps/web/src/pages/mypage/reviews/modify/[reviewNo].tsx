@@ -1,5 +1,5 @@
-import { useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect, type ReactNode } from 'react';
 
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
@@ -13,9 +13,9 @@ const MypageReviewModifyPage = () => {
 
     useEffect(() => {
         if (router.isReady && (!reviewNo || !productNo)) {
-            void router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+            router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
         }
-    }, [router.isReady, reviewNo, productNo]);
+    }, [router.isReady]);
 
     return (
         <div className={card.container}>

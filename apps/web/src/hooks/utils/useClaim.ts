@@ -1,7 +1,7 @@
 import { type MutateOptions } from '@tanstack/react-query';
 import type { AxiosResponse } from 'axios';
-import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { NEXT_ACTION_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
@@ -11,10 +11,10 @@ import {
     useMemberClaimMutation,
     useMyOrderMutation,
 } from '@/hooks/mutations';
+import { useAuth } from '@/hooks/useAuth';
 import useDialog from '@/hooks/utils/useDialog';
 import type { NextActionType } from '@/models';
 import type { CancelClaimData } from '@/models/claim/guest';
-import { useAuth } from '@/hooks/useAuth';
 
 interface useClaimProps {
     nextActionType: NextActionType;
@@ -320,7 +320,7 @@ const useClaim = ({
             case 'WRITE_REVIEW': {
                 return () => {
                     router.push(
-                        `${PATHS.MYPAGE.REVIEWS.MAIN}/write/${productNo}?optionNo=${optionNo}&orderOptionNo=${orderOptionNo}`,
+                        `${PATHS.MYPAGE.REVIEWS.MAIN}/write/${productNo}?optionNo=${optionNo}&orderOptionNo=${orderOptionNo}&orderNo=${orderNo}`,
                     );
                 };
             }

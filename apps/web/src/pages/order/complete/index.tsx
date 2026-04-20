@@ -1,18 +1,19 @@
+import dayjs from 'dayjs';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Suspense, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { isMobile } from 'react-device-detect';
-import Link from 'next/link';
-import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 // import { authCookieManager } from '@/utils/cookie';
-import { useAuth } from '@/hooks/useAuth';
-import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
-import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
-import * as styles from '@/pages/order/complete/index.css';
-import type { OrderDetailResponse } from '@/models/order';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
+import { PATHS } from '@/const/paths';
+import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
+import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
+import { useAuth } from '@/hooks/useAuth';
+import type { OrderDetailResponse } from '@/models/order';
+import * as styles from '@/pages/order/complete/index.css';
 
 /**
  * [회원 주문 내역 렌더러]
@@ -248,8 +249,14 @@ const OrderDetailsContent = ({
                 <Link
                     href={
                         isLogin
-                            ? `/my/order/${orderNo}`
-                            : `/guest/order/${orderNo}`
+                            ? `${PATHS.MYPAGE.ORDERS.DETAIL.replace(
+                                  '[orderNo]',
+                                  orderNo,
+                              )}`
+                            : `${PATHS.GUEST.ORDER.DETAIL.replace(
+                                  '[orderNo]',
+                                  orderNo,
+                              )}`
                     }
                     className={styles.ghostButton}
                 >
