@@ -1,9 +1,6 @@
+import { keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import {
-    keepPreviousData,
-    useQueryClient,
-} from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 
 import { recipe } from '@/api/shop';
@@ -89,16 +86,14 @@ export const SearchDrawer = ({
         <AnimatePresence onExitComplete={unmount}>
             {isOpen && (
                 <>
-                    {!isMobile && (
-                        <motion.div
-                            className={styles.dimmed}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={close}
-                            style={{ zIndex: 1001 }}
-                        />
-                    )}
+                    <motion.div
+                        className={styles.dimmed}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={close}
+                        style={{ zIndex: isMobile ? 999 : 1001 }}
+                    />
 
                     <motion.div
                         className={styles.container}

@@ -25,7 +25,7 @@ const EventProductSection = ({
 
     return data.products.map((product) => (
         <li key={`${sectionNo}-${product.productNo}`}>
-            <ProductCard {...product} />
+            <ProductCard {...product} isTimeSaleEnabled={false} />
         </li>
     ));
 };

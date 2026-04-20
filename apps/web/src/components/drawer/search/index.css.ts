@@ -28,6 +28,12 @@ export const container = style({
             paddingTop: '180px',
             boxShadow: '-1px 0 5px rgba(0, 0, 0, 0.1)',
         },
+        [media.tablet]: {
+            width: '600px',
+            height: '100vh',
+            paddingTop: '60px',
+            boxShadow: '-1px 0 5px rgba(0, 0, 0, 0.1)',
+        },
     },
 });
 
@@ -65,6 +71,7 @@ export const scrollArea = style({
     '@media': {
         [media.desktop]: {
             paddingRight: '8px',
+            marginBottom: '60px',
         },
     },
 });
@@ -86,11 +93,14 @@ export const drawerContentInset = style({
 });
 
 export const closeButton = style({
+    position: 'absolute',
+    top: '90px',
+    right: '60px',
+
     '@media': {
-        [media.desktop]: {
-            position: 'absolute',
-            top: '90px',
-            right: '60px',
+        [media.tablet]: {
+            right: '8px',
+            top: '8px',
         },
     },
 });
@@ -212,6 +222,11 @@ export const sectionTitle = style([
         fontSize: '1.8rem', // Figma: 18px
         lineHeight: 1.5,
         letterSpacing: '-1.3%',
+        '@media': {
+            [media.tablet]: {
+                padding: '0',
+            },
+        },
     },
 ]);
 
@@ -414,6 +429,9 @@ export const productSectionContainer = style({
             gap: '24px',
             borderTop: 'none',
             padding: '0',
+        },
+        [media.tablet]: {
+            padding: '20px',
         },
     },
 });
