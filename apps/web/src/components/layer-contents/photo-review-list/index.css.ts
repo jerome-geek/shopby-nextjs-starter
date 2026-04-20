@@ -105,6 +105,7 @@ export const badgeItem = style([
     {
         display: 'inline-flex',
         alignItems: 'center',
+        lineHeight: 0,
         gap: '4px',
     },
 ]);

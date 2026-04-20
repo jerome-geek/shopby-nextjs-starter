@@ -1,4 +1,5 @@
 export * from '@/components/modal/address-search';
+export * from '@/components/modal/product-inquiry-write';
 export * from '@/components/modal/recipe-create-select';
 export * from '@/components/modal/recipe-image-upload';
 export * from '@/components/modal/recipe-url-input';

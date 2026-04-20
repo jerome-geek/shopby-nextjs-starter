@@ -211,7 +211,7 @@ const Review = ({ onClick }: { onClick: () => void }) => {
             <div className={styles.headerContainer}>
                 <div className={styles.header}>
                     <span className={styles.title}>
-                        리뷰({totalCount || 0})
+                        리뷰 ({totalCount || 0})
                     </span>
                     <Stars rate={rate} />
                 </div>
@@ -263,7 +263,12 @@ const Review = ({ onClick }: { onClick: () => void }) => {
             </div>
 
             {isEmpty(reviews) ? (
-                <NoResult text='등록된 리뷰가 없습니다.' />
+                <NoResult
+                    text='등록된 리뷰가 없습니다.'
+                    style={{
+                        height: '150px',
+                    }}
+                />
             ) : (
                 <div className={styles.list}>
                     {reviews.map((r) => {
@@ -289,21 +294,27 @@ const Review = ({ onClick }: { onClick: () => void }) => {
                                             <span>{writer}</span>
                                             <span>•</span>
                                             <span>{dateText}</span>
-                                            <span>•</span>
-                                            <button
-                                                type='button'
-                                                className={styles.reportButton}
-                                                onClick={() => {
-                                                    openReviewReportOverlay(
-                                                        r.reviewNo,
-                                                        r.reportable,
-                                                    );
-                                                }}
-                                            >
-                                                {r.reportable
-                                                    ? '신고'
-                                                    : '신고 취소'}
-                                            </button>
+                                            {!r.myReview && (
+                                                <>
+                                                    <span>•</span>
+                                                    <button
+                                                        type='button'
+                                                        className={
+                                                            styles.reportButton
+                                                        }
+                                                        onClick={() => {
+                                                            openReviewReportOverlay(
+                                                                r.reviewNo,
+                                                                r.reportable,
+                                                            );
+                                                        }}
+                                                    >
+                                                        {r.reportable
+                                                            ? '신고'
+                                                            : '신고 취소'}
+                                                    </button>
+                                                </>
+                                            )}
                                         </span>
                                     </div>
                                 </div>

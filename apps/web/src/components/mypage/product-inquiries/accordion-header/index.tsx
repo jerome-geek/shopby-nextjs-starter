@@ -1,12 +1,12 @@
-import dayjs from 'dayjs';
 import { clsx } from 'clsx';
+import dayjs from 'dayjs';
 import Link from 'next/link';
-import { Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { LockIcon } from '@/components/icons';
+import * as styles from '@/components/mypage/product-inquiries/accordion-header/index.css';
 import { PATHS } from '@/const/paths';
-
-import * as styles from './index.css';
+import { vars } from '@/styles/theme.css';
 
 interface ProductInquiryHeaderProps {
     replied: boolean;
@@ -63,11 +63,10 @@ export const ProductInquiryHeader = ({
                             </span>
                         ) : null}
                         {secreted ? (
-                            <Lock
-                                size={14}
-                                strokeWidth={2}
-                                className={styles.lockIcon}
-                                aria-label={t('비밀글')}
+                            <LockIcon
+                                width={15}
+                                height={16}
+                                currentColor={vars.color.black}
                             />
                         ) : null}
                     </span>
@@ -130,11 +129,10 @@ export const ProductInquiryHeader = ({
                     ) : null}
 
                     {secreted ? (
-                        <Lock
-                            size={14}
-                            strokeWidth={2}
-                            className={styles.lockIcon}
-                            aria-label={t('비밀글')}
+                        <LockIcon
+                            width={15}
+                            height={16}
+                            currentColor={vars.color.black}
                         />
                     ) : null}
                 </div>

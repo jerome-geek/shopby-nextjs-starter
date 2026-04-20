@@ -99,6 +99,11 @@ globalStyle(`${tabContentContainer} > div:after`, {
     },
 });
 
+globalStyle(`${tabContentContainer} > :last-child:after`, {
+    content: '""',
+    display: 'none',
+});
+
 export const descriptionSection = style({
     position: 'relative',
     display: 'flex',

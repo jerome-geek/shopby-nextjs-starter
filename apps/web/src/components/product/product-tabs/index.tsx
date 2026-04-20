@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react';
 import ProductContents from '@/components/product/product-tabs/contents';
 import DutyInfo from '@/components/product/product-tabs/duty-info';
 import * as styles from '@/components/product/product-tabs/index.css';
+import Inquiries from '@/components/product/product-tabs/inquiries';
 import PopularProducts from '@/components/product/product-tabs/popular-products';
 import RelatedProducts from '@/components/product/product-tabs/related-products';
 import Review from '@/components/product/product-tabs/review';
@@ -171,14 +172,7 @@ export default function ProductTabs({
                     id='product-tab-inquiry'
                     className={styles.descriptionSection}
                 >
-                    <p className={styles.descriptionText}>
-                        상품 문의 영역을 구현 중입니다.
-                    </p>
-                    <div
-                        style={{
-                            height: '1000px',
-                        }}
-                    ></div>
+                    <Inquiries />
                 </div>
             </div>
 

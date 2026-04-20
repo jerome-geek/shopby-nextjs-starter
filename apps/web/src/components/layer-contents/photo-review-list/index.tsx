@@ -1,5 +1,5 @@
 import { isEmpty } from '@fxts/core';
-import { MessageCircle, ThumbsUp } from 'lucide-react';
+import { Image as ImageIcon, ThumbsUp } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -118,7 +118,7 @@ export const PhotoReviewList = ({
                                     {Number(review.recommendCnt) || 0}
                                 </span>
                                 <span className={styles.badgeItem}>
-                                    <MessageCircle size={12} />
+                                    <ImageIcon size={12} />
                                     {Number(review.attachedFileCount) || 0}
                                 </span>
                             </span>
