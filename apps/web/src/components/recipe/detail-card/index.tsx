@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CollectionMoreMenu } from '@/components/collection/collection-more-menu';
+import { VerticalMoreMenu } from '@/components/ui';
 import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
 import * as styles from '@/components/recipe/detail-card/index.css';
 import { PATHS } from '@/const/paths';
@@ -82,11 +82,13 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                                 {recipe.title}
                             </h4>
                         </Link>
-                        {/* // TODO:레시피 수정 필요 */}
                         {!isExcludedPath && (
-                            <CollectionMoreMenu
+                            <VerticalMoreMenu
+                                id={String(recipe.sno)}
                                 onEdit={handleEdit}
+                                onEditText={t('레시피 수정')}
                                 onDelete={handleDelete}
+                                onDeleteText={t('레시피 삭제')}
                             />
                         )}
                     </div>

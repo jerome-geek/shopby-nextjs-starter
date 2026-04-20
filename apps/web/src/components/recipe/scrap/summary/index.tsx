@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { CollectionMoreMenu } from '@/components/collection';
+import { CollectionCard } from '@/components/collection';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
 import * as styles from '@/components/recipe/scrap/summary/index.css';
@@ -14,6 +14,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useCollectionList } from '@/hooks/query/shop/collection';
 import { useBookmark } from '@/hooks/recipe';
 import { useCustomDialog } from '@/hooks/ui';
+import { VerticalMoreMenu } from '@/components/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
@@ -152,7 +153,8 @@ const RecipeScrapSummary = () => {
                                         <div className={styles.buttonContainer}>
                                             {profileData?.memberNo ===
                                                 c.memberNo && (
-                                                <CollectionMoreMenu
+                                                <VerticalMoreMenu
+                                                    id={String(c.sno)}
                                                     onEdit={() =>
                                                         handleEditCollection(
                                                             c.shareCode,

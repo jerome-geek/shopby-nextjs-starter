@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CollectionMoreMenu } from '@/components/collection';
 import { Grid2X2, Row2 } from '@/components/icons';
 import { RecipeCard, RecipeDetailCard } from '@/components/recipe';
+import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -109,7 +109,8 @@ export const RecipeScrapDetail = ({
                             {t(sharedCollectionData?.title || title)}
                         </h2>
                         {isEditable && (
-                            <CollectionMoreMenu
+                            <VerticalMoreMenu
+                                id={`recipe-detail-more-menu-${sharedCollectionData?.sno}`}
                                 onEdit={handleEditCollection}
                                 onDelete={handleDeleteCollection}
                             />

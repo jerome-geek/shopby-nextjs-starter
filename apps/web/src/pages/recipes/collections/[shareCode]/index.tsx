@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { collection } from '@/api/shop';
 import { RecipeDetailCard } from '@/components/recipe/detail-card';
-import { CollectionMoreMenu } from '@/components/collection';
+import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -208,7 +208,8 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                             </h1>
 
                             {isEditable && (
-                                <CollectionMoreMenu
+                                <VerticalMoreMenu
+                                    id={`collection-more-menu-${sharedCollectionData.sno}`}
                                     onEdit={handleEditCollection}
                                     onDelete={handleDeleteCollection}
                                 />
@@ -284,7 +285,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
                 {/* --- Recipe Grid Section --- */}
                 <section className={styles.recipeSection}>
-
                     {recipes.length === 0 ? (
                         <div className={styles.emptyState}>
                             <Bookmark size={40} />
@@ -295,10 +295,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                     ) : (
                         <div className={styles.recipeGrid}>
                             {recipes.map((r) => (
-                                <RecipeDetailCard
-                                    key={r.sno}
-                                    recipe={r}
-                                />
+                                <RecipeDetailCard key={r.sno} recipe={r} />
                             ))}
                         </div>
                     )}

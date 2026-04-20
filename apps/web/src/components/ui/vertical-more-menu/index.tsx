@@ -1,28 +1,47 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Bookmark, EllipsisVertical, Heart } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/collection/collection-more-menu/index.css';
+import * as styles from '@/components/ui/vertical-more-menu/index.css';
+import { useResponsive } from '@/hooks/utils';
+import { useDropdownStore } from '@/store/useDropdownStore';
 
-interface CollectionMoreMenuProps {
+interface VerticalMoreMenuProps {
+    /** 드롭다운 식별을 위한 유니크 ID */
+    id: string;
     onEdit: () => void;
+    onEditText?: string;
     onDelete: () => void;
+    onDeleteText?: string;
 }
 
 /**
- * 컬렉션 수정/삭제를 위한 공통 드롭다운 메뉴 컴포넌트
+ * 아이템 수정/삭제를 위한 공통 드롭다운 메뉴 컴포넌트 (Vertical Ellipsis)
  */
-export const CollectionMoreMenu = ({
+export const VerticalMoreMenu = ({
+    id,
     onEdit,
+    onEditText,
     onDelete,
-}: CollectionMoreMenuProps) => {
+    onDeleteText,
+}: VerticalMoreMenuProps) => {
     const { t } = useTranslation();
-    const [open, setOpen] = useState(false);
+    const { isMobile } = useResponsive();
+
+    const { activeId, setActiveId } = useDropdownStore();
+    const isOpen = activeId === id;
+
+    const handleOpenChange = (isOpen: boolean) => {
+        if (isOpen) {
+            setActiveId(id);
+        } else if (activeId === id) {
+            setActiveId('');
+        }
+    };
 
     return (
-        <DropdownMenu.Root open={open} onOpenChange={setOpen}>
+        <DropdownMenu.Root open={isOpen} onOpenChange={handleOpenChange}>
             <DropdownMenu.Trigger asChild>
                 <button
                     className={styles.moreButton}
@@ -32,12 +51,12 @@ export const CollectionMoreMenu = ({
                         e.stopPropagation();
                     }}
                 >
-                    <EllipsisVertical size={20} />
+                    <EllipsisVertical size={isMobile ? 16 : 20} />
                 </button>
             </DropdownMenu.Trigger>
 
             <AnimatePresence>
-                {open && (
+                {isOpen && (
                     <DropdownMenu.Portal forceMount>
                         <DropdownMenu.Content
                             className={styles.dropdownContent}
@@ -61,11 +80,12 @@ export const CollectionMoreMenu = ({
                                     onSelect={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        setOpen(false);
+                                        handleOpenChange(false);
                                         onEdit();
                                     }}
                                 >
-                                    <Heart size={16} /> {t('컬렉션 수정')}
+                                    <Heart size={16} />
+                                    <span>{onEditText ?? t('수정')}</span>
                                 </DropdownMenu.Item>
                                 <DropdownMenu.Item
                                     className={styles.dropdownItem}
@@ -73,11 +93,12 @@ export const CollectionMoreMenu = ({
                                     onSelect={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        setOpen(false);
+                                        handleOpenChange(false);
                                         onDelete();
                                     }}
                                 >
-                                    <Bookmark size={16} /> {t('컬렉션 삭제')}
+                                    <Bookmark size={16} />
+                                    <span>{onDeleteText ?? t('삭제')}</span>
                                 </DropdownMenu.Item>
                             </motion.div>
                         </DropdownMenu.Content>
