@@ -6,6 +6,9 @@
         "dev:web": "pnpm --filter web dev",
         "dev:admin": "pnpm --filter admin dev",
         "build": "turbo build",
+        "start": "turbo start",
+        "start:web": "pnpm --filter web start",
+        "start:admin": "pnpm --filter admin start",
         "lint": "turbo lint"
     },
     "devDependencies": {

@@ -11,16 +11,17 @@ import type {
     GetRecipeExposureGroupParams,
     RecipeExposureGroupResponse,
     RegisterManualTempImagesData,
+    RegisterManualTempImagesResponse,
     SearchPublicCollectionsParams,
     SearchPublicRecipesParams,
     SearchRecipesParams,
     SearchRecipesResponse,
+    UpdateRecipeData,
 } from '@/models/shop/recipe';
 
 const recipe = {
     /**
      * SNS URL로 레시피 생성
-     *  - SNS URL을 분석하여 레시피를 생성하거나 기존 레시피를 반환합니다
      */
     createRecipe: (data: CreateRecipeData, options?: AxiosRequestConfig) => {
         return geekRequest<CreateRecipeResponse>({
@@ -32,44 +33,13 @@ const recipe = {
     },
 
     /**
-     * 공용 이미지 업로드 (Geek 백엔드)
-     */
-    upload: (formData: FormData, options?: AxiosRequestConfig) => {
-        return geekRequest<{
-            filePath: string;
-            originFileName: string;
-            size: number;
-            contentType: string;
-        }>({
-            method: 'POST',
-            url: '/common/upload',
-            data: formData,
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-            ...options,
-        });
-    },
-
-    /**
      * 수동 레시피 임시 이미지 등록
-     *  - 수동 레시피 작성 시 사용할 임시 이미지를 등록합니다
      */
     registerManualTempImages: (
         data: RegisterManualTempImagesData,
         options?: AxiosRequestConfig,
     ) => {
-        return geekRequest<{
-            memberNo: number;
-            tempImages: {
-                sno: number;
-                uploadPath: string;
-                imageUrl: string;
-                sortOrder: number;
-                //TODO: TEMP or ....
-                status: string;
-            }[];
-        }>({
+        return geekRequest<RegisterManualTempImagesResponse>({
             method: 'POST',
             url: '/shop/recipe/manual/temp-images',
             data,
@@ -90,7 +60,6 @@ const recipe = {
 
     /**
      * 수동 레시피 생성
-     *  - 직접 입력한 정보로 레시피를 생성합니다
      */
     createManualRecipe: (
         data: CreateManualRecipeData,
@@ -104,17 +73,8 @@ const recipe = {
         });
     },
 
-    deleteCollection: (collectionSno: number, options?: AxiosRequestConfig) => {
-        return geekRequest({
-            method: 'DELETE',
-            url: `/shop/recipe/collections/${collectionSno}`,
-            ...options,
-        });
-    },
-
     /**
      * 상위 영역별 사용자 레시피 그룹 조회
-     *  - groupId에 해당하는 레시피 노출 그룹 목록을 조회합니다
      */
     getRecipeExposureGroup: (
         groupId: string,
@@ -125,6 +85,14 @@ const recipe = {
             method: 'GET',
             url: `/shop/recipe/group/${groupId}`,
             params,
+            ...options,
+        });
+    },
+
+    deleteCollection: (collectionSno: number, options?: AxiosRequestConfig) => {
+        return geekRequest({
+            method: 'DELETE',
+            url: `/shop/recipe/collections/${collectionSno}`,
             ...options,
         });
     },
@@ -142,8 +110,34 @@ const recipe = {
     },
 
     /**
+     * 레시피 수정
+     */
+    updateRecipe: (
+        sno: number,
+        data: UpdateRecipeData,
+        options?: AxiosRequestConfig,
+    ) => {
+        return geekRequest({
+            method: 'PUT',
+            url: `/shop/recipe/${sno}`,
+            data,
+            ...options,
+        });
+    },
+
+    /**
+     * 레시피 삭제
+     */
+    deleteRecipe: (sno: number, options?: AxiosRequestConfig) => {
+        return geekRequest({
+            method: 'DELETE',
+            url: `/shop/recipe/${sno}`,
+            ...options,
+        });
+    },
+
+    /**
      * 레시피 좋아요 추가
-     *  - 레시피에 좋아요를 추가합니다
      */
     likeRecipe: (sno: number, options?: AxiosRequestConfig) => {
         return geekRequest({
@@ -155,7 +149,6 @@ const recipe = {
 
     /**
      * 레시피 좋아요 취소
-     *  - 레시피 좋아요를 취소합니다
      */
     unlikeRecipe: (sno: number, options?: AxiosRequestConfig) => {
         return geekRequest({

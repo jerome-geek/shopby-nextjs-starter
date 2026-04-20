@@ -34,10 +34,10 @@ import {
     InputLabel,
     TextArea,
 } from '@/components/ui/input';
-import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
+import { useRecipeMutation } from '@/hooks/mutations/';
 import { useToast } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
-import * as styles from '@/pages/recipes/write.css';
+import * as styles from '@/pages/recipes/write/index.css';
 import {
     recipeCreateSchema,
     type RecipeCreateInput,
