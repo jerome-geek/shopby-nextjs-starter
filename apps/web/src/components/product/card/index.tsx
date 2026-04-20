@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
+import * as styles from '@/components/product/card/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
 import type { StickerInfo } from '@/models/display';
 import type { ImageUrlType } from '@/models/product';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
-import * as styles from '@/components/product/card/index.css';
 
 export interface ProductCardProps {
     productNo: number;

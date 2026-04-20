@@ -67,7 +67,7 @@ export const MENU_LIST = [
     },
     {
         label: '특가',
-        href: PATHS.PRODUCTS.SALE,
+        href: PATHS.TIME_SALE.MAIN,
     },
 ];
 

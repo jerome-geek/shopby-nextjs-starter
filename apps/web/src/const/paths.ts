@@ -71,6 +71,11 @@ export const PATHS = {
         DETAIL: '/products/[productNo]',
     },
 
+    TIME_SALE: {
+        MAIN: '/time-sale',
+        DETAIL: '/time-sale/[timeSaleId]',
+    },
+
     CATEGORIES: {
         DETAIL: (categoryNo: number) => `/categories/${categoryNo}`,
     },

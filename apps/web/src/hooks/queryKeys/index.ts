@@ -23,6 +23,7 @@ import profileKeys from '@/hooks/queryKeys/profileKeys';
 import recipeKeys from '@/hooks/queryKeys/recipeKeys';
 import reviewKeys from '@/hooks/queryKeys/reviewKeys';
 import termsKeys from '@/hooks/queryKeys/termsKeys';
+import timeSaleKeys from '@/hooks/queryKeys/timeSaleKeys';
 
 export {
     accumulationKeys,
@@ -50,4 +51,5 @@ export {
     recipeKeys,
     reviewKeys,
     termsKeys,
+    timeSaleKeys,
 };

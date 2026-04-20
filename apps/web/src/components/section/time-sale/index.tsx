@@ -5,7 +5,7 @@ import { Grid } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { CountdownTimer, ProductCard } from '@/components/product';
-import * as styles from '@/components/section/timeSale/index.css';
+import * as styles from '@/components/section/time-sale/index.css';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
 import type { ImageUrlType } from '@/models/product';
 import { BREAKPOINTS } from '@/styles/media';

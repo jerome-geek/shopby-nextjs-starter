@@ -6,7 +6,7 @@ import IconBanner from '@/components/banner/icon';
 import SectionGroup from '@/components/section/group';
 import * as styles from '@/styles/Home.css';
 
-const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
+const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
     ssr: false,
 });
 

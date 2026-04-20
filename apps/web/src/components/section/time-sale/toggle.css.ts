@@ -1,25 +1,34 @@
-import { style } from '@vanilla-extract/css';
-import { recipe } from '@vanilla-extract/recipes';
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
 export const container = style({
     display: 'flex',
+    gap: '2px',
     backgroundColor: vars.color.gray['20'],
     borderRadius: '100px',
-    padding: '4px',
-    width: 'fit-content',
-    margin: '0 auto',
+    padding: '2px',
+    width: '100%',
     position: 'relative',
+
+    '@media': {
+        [media.desktop]: {
+            width: '384px',
+            margin: '0 auto',
+        },
+    },
 });
 
 export const button = recipe({
     base: {
         position: 'relative',
+        flex: 1,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '12px 24px',
+        height: '36px',
         borderRadius: '100px',
         border: 'none',
         backgroundColor: 'transparent',
@@ -27,6 +36,12 @@ export const button = recipe({
         minWidth: '160px',
         outline: 'none',
         zIndex: 1,
+
+        '@media': {
+            [media.desktop]: {
+                height: '41px',
+            },
+        },
     },
     variants: {
         active: {
@@ -48,20 +63,29 @@ export const activeBg = style({
 
 export const label = recipe({
     base: [
-        textStyles.body2Semibold,
+        textStyles.body1Medium,
         {
             position: 'relative',
             zIndex: 2,
             transition: 'color 0.2s ease',
+            '@media': {
+                [media.desktop]: {
+                    fontSize: '1.5rem',
+                    lineHeight: '1.4',
+                    letterSpacing: '-0.2%',
+                },
+            },
         },
     ],
     variants: {
         active: {
             true: {
                 color: vars.color.white,
+                fontWeight: 600,
+                letterSpacing: '-1.3%',
             },
             false: {
-                color: vars.color.gray['50'],
+                color: vars.color.gray['60'],
             },
         },
     },

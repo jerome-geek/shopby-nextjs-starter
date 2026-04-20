@@ -10,6 +10,7 @@ const fadeIn = keyframes({
 });
 
 export const container = style({
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',

@@ -5,7 +5,7 @@ import { HeroBanner } from '@/components/banner/hero';
 import { LazyRender } from '@/components/common';
 import * as styles from '@/styles/Home.css';
 
-const TimeSale = dynamic(() => import('@/components/section/timeSale'), {
+const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
     ssr: false,
 });
 const Best = dynamic(() => import('@/components/section/best'), {
