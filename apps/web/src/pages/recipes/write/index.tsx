@@ -35,6 +35,8 @@ import {
     TextArea,
 } from '@/components/ui/input';
 import { useRecipeMutation } from '@/hooks/mutations/';
+import { useProfile } from '@/hooks/query/member/profile';
+import { useRecipeDetail } from '@/hooks/query/shop/recipe';
 import { useToast } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/write/index.css';
@@ -95,11 +97,13 @@ const SortablePreviewImage = ({
     );
 };
 
-// TODO: 회원만 접근 가능하도록 처리
 const RecipeWritePage = () => {
     const { t } = useTranslation();
 
     const router = useRouter();
+    console.log('🚀 ~ RecipeWritePage ~ router:', router);
+    const recipeNo = Number(router.query.recipeNo) || 0;
+    console.log('🚀 ~ RecipeWritePage ~ recipeNo:', recipeNo);
 
     const { isMobile } = useResponsive();
 
@@ -111,6 +115,19 @@ const RecipeWritePage = () => {
         (state) => state.clearTempImages,
     );
 
+    const { data: profileData } = useProfile();
+    const memberNo = profileData?.memberNo || 0;
+    const isModify = !!memberNo && !!recipeNo;
+
+    const { data: recipeDetailData } = useRecipeDetail({
+        sno: Number(recipeNo),
+        memberNo,
+        options: {
+            enabled: isModify,
+        },
+    });
+    console.log('🚀 ~ RecipeWritePage ~ recipeDetailData:', recipeDetailData);
+
     const methods = useForm<RecipeCreateInput>({
         resolver: zodResolver(recipeCreateSchema),
         defaultValues: {
@@ -121,7 +138,14 @@ const RecipeWritePage = () => {
             caloriesPerServingKcal: 1,
             thumbnailTempImageSno: 1, // TODO: 임시 데이터
             ingredients: [{ name: 'ggggg', amount: '11111' }],
-            steps: [{ stepNumber: 1, description: '', tempImageSno: null }],
+            steps: [
+                {
+                    stepNumber: 1,
+                    description: '',
+                    tempImageSno: null,
+                    imageUrl: null,
+                },
+            ],
         },
     });
 
@@ -130,9 +154,49 @@ const RecipeWritePage = () => {
         control,
         handleSubmit,
         setValue,
+        reset,
         formState: { errors },
     } = methods;
     console.log('🚀 ~ RecipeWritePage ~ errors:', errors);
+
+    useEffect(
+        function initializeForm() {
+            if (recipeDetailData) {
+                reset({
+                    title: recipeDetailData.title,
+                    description: recipeDetailData.description,
+                    // NOTE: BE에서 cookTimeMinutes -> durationSeconds로 변환되서 나오니 참고
+                    cookTimeMinutes: recipeDetailData.durationSeconds,
+                    servings: recipeDetailData.servings,
+                    caloriesPerServingKcal:
+                        recipeDetailData.caloriesPerServingKcal,
+                    ingredients:
+                        recipeDetailData.ingredients.length > 0
+                            ? recipeDetailData.ingredients.map((ing) => ({
+                                  name: ing.name,
+                                  amount: ing.amount || '',
+                              }))
+                            : [{ name: '', amount: '' }], // 기본 1행
+                    steps:
+                        recipeDetailData.steps.length > 0
+                            ? recipeDetailData.steps.map((step) => ({
+                                  stepNumber: step.stepNumber,
+                                  description: step.description,
+                                  tempImageSno: null, // 수정 시에도 이미지를 새로 올릴 수 있으므로 일단 null
+                                  imageUrl: step.stepImageUrl,
+                              }))
+                            : [
+                                  {
+                                      stepNumber: 1,
+                                      description: '',
+                                      imageUrl: null,
+                                  },
+                              ], // 기본 1행
+                });
+            }
+        },
+        [recipeDetailData, reset],
+    );
 
     const {
         fields: ingredientFields,
@@ -153,6 +217,32 @@ const RecipeWritePage = () => {
         name: 'steps',
     });
 
+    // 수정 시 기존 데이터를 스토어(tempImages)에 초기화
+    useEffect(
+        function syncTempImagesWithDetail() {
+            // 수정 모드이고, 스토어가 아직 비어있을 때만 실행
+            if (isModify && recipeDetailData && tempImages.length === 0) {
+                const initialTempImages = recipeDetailData.steps.map(
+                    (step, idx) => ({
+                        sno: step.sno,
+                        imageUrl: step.stepImageUrl,
+                        sortOrder: step.stepNumber || idx + 1,
+                    }),
+                );
+                setTempImages(initialTempImages);
+
+                // 썸네일 정보도 초기화
+                if (recipeDetailData.thumbnailUrl) {
+                    // NOTE: API에서 thumbnailTempImageSno를 제공한다면 그것을 사용
+                    // 현재는 첫 번째 이미지의 sno를 기본값으로 설정하는 로직이 syncSteps에서 처리됨
+                }
+            }
+        },
+        [isModify, recipeDetailData, tempImages.length, setTempImages],
+    );
+
+    /* 
+    // 기존 로직: 이미지 개수만큼 steps 자동 생성 및 sno 매핑
     useEffect(() => {
         if (tempImages.length > 0) {
             const sortedImages = [...tempImages].sort(
@@ -175,6 +265,49 @@ const RecipeWritePage = () => {
             setValue('steps', newSteps);
         }
     }, [tempImages, setValue]);
+    */
+
+    // 이미지 스토어(tempImages)와 폼의 steps 필드를 동기화 (설명 보존 로직 포함)
+    useEffect(
+        function syncStepsWithImages() {
+            if (tempImages.length === 0) return;
+
+            // 현재 폼에 입력된 값들 가져오기
+            const currentSteps = methods.getValues('steps') || [];
+            const sortedImages = [...tempImages].sort(
+                (a, b) => a.sortOrder - b.sortOrder,
+            );
+
+            // 1. 대표 이미지(썸네일) 설정
+            const mainImage = sortedImages.find((img) => img.sortOrder === 1);
+            if (mainImage) {
+                // sno가 있으면 sno를, 없으면 0이나 thumbnailTempImageSno 유지
+                if (mainImage.sno) {
+                    setValue('thumbnailTempImageSno', mainImage.sno);
+                }
+            }
+
+            // 2. 이미지 순서에 맞춰 steps 재구성 (기존 설명 보존)
+            const newSteps = sortedImages.map((img, idx) => {
+                // 기존 데이터 중 동일한 이미지(sno 또는 imageUrl)를 가진 Step이 있는지 탐색
+                const existingStep = currentSteps.find(
+                    (step) =>
+                        (img.sno && step.tempImageSno === img.sno) ||
+                        (img.imageUrl && step.imageUrl === img.imageUrl),
+                );
+
+                return {
+                    stepNumber: idx + 1,
+                    description: existingStep?.description || '', // 기존 설명 보존!
+                    tempImageSno: img.sno || null,
+                    imageUrl: img.imageUrl || null,
+                };
+            });
+
+            setValue('steps', newSteps);
+        },
+        [tempImages, setValue],
+    );
 
     const {
         createManualRecipe: { mutateAsync: createManualRecipeAsync },
@@ -403,7 +536,7 @@ const RecipeWritePage = () => {
                                     <InputLabel>{t('요리 시간')}</InputLabel>
                                     <InputField
                                         placeholder={t('30분')}
-                                        type='number'
+                                        inputMode='numeric'
                                         {...register('cookTimeMinutes', {
                                             valueAsNumber: true,
                                         })}
@@ -413,7 +546,7 @@ const RecipeWritePage = () => {
                                     <InputLabel>{t('몇 인분')}</InputLabel>
                                     <InputField
                                         placeholder={t('2인분')}
-                                        type='number'
+                                        inputMode='numeric'
                                         {...register('servings', {
                                             valueAsNumber: true,
                                         })}
@@ -423,7 +556,7 @@ const RecipeWritePage = () => {
                                     <InputLabel>{t('칼로리')}</InputLabel>
                                     <InputField
                                         placeholder={t('500kcal')}
-                                        type='number'
+                                        inputMode='numeric'
                                         {...register('caloriesPerServingKcal', {
                                             valueAsNumber: true,
                                         })}
@@ -613,7 +746,8 @@ const RecipeWritePage = () => {
                                                         styles.stepImageGrid
                                                     }
                                                 >
-                                                    {stepImage ? (
+                                                    {stepImage ||
+                                                    field.imageUrl ? (
                                                         <div
                                                             className={
                                                                 styles.stepImageSlot
@@ -621,17 +755,27 @@ const RecipeWritePage = () => {
                                                         >
                                                             <RecipePreviewImage
                                                                 url={
-                                                                    stepImage.imageUrl
+                                                                    stepImage?.imageUrl ||
+                                                                    field.imageUrl
                                                                 }
                                                                 sno={
-                                                                    stepImage.sno
+                                                                    stepImage?.sno
                                                                 }
-                                                                onDeleteButtonClick={() =>
-                                                                    setValue(
-                                                                        `steps.${idx}.tempImageSno`,
-                                                                        null,
-                                                                    )
-                                                                }
+                                                                onDeleteButtonClick={() => {
+                                                                    if (
+                                                                        stepImage
+                                                                    ) {
+                                                                        setValue(
+                                                                            `steps.${idx}.tempImageSno`,
+                                                                            null,
+                                                                        );
+                                                                    } else {
+                                                                        setValue(
+                                                                            `steps.${idx}.imageUrl`,
+                                                                            null,
+                                                                        );
+                                                                    }
+                                                                }}
                                                             />
                                                         </div>
                                                     ) : (

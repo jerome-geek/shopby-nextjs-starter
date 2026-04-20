@@ -171,7 +171,7 @@ export interface SearchPublicCollectionsParams {
 /** 조리 단계 */
 export interface RecipeStep {
     /** 단계 고유 번호 */
-    no: number;
+    sno: number;
     /** 조리 단계 순서 */
     stepNumber: number;
     /** 조리 단계 설명 */

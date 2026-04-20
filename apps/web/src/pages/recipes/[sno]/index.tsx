@@ -292,7 +292,7 @@ const RecipeDetailPage = ({
                                             )}
                                         </span>
                                     </div>
-                                    {coupangProduct && (
+                                    {coupangProduct?.url && (
                                         <Link
                                             href={coupangProduct.url}
                                             target='_blank'
@@ -339,25 +339,27 @@ const RecipeDetailPage = ({
                             <div className={styles.stepContent}>
                                 <p className={styles.stepDescription}>
                                     {step.description}
-                                    <Link
-                                        href={
-                                            recipeDetailData.sourceType ===
-                                            'YOUTUBE'
-                                                ? `https://www.youtube.com/watch?v=${recipeDetailData.sourceId}&t=${step.timestampSeconds}s`
-                                                : recipeDetailData.sourceUrl ||
-                                                  '#'
-                                        }
-                                        target='_blank'
-                                        className={styles.stepTime}
-                                    >
-                                        {dayjs()
-                                            .startOf('day')
-                                            .add(
-                                                step.timestampSeconds,
-                                                'second',
-                                            )
-                                            .format('mm:ss')}
-                                    </Link>
+                                    {step.timestampSeconds && (
+                                        <Link
+                                            href={
+                                                recipeDetailData.sourceType ===
+                                                'YOUTUBE'
+                                                    ? `https://www.youtube.com/watch?v=${recipeDetailData.sourceId}&t=${step.timestampSeconds}s`
+                                                    : recipeDetailData.sourceUrl ||
+                                                      '#'
+                                            }
+                                            target='_blank'
+                                            className={styles.stepTime}
+                                        >
+                                            {dayjs()
+                                                .startOf('day')
+                                                .add(
+                                                    step.timestampSeconds,
+                                                    'second',
+                                                )
+                                                .format('mm:ss')}
+                                        </Link>
+                                    )}
                                 </p>
                             </div>
                         </li>

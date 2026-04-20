@@ -21,6 +21,7 @@ export const recipeCreateSchema = z.object({
                 stepNumber: z.number().int(),
                 description: z.string().min(1, '상세 내용을 입력해주세요'),
                 tempImageSno: z.number().optional().nullable(),
+                imageUrl: z.string().optional().nullable(),
             }),
         )
         .min(1, '최소 한 개 이상의 조리 순서가 필요합니다'),
