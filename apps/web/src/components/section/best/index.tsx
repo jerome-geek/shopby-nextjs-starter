@@ -190,7 +190,10 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                 )}
             </div>
 
-            <Link href='/best' className={styles.moreLink}>
+            <Link
+                href={`${PATHS.PRODUCTS.BEST}?categoryNo=${currentCategory?.categoryNo}`}
+                className={styles.moreLink}
+            >
                 {t('베스트 랭킹 더보기')}
                 <ArrowIcon direction='right' />
             </Link>

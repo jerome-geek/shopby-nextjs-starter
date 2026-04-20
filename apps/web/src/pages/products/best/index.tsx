@@ -12,11 +12,11 @@ import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';
 import { PATHS } from '@/const/paths';
-import useCategoriesByCode from '@/hooks/query/display/category/useCategoriesByCode';
 import {
     useBestSellerProductList,
     useInfiniteBestSellerProductList,
 } from '@/hooks/query/product/product';
+import { useCategoryAll } from '@/hooks/suspenseQuery/display/category';
 import { useResponsive } from '@/hooks/utils';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
 import * as styles from '@/pages/products/best/index.css';
@@ -45,15 +45,14 @@ export default function BestProducts() {
         1,
     );
 
-    const { data: categoriesByCodeData } = useCategoriesByCode({
-        data: { codes: ['MAIN'] },
-    });
+    const { data: categoryData } = useCategoryAll();
 
-    const mainCategoryNo = categoriesByCodeData?.[0]?.displayCategoryNo ?? 0;
+    const mainCategoryNo =
+        categoryData?.multiLevelCategories?.[0]?.categoryNo ?? 0;
 
     const { depth2CategoryList } = useCategoryMenu(mainCategoryNo);
 
-    const defaultCategoryNo = depth2CategoryList[0]?.categoryNo ?? 0;
+    const defaultCategoryNo = mainCategoryNo;
 
     const categoryNoFromQuery = categoryNoQuery
         ? Number(
@@ -159,6 +158,21 @@ export default function BestProducts() {
                         }}
                         style={{ paddingRight: isMobile ? '20px' : '0' }}
                     >
+                        <SwiperSlide style={{ width: 'auto' }}>
+                            <Link
+                                href={`${PATHS.PRODUCTS.BEST}`}
+                                className={styles.categoryLink}
+                                data-selected={
+                                    Number(selectedCategory) ===
+                                    Number(mainCategoryNo)
+                                        ? 'true'
+                                        : undefined
+                                }
+                            >
+                                전체
+                            </Link>
+                        </SwiperSlide>
+
                         {depth2CategoryList.map((category) => (
                             <SwiperSlide
                                 key={category.categoryNo}

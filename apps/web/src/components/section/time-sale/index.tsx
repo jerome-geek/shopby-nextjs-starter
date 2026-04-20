@@ -168,7 +168,10 @@ export const TimeSale = memo(
                     </Swiper>
                 </div>
 
-                <Link href='/timesale' className={styles.moreLink}>
+                <Link
+                    href={`/time-sale?tab=${type === 'KIDS' ? 'kids' : 'life'}`}
+                    className={styles.moreLink}
+                >
                     <span>{buttonLabel}</span> <ArrowRight />
                 </Link>
             </section>

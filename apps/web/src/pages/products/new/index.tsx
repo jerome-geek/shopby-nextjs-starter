@@ -12,9 +12,9 @@ import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';
 import { PATHS } from '@/const/paths';
-import useCategoriesByCode from '@/hooks/query/display/category/useCategoriesByCode';
-import { useProductList } from '@/hooks/query/product/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
+import { useProductList } from '@/hooks/query/product/product';
+import { useCategoryAll } from '@/hooks/suspenseQuery/display/category';
 import { useResponsive } from '@/hooks/utils';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
 import type { OrderByType, OrderDirectionType } from '@/models';
@@ -44,15 +44,14 @@ export default function NewProducts() {
         1,
     );
 
-    const { data: categoriesByCodeData } = useCategoriesByCode({
-        data: { codes: ['MAIN'] },
-    });
+    const { data: categoryData } = useCategoryAll();
 
-    const mainCategoryNo = categoriesByCodeData?.[0]?.displayCategoryNo ?? 0;
+    const mainCategoryNo =
+        categoryData?.multiLevelCategories?.[0]?.categoryNo ?? 0;
 
     const { depth2CategoryList } = useCategoryMenu(mainCategoryNo);
 
-    const defaultCategoryNo = depth2CategoryList[0]?.categoryNo ?? 0;
+    const defaultCategoryNo = mainCategoryNo;
 
     const categoryNoFromQuery = categoryNoQuery
         ? Number(
@@ -118,8 +117,8 @@ export default function NewProducts() {
     }, [infiniteProductListData, isMobile, productListData?.items]);
 
     const totalCount = isMobile
-        ? (infiniteProductListData?.pages[0]?.data.totalCount ?? 0)
-        : (productListData?.totalCount ?? 0);
+        ? infiniteProductListData?.pages[0]?.data.totalCount ?? 0
+        : productListData?.totalCount ?? 0;
 
     const isListLoading = isMobile
         ? isInfiniteProductListLoading
@@ -156,6 +155,21 @@ export default function NewProducts() {
                         }}
                         style={{ paddingRight: isMobile ? '20px' : '0' }}
                     >
+                        <SwiperSlide style={{ width: 'auto' }}>
+                            <Link
+                                href={`${PATHS.PRODUCTS.NEW}`}
+                                className={styles.categoryLink}
+                                data-selected={
+                                    Number(selectedCategory) ===
+                                    Number(mainCategoryNo)
+                                        ? 'true'
+                                        : undefined
+                                }
+                            >
+                                전체
+                            </Link>
+                        </SwiperSlide>
+
                         {depth2CategoryList.map((category) => (
                             <SwiperSlide
                                 key={category.categoryNo}
