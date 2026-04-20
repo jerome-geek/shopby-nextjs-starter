@@ -1,11 +1,11 @@
+import { isEmpty } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
-import { isEmpty } from '@fxts/core';
-import clsx from 'clsx';
 
 import ErrorMessage from '@/components/form/ErrorMessage';
 import { Input, InputContainer, Label } from '@/components/form/input';
@@ -16,7 +16,7 @@ import useLimitMutation from '@/hooks/mutations/useLimitMutation';
 import { useServerApiByPass } from '@/hooks/query/shopby';
 import limitKeys from '@/hooks/queryKeys/limitKeys';
 import useApiError from '@/hooks/useApiError';
-import useDialog from '@/hooks/utils/useDialog';
+import { useToast } from '@/hooks/utils';
 import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
 import { MemberListResponse } from '@/model/shopby';
 import { createExceptionSchema, CreateExceptionSchemaType } from '@/schema';
@@ -30,8 +30,8 @@ type MemberOption = {
 };
 
 const AddExceptionUserModal = ({ ...props }: DefaultModalLayoutProps) => {
-    const { openAsyncDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { addToast } = useToast();
+    const { handleErrorToast } = useApiError();
 
     const queryClient = useQueryClient();
 
@@ -120,24 +120,26 @@ const AddExceptionUserModal = ({ ...props }: DefaultModalLayoutProps) => {
 
             const failedCount = results.length - successCount;
 
-            queryClient.invalidateQueries({
+            await queryClient.invalidateQueries({
                 queryKey: limitKeys.exceptionLists(),
             });
 
             if (failedCount > 0) {
-                await openAsyncDialog({
+                addToast({
+                    variant: 'success',
                     message: `예외 계정을 추가했습니다. (성공: ${successCount} / 실패: ${failedCount})`,
                 });
                 return;
             }
 
-            await openAsyncDialog({
+            addToast({
+                variant: 'success',
                 message: `예외 계정을 추가했습니다. (총 ${successCount}명)`,
             });
 
             props.close();
         } catch (error) {
-            handleErrorDialog(error);
+            handleErrorToast(error);
         }
     };
 

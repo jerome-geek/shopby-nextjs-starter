@@ -1,4 +1,6 @@
+import { pipe, some, values } from '@fxts/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HttpStatusCode, isAxiosError } from 'axios';
 import { OverlayProvider, useOverlayData } from 'overlay-kit';
 import { useEffect, useState } from 'react';
 import {
@@ -7,26 +9,25 @@ import {
     Routes,
     useLocation,
 } from 'react-router';
-import { HttpStatusCode, isAxiosError } from 'axios';
+import { Toaster } from 'sonner';
 import { useScrollLock } from 'usehooks-ts';
-import { pipe, some, values } from '@fxts/core';
 
 import { PATHS } from '@/const/paths';
-import AppLayout from '@/layout/AppLayout';
-import SignIn from '@/pages/AuthPages/SignIn';
-import Home from '@/pages/Dashboard/Home';
-import CollectionGroupList from '@/pages/CollectionGroup/CollectionGroupList';
-import CollectionGroupDetail from '@/pages/CollectionGroup/CollectionGroupDetail';
-import RecipeGroupList from '@/pages/RecipeGroup/RecipeGroupList';
-import RecipeGroupDetail from '@/pages/RecipeGroup/RecipeGroupDetail';
-import UserCollections from '@/pages/UserCollection/UserCollections';
-import UserCollectionDetail from '@/pages/UserCollection/UserCollectionDetail';
-import UserRecipeList from '@/pages/UserRecipe/UserRecipeList';
-import UserRecipeDetail from '@/pages/UserRecipe/UserRecipeDetail';
-import RecipeSettings from '@/pages/RecipeSettings/RecipeSettings';
-import NotFound from '@/pages/OtherPage/NotFound';
-import AuthLayout from '@/pages/AuthPages/AuthPageLayout';
 import { useAxiosInterceptor } from '@/hooks/utils';
+import AppLayout from '@/layout/AppLayout';
+import AuthLayout from '@/pages/AuthPages/AuthPageLayout';
+import SignIn from '@/pages/AuthPages/SignIn';
+import CollectionGroupDetail from '@/pages/CollectionGroup/CollectionGroupDetail';
+import CollectionGroupList from '@/pages/CollectionGroup/CollectionGroupList';
+import Home from '@/pages/Dashboard/Home';
+import NotFound from '@/pages/OtherPage/NotFound';
+import RecipeGroupDetail from '@/pages/RecipeGroup/RecipeGroupDetail';
+import RecipeGroupList from '@/pages/RecipeGroup/RecipeGroupList';
+import RecipeSettings from '@/pages/RecipeSettings/RecipeSettings';
+import UserCollectionDetail from '@/pages/UserCollection/UserCollectionDetail';
+import UserCollections from '@/pages/UserCollection/UserCollections';
+import UserRecipeDetail from '@/pages/UserRecipe/UserRecipeDetail';
+import UserRecipeList from '@/pages/UserRecipe/UserRecipeList';
 
 export default function App() {
     const [queryClient] = useState(
@@ -132,6 +133,12 @@ export default function App() {
                                 />
                             </Route>
                         </Routes>
+
+                        <Toaster
+                            richColors
+                            position='bottom-center'
+                            duration={1500}
+                        />
                     </Router>
                 </AxiosInterceptor>
             </OverlayProvider>

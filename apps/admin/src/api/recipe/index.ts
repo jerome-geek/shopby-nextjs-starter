@@ -1,18 +1,18 @@
 import { request } from '@/api/core/request';
 import {
-    CreateUserRecipeBody,
-    GetRecipeExposureGroupsParams,
     CreateRecipeExposureGroupsBody,
     CreateRecipeExposureGroupsResponse,
+    CreateUserRecipeBody,
+    GetRecipeExposureGroupsParams,
+    GetRecipeResponse,
+    RecipeExposureGroupDetailResponse,
+    RecipeExposureGroupResponse,
     SearchRecipesParams,
     SearchRecipesResponse,
-    RecipeExposureGroupResponse,
-    RecipeExposureGroupDetailResponse,
-    UpdateRecipeExposureGroupsResponse,
-    UpdateRecipeExposureGroupsBody,
-    UpdateRecipeExposureGroupsSortOrderBody,
-    GetRecipeResponse,
     UpdateAllRecipeExposureGroupsBody,
+    UpdateRecipeExposureGroupsBody,
+    UpdateRecipeExposureGroupsResponse,
+    UpdateRecipeExposureGroupsSortOrderBody,
 } from '@/model/recipe';
 
 export const recipe = {
@@ -92,6 +92,12 @@ export const recipe = {
             method: 'PUT',
             url: '/admin/recipe/exposure-groups/reorder',
             data,
+        });
+    },
+    deleteRecipe: (sno: number) => {
+        return request({
+            method: 'DELETE',
+            url: `/admin/recipe/${sno}`,
         });
     },
 };

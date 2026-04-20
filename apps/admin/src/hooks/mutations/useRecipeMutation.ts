@@ -3,10 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import { recipe } from '@/api/recipe';
 import {
     CreateRecipeExposureGroupsBody,
-    UpdateRecipeExposureGroupsBody,
-    UpdateRecipeExposureGroupsSortOrderBody,
     CreateUserRecipeBody,
     UpdateAllRecipeExposureGroupsBody,
+    UpdateRecipeExposureGroupsBody,
+    UpdateRecipeExposureGroupsSortOrderBody,
 } from '@/model/recipe';
 
 const useRecipeMutation = () => {
@@ -45,6 +45,9 @@ const useRecipeMutation = () => {
         updateRecipeExposureGroupsSortOrder: useMutation({
             mutationFn: async (data: UpdateRecipeExposureGroupsSortOrderBody) =>
                 await recipe.updateRecipeExposureGroupsSortOrder(data),
+        }),
+        deleteRecipe: useMutation({
+            mutationFn: async (sno: number) => await recipe.deleteRecipe(sno),
         }),
     };
 };

@@ -1,6 +1,6 @@
+import { filter, isEmpty, pipe, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { filter, isEmpty, pipe, toArray } from '@fxts/core';
 import dayjs from 'dayjs';
 import { useMemo, useRef, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -30,7 +30,7 @@ import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 
 const CreateUserCollectionModal = ({ ...props }: DefaultModalLayoutProps) => {
     const { openAsyncDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const queryClient = useQueryClient();
 
@@ -179,7 +179,7 @@ const CreateUserCollectionModal = ({ ...props }: DefaultModalLayoutProps) => {
                 props.close();
             },
             onError: (error) => {
-                handleErrorDialog(error);
+                handleErrorToast(error);
             },
         });
     };

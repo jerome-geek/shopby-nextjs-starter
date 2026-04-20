@@ -10,13 +10,13 @@ import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
 import { useCollectionExposureGroupList } from '@/hooks/query/collection';
 import { collectionKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
+import { useToast } from '@/hooks/utils';
 import { ModalLayout } from '@/layout/modal';
 import type { CollectionExposureGroup } from '@/model/collection';
 import {
     collectionExposureLocationLabel,
     groupCollectionExposureByLocation,
 } from '@/utils/collection';
-import { useDialog } from '@/hooks/utils';
 
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
 import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
@@ -34,7 +34,8 @@ const CollectionOrderManagementModal = ({
     ...props
 }: CollectionOrderManagementModalProps) => {
     const queryClient = useQueryClient();
-    const { openAsyncDialog } = useDialog();
+
+    const { addToast } = useToast();
 
     const { data: collectionExposureGroupListData, isLoading } =
         useCollectionExposureGroupList({
@@ -133,7 +134,7 @@ const CollectionOrderManagementModal = ({
         close();
     };
 
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const handleSave = async () => {
         try {
@@ -163,18 +164,19 @@ const CollectionOrderManagementModal = ({
                 ),
             );
 
-            queryClient.invalidateQueries({
+            await queryClient.invalidateQueries({
                 queryKey: collectionKeys.all,
                 refetchType: 'all',
             });
 
-            await openAsyncDialog({
+            addToast({
+                variant: 'success',
                 message: '컬렉션 그룹 노출 순서가 저장되었습니다.',
             });
 
             handleClose();
         } catch (error) {
-            handleErrorDialog(error);
+            handleErrorToast(error);
         }
     };
 

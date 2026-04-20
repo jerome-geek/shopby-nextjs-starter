@@ -1,17 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
+import { accessTokenManager } from '@/api/core/token';
 import ErrorMessage from '@/components/form/ErrorMessage';
 import { Input, InputContainer, Label } from '@/components/form/input';
 import Button from '@/components/ui/button/Button';
+import { PATHS } from '@/const/paths';
 import { useAuthMutation } from '@/hooks/mutations';
+import useApiError from '@/hooks/useApiError';
 import { EyeCloseIcon, EyeIcon } from '@/icons';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema';
-import useApiError from '@/hooks/useApiError';
-import { accessTokenManager } from '@/api/core/token';
-import { useNavigate } from 'react-router';
-import { PATHS } from '@/const/paths';
 
 export default function SignInForm() {
     const navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function SignInForm() {
 
     const { login } = useAuthMutation();
 
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const onSubmit = handleSubmit(async ({ id, pwd }) => {
         try {
@@ -43,7 +43,7 @@ export default function SignInForm() {
 
             navigate(PATHS.DASHBOARD);
         } catch (error) {
-            handleErrorDialog(error);
+            handleErrorToast(error);
         }
     });
 

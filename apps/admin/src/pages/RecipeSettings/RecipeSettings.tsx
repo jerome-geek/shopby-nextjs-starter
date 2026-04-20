@@ -1,25 +1,25 @@
+import { isEmpty } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { isEmpty } from '@fxts/core';
 
 import PageMeta from '@/components/common/PageMeta';
 import ErrorMessage from '@/components/form/ErrorMessage';
 import { Input } from '@/components/form/input';
 import AddExceptionUserModal from '@/components/modal/add-exception-user';
+import LoadingWrapper from '@/components/ui/loading-wrapper';
 import useLimitMutation from '@/hooks/mutations/useLimitMutation';
 import { useLimitSettings } from '@/hooks/query/limit';
 import useExceptionList from '@/hooks/query/limit/useExceptionList';
 import limitKeys from '@/hooks/queryKeys/limitKeys';
 import useApiError from '@/hooks/useApiError';
-import { useDialog } from '@/hooks/utils';
+import { useDialog, useToast } from '@/hooks/utils';
 import {
     updateCreationLimitSchema,
     UpdateCreationLimitSchemaType,
 } from '@/schema';
-import LoadingWrapper from '@/components/ui/loading-wrapper';
 
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
@@ -44,8 +44,9 @@ const tableTh = {
 
 const RecipeSettings = () => {
     const queryClient = useQueryClient();
-    const { openAsyncDialog, openDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { openAsyncDialog } = useDialog();
+    const { addToast } = useToast();
+    const { handleErrorToast } = useApiError();
 
     const { data: limitSettingsData } = useLimitSettings();
 
@@ -115,12 +116,15 @@ const RecipeSettings = () => {
 
     const handleSaveLimits = handleSubmit((data) => {
         updateCreationLimit.mutate(data, {
-            onSuccess: () => {
-                queryClient.invalidateQueries({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
                     queryKey: limitKeys.settings(),
                 });
 
-                openDialog({ message: '설정이 저장되었습니다.' });
+                addToast({
+                    variant: 'success',
+                    message: '설정이 저장되었습니다.',
+                });
 
                 reset(
                     {
@@ -133,7 +137,7 @@ const RecipeSettings = () => {
                     },
                 );
             },
-            onError: (err) => handleErrorDialog(err),
+            onError: (err) => handleErrorToast(err),
         });
     });
 
@@ -153,14 +157,17 @@ const RecipeSettings = () => {
         }
 
         deleteException.mutate(memberNo, {
-            onSuccess: () => {
-                queryClient.invalidateQueries({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
                     queryKey: limitKeys.exceptionLists(),
                 });
 
-                openDialog({ message: '예외 계정이 삭제되었습니다.' });
+                addToast({
+                    variant: 'success',
+                    message: '예외 계정이 삭제되었습니다.',
+                });
             },
-            onError: (err) => handleErrorDialog(err),
+            onError: (err) => handleErrorToast(err),
         });
     };
 

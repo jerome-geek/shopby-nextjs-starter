@@ -1,4 +1,5 @@
 import { isEmpty } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
 
@@ -7,12 +8,17 @@ import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
+import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useRecipeList } from '@/hooks/query/recipe';
+import { recipeKeys } from '@/hooks/queryKeys';
+import useApiError from '@/hooks/useApiError';
+import { useDialog, useToast } from '@/hooks/utils';
 import { isProcessingRecipe } from '@/utils/recipe';
 
 import { ReactComponent as BookmarkIcon } from '@/icons/bookmark.svg?react';
 import { ReactComponent as HeartIcon } from '@/icons/heart.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
+import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
     minWidth: 'min-w-[860px]',
@@ -22,6 +28,7 @@ const tableLayout = {
         source: 'w-[120px]',
         bookmark: 'w-[90px]',
         like: 'w-[90px]',
+        actions: 'w-[100px]',
     },
 } as const;
 
@@ -34,6 +41,8 @@ const PAGE_SEARCH_PARAM = 'page';
 const PAGE_SIZE = 10;
 
 const UserRecipeList = () => {
+    const { addToast } = useToast();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const keyword = searchParams.get('keyword') ?? '';
@@ -54,6 +63,13 @@ const UserRecipeList = () => {
             params,
         });
 
+    const queryClient = useQueryClient();
+
+    const { openAsyncDialog } = useDialog();
+    const { handleErrorToast } = useApiError();
+
+    const { deleteRecipe: deleteRecipeMutation } = useRecipeMutation();
+
     const totalCount = recipeListData?.count ?? 0;
     const lastPage = recipeListData?.lastPage ?? 1;
 
@@ -68,6 +84,35 @@ const UserRecipeList = () => {
 
         setSearchParams({
             keyword,
+        });
+    };
+
+    const handleDeleteRecipe = async (sno: number) => {
+        const isAgree = await openAsyncDialog({
+            message: '레시피를 삭제하시겠습니까?',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (!isAgree) {
+            return;
+        }
+
+        deleteRecipeMutation.mutate(sno, {
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
+                    queryKey: recipeKeys.all,
+                    refetchType: 'all',
+                });
+
+                addToast({
+                    message: '레시피가 삭제되었습니다.',
+                    variant: 'success',
+                });
+            },
+            onError: (error) => {
+                handleErrorToast(error);
+            },
         });
     };
 
@@ -176,6 +221,11 @@ const UserRecipeList = () => {
                                         >
                                             좋아요
                                         </th>
+                                        <th
+                                            className={`${tableLayout.column.actions} ${tableTh.right}`}
+                                        >
+                                            작업
+                                        </th>
                                     </tr>
                                 </thead>
 
@@ -183,7 +233,7 @@ const UserRecipeList = () => {
                                     {isEmpty(searchRecipeList) ? (
                                         <tr>
                                             <td
-                                                colSpan={5}
+                                                colSpan={6}
                                                 className='px-6 py-12 text-center text-sm text-[#6a7282]'
                                             >
                                                 검색 결과가 없습니다.
@@ -280,6 +330,22 @@ const UserRecipeList = () => {
                                                                 item.likeCount ??
                                                                 0
                                                             ).toLocaleString()}
+                                                        </div>
+                                                    </td>
+                                                    <td className='px-6 py-6 text-right'>
+                                                        <div className='flex items-center justify-end gap-2'>
+                                                            <button
+                                                                type='button'
+                                                                className='flex h-8 w-8 items-center justify-center rounded-lg text-error-500 transition-colors hover:bg-error-50'
+                                                                aria-label='삭제'
+                                                                onClick={() =>
+                                                                    handleDeleteRecipe(
+                                                                        item.sno,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <TrashSimpleIcon className='h-4 w-4 text-error-500' />
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>

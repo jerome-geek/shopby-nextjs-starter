@@ -21,7 +21,7 @@ import {
 } from '@/hooks/query/collection';
 import { collectionKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
-import { useDialog } from '@/hooks/utils';
+import { useToast } from '@/hooks/utils';
 import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
 import type {
     Collection,
@@ -56,6 +56,8 @@ const CreateCollectionGroupModal = ({
     ...props
 }: CreateCollectionGroupModalProps) => {
     const queryClient = useQueryClient();
+
+    const { addToast } = useToast();
 
     const isModify = !!groupSno;
 
@@ -94,16 +96,15 @@ const CreateCollectionGroupModal = ({
         reset,
     } = methods;
 
-    const { openAsyncDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const {
         createCollectionExposureGroups: createCollectionExposureGroupsMutation,
         updateCollectionExposureGroups: updateCollectionExposureGroupsMutation,
     } = useCollectionMutation();
 
-    const invalidate = () => {
-        queryClient.invalidateQueries({
+    const invalidate = async () => {
+        await queryClient.invalidateQueries({
             queryKey: collectionKeys.all,
             refetchType: 'all',
         });
@@ -128,16 +129,17 @@ const CreateCollectionGroupModal = ({
                 },
                 {
                     onSuccess: async () => {
-                        invalidate();
+                        await invalidate();
 
-                        await openAsyncDialog({
+                        addToast({
+                            variant: 'success',
                             message: '컬렉션 그룹이 수정되었습니다.',
                         });
 
                         props.close();
                     },
                     onError: (error) => {
-                        handleErrorDialog(error);
+                        handleErrorToast(error);
                     },
                 },
             );
@@ -148,16 +150,17 @@ const CreateCollectionGroupModal = ({
 
         createCollectionExposureGroupsMutation.mutate(parseData, {
             onSuccess: async () => {
-                invalidate();
+                await invalidate();
 
-                await openAsyncDialog({
+                addToast({
+                    variant: 'success',
                     message: '컬렉션 그룹이 생성되었습니다.',
                 });
 
                 props.close();
             },
             onError: (error) => {
-                handleErrorDialog(error);
+                handleErrorToast(error);
             },
         });
     };
@@ -421,7 +424,9 @@ const CreateCollectionGroupModal = ({
                                                                     {item.title}
                                                                 </p>
                                                                 <p className='text-xs leading-4 text-[#6a7282]'>
-                                                                    {item.memberName}
+                                                                    {
+                                                                        item.memberName
+                                                                    }
                                                                     <span className='px-1 text-[#e5e7eb]'>
                                                                         |
                                                                     </span>

@@ -10,10 +10,10 @@ import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useRecipeExposureGroupList } from '@/hooks/query/recipe';
 import recipeKeys from '@/hooks/queryKeys/recipeKeys';
 import useApiError from '@/hooks/useApiError';
+import { useToast } from '@/hooks/utils';
 import { ModalLayout } from '@/layout/modal';
 import type { RecipeExposureGroup } from '@/model/recipe';
 import { exposureLocationLabel, groupByExposureLocation } from '@/utils/recipe';
-import { useDialog } from '@/hooks/utils';
 
 import { ReactComponent as ArrowDownSimpleIcon } from '@/icons/arrow-down-simple.svg?react';
 import { ReactComponent as ArrowUpSimpleIcon } from '@/icons/arrow-up-simple.svg?react';
@@ -31,7 +31,8 @@ const RecipeOrderManagementModal = ({
     ...props
 }: RecipeOrderManagementModalProps) => {
     const queryClient = useQueryClient();
-    const { openAsyncDialog } = useDialog();
+
+    const { addToast } = useToast();
 
     const { data: recipeExposureGroupListData, isLoading } =
         useRecipeExposureGroupList({
@@ -124,7 +125,7 @@ const RecipeOrderManagementModal = ({
         close();
     };
 
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const handleSave = async () => {
         try {
@@ -154,18 +155,19 @@ const RecipeOrderManagementModal = ({
                 ),
             );
 
-            queryClient.invalidateQueries({
+            await queryClient.invalidateQueries({
                 queryKey: recipeKeys.all,
                 refetchType: 'all',
             });
 
-            await openAsyncDialog({
+            addToast({
                 message: '레시피 그룹 노출 순서가 저장되었습니다.',
+                variant: 'success',
             });
 
             handleClose();
         } catch (error) {
-            handleErrorDialog(error);
+            handleErrorToast(error);
         }
     };
 

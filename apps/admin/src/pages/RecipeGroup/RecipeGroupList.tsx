@@ -16,7 +16,7 @@ import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useRecipeExposureGroupList } from '@/hooks/query/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
-import { useDialog } from '@/hooks/utils';
+import { useDialog, useToast } from '@/hooks/utils';
 
 import { ReactComponent as GridDotsIcon } from '@/icons/grid-dots.svg?react';
 import { ReactComponent as PencilSimpleIcon } from '@/icons/pencil-simple.svg?react';
@@ -50,6 +50,8 @@ const PAGE_SEARCH_PARAM = 'page';
 const PAGE_SIZE = 10;
 
 const RecipeGroupList = () => {
+    const { addToast } = useToast();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get(PAGE_SEARCH_PARAM)) || 1;
@@ -129,8 +131,8 @@ const RecipeGroupList = () => {
 
     const queryClient = useQueryClient();
 
-    const { openAsyncDialog, openDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { openAsyncDialog } = useDialog();
+    const { handleErrorToast } = useApiError();
 
     const { deleteRecipeExposureGroups: deleteRecipeExposureGroupsMutation } =
         useRecipeMutation();
@@ -147,18 +149,19 @@ const RecipeGroupList = () => {
         }
 
         deleteRecipeExposureGroupsMutation.mutate(groupSno, {
-            onSuccess: () => {
-                queryClient.invalidateQueries({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
                     queryKey: recipeKeys.all,
                     refetchType: 'all',
                 });
 
-                openDialog({
+                addToast({
                     message: '레시피 그룹이 삭제되었습니다.',
+                    variant: 'success',
                 });
             },
             onError: (error) => {
-                handleErrorDialog(error);
+                handleErrorToast(error);
             },
         });
     };

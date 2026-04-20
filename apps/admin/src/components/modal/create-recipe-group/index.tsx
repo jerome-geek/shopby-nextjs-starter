@@ -21,7 +21,7 @@ import {
 } from '@/hooks/query/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
-import { useDialog } from '@/hooks/utils';
+import { useToast } from '@/hooks/utils';
 import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
 import type { Recipe } from '@/model/recipe';
 import {
@@ -42,6 +42,8 @@ const CreateRecipeGroupModal = ({
     groupSno = 0,
     ...props
 }: CreateRecipeGroupModalProps) => {
+    const { addToast } = useToast();
+
     const queryClient = useQueryClient();
 
     const isModify = !!groupSno;
@@ -82,8 +84,7 @@ const CreateRecipeGroupModal = ({
         reset,
     } = methods;
 
-    const { openAsyncDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const {
         createRecipeExposureGroups: createRecipeExposureGroupsMutation,
@@ -91,8 +92,8 @@ const CreateRecipeGroupModal = ({
         updateAllRecipeExposureGroups: updateAllRecipeExposureGroupsMutation,
     } = useRecipeMutation();
 
-    const invalidate = () => {
-        queryClient.invalidateQueries({
+    const invalidate = async () => {
+        await queryClient.invalidateQueries({
             queryKey: recipeKeys.all,
             refetchType: 'all',
         });
@@ -156,16 +157,17 @@ const CreateRecipeGroupModal = ({
                             }
                         }
 
-                        invalidate();
+                        await invalidate();
 
-                        await openAsyncDialog({
+                        addToast({
                             message: '레시피 그룹이 수정되었습니다.',
+                            variant: 'success',
                         });
 
                         props.close();
                     },
                     onError: (error) => {
-                        handleErrorDialog(error);
+                        handleErrorToast(error);
                     },
                 },
             );
@@ -176,16 +178,17 @@ const CreateRecipeGroupModal = ({
 
         createRecipeExposureGroupsMutation.mutate(parseData, {
             onSuccess: async () => {
-                invalidate();
+                await invalidate();
 
-                await openAsyncDialog({
+                addToast({
                     message: '레시피 그룹이 생성되었습니다.',
+                    variant: 'success',
                 });
 
                 props.close();
             },
             onError: (error) => {
-                handleErrorDialog(error);
+                handleErrorToast(error);
             },
         });
     };

@@ -1,13 +1,13 @@
 import { isEmpty } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
 import { useCallback, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
-import { useQueryClient } from '@tanstack/react-query';
 
 import PageMeta from '@/components/common/PageMeta';
 import Select from '@/components/form/select/intdex';
-import CreateCollectionGroupModal from '@/components/modal/create-collection-group';
 import CollectionOrderManagementModal from '@/components/modal/collection-order-management';
+import CreateCollectionGroupModal from '@/components/modal/create-collection-group';
 import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
@@ -17,7 +17,7 @@ import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
 import { useCollectionExposureGroupList } from '@/hooks/query/collection';
 import { collectionKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
-import { useDialog } from '@/hooks/utils';
+import { useDialog, useToast } from '@/hooks/utils';
 
 import { ReactComponent as GridDotsIcon } from '@/icons/grid-dots.svg?react';
 import { ReactComponent as PencilSimpleIcon } from '@/icons/pencil-simple.svg?react';
@@ -51,6 +51,8 @@ const COLLECTION_GROUP_EXPOSURE_FILTER_OPTIONS = [
 ];
 
 const CollectionGroupList = () => {
+    const { addToast } = useToast();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get(PAGE_SEARCH_PARAM)) || 1;
@@ -123,8 +125,8 @@ const CollectionGroupList = () => {
     const listLastPage = collectionExposureGroupListData?.lastPage ?? 1;
 
     const queryClient = useQueryClient();
-    const { openAsyncDialog, openDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { openAsyncDialog } = useDialog();
+    const { handleErrorToast } = useApiError();
 
     const {
         deleteCollectionExposureGroups: deleteCollectionExposureGroupsMutation,
@@ -142,18 +144,19 @@ const CollectionGroupList = () => {
         }
 
         deleteCollectionExposureGroupsMutation.mutate(groupSno, {
-            onSuccess: () => {
-                queryClient.invalidateQueries({
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
                     queryKey: collectionKeys.all,
                     refetchType: 'all',
                 });
 
-                openDialog({
+                addToast({
+                    variant: 'success',
                     message: '컬렉션 그룹이 삭제되었습니다.',
                 });
             },
             onError: (error) => {
-                handleErrorDialog(error);
+                handleErrorToast(error);
             },
         });
     };

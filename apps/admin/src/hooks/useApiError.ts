@@ -1,6 +1,6 @@
 import { isAxiosError, type AxiosError } from 'axios';
 
-import useDialog from '@/hooks/utils/useDialog';
+import { useDialog, useToast } from '@/hooks/utils';
 
 /**
  * API 에러 핸들링을 위한 설정 인터페이스
@@ -47,6 +47,7 @@ interface ErrorStrategy {
  */
 const useApiError = () => {
     const { openDialog } = useDialog();
+    const { addToast } = useToast();
 
     // 에러 처리 전략 목록
     const strategies: ErrorStrategy[] = [
@@ -142,8 +143,7 @@ const useApiError = () => {
                     if (type === 'dialog') {
                         openDialog({ message });
                     } else {
-                        // TODO: 추후 토스트 사용 시 추가
-                        // addToast({ message, variant: 'error' });
+                        addToast({ message, variant: 'error' });
                     }
                 }
 
@@ -162,14 +162,14 @@ const useApiError = () => {
     };
 
     // TODO: 추후 토스트 사용 시 추가
-    // const handleErrorToast = async (
-    //     error: unknown,
-    //     config: ErrorHandlerConfig = {},
-    // ): Promise<string | null> => {
-    //     return await handleError(error, config, 'toast');
-    // };
+    const handleErrorToast = async (
+        error: unknown,
+        config: ErrorHandlerConfig = {},
+    ): Promise<string | null> => {
+        return await handleError(error, config, 'toast');
+    };
 
-    return { handleError, handleErrorDialog };
+    return { handleError, handleErrorDialog, handleErrorToast };
 };
 
 export default useApiError;

@@ -8,6 +8,8 @@ import { useDebounceValue } from 'usehooks-ts';
 import ErrorMessage from '@/components/form/ErrorMessage';
 import { Input, InputContainer, Label } from '@/components/form/input';
 import Select from '@/components/form/select/intdex';
+import LoadingWrapper from '@/components/ui/loading-wrapper';
+import { MEMBER_SEARCH_TYPE_OPTIONS } from '@/const/recipe';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useServerApiByPass } from '@/hooks/query/shopby';
 import { recipeKeys } from '@/hooks/queryKeys';
@@ -19,12 +21,10 @@ import {
     createUserRecipeSchema,
     CreateUserRecipeSchemaType,
 } from '@/schema/recipe.schema';
-import LoadingWrapper from '@/components/ui/loading-wrapper';
-import { MEMBER_SEARCH_TYPE_OPTIONS } from '@/const/recipe';
 
 const CreateUserRecipeModal = ({ ...props }: DefaultModalLayoutProps) => {
     const { openAsyncDialog } = useDialog();
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const queryClient = useQueryClient();
 
@@ -102,7 +102,7 @@ const CreateUserRecipeModal = ({ ...props }: DefaultModalLayoutProps) => {
                 props.close();
             },
             onError: (error) => {
-                handleErrorDialog(error);
+                handleErrorToast(error);
             },
         });
     };

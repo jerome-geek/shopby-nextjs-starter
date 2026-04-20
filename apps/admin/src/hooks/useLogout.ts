@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 
-import { PATHS } from '@/const/paths';
 import { accessTokenManager } from '@/api/core/token';
+import { PATHS } from '@/const/paths';
 import { useAuthMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';
 
@@ -18,7 +18,7 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
         logout: { mutateAsync: logoutAsyncMutation },
     } = useAuthMutation();
 
-    const { handleErrorDialog } = useApiError();
+    const { handleErrorToast } = useApiError();
 
     const logout = async () => {
         try {
@@ -31,7 +31,7 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
 
             navigate(PATHS.AUTH.LOGIN);
         } catch (error) {
-            handleErrorDialog(error);
+            handleErrorToast(error);
         }
     };
 
