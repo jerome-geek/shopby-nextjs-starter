@@ -21,6 +21,8 @@ import type { Swiper as SwiperType } from 'swiper';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { useRouter } from 'next/router';
+
 import { recipe } from '@/api/shop';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
@@ -30,6 +32,8 @@ import {
     RecipeDetailStickyFooterSkeleton,
     RecipeRecommend,
 } from '@/components/recipe';
+import { VerticalMoreMenu } from '@/components/ui';
+import { PATHS } from '@/const/paths';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { recipeKeys } from '@/hooks/queryKeys';
@@ -37,7 +41,7 @@ import { useBookmark } from '@/hooks/recipe';
 import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useResponsive } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
 import { vars } from '@/styles/theme.css';
 
@@ -55,6 +59,8 @@ const RecipeDetailPage = ({
     const { t } = useTranslation();
 
     const { isMobile } = useResponsive();
+    const router = useRouter();
+    const { openAsyncDialog } = useDialog();
 
     const { addToast } = useToast();
     const { openLoginDialog } = useCustomDialog();
@@ -66,6 +72,37 @@ const RecipeDetailPage = ({
     const memberNo = profileData?.memberNo || 0;
 
     const { data: recipeDetailData } = useRecipeDetail({ sno, memberNo });
+
+    const isEditable = memberNo === recipeDetailData.memberNo;
+
+    const { likeRecipe, unlikeRecipe, deleteRecipe } = useRecipeMutation();
+
+    const handleEdit = () => {
+        router.push({
+            pathname: PATHS.RECIPES.WRITE,
+            query: { recipeNo: sno },
+        });
+    };
+
+    const handleDelete = async () => {
+        const isConfirm = await openAsyncDialog({
+            message: t('정말 삭제하시겠습니까?'),
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (isConfirm) {
+            deleteRecipe.mutate(
+                { sno },
+                {
+                    onSuccess: () => {
+                        addToast({ message: t('레시피가 삭제되었습니다.') });
+                        router.replace(PATHS.RECIPES.SCRAP);
+                    },
+                },
+            );
+        }
+    };
 
     const cookingMinutes = recipeDetailData.durationSeconds
         ? Math.floor(recipeDetailData.durationSeconds / 60)
@@ -90,7 +127,6 @@ const RecipeDetailPage = ({
 
     const swiperRef = useRef<SwiperType | null>(null);
 
-    const { likeRecipe, unlikeRecipe } = useRecipeMutation();
     const onLikeToggle = () => {
         if (!isLogin) {
             openLoginDialog();
@@ -200,9 +236,20 @@ const RecipeDetailPage = ({
                 <div className={styles.headerInfo}>
                     <div className={styles.recipeInfo}>
                         <div className={styles.titleRow}>
-                            <h1 className={styles.title}>
-                                {recipeDetailData.title}
-                            </h1>
+                            <div className={styles.titleContainer}>
+                                <h1 className={styles.title}>
+                                    {recipeDetailData.title}
+                                </h1>
+                                {isEditable && (
+                                    <VerticalMoreMenu
+                                        id={`recipe-more-menu-${recipeDetailData.sno}`}
+                                        iconSize={28}
+                                        onEdit={handleEdit}
+                                        onDelete={handleDelete}
+                                    />
+                                )}
+                            </div>
+
                             <div className={styles.actionButtons}>
                                 <button
                                     className={styles.actionButton}
@@ -236,7 +283,7 @@ const RecipeDetailPage = ({
                         </div>
 
                         <p className={styles.author}>
-                            {`By ${recipeDetailData.authorName}`}
+                            {`By ${recipeDetailData.authorName ?? recipeDetailData.memberName ?? recipeDetailData.memberId}`}
                         </p>
 
                         <p className={styles.description}>

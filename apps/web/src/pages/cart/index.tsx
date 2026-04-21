@@ -18,6 +18,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import type { UpdateCartData } from '@/models/order/cart';
 import * as styles from '@/pages/cart/index.css';
+import { useCartStore } from '@/store/useCartStore';
 import { CURRENCY } from '@/utils/currency';
 
 const CartPage = () => {
@@ -36,6 +37,8 @@ const CartContent = () => {
     const { openDialog, openAsyncDialog } = useDialog();
 
     const { addToast } = useToast();
+    const updateGuestCartItem = useCartStore((state) => state.updateItem);
+    const removeGuestCartItem = useCartStore((state) => state.removeItem);
 
     const { cartInfo, isLoading } = useCart();
 
@@ -125,10 +128,14 @@ const CartContent = () => {
     const onOrderCntChangeButtonClick = ({
         cartNo,
         orderCnt,
+        productNo,
+        optionNo,
         optionInputs,
     }: {
         cartNo: number;
         orderCnt: number;
+        productNo: number;
+        optionNo: number;
         optionInputs?: UpdateCartData[number]['optionInputs'];
     }) => {
         if (isLogin) {
@@ -141,6 +148,8 @@ const CartContent = () => {
                     },
                 ],
             });
+        } else {
+            updateGuestCartItem(productNo, optionNo, orderCnt);
         }
     };
 
@@ -179,11 +188,21 @@ const CartContent = () => {
                 },
             );
         } else {
-            // dispatch(
-            //     deleteCart({
-            //         deleteList: cartNos,
-            //     }),
-            // );
+            const guestOptions = deliveryGroups.flatMap((group) =>
+                group.orderProducts.flatMap((product) =>
+                    product.orderProductOptions.map((option) => ({
+                        cartNo: option.cartNo,
+                        productNo: product.productNo,
+                        optionNo: option.optionNo,
+                    })),
+                ),
+            );
+
+            guestOptions
+                .filter((item) => cartNos.includes(item.cartNo))
+                .forEach((item) => {
+                    removeGuestCartItem(item.productNo, item.optionNo);
+                });
 
             addToast({
                 message: '장바구니에서 삭제되었습니다.',
@@ -438,6 +457,10 @@ const CartContent = () => {
                                                                                                 orderCnt:
                                                                                                     option.orderCnt -
                                                                                                     1,
+                                                                                                productNo:
+                                                                                                    product.productNo,
+                                                                                                optionNo:
+                                                                                                    option.optionNo,
                                                                                                 optionInputs:
                                                                                                     option.optionInputs,
                                                                                             },
@@ -475,6 +498,10 @@ const CartContent = () => {
                                                                                                 orderCnt:
                                                                                                     option.orderCnt +
                                                                                                     1,
+                                                                                                productNo:
+                                                                                                    product.productNo,
+                                                                                                optionNo:
+                                                                                                    option.optionNo,
                                                                                                 optionInputs:
                                                                                                     option.optionInputs,
                                                                                             },

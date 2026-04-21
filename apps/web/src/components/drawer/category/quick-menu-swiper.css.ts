@@ -7,7 +7,6 @@ export const container = style({
     flexShrink: 0,
     width: '100%',
     padding: '20px 0',
-    borderBottom: `1px solid ${vars.color.gray['20']}`,
 });
 
 export const slide = style({

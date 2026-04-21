@@ -8,7 +8,10 @@ import { Button } from '@/components/ui';
 import useCart from '@/hooks/cart/useCart';
 import { useOrderSheetMutation } from '@/hooks/mutations';
 import { useCartPrice } from '@/hooks/query/order/cart';
+import useGuestCartList from '@/hooks/query/order/guestOrder/useGuestCartList';
+import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
+import type { GetCartData } from '@/models/order/guestOrder';
 import { CURRENCY } from '@/utils/currency';
 
 interface CartSummaryProps {
@@ -19,6 +22,7 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
     const { t } = useTranslation();
 
     const { openDialog } = useDialog();
+    const isLogin = useAuth();
 
     const { cartInfo } = useCart();
     const products = useMemo(() => {
@@ -53,21 +57,48 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
                 cartNo: checkedCartNoList,
                 divideInvalidProducts: true,
             },
+            options: {
+                enabled: !!isLogin && checkedCartNoList.length > 0,
+            },
         });
-    console.log('🚀 ~ CartSummary ~ calculateData:', calculateData);
+
+    const guestCartData = useMemo(
+        () =>
+            products.map((item, idx) => ({
+                ...item,
+                cartNo: checkedCartNoList[idx] ?? idx + 1,
+            })) as GetCartData,
+        [products, checkedCartNoList],
+    );
+
+    const { data: guestCartListData, isFetching: isGuestCartListFetching } =
+        useGuestCartList({
+            data: guestCartData,
+            searchParams: {
+                divideInvalidProducts: true,
+            },
+            options: {
+                enabled: !isLogin && guestCartData.length > 0,
+            },
+        });
+
+    const calculate = isLogin ? calculateData : guestCartListData?.price;
+    const isPriceFetching = isLogin
+        ? isCartPriceFetching
+        : isGuestCartListFetching;
 
     const standardAmt =
-        checkedCartNoList.length > 0 ? calculateData?.standardAmt || 0 : 0;
+        checkedCartNoList.length > 0 ? calculate?.standardAmt || 0 : 0;
     const totalDeliveryAmt =
-        checkedCartNoList.length > 0 ? calculateData?.totalDeliveryAmt || 0 : 0;
+        checkedCartNoList.length > 0 ? calculate?.totalDeliveryAmt || 0 : 0;
     const discountAmt =
-        checkedCartNoList.length > 0 ? calculateData?.discountAmt || 0 : 0;
+        checkedCartNoList.length > 0 ? calculate?.discountAmt || 0 : 0;
     const accumulationAmtWhenBuyConfirm =
         checkedCartNoList.length > 0
-            ? calculateData?.accumulationAmtWhenBuyConfirm || 0
+            ? calculate?.accumulationAmtWhenBuyConfirm || 0
             : 0;
     const totalAmt =
-        checkedCartNoList.length > 0 ? calculateData?.totalAmt || 0 : 0;
+        checkedCartNoList.length > 0 ? calculate?.totalAmt || 0 : 0;
 
     const {
         write: {
@@ -159,7 +190,7 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
                     frame='solid'
                     variant='primary'
                     onClick={onPurchaseClick}
-                    disabled={isCartPriceFetching || writeOrderSheetMutatePending}
+                    disabled={isPriceFetching || writeOrderSheetMutatePending}
                     className={styles.orderButton}
                     style={{
                         display: 'flex',
@@ -168,7 +199,7 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
                         gap: '8px',
                     }}
                 >
-                    {isCartPriceFetching ? (
+                    {isPriceFetching ? (
                         <Loader2 className={styles.spinner} />
                     ) : (
                         <>

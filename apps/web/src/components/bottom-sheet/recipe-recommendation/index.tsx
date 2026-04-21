@@ -23,7 +23,7 @@ export const RecipeRecommendationBottomSheet = ({
     const router = useRouter();
 
     const { data: publicRecipeSearchData } = usePublicRecipeSearch({
-        params: {
+        searchParams: {
             page: 1,
             take: 6,
             order: 'DESC',

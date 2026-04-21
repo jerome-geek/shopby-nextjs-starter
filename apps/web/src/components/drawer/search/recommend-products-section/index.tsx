@@ -1,11 +1,12 @@
+import { map, pipe, toArray } from '@fxts/core';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
 import * as styles from '@/components/drawer/search/index.css';
 import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import { useProductSectionProductList } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
 import type { ImageUrlType } from '@/models/product';
-import { map, pipe, toArray } from '@fxts/core';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 export const RecommendProductsSection = () => {
     const { isMobile } = useResponsive();
@@ -93,6 +94,7 @@ export const RecommendProductsSection = () => {
                                             product.totalReviewCount
                                         }
                                         isAdditionalDiscount
+                                        isTimeSaleEnabled={false}
                                     />
                                 </div>
                             </SwiperSlide>
@@ -120,6 +122,7 @@ export const RecommendProductsSection = () => {
                             reviewRating={product.reviewRating}
                             totalReviewCount={product.totalReviewCount}
                             isAdditionalDiscount
+                            isTimeSaleEnabled={false}
                         />
                     ))}
                 </div>

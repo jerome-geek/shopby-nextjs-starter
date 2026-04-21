@@ -1,4 +1,3 @@
-import { keepPreviousData } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,14 +20,11 @@ export const RecipeRecommendationModal = ({
     const pageSize = 3;
 
     const { data: publicRecipeSearchData } = usePublicRecipeSearch({
-        params: {
+        searchParams: {
             page: page,
             take: pageSize,
             order: 'DESC',
             sortBy: 'LATEST',
-        },
-        options: {
-            placeholderData: keepPreviousData,
         },
     });
 

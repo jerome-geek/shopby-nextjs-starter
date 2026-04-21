@@ -147,10 +147,21 @@ export const titleRow = style({
     alignItems: 'flex-start',
 });
 
+export const titleContainer = style({
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '8px',
+    flex: 1,
+    minWidth: 0,
+});
+
 export const title = style({
     fontSize: '32px',
     fontWeight: 'bold',
     color: vars.color.black,
+    lineHeight: '1.2',
+    wordBreak: 'break-all',
+    overflowWrap: 'break-word',
 });
 
 export const actionButtons = style({

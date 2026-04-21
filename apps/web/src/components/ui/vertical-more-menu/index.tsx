@@ -10,6 +10,7 @@ import { useDropdownStore } from '@/store/useDropdownStore';
 interface VerticalMoreMenuProps {
     /** 드롭다운 식별을 위한 유니크 ID */
     id: string;
+    iconSize?: number;
     onEdit: () => void;
     onEditText?: string;
     onDelete: () => void;
@@ -21,6 +22,7 @@ interface VerticalMoreMenuProps {
  */
 export const VerticalMoreMenu = ({
     id,
+    iconSize,
     onEdit,
     onEditText,
     onDelete,
@@ -46,12 +48,8 @@ export const VerticalMoreMenu = ({
                 <button
                     className={styles.moreButton}
                     aria-label={t('더보기')}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }}
                 >
-                    <EllipsisVertical size={isMobile ? 16 : 20} />
+                    <EllipsisVertical size={iconSize ?? (isMobile ? 16 : 20)} />
                 </button>
             </DropdownMenu.Trigger>
 

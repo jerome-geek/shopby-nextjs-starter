@@ -6,8 +6,8 @@ import FetchBoundary from '@/components/common/FetchBoundary';
 import * as styles from '@/components/drawer/category/index.css';
 import { QuickMenuSkeleton } from '@/components/drawer/category/quick-menu-skeleton';
 import { QuickMenuSwiper } from '@/components/drawer/category/quick-menu-swiper';
-import { RecommendProductsSection } from '@/components/drawer/search/recommend-products-section';
-import { RecommendProductsSkeleton } from '@/components/drawer/search/recommend-products-section/skeleton';
+import Recipe from '@/components/drawer/category/recipe';
+import Shopping from '@/components/drawer/category/shopping';
 import { BigCartIcon } from '@/components/icons';
 import { DefaultModalLayoutProps } from '@/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
@@ -44,6 +44,7 @@ export const CategoryDrawer = ({
                         exit={{ opacity: 0 }}
                         onClick={close}
                     />
+
                     <motion.div
                         className={styles.drawer}
                         initial={{ x: '-100%' }}
@@ -54,6 +55,8 @@ export const CategoryDrawer = ({
                             stiffness: 500,
                             damping: 50,
                         }}
+                        id='category-drawer-container'
+                        data-lenis-prevent
                     >
                         <div className={styles.searchRow}>
                             <div className={styles.searchRowInner}>
@@ -86,53 +89,66 @@ export const CategoryDrawer = ({
                         </FetchBoundary>
 
                         <div className={styles.tabBar}>
-                            {TABS.map((tab) => {
-                                const isActive = activeTab === tab;
-                                return (
-                                    <motion.button
-                                        key={tab}
-                                        type='button'
-                                        role='tab'
-                                        aria-selected={isActive}
-                                        data-active={isActive}
-                                        className={styles.tabItem}
-                                        onClick={() => setActiveTab(tab)}
-                                        whileTap={{ scale: 0.96 }}
-                                    >
-                                        {isActive && (
-                                            <motion.div
-                                                layoutId='mobile-menu-tab-bg'
-                                                className={
-                                                    styles.activeIndicator
-                                                }
-                                                transition={{
-                                                    type: 'spring',
-                                                    stiffness: 380,
-                                                    damping: 30,
-                                                }}
-                                            />
-                                        )}
-                                        <span
-                                            style={{
-                                                position: 'relative',
-                                                zIndex: 1,
-                                            }}
+                            <div className={styles.tabBarInner}>
+                                {TABS.map((tab) => {
+                                    const isActive = activeTab === tab;
+                                    return (
+                                        <motion.button
+                                            key={tab}
+                                            type='button'
+                                            role='tab'
+                                            aria-selected={isActive}
+                                            data-active={isActive}
+                                            className={styles.tabItem}
+                                            onClick={() => setActiveTab(tab)}
+                                            whileTap={{ scale: 0.96 }}
                                         >
-                                            {tab}
-                                        </span>
-                                    </motion.button>
-                                );
-                            })}
+                                            {isActive && (
+                                                <motion.div
+                                                    layoutId='mobile-menu-tab-bg'
+                                                    className={
+                                                        styles.activeIndicator
+                                                    }
+                                                    transition={{
+                                                        type: 'spring',
+                                                        stiffness: 380,
+                                                        damping: 30,
+                                                    }}
+                                                />
+                                            )}
+                                            <span
+                                                style={{
+                                                    position: 'relative',
+                                                    zIndex: 1,
+                                                }}
+                                            >
+                                                {tab}
+                                            </span>
+                                        </motion.button>
+                                    );
+                                })}
+                            </div>
                         </div>
 
-                        <div>{/* TODO: 카테고리 영역 */}</div>
-
-                        <div className={styles.content} data-lenis-prevent>
-                            <FetchBoundary
-                                fallback={<RecommendProductsSkeleton />}
+                        <div className={styles.tabContentViewport}>
+                            <motion.div
+                                className={styles.tabContentTrack}
+                                animate={{
+                                    x: activeTab === '쇼핑' ? '0%' : '-50%',
+                                }}
+                                transition={{
+                                    type: 'spring',
+                                    stiffness: 500,
+                                    damping: 50,
+                                }}
                             >
-                                <RecommendProductsSection />
-                            </FetchBoundary>
+                                <div className={styles.tabPane}>
+                                    <Shopping />
+                                </div>
+                                <div className={styles.tabPane}>
+                                    <Recipe />
+                                </div>
+                            </motion.div>
                         </div>
                     </motion.div>
                 </>

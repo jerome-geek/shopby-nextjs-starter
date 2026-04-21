@@ -1,3 +1,5 @@
+import { NuqsAdapter } from 'nuqs/adapters/next/pages';
+import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { OverlayProvider } from 'overlay-kit';
 import { type ReactNode } from 'react';
 
@@ -21,12 +23,16 @@ function InterceptorSetup({ children }: { children: ReactNode }) {
 
 export function AppProviders({ children }: { children: ReactNode }) {
     return (
-        <OverlayProvider>
-            <InterceptorSetup>
-                <CertificationCheckProvider>
-                    {children}
-                </CertificationCheckProvider>
-            </InterceptorSetup>
-        </OverlayProvider>
+        <NuqsAdapter>
+            <OverlayProvider>
+                <InterceptorSetup>
+                    <CertificationCheckProvider>
+                        <TooltipProvider>
+                            {children}
+                        </TooltipProvider>
+                    </CertificationCheckProvider>
+                </InterceptorSetup>
+            </OverlayProvider>
+        </NuqsAdapter>
     );
 }

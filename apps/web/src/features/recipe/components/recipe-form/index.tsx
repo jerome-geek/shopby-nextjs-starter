@@ -32,10 +32,7 @@ export const RecipeForm = ({
         recipeDetailData,
     });
 
-    const {
-        register,
-        formState: { errors },
-    } = methods;
+    const { register } = methods;
 
     return (
         <FormProvider {...methods}>

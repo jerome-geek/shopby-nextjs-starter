@@ -118,7 +118,7 @@ const recipe = {
         options?: AxiosRequestConfig,
     ) => {
         return geekRequest({
-            method: 'PUT',
+            method: 'PATCH',
             url: `/shop/recipe/${sno}`,
             data,
             ...options,

@@ -1,8 +1,8 @@
 import type {
     GetRecipeExposureGroupParams,
     SearchPublicRecipesParams,
+    SearchRecipesParams,
 } from '@/models/shop/recipe';
-import type { SearchRecipesParams } from '@/models/shop/recipe';
 
 const recipeKeys = {
     all: ['recipe'] as const,
@@ -12,8 +12,8 @@ const recipeKeys = {
         [...recipeKeys.lists(), params ?? null] as const,
 
     publicSearches: () => [...recipeKeys.all, 'public-search'] as const,
-    publicSearch: (params: SearchPublicRecipesParams) =>
-        [...recipeKeys.publicSearches(), params] as const,
+    publicSearch: (searchParams: SearchPublicRecipesParams) =>
+        [...recipeKeys.publicSearches(), searchParams] as const,
     publicSearchInfinite: (params: Omit<SearchPublicRecipesParams, 'page'>) =>
         [...recipeKeys.publicSearches(), 'infinite', params] as const,
 

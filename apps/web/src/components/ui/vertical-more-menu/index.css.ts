@@ -5,7 +5,7 @@ export const moreButton = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '4px',
+    padding: '8px',
     background: 'none',
     border: 'none',
     cursor: 'pointer',

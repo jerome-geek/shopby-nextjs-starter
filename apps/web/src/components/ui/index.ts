@@ -6,3 +6,4 @@ export * from '@/components/ui/view-all-link';
 export * from '@/components/ui/route-change-overlay';
 export * from '@/components/ui/scroll-to-top';
 export * from '@/components/ui/vertical-more-menu';
+export * from '@/components/ui/tooltip';
