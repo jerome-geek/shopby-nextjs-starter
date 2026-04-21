@@ -11,12 +11,13 @@ export const mobileMenu = style({
             display: 'flex',
             padding: '4px 0 12px',
             width: '100vw',
+            borderBottom: `1px solid ${vars.color.gray['20']}`,
         },
     },
 });
 
 export const mobileMenuItem = style([
-    textStyles.headlineMedium,
+    textStyles.headlineRegular,
     {
         width: 'fit-content',
         display: 'flex',
@@ -24,11 +25,12 @@ export const mobileMenuItem = style([
         justifyContent: 'center',
         padding: '6px 12px',
         backgroundColor: vars.color.green['20'],
-        color: vars.color.green['80'],
+        color: vars.color.gray['80'],
         borderRadius: '60px',
 
         selectors: {
             '&[data-selected="true"]': {
+                fontWeight: 500,
                 backgroundColor: vars.color.green['100'],
                 color: vars.color.white,
             },
