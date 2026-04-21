@@ -21,6 +21,7 @@ import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import type { ChannelType } from '@/models';
+import { useCartStore } from '@/store/useCartStore';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
@@ -51,6 +52,7 @@ export const OptionSelectBottomSheet = ({
         productNo,
     });
 
+    const addGuestCartItem = useCartStore((state) => state.addItem);
     const { selectedOptionList, clearOptions } = useProductOptionStore();
 
     const totalPrice = pipe(
@@ -93,8 +95,20 @@ export const OptionSelectBottomSheet = ({
                 },
             );
         } else {
-            // NOTE: 비회원 장바구니 로직 추후 구현
+            selectedOptionList.forEach((option) => {
+                addGuestCartItem({
+                    productNo: option.productNo,
+                    optionNo: option.optionNo,
+                    orderCnt: option.orderCnt,
+                });
+            });
+
             close();
+            openAddCartDialog();
+
+            if (!isDefaultOptionUsed) {
+                clearOptions();
+            }
         }
     };
 

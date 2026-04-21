@@ -50,6 +50,7 @@ import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import type { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo]/index.css';
+import { useCartStore } from '@/store/useCartStore';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
@@ -164,6 +165,7 @@ function ProductDetailView({
         productNo,
     });
 
+    const addGuestCartItem = useCartStore((state) => state.addItem);
     const { selectedOptionList, addOption, clearOptions } =
         useProductOptionStore();
 
@@ -286,19 +288,19 @@ function ProductDetailView({
                 },
             );
         } else {
-            // dispatch(
-            //     setCart(
-            //         pipe(
-            //             selectedOptionList,
-            //             map((a) => toOrderSheetOption(a, channelType)),
-            //             toArray,
-            //         ),
-            //     ),
-            // );
-            // openAddCartDialog();
-            // if (!isDefaultOptionUsed) {
-            //     dispatch(clearOptions());
-            // }
+            selectedOptionList.forEach((option) => {
+                addGuestCartItem({
+                    productNo: option.productNo,
+                    optionNo: option.optionNo,
+                    orderCnt: option.orderCnt,
+                });
+            });
+
+            openAddCartDialog();
+
+            if (!isDefaultOptionUsed) {
+                clearOptions();
+            }
         }
     };
 
