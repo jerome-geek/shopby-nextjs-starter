@@ -170,6 +170,12 @@ function ProductDetailView({
         useProductOptionStore();
 
     useEffect(() => {
+        return () => {
+            clearOptions();
+        };
+    }, [productNo, clearOptions]);
+
+    useEffect(() => {
         if (!productDetailData) {
             return;
         }
