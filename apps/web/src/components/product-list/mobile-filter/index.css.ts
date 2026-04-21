@@ -23,7 +23,7 @@ export const refreshButton = style({
 
 export const filterPill = recipe({
     base: [
-        textStyles.body1Medium,
+        textStyles.body2Regular,
         {
             display: 'flex',
             alignItems: 'center',
@@ -41,7 +41,7 @@ export const filterPill = recipe({
         isActive: {
             true: {
                 color: vars.color.white,
-                background: vars.color.gray['90'],
+                background: vars.color.gray['60'],
             },
             false: {},
         },
