@@ -1,3 +1,4 @@
+import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { OverlayProvider } from 'overlay-kit';
 import { type ReactNode } from 'react';
 
@@ -24,7 +25,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
         <OverlayProvider>
             <InterceptorSetup>
                 <CertificationCheckProvider>
-                    {children}
+                    <TooltipProvider>
+                        {children}
+                    </TooltipProvider>
                 </CertificationCheckProvider>
             </InterceptorSetup>
         </OverlayProvider>

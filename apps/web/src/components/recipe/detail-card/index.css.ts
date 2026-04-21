@@ -1,13 +1,13 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const recipeLink = style({
     display: 'flex',
     flexDirection: 'column',
-    textDecoration: 'none',
+    gap: '16px',
     color: 'inherit',
     height: '100%',
     backgroundColor: vars.color.ivory['10'],
@@ -31,7 +31,6 @@ globalStyle(`${recipeLink} a:focus-visible`, {
     outlineOffset: 2,
     borderRadius: 4,
 });
-
 
 export const cardHeader = style({
     display: 'flex',
@@ -131,12 +130,15 @@ export const recipeTitle = style([
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
+        height: '3em',
+        lineHeight: '1.5',
         transition: 'text-decoration-color 120ms ease, opacity 120ms ease',
         '@media': {
             [media.mobile]: {
                 fontSize: '1.5rem',
                 fontWeight: 600,
                 lineHeight: '1.4',
+                height: '2.8em',
                 letterSpacing: '-0.2%',
             },
         },
@@ -210,20 +212,25 @@ export const iconText = style([
 export const ingredientHeader = style({
     display: 'flex',
     alignItems: 'center',
-    gap: '6px',
-    marginBottom: '12px',
-    height: '20px',
+    gap: '4px',
+
     '@media': {
-        [media.mobile]: {
-            height: '17px',
+        [media.desktop]: {
+            gap: '6px',
         },
     },
 });
 
 export const ingredientTitle = style([
-    textStyles.body2Semibold,
+    textStyles.body1Semibold,
     {
         color: vars.color.gray['90'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Semibold,
+            },
+        },
     },
 ]);
 
@@ -239,25 +246,36 @@ export const infoDot = style({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    cursor: 'help',
 });
 
 export const ingredientContent = style({
     display: 'flex',
-    gap: '16px',
-    marginBottom: '16px',
-    paddingBottom: '16px',
-    borderBottom: `1px solid ${vars.color.gray['20']}`,
+    gap: '10px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const recipeThumbArea = style({
-    width: '100%',
-    maxWidth: '137px',
-    maxHeight: '182px',
-    aspectRatio: '137 / 182',
+    width: '112px',
+    height: '149px',
+    aspectRatio: '112 / 149',
     borderRadius: '4px',
     overflow: 'hidden',
     flexShrink: 0,
     backgroundColor: vars.color.gray['10'],
+
+    '@media': {
+        [media.desktop]: {
+            width: '137px',
+            height: '182px',
+            aspectRatio: '137 / 182',
+        },
+    },
 });
 
 export const recipeThumb = style({
@@ -276,49 +294,80 @@ export const ingredientContainer = style({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
+    gap: '10px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const ingredientList = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '6px',
+    gap: '4px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '6px',
+        },
+    },
 });
 
 export const ingredientListItem = style([
-    textStyles.body1Regular,
+    textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
         display: 'flex',
+        alignItems: 'center',
         gap: '8px',
-        height: '20px',
-        alignContent: 'center',
+
         '@media': {
-            [media.mobile]: {
-                fontSize: '1.3rem',
-                lineHeight: '1.3',
-                letterSpacing: '-1.3%',
-                height: '17px',
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
             },
         },
     },
 ]);
 
 export const ingredientName = style({
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    maxWidth: '100%',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     textDecoration: 'underline',
+    textDecorationStyle: 'solid',
+    textDecorationSkipInk: 'auto',
+    textUnderlineOffset: '15%',
+    textDecorationThickness: '5%',
+    lineHeight: '1.4',
+
+    '@media': {
+        [media.desktop]: {
+            textUnderlineOffset: '15%',
+            textDecorationThickness: '5%',
+        },
+    },
 
     selectors: {
         '&:before': {
-            content: '',
+            content: "''",
             width: '3px',
             height: '3px',
             backgroundColor: vars.color.green['80'],
             borderRadius: '50%',
             display: 'inline-block',
-            marginRight: '6px',
-            marginBottom: '4px',
+            marginRight: '8px',
+            verticalAlign: 'middle',
+
+            '@media': {
+                [media.desktop]: {
+                    marginRight: '6px',
+                },
+            },
         },
     },
 });
@@ -367,6 +416,7 @@ export const stepItem = style({
     display: 'flex',
     gap: '6px',
     alignItems: 'flex-start',
+    minWidth: 0,
 
     '@media': {
         [media.desktop]: {
@@ -403,17 +453,22 @@ export const stepText = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
+        flex: 1,
+        minWidth: 0,
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        minWidth: 0,
-        display: '-webkit-box',
-        WebkitLineClamp: 1,
-        WebkitBoxOrient: 'vertical',
     },
 ]);
 
 export const bookmarkIcon = style({
     flexShrink: 0,
     color: vars.color.green['100'],
+});
+
+export const divider = style({
+    width: '100%',
+    height: '1px',
+    border: 'none',
+    backgroundColor: vars.color.gray['20'],
 });

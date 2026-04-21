@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { VerticalMoreMenu } from '@/components/ui';
 import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
 import * as styles from '@/components/recipe/detail-card/index.css';
+import { Tooltip, VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useBookmark } from '@/hooks/recipe';
 import { useDialog } from '@/hooks/utils';
@@ -18,15 +18,20 @@ interface RecipeDetailCardProps {
 }
 
 export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
-    const { t } = useTranslation();
     const router = useRouter();
+
+    const { t } = useTranslation();
+
     const { openAsyncDialog } = useDialog();
 
-    const { toggleRecipeBookmark: toggleBookmark } = useBookmark();
+    const { toggleRecipeBookmark } = useBookmark();
 
-    const isExcludedPath = ['/', '/shop', '/kids', '/life'].includes(
-        router.pathname,
-    );
+    const isExcludedPath = [
+        PATHS.MAIN,
+        PATHS.SHOP.DISCOVERY,
+        PATHS.SHOP.KIDS,
+        PATHS.SHOP.LIFE,
+    ].includes(router.pathname);
 
     const href = PATHS.RECIPES.DETAIL.replace('[recipeNo]', String(recipe.sno));
 
@@ -35,7 +40,6 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
         : 0;
 
     const author = recipe.authorName ?? recipe.memberName ?? '';
-
     const ingredients = recipe.ingredients ?? [];
     const steps = recipe.steps ?? [];
 
@@ -52,7 +56,7 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
         });
 
         if (isConfirmed) {
-            toggleBookmark({
+            toggleRecipeBookmark({
                 sno: recipe.sno,
                 bookmarked: true,
             });
@@ -62,7 +66,7 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
     const handleBookmarkClick = async (e: MouseEvent) => {
         e.stopPropagation();
 
-        toggleBookmark({
+        toggleRecipeBookmark({
             sno: recipe.sno,
             bookmarked: recipe.bookmarked,
         });
@@ -107,7 +111,7 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                     aria-pressed={recipe.bookmarked}
                 >
                     <Bookmark
-                        size={20}
+                        size={24}
                         className={styles.bookmarkIcon}
                         fill={
                             recipe.bookmarked ? vars.color.green['100'] : 'none'
@@ -150,7 +154,13 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                         <h5 className={styles.ingredientTitle}>
                             요리 재료 List
                         </h5>
-                        <div className={styles.infoDot}>i</div>
+                        <Tooltip
+                            content={
+                                '재료는 최대 6개까지 노출됩니다.\n자세한 사항은 상세 페이지를 참고해주세요.'
+                            }
+                        >
+                            <div className={styles.infoDot}>i</div>
+                        </Tooltip>
                     </div>
 
                     <ul className={styles.ingredientList}>
@@ -181,14 +191,10 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                             </li>
                         ))}
                     </ul>
-
-                    {ingredients.length > 6 ? (
-                        <p className={styles.moreText}>
-                            {`외 ${ingredients.length - 6}개...`}
-                        </p>
-                    ) : null}
                 </div>
             </div>
+
+            <hr className={styles.divider} />
 
             <div className={styles.stepSection}>
                 <h5 className={styles.stepTitle}>따라해봐 How to Cook</h5>
