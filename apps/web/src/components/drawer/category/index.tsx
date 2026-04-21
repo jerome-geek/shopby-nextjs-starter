@@ -13,6 +13,7 @@ import { DefaultModalLayoutProps } from '@/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
+import { useResponsive } from '@/hooks/utils';
 
 type Tab = '쇼핑' | '레시피';
 const TABS: Tab[] = ['쇼핑', '레시피'];
@@ -22,8 +23,15 @@ export const CategoryDrawer = ({
     close,
     unmount,
 }: DefaultModalLayoutProps) => {
+    const { isMobile } = useResponsive();
+
     const { totalCount } = useCart();
     const [activeTab, setActiveTab] = useState<Tab>('쇼핑');
+
+    if (!isMobile) {
+        unmount();
+        return null;
+    }
 
     return (
         <AnimatePresence onExitComplete={unmount}>
@@ -34,7 +42,6 @@ export const CategoryDrawer = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
                         onClick={close}
                     />
                     <motion.div
@@ -42,7 +49,11 @@ export const CategoryDrawer = ({
                         initial={{ x: '-100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '-100%' }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        transition={{
+                            type: 'spring',
+                            stiffness: 500,
+                            damping: 50,
+                        }}
                     >
                         <div className={styles.searchRow}>
                             <div className={styles.searchRowInner}>

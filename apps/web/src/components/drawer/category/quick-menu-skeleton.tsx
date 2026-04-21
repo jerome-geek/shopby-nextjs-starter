@@ -3,7 +3,7 @@ import * as styles from './quick-menu-swiper.css';
 export const QuickMenuSkeleton = () => {
     return (
         <div className={styles.container}>
-            <div style={{ display: 'flex', gap: '16px', padding: '0 20px' }}>
+            <div style={{ display: 'flex', gap: '12px', padding: '0 20px' }}>
                 {Array.from({ length: 5 }).map((_, i) => (
                     <div key={i} className={styles.slide}>
                         <div
@@ -13,9 +13,8 @@ export const QuickMenuSkeleton = () => {
                         <div
                             style={{
                                 width: '40px',
-                                height: '12px',
+                                height: '16px',
                                 backgroundColor: '#f5f5f5',
-                                marginTop: '8px',
                                 borderRadius: '4px',
                             }}
                         />

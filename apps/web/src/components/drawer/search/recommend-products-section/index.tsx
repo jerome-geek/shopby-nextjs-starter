@@ -1,10 +1,11 @@
-import { map, pipe, toArray } from '@fxts/core';
 import * as styles from '@/components/drawer/search/index.css';
 import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import { useProductSectionProductList } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
 import type { ImageUrlType } from '@/models/product';
+import { map, pipe, toArray } from '@fxts/core';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 export const RecommendProductsSection = () => {
     const { isMobile } = useResponsive();
@@ -61,38 +62,42 @@ export const RecommendProductsSection = () => {
             <h3 className={styles.sectionTitle}>추천 상품</h3>
 
             {isMobile ? (
-                <div className={styles.recommendSwiper}>
-                    {filteredProducts.map((product) => (
-                        <div
-                            key={product.productNo}
-                            className={styles.recommendSlide}
-                        >
-                            <div className={styles.recommendCardWrap}>
-                                <ProductCard
-                                    productNo={product.productNo}
-                                    productName={product.productName}
-                                    brandName={product.brandName}
-                                    brandNo={product.brandNo}
-                                    salePrice={product.salePrice}
-                                    immediateDiscountAmt={
-                                        product.immediateDiscountAmt
-                                    }
-                                    additionDiscountAmt={
-                                        product.additionDiscountAmt
-                                    }
-                                    imageUrlInfo={
-                                        product.imageUrlInfo as ImageUrlType[]
-                                    }
-                                    stickerInfos={product.stickerInfos}
-                                    likeCount={product.likeCount}
-                                    liked={product.liked}
-                                    reviewRating={product.reviewRating}
-                                    totalReviewCount={product.totalReviewCount}
-                                    isAdditionalDiscount
-                                />
-                            </div>
-                        </div>
-                    ))}
+                <div className={styles.recommendSwiperContainer}>
+                    <Swiper slidesPerView={2.3} spaceBetween={16}>
+                        {filteredProducts.map((product) => (
+                            <SwiperSlide
+                                key={product.productNo}
+                                className={styles.recommendSlide}
+                            >
+                                <div className={styles.recommendCardWrap}>
+                                    <ProductCard
+                                        productNo={product.productNo}
+                                        productName={product.productName}
+                                        brandName={product.brandName}
+                                        brandNo={product.brandNo}
+                                        salePrice={product.salePrice}
+                                        immediateDiscountAmt={
+                                            product.immediateDiscountAmt
+                                        }
+                                        additionDiscountAmt={
+                                            product.additionDiscountAmt
+                                        }
+                                        imageUrlInfo={
+                                            product.imageUrlInfo as ImageUrlType[]
+                                        }
+                                        stickerInfos={product.stickerInfos}
+                                        likeCount={product.likeCount}
+                                        liked={product.liked}
+                                        reviewRating={product.reviewRating}
+                                        totalReviewCount={
+                                            product.totalReviewCount
+                                        }
+                                        isAdditionalDiscount
+                                    />
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
                 </div>
             ) : (
                 <div className={styles.productGrid}>

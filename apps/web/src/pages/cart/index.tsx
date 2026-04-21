@@ -4,11 +4,11 @@ import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Recommend from '@/components/cart/Recommend';
 import CartSummary from '@/components/cart/summary';
 import { NoResult } from '@/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
-import Recommend from '@/components/cart/Recommend';
 import { InputCheckbox, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
@@ -154,7 +154,7 @@ const CartContent = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.contentWrapper}>
+            <div className={styles.contentWrapper} data-empty={isEmpty}>
                 {/* Left Area: Cart List */}
                 <div className={styles.cartListArea} data-empty={isEmpty}>
                     {!isEmpty && (

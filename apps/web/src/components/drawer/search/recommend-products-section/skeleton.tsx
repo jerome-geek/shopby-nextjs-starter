@@ -33,28 +33,28 @@ export const RecommendProductsSkeleton = () => {
             <Skeleton
                 width={80}
                 height={22}
-                style={{ borderRadius: '4px' }}
+                style={{
+                    borderRadius: '4px',
+                    marginLeft: isMobile ? '20px' : 0,
+                }}
                 className={styles.sectionTitle}
             />
 
             {isMobile ? (
-                <Swiper
-                    className={styles.recommendSwiper}
-                    style={{
-                        // marginLeft: 0, marginRight: '-20px'
-                        overflow: 'visible',
-                    }}
-                    slidesPerView={2.3}
-                    spaceBetween={12}
-                >
-                    {Array.from({ length: 3 }).map((_, i) => (
-                        <SwiperSlide key={i} className={styles.recommendSlide}>
-                            <div className={styles.recommendCardWrap}>
-                                <ProductCardSkeleton />
-                            </div>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                <div className={styles.recommendSwiperContainer}>
+                    <Swiper slidesPerView={2.3} spaceBetween={16}>
+                        {Array.from({ length: 3 }).map((_, i) => (
+                            <SwiperSlide
+                                key={i}
+                                className={styles.recommendSlide}
+                            >
+                                <div className={styles.recommendCardWrap}>
+                                    <ProductCardSkeleton />
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
             ) : (
                 <div className={styles.productGrid}>
                     {Array.from({ length: 3 }).map((_, i) => (

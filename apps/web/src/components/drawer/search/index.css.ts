@@ -382,22 +382,17 @@ export const productGrid = style({
     rowGap: '24px',
 });
 
+export const recommendSwiperContainer = style({
+    width: '100%',
+});
+
+globalStyle(`${recommendSwiperContainer} .swiper`, {
+    width: '100%',
+    padding: '0 20px',
+});
+
 export const recommendSwiper = style({
-    width: 'calc(100% - 40px)',
-    paddingRight: '20px',
-    display: 'flex',
-    overflowX: 'auto',
-    gap: '16px',
-    marginLeft: '20px',
-    boxSizing: 'content-box',
-    scrollSnapType: 'x mandatory',
-    WebkitOverflowScrolling: 'touch',
-    scrollbarWidth: 'none',
-    selectors: {
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
+    padding: '0 40px',
 });
 
 export const recommendSlide = style({

@@ -1,5 +1,14 @@
 'use client';
 
+import * as styles from '@/components/banner/hero/index.css';
+import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
+import type { Banner } from '@/models/display/banner';
+import { BREAKPOINTS } from '@/styles/media';
+import { getLandingUrl, getLinkTarget } from '@/utils/banner';
+import {
+    extractBannerContentsByAccountIndex,
+    normalizeImageUrl,
+} from '@/utils/shopby';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense, useMemo, useRef, useState } from 'react';
@@ -11,16 +20,8 @@ import {
     Pagination,
 } from 'swiper/modules';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
-import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
-import type { Banner } from '@/models/display/banner';
-import { getLandingUrl, getLinkTarget } from '@/utils/banner';
-import {
-    extractBannerContentsByAccountIndex,
-    normalizeImageUrl,
-} from '@/utils/shopby';
-import * as styles from '@/components/banner/hero/index.css';
-import { BREAKPOINTS } from '@/styles/media';
 
+import ImageWrapper from '@/components/ui/image';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
@@ -187,11 +188,14 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
                                     }
                                     className={styles.card}
                                 >
-                                    <img
-                                        src={normalizeImageUrl(banner.imageUrl)}
+                                    <ImageWrapper
+                                        src={
+                                            normalizeImageUrl(
+                                                banner.imageUrl || '',
+                                            ) || ''
+                                        }
                                         alt={banner.name || '배너 이미지'}
-                                        className={styles.cardImage}
-                                        loading='lazy'
+                                        loading='eager'
                                     />
                                     <div className={styles.cardContent}>
                                         <h3

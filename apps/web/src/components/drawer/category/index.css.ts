@@ -121,5 +121,5 @@ export const content = style({
     flex: 1,
     overflowY: 'auto',
     overflowX: 'hidden',
-    padding: '0 20px 24px',
+    padding: '0 0 24px',
 });

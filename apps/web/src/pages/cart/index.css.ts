@@ -42,6 +42,12 @@ export const contentWrapper = style({
             maxWidth: '1200px',
         },
     },
+
+    selectors: {
+        '&[data-empty="true"]': {
+            gridTemplateColumns: 'minmax(0, 1fr)',
+        },
+    },
 });
 
 export const cartListArea = style({

@@ -1,7 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
 const shimmer = keyframes({
@@ -108,6 +108,7 @@ export const cardContent = style({
     left: 0,
     right: 0,
     padding: '36px 24px',
+    zIndex: 2,
     background:
         'linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%)',
     display: 'flex',
