@@ -21,7 +21,7 @@ export const container = style({
             position: 'static',
             border: 'none',
             borderRadius: '0',
-            padding: '24px 20px 0',
+            padding: '24px 0 0',
             gap: '24px',
         },
     },
