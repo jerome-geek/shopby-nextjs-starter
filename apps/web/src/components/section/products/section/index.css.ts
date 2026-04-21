@@ -1,8 +1,8 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const section = style({
     display: 'flex',
@@ -19,6 +19,20 @@ export const section = style({
 export const swiperArea = style({
     position: 'relative',
     width: '100%',
+    '@media': {
+        [media.mobile]: {
+            marginLeft: '-20px',
+            width: 'calc(100% + 40px)',
+        },
+    },
+});
+
+globalStyle(`${swiperArea} .swiper`, {
+    '@media': {
+        [media.mobile]: {
+            padding: '0 20px',
+        },
+    },
 });
 
 export const titleContainer = style({

@@ -217,16 +217,12 @@ export const sectionTitle = style([
     textStyles.headlineSemibold,
     {
         color: vars.color.black,
-        padding: '0 20px',
         fontSize: '1.8rem', // Figma: 18px
         lineHeight: 1.5,
         letterSpacing: '-1.3%',
         '@media': {
-            [media.tablet]: {
-                padding: '0',
-            },
-            [media.desktop]: {
-                padding: '0',
+            [media.mobile]: {
+                padding: '0 20px',
             },
         },
     },

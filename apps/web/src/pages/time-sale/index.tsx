@@ -1,14 +1,14 @@
-import { map, pipe, toArray } from '@fxts/core';
+import { isEmpty, map, pipe, toArray } from '@fxts/core';
 import { useLenis } from 'lenis/react';
 import { ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 
-import { ProductCard } from '@/components/product';
+import { NoResult } from '@/components/common/no-result';
+import { CountdownTimer, ProductCard } from '@/components/product';
 import * as tabStyles from '@/components/section/time-sale/tab.css';
 import * as toggleStyles from '@/components/section/time-sale/toggle.css';
-import Timer from '@/components/time-sale/timer';
 import { Column, Row } from '@/components/ui/layout/flex';
 import {
     INITIAL_STATUS_PAGE,
@@ -28,7 +28,7 @@ import { ImageUrlType } from '@/models/product';
 import type { TimeSaleSectionProductsResponse } from '@/models/shop/timeSale';
 import * as styles from '@/pages/time-sale/index.css';
 
-const TIME_SALE_LIST_BASE_PARAMS = {
+export const TIME_SALE_LIST_BASE_PARAMS = {
     by: 'ADMIN_SETTING',
     direction: 'DESC',
     soldout: false,
@@ -316,6 +316,15 @@ const TimeSale = () => {
                             sectionTotalCount > TIME_SALE_DISPLAY_PAGE_SIZE &&
                             visibleCount < products.length;
 
+                        const noResultText =
+                            option.value === 'today-open'
+                                ? '오늘 시작한 타임특가 상품이 없습니다.'
+                                : option.value === 'best'
+                                ? '베스트 타임특가 상품이 없습니다.'
+                                : '마감 임박 타임특가 상품이 없습니다.';
+
+                        const visibleProducts = products.slice(0, visibleCount);
+
                         return (
                             <section
                                 key={option.value}
@@ -335,7 +344,10 @@ const TimeSale = () => {
                                             <h2 className={styles.sectionTitle}>
                                                 {option.label}
                                             </h2>
-                                            {option.showTimer && <Timer />}
+                                            {option.showTimer &&
+                                                !isEmpty(visibleProducts) && (
+                                                    <CountdownTimer />
+                                                )}
                                         </Row>
 
                                         <p
@@ -348,10 +360,18 @@ const TimeSale = () => {
                                     </Column>
                                 </Row>
 
-                                <div className={styles.productListContainer}>
-                                    {products
-                                        .slice(0, visibleCount)
-                                        .map((product) => (
+                                {isEmpty(visibleProducts) ? (
+                                    <NoResult
+                                        text={noResultText}
+                                        style={{
+                                            height: '120px',
+                                        }}
+                                    />
+                                ) : (
+                                    <div
+                                        className={styles.productListContainer}
+                                    >
+                                        {visibleProducts.map((product) => (
                                             <ProductCard
                                                 key={product.productNo}
                                                 {...product}
@@ -361,7 +381,8 @@ const TimeSale = () => {
                                                 isTimeSaleEnabled
                                             />
                                         ))}
-                                </div>
+                                    </div>
+                                )}
 
                                 {canShowMore && (
                                     <button

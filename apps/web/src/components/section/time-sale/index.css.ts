@@ -2,7 +2,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const section = style({
     width: '100%',
@@ -58,13 +58,18 @@ export const subtitle = style([
 ]);
 
 export const viewAll = style([
-    textStyles.caption1Regular,
+    textStyles.body1Regular,
     {
         display: 'flex',
         alignItems: 'center',
         gap: '2px',
         color: vars.color.gray['60'],
         textDecoration: 'none',
+        '@media': {
+            [media.mobile]: {
+                ...textStyleTokens.caption1Regular,
+            },
+        },
     },
 ]);
 
@@ -154,6 +159,27 @@ export const moreLink = style([
                 fontSize: '1.5rem',
                 lineHeight: '1.4',
                 letterSpacing: '-0.2%',
+            },
+        },
+    },
+]);
+
+export const emptyMessage = style([
+    textStyles.headlineRegular,
+    {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        padding: '40px 0',
+        color: vars.color.gray[60],
+        backgroundColor: vars.color.gray[10],
+        borderRadius: '4px',
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
             },
         },
     },

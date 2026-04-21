@@ -94,7 +94,12 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                     }}
                 >
                     <SwiperSlide style={{ width: 'auto' }}>
-                        <button
+                        <div
+                            role='button'
+                            tabIndex={0}
+                            aria-pressed={
+                                activeCategory === currentCategory?.categoryNo
+                            }
                             className={`${styles.categoryTab} ${
                                 activeCategory === currentCategory?.categoryNo
                                     ? styles.categoryTabActive
@@ -107,7 +112,7 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                             }
                         >
                             전체
-                        </button>
+                        </div>
                     </SwiperSlide>
 
                     {currentCategory?.children.map((category) => (
@@ -115,8 +120,12 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                             key={category.categoryNo}
                             style={{ width: 'auto' }}
                         >
-                            <button
-                                key={category.categoryNo}
+                            <div
+                                role='button'
+                                tabIndex={0}
+                                aria-pressed={
+                                    activeCategory === category.categoryNo
+                                }
                                 className={`${styles.categoryTab} ${
                                     activeCategory === category.categoryNo
                                         ? styles.categoryTabActive
@@ -127,7 +136,7 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                                 }
                             >
                                 {category.label}
-                            </button>
+                            </div>
                         </SwiperSlide>
                     ))}
                 </Swiper>
