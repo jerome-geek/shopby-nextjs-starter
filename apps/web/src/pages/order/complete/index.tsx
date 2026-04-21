@@ -1,19 +1,24 @@
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Suspense, useEffect, useMemo } from 'react';
+
+import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
 
 // import { authCookieManager } from '@/utils/cookie';
+
+import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
+import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendation';
 import { PATHS } from '@/const/paths';
 import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
 import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
 import { useAuth } from '@/hooks/useAuth';
 import type { OrderDetailResponse } from '@/models/order';
 import * as styles from '@/pages/order/complete/index.css';
+import { overlay } from 'overlay-kit';
 
 /**
  * [회원 주문 내역 렌더러]
@@ -316,6 +321,7 @@ const OrderComplete = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const isLogin = useAuth();
+    const hasOpenedRef = useRef(false);
 
     const {
         orderNo,
@@ -334,13 +340,38 @@ const OrderComplete = () => {
     // }, [guestToken]);
 
     useEffect(() => {
+        if (!router.isReady || hasOpenedRef.current) {
+            return;
+        }
+
         if (!isMobile && window.opener) {
             window.opener.location.href = window.location.href;
             setTimeout(() => {
                 window.close();
             }, 500);
         }
-    }, []);
+
+        if (result === 'SUCCESS' && orderNo) {
+            hasOpenedRef.current = true;
+            if (isMobile) {
+                overlay.open(({ isOpen, close, unmount }) => (
+                    <RecipeRecommendationBottomSheet
+                        isOpen={isOpen}
+                        close={close}
+                        unmount={unmount}
+                    />
+                ));
+            } else {
+                overlay.open(({ isOpen, close, unmount }) => (
+                    <RecipeRecommendationModal
+                        isOpen={isOpen}
+                        close={close}
+                        unmount={unmount}
+                    />
+                ));
+            }
+        }
+    }, [router.isReady, result, orderNo]);
 
     if (router.isReady && !orderNo && result === 'SUCCESS') {
         void router.replace('/');

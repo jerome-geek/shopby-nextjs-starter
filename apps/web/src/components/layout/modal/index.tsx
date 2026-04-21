@@ -1,6 +1,6 @@
-import { motion, AnimatePresence } from 'motion/react';
-import React, { useEffect, Fragment } from 'react';
 import { X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import React, { Fragment } from 'react';
 
 import * as styles from '@/components/layout/modal/index.css';
 import { useKeyDown } from '@/hooks/utils';
@@ -19,6 +19,7 @@ interface ModalLayoutProps extends DefaultModalLayoutProps {
     size?: 'small' | 'medium' | 'large' | 'auto' | 'full';
     width?: string;
     height?: string;
+    modalContentClass?: string;
 }
 
 export const ModalLayout = ({
@@ -31,6 +32,7 @@ export const ModalLayout = ({
     size = 'auto',
     width,
     height,
+    modalContentClass,
 }: ModalLayoutProps) => {
     // ESC 키로 모달 닫기 지원
     useKeyDown({
@@ -85,7 +87,8 @@ export const ModalLayout = ({
 
                         {/* 컨텐츠 영역 */}
                         <div
-                            className={styles.modalContent}
+                            // class props로 추가적으로 전달 받을수 있게끔 변경
+                            className={`${styles.modalContent} ${modalContentClass}`}
                             data-lenis-prevent
                             id='modal-content'
                         >

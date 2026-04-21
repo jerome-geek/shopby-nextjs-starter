@@ -13,4 +13,6 @@ export const OVERLAY_ID = {
     TOAST: 'toast',
     LOADING: 'loading',
     COLLECTION_FORM: 'collection-form',
+    ORDER_COMPLETE_RECIPE_RECOMMENDATION: 'order-complete-recipe-recommendation',
+    ORDER_COMPLETE_RECIPE_RECOMMENDATION_MODAL: 'order-complete-recipe-recommendation-modal',
 } as const;

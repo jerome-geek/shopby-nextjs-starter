@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
-import { recipe } from '@vanilla-extract/recipes';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
 export const dimmed = style({
     position: 'fixed',
