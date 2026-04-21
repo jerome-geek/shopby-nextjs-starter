@@ -153,7 +153,7 @@ export default function NewProducts() {
                                 spaceBetween: 6,
                             },
                         }}
-                        style={{ paddingRight: isMobile ? '20px' : '0' }}
+                        className={styles.categorySwiper}
                     >
                         <SwiperSlide style={{ width: 'auto' }}>
                             <Link

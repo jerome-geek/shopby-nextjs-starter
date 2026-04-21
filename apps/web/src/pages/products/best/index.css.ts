@@ -28,9 +28,22 @@ export const categorySwiperContainer = style({
 
     '@media': {
         [media.desktop]: {
-            width: '100%',
-            margin: '0',
+            width: '100vw',
+            marginLeft: 'calc(50% - 50vw)',
+            marginRight: 'calc(50% - 50vw)',
             padding: '0 0 12px 0',
+        },
+    },
+});
+
+export const categorySwiper = style({
+    paddingRight: '20px',
+
+    '@media': {
+        [media.desktop]: {
+            paddingRight: '0',
+            maxWidth: '1200px',
+            margin: '0 auto',
         },
     },
 });
