@@ -61,7 +61,20 @@ const CartContent = () => {
         }
     }, [cartInfo]);
 
-    const [checkedCartNoList, setCheckedCartNoList] = useState<number[]>([]);
+    // NOTE: null일 경우, 전체 선택한 상태로 보여줌
+    const [userCheckedCartNoList, setUserCheckedCartNoList] = useState<
+        number[] | null
+    >(null);
+
+    const checkedCartNoList = useMemo(() => {
+        if (userCheckedCartNoList === null) {
+            return cartNoList;
+        }
+
+        return userCheckedCartNoList.filter((cartNo) =>
+            cartNoList.includes(cartNo),
+        );
+    }, [cartNoList, userCheckedCartNoList]);
 
     const checkedProductNoList = useMemo(() => {
         if (!cartInfo) {
@@ -92,15 +105,16 @@ const CartContent = () => {
         cartNoList.length > 0 && checkedCartNoList.length === cartNoList.length;
 
     const onSelectButtonClick = (checked: boolean) => {
-        setCheckedCartNoList(checked ? cartNoList : []);
+        setUserCheckedCartNoList(checked ? cartNoList : []);
     };
 
     const handleSelectOption = (optionNo: number, checked: boolean) => {
-        setCheckedCartNoList((prev) =>
-            checked
-                ? [...prev, optionNo]
-                : prev.filter((no) => no !== optionNo),
-        );
+        setUserCheckedCartNoList((prev) => {
+            const base = prev ?? cartNoList;
+            return checked
+                ? [...base, optionNo]
+                : base.filter((no) => no !== optionNo);
+        });
     };
 
     const {
@@ -274,25 +288,29 @@ const CartContent = () => {
                                                                                 o.cartNo,
                                                                         ),
                                                                 );
-                                                            setCheckedCartNoList(
-                                                                (prev) =>
-                                                                    checked
+                                                            setUserCheckedCartNoList(
+                                                                (prev) => {
+                                                                    const base =
+                                                                        prev ??
+                                                                        cartNoList;
+                                                                    return checked
                                                                         ? Array.from(
                                                                               new Set(
                                                                                   [
-                                                                                      ...prev,
+                                                                                      ...base,
                                                                                       ...groupCartNos,
                                                                                   ],
                                                                               ),
                                                                           )
-                                                                        : prev.filter(
+                                                                        : base.filter(
                                                                               (
                                                                                   no,
                                                                               ) =>
                                                                                   !groupCartNos.includes(
                                                                                       no,
                                                                                   ),
-                                                                          ),
+                                                                          );
+                                                                },
                                                             );
                                                         }}
                                                     />
