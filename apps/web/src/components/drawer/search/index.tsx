@@ -79,7 +79,7 @@ export const SearchDrawer = ({
     }, [queryClient, recipePage, recipeTotalPages]);
 
     const { data: favoriteKeywordData = [] } = useFavoriteKeywords({
-        size: 18,
+        size: 30,
     });
 
     return (

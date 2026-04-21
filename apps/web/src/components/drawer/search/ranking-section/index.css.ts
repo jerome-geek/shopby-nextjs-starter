@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, styleVariants } from '@vanilla-extract/css';
 
 import { vars } from '@/styles/theme.css';
 
@@ -19,10 +19,8 @@ export const dotPagination = style({
     minHeight: '6px',
 });
 
-export const dotButton = style({
+const dotVisualBase = style({
     flexShrink: 0,
-    width: '6px',
-    height: '6px',
     padding: 0,
     border: 'none',
     borderRadius: '999px',
@@ -34,4 +32,29 @@ export const dotButton = style({
             backgroundColor: vars.color.green['100'],
         },
     },
+});
+
+/** 피그마: 6px / 4px / 2px — 페이지가 많을 때 양끝이 축소 */
+export const dotButton = styleVariants({
+    lg: [
+        dotVisualBase,
+        {
+            width: '6px',
+            height: '6px',
+        },
+    ],
+    md: [
+        dotVisualBase,
+        {
+            width: '4px',
+            height: '4px',
+        },
+    ],
+    sm: [
+        dotVisualBase,
+        {
+            width: '2px',
+            height: '2px',
+        },
+    ],
 });

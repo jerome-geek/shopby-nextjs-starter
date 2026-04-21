@@ -17,6 +17,40 @@ import { useResponsive } from '@/hooks/utils';
 
 const RANKING_ITEMS_PER_PAGE = 6;
 
+type RankingDotSize = 'lg' | 'md' | 'sm';
+
+/**
+ * 모바일 도트: 페이지 ≤5면 모두 동일 크기, 그 이상이면 최대 5개만 표시하고
+ * 피그마처럼 앞/뒤로 더 있을 때 4·5번째(또는 반대편)를 작게 표시한다.
+ */
+const getRankingDotPages = (
+    currentPage: number,
+    totalPages: number,
+): { page: number; size: RankingDotSize; active: boolean }[] => {
+    if (totalPages <= 5) {
+        return Array.from({ length: totalPages }, (_, i) => ({
+            page: i + 1,
+            size: 'lg' as const,
+            active: i + 1 === currentPage,
+        }));
+    }
+
+    const start = Math.min(Math.max(0, currentPage - 1 - 2), totalPages - 5);
+
+    const sizePattern: RankingDotSize[] =
+        start === 0
+            ? ['lg', 'lg', 'lg', 'md', 'sm']
+            : start === totalPages - 5
+            ? ['sm', 'md', 'lg', 'lg', 'lg']
+            : ['sm', 'md', 'lg', 'md', 'sm'];
+
+    return Array.from({ length: 5 }, (_, i) => ({
+        page: start + i + 1,
+        size: sizePattern[i],
+        active: start + i + 1 === currentPage,
+    }));
+};
+
 interface RankingSectionProps {
     title: string;
     items: string[];
@@ -75,10 +109,7 @@ export const RankingSection = ({
     }, [currentPage, isServerPaginated, items.length, resolvedTotalPages]);
 
     const goToPage = (targetPage: number) => {
-        const safePage = Math.min(
-            Math.max(targetPage, 1),
-            resolvedTotalPages,
-        );
+        const safePage = Math.min(Math.max(targetPage, 1), resolvedTotalPages);
         onPageChange(safePage);
 
         if (!isServerPaginated) {
@@ -191,21 +222,19 @@ export const RankingSection = ({
                     role='tablist'
                     aria-label={`${title} 페이지`}
                 >
-                    {Array.from({ length: resolvedTotalPages }).map(
-                        (_, dotIdx) => {
-                            const isActive = dotIdx === currentPage - 1;
-                            return (
-                                <button
-                                    key={`dot-${dotIdx}`}
-                                    role='tab'
-                                    aria-selected={isActive}
-                                    aria-label={`${dotIdx + 1} / ${resolvedTotalPages}`}
-                                    data-active={isActive}
-                                    className={styles.dotButton}
-                                    onClick={() => goToPage(dotIdx + 1)}
-                                />
-                            );
-                        },
+                    {getRankingDotPages(currentPage, resolvedTotalPages).map(
+                        ({ page: dotPage, size, active }) => (
+                            <button
+                                key={`dot-${dotPage}`}
+                                type='button'
+                                role='tab'
+                                aria-selected={active}
+                                aria-label={`${dotPage} / ${resolvedTotalPages}`}
+                                data-active={active}
+                                className={styles.dotButton[size]}
+                                onClick={() => goToPage(dotPage)}
+                            />
+                        ),
                     )}
                 </div>
             ) : (
