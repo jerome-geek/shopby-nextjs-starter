@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const footerContainer = style({
     width: '100%',
@@ -20,7 +20,7 @@ export const footerContainer = style({
 export const footerInner = style({
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '0 20px',
+    padding: '0',
     display: 'flex',
     flexDirection: 'column',
     gap: '40px',
@@ -31,6 +31,7 @@ export const footerInner = style({
             gridTemplateColumns: '1fr 1fr',
             columnGap: '60px',
             rowGap: '60px',
+            padding: '0 20px',
         },
     },
 });
@@ -118,7 +119,7 @@ export const copyrightSection = style({
 
 export const copyright = style([
     textStyles.caption1Regular,
-    { 
+    {
         color: '#AAAAAA',
         fontSize: '1.1rem',
     },

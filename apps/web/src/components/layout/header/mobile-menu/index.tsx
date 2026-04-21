@@ -1,20 +1,23 @@
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import * as styles from '@/components/layout/header/mobile-menu/index.css';
 import { MENU_LIST } from '@/components/layout/header/Menu';
+import * as styles from '@/components/layout/header/mobile-menu/index.css';
 import { usePage } from '@/hooks/utils';
 
 import 'swiper/css';
 
 const MobileMenu = () => {
-    const { isShopMainPage } = usePage();
     const router = useRouter();
+
+    const { isShopMainPage } = usePage();
 
     if (!isShopMainPage) {
         return null;
     }
+
+    const pathname = router.asPath.split('?')[0];
 
     return (
         <div className={styles.mobileMenu}>
@@ -35,7 +38,7 @@ const MobileMenu = () => {
                         <Link
                             href={item.href}
                             className={styles.mobileMenuItem}
-                            data-selected={item.href === router.asPath}
+                            data-selected={item.href === pathname}
                         >
                             {item.label}
                         </Link>

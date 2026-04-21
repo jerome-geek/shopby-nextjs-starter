@@ -5,9 +5,8 @@ const usePage = () => {
     const router = useRouter();
 
     const isShopMainPage =
-        router.asPath === PATHS.SHOP.DISCOVERY ||
-        router.asPath === PATHS.SHOP.KIDS ||
-        router.asPath === PATHS.SHOP.LIFE;
+        router.pathname === PATHS.SHOP.DISCOVERY ||
+        router.pathname === '/shop/[slug]';
 
     return {
         isShopMainPage,
