@@ -45,25 +45,29 @@ export const CategoryDrawer = ({
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                     >
                         <div className={styles.searchRow}>
-                            <ProductListSearchInput
-                                onBack={close}
-                                searchAfterAction={close}
-                                autoFocus={false}
-                                className={styles.searchInputOverride}
-                            />
-                            <Link
-                                href={PATHS.CART}
-                                className={styles.cartButton}
-                                onClick={close}
-                                aria-label='장바구니'
-                            >
-                                <BigCartIcon width={24} height={24} />
-                                {totalCount > 0 && (
-                                    <span className={styles.cartBadge}>
-                                        {totalCount > 99 ? '99+' : totalCount}
-                                    </span>
-                                )}
-                            </Link>
+                            <div className={styles.searchRowInner}>
+                                <ProductListSearchInput
+                                    onBack={close}
+                                    searchAfterAction={close}
+                                    autoFocus={false}
+                                    className={styles.searchInputOverride}
+                                />
+                                <Link
+                                    href={PATHS.CART}
+                                    className={styles.cartButton}
+                                    onClick={close}
+                                    aria-label='장바구니'
+                                >
+                                    <BigCartIcon width={24} height={24} />
+                                    {totalCount > 0 && (
+                                        <span className={styles.cartBadge}>
+                                            {totalCount > 99
+                                                ? '99+'
+                                                : totalCount}
+                                        </span>
+                                    )}
+                                </Link>
+                            </div>
                         </div>
 
                         <FetchBoundary fallback={<QuickMenuSkeleton />}>

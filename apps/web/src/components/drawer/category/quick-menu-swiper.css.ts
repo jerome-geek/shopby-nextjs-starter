@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
@@ -20,11 +20,17 @@ export const slide = style({
     color: 'inherit',
 });
 
+globalStyle(`.${slide} > img`, {
+    borderRadius: '999px',
+    overflow: 'hidden',
+});
+
 export const iconCircle = style({
     width: '72px',
     height: '72px',
     borderRadius: '50%',
     backgroundColor: vars.color.gray['10'],
+    overflow: 'hidden',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

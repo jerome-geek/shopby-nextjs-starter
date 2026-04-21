@@ -10,7 +10,7 @@ export const header = style({
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 1000,
+    zIndex: 999,
     backgroundColor: vars.color.white,
     padding: '0 20px',
     display: 'flex',
@@ -46,9 +46,10 @@ export const headerInner = style({
             gap: '16px',
         },
         [media.mobile]: {
+            alignItems: 'flex-end',
             display: 'grid',
             gridTemplateColumns: '1fr auto 1fr',
-            padding: 0,
+            padding: '0 0 16px',
         },
     },
 });

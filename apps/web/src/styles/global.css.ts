@@ -1,10 +1,10 @@
+import { vars } from '@/styles/theme.css';
 import {
     createGlobalTheme,
     globalKeyframes,
     globalStyle,
     style,
 } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
 
 export const visuallyHidden = style({
     position: 'absolute',
@@ -176,8 +176,8 @@ globalKeyframes('slideDownFade', {
 export const globalVars = createGlobalTheme(':root', {
     header: {
         height: '90px',
-        mobileHeight: '56px',
-        mobileShopMainHeight: '106px',
+        mobileHeight: '70px',
+        mobileShopMainHeight: '120px',
     },
     input: { checkboxSize: '16px' },
 });

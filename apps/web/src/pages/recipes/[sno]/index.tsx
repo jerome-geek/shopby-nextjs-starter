@@ -46,7 +46,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 const HEADER_HEIGHT = 90;
-const HEADER_HEIGHT_MOBILE = 56;
+const HEADER_HEIGHT_MOBILE = 70;
 const SCROLL_OFFSET_MARGIN = 16;
 
 const RecipeDetailPage = ({

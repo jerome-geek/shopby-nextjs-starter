@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
+import { globalVars } from '@/styles/global.css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -26,8 +27,17 @@ export const drawer = style({
 
 export const searchRow = style({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     flexShrink: 0,
+    gap: '12px',
+    height: globalVars.header.mobileHeight,
+    padding: '0 20px 8px',
+});
+
+export const searchRowInner = style({
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
     gap: '12px',
 });
 
@@ -35,7 +45,7 @@ export const searchInputOverride = style({
     flex: 1,
     width: 'auto',
     flexShrink: 1,
-    paddingRight: 0,
+    padding: 0,
 });
 
 export const cartButton = style({
@@ -44,7 +54,6 @@ export const cartButton = style({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-    marginRight: '20px',
     color: vars.color.black,
 });
 

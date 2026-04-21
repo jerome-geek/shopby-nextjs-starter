@@ -17,7 +17,7 @@ export const container = style({
     top: 0,
     right: 0,
     width: '100%',
-    height: 'calc(100dvh - 58px)',
+    height: 'calc(100dvh - 64px)', // view height - bottom navigation height
     maxHeight: '100vh',
     backgroundColor: vars.color.white,
     willChange: 'transform',
