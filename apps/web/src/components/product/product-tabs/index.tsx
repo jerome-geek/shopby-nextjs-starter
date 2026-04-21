@@ -37,7 +37,7 @@ export default function ProductTabs({
 
     // NOTE: apps/web/src/styles/global.css.ts 의 globalVars.header 값을 기준으로 사용
     const pcOffsetPx = 90;
-    const mobileOffsetPx = 56;
+    const mobileOffsetPx = 70;
     const tabButtonHeight = 45;
 
     const scrollToSection = useCallback(

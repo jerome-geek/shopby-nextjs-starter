@@ -158,7 +158,7 @@ const TimeSale = () => {
             return;
         }
 
-        const margin = isMobile ? 120 : 160;
+        const margin = isMobile ? 114 : 160;
         const bestTop = document
             .getElementById('best')
             ?.getBoundingClientRect().top;
@@ -202,7 +202,7 @@ const TimeSale = () => {
         );
 
         lenis?.scrollTo(`#${value}`, {
-            offset: isMobile ? -106 : -140, // 데스크탑 90+50, 모바일 56+50
+            offset: isMobile ? -120 : -140, // 데스크탑 90+50, 모바일 70+50
             duration: 1.2,
             onComplete: () => {
                 window.clearTimeout(releaseTimeoutId);

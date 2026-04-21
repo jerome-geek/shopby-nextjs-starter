@@ -563,9 +563,6 @@ function ProductDetailView({
                 >
                     <Gift size={24} color='#333' />
                 </button>
-                <Button frame='outlined' onClick={onCartButtonClick}>
-                    장바구니
-                </Button>
                 <Button
                     frame='solid'
                     variant='primary'
