@@ -77,13 +77,12 @@ export const useRecipeForm = ({
             cookTimeMinutes: 1,
             servings: 1,
             caloriesPerServingKcal: 1,
-            thumbnailTempImageSno: undefined,
+            thumbnailUrl: null,
             ingredients: [{ name: '', amount: '' }],
             steps: [
                 {
                     stepNumber: 1,
                     description: '',
-                    tempImageSno: null,
                     stepImageUrl: null,
                 },
             ],
@@ -119,8 +118,8 @@ export const useRecipeForm = ({
                 (a, b) => a.sortOrder - b.sortOrder,
             );
             const mainImage = sortedImages.find((img) => img.sortOrder === 1);
-            if (mainImage?.sno) {
-                setValue('thumbnailTempImageSno', mainImage.sno);
+            if (mainImage?.imageUrl) {
+                setValue('thumbnailUrl', mainImage.imageUrl);
             }
         },
         [setValue],
@@ -151,15 +150,13 @@ export const useRecipeForm = ({
                 recipeDetailData.steps.length > 0
                     ? recipeDetailData.steps.map((step: RecipeStep) => ({
                           stepNumber: step.stepNumber,
-                          description: step.description,
-                          tempImageSno: step.sno,
+                          description: step.description || '',
                           stepImageUrl: step.stepImageUrl,
                       }))
                     : [
                           {
                               stepNumber: 1,
                               description: '',
-                              tempImageSno: null,
                               stepImageUrl: null,
                           },
                       ],
@@ -204,7 +201,7 @@ export const useRecipeForm = ({
 
     // 2. 스토어 이미지 변경 시 폼 썸네일 및 조리 단계 동기화 (Strict Sync)
     useEffect(() => {
-        const currentThumb = getValues('thumbnailTempImageSno');
+        const currentThumb = getValues('thumbnailUrl');
         const currentSteps = getValues('steps');
 
         // 썸네일 동기화
@@ -221,7 +218,6 @@ export const useRecipeForm = ({
                       return {
                           stepNumber: index + 1,
                           description: existingStep?.description || '',
-                          tempImageSno: img.sno,
                           stepImageUrl: img.imageUrl,
                       };
                   })
@@ -229,17 +225,15 @@ export const useRecipeForm = ({
                       {
                           stepNumber: 1,
                           description: '',
-                          tempImageSno: null,
                           stepImageUrl: null,
                       },
                   ];
 
-        // 상태가 실제로 다를 때만 업데이트 (개수, 순서, 매칭된 sno 기준)
+        // 상태가 실제로 다를 때만 업데이트 (개수, 순서, 매칭된 URL 기준)
         const isDifferent =
             nextSteps.length !== currentSteps.length ||
             nextSteps.some(
                 (step, i) =>
-                    step.tempImageSno !== currentSteps[i]?.tempImageSno ||
                     step.stepImageUrl !== currentSteps[i]?.stepImageUrl,
             );
 
@@ -269,14 +263,8 @@ export const useRecipeForm = ({
 
             // 개별 단계 업로드인 경우 폼 필드 바로 업데이트
             if (targetStepIndex !== undefined) {
-                // 방금 등록된 마지막 이미지를 해당 스텝에 할당 (만약 1장만 올렸다면 첫번째)
-                // response.data.tempImages 배열에서 가져와야 함 (새로 등록된 이미지들)
                 const newUploaded = response.data.tempImages;
                 if (newUploaded && newUploaded.length > 0) {
-                    setValue(
-                        `steps.${targetStepIndex}.tempImageSno`,
-                        newUploaded[0].sno,
-                    );
                     setValue(
                         `steps.${targetStepIndex}.stepImageUrl`,
                         newUploaded[0].imageUrl,
@@ -352,24 +340,19 @@ export const useRecipeForm = ({
         updateThumbnailFromImages(newImages);
 
         // 삭제된 이미지가 steps에 참조되어 있다면 제거
-        if (deletedImage && deletedImage.sno) {
+        if (deletedImage && deletedImage.imageUrl) {
             const currentSteps = getValues('steps');
             const stepIndex = currentSteps.findIndex(
-                (step: { tempImageSno?: number | null }) =>
-                    step.tempImageSno === deletedImage.sno,
+                (step: { stepImageUrl?: string | null }) =>
+                    step.stepImageUrl === deletedImage.imageUrl,
             );
             if (stepIndex !== -1) {
-                setValue(`steps.${stepIndex}.tempImageSno`, null);
                 setValue(`steps.${stepIndex}.stepImageUrl`, null);
             }
         }
     };
 
-    const onDeleteStepImage = (
-        stepIndex: number,
-        tempImageSno: number | null,
-    ) => {
-        setValue(`steps.${stepIndex}.tempImageSno`, null);
+    const onDeleteStepImage = (stepIndex: number, imageUrl: string | null) => {
         setValue(`steps.${stepIndex}.stepImageUrl`, null);
 
         // 스토어 삭제를 원한다면 여기서 연동 추가 기능 구현 가능.
@@ -389,12 +372,11 @@ export const useRecipeForm = ({
         try {
             const mainImage = currentImages.find((img) => img.sortOrder === 1);
 
-            // 최종 전송 페이로드 (stepImageUrl 보정)
+            // 최종 전송 페이로드 (불필요 필드 제거)
             const finalSteps = data.steps.map((step) => {
                 return {
                     stepNumber: step.stepNumber,
                     description: step.description,
-                    tempImageSno: step.tempImageSno,
                     stepImageUrl: step.stepImageUrl,
                 };
             });
@@ -402,10 +384,10 @@ export const useRecipeForm = ({
             const finalData = {
                 ...data,
                 steps: finalSteps,
-                thumbnailTempImageSno:
-                    mainImage?.sno ??
-                    currentImages[0]?.sno ??
-                    data.thumbnailTempImageSno,
+                thumbnailUrl:
+                    mainImage?.imageUrl ??
+                    currentImages[0]?.imageUrl ??
+                    data.thumbnailUrl,
             };
 
             if (isModify && recipeDetailData) {
