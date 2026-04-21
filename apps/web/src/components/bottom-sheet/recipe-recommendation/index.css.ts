@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -21,19 +22,14 @@ export const titleLine = style([
     },
 ]);
 
-export const recipeList = style({
-    display: 'flex',
-    gap: '16px',
-    overflowX: 'auto',
-    padding: '0 20px 24px',
-    // Hide scrollbar but allow scrolling
-    selectors: {
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    msOverflowStyle: 'none',
-    scrollbarWidth: 'none',
+export const swiperContainer = style({
+    width: 'calc(100% + 20px)',
+    marginLeft: '20px',
+    paddingRight: '40px',
+});
+
+export const swiperSlide = style({
+    width: 'auto',
 });
 
 export const recipeCardItem = style({
@@ -45,13 +41,14 @@ export const footerButtonGroup = style({
     display: 'flex',
     gap: '6px',
     width: '100%',
+    padding: '0 20px 40px',
 });
 
 export const closeButton = style([
     textStyles.headlineSemibold,
     {
         flex: 1,
-        height: '52px',
+        height: '53px',
         backgroundColor: vars.color.white,
         border: `1px solid ${vars.color.gray['50']}`,
         borderRadius: '4px',
@@ -67,7 +64,7 @@ export const moreButton = style([
     textStyles.headlineSemibold,
     {
         flex: 1,
-        height: '52px',
+        height: '53px',
         backgroundColor: vars.color.green['100'],
         borderRadius: '4px',
         color: vars.color.white,

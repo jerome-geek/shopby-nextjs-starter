@@ -6,6 +6,7 @@ import { Fragment, useEffect } from 'react';
 
 import * as styles from '@/components/layout/bottom-sheet/index.css';
 import { useKeyDown, useResponsive } from '@/hooks/utils';
+export { styles as bottomSheetStyles };
 
 export interface DefaultBottomSheetProps {
     overlayId?: string;
@@ -26,6 +27,7 @@ interface BottomSheetProps extends DefaultBottomSheetProps {
     lockTargetId?: string;
     zIndex?: number;
     contentStyle?: React.CSSProperties;
+    footerStyle?: React.CSSProperties;
 }
 
 export const BottomSheetLayout = ({
@@ -43,6 +45,8 @@ export const BottomSheetLayout = ({
     lockTargetId = 'bottom-sheet-content',
     zIndex,
     contentStyle,
+    overlayId,
+    footerStyle,
 }: BottomSheetProps) => {
     const { isMobile } = useResponsive();
 
@@ -101,6 +105,7 @@ export const BottomSheetLayout = ({
                 aria-labelledby='bottom-sheet-title'
                 aria-describedby='bottom-sheet-description'
                 className={styles.bottomSheetContainer({ type })}
+                data-overlay-id={overlayId}
                 variants={{
                     init: { opacity: 0, y: '100%' },
                     show: {
@@ -171,7 +176,10 @@ export const BottomSheetLayout = ({
                 </div>
 
                 {footerButtonList && (
-                    <div className={styles.bottomSheetFooter}>
+                    <div
+                        className={styles.bottomSheetFooter}
+                        style={footerStyle}
+                    >
                         {isArray(footerButtonList)
                             ? footerButtonList.map((button, index) => (
                                   <Fragment key={index}>{button}</Fragment>

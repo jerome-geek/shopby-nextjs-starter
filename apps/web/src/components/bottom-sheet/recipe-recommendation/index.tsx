@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
 
 import * as styles from '@/components/bottom-sheet/recipe-recommendation/index.css';
 import {
@@ -42,14 +45,21 @@ export const RecipeRecommendationBottomSheet = ({
             unmount={unmount}
             overlayId={OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION}
             isCloseButton={false}
+            contentStyle={{ padding: 0, maxHeight: 'calc(80vh)' }}
+            footerStyle={{ borderTop: 'none', padding: 0, marginTop: '60px' }}
             footerButtonList={
                 <div className={styles.footerButtonGroup}>
-                    <button className={styles.closeButton} onClick={close}>
+                    <button
+                        className={styles.closeButton}
+                        onClick={close}
+                        type='button'
+                    >
                         {t('닫기')}
                     </button>
                     <button
                         className={styles.moreButton}
                         onClick={handleMoreClick}
+                        type='button'
                     >
                         {t('레시피 더 보러가기')}
                     </button>
@@ -66,17 +76,23 @@ export const RecipeRecommendationBottomSheet = ({
                     </span>
                 </div>
 
-                <ul className={styles.recipeList}>
+                <Swiper
+                    className={styles.swiperContainer}
+                    spaceBetween={16}
+                    slidesPerView={2.2}
+                    slidesOffsetAfter={20}
+                >
                     {recipes.map((recipe) => (
-                        <li
+                        <SwiperSlide
                             key={recipe.sno}
-                            className={styles.recipeCardItem}
-                            onClick={() => close()}
+                            className={styles.swiperSlide}
                         >
-                            <RecipeCard recipe={recipe} />
-                        </li>
+                            <div onClick={() => close()}>
+                                <RecipeCard recipe={recipe} />
+                            </div>
+                        </SwiperSlide>
                     ))}
-                </ul>
+                </Swiper>
             </div>
         </BottomSheetLayout>
     );

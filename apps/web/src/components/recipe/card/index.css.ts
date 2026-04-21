@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const recipeCard = style({
     display: 'flex',
@@ -76,6 +76,7 @@ export const recipeTitle = style([
                 fontSize: '1.4rem',
                 lineHeight: '1.4',
                 letterSpacing: '-1.3%',
+                height: 'auto',
             },
         },
     },
