@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 
-import { geekRequest } from '@/api/core/geekRequest';
 import { handle401Error } from '@/api/core/authInterceptor';
+import { geekRequest } from '@/api/core/geekRequest';
 import { logOnDev } from '@/api/core/utils';
 import { env } from '@/configs/env';
 import { useHandleSessionExpired } from '@/hooks/auth/useHandleSessionExpired';
 import { accessTokenCookie } from '@/utils/cookie';
 
-const useGeekInterceptor = () => {
+export const useGeekInterceptor = () => {
     const { handleSessionExpired } = useHandleSessionExpired();
 
     useEffect(() => {
@@ -74,5 +74,3 @@ const useGeekInterceptor = () => {
         };
     }, []);
 };
-
-export default useGeekInterceptor;

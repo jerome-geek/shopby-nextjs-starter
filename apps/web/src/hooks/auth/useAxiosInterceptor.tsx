@@ -15,7 +15,7 @@ import {
     refreshTokenCookie,
 } from '@/utils/cookie';
 
-const useAxiosInterceptor = () => {
+export const useAxiosInterceptor = () => {
     const [isReady, setIsReady] = useState(false);
     const { handleSessionExpired } = useHandleSessionExpired();
     const handleSessionExpiredRef = useRef(handleSessionExpired);
@@ -107,5 +107,3 @@ const useAxiosInterceptor = () => {
         isReady,
     };
 };
-
-export default useAxiosInterceptor;
