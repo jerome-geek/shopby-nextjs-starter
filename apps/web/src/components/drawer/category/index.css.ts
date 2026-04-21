@@ -144,3 +144,22 @@ export const content = style({
     overflowX: 'hidden',
     padding: '0 0 24px',
 });
+
+export const tabContentViewport = style({
+    position: 'relative',
+    width: '100%',
+    // overflow: 'hidden',
+    flex: 1,
+});
+
+export const tabContentTrack = style({
+    display: 'flex',
+    width: '200%',
+    height: '100%',
+});
+
+export const tabPane = style({
+    width: '50%',
+    minWidth: '50%',
+    height: '100%',
+});

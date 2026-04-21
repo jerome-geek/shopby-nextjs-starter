@@ -3,12 +3,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
-import CategorySection from '@/components/drawer/category/category-section';
 import * as styles from '@/components/drawer/category/index.css';
 import { QuickMenuSkeleton } from '@/components/drawer/category/quick-menu-skeleton';
 import { QuickMenuSwiper } from '@/components/drawer/category/quick-menu-swiper';
-import { RecommendProductsSection } from '@/components/drawer/search/recommend-products-section';
-import { RecommendProductsSkeleton } from '@/components/drawer/search/recommend-products-section/skeleton';
+import Recipe from '@/components/drawer/category/recipe';
+import Shopping from '@/components/drawer/category/shopping';
 import { BigCartIcon } from '@/components/icons';
 import { DefaultModalLayoutProps } from '@/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
@@ -131,11 +130,26 @@ export const CategoryDrawer = ({
                             </div>
                         </div>
 
-                        <CategorySection />
-
-                        <FetchBoundary fallback={<RecommendProductsSkeleton />}>
-                            <RecommendProductsSection />
-                        </FetchBoundary>
+                        <div className={styles.tabContentViewport}>
+                            <motion.div
+                                className={styles.tabContentTrack}
+                                animate={{
+                                    x: activeTab === '쇼핑' ? '0%' : '-50%',
+                                }}
+                                transition={{
+                                    type: 'spring',
+                                    stiffness: 500,
+                                    damping: 50,
+                                }}
+                            >
+                                <div className={styles.tabPane}>
+                                    <Shopping />
+                                </div>
+                                <div className={styles.tabPane}>
+                                    <Recipe />
+                                </div>
+                            </motion.div>
+                        </div>
                     </motion.div>
                 </>
             )}
