@@ -148,7 +148,6 @@ export const content = style({
 export const tabContentViewport = style({
     position: 'relative',
     width: '100%',
-    // overflow: 'hidden',
     flex: 1,
 });
 
@@ -156,10 +155,28 @@ export const tabContentTrack = style({
     display: 'flex',
     width: '200%',
     height: '100%',
+
+    selectors: {
+        '&[data-active-tab="쇼핑"]': {
+            justifyContent: 'start',
+        },
+        '&[data-active-tab="레시피"]': {
+            justifyContent: 'end',
+        },
+    },
 });
 
 export const tabPane = style({
     width: '50%',
     minWidth: '50%',
     height: '100%',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+
+    selectors: {
+        '&[aria-hidden="true"]': {
+            overflow: 'hidden',
+            height: '500px',
+        },
+    },
 });

@@ -6,10 +6,10 @@ import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon'
 import { TimerIcon } from '@/components/icons/TimerIcon';
 import { UsersIcon } from '@/components/icons/UsersIcon';
 import * as styles from '@/components/recipe/card/index.css';
-import { PATHS } from '@/const/paths';
-import { useBookmark } from '@/hooks/recipe';
 import { FailedCard } from '@/components/recipe/grid-section/failed-card';
 import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
+import { PATHS } from '@/const/paths';
+import { useBookmark } from '@/hooks/recipe';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 
 interface RecipeCardProps {
@@ -19,19 +19,13 @@ interface RecipeCardProps {
 export const RecipeCard = ({ recipe }: RecipeCardProps) => {
     const { t } = useTranslation();
 
-    if (recipe.recipeStatus === 'PROCESSING') {
-        return <ProcessingCard recipe={recipe} />;
-    }
-
-    if (recipe.recipeStatus === 'FAILED') {
-        return <FailedCard recipe={recipe} />;
-    }
-
     const { toggleRecipeBookmark } = useBookmark();
 
     const handleBookmarkClick = async (e: MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+
+        console.log(1);
 
         toggleRecipeBookmark({
             sno: recipe.sno,
@@ -42,6 +36,14 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
     const cookingTime = recipe.durationSeconds
         ? Math.floor(recipe.durationSeconds / 60)
         : 0;
+
+    if (recipe.recipeStatus === 'PROCESSING') {
+        return <ProcessingCard recipe={recipe} />;
+    }
+
+    if (recipe.recipeStatus === 'FAILED') {
+        return <FailedCard recipe={recipe} />;
+    }
 
     return (
         <Link

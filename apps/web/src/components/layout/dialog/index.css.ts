@@ -1,6 +1,6 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { style } from '@vanilla-extract/css';
 
 export const dimmed = style({
     position: 'fixed',
@@ -9,7 +9,7 @@ export const dimmed = style({
     width: '100%',
     height: '100%',
     backgroundColor: vars.color.black,
-    zIndex: 1000,
+    zIndex: 1003,
 });
 
 export const container = style({
@@ -18,7 +18,7 @@ export const container = style({
     left: '50%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: vars.color.white,
-    zIndex: 1001,
+    zIndex: 1004,
     minWidth: '432px',
     borderRadius: '24px',
     overflow: 'hidden',

@@ -11,7 +11,7 @@ export const dimmed = style({
     width: '100%',
     height: '100%',
     backgroundColor: vars.color.black,
-    zIndex: 1000,
+    zIndex: 1003,
 });
 
 export const bottomSheetContainer = recipe({
@@ -24,7 +24,7 @@ export const bottomSheetContainer = recipe({
         flexDirection: 'column',
         backgroundColor: vars.color.white,
         padding: 0,
-        zIndex: 1000,
+        zIndex: 1004,
     },
     variants: {
         type: {

@@ -136,16 +136,23 @@ export const CategoryDrawer = ({
                                 animate={{
                                     x: activeTab === '쇼핑' ? '0%' : '-50%',
                                 }}
+                                data-active-tab={activeTab}
                                 transition={{
                                     type: 'spring',
                                     stiffness: 500,
                                     damping: 50,
                                 }}
                             >
-                                <div className={styles.tabPane}>
+                                <div
+                                    className={styles.tabPane}
+                                    aria-hidden={activeTab !== '쇼핑'}
+                                >
                                     <Shopping />
                                 </div>
-                                <div className={styles.tabPane}>
+                                <div
+                                    className={styles.tabPane}
+                                    aria-hidden={activeTab !== '레시피'}
+                                >
                                     <Recipe />
                                 </div>
                             </motion.div>
