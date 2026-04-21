@@ -76,7 +76,6 @@ export const scrollArea = style({
     },
 });
 
-/** 모바일: 랭킹 등 좌우 여백 (추천 상품 풀블리드와 분리) */
 export const drawerContentInset = style({
     display: 'flex',
     flexDirection: 'column',
@@ -226,6 +225,9 @@ export const sectionTitle = style([
             [media.tablet]: {
                 padding: '0',
             },
+            [media.desktop]: {
+                padding: '0',
+            },
         },
     },
 ]);
@@ -296,7 +298,7 @@ export const rankingNumber = style([
     {
         display: 'inline-flex',
         flexShrink: 0,
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         minWidth: '2ch',
         color: vars.color.green['80'],
         fontVariantNumeric: 'tabular-nums',
