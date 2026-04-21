@@ -143,57 +143,61 @@ export default function BestProducts() {
 
     return (
         <div className={styles.container}>
-            <Column style={{ gap: isMobile ? '20px' : '32px' }}>
-                {!isMobile && <h1 className={styles.title}>베스트 랭킹</h1>}
+            <Column>
+                <Column style={{ gap: isMobile ? '20px' : '32px' }}>
+                    {!isMobile && <h1 className={styles.title}>베스트 랭킹</h1>}
 
-                <div className={styles.categorySwiperContainer}>
-                    <Swiper
-                        slidesPerView='auto'
-                        spaceBetween={4}
-                        watchOverflow
-                        breakpoints={{
-                            768: {
-                                spaceBetween: 6,
-                            },
-                        }}
-                        className={styles.categorySwiper}
-                    >
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <Link
-                                href={`${PATHS.PRODUCTS.BEST}`}
-                                className={styles.categoryLink}
-                                data-selected={
-                                    Number(selectedCategory) ===
-                                    Number(mainCategoryNo)
-                                        ? 'true'
-                                        : undefined
-                                }
-                            >
-                                전체
-                            </Link>
-                        </SwiperSlide>
-
-                        {depth2CategoryList.map((category) => (
-                            <SwiperSlide
-                                key={category.categoryNo}
-                                style={{ width: 'auto' }}
-                            >
+                    <div className={styles.categorySwiperContainer}>
+                        <Swiper
+                            slidesPerView='auto'
+                            spaceBetween={4}
+                            watchOverflow
+                            breakpoints={{
+                                768: {
+                                    spaceBetween: 6,
+                                },
+                            }}
+                            className={styles.categorySwiper}
+                        >
+                            <SwiperSlide style={{ width: 'auto' }}>
                                 <Link
-                                    href={`${PATHS.PRODUCTS.BEST}?categoryNo=${category.categoryNo}&pageNumber=1`}
+                                    href={`${PATHS.PRODUCTS.BEST}`}
                                     className={styles.categoryLink}
                                     data-selected={
                                         Number(selectedCategory) ===
-                                        Number(category.categoryNo)
+                                        Number(mainCategoryNo)
                                             ? 'true'
                                             : undefined
                                     }
                                 >
-                                    {category.label}
+                                    전체
                                 </Link>
                             </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
+
+                            {depth2CategoryList.map((category) => (
+                                <SwiperSlide
+                                    key={category.categoryNo}
+                                    style={{ width: 'auto' }}
+                                >
+                                    <Link
+                                        href={`${PATHS.PRODUCTS.BEST}?categoryNo=${category.categoryNo}&pageNumber=1`}
+                                        className={styles.categoryLink}
+                                        data-selected={
+                                            Number(selectedCategory) ===
+                                            Number(category.categoryNo)
+                                                ? 'true'
+                                                : undefined
+                                        }
+                                    >
+                                        {category.label}
+                                    </Link>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
+                </Column>
+
+                <div className={styles.border} />
             </Column>
 
             <LoadingWrapper isLoading={isListLoading}>

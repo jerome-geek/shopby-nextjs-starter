@@ -20,28 +20,33 @@ export const container = style({
 
 export const title = style([textStyles.display1Semibold]);
 
+export const border = style({
+    width: '100vw',
+    borderBottom: `1px solid ${vars.color.gray['20']}`,
+    marginLeft: 'calc(50% - 50vw)',
+    marginRight: 'calc(50% - 50vw)',
+});
+
 export const categorySwiperContainer = style({
     width: 'calc(100% + 40px)',
-    margin: '0 -20px',
-    padding: '4px 0 12px 20px',
-    borderBottom: `1px solid ${vars.color.gray['20']}`,
+    marginLeft: '-20px',
+    padding: '4px 0 12px 0',
 
     '@media': {
         [media.desktop]: {
-            width: '100vw',
-            marginLeft: 'calc(50% - 50vw)',
-            marginRight: 'calc(50% - 50vw)',
+            width: '100%',
+            margin: '0',
             padding: '0 0 12px 0',
         },
     },
 });
 
 export const categorySwiper = style({
-    paddingRight: '20px',
+    padding: '0 20px',
 
     '@media': {
         [media.desktop]: {
-            paddingRight: '0',
+            padding: '0',
             maxWidth: '1200px',
             margin: '0 auto',
         },
@@ -78,6 +83,11 @@ export const productGrid = style({
     rowGap: '24px',
 
     '@media': {
+        [media.tablet]: {
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            columnGap: '18px',
+            rowGap: '36px',
+        },
         [media.desktop]: {
             gridTemplateColumns: 'repeat(5, 1fr)',
             columnGap: '25px',
