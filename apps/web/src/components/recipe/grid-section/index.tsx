@@ -1,9 +1,7 @@
 import { ChefHat, CirclePlusIcon } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { RecipeCard } from '@/components/recipe/card';
@@ -11,17 +9,20 @@ import * as styles from '@/components/recipe/grid-section/index.css';
 import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
 import { ViewAllLink } from '@/components/ui';
 import PagingV2 from '@/components/ui/paging-v2';
-import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { useSearchMyRecipeList } from '@/hooks/query/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import type { SearchRecipesParams } from '@/models/shop/recipe';
 
+import { PATHS } from '@/const/paths';
+import 'swiper/css';
+
 export const RecipeGridSection = () => {
     const { t } = useTranslation();
-    const router = useRouter();
-    const { openRecipeCreateSelection } = useCustomDialog();
+
     const { isMobile } = useResponsive();
+
+    const { openRecipeCreateSelection } = useCustomDialog();
 
     const pageSize = isMobile ? 10 : 5;
 
@@ -41,7 +42,6 @@ export const RecipeGridSection = () => {
     const recipeList = searchMyRecipeListData?.data ?? [];
     const isRecipeListVisible = recipeList.length > 0;
 
-
     if (isPending) {
         return <RecipeGridSkeleton />;
     }
@@ -50,9 +50,10 @@ export const RecipeGridSection = () => {
         <section className={styles.section}>
             <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>{t('레시피')}</h2>
-                {/* TODO: 전체보기 클릭시 레시피 전체보기 페이지 이동 */}
                 {isRecipeListVisible && (
-                    <ViewAllLink href={'/'}>{t('전체보기')}</ViewAllLink>
+                    <ViewAllLink href={PATHS.RECIPES.MAIN}>
+                        {t('전체보기')}
+                    </ViewAllLink>
                 )}
             </div>
 

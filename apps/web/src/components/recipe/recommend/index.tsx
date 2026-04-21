@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
 import { RecipeCard } from '@/components/recipe/card';
 import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/recommend/index.css';
 
@@ -8,7 +8,7 @@ export const RecipeRecommend = () => {
     const { t } = useTranslation();
 
     const { data: publicRecipeSearchData } = usePublicRecipeSearch({
-        params: {
+        searchParams: {
             page: 1,
             take: 4,
             order: 'DESC',

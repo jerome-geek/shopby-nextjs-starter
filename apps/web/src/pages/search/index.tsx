@@ -9,8 +9,8 @@ import { IntegratedSearchView } from '@/components/search/integrated-search-view
 import { RecipeSearchView } from '@/components/search/recipe-search-view';
 import { ShoppingSearchView } from '@/components/search/shopping-search-view';
 import { Column } from '@/components/ui/layout/flex';
-import { type CollectionSortBy, type RecipeSortBy } from '@/const/recipe';
 import { SORT_OPTIONS } from '@/const/product';
+import { type CollectionSortBy, type RecipeSortBy } from '@/const/recipe';
 import {
     COLLECTION_ORDER_QUERY_KEY,
     COLLECTION_PAGE_QUERY_KEY,
@@ -25,9 +25,9 @@ import {
     TAB_QUERY_KEY,
     type SearchTabId,
 } from '@/const/search';
+import { useInfiniteProductList } from '@/hooks/infiniteQuery/product/product';
 import { useCategoriesByCode } from '@/hooks/query/display/category';
 import { useProductList } from '@/hooks/query/product/product';
-import { useInfiniteProductList } from '@/hooks/infiniteQuery/product/product';
 import {
     useInfinitePublicCollectionSearch,
     usePublicCollectionSearch,
@@ -232,7 +232,7 @@ const Search = () => {
     });
 
     const { data: recipeData } = usePublicRecipeSearch({
-        params: {
+        searchParams: {
             keyword: searchKeyword,
             order: recipeSortOrder,
             sortBy: recipeSortBy,

@@ -36,7 +36,7 @@ export const SearchDrawer = ({
     const [productPage, setProductPage] = useState(1);
 
     const { data: recipeData } = usePublicRecipeSearch({
-        params: {
+        searchParams: {
             ...RECIPE_SEARCH_BASE_PARAMS,
             page: recipePage,
         },

@@ -1,4 +1,8 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import {
+    keepPreviousData,
+    useQuery,
+    type UseQueryOptions,
+} from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { recipe } from '@/api/shop';
@@ -32,6 +36,7 @@ const usePublicRecipeSearch = <T = SearchRecipesResponse>({
 
             return data;
         },
+        placeholderData: keepPreviousData,
         ...options,
     });
 };
