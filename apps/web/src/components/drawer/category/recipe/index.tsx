@@ -4,7 +4,7 @@ import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 
 const Recipe = () => {
     const { data: publicRecipeSearchData } = usePublicRecipeSearch({
-        params: {
+        searchParams: {
             order: 'DESC',
             sortBy: 'LATEST',
             page: 1,
