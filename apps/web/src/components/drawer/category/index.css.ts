@@ -21,8 +21,18 @@ export const drawer = style({
     zIndex: 1002,
     display: 'flex',
     flexDirection: 'column',
-    overflowY: 'hidden',
+    overflowY: 'auto',
     overflowX: 'hidden',
+
+    selectors: {
+        '&::-webkit-scrollbar': {
+            width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: vars.color.gray['30'],
+            borderRadius: '10px',
+        },
+    },
 });
 
 export const searchRow = style({
@@ -32,6 +42,10 @@ export const searchRow = style({
     gap: '12px',
     height: globalVars.header.mobileHeight,
     padding: '0 20px 8px',
+    position: 'sticky',
+    top: 0,
+    backgroundColor: vars.color.white,
+    zIndex: 1003,
 });
 
 export const searchRowInner = style({
@@ -82,6 +96,14 @@ export const tabBar = style({
     border: `1px solid ${vars.color.gray['20']}`,
 });
 
+export const tabBarInner = style({
+    width: '100%',
+    display: 'flex',
+    gap: '8px',
+    backgroundColor: vars.color.gray['20'],
+    borderRadius: '100px',
+});
+
 export const tabItem = style([
     textStyles.body2Semibold,
     {
@@ -96,7 +118,6 @@ export const tabItem = style([
         cursor: 'pointer',
         whiteSpace: 'nowrap',
         color: vars.color.gray['60'],
-        backgroundColor: vars.color.gray['20'],
         transition: 'color 0.3s ease',
         userSelect: 'none',
 
@@ -114,7 +135,7 @@ export const activeIndicator = style({
     inset: 0,
     borderRadius: '100px',
     backgroundColor: vars.color.black,
-    zIndex: 0,
+    zIndex: 1,
 });
 
 export const content = style({
