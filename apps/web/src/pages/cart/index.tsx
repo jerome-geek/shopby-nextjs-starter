@@ -13,8 +13,10 @@ import { InputCheckbox, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
 import { useCartMutation } from '@/hooks/mutations';
+import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
+import type { UpdateCartData } from '@/models/order/cart';
 import * as styles from '@/pages/cart/index.css';
 import { CURRENCY } from '@/utils/currency';
 
@@ -32,6 +34,8 @@ const CartContent = () => {
     const isLogin = useAuth();
 
     const { openDialog, openAsyncDialog } = useDialog();
+
+    const { addToast } = useToast();
 
     const { cartInfo, isLoading } = useCart();
 
@@ -100,8 +104,32 @@ const CartContent = () => {
     };
 
     const {
+        modify: { mutate: cartModifyMutate },
         delete: { mutate: cartDeleteMutate },
     } = useCartMutation();
+
+    const onOrderCntChangeButtonClick = ({
+        cartNo,
+        orderCnt,
+        optionInputs,
+    }: {
+        cartNo: number;
+        orderCnt: number;
+        optionInputs?: UpdateCartData[number]['optionInputs'];
+    }) => {
+        if (isLogin) {
+            cartModifyMutate({
+                data: [
+                    {
+                        cartNo,
+                        orderCnt,
+                        optionInputs,
+                    },
+                ],
+            });
+        }
+    };
+
     const onDeleteButtonClick = async (cartNos: number[]) => {
         if (cartNos.length === 0) {
             openDialog({
@@ -129,8 +157,9 @@ const CartContent = () => {
                 },
                 {
                     onSuccess: async () => {
-                        openDialog({
+                        addToast({
                             message: '장바구니에서 삭제되었습니다.',
+                            variant: 'success',
                         });
                     },
                 },
@@ -142,8 +171,9 @@ const CartContent = () => {
             //     }),
             // );
 
-            openDialog({
+            addToast({
                 message: '장바구니에서 삭제되었습니다.',
+                variant: 'success',
             });
         }
     };
@@ -379,6 +409,22 @@ const CartContent = () => {
                                                                                     className={
                                                                                         styles.quantityButton
                                                                                     }
+                                                                                    disabled={
+                                                                                        option.orderCnt <=
+                                                                                        1
+                                                                                    }
+                                                                                    onClick={() =>
+                                                                                        onOrderCntChangeButtonClick(
+                                                                                            {
+                                                                                                cartNo: option.cartNo,
+                                                                                                orderCnt:
+                                                                                                    option.orderCnt -
+                                                                                                    1,
+                                                                                                optionInputs:
+                                                                                                    option.optionInputs,
+                                                                                            },
+                                                                                        )
+                                                                                    }
                                                                                 >
                                                                                     <Minus
                                                                                         size={
@@ -399,6 +445,22 @@ const CartContent = () => {
                                                                                     type='button'
                                                                                     className={
                                                                                         styles.quantityButton
+                                                                                    }
+                                                                                    disabled={
+                                                                                        option.orderCnt >=
+                                                                                        option.stockCnt
+                                                                                    }
+                                                                                    onClick={() =>
+                                                                                        onOrderCntChangeButtonClick(
+                                                                                            {
+                                                                                                cartNo: option.cartNo,
+                                                                                                orderCnt:
+                                                                                                    option.orderCnt +
+                                                                                                    1,
+                                                                                                optionInputs:
+                                                                                                    option.optionInputs,
+                                                                                            },
+                                                                                        )
                                                                                     }
                                                                                 >
                                                                                     <Plus
