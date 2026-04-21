@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { parseAsInteger, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
+import { RecipeCard } from '@/components/recipe/card';
 import { RecipeDetailCard } from '@/components/recipe/detail-card';
 import { Paging } from '@/components/ui/paging';
 import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
@@ -17,7 +18,7 @@ const RecipesPage = () => {
     // nuqs를 사용한 쿼리 파라미터 관리
     const [queryParams, setQueryParams] = useQueryStates({
         page: parseAsInteger.withDefault(1),
-        take: parseAsInteger.withDefault(20),
+        take: parseAsInteger.withDefault(12),
         sortBy: parseAsStringLiteral([
             'LATEST',
             'BOOKMARK_COUNT',
@@ -119,26 +120,7 @@ const RecipesPage = () => {
                         }}
                     >
                         {queryParams.viewMode === 'grid' ? (
-                            <Link
-                                href={`/recipes/${recipe.sno}`}
-                                className={styles.recipeCard}
-                            >
-                                <div className={styles.thumbArea}>
-                                    <img
-                                        src={recipe.thumbnailUrl}
-                                        alt={recipe.title}
-                                        className={styles.thumbImg}
-                                    />
-                                </div>
-                                <div className={styles.recipeInfo}>
-                                    <h3 className={styles.recipeTitle}>
-                                        {recipe.title}
-                                    </h3>
-                                    <span className={styles.authorName}>
-                                        {recipe.authorName || recipe.memberName}
-                                    </span>
-                                </div>
-                            </Link>
+                            <RecipeCard recipe={recipe} />
                         ) : (
                             <RecipeDetailCard recipe={recipe} />
                         )}
@@ -151,7 +133,7 @@ const RecipesPage = () => {
                     currentPage={queryParams.page}
                     totalCount={totalCount}
                     pageSize={queryParams.take}
-                    onPageClick={(page) => setQueryParams({ page })}
+                    onPageClick={(page) => setQueryParams({ page }, { scroll: true })}
                 />
             </footer>
         </div>

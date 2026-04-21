@@ -13,7 +13,7 @@ import type {
 } from '@/models/shop/recipe';
 
 interface UsePublicRecipeSearchParams<T = SearchRecipesResponse> {
-    params: SearchPublicRecipesParams;
+    searchParams: SearchPublicRecipesParams;
     options?: Omit<
         UseQueryOptions<
             SearchRecipesResponse,
@@ -26,13 +26,13 @@ interface UsePublicRecipeSearchParams<T = SearchRecipesResponse> {
 }
 
 const usePublicRecipeSearch = <T = SearchRecipesResponse>({
-    params,
+    searchParams,
     options,
 }: UsePublicRecipeSearchParams<T>) => {
     return useQuery({
-        queryKey: recipeKeys.publicSearch(params),
+        queryKey: recipeKeys.publicSearch(searchParams),
         queryFn: async () => {
-            const { data } = await recipe.searchPublicRecipes(params);
+            const { data } = await recipe.searchPublicRecipes(searchParams);
 
             return data;
         },
