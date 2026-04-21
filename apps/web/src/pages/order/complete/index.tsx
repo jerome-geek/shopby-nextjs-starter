@@ -10,12 +10,14 @@ import { useTranslation } from 'react-i18next';
 
 import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import { CongratulationIcon } from '@/components/icons/login/Congratulation';
 import { CSRLayout } from '@/components/layout';
 import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendation';
 import { PATHS } from '@/const/paths';
 import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
 import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
 import * as styles from '@/pages/order/complete/index.css';
 import { overlay } from 'overlay-kit';
@@ -47,6 +49,7 @@ const OrderDetailsContent = ({
     isLogin: boolean;
 }) => {
     const { t } = useTranslation();
+    const { isMobile } = useResponsive();
 
     const {
         orderNo,
@@ -82,7 +85,12 @@ const OrderDetailsContent = ({
     return (
         <div className={styles.container}>
             <div className={styles.banner}>
-                <div className={styles.bannerIcon}>🎉</div>
+                <div className={styles.bannerIcon}>
+                    <CongratulationIcon
+                        width={isMobile ? 50 : 67}
+                        height={isMobile ? 50 : 67}
+                    />
+                </div>
                 <h1 className={styles.bannerTitle}>
                     {t('주문이 완료되었습니다!')}
                 </h1>
@@ -166,48 +174,54 @@ const OrderDetailsContent = ({
             <hr className={styles.divider} />
 
             <div>
-                <h2 className={styles.sectionTitle}>{t('상품 정보')}</h2>
-                {orderOptions.map((option, idx) => (
-                    <div
-                        key={`${option.orderOptionNo}-${idx}`}
-                        className={styles.productItem}
-                    >
-                        <img
-                            src={option.imageUrl}
-                            alt={option.productName}
-                            className={styles.productImage}
-                        />
-                        <div className={styles.productContent}>
-                            <p className={styles.productBrand}>
-                                {option.brandName}
-                            </p>
-                            <h3 className={styles.productName}>
-                                {option.productName}
-                            </h3>
-                            {option.optionName && (
-                                <p
-                                    style={{
-                                        fontSize: '12px',
-                                        color: '#888',
-                                        marginBottom: '4px',
-                                    }}
-                                >
-                                    {option.optionName}: {option.optionValue}
+                <h2 className={styles.sectionTitle}>{t('결제 정보')}</h2>
+                <div
+                    className={styles.productList}
+                    style={{ marginTop: '20px' }}
+                >
+                    {orderOptions.map((option, idx) => (
+                        <div
+                            key={`${option.orderOptionNo}-${idx}`}
+                            className={styles.productItem}
+                        >
+                            <img
+                                src={option.imageUrl}
+                                alt={option.productName}
+                                className={styles.productImage}
+                            />
+                            <div className={styles.productContent}>
+                                <p className={styles.productBrand}>
+                                    {option.brandName}
                                 </p>
-                            )}
-                            <div className={styles.productFooter}>
-                                <p className={styles.orderCount}>
-                                    {t('수량')} {option.orderCnt}
-                                    {t('개')}
-                                </p>
-                                <p className={styles.productPrice}>
-                                    {option.price.buyAmt.toLocaleString()}
-                                    {t('원')}
-                                </p>
+                                <h3 className={styles.productName}>
+                                    {option.productName}
+                                </h3>
+                                {option.optionName && (
+                                    <p
+                                        style={{
+                                            fontSize: '12px',
+                                            color: '#888',
+                                            marginBottom: '4px',
+                                        }}
+                                    >
+                                        {option.optionName}:{' '}
+                                        {option.optionValue}
+                                    </p>
+                                )}
+                                <div className={styles.productFooter}>
+                                    <p className={styles.orderCount}>
+                                        {t('수량')} {option.orderCnt}
+                                        {t('개')}
+                                    </p>
+                                    <p className={styles.productPrice}>
+                                        {option.price.buyAmt.toLocaleString()}
+                                        {t('원')}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
             <div className={styles.summaryContainer}>

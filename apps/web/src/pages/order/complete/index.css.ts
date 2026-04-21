@@ -1,13 +1,12 @@
 import { media } from '@/styles/media';
-import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const container = style({
     width: '100%',
     maxWidth: '792px',
     margin: '0 auto',
-    padding: '0 20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '48px',
@@ -52,7 +51,6 @@ export const infoGrid = style({
     display: 'flex',
     gap: '24px',
     alignItems: 'flex-start',
-    padding: '0 12px',
     width: '100%',
 
     '@media': {
@@ -123,6 +121,11 @@ export const productList = style({
     flexDirection: 'column',
     gap: '24px',
     width: '100%',
+    '@media': {
+        'screen and (max-width: 480px)': {
+            gap: '12px',
+        },
+    },
 });
 
 export const productSection = style({
