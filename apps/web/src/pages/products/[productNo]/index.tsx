@@ -54,6 +54,7 @@ import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 
+import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -132,10 +133,9 @@ function ProductDetailView({
     const { onLikeButtonClick } = useProductLike();
 
     const onCouponDownloadClick = () => {
-        console.log('onCouponDownloadClick');
         overlay.open((props) => {
             return isMobile ? (
-                <></>
+                <ProductCouponBottomSheet productNo={productNo} {...props} />
             ) : (
                 <ProductCouponModal productNo={productNo} {...props} />
             );
@@ -227,7 +227,7 @@ function ProductDetailView({
     const { addToast } = useToast();
 
     const onGiftButtonClick = () => {
-        if (isMobile && !isOptionBottomSheetOpen) {
+        if (isTablet && !isOptionBottomSheetOpen) {
             openOptionBottomSheet();
             return;
         }
@@ -251,7 +251,7 @@ function ProductDetailView({
     };
 
     const onCartButtonClick = () => {
-        if (isMobile && !isOptionBottomSheetOpen) {
+        if (isTablet && !isOptionBottomSheetOpen) {
             openOptionBottomSheet();
             return;
         }
@@ -307,7 +307,7 @@ function ProductDetailView({
     } = useOrderSheetMutation();
 
     const onOrderButtonClick = () => {
-        if (isMobile && !isOptionBottomSheetOpen) {
+        if (isTablet && !isOptionBottomSheetOpen) {
             openOptionBottomSheet();
             return;
         }

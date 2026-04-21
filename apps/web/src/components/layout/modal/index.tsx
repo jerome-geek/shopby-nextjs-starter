@@ -29,7 +29,7 @@ export const ModalLayout = ({
     isOpen,
     close,
     unmount,
-    size = 'auto',
+    size = 'medium',
     width,
     height,
     modalContentClass,

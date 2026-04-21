@@ -102,23 +102,3 @@ export const downloadText = style([
         color: vars.color.gray['60'],
     },
 ]);
-
-export const footerButton = style([
-    textStyles.title2Semibold,
-    {
-        width: '100%',
-        height: '64px',
-        backgroundColor: '#3b4d2f', // 스크린샷의 짙은 녹색
-        color: vars.color.white,
-        borderRadius: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        border: 'none',
-        transition: 'opacity 0.2s ease',
-        ':hover': {
-            opacity: 0.9,
-        },
-    },
-]);

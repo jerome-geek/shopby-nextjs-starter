@@ -1,5 +1,6 @@
 import { includes, map, pipe, sum, toArray } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
+import { Gift } from 'lucide-react';
 
 import * as styles from '@/components/bottom-sheet/option-select/index.css';
 import {
@@ -18,9 +19,9 @@ import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { cartKeys } from '@/hooks/queryKeys';
 import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsive } from '@/hooks/utils';
 import type { ChannelType } from '@/models';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
-import { Gift } from 'lucide-react';
 import { CURRENCY } from '@/utils/currency';
 
 export interface OptionSelectBottomSheetProps extends DefaultModalLayoutProps {
@@ -38,6 +39,8 @@ export const OptionSelectBottomSheet = ({
     const isLogin = useAuth();
     const queryClient = useQueryClient();
     const { openAddCartDialog } = useCustomDialog();
+
+    const { isDesktop } = useResponsive();
 
     const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
         useProductOption({
@@ -156,6 +159,7 @@ export const OptionSelectBottomSheet = ({
             isOpen={isOpen}
             close={close}
             unmount={unmount}
+            isUnmountCondition={isDesktop}
             title='옵션 선택'
             footerButtonList={
                 <div className={styles.footerStickyWrapper}>

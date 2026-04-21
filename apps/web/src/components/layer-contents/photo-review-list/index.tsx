@@ -8,22 +8,22 @@ import { PhotoReviewDetail } from '@/components/layer-contents/photo-review-list
 import * as styles from '@/components/layer-contents/photo-review-list/index.css';
 import { DefaultModalLayoutProps } from '@/components/layout';
 import { PHOTO_PAGE_SIZE } from '@/components/product/product-tabs/review';
-import { Button } from '@/components/ui';
 import PagingV2 from '@/components/ui/paging-v2';
 import { usePhotoReviewList } from '@/hooks/query/display/review';
 
 interface PhotoReviewListProps extends DefaultModalLayoutProps {
     productNo: number;
-    reviewNo: number;
+    selectedReviewNo: number;
+    setSelectedReviewNo: (reviewNo: number) => void;
 }
 
 export const PhotoReviewList = ({
     productNo,
-    reviewNo,
+    selectedReviewNo,
+    setSelectedReviewNo,
 }: PhotoReviewListProps) => {
     const { t } = useTranslation();
 
-    const [selectedReviewNo, setSelectedReviewNo] = useState<number>(reviewNo);
     const [pageNumber, setPageNumber] = useState(1);
 
     const isDetail = selectedReviewNo > 0;
@@ -63,16 +63,6 @@ export const PhotoReviewList = ({
                     productNo={productNo}
                     reviewNo={selectedReviewNo}
                 />
-
-                <Button
-                    frame='outlined'
-                    variant='secondary'
-                    type='button'
-                    className={styles.backButton}
-                    onClick={() => setSelectedReviewNo(0)}
-                >
-                    {t('목록으로')}
-                </Button>
             </div>
         );
     }

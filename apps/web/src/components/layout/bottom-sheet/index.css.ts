@@ -75,6 +75,16 @@ export const bottomSheetContent = recipe({
         overflowY: 'auto',
         overflowX: 'hidden',
         padding: '0 20px 20px',
+
+        selectors: {
+            '&::-webkit-scrollbar': {
+                width: '4px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+                backgroundColor: vars.color.gray['30'],
+                borderRadius: '10px',
+            },
+        },
     },
     variants: {
         isHeader: {

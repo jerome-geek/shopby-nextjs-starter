@@ -1,24 +1,26 @@
 import { useTranslation } from 'react-i18next';
 
 import { ProductCoupon } from '@/components/layer-contents/product-coupon';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
+import {
+    BottomSheetLayout,
+    DefaultBottomSheetProps,
+} from '@/components/layout';
 import { Button } from '@/components/ui';
 
-interface ProductCouponModalProps extends DefaultModalLayoutProps {
+interface ProductCouponBottomSheetProps extends DefaultBottomSheetProps {
     productNo: number;
 }
 
-export const ProductCouponModal = ({
+export const ProductCouponBottomSheet = ({
     productNo,
     ...props
-}: ProductCouponModalProps) => {
+}: ProductCouponBottomSheetProps) => {
     const { t } = useTranslation();
 
     return (
-        <ModalLayout
+        <BottomSheetLayout
             {...props}
             title='쿠폰 받기'
-            size='medium'
             footerButtonList={[
                 <Button
                     key='download-all'
@@ -33,6 +35,6 @@ export const ProductCouponModal = ({
             ]}
         >
             <ProductCoupon productNo={productNo} {...props} />
-        </ModalLayout>
+        </BottomSheetLayout>
     );
 };

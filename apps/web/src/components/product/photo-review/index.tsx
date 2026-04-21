@@ -11,6 +11,7 @@ import * as styles from '@/components/product/photo-review/index.css';
 import { PHOTO_PAGE_SIZE } from '@/components/product/product-tabs/review';
 import { usePhotoReviewList } from '@/hooks/query/display/review';
 import { useResponsive } from '@/hooks/utils';
+import { BREAKPOINTS } from '@/styles/media';
 
 import 'swiper/css';
 
@@ -65,9 +66,11 @@ const PhotoReview = () => {
                             slidesPerView={3.2}
                             spaceBetween={12}
                             breakpoints={{
-                                1024: {
+                                [BREAKPOINTS.SM]: {
+                                    slidesPerView: 4.2,
+                                },
+                                [BREAKPOINTS.MD]: {
                                     slidesPerView: 5,
-                                    spaceBetween: 12,
                                 },
                             }}
                         >

@@ -44,6 +44,7 @@ export const headerInner = style({
     '@media': {
         [media.tablet]: {
             gap: '16px',
+            padding: '0',
         },
         [media.mobile]: {
             alignItems: 'flex-end',

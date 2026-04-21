@@ -1,8 +1,8 @@
 import { recipe } from '@vanilla-extract/recipes';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const button = recipe({
     base: [
@@ -51,6 +51,10 @@ export const button = recipe({
             tertiary: {
                 color: vars.color.black,
                 backgroundColor: vars.color.green['20'],
+            },
+            green: {
+                color: vars.color.white,
+                backgroundColor: vars.color.green['100'],
             },
             kakao: {
                 color: vars.color.black,
