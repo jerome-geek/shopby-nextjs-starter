@@ -7,7 +7,7 @@ import * as styles from '@/components/recipe/preview-image/index.css';
 
 export interface RecipePreviewImageProps {
     isMain?: boolean;
-    sno: number | null;
+    sno: number | null | undefined;
     url: string;
     onDeleteButtonClick?: (sno: number) => void;
     onClick?: () => void;

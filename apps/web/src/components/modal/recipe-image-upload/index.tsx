@@ -1,6 +1,6 @@
 import {
-    DndContext,
     closestCenter,
+    DndContext,
     KeyboardSensor,
     PointerSensor,
     useSensor,
@@ -9,17 +9,17 @@ import {
 } from '@dnd-kit/core';
 import {
     arrayMove,
+    rectSortingStrategy,
     SortableContext,
     sortableKeyboardCoordinates,
-    rectSortingStrategy,
     useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Loader2, Plus, X } from 'lucide-react';
-import { motion, AnimatePresence, type Variants } from 'motion/react';
+import { AnimatePresence, motion, type Variants } from 'motion/react';
+import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
 
 import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
 import * as styles from '@/components/modal/recipe-image-upload/index.css';
@@ -93,7 +93,7 @@ const SortableImageItem = ({
                 {...attributes}
                 {...listeners}
             >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {}
                 <img
                     src={src}
                     alt={`${index + 1}`}
@@ -190,12 +190,17 @@ export const RecipeImageUploadModal = (props: DefaultModalLayoutProps) => {
                         className={styles.nextButton}
                         disabled={images.length === 0 || isLoading}
                         onClick={() =>
-                            uploadAndRegister.mutate(images, {
-                                onSuccess: () => {
-                                    handleClose();
-                                    router.push(PATHS.RECIPES.WRITE);
+                            uploadAndRegister.mutate(
+                                { blobUrls: images },
+                                {
+                                    onSuccess: () => {
+                                        handleClose();
+                                        if (!router.pathname.includes(PATHS.RECIPES.WRITE)) {
+                                            router.push(PATHS.RECIPES.WRITE);
+                                        }
+                                    },
                                 },
-                            })
+                            )
                         }
                     >
                         {isLoading ? (

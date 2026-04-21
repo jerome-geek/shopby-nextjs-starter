@@ -9,6 +9,7 @@ import type {
     CreateRecipeData,
     RegisterManualTempImagesData,
     BookmarkRecipeData,
+    UpdateRecipeData,
 } from '@/models/shop/recipe';
 import { useToast } from '@/hooks/ui';
 import { recipeKeys, collectionKeys } from '@/hooks/queryKeys';
@@ -116,12 +117,23 @@ const useRecipeMutation = () => {
             onError: onMutationError,
         }),
 
-        /**
-         * 레시피 북마크 취소
-         */
         unBookmarkRecipe: useMutation({
             mutationFn: async ({ sno }: { sno: number }) =>
                 await recipe.unBookmarkRecipe(sno),
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
+        }),
+        /**
+         * 레시피 수정
+         */
+        updateRecipe: useMutation({
+            mutationFn: async ({
+                sno,
+                data,
+            }: {
+                sno: number;
+                data: UpdateRecipeData;
+            }) => await recipe.updateRecipe(sno, data),
             onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),

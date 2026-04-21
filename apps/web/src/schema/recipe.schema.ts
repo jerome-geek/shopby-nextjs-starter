@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-export const recipeCreateSchema = z.object({
+export const baseRecipeSchema = z.object({
     title: z.string().min(1, '제목을 입력해주세요'),
     description: z.string().min(1, '설명을 입력해주세요'),
     cookTimeMinutes: z.number().optional().nullable(),
     servings: z.number().optional().nullable(),
     caloriesPerServingKcal: z.number().optional().nullable(),
-    thumbnailTempImageSno: z.number().min(1, '대표 이미지를 등록해주세요'),
+    thumbnailTempImageSno: z.number().optional().nullable(),
     ingredients: z
         .array(
             z.object({
@@ -21,10 +21,18 @@ export const recipeCreateSchema = z.object({
                 stepNumber: z.number().int(),
                 description: z.string().min(1, '상세 내용을 입력해주세요'),
                 tempImageSno: z.number().optional().nullable(),
-                imageUrl: z.string().optional().nullable(),
+                stepImageUrl: z.string().optional().nullable(), // create, update 양쪽에서 타입 에러 없도록 통일
             }),
         )
         .min(1, '최소 한 개 이상의 조리 순서가 필요합니다'),
 });
 
+export const recipeCreateSchema = baseRecipeSchema.extend({});
+
+export const recipeUpdateSchema = baseRecipeSchema.extend({
+    thumbnailUrl: z.string().nullish(),
+});
+
 export type RecipeCreateInput = z.infer<typeof recipeCreateSchema>;
+export type RecipeUpdateInput = z.infer<typeof recipeUpdateSchema>;
+export type RecipeFormInput = RecipeCreateInput | RecipeUpdateInput;

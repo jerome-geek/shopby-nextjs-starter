@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
+import common from '@/api/shop/common';
 import recipe from '@/api/shop/recipe';
 import { useRecipeManualStore } from '@/store/useRecipeManualStore';
-import common from '@/api/shop/common';
 
 /**
  * blob URL(string)을 File 객체로 변환합니다.
@@ -32,7 +32,13 @@ const useRecipeImageUploadMutation = () => {
      * 4. 성공 시 Zustand store에 결과 저장
      */
     const uploadAndRegister = useMutation({
-        mutationFn: async (blobUrls: string[]) => {
+        mutationFn: async ({
+            blobUrls,
+            startOrder = 1,
+        }: {
+            blobUrls: string[];
+            startOrder?: number;
+        }) => {
             // Step 1: blob URL → File 변환 (병렬)
             const files = await Promise.all(
                 blobUrls.map((url, i) => blobUrlToFile(url, i)),
@@ -53,7 +59,7 @@ const useRecipeImageUploadMutation = () => {
                 originFileName: result.data.originFileName,
                 size: result.data.size,
                 contentType: result.data.contentType,
-                sortOrder: index + 1,
+                sortOrder: startOrder + index,
             }));
 
             // Step 4: 임시 이미지 등록
@@ -64,11 +70,16 @@ const useRecipeImageUploadMutation = () => {
             return registered;
         },
         onSuccess: ({ data }) => {
-            // Zustand store에 저장 (sortOrder 기준으로 정렬 보장)
-            const sorted = [...data.tempImages].sort(
+            // 기존 이미지 목록 가져오기
+            const currentImages = useRecipeManualStore.getState().tempImages;
+
+            // 새 이미지 정렬 (sortOrder 기준)
+            const newSortedImages = [...data.tempImages].sort(
                 (a, b) => a.sortOrder - b.sortOrder,
             );
-            setTempImages(sorted);
+
+            // 기존 이미지 뒤에 추가
+            setTempImages([...currentImages, ...newSortedImages]);
         },
     });
 
