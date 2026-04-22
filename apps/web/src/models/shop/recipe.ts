@@ -69,6 +69,8 @@ export interface CreateManualRecipeStep {
     description: string;
     /** 조리 단계 이미지 URL */
     stepImageUrl?: string | null;
+    /** 임시 이미지 번호 */
+    tempImageSno?: number | null;
 }
 
 /** 수동 레시피 생성 요청 */
@@ -84,7 +86,9 @@ export interface CreateManualRecipeData {
     /** 1인분당 칼로리 */
     caloriesPerServingKcal?: number | null;
     /** 대표 썸네일 URL */
-    thumbnailUrl: string;
+    thumbnailUrl?: string | null;
+    /** 대표 썸네일 임시 이미지 번호 */
+    thumbnailTempImageSno?: number | null;
     /** 재료 목록 */
     ingredients: CreateManualRecipeIngredient[];
     /** 조리 단계 목록 */
@@ -292,7 +296,9 @@ export interface UpdateRecipeData {
     /** 1인분당 칼로리 */
     caloriesPerServingKcal: number;
     /** 대표 썸네일 URL */
-    thumbnailUrl: string;
+    thumbnailUrl?: string | null;
+    /** 대표 썸네일 임시 이미지 번호 */
+    thumbnailTempImageSno?: number | null;
     /** 재료 목록 */
     ingredients: {
         /** 재료명 */
@@ -308,6 +314,8 @@ export interface UpdateRecipeData {
         description: string;
         /** 대표 썸네일 URL */
         stepImageUrl?: string;
+        /** 임시 이미지 번호 */
+        tempImageSno?: number | null;
     }[];
 }
 

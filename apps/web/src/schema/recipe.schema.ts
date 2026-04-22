@@ -7,6 +7,7 @@ export const baseRecipeSchema = z.object({
     servings: z.number().optional().nullable(),
     caloriesPerServingKcal: z.number().optional().nullable(),
     thumbnailUrl: z.string().optional().nullable(),
+    thumbnailTempImageSno: z.number().optional().nullable(),
     ingredients: z
         .array(
             z.object({
@@ -21,6 +22,7 @@ export const baseRecipeSchema = z.object({
                 stepNumber: z.number().int(),
                 description: z.string().min(1, '상세 내용을 입력해주세요'),
                 stepImageUrl: z.string().optional().nullable(),
+                tempImageSno: z.number().optional().nullable(),
             }),
         )
         .min(1, '최소 한 개 이상의 조리 순서가 필요합니다'),

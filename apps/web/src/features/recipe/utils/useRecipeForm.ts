@@ -84,6 +84,7 @@ export const useRecipeForm = ({
                     stepNumber: 1,
                     description: '',
                     stepImageUrl: null,
+                    tempImageSno: null,
                 },
             ],
         },
@@ -152,12 +153,14 @@ export const useRecipeForm = ({
                           stepNumber: step.stepNumber,
                           description: step.description || '',
                           stepImageUrl: step.stepImageUrl,
+                          tempImageSno: null,
                       }))
                     : [
                           {
                               stepNumber: 1,
                               description: '',
                               stepImageUrl: null,
+                              tempImageSno: null,
                           },
                       ],
         });
@@ -219,6 +222,7 @@ export const useRecipeForm = ({
                           stepNumber: index + 1,
                           description: existingStep?.description || '',
                           stepImageUrl: img.imageUrl,
+                          tempImageSno: img.sno,
                       };
                   })
                 : [
@@ -226,6 +230,7 @@ export const useRecipeForm = ({
                           stepNumber: 1,
                           description: '',
                           stepImageUrl: null,
+                          tempImageSno: null,
                       },
                   ];
 
@@ -268,6 +273,10 @@ export const useRecipeForm = ({
                     setValue(
                         `steps.${targetStepIndex}.stepImageUrl`,
                         newUploaded[0].imageUrl,
+                    );
+                    setValue(
+                        `steps.${targetStepIndex}.tempImageSno`,
+                        newUploaded[0].sno,
                     );
                 }
             }
@@ -354,9 +363,7 @@ export const useRecipeForm = ({
 
     const onDeleteStepImage = (stepIndex: number) => {
         setValue(`steps.${stepIndex}.stepImageUrl`, null);
-
-        // 스토어 삭제를 원한다면 여기서 연동 추가 기능 구현 가능.
-        // 그러나 보통 상단 갤러리 수정이 메인이므로, 여기서는 단계와의 연결만 끊음 (UX 원칙)
+        setValue(`steps.${stepIndex}.tempImageSno`, null);
     };
 
     const onSubmitHandler = handleSubmit(async (data) => {
@@ -377,23 +384,28 @@ export const useRecipeForm = ({
                 return {
                     stepNumber: step.stepNumber,
                     description: step.description,
-                    stepImageUrl: step.stepImageUrl,
+                    ...(isModify
+                        ? { stepImageUrl: step.stepImageUrl }
+                        : { tempImageSno: step.tempImageSno }),
                 };
             });
 
+            // 생성/수정 공통 필드 구성 (thumbnailUrl은 일단 제외)
+            const { thumbnailUrl, ...baseData } = data;
             const finalData = {
-                ...data,
+                ...baseData,
                 steps: finalSteps,
-                thumbnailUrl:
-                    mainImage?.imageUrl ??
-                    currentImages[0]?.imageUrl ??
-                    data.thumbnailUrl,
+                thumbnailTempImageSno:
+                    mainImage?.sno ?? currentImages[0]?.sno ?? null,
             };
 
             if (isModify && recipeDetailData) {
                 await updateRecipeAsync({
                     sno: recipeDetailData.sno,
-                    data: finalData as UpdateRecipeData,
+                    data: {
+                        ...finalData,
+                        thumbnailUrl: data.thumbnailUrl,
+                    } as UpdateRecipeData,
                 });
                 addToast({ message: t('레시피가 수정되었습니다.') });
                 router.replace(`/recipes/${recipeDetailData.sno}`);

@@ -13,10 +13,10 @@ interface RecipeStepSectionProps {
     isModify: boolean;
     stepFields: Record<'id', string>[];
     tempImages: ManualTempImage[];
-    onInsert: (index: number, item: { stepNumber: number; description: string; tempImageSno: number | null }) => void;
+    onInsert: (index: number, item: { stepNumber: number; description: string; tempImageSno: number | null; stepImageUrl: string | null }) => void;
     onRemove: (index: number) => void;
     onFileChange: (e: React.ChangeEvent<HTMLInputElement>, stepIndex: number) => void;
-    onDeleteStepImage: (stepIndex: number, tempImageSno: number | null) => void;
+    onDeleteStepImage: (stepIndex: number) => void;
 }
 
 export const RecipeStepSection = ({
@@ -71,6 +71,7 @@ export const RecipeStepSection = ({
                                                     stepNumber: idx + 2,
                                                     description: '',
                                                     tempImageSno: null,
+                                                    stepImageUrl: null,
                                                 })
                                             }
                                         >
@@ -102,7 +103,7 @@ export const RecipeStepSection = ({
                                             <RecipePreviewImage
                                                 url={stepImage?.imageUrl || stepImageUrl}
                                                 sno={stepImage?.sno || tempImageSno}
-                                                onDeleteButtonClick={() => onDeleteStepImage(idx, stepImage?.sno || tempImageSno)}
+                                                onDeleteButtonClick={() => onDeleteStepImage(idx)}
                                             />
                                         </div>
                                     ) : (
