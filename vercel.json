@@ -1,5 +1,4 @@
 {
     "version": 2,
-    "regions": ["icn1"],
-    "ignoreBuildStep": "npx turbo-ignore"
+    "regions": ["icn1"]
 }
