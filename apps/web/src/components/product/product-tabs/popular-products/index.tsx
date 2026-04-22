@@ -24,15 +24,15 @@ const PopularProducts = () => {
                 by: 'POPULAR',
                 direction: 'DESC',
             },
-            // categoryNos: [mainCategoryNo],
+            categoryNos: [mainCategoryNo],
             filter: {
                 soldout: false,
                 saleStatus: 'RESERVATION_AND_ONSALE',
             },
         },
-        // options: {
-        //     enabled: !!mainCategoryNo,
-        // },
+        options: {
+            enabled: !!mainCategoryNo,
+        },
     });
 
     if (isEmpty(productListData?.items ?? [])) {
@@ -55,7 +55,7 @@ const PopularProducts = () => {
             >
                 {productListData?.items?.map((item) => (
                     <SwiperSlide key={item.productNo}>
-                        <ProductCard {...item} />
+                        <ProductCard {...item} isTimeSaleEnabled={false} />
                     </SwiperSlide>
                 ))}
             </Swiper>
