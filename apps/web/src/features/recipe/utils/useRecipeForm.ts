@@ -352,7 +352,7 @@ export const useRecipeForm = ({
         }
     };
 
-    const onDeleteStepImage = (stepIndex: number, imageUrl: string | null) => {
+    const onDeleteStepImage = (stepIndex: number) => {
         setValue(`steps.${stepIndex}.stepImageUrl`, null);
 
         // 스토어 삭제를 원한다면 여기서 연동 추가 기능 구현 가능.

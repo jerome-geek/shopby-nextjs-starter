@@ -1,6 +1,5 @@
 import { LayoutGrid, List } from 'lucide-react';
 import { motion } from 'motion/react';
-import Link from 'next/link';
 import { parseAsInteger, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
@@ -133,7 +132,9 @@ const RecipesPage = () => {
                     currentPage={queryParams.page}
                     totalCount={totalCount}
                     pageSize={queryParams.take}
-                    onPageClick={(page) => setQueryParams({ page }, { scroll: true })}
+                    onPageClick={(page) =>
+                        setQueryParams({ page }, { scroll: true })
+                    }
                 />
             </footer>
         </div>
