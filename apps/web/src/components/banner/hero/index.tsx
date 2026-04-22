@@ -175,7 +175,7 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
                             >
                                 <Link
                                     href={getLandingUrl({
-                                        landingUrl: banner.landingUrlType,
+                                        landingUrl: banner.landingUrl,
                                         landingUrlType: banner.landingUrlType,
                                     })}
                                     target={getLinkTarget(
