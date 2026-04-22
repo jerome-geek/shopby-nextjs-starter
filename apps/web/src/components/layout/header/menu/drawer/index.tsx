@@ -1,11 +1,15 @@
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperInstance } from 'swiper/types';
 
-import * as styles from '@/components/layout/header/menu/index.css';
+import * as styles from '@/components/layout/header/menu/drawer/index.css';
 import { PATHS } from '@/const/paths';
 import { useSuspenseMainCategory } from '@/hooks/useMainCategory';
 import { useResponsive } from '@/hooks/utils/useResponsive';
+import { vars } from '@/styles/theme.css';
 
 interface MenuDrawerProps {
     isOpen: boolean;
@@ -19,9 +23,10 @@ export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
     const [selectedCategoryNo, setSelectedCategoryNo] = useState<number | null>(
         null,
     );
-    const [canScrollRight, setCanScrollRight] = useState(false);
 
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const [swiper, setSwiper] = useState<SwiperInstance | null>(null);
+    const [canScrollPrev, setCanScrollPrev] = useState(false);
+    const [canScrollNext, setCanScrollNext] = useState(false);
 
     const activeCategoryNo = selectedCategoryNo ?? oneDepthDefaultCategoryNo;
 
@@ -33,47 +38,35 @@ export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
 
     const { isMobile } = useResponsive();
 
-    // 스크롤 가능 여부 체크
-    const checkScrollable = () => {
-        if (scrollRef.current) {
-            const { scrollWidth, clientWidth, scrollLeft } = scrollRef.current;
-            // 여유분 1px
-            setCanScrollRight(
-                scrollWidth > clientWidth &&
-                    scrollWidth - clientWidth > scrollLeft + 1,
-            );
+    const syncSwiperNavState = (s?: SwiperInstance | null) => {
+        const instance = s ?? swiper;
+        if (!instance) {
+            setCanScrollPrev(false);
+            setCanScrollNext(false);
+            return;
         }
+
+        // slides가 1페이지면 isLocked=true
+        const locked = Boolean(instance.isLocked);
+        setCanScrollPrev(!locked && !instance.isBeginning);
+        setCanScrollNext(!locked && !instance.isEnd);
     };
 
-    // 카테고리 변경 시 스크롤 체크
-    useEffect(() => {
-        if (activeCategory) {
-            setTimeout(checkScrollable, 0);
+    const handlePrevClick = () => {
+        if (!swiper) {
+            return;
         }
-    }, [activeCategory]);
-
-    const handleScrollNext = () => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
-        }
+        swiper.slidePrev();
+        requestAnimationFrame(() => syncSwiperNavState(swiper));
     };
 
-    // 스크롤 이벤트 리스너
-    useEffect(() => {
-        const handleScroll = () => {
-            checkScrollable();
-        };
-
-        const container = scrollRef.current;
-        if (container) {
-            container.addEventListener('scroll', handleScroll);
+    const handleNextClick = () => {
+        if (!swiper) {
+            return;
         }
-        return () => {
-            if (container) {
-                container.removeEventListener('scroll', handleScroll);
-            }
-        };
-    }, [activeCategory]);
+        swiper.slideNext();
+        requestAnimationFrame(() => syncSwiperNavState(swiper));
+    };
 
     // 외부 클릭 닫기
     useEffect(() => {
@@ -93,7 +86,17 @@ export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [isOpen]);
+    }, [isOpen, setIsOpen]);
+
+    useEffect(() => {
+        queueMicrotask(() => syncSwiperNavState());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeCategoryNo, swiper]);
+
+    if (isMobile) {
+        setIsOpen(false);
+        return null;
+    }
 
     return (
         <AnimatePresence>
@@ -108,7 +111,7 @@ export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
                         stiffness: 500,
                         type: 'spring',
                     }}
-                    style={{ overflow: 'hidden' }} // 애니메이션 중 내용 넘침 방지
+                    style={{ overflow: 'hidden' }}
                 >
                     <div className={styles.drawerInner}>
                         <div className={styles.sidebar}>
@@ -139,21 +142,11 @@ export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
                                     </span>
                                     {activeCategoryNo ===
                                         category.categoryNo && (
-                                        <svg
-                                            width='16'
-                                            height='16'
-                                            viewBox='0 0 24 24'
-                                            fill='none'
-                                            style={{ marginLeft: 'auto' }}
-                                        >
-                                            <path
-                                                d='M9 18L15 12L9 6'
-                                                stroke='currentColor'
-                                                strokeWidth='2'
-                                                strokeLinecap='round'
-                                                strokeLinejoin='round'
-                                            />
-                                        </svg>
+                                        <ArrowRight
+                                            size={16}
+                                            strokeWidth={2}
+                                            color={vars.color.green['100']}
+                                        />
                                     )}
                                 </button>
                             ))}
@@ -161,64 +154,108 @@ export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
 
                         <div className={styles.content}>
                             <div className={styles.contentWrapper}>
-                                <div
-                                    className={styles.scrollContainer}
-                                    ref={scrollRef}
+                                <Swiper
+                                    key={activeCategoryNo}
+                                    slidesPerView={'auto'}
+                                    spaceBetween={29}
+                                    onSwiper={(s) => {
+                                        setSwiper(s);
+                                        syncSwiperNavState(s);
+
+                                        s.on('reachBeginning', () =>
+                                            syncSwiperNavState(s),
+                                        );
+                                        s.on('reachEnd', () =>
+                                            syncSwiperNavState(s),
+                                        );
+                                        s.on('fromEdge', () =>
+                                            syncSwiperNavState(s),
+                                        );
+                                    }}
+                                    onSlideChange={(s) => syncSwiperNavState(s)}
+                                    onResize={(s) => syncSwiperNavState(s)}
                                 >
                                     {activeCategory?.children?.map(
                                         (subCategory) => (
-                                            <div
+                                            <SwiperSlide
                                                 key={subCategory.categoryNo}
-                                                className={
-                                                    styles.subCategoryColumn
-                                                }
+                                                style={{ width: 'auto' }}
                                             >
-                                                <Link
-                                                    href={PATHS.CATEGORIES.DETAIL(
-                                                        subCategory.categoryNo,
-                                                    )}
+                                                <div
                                                     className={
-                                                        styles.subCategoryTitle
-                                                    }
-                                                    onClick={() =>
-                                                        setIsOpen(false)
+                                                        styles.subCategoryColumn
                                                     }
                                                 >
-                                                    {subCategory.label}
-                                                </Link>
-                                                {subCategory.children?.map(
-                                                    (leafCategory) => (
-                                                        <Link
-                                                            key={
-                                                                leafCategory.categoryNo
-                                                            }
-                                                            href={PATHS.CATEGORIES.DETAIL(
-                                                                leafCategory.categoryNo,
-                                                            )}
-                                                            className={
-                                                                styles.leafCategoryLink
-                                                            }
-                                                            onClick={() =>
-                                                                setIsOpen(false)
-                                                            }
-                                                        >
-                                                            {leafCategory.label}
-                                                        </Link>
-                                                    ),
-                                                )}
-                                            </div>
+                                                    <Link
+                                                        href={PATHS.CATEGORIES.DETAIL(
+                                                            subCategory.categoryNo,
+                                                        )}
+                                                        className={
+                                                            styles.subCategoryTitle
+                                                        }
+                                                        onClick={() =>
+                                                            setIsOpen(false)
+                                                        }
+                                                    >
+                                                        {subCategory.label}
+                                                    </Link>
+                                                    {subCategory.children?.map(
+                                                        (leafCategory) => (
+                                                            <Link
+                                                                key={
+                                                                    leafCategory.categoryNo
+                                                                }
+                                                                href={PATHS.CATEGORIES.DETAIL(
+                                                                    leafCategory.categoryNo,
+                                                                )}
+                                                                className={
+                                                                    styles.leafCategoryLink
+                                                                }
+                                                                onClick={() =>
+                                                                    setIsOpen(
+                                                                        false,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {
+                                                                    leafCategory.label
+                                                                }
+                                                            </Link>
+                                                        ),
+                                                    )}
+                                                </div>
+                                            </SwiperSlide>
                                         ),
                                     )}
-                                </div>
-                                {canScrollRight && (
+                                </Swiper>
+
+                                {canScrollPrev ? (
+                                    <button
+                                        className={`${styles.scrollButton} ${styles.scrollButtonLeft}`}
+                                        type='button'
+                                        onClick={handlePrevClick}
+                                        aria-label='Prev'
+                                    >
+                                        <ArrowLeft
+                                            size={20}
+                                            color={vars.color.gray['60']}
+                                        />
+                                    </button>
+                                ) : null}
+
+                                {canScrollNext ? (
                                     <button
                                         className={styles.scrollButton}
-                                        onClick={handleScrollNext}
+                                        type='button'
+                                        onClick={handleNextClick}
                                         aria-label='Next'
                                     >
-                                        <ArrowRightIcon />
+                                        <ArrowRight
+                                            size={20}
+                                            color={vars.color.gray['60']}
+                                        />
                                     </button>
-                                )}
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -227,15 +264,3 @@ export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
         </AnimatePresence>
     );
 }
-
-const ArrowRightIcon = () => (
-    <svg width='20' height='20' viewBox='0 0 24 24' fill='none'>
-        <path
-            d='M9 18L15 12L9 6'
-            stroke='currentColor'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-        />
-    </svg>
-);
