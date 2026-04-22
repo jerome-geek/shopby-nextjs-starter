@@ -28,11 +28,7 @@ export default function CategoryPage() {
     const router = useRouter();
     const { categoryNo } = router.query;
 
-    const parsedCategoryNo = useMemo(() => {
-        const raw = Array.isArray(categoryNo) ? categoryNo[0] : categoryNo;
-        const parsed = Number(raw);
-        return Number.isFinite(parsed) ? parsed : undefined;
-    }, [categoryNo]);
+    const parsedCategoryNo = Number(categoryNo) || undefined;
 
     const { depth4CategoryList, depth3CategoryNo, depth4CategoryNo } =
         useCategoryMenu(parsedCategoryNo);
@@ -84,10 +80,6 @@ export default function CategoryPage() {
             )?.id ?? SORT_OPTIONS[0].id
         );
     }, [appliedSearchParams.order?.by, appliedSearchParams.order?.direction]);
-
-    if (parsedCategoryNo == null) {
-        return <div className={styles.container}>Loading...</div>;
-    }
 
     return (
         <div className={styles.container}>

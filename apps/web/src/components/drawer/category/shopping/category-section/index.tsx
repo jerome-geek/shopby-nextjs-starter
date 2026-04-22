@@ -4,27 +4,21 @@ import { useCallback, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/drawer/category/shopping/category-section/index.css';
-import { CATEGORY_CODE } from '@/const/category';
-import { useCategoryAll } from '@/hooks/suspenseQuery/display/category';
+import { useSuspenseMainCategory } from '@/hooks/useMainCategory';
 import { vars } from '@/styles/theme.css';
 
 const CategorySection = () => {
-    const { data: categoryAllData } = useCategoryAll();
-
-    const mainCategory = categoryAllData?.multiLevelCategories.find(
-        (category) => category.managementCode === CATEGORY_CODE.MAIN,
-    );
-
-    const defaultOneDepthCategoryNo = mainCategory?.children?.[0]?.categoryNo;
+    const { mainCategoryChildrenList, oneDepthDefaultCategoryNo } =
+        useSuspenseMainCategory();
 
     const [selectedOneDepthCategoryNo, setSelectedOneDepthCategoryNo] =
-        useState(() => defaultOneDepthCategoryNo);
+        useState(() => oneDepthDefaultCategoryNo);
 
     const selectedOneDepthCategory = useMemo(() => {
-        return mainCategory?.children?.find(
+        return mainCategoryChildrenList?.find(
             (category) => category.categoryNo === selectedOneDepthCategoryNo,
         );
-    }, [mainCategory?.children, selectedOneDepthCategoryNo]);
+    }, [mainCategoryChildrenList, selectedOneDepthCategoryNo]);
 
     const twoDepthCategoryList = useMemo(() => {
         return selectedOneDepthCategory?.children ?? [];
@@ -73,7 +67,7 @@ const CategorySection = () => {
         (categoryNo: number) => {
             setSelectedOneDepthCategoryNo(categoryNo);
 
-            const selectedTwoDepthCategory = mainCategory?.children?.find(
+            const selectedTwoDepthCategory = mainCategoryChildrenList?.find(
                 (category) => category.categoryNo === categoryNo,
             );
 
@@ -86,7 +80,7 @@ const CategorySection = () => {
                 onClickTwoDepthCategory(defaultTwoDepthCategoryNo, true);
             }, 0);
         },
-        [onClickTwoDepthCategory, mainCategory?.children],
+        [onClickTwoDepthCategory, mainCategoryChildrenList],
     );
 
     return (
@@ -96,7 +90,7 @@ const CategorySection = () => {
                 id='one-depth-category-swiper-container'
             >
                 <Swiper slidesPerView={'auto'} spaceBetween={4}>
-                    {mainCategory?.children.map((category) => (
+                    {mainCategoryChildrenList.map((category) => (
                         <SwiperSlide key={category.categoryNo}>
                             <div
                                 className={styles.oneDepthCategoryItem}

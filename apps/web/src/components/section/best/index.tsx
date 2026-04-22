@@ -10,8 +10,8 @@ import ProductCard from '@/components/product/card';
 import * as styles from '@/components/section/best/index.css';
 import { CATEGORY_CODE } from '@/const/category';
 import { PATHS } from '@/const/paths';
-import { useCategoryAll } from '@/hooks/query/display/category';
 import { useBestSellerProductList } from '@/hooks/query/product/product';
+import { useMainCategory } from '@/hooks/useMainCategory';
 import { BREAKPOINTS } from '@/styles/media';
 
 import 'swiper/css';
@@ -21,19 +21,13 @@ import 'swiper/css/pagination';
 export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
     const { t } = useTranslation();
 
-    const { data: categoryData } = useCategoryAll();
-
-    const mainCategory = useMemo(() => {
-        return categoryData?.multiLevelCategories?.find(
-            (category) => category.managementCode === CATEGORY_CODE.MAIN,
-        );
-    }, [categoryData]);
+    const { mainCategoryChildrenList } = useMainCategory();
 
     const currentCategory = useMemo(() => {
-        return mainCategory?.children?.find(
+        return mainCategoryChildrenList?.find(
             (category) => category.managementCode === CATEGORY_CODE[type],
         );
-    }, [mainCategory, type]);
+    }, [mainCategoryChildrenList, type]);
 
     const [selectedCategory, setSelectedCategory] = useState(0);
 

@@ -26,7 +26,6 @@ import {
     type SearchTabId,
 } from '@/const/search';
 import { useInfiniteProductList } from '@/hooks/infiniteQuery/product/product';
-import { useCategoriesByCode } from '@/hooks/query/display/category';
 import { useProductList } from '@/hooks/query/product/product';
 import {
     useInfinitePublicCollectionSearch,
@@ -36,6 +35,7 @@ import {
     useInfinitePublicRecipeSearch,
     usePublicRecipeSearch,
 } from '@/hooks/query/shop/recipe';
+import { useMainCategory } from '@/hooks/useMainCategory';
 import { useProductFilter } from '@/hooks/useProductFilter';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/search/index.css';
@@ -86,13 +86,7 @@ const Search = () => {
 
     const router = useRouter();
 
-    const { data: mainCategoryData } = useCategoriesByCode({
-        data: {
-            codes: ['MAIN'],
-        },
-    });
-
-    const mainCategoryNo = mainCategoryData?.[0]?.displayCategoryNo ?? 0;
+    const { mainCategoryNo } = useMainCategory();
 
     const { appliedSearchParams } = useProductFilter({
         categoryNo: mainCategoryNo,
@@ -290,8 +284,8 @@ const Search = () => {
     ]);
     const productTotalCount =
         selectedTab === 'shopping' && !isTablet
-            ? (productListData?.totalCount ?? 0)
-            : (infiniteProductListData?.pages[0]?.data.totalCount ?? 0);
+            ? productListData?.totalCount ?? 0
+            : infiniteProductListData?.pages[0]?.data.totalCount ?? 0;
 
     const recipeList = useMemo(() => {
         if (selectedTab === 'recipe' && !isTablet) {
@@ -302,8 +296,8 @@ const Search = () => {
     }, [infiniteRecipeData, isTablet, recipeData?.data, selectedTab]);
     const recipeTotalCount =
         selectedTab === 'recipe' && !isTablet
-            ? (recipeData?.count ?? 0)
-            : (infiniteRecipeData?.pages[0]?.count ?? 0);
+            ? recipeData?.count ?? 0
+            : infiniteRecipeData?.pages[0]?.count ?? 0;
 
     const collectionList = useMemo(() => {
         if (selectedTab === 'collection' && !isTablet) {
@@ -314,8 +308,8 @@ const Search = () => {
     }, [collectionData?.data, infiniteCollectionData, isTablet, selectedTab]);
     const collectionTotalCount =
         selectedTab === 'collection' && !isTablet
-            ? (collectionData?.count ?? 0)
-            : (infiniteCollectionData?.pages[0]?.count ?? 0);
+            ? collectionData?.count ?? 0
+            : infiniteCollectionData?.pages[0]?.count ?? 0;
 
     const integratedTotalCount = useMemo(
         () => productTotalCount + recipeTotalCount + collectionTotalCount,

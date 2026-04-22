@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
-import { CATEGORY_CODE } from '@/const/category';
-import { useCategory, useCategoryAll } from '@/hooks/query/display/category';
+import { useCategory } from '@/hooks/query/display/category';
+import { useMainCategory } from '@/hooks/useMainCategory';
 import type { MultiLevelCategory } from '@/models/display';
 
 const EMPTY_CATEGORY_LIST: MultiLevelCategory[] = [];
@@ -36,15 +36,12 @@ export const useCategoryMenu = (categoryNoFromProps?: number) => {
                 : categoryNoFromRoute,
         );
 
-    const { data: categoryAllData } = useCategoryAll();
+    const { mainCategory: mainCategoryData } = useMainCategory();
+
     const { data: categoryData } = useCategory({
         categoryNo: parsedCategoryNo,
         searchParams: { needsBrands: true },
     });
-
-    const mainCategoryData = categoryAllData?.multiLevelCategories.find(
-        (category) => category.managementCode === CATEGORY_CODE.MAIN,
-    );
 
     const categoryBreadcrumbPath =
         mainCategoryData && Number.isFinite(parsedCategoryNo)

@@ -1,14 +1,14 @@
-import { overlay } from 'overlay-kit';
 import { includes } from '@fxts/core';
 import { clsx } from 'clsx';
-import { useRouter } from 'next/router';
-import type { ReactNode } from 'react';
 import { useLenis } from 'lenis/react';
+import { useRouter } from 'next/router';
+import { overlay } from 'overlay-kit';
+import type { ReactNode } from 'react';
 
 import BottomNavigation from '@/components/layout/bottom-navigation';
+import * as styles from '@/components/layout/default/index.css';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
-import * as styles from '@/components/layout/default/index.css';
 import { RouteChangeOverlay, ScrollToTop } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useModalWatcher } from '@/hooks/common/useModalWatcher';

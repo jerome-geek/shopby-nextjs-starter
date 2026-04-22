@@ -14,9 +14,8 @@ import PagingV2 from '@/components/ui/paging-v2';
 import { PATHS } from '@/const/paths';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useProductList } from '@/hooks/query/product/product';
-import { useCategoryAll } from '@/hooks/suspenseQuery/display/category';
+import { useMainCategory } from '@/hooks/useMainCategory';
 import { useResponsive } from '@/hooks/utils';
-import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
 import type { OrderByType, OrderDirectionType } from '@/models';
 import * as styles from '@/pages/products/best/index.css';
 
@@ -44,12 +43,7 @@ export default function NewProducts() {
         1,
     );
 
-    const { data: categoryData } = useCategoryAll();
-
-    const mainCategoryNo =
-        categoryData?.multiLevelCategories?.[0]?.categoryNo ?? 0;
-
-    const { depth2CategoryList } = useCategoryMenu(mainCategoryNo);
+    const { mainCategoryNo, mainCategoryChildrenList } = useMainCategory();
 
     const defaultCategoryNo = mainCategoryNo;
 
@@ -171,7 +165,7 @@ export default function NewProducts() {
                                 </Link>
                             </SwiperSlide>
 
-                            {depth2CategoryList.map((category) => (
+                            {mainCategoryChildrenList.map((category) => (
                                 <SwiperSlide
                                     key={category.categoryNo}
                                     style={{ width: 'auto' }}

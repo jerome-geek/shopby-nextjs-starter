@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { MENU_LIST } from '@/components/layout/header/Menu';
+import { MENU_LIST } from '@/components/layout/header/menu';
 import * as styles from '@/components/layout/header/mobile-menu/index.css';
 import { usePage } from '@/hooks/utils';
 

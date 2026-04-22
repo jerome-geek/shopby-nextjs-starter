@@ -1,4 +1,4 @@
-import { compact, filter, isEmpty, pipe, toArray } from '@fxts/core';
+import { filter, pipe, toArray } from '@fxts/core';
 import { keepPreviousData } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -7,9 +7,8 @@ import { useMemo } from 'react';
 import { LazyRender } from '@/components/common';
 import { ObserverTarget } from '@/components/common/observer-target';
 import ProductsSearch from '@/components/section/products/search';
-import { CATEGORY_CODE, EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
+import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
-import { useCategoryAll } from '@/hooks/suspenseQuery/display/category';
 import type { GetEventsV2Params } from '@/models/display/event';
 import { ShopType } from '@/pages/shop/[slug]';
 
@@ -62,30 +61,6 @@ const SectionGroup = () => {
         },
     });
 
-    const { data: categoryAllData } = useCategoryAll();
-
-    const mainCategoryChildrenList = categoryAllData?.multiLevelCategories.find(
-        (category) => category.managementCode === CATEGORY_CODE.MAIN,
-    )?.children;
-
-    const kidsCategoryNo = mainCategoryChildrenList?.find(
-        (category) => category.managementCode === CATEGORY_CODE.KIDS,
-    )?.categoryNo;
-
-    const lifeCategoryNo = mainCategoryChildrenList?.find(
-        (category) => category.managementCode === CATEGORY_CODE.LIFE,
-    )?.categoryNo;
-
-    const parsedCategoryNos = pipe(
-        type === 'kids' ? [kidsCategoryNo] : [lifeCategoryNo],
-        compact,
-        toArray,
-    );
-
-    const categoryNos = isEmpty(parsedCategoryNos)
-        ? undefined
-        : parsedCategoryNos;
-
     const eventList = useMemo(
         () =>
             infiniteEventListData?.pages?.flatMap((page) => page.contents) ??
@@ -133,7 +108,6 @@ const SectionGroup = () => {
                             by: 'RECENT_PRODUCT',
                             direction: 'DESC',
                         },
-                        categoryNos,
                     }}
                     filter={(items) => {
                         const filteredItems = pipe(
@@ -167,7 +141,6 @@ const SectionGroup = () => {
                             by: 'SALE_YMD',
                             direction: 'DESC',
                         },
-                        categoryNos,
                     }}
                 />
             </LazyRender>
@@ -177,7 +150,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <BestReview categoryNos={categoryNos} />
+                <BestReview />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -196,7 +169,6 @@ const SectionGroup = () => {
                             by: 'SALE_CNT',
                             direction: 'DESC',
                         },
-                        categoryNos,
                     }}
                 />
             </LazyRender>
@@ -225,7 +197,6 @@ const SectionGroup = () => {
                             by: 'REVIEW',
                             direction: 'DESC',
                         },
-                        categoryNos,
                     }}
                 />
             </LazyRender>

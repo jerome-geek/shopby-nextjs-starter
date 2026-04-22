@@ -3,18 +3,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ProductCard } from '@/components/product';
 import * as styles from '@/components/product/product-tabs/popular-products/index.css';
-import { CATEGORY_CODE } from '@/const/category';
-import { useCategoryAll } from '@/hooks/query/display/category';
 import { useProductList } from '@/hooks/query/product/product';
+import { useMainCategory } from '@/hooks/useMainCategory';
 import { BREAKPOINTS } from '@/styles/media';
 
 const PopularProducts = () => {
-    const { data: categoryAllData } = useCategoryAll();
-
-    const mainCategoryNo =
-        categoryAllData?.multiLevelCategories?.find(
-            (category) => category.managementCode === CATEGORY_CODE.MAIN,
-        )?.categoryNo ?? 0;
+    const { mainCategoryNo } = useMainCategory();
 
     const { data: productListData } = useProductList({
         searchParams: {
@@ -24,7 +18,7 @@ const PopularProducts = () => {
                 by: 'POPULAR',
                 direction: 'DESC',
             },
-            categoryNos: [mainCategoryNo],
+            categoryNos: [mainCategoryNo ?? 0],
             filter: {
                 soldout: false,
                 saleStatus: 'RESERVATION_AND_ONSALE',

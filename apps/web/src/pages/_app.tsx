@@ -9,7 +9,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { ReactLenis } from 'lenis/react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import type { NextPage } from 'next';
 import { generateDefaultSeo } from 'next-seo/pages';
 import type { AppProps } from 'next/app';
@@ -93,7 +93,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         description: 'Headless Commerce Example',
     });
 
-    const pathname = useMemo(() => {
+    const pathnameKey = useMemo(() => {
+        // NOTE: 동적 라우트에서 router.isReady 전에는 asPath가 템플릿(/foo/[id])으로 잡힐 수 있음.
+        // 브라우저의 실제 location을 우선 사용해 key가 한 번만 바뀌도록 고정한다.
+        if (typeof window !== 'undefined') {
+            return window.location.pathname;
+        }
+
         return router.asPath.split('?')[0];
     }, [router.asPath]);
 
@@ -108,18 +114,16 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                             <Head>{defaultSeo}</Head>
                             <DefaultLayout>
                                 {getLayout(
-                                    <AnimatePresence mode='wait'>
-                                        <motion.div
-                                            // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
-                                            key={pathname}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -20 }}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            <Component {...pageProps} />
-                                        </motion.div>
-                                    </AnimatePresence>,
+                                    <motion.div
+                                        // TO CHECK: 리스트 페이지에서 다음 페이지로 이동할 경우 체크 필요(router.asPath -> router.pathname으로 변경)
+                                        key={pathnameKey}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <Component {...pageProps} />
+                                    </motion.div>,
                                 )}
                             </DefaultLayout>
                             <Toaster

@@ -1,11 +1,29 @@
-import { isEmpty } from '@fxts/core';
+import { compact, isEmpty, pipe, toArray } from '@fxts/core';
+import { useRouter } from 'next/router';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
 import Products from '@/components/section/products/section';
 import ProductsSectionSkeleton from '@/components/section/products/section/skeleton';
 import useBestReviewProductList from '@/hooks/suspenseQuery/product/product/useBestSellerProductList';
+import { useSuspenseMainCategory } from '@/hooks/useMainCategory';
+import { ShopType } from '@/pages/shop/[slug]';
 
-const BestReviewContent = ({ categoryNos }: { categoryNos?: number[] }) => {
+const BestReviewContent = () => {
+    const router = useRouter();
+    const type = router.query.slug as ShopType;
+
+    const { kidsCategoryNo, lifeCategoryNo } = useSuspenseMainCategory();
+
+    const parsedCategoryNos = pipe(
+        type === 'kids' ? [kidsCategoryNo] : [lifeCategoryNo],
+        compact,
+        toArray,
+    );
+
+    const categoryNos = isEmpty(parsedCategoryNos)
+        ? undefined
+        : parsedCategoryNos;
+
     const { data: productListData } = useBestReviewProductList({
         searchParams: {
             pageNumber: 1,
@@ -29,10 +47,10 @@ const BestReviewContent = ({ categoryNos }: { categoryNos?: number[] }) => {
     );
 };
 
-const BestReview = ({ categoryNos }: { categoryNos?: number[] }) => {
+const BestReview = () => {
     return (
         <FetchBoundary fallback={<ProductsSectionSkeleton />}>
-            <BestReviewContent categoryNos={categoryNos} />
+            <BestReviewContent />
         </FetchBoundary>
     );
 };

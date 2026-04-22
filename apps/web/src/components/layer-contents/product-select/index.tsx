@@ -11,12 +11,9 @@ import { ObserverTarget } from '@/components/common/observer-target';
 import * as styles from '@/components/layer-contents/product-select/index.css';
 import { type DefaultModalLayoutProps } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { Select, InputField } from '@/components/ui/input';
-import {
-    useCategoriesByCode,
-    useCategory,
-} from '@/hooks/query/display/category';
+import { InputField, Select } from '@/components/ui/input';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
+import { useMainCategory } from '@/hooks/useMainCategory';
 import type { MultiLevelCategory } from '@/models/display';
 import type {
     ProductSearchParams,
@@ -53,23 +50,15 @@ export const ProductSelect = ({
             },
         });
 
-    const { data: categoriesByCodeData } = useCategoriesByCode({
-        data: { codes: ['MAIN'] },
-    });
-
-    const mainCategoryNo = categoriesByCodeData?.[0]?.displayCategoryNo ?? 0;
-
-    const { data: categoryData } = useCategory({
-        categoryNo: mainCategoryNo,
-    });
+    const { mainCategoryChildrenList } = useMainCategory();
 
     const [selectedCategoryPath, setSelectedCategoryPath] = useState<
         (number | undefined)[]
     >([undefined, undefined, undefined, undefined]);
 
     const oneDepthCategoryList = useMemo(
-        () => categoryData?.multiLevelCategories?.[0]?.children ?? [],
-        [categoryData],
+        () => mainCategoryChildrenList ?? [],
+        [mainCategoryChildrenList],
     );
 
     const getChildrenByNo = useCallback(
@@ -229,8 +218,8 @@ export const ProductSelect = ({
                                                     i < index
                                                         ? value
                                                         : i === index
-                                                          ? opt.value
-                                                          : undefined,
+                                                        ? opt.value
+                                                        : undefined,
                                                 ),
                                             );
                                         }}

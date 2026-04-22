@@ -9,16 +9,12 @@ import { useTranslation } from 'react-i18next';
 import { SearchDrawer } from '@/components/drawer/search';
 import { BigCartIcon, BigSearchIcon, UserIcon } from '@/components/icons';
 import * as styles from '@/components/layout/header/index.css';
-import { Menu } from '@/components/layout/header/Menu';
+import { Menu } from '@/components/layout/header/menu';
 import MobileMenu from '@/components/layout/header/mobile-menu';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
-import {
-    useCategoriesByCode,
-    useCategory,
-} from '@/hooks/query/display/category';
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { vars } from '@/styles/theme.css';
@@ -33,15 +29,6 @@ export function Header() {
 
     const { totalCount } = useCart();
     const { openLoginDialog } = useCustomDialog();
-
-    const { data: categoriesByCodeData } = useCategoriesByCode({
-        data: { codes: ['MAIN'] },
-    });
-    const categoryNo = categoriesByCodeData?.[0]?.displayCategoryNo ?? 0;
-
-    const { data: categoryData } = useCategory({
-        categoryNo,
-    });
 
     const overlayData = useOverlayData();
 
@@ -92,7 +79,7 @@ export function Header() {
     return (
         <header id='header' className={styles.header}>
             <div className={styles.headerInner}>
-                <Menu categoryData={categoryData} />
+                <Menu />
 
                 <Link href={PATHS.MAIN} className={styles.logo}>
                     <Image src={logoImage} alt='Jolly pot' fill priority />

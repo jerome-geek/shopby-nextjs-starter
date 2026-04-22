@@ -12,7 +12,7 @@ import type {
     GetCategoriesResponse,
 } from '@/models/display/category';
 
-interface UseCategoryAllParams<T = GetCategoriesResponse> {
+export interface UseCategoryAllParams<T = GetCategoriesResponse> {
     params?: GetCategoriesParams;
     options?: Omit<
         UseQueryOptions<

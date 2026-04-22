@@ -3,13 +3,17 @@ import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/drawer/category/quick-menu-swiper.css';
+import { BANNER_ID } from '@/const/banner';
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 
 export const QuickMenuSwiper = ({ onNavigate }: { onNavigate: () => void }) => {
-    const { data } = useBannerList({ type: 'id', banners: ['QUICK_MENU'] });
+    const { data } = useBannerList({
+        type: 'id',
+        banners: [BANNER_ID.QUICK_MENU],
+    });
     const banners = data[0]?.accounts[0]?.banners ?? [];
 
     return (
