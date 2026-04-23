@@ -33,7 +33,7 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
         PATHS.SHOP.LIFE,
     ].includes(router.pathname);
 
-    const href = PATHS.RECIPES.DETAIL.replace('[recipeNo]', String(recipe.sno));
+    const href = PATHS.RECIPES.DETAIL.replace('[sno]', String(recipe.sno));
 
     const cookingMinutes = recipe.durationSeconds
         ? Math.floor(recipe.durationSeconds / 60)

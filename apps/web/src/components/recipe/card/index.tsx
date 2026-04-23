@@ -47,10 +47,7 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
 
     return (
         <Link
-            href={PATHS.RECIPES.DETAIL.replace(
-                '[recipeNo]',
-                recipe.sno.toString(),
-            )}
+            href={PATHS.RECIPES.DETAIL.replace('[sno]', recipe.sno.toString())}
             className={styles.recipeCard}
         >
             <div className={styles.recipeThumbWrapper}>

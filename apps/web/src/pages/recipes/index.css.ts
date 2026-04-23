@@ -24,11 +24,23 @@ export const header = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    '@media': {
+        [media.mobile]: {
+            justifyContent: 'end',
+        },
+    },
 });
 
 export const title = style([
     textStyles.title1Bold,
-    { color: vars.color.black },
+    {
+        color: vars.color.black,
+        '@media': {
+            [media.mobile]: {
+                display: 'none',
+            },
+        },
+    },
 ]);
 
 export const viewToggle = style({

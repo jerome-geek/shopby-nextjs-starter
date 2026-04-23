@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { IntegratedSearchResults } from '@/components/search/integrated-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
-import { useSearchTab } from '@/hooks/useSearchTab';
 import { Row } from '@/components/ui/layout/flex';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useInfinitePublicCollectionSearch } from '@/hooks/query/shop/collection';
 import { useInfinitePublicRecipeSearch } from '@/hooks/query/shop/recipe';
+import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';
 import type { SearchProductItem } from '@/models/product/product';
 import type {
@@ -61,6 +61,7 @@ export const IntegratedSearchView = ({
                     <ProductListSearchInput
                         syncKeywordFromUrl
                         onBack={() => router.back()}
+                        className={styles.searchInput}
                     />
                     <SearchTabNav activeTab='integrated' onTabChange={setTab} />
                     <div className={styles.totalCount}>

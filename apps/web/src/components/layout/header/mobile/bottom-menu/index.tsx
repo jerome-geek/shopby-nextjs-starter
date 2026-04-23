@@ -8,7 +8,7 @@ import { usePage } from '@/hooks/utils';
 
 import 'swiper/css';
 
-const MobileBottomMenu = () => {
+export const MobileBottomMenu = () => {
     const router = useRouter();
 
     const { isShopMainPage } = usePage();
@@ -48,5 +48,3 @@ const MobileBottomMenu = () => {
         </div>
     );
 };
-
-export default MobileBottomMenu;

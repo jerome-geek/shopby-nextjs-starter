@@ -121,6 +121,19 @@ export const mobileTopContainer = style({
     margin: '0 -20px',
 });
 
+export const searchInput = style({
+    display: 'none',
+
+    '@media': {
+        [media.mobile]: {
+            display: 'none',
+        },
+        [media.tablet]: {
+            display: 'block',
+        },
+    },
+});
+
 export const totalCount = style([
     textStyles.caption1Regular,
     {

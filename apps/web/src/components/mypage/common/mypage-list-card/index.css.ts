@@ -48,6 +48,12 @@ export const toolbar = style({
     alignItems: 'stretch',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
+
+    '@media': {
+        [media.mobile]: {
+            display: 'none',
+        },
+    },
 });
 
 export const toolbarTop = style({
@@ -167,6 +173,12 @@ export const list = style({
     display: 'flex',
     flexDirection: 'column',
     marginTop: '12px',
+
+    '@media': {
+        [media.mobile]: {
+            marginTop: '0',
+        },
+    },
 });
 
 export const listItem = style({

@@ -3,16 +3,16 @@ import { useRouter } from 'next/router';
 import { ProductListFilter } from '@/components/product-list/filter';
 import { MobileFilter } from '@/components/product-list/mobile-filter';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
-import { SearchTabNav } from '@/components/search/tab-nav';
 import { ShoppingSearchResults } from '@/components/search/shopping-results';
+import { SearchTabNav } from '@/components/search/tab-nav';
 import { Row } from '@/components/ui/layout/flex';
 import { SORT_OPTIONS } from '@/const/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';
+import type { SearchProductItem } from '@/models/product/product';
 import * as styles from '@/pages/search/index.css';
 import { vars } from '@/styles/theme.css';
-import type { SearchProductItem } from '@/models/product/product';
 
 type ShoppingSearchViewProps = {
     mainCategoryNo: number;
@@ -50,6 +50,7 @@ export const ShoppingSearchView = ({
                     <ProductListSearchInput
                         syncKeywordFromUrl
                         onBack={() => router.back()}
+                        className={styles.searchInput}
                     />
                     <SearchTabNav activeTab='shopping' onTabChange={setTab} />
                     <MobileFilter categoryNo={mainCategoryNo} />

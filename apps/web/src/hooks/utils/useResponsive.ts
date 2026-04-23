@@ -7,7 +7,7 @@ import { useMediaQuery } from 'usehooks-ts';
  * 미디어 쿼리 문자열 전체를 상수로 뽑아두는 것이 정석입니다.
  */
 export const mediaQuery = {
-    miniMobile: 'screen and (max-width: 375px)',
+    miniMobile: 'screen and (max-width: 374px)',
     mobile: 'screen and (max-width: 768px)',
     tablet: 'screen and (max-width: 1024px)',
     desktop: 'screen and (min-width: 1025px)',

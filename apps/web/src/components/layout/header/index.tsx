@@ -15,7 +15,7 @@ import {
 } from '@/components/icons';
 import * as styles from '@/components/layout/header/index.css';
 import { Menu } from '@/components/layout/header/menu';
-import MobileHeader from '@/components/layout/header/mobile';
+import { MobileHeader } from '@/components/layout/header/mobile';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';

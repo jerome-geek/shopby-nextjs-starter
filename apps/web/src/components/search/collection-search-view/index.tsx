@@ -2,26 +2,23 @@ import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
 import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { CollectionSearchResults } from '@/components/search/collection-results';
+import { SearchMobileSort } from '@/components/search/mobile-sort';
+import { SearchTabNav } from '@/components/search/tab-nav';
+import { Row } from '@/components/ui/layout/flex';
+import { COLLECTION_SORT_OPTIONS, type CollectionSortBy } from '@/const/recipe';
 import {
     COLLECTION_ORDER_QUERY_KEY,
     COLLECTION_PAGE_QUERY_KEY,
     COLLECTION_SORT_BY_QUERY_KEY,
 } from '@/const/search';
-import { CollectionSearchResults } from '@/components/search/collection-results';
-import { SearchMobileSort } from '@/components/search/mobile-sort';
-import { SearchTabNav } from '@/components/search/tab-nav';
-import { Row } from '@/components/ui/layout/flex';
-import {
-    COLLECTION_SORT_OPTIONS,
-    type CollectionSortBy,
-} from '@/const/recipe';
-import { useSearchTab } from '@/hooks/useSearchTab';
 import useInfinitePublicCollectionSearch from '@/hooks/query/shop/collection/useInfinitePublicCollectionSearch';
+import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';
-import * as styles from '@/pages/search/index.css';
-import { vars } from '@/styles/theme.css';
 import type { OrderDirectionType } from '@/models';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
+import * as styles from '@/pages/search/index.css';
+import { vars } from '@/styles/theme.css';
 
 type CollectionSearchViewProps = {
     collectionSortOrder: OrderDirectionType;
@@ -73,6 +70,7 @@ export const CollectionSearchView = ({
                     <ProductListSearchInput
                         syncKeywordFromUrl
                         onBack={() => router.back()}
+                        className={styles.searchInput}
                     />
                     <SearchTabNav activeTab='collection' onTabChange={setTab} />
                     <SearchMobileSort

@@ -59,7 +59,7 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
             <div className={styles.textWrapper}>
                 <Link
                     href={PATHS.EVENTS.DETAIL.replace(
-                        '[eventKey]',
+                        '[eventNo]',
                         event.eventNo.toString(),
                     )}
                     prefetch={false}
@@ -77,7 +77,7 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
             <div className={styles.imageWrapper}>
                 <Link
                     href={PATHS.EVENTS.DETAIL.replace(
-                        '[eventKey]',
+                        '[eventNo]',
                         event.eventNo.toString(),
                     )}
                     prefetch={false}

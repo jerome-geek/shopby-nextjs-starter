@@ -5,20 +5,20 @@ import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { SearchMobileSort } from '@/components/search/mobile-sort';
 import { RecipeSearchResults } from '@/components/search/recipe-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
-import { RECIPE_SORT_OPTIONS, type RecipeSortBy } from '@/const/recipe';
 import { Row } from '@/components/ui/layout/flex';
+import { RECIPE_SORT_OPTIONS, type RecipeSortBy } from '@/const/recipe';
 import {
     RECIPE_ORDER_QUERY_KEY,
     RECIPE_PAGE_QUERY_KEY,
     RECIPE_SORT_BY_QUERY_KEY,
 } from '@/const/search';
-import { useSearchTab } from '@/hooks/useSearchTab';
 import useInfinitePublicRecipeSearch from '@/hooks/infiniteQuery/shop/recipe/useInfinitePublicRecipeSearch';
+import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';
-import * as styles from '@/pages/search/index.css';
-import { vars } from '@/styles/theme.css';
 import type { OrderDirectionType } from '@/models';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
+import * as styles from '@/pages/search/index.css';
+import { vars } from '@/styles/theme.css';
 
 type RecipeSearchViewProps = {
     recipeSortOrder: OrderDirectionType;
@@ -70,6 +70,7 @@ export const RecipeSearchView = ({
                     <ProductListSearchInput
                         syncKeywordFromUrl
                         onBack={() => router.back()}
+                        className={styles.searchInput}
                     />
                     <SearchTabNav activeTab='recipe' onTabChange={setTab} />
                     <SearchMobileSort

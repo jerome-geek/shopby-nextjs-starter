@@ -20,6 +20,11 @@ export const title = style([
     textStyles.display1Semibold,
     {
         color: vars.color.black,
+        '@media': {
+            [media.mobile]: {
+                display: 'none',
+            },
+        },
     },
 ]);
 

@@ -184,7 +184,7 @@ const LoginPage: NextPageWithLayout = () => {
 
                 <SocialLoginList />
 
-                {isGuestOrder ? (
+                {isGuestOrder && (
                     <div className={styles.buttonContainer}>
                         <Button
                             type='button'
@@ -194,17 +194,6 @@ const LoginPage: NextPageWithLayout = () => {
                         >
                             <span>{t('비회원 주문하기')}</span>
                         </Button>
-                    </div>
-                ) : (
-                    <div className={styles.linkList}>
-                        <Link
-                            href={PATHS.GUEST.LOGIN}
-                            prefetch={false}
-                            className={styles.link}
-                            style={{ fontSize: '14px' }}
-                        >
-                            {t('비회원 주문조회')}
-                        </Link>
                     </div>
                 )}
             </div>

@@ -5,16 +5,22 @@ import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
 export const headerInner = style({
-    maxWidth: '1240px',
     height: globalVars.header.mobileHeight,
-    margin: '0 auto',
     width: '100%',
+    display: 'flex',
+    alignItems: 'end',
+    padding: '0 0 8px',
+});
+
+export const container = style({
+    width: '100%',
+    margin: '0 auto',
     justifyContent: 'space-between',
     gap: '32px',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     display: 'grid',
     gridTemplateColumns: '1fr auto 1fr',
-    padding: '0 0 16px',
+    padding: '0 0 8px',
 });
 
 export const logo = style({
@@ -31,6 +37,18 @@ globalStyle(`${logo} > img`, {
     width: '100%',
     height: '100%',
     objectFit: 'contain',
+});
+
+export const searchInputContainer = style({
+    display: 'flex',
+    width: '100%',
+    gap: '12px',
+    alignItems: 'center',
+});
+
+export const searchInput = style({
+    padding: '0',
+    flexShrink: 1,
 });
 
 export const title = style([
@@ -55,6 +73,7 @@ export const iconWrapper = style({
     cursor: 'pointer',
     transition: 'opacity 0.2s ease',
     width: '24px',
+    minWidth: '24px',
 
     ':hover': {
         opacity: 0.7,

@@ -24,7 +24,7 @@ const EventItem = ({
     const { isMobile } = useResponsive();
 
     const detailPath = PATHS.EVENTS.DETAIL.replace(
-        '[eventKey]',
+        '[eventNo]',
         eventNo.toString(),
     );
 
@@ -46,11 +46,7 @@ const EventItem = ({
         <Link href={detailPath} className={styles.wrapper}>
             <div className={styles.thumbnail}>
                 {imageUrl && (
-                    <img
-                        src={imageUrl}
-                        alt={label}
-                        className={styles.image}
-                    />
+                    <img src={imageUrl} alt={label} className={styles.image} />
                 )}
             </div>
             <div className={styles.infoBox}>

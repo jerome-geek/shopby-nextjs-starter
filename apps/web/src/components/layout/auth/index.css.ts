@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
-import { textStyles } from '@/styles/typography.css';
-import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const container = style({
     display: 'flex',
@@ -25,7 +25,7 @@ export const heading = style([
 
         '@media': {
             [media.mobile]: {
-                fontSize: '24px',
+                display: 'none',
             },
         },
     },

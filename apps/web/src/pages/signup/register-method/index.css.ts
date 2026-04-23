@@ -11,8 +11,8 @@ export const container = style({
     marginTop: '-20px',
 
     '@media': {
-        [media.desktop]: {
-            gap: '60px',
+        [media.mobile]: {
+            gap: '30px',
         },
     },
 });
