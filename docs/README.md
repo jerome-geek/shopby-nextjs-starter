@@ -7,6 +7,8 @@
 ### 🚀 기능 기획 (Specifications)
 향후 개발 예정이거나 현재 구현된 주요 기능의 기획 내용입니다.
 - [어드민 모바일 앱 관리](specs/admin-mobile-app.md): 어드민 내 앱 통계 및 푸시 관리 기능 기획.
+- [레시피 등록 프로세스 가이드](specs/recipe-registration-process.md): AI 자동 등록 및 수동 이미지 등록 프로세스 정의.
+- [레시피 스크랩북 가이드](specs/recipe-scrapbook-guide.md): 회원 전용 스크랩북 및 컬렉션 관리 기능 정의.
 
 ### 🏗️ 아키텍처 및 기술 전략 (Technical Decisions)
 프로젝트 전반에 적용된 기술적 설계와 아키텍처 결정 사항입니다.
