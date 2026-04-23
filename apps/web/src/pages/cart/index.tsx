@@ -216,7 +216,7 @@ const CartContent = () => {
 
     return (
         <div className={styles.container}>
-            {!isMobile && <h2 className={styles.title}>{t('장바구니')}</h2>}
+            <h2 className={styles.title}>{t('장바구니')}</h2>
             <div className={styles.contentWrapper} data-empty={isEmpty}>
                 {/* Left Area: Cart List */}
                 <div className={styles.cartListArea} data-empty={isEmpty}>

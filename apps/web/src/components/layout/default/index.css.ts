@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
-import { media } from '@/styles/media';
 import { globalVars } from '@/styles/global.css';
+import { media } from '@/styles/media';
 
 export const layout = style({
     display: 'flex',
@@ -16,6 +16,9 @@ export const main = style({
     paddingTop: globalVars.header.height,
 
     '@media': {
+        [media.tablet]: {
+            paddingTop: globalVars.header.mobileHeight,
+        },
         [media.mobile]: {
             paddingTop: globalVars.header.mobileHeight,
         },
@@ -28,6 +31,9 @@ export const shopMain = style({
     paddingTop: globalVars.header.height,
 
     '@media': {
+        [media.tablet]: {
+            paddingTop: globalVars.header.mobileShopMainHeight,
+        },
         [media.mobile]: {
             paddingTop: globalVars.header.mobileShopMainHeight,
         },

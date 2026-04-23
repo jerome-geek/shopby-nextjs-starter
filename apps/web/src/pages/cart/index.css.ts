@@ -10,6 +10,9 @@ export const container = style({
     paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))',
 
     '@media': {
+        [media.tablet]: {
+            marginTop: '-24px',
+        },
         [media.desktop]: {
             gap: '32px',
             paddingTop: '36px',
@@ -21,6 +24,13 @@ export const title = style([
     textStyles.display1Semibold,
     {
         color: vars.color.black,
+        display: 'none',
+
+        '@media': {
+            [media.desktop]: {
+                display: 'block',
+            },
+        },
     },
 ]);
 
