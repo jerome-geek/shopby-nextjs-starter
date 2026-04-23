@@ -8,7 +8,8 @@ import { textStyles } from '@/styles/typography.css';
 export const summaryArea = style({
     width: '100%',
     order: 2,
-    padding: '24px 20px',
+    padding: '36px 20px',
+    borderBottom: `6px solid ${vars.color.gray['20']}`,
 
     '@media': {
         [media.desktop]: {
@@ -21,6 +22,7 @@ export const summaryArea = style({
             padding: 0,
             gridColumn: '2 / 3',
             gridRow: '1 / 3',
+            borderBottom: `none`,
         },
     },
 });
@@ -33,6 +35,7 @@ export const summaryBox = style({
     '@media': {
         [media.desktop]: {
             gap: '24px',
+            paddingTop: '8px',
         },
     },
 });
@@ -60,12 +63,18 @@ export const spinner = style({
     height: '20px',
 });
 
-
-
 export const summaryHeader = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '2.2rem',
+                lineHeight: '1.32',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -88,6 +97,14 @@ export const summaryLabel = style([
         alignItems: 'center',
         gap: '8px',
         color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
+            },
+        },
     },
 ]);
 
@@ -95,6 +112,14 @@ export const summaryValue = style([
     textStyles.body1Regular,
     {
         color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
+            },
+        },
     },
 ]);
 
@@ -137,6 +162,14 @@ export const totalPriceTitle = style([
     textStyles.headlineSemibold,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '1.8rem',
+                lineHeight: '1.5',
+                letterSpacing: '-1.3%',
+            },
+        },
     },
 ]);
 
@@ -144,6 +177,14 @@ export const totalPrice = style([
     textStyles.headingBold,
     {
         color: vars.color.pink['100'],
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '2.2rem',
+                lineHeight: '1.32',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
@@ -173,7 +214,7 @@ export const bottomSticky = style({
 });
 
 export const orderButton = style([
-    textStyles.body1Semibold,
+    textStyles.headlineSemibold,
     {
         width: '100%',
         padding: '16px',
@@ -186,6 +227,15 @@ export const orderButton = style([
         transition: 'background-color 0.2s',
         ':hover': {
             backgroundColor: '#d89493',
+        },
+
+        '@media': {
+            [media.desktop]: {
+                fontWeight: '600',
+                fontSize: '1.8rem',
+                lineHeight: '1.5',
+                letterSpacing: '-1.3%',
+            },
         },
     },
 ]);
@@ -219,4 +269,3 @@ export const emptyCartLink = style([
         borderRadius: '4px',
     },
 ]);
-

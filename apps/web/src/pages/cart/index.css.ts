@@ -12,9 +12,17 @@ export const container = style({
     '@media': {
         [media.desktop]: {
             gap: '32px',
+            paddingTop: '36px',
         },
     },
 });
+
+export const title = style([
+    textStyles.display1Semibold,
+    {
+        color: vars.color.black,
+    },
+]);
 
 export const summaryLabel = style([
     textStyles.body1Medium,
@@ -23,6 +31,14 @@ export const summaryLabel = style([
         alignItems: 'center',
         gap: '8px',
         color: vars.color.gray['90'],
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
+            },
+        },
     },
 ]);
 
@@ -38,7 +54,8 @@ export const contentWrapper = style({
             marginLeft: '0',
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 1fr) 486px',
-            gap: '48px',
+            columnGap: '48px',
+            rowGap: '32px',
             maxWidth: '1200px',
         },
     },
@@ -86,10 +103,24 @@ export const itemList = style({
     margin: 0,
     display: 'flex',
     flexDirection: 'column',
+    gap: '16px',
 
     '@media': {
         [media.desktop]: {
             gap: '24px',
+        },
+    },
+});
+
+export const invalidItemList = style({
+    margin: '24px 0 36px 0',
+    padding: '0 20px',
+
+    '@media': {
+        [media.desktop]: {
+            margin: '0',
+            padding: '0 20px 32px',
+            borderBottom: `1px solid ${vars.color.gray['20']}`,
         },
     },
 });
@@ -142,211 +173,20 @@ export const partnerHeader = style({
 });
 
 export const partnerName = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.gray['90'],
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-    },
-]);
 
-export const cartItem = style({
-    display: 'flex',
-    gap: '12px',
-    position: 'relative',
-    alignItems: 'flex-start',
-    '@media': {
-        [media.desktop]: {
-            gap: '16px',
-            paddingLeft: '32px',
-        },
-    },
-});
-
-export const itemCheckbox = style({
-    flexShrink: 0,
-    marginTop: '2px', // align with the text visual center if needed
-    '@media': {
-        [media.desktop]: {
-            position: 'absolute',
-            left: 0,
-            top: 0,
-        },
-    },
-});
-
-export const itemContent = style({
-    display: 'flex',
-    flex: 1,
-    minWidth: 0,
-    gap: '16px',
-    alignItems: 'flex-start',
-});
-
-export const itemImageLink = style({
-    width: '72px',
-    height: '72px',
-    borderRadius: '4px',
-    overflow: 'hidden',
-    display: 'block',
-    flexShrink: 0,
-
-    '@media': {
-        [media.desktop]: {
-            width: '128px',
-            height: '128px',
-            borderRadius: '4px',
-        },
-    },
-});
-
-export const itemImage = style({
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
-export const itemDetails = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    flex: 1,
-    minWidth: 0,
-
-    '@media': {
-        [media.desktop]: {
-            gap: '12px',
-        },
-    },
-});
-
-export const itemTop = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-});
-
-export const itemTextInfo = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1px',
-    padding: '2px 0',
-});
-
-export const itemBrand = style([
-    textStyles.caption1Regular,
-    {
-        color: vars.color.gray['60'],
-    },
-]);
-
-export const itemName = style([
-    textStyles.body1Medium,
-    {
-        color: vars.color.black,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: 'vertical',
-    },
-]);
-
-export const itemOption = style([
-    textStyles.caption1Regular,
-    {
-        color: vars.color.gray['50'],
-    },
-]);
-
-export const itemXButton = style({
-    color: vars.color.gray['60'],
-    cursor: 'pointer',
-    background: 'none',
-    border: 'none',
-    flexShrink: 0,
-    width: '16px',
-    height: '16px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-});
-
-export const quantityController = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    width: 'fit-content',
-    border: `1px solid ${vars.color.gray['20']}`,
-    backgroundColor: vars.color.white,
-    borderRadius: '2px',
-    padding: '6px',
-    '@media': {
-        [media.desktop]: {
-            border: `1px solid ${vars.color.gray['30']}`,
-            borderRadius: '4px',
-            padding: '4px',
-        },
-    },
-});
-
-export const quantityButton = style({
-    width: '16px',
-    height: '16px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    color: vars.color.gray['90'],
-    '@media': {
-        [media.desktop]: {
-            width: '24px',
-            height: '24px',
-            color: vars.color.gray['60'],
-        },
-    },
-});
-
-export const quantityValue = style([
-    textStyles.caption1Regular,
-    {
-        width: '15px',
-        textAlign: 'center',
-        color: vars.color.gray['80'],
         '@media': {
             [media.desktop]: {
-                width: '32px',
+                fontSize: '1.8rem',
+                lineHeight: '1.5',
+                letterSpacing: '-1.3%',
             },
         },
-    },
-]);
-
-export const itemPriceArea = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '3px',
-    '@media': {
-        [media.desktop]: {
-            alignItems: 'baseline',
-        },
-    },
-});
-
-export const itemDiscount = style([
-    textStyles.headlineBold,
-    {
-        color: vars.color.pink['100'],
-    },
-]);
-
-export const itemPrice = style([
-    textStyles.headlineBold,
-    {
-        color: vars.color.black,
     },
 ]);
 
@@ -355,14 +195,13 @@ export const recommendArea = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-    padding: '24px 20px',
+    padding: '36px 20px',
     order: 3,
 
     '@media': {
         [media.desktop]: {
             gridColumn: '1 / 2',
             gridRow: '2 / 3',
-            marginTop: '100px',
             padding: '0',
             gap: '24px',
         },
@@ -429,5 +268,13 @@ export const deleteAllButton = style([
         background: 'none',
         border: 'none',
         cursor: 'pointer',
+
+        '@media': {
+            [media.desktop]: {
+                fontSize: '1.3rem',
+                lineHeight: '1.3',
+                letterSpacing: '-1.3%',
+            },
+        },
     },
 ]);

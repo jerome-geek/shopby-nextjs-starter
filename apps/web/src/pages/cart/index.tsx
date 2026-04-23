@@ -1,9 +1,9 @@
-import { filter, flatMap, map, pipe, prop, toArray } from '@fxts/core';
-import { Minus, Plus, X } from 'lucide-react';
+import { flatMap, map, pipe, prop, toArray } from '@fxts/core';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { OrderProductItem } from '@/components/cart/order-product-item';
 import Recommend from '@/components/cart/Recommend';
 import CartSummary from '@/components/cart/summary';
 import { NoResult } from '@/components/common/no-result';
@@ -15,11 +15,10 @@ import useCart from '@/hooks/cart/useCart';
 import { useCartMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useDialog } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import type { UpdateCartData } from '@/models/order/cart';
 import * as styles from '@/pages/cart/index.css';
 import { useCartStore } from '@/store/useCartStore';
-import { CURRENCY } from '@/utils/currency';
 
 const CartPage = () => {
     return (
@@ -32,6 +31,8 @@ const CartPage = () => {
 const CartContent = () => {
     const { t } = useTranslation();
 
+    const { isMobile } = useResponsive();
+
     const isLogin = useAuth();
 
     const { openDialog, openAsyncDialog } = useDialog();
@@ -43,6 +44,18 @@ const CartContent = () => {
     const { cartInfo, isLoading } = useCart();
 
     const deliveryGroups = cartInfo?.deliveryGroups ?? [];
+    const invalidProducts = useMemo(
+        () => cartInfo?.invalidProducts ?? [],
+        [cartInfo],
+    );
+
+    const invalidCartNoList = useMemo(
+        () =>
+            invalidProducts.flatMap((product) =>
+                product.orderProductOptions.map((option) => option.cartNo),
+            ),
+        [invalidProducts],
+    );
 
     const cartNoList = useMemo(() => {
         if (!cartInfo) {
@@ -78,31 +91,6 @@ const CartContent = () => {
             cartNoList.includes(cartNo),
         );
     }, [cartNoList, userCheckedCartNoList]);
-
-    const checkedProductNoList = useMemo(() => {
-        if (!cartInfo) {
-            return [];
-        }
-
-        try {
-            return pipe(
-                cartInfo,
-                prop('deliveryGroups'),
-                flatMap((a) => a.orderProducts),
-                flatMap((b) => b.orderProductOptions),
-                filter((c) => checkedCartNoList.includes(c.cartNo)),
-                map((c) => c.productNo),
-                toArray,
-            );
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    }, [cartInfo, checkedCartNoList]);
-    console.log(
-        '🚀 ~ CartContent ~ checkedProductNoList:',
-        checkedProductNoList,
-    );
 
     const isAllChecked =
         cartNoList.length > 0 && checkedCartNoList.length === cartNoList.length;
@@ -188,7 +176,7 @@ const CartContent = () => {
                 },
             );
         } else {
-            const guestOptions = deliveryGroups.flatMap((group) =>
+            const guestOptionsFromValid = deliveryGroups.flatMap((group) =>
                 group.orderProducts.flatMap((product) =>
                     product.orderProductOptions.map((option) => ({
                         cartNo: option.cartNo,
@@ -197,6 +185,17 @@ const CartContent = () => {
                     })),
                 ),
             );
+            const guestOptionsFromInvalid = invalidProducts.flatMap((product) =>
+                product.orderProductOptions.map((option) => ({
+                    cartNo: option.cartNo,
+                    productNo: product.productNo,
+                    optionNo: option.optionNo,
+                })),
+            );
+            const guestOptions = [
+                ...guestOptionsFromValid,
+                ...guestOptionsFromInvalid,
+            ];
 
             guestOptions
                 .filter((item) => cartNos.includes(item.cartNo))
@@ -217,6 +216,7 @@ const CartContent = () => {
 
     return (
         <div className={styles.container}>
+            {!isMobile && <h2 className={styles.title}>{t('장바구니')}</h2>}
             <div className={styles.contentWrapper} data-empty={isEmpty}>
                 {/* Left Area: Cart List */}
                 <div className={styles.cartListArea} data-empty={isEmpty}>
@@ -270,324 +270,182 @@ const CartContent = () => {
                             }
                         />
                     ) : (
-                        <ul className={styles.cartList}>
-                            {deliveryGroups.map((group, groupIdx) => {
-                                return (
-                                    <React.Fragment key={`group-${groupIdx}`}>
-                                        <li className={styles.partnerGroup}>
-                                            <div
-                                                className={styles.partnerHeader}
-                                            >
-                                                <InputLabel
-                                                    isCheckbox
+                        <>
+                            <ul className={styles.cartList}>
+                                {deliveryGroups.map((group, groupIdx) => {
+                                    return (
+                                        <React.Fragment
+                                            key={`group-${groupIdx}`}
+                                        >
+                                            <li className={styles.partnerGroup}>
+                                                <div
                                                     className={
-                                                        styles.partnerName
+                                                        styles.partnerHeader
                                                     }
                                                 >
-                                                    <InputCheckbox
-                                                        checked={group.orderProducts.every(
-                                                            (p) =>
-                                                                p.orderProductOptions.every(
-                                                                    (o) =>
-                                                                        checkedCartNoList.includes(
-                                                                            o.cartNo,
-                                                                        ),
-                                                                ),
-                                                        )}
-                                                        onCheckedChange={(
-                                                            checked,
-                                                        ) => {
-                                                            const groupCartNos =
-                                                                group.orderProducts.flatMap(
-                                                                    (p) =>
-                                                                        p.orderProductOptions.map(
-                                                                            (
-                                                                                o,
-                                                                            ) =>
+                                                    <InputLabel
+                                                        isCheckbox
+                                                        className={
+                                                            styles.partnerName
+                                                        }
+                                                    >
+                                                        <InputCheckbox
+                                                            checked={group.orderProducts.every(
+                                                                (p) =>
+                                                                    p.orderProductOptions.every(
+                                                                        (o) =>
+                                                                            checkedCartNoList.includes(
                                                                                 o.cartNo,
-                                                                        ),
-                                                                );
-                                                            setUserCheckedCartNoList(
-                                                                (prev) => {
-                                                                    const base =
-                                                                        prev ??
-                                                                        cartNoList;
-                                                                    return checked
-                                                                        ? Array.from(
-                                                                              new Set(
-                                                                                  [
-                                                                                      ...base,
-                                                                                      ...groupCartNos,
-                                                                                  ],
-                                                                              ),
-                                                                          )
-                                                                        : base.filter(
-                                                                              (
-                                                                                  no,
-                                                                              ) =>
-                                                                                  !groupCartNos.includes(
-                                                                                      no,
+                                                                            ),
+                                                                    ),
+                                                            )}
+                                                            onCheckedChange={(
+                                                                checked,
+                                                            ) => {
+                                                                const groupCartNos =
+                                                                    group.orderProducts.flatMap(
+                                                                        (p) =>
+                                                                            p.orderProductOptions.map(
+                                                                                (
+                                                                                    o,
+                                                                                ) =>
+                                                                                    o.cartNo,
+                                                                            ),
+                                                                    );
+                                                                setUserCheckedCartNoList(
+                                                                    (prev) => {
+                                                                        const base =
+                                                                            prev ??
+                                                                            cartNoList;
+                                                                        return checked
+                                                                            ? Array.from(
+                                                                                  new Set(
+                                                                                      [
+                                                                                          ...base,
+                                                                                          ...groupCartNos,
+                                                                                      ],
                                                                                   ),
-                                                                          );
-                                                                },
-                                                            );
-                                                        }}
-                                                    />
-                                                    {group.partnerName}
-                                                </InputLabel>
-                                            </div>
+                                                                              )
+                                                                            : base.filter(
+                                                                                  (
+                                                                                      no,
+                                                                                  ) =>
+                                                                                      !groupCartNos.includes(
+                                                                                          no,
+                                                                                      ),
+                                                                              );
+                                                                    },
+                                                                );
+                                                            }}
+                                                        />
+                                                        {group.partnerName}
+                                                    </InputLabel>
+                                                </div>
 
-                                            <ul className={styles.itemList}>
-                                                {group.orderProducts.map(
-                                                    (product) =>
-                                                        product.orderProductOptions.map(
-                                                            (option) => (
-                                                                <li
-                                                                    key={`${product.productNo}-${option.optionNo}`}
-                                                                    className={
-                                                                        styles.cartItem
-                                                                    }
-                                                                >
-                                                                    <div
-                                                                        className={
-                                                                            styles.itemCheckbox
-                                                                        }
-                                                                    >
-                                                                        <InputCheckbox
-                                                                            checked={checkedCartNoList.includes(
+                                                <ul className={styles.itemList}>
+                                                    {group.orderProducts.map(
+                                                        (product) =>
+                                                            product.orderProductOptions.map(
+                                                                (option) => (
+                                                                    <OrderProductItem
+                                                                        key={`${product.productNo}-${option.optionNo}`}
+                                                                        item={{
+                                                                            product,
+                                                                            option,
+                                                                        }}
+                                                                        isChecked={checkedCartNoList.includes(
+                                                                            option.cartNo,
+                                                                        )}
+                                                                        onCheckChange={(
+                                                                            checked,
+                                                                        ) =>
+                                                                            handleSelectOption(
                                                                                 option.cartNo,
-                                                                            )}
-                                                                            onCheckedChange={(
                                                                                 checked,
-                                                                            ) =>
-                                                                                handleSelectOption(
-                                                                                    option.cartNo,
-                                                                                    checked,
-                                                                                )
-                                                                            }
-                                                                        />
-                                                                    </div>
-
-                                                                    <div
-                                                                        className={
-                                                                            styles.itemContent
+                                                                            )
                                                                         }
-                                                                    >
-                                                                        <Link
-                                                                            className={
-                                                                                styles.itemImageLink
-                                                                            }
-                                                                            href={`${PATHS.PRODUCTS.MAIN}/${product.productNo}`}
-                                                                        >
-                                                                            <img
-                                                                                src={
-                                                                                    option.imageUrl ||
-                                                                                    product.imageUrl
-                                                                                }
-                                                                                alt={
-                                                                                    product.productName
-                                                                                }
-                                                                                className={
-                                                                                    styles.itemImage
-                                                                                }
-                                                                            />
-                                                                        </Link>
-
-                                                                        <div
-                                                                            className={
-                                                                                styles.itemDetails
-                                                                            }
-                                                                        >
-                                                                            <div
-                                                                                className={
-                                                                                    styles.itemTextInfo
-                                                                                }
-                                                                            >
-                                                                                {product.brandName && (
-                                                                                    <span
-                                                                                        className={
-                                                                                            styles.itemBrand
-                                                                                        }
-                                                                                    >
-                                                                                        {
-                                                                                            product.brandName
-                                                                                        }
-                                                                                    </span>
-                                                                                )}
-                                                                                <span
-                                                                                    className={
-                                                                                        styles.itemName
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        product.productName
-                                                                                    }
-                                                                                </span>
-                                                                                {option.optionTitle && (
-                                                                                    <span
-                                                                                        className={
-                                                                                            styles.itemOption
-                                                                                        }
-                                                                                    >
-                                                                                        {
-                                                                                            option.optionTitle
-                                                                                        }
-                                                                                    </span>
-                                                                                )}
-                                                                            </div>
-
-                                                                            <div
-                                                                                className={
-                                                                                    styles.quantityController
-                                                                                }
-                                                                            >
-                                                                                <button
-                                                                                    type='button'
-                                                                                    className={
-                                                                                        styles.quantityButton
-                                                                                    }
-                                                                                    disabled={
-                                                                                        option.orderCnt <=
-                                                                                        1
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        onOrderCntChangeButtonClick(
-                                                                                            {
-                                                                                                cartNo: option.cartNo,
-                                                                                                orderCnt:
-                                                                                                    option.orderCnt -
-                                                                                                    1,
-                                                                                                productNo:
-                                                                                                    product.productNo,
-                                                                                                optionNo:
-                                                                                                    option.optionNo,
-                                                                                                optionInputs:
-                                                                                                    option.optionInputs,
-                                                                                            },
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    <Minus
-                                                                                        size={
-                                                                                            16
-                                                                                        }
-                                                                                    />
-                                                                                </button>
-                                                                                <span
-                                                                                    className={
-                                                                                        styles.quantityValue
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        option.orderCnt
-                                                                                    }
-                                                                                </span>
-                                                                                <button
-                                                                                    type='button'
-                                                                                    className={
-                                                                                        styles.quantityButton
-                                                                                    }
-                                                                                    disabled={
-                                                                                        option.orderCnt >=
-                                                                                        option.stockCnt
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        onOrderCntChangeButtonClick(
-                                                                                            {
-                                                                                                cartNo: option.cartNo,
-                                                                                                orderCnt:
-                                                                                                    option.orderCnt +
-                                                                                                    1,
-                                                                                                productNo:
-                                                                                                    product.productNo,
-                                                                                                optionNo:
-                                                                                                    option.optionNo,
-                                                                                                optionInputs:
-                                                                                                    option.optionInputs,
-                                                                                            },
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    <Plus
-                                                                                        size={
-                                                                                            16
-                                                                                        }
-                                                                                    />
-                                                                                </button>
-                                                                            </div>
-
-                                                                            <div
-                                                                                className={
-                                                                                    styles.itemPriceArea
-                                                                                }
-                                                                            >
-                                                                                {option
-                                                                                    .price
-                                                                                    .immediateDiscountAmt >
-                                                                                    0 && (
-                                                                                    <span
-                                                                                        className={
-                                                                                            styles.itemDiscount
-                                                                                        }
-                                                                                    >
-                                                                                        {Math.floor(
-                                                                                            (option
-                                                                                                .price
-                                                                                                .immediateDiscountAmt /
-                                                                                                option
-                                                                                                    .price
-                                                                                                    .standardAmt) *
-                                                                                                100,
-                                                                                        )}
-
-                                                                                        %
-                                                                                    </span>
-                                                                                )}
-                                                                                <span
-                                                                                    className={
-                                                                                        styles.itemPrice
-                                                                                    }
-                                                                                >
-                                                                                    {CURRENCY(
-                                                                                        option
-                                                                                            .price
-                                                                                            .buyAmt,
-                                                                                    ).format()}
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <button
-                                                                        type='button'
-                                                                        className={
-                                                                            styles.itemXButton
+                                                                        onQuantityChange={(
+                                                                            nextOrderCnt,
+                                                                        ) =>
+                                                                            onOrderCntChangeButtonClick(
+                                                                                {
+                                                                                    cartNo: option.cartNo,
+                                                                                    orderCnt:
+                                                                                        nextOrderCnt,
+                                                                                    productNo:
+                                                                                        product.productNo,
+                                                                                    optionNo:
+                                                                                        option.optionNo,
+                                                                                    optionInputs:
+                                                                                        option.optionInputs,
+                                                                                },
+                                                                            )
                                                                         }
-                                                                        onClick={() =>
+                                                                        onDelete={() =>
                                                                             onDeleteButtonClick(
                                                                                 [
                                                                                     option.cartNo,
                                                                                 ],
                                                                             )
                                                                         }
-                                                                    >
-                                                                        <X
-                                                                            size={
-                                                                                16
-                                                                            }
-                                                                        />
-                                                                    </button>
-                                                                </li>
+                                                                    />
+                                                                ),
                                                             ),
-                                                        ),
-                                                )}
-                                            </ul>
-                                        </li>
-                                        <div className={styles.thickDivider} />
-                                    </React.Fragment>
-                                );
-                            })}
-                        </ul>
+                                                    )}
+                                                </ul>
+                                            </li>
+                                            <div
+                                                className={styles.thickDivider}
+                                            />
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </ul>
+                        </>
+                    )}
+
+                    {invalidProducts.length > 0 && (
+                        <>
+                            <div className={styles.selectAllArea}>
+                                <p className={styles.summaryLabel}>
+                                    {t('구매 불가 상품')}
+                                </p>
+                                <button
+                                    type='button'
+                                    className={styles.deleteAllButton}
+                                    onClick={() =>
+                                        onDeleteButtonClick(invalidCartNoList)
+                                    }
+                                >
+                                    {t('전체 삭제')}
+                                </button>
+                            </div>
+
+                            <ul
+                                className={`${styles.itemList} ${styles.invalidItemList}`}
+                            >
+                                {invalidProducts.map((product) =>
+                                    product.orderProductOptions.map(
+                                        (option) => (
+                                            <OrderProductItem
+                                                key={`invalid-${product.productNo}-${option.optionNo}`}
+                                                item={{
+                                                    product,
+                                                    option,
+                                                }}
+                                                isInvalidProduct
+                                                onDelete={() =>
+                                                    onDeleteButtonClick([
+                                                        option.cartNo,
+                                                    ])
+                                                }
+                                            />
+                                        ),
+                                    ),
+                                )}
+                            </ul>
+                            <div className={styles.thickDivider} />
+                        </>
                     )}
                 </div>
 

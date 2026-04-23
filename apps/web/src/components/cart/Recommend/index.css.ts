@@ -1,9 +1,13 @@
 import { style } from '@vanilla-extract/css';
-import { textStyles } from '@/styles/typography.css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const container = style({
     width: '100%',
+    maxWidth: '100%',
+    minWidth: 0,
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
@@ -20,7 +24,13 @@ export const title = style([
 
 export const swiperContainer = style({
     width: '100%',
-    overflow: 'visible', // allows peeking items
+    overflow: 'visible',
+
+    '@media': {
+        [media.desktop]: {
+            overflow: 'hidden',
+        },
+    },
 });
 
 export const swiperSlide = style({
