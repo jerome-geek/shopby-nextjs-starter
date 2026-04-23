@@ -27,6 +27,12 @@ export const collectionSectionTitleContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
+
+    '@media': {
+        [media.mobile]: {
+            gap: '2px',
+        },
+    },
 });
 
 export const collectionSectionTitle = style([
@@ -65,8 +71,15 @@ export const detailLink = style([
         color: vars.color.gray['60'],
         display: 'flex',
         alignItems: 'center',
-        lineHeight: 1,
         gap: '4px',
+
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.2rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 

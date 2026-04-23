@@ -140,6 +140,14 @@ export const cardDescription = style([
     textStyles.headlineRegular,
     {
         color: vars.color.white,
+
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+                lineHeight: '1.4',
+                letterSpacing: '-2%',
+            },
+        },
     },
 ]);
 
