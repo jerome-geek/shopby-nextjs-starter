@@ -1,8 +1,14 @@
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
-import Head from 'next/head';
 
-import { HeroBanner } from '@/components/banner/hero';
+import { banner } from '@/api/display';
+import { collection } from '@/api/shop';
+import { BANNER_ID_PREFIX, HeroBanner } from '@/components/banner/hero';
 import { LazyRender } from '@/components/common';
+import Seo from '@/components/common/seo';
+import CollectionGroupSection from '@/components/section/collection-group';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
+import { bannerKeys, collectionKeys } from '@/hooks/queryKeys';
 import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
@@ -17,28 +23,51 @@ const RecipeGroupSection = dynamic(
         ssr: false,
     },
 );
-const CollectionGroupSection = dynamic(
-    () => import('@/components/section/collection-group'),
-    {
-        ssr: false,
-    },
-);
+
+export async function getStaticProps() {
+    const queryClient = new QueryClient();
+
+    try {
+        await Promise.all([
+            queryClient.prefetchQuery({
+                queryKey: bannerKeys.list([`${BANNER_ID_PREFIX}-HOME`]),
+                queryFn: async () => {
+                    const { data } = await banner.getBannersByIds([
+                        `${BANNER_ID_PREFIX}-HOME`,
+                    ]);
+                    return data;
+                },
+            }),
+            queryClient.prefetchQuery({
+                queryKey: collectionKeys.exposureGroup('collection_group_1'),
+                queryFn: async () => {
+                    const { data } =
+                        await collection.getCollectionExposureGroup(
+                            'collection_group_1',
+                        );
+                    return data;
+                },
+            }),
+        ]);
+    } catch (error) {
+        console.error('[Home Page getStaticProps] Prefetching failed:', {
+            message: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+        });
+    }
+
+    return {
+        props: {
+            dehydratedState: dehydrate(queryClient),
+        },
+        revalidate: ONE_HOUR_IN_SECONDS,
+    };
+}
 
 export default function Home() {
     return (
         <>
-            <Head>
-                <title>JollyPot</title>
-                <meta
-                    name='description'
-                    content='Welcome to our online store'
-                />
-                <meta
-                    name='viewport'
-                    content='width=device-width, initial-scale=1'
-                />
-                <link rel='icon' href='/favicon.ico' />
-            </Head>
+            <Seo title='JollyPot' description='Welcome to our online store' />
 
             <div className={`${styles.main}`}>
                 {/* Full-width HeroBanner */}
