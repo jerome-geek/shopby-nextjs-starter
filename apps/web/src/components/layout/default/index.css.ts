@@ -32,7 +32,7 @@ export const shopMain = style({
 
     '@media': {
         [media.tablet]: {
-            paddingTop: globalVars.header.mobileShopMainHeight,
+            paddingTop: globalVars.header.mobileHeight,
         },
         [media.mobile]: {
             paddingTop: globalVars.header.mobileShopMainHeight,

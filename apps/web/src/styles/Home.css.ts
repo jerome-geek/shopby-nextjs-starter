@@ -1,5 +1,5 @@
-import { style, globalStyle, createVar } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
+import { createVar, style } from '@vanilla-extract/css';
+
 import { media } from '@/styles/media';
 
 const background = createVar();
@@ -46,7 +46,7 @@ export const main = style({
 
     '@media': {
         [media.desktop]: {
-            padding: '24px 0px',
+            padding: '0',
             gap: '96px',
         },
         [media.mobile]: {
