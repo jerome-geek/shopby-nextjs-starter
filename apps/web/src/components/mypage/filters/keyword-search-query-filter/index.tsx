@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import { SearchIcon } from '@/components/icons';
 import * as styles from '@/components/mypage/filters/keyword-search-query-filter/index.css';
-import { Select, InputField, InputFieldContainer } from '@/components/ui/input';
+import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
 import { useResponsive } from '@/hooks/utils';
+import { vars } from '@/styles/theme.css';
 
 export type KeywordSearchQueryTypeOption = {
     value: string;
@@ -162,7 +163,7 @@ const MypageKeywordSearchFilterRow = ({
                     />
 
                     <button className={styles.searchButton} type='submit'>
-                        <SearchIcon />
+                        <SearchIcon currentColor={vars.color.gray[60]} />
                     </button>
                 </div>
             </InputFieldContainer>

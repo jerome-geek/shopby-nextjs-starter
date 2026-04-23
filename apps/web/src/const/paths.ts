@@ -3,6 +3,7 @@ export const PATHS = {
 
     SHOP: {
         DISCOVERY: '/shop',
+        DETAIL: '/shop/[slug]',
         KIDS: '/shop/kids',
         LIFE: '/shop/life',
     },

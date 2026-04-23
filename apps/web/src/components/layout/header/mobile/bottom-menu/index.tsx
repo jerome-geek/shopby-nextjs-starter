@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { MENU_LIST } from '@/components/layout/header/menu';
-import * as styles from '@/components/layout/header/mobile-menu/index.css';
+import * as styles from '@/components/layout/header/mobile/bottom-menu/index.css';
 import { usePage } from '@/hooks/utils';
 
 import 'swiper/css';
 
-const MobileMenu = () => {
+const MobileBottomMenu = () => {
     const router = useRouter();
 
     const { isShopMainPage } = usePage();
@@ -49,4 +49,4 @@ const MobileMenu = () => {
     );
 };
 
-export default MobileMenu;
+export default MobileBottomMenu;

@@ -198,24 +198,6 @@ export const iconList = style({
     },
 });
 
-export const iconButton = style({
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '40px',
-    height: '40px',
-    border: 'none',
-    background: 'transparent',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s ease',
-
-    ':hover': {
-        backgroundColor: vars.color.gray['20'],
-    },
-});
-
 export const mobileMenuButton = style({
     display: 'flex',
     alignItems: 'center',
@@ -237,44 +219,17 @@ export const mobileMenuButton = style({
     },
 });
 
-export const iconLink = style({
+export const iconWrapper = style({
     position: 'relative',
-    display: 'none',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '24px',
-    height: '24px',
     cursor: 'pointer',
     transition: 'opacity 0.2s ease',
 
     ':hover': {
         opacity: 0.7,
-    },
-
-    '@media': {
-        [media.tablet]: {
-            display: 'flex',
-        },
-        [media.desktop]: {
-            display: 'flex',
-        },
-    },
-});
-
-export const mobileVisibleIcon = style({
-    display: 'flex !important',
-});
-
-export const mobileHiddenItem = style({
-    display: 'none',
-
-    '@media': {
-        [media.tablet]: {
-            display: 'list-item',
-        },
-        [media.desktop]: {
-            display: 'list-item',
-        },
     },
 });
 
@@ -294,30 +249,6 @@ export const cartBadge = style([
         alignItems: 'center',
     },
 ]);
-
-export const searchIcon = style({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '24px',
-    height: '24px',
-    cursor: 'pointer',
-    transition: 'opacity 0.2s ease',
-    order: 1,
-
-    ':hover': {
-        opacity: 0.7,
-    },
-
-    '@media': {
-        [media.tablet]: {
-            order: 2,
-        },
-        [media.desktop]: {
-            order: 2,
-        },
-    },
-});
 
 export const alarmIcon = style({
     display: 'flex',
