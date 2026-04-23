@@ -2,10 +2,10 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { RecipeImageUpload } from '@/components/layer-contents/recipe-image-upload';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
+import { BottomSheetLayout, type DefaultBottomSheetProps } from '@/components/layout';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 
-export const RecipeImageUploadModal = (props: DefaultModalLayoutProps) => {
+export const RecipeImageUploadSheet = (props: DefaultBottomSheetProps) => {
     const { t } = useTranslation();
     const router = useRouter();
 
@@ -21,13 +21,12 @@ export const RecipeImageUploadModal = (props: DefaultModalLayoutProps) => {
     };
 
     return (
-        <ModalLayout
+        <BottomSheetLayout
             {...props}
             close={handleClose}
             title={t('이미지 추가')}
-            width='588px'
         >
             <RecipeImageUpload handleClose={handleClose} />
-        </ModalLayout>
+        </BottomSheetLayout>
     );
 };

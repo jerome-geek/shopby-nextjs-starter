@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CollectionFormSheet } from '@/components/bottom-sheet/collection-form';
 import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
+import { RecipeImageUploadSheet } from '@/components/bottom-sheet/recipe-image-upload';
 import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
 import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
 import { ImageDetailModal } from '@/components/modal';
@@ -210,8 +211,12 @@ export const useCustomDialog = () => {
     );
 
     const _openRecipeImageUpload = useCallback(() => {
-        overlay.open((props) => <RecipeImageUploadModal {...props} />);
-    }, []);
+        if (isMobile) {
+            overlay.open((props) => <RecipeImageUploadSheet {...props} />);
+        } else {
+            overlay.open((props) => <RecipeImageUploadModal {...props} />);
+        }
+    }, [isMobile]);
 
     const openRecipeImageUpload = withRequiredAuth(
         _openRecipeImageUpload,

@@ -18,9 +18,7 @@ export const container = style({
     transition: 'all 0.2s ease',
 
     '@media': {
-        [media.desktop]: {
-            maxWidth: '130px',
-        },
+        [media.desktop]: {},
     },
 
     selectors: {
@@ -43,6 +41,25 @@ export const mainBadge = style([
         padding: '4px 8px',
         borderTopLeftRadius: '4px',
         zIndex: 10,
+    },
+]);
+
+export const indexBadge = style([
+    textStyles.caption1Semibold,
+    {
+        position: 'absolute',
+        top: '8px',
+        left: '8px',
+        width: '26px',
+        height: '26px',
+        borderRadius: '50%',
+        backgroundColor: '#1a1a1a',
+        color: vars.color.white,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1,
+        fontSize: '13px',
     },
 ]);
 

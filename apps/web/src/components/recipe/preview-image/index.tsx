@@ -1,15 +1,16 @@
-import { X } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { DraggableAttributes } from '@dnd-kit/core';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/preview-image/index.css';
 
 export interface RecipePreviewImageProps {
     isMain?: boolean;
+    index?: number; // 순서 표시를 위한 인덱스 추가
     sno: number | null | undefined;
     url: string;
-    onDeleteButtonClick?: (sno: number) => void;
+    onDeleteButtonClick?: (sno: number, index?: number) => void;
     onClick?: () => void;
     // DND 관련 props 추가
     attributes?: DraggableAttributes;
@@ -21,6 +22,7 @@ export interface RecipePreviewImageProps {
 export const RecipePreviewImage = ({
     isMain,
     sno,
+    index,
     url,
     onDeleteButtonClick,
     onClick,
@@ -41,9 +43,12 @@ export const RecipePreviewImage = ({
             onClick={onClick}
         >
             {isMain && <span className={styles.mainBadge}>{t('대표')}</span>}
+            {typeof index === 'number' && (
+                <span className={styles.indexBadge}>{index + 1}</span>
+            )}
             <img
                 src={url}
-                alt={`recipe-preview-image-${sno}`}
+                alt={`recipe-preview-image-${sno ?? index}`}
                 className={styles.previewImage}
             />
             {onDeleteButtonClick && (
@@ -54,9 +59,7 @@ export const RecipePreviewImage = ({
                         // onClick={() => (img.sno ? null : handleDeleteImage(i))}
                         onClick={(e) => {
                             e.stopPropagation();
-                            if (sno) {
-                                onDeleteButtonClick(sno);
-                            }
+                            onDeleteButtonClick(sno ?? 0, index);
                         }}
                     >
                         <X size={20} />

@@ -1,7 +1,9 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
+import { mediaQuery } from '@/hooks/utils/useResponsive';
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 const spin = keyframes({
     from: { transform: 'rotate(0deg)' },
@@ -11,15 +13,19 @@ const spin = keyframes({
 export const container = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
+    height: 'auto',
+});
+
+export const scrollArea = style({
+    flex: 1,
+    overflowY: 'auto',
+    overflowX: 'hidden',
     padding: '12px 0',
-    height: '100%',
     maxHeight: '388px',
 
-    '@media': {
-        'screen and (max-width: 768px)': {
-            padding: '12px 20px',
-            maxHeight: 'none',
+    selectors: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
     },
 });
@@ -27,15 +33,14 @@ export const container = style({
 export const imageGrid = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: '18px',
+    gap: '10px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
 
     '@media': {
-        'screen and (max-width: 768px)': {
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '10px',
+        [mediaQuery.desktop]: {
+            gap: '18px',
         },
     },
 });
@@ -49,7 +54,7 @@ export const imageAddCell = style({
     width: '100%',
     height: '100%',
     borderRadius: '4px',
-    border: `2px dashed ${vars.color.gray['50']}`,
+    border: `1px dashed ${vars.color.gray['50']}`,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -136,23 +141,31 @@ export const nextButtonContainer = style({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px',
+    gap: '10px',
+    backgroundColor: vars.color.white,
+    borderTop: `1px solid ${vars.color.gray['20']}`,
+    paddingTop: '12px',
 
     '@media': {
-        'screen and (max-width: 768px)': {
-            padding: '0 20px 20px',
-            gap: '12px',
+        [mediaQuery.desktop]: {
+            padding: 0,
+            gap: '16px',
+            borderTop: 'none',
         },
     },
 });
 
 export const hint = style([
-    textStyles.body2Medium,
+    textStyles.body2Regular,
     {
-        color: vars.color.gray['50'],
+        color: vars.color.gray['60'],
         textAlign: 'center',
-        marginTop: '8px',
-        fontSize: '13px',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Medium,
+            },
+        },
     },
 ]);
 

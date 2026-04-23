@@ -29,7 +29,7 @@ export const SortablePreviewImage = ({
         transform,
         transition,
         isDragging,
-    } = useSortable({ id: image.sno ?? image.url });
+    } = useSortable({ id: image.sno || image.url });
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -44,6 +44,7 @@ export const SortablePreviewImage = ({
             sno={image.sno}
             url={image.url}
             isMain={image.isMain}
+            index={index} // 인덱스 전달 추가
             onDeleteButtonClick={() => onDelete(index)}
             onClick={onClick}
             setNodeRef={setNodeRef}
