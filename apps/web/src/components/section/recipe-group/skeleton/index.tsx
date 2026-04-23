@@ -1,7 +1,7 @@
 import * as recipeCardStyle from '@/components/recipe/card/index.css';
 import * as styles from '@/components/section/recipe-group/index.css';
 import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
-import Skeleton from '@/components/ui/Skeleton/Skeleton';
+import Skeleton from '@/components/ui/skeleton';
 
 const RecipeSectionSkeleton = () => {
     return (

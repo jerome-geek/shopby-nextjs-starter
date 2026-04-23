@@ -4,7 +4,7 @@ import { generateNextSeo } from 'next-seo/pages';
 import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 
-import TermsHistorySelect from '@/components/terms/historySelect';
+import TermsHistorySelect from '@/components/terms/history-select';
 import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { useTermHistory, useTermList } from '@/hooks/query/manage/terms';
 import type { ShopbyTermHistoryTypes, ShopbyTermsTypes } from '@/models';

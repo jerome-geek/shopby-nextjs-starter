@@ -1,7 +1,7 @@
 import { useResponsive } from '@/hooks/utils';
 import * as productRowStyles from '@/components/product/card-row/index.css';
 import * as eventCardStyles from '@/components/section/event/card/index.css';
-import Skeleton from '@/components/ui/Skeleton/Skeleton';
+import Skeleton from '@/components/ui/skeleton';
 
 export const EventProductsSkeleton = () => {
     return (

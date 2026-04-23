@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import * as styles from '@/components/ui/image/index.css';
-import Skeleton from '@/components/ui/Skeleton/Skeleton';
+import Skeleton from '@/components/ui/skeleton';
 
 type ImageStatus = 'loading' | 'loaded' | 'error';
 

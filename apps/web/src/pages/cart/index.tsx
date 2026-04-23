@@ -4,7 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OrderProductItem } from '@/components/cart/order-product-item';
-import Recommend from '@/components/cart/Recommend';
+import Recommend from '@/components/cart/recommend';
 import CartSummary from '@/components/cart/summary';
 import { NoResult } from '@/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';

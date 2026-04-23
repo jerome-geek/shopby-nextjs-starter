@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { skeleton } from './Skeleton.css';
+import { skeleton } from './index.css';
 
 interface SkeletonProps {
     className?: string;

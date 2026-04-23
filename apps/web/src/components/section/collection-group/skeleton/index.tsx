@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import * as recipeDetailCardStyle from '@/components/recipe/detail-card/index.css';
 import * as collectionSectionStyle from '@/components/section/collection-group/collection/index.css';
 import { useResponsive } from '@/hooks/utils/useResponsive';
-import Skeleton from '@/components/ui/Skeleton/Skeleton';
+import Skeleton from '@/components/ui/skeleton';
 
 import 'swiper/css';
 
