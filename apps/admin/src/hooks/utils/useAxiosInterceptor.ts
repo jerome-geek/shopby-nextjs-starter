@@ -1,4 +1,9 @@
-import { type AxiosError, type AxiosResponse, HttpStatusCode, type InternalAxiosRequestConfig } from 'axios';
+import {
+    AxiosError,
+    type AxiosResponse,
+    HttpStatusCode,
+    type InternalAxiosRequestConfig,
+} from 'axios';
 import { useCallback, useLayoutEffect, useState } from 'react';
 
 import { controller } from '@/api/core/controller';
