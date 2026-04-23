@@ -1,0 +1,10 @@
+{
+    "version": 2,
+    "regions": ["icn1"],
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}
