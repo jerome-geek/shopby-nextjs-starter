@@ -12,7 +12,6 @@ export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
-    padding: '24px 0',
 
     '@media': {
         [media.desktop]: {
@@ -31,39 +30,6 @@ export const title = style([
     },
 ]);
 
-export const headerTop = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    maxWidth: '1200px',
-    margin: '0 auto',
-});
-
-export const headerIcons = style({
-    display: 'flex',
-    gap: '16px',
-    alignItems: 'center',
-});
-
-export const cartBadge = style([
-    textStyles.caption1Semibold,
-    {
-        position: 'absolute',
-        top: '-4px',
-        right: '-4px',
-        width: '16px',
-        height: '16px',
-        backgroundColor: '#ff4d4d',
-        color: vars.color.white,
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '10px',
-    },
-]);
-
 export const titleContainer = style({
     width: '100vw',
     position: 'relative',
@@ -73,10 +39,16 @@ export const titleContainer = style({
     marginRight: '-50vw',
     borderBottom: `1px solid ${vars.color.gray['20']}`,
     backgroundColor: vars.color.white,
-    paddingTop: '20px',
+    padding: '0 20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '20px 20px 0 20px',
+        },
+    },
 });
 
 export const titleArea = style({
@@ -157,140 +129,6 @@ export const activeIndicator = style({
     boxShadow: '0 4px 12px rgba(141, 162, 135, 0.3)',
 });
 
-export const section = style({
-    display: 'flex',
-    flexDirection: 'column',
-
-    '@media': {
-        [media.desktop]: {
-            gap: '24px',
-        },
-    },
-});
-
-export const sectionHeader = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-});
-
-export const sectionTitle = style([
-    textStyles.title1Bold,
-    { color: vars.color.black },
-]);
-
-export const viewAll = style([
-    textStyles.caption1Regular,
-    {
-        color: vars.color.gray['40'],
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-        cursor: 'pointer',
-    },
-]);
-
-/* Collection Styles */
-export const collectionGrid = style({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(1, 1fr)',
-    gap: '16px',
-    '@media': {
-        [media.desktop]: {
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '24px',
-        },
-    },
-});
-
-export const collectionCard = style({
-    borderRadius: '16px',
-    overflow: 'hidden',
-    backgroundColor: vars.color.white,
-    border: '1px solid rgba(0, 0, 0, 0.05)',
-    transition: 'box-shadow 0.3s ease',
-    cursor: 'pointer',
-    selectors: {
-        '&:hover': {
-            boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
-        },
-    },
-});
-
-export const collageGrid = style({
-    display: 'grid',
-    gridTemplateColumns: '1.5fr 1fr',
-    gridTemplateRows: 'repeat(2, 80px)',
-    gap: '2px',
-    '@media': {
-        [media.desktop]: {
-            gridTemplateRows: 'repeat(2, 100px)',
-        },
-    },
-});
-
-export const collageMain = style({
-    gridRow: '1 / span 2',
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
-export const collageSub = style({
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
-export const collectionInfo = style({
-    padding: '16px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-    backgroundColor: '#f9fbf8',
-});
-
-export const collectionTitleArea = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-});
-
-export const collectionDesc = style([
-    textStyles.caption1Regular,
-    {
-        color: vars.color.gray['60'],
-        lineHeight: '1.5',
-    },
-]);
-
-export const collectionFooter = style([
-    textStyles.caption2Regular,
-    {
-        color: vars.color.gray['40'],
-        marginTop: '8px',
-    },
-]);
-
-export const createButton = style([
-    textStyles.headingSemibold,
-    {
-        width: '100%',
-        maxWidth: '588px',
-        padding: '18px 0',
-        margin: '0 auto',
-        borderRadius: '4px',
-        border: `1px solid ${vars.color.gray['50']}`,
-        backgroundColor: vars.color.white,
-        color: vars.color.black,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        cursor: 'pointer',
-    },
-]);
-
 /* Product Grid */
 export const productGrid = style({
     display: 'grid',
@@ -304,32 +142,11 @@ export const productGrid = style({
     },
 });
 
-export const productThumb = style({
-    position: 'relative',
-    aspectRatio: '1 / 1',
-    borderRadius: '12px',
-    overflow: 'hidden',
-});
-
 export const productImg = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
 });
-
-export const soldOutOverlay = style([
-    textStyles.body1Semibold,
-    {
-        position: 'absolute',
-        inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: vars.color.white,
-        backdropFilter: 'blur(2px)',
-    },
-]);
 
 export const productInfo = style({
     marginTop: '12px',
@@ -363,42 +180,11 @@ export const brandName = style([
     },
 ]);
 
-export const priceArea = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    marginTop: '4px',
-});
-
-export const discount = style([
-    textStyles.body2Semibold,
-    {
-        color: '#ff4d4d',
-    },
-]);
-
-export const price = style([
-    textStyles.body2Semibold,
-    {
-        color: vars.color.black,
-    },
-]);
-
 export const badgeArea = style({
     display: 'flex',
     gap: '4px',
     marginTop: '8px',
 });
-
-export const badge = style([
-    textStyles.caption2Regular,
-    {
-        padding: '2px 6px',
-        backgroundColor: vars.color.gray['10'],
-        color: vars.color.gray['60'],
-        borderRadius: '4px',
-    },
-]);
 
 /* Recipe Cards */
 export const recipeGrid = style({
@@ -437,16 +223,6 @@ export const iconText = style({
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
-});
-
-/* Pagination */
-export const pagination = style({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '16px',
-    marginTop: '32px',
-    color: vars.color.gray['30'],
 });
 
 export const primaryButton = style([
@@ -765,33 +541,6 @@ export const stepText = style([
         lineHeight: '1.5',
     },
 ]);
-
-export const fab = style({
-    position: 'fixed',
-    bottom: '80px', // 바텀 탭바 고려
-    right: '20px',
-    width: '48px',
-    height: '48px',
-    borderRadius: '50%',
-    backgroundColor: 'rgba(141, 162, 135, 0.8)',
-    color: vars.color.white,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: 'none',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    backdropFilter: 'blur(4px)',
-    cursor: 'pointer',
-    zIndex: 100,
-    '@media': {
-        [media.desktop]: {
-            bottom: '40px',
-            right: '40px',
-            width: '56px',
-            height: '56px',
-        },
-    },
-});
 
 export const recipeLink = style({
     display: 'block',
