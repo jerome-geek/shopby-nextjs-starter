@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const commentListItem = style({
     display: 'flex',
@@ -10,6 +10,13 @@ export const commentListItem = style({
     gap: '6px',
     paddingBottom: '20px',
     borderBottom: `1px solid ${vars.color.gray['20']}`,
+
+    selectors: {
+        '&:last-of-type': {
+            borderBottom: 'none',
+            paddingBottom: '0',
+        },
+    },
 
     '@media': {
         [media.desktop]: {

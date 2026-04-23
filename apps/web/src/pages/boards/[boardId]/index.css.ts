@@ -1,8 +1,8 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 const ellipsis = style({
     minWidth: 0,
@@ -71,15 +71,10 @@ export const title = style([
 ]);
 
 export const categorySwiperWrapper = style({
-    width: 'calc(100% + 40px)',
-    margin: '0 -20px',
-    paddingLeft: '20px',
-
     '@media': {
-        [media.desktop]: {
-            width: '100%',
-            margin: 0,
-            paddingLeft: 0,
+        [media.mobile]: {
+            width: 'calc(100% + 40px)',
+            marginLeft: '-20px',
         },
     },
 });
@@ -88,13 +83,19 @@ export const categorySwiper = style({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
+
+    '@media': {
+        [media.mobile]: {
+            padding: '0 20px',
+        },
+    },
 });
 
 export const categorySwiperSlide = style({
     width: 'auto',
 });
 
-export const categoryButton = style([
+export const categoryLink = style([
     textStyles.body1Regular,
     {
         display: 'flex',
@@ -103,11 +104,13 @@ export const categoryButton = style([
         height: '37px',
         padding: '0 16px',
         borderRadius: '60px',
+        border: 'none',
+        textDecoration: 'none',
         backgroundColor: vars.color.green['20'],
         color: vars.color.gray['80'],
 
         selectors: {
-            '&[aria-pressed="true"]': {
+            '&[data-selected="true"]': {
                 backgroundColor: vars.color.green['80'],
                 color: vars.color.white,
                 fontWeight: 500,
@@ -169,76 +172,16 @@ export const sortButton = style([
     },
 ]);
 
-export const searchTypeSelect = style({
-    width: '120px',
-    minWidth: '120px',
-    flexShrink: 0,
-
-    '@media': {
-        [media.desktop]: {
-            width: '160px',
-            minWidth: '160px',
-        },
-    },
-});
-
-export const searchInputWrapper = style({
-    flex: 1,
-    minWidth: 0,
-    width: '100%',
-
-    '@media': {
-        [media.desktop]: {
-            flex: 'none',
-            width: 'auto',
-            maxWidth: '180px',
-        },
-    },
-});
-
-globalStyle(`${searchInputWrapper} input`, {
-    height: '46px !important',
-    minHeight: '46px !important',
-});
-
-export const searchSelectControl = style({
-    height: '46px !important',
-    minHeight: '46px !important',
-});
-
-export const searchSubmitButton = style({
-    width: '46px !important',
-    height: '46px !important',
-    minWidth: '46px !important',
-    minHeight: '46px !important',
-    flexShrink: 0,
-    padding: 0,
-});
-
-export const searchForm = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    flexWrap: 'nowrap',
-    width: '100%',
-
-    '@media': {
-        [media.desktop]: {
-            width: 'auto',
-        },
-    },
-});
-
 export const writeLink = style([
     textStyles.body1Medium,
     {
+        height: '46px !important',
+        padding: '0 16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
         width: 'fit-content !important',
-        height: '32px !important',
-        padding: '0 8px',
         backgroundColor: vars.color.primary,
         color: vars.color.white,
         borderRadius: '4px',
@@ -250,9 +193,9 @@ export const writeLink = style([
         },
 
         '@media': {
-            [media.desktop]: {
-                height: '46px !important',
-                padding: '0 16px',
+            [media.mobile]: {
+                height: '32px !important',
+                padding: '0 8px',
             },
         },
     },

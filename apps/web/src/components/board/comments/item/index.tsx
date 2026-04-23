@@ -1,15 +1,17 @@
 import dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/item/index.css';
+import { ErrorMessage } from '@/components/ui/form';
 import { TextArea } from '@/components/ui/input';
-import { Row } from '@/components/ui/layout/flex';
+import { Column, Row } from '@/components/ui/layout/flex';
 import { BOARD_REPLY_MAX_LENGTH } from '@/const/board';
 import { useBoardReplyMutation } from '@/hooks/mutations';
-import { useBoardConfig } from '@/hooks/query/manage/board';
 import { useProfile } from '@/hooks/query/member/profile';
+import useBoardConfig from '@/hooks/suspenseQuery/manage/board/useBoardConfig';
+import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 import type { AuthorityConfigType } from '@/models';
 import type { ReplyList, UpdateArticleData } from '@/models/manage/board';
@@ -25,7 +27,9 @@ const CommentItem = ({
 }) => {
     const { t } = useTranslation();
 
-    const { openDialog, openAsyncDialog } = useDialog();
+    const { openAsyncDialog } = useDialog();
+
+    const { addToast } = useToast();
 
     const [isEditing, setIsEditing] = useState(false);
 
@@ -33,8 +37,7 @@ const CommentItem = ({
         useBoardReplyMutation({
             articleNo,
         });
-
-    const { register, handleSubmit, watch, formState } = useForm<{
+    const methods = useForm<{
         content: string;
     }>({
         defaultValues: {
@@ -42,22 +45,25 @@ const CommentItem = ({
         },
     });
 
-    const editContent = watch('content');
+    const {
+        register,
+        handleSubmit,
+        formState: { isSubmitting, errors },
+    } = methods;
 
     const { data: profileData } = useProfile();
 
     const { data: boardConfigData } = useBoardConfig();
 
     const currentBoardConfig = useMemo(() => {
-        if (!boardConfigData?.boardConfigs) {
-            return null;
-        }
         if (!boardNo) {
             return null;
         }
 
-        return boardConfigData.boardConfigs.find(
-            (config) => config.boardId === boardNo,
+        return (
+            boardConfigData.boardConfigs.find(
+                (config) => config.boardId === boardNo,
+            ) ?? null
         );
     }, [boardConfigData, boardNo]);
 
@@ -72,14 +78,14 @@ const CommentItem = ({
 
             switch (displayType) {
                 case 'MEMBER_ID':
-                    return reply.memberId || reply.registerName;
+                    return reply.memberId || reply.registerName || '회원';
                 case 'MEMBER_NICKNAME':
-                    return reply.memberNickname;
+                    return reply.memberNickname || '회원';
                 case 'MEMBER_EMAIL':
-                    return reply.memberEmail;
+                    return reply.memberEmail || '회원';
                 case 'MEMBER_NAME':
                 default:
-                    return reply.registerName;
+                    return reply.registerName || '회원';
             }
         },
         [currentBoardConfig?.writerDisplayType],
@@ -107,7 +113,9 @@ const CommentItem = ({
                 articleNo: reply.articleNo,
             });
 
-            openDialog({ message: t('댓글이 삭제되었습니다.') });
+            addToast({
+                message: t('댓글이 삭제되었습니다.'),
+            });
         } catch (error) {
             console.error('댓글 삭제 실패:', error);
         }
@@ -135,7 +143,7 @@ const CommentItem = ({
                 data: updateData,
             });
 
-            openDialog({
+            addToast({
                 message: t('댓글이 수정되었습니다.'),
             });
 
@@ -146,71 +154,85 @@ const CommentItem = ({
     });
 
     return (
-        <li className={styles.commentListItem}>
-            {isEditing ? (
-                <form className={styles.commentContainer} onSubmit={onSubmit}>
-                    <TextArea
-                        placeholder='댓글을 입력해주세요.'
-                        {...register('content', {
-                            maxLength: BOARD_REPLY_MAX_LENGTH,
-                        })}
-                        maxLength={BOARD_REPLY_MAX_LENGTH}
-                    />
-                    <Row gap={'sm'}>
-                        <button
-                            type='submit'
-                            className={styles.registerButton}
-                            disabled={
-                                formState.isSubmitting || !editContent.trim()
-                            }
+        <FormProvider {...methods}>
+            <li className={styles.commentListItem}>
+                {isEditing ? (
+                    <form
+                        className={styles.commentContainer}
+                        onSubmit={onSubmit}
+                    >
+                        <Column
+                            align='start'
+                            gap='sm'
+                            style={{ width: '100%' }}
                         >
-                            수정
-                        </button>
-                        <button
-                            type='button'
-                            className={styles.registerButton}
-                            onClick={toggleEdit}
-                            disabled={formState.isSubmitting}
-                        >
-                            취소
-                        </button>
-                    </Row>
-                </form>
-            ) : (
-                <>
-                    <div className={styles.commentItemHeader}>
+                            <TextArea
+                                placeholder='댓글을 입력해주세요.'
+                                {...register('content', {
+                                    maxLength: BOARD_REPLY_MAX_LENGTH,
+                                    validate: (value) =>
+                                        value.trim().length >= 1 ||
+                                        '댓글을 1글자 이상 입력해주세요.',
+                                })}
+                                maxLength={BOARD_REPLY_MAX_LENGTH}
+                                data-error={!!errors.content}
+                            />
+                            <ErrorMessage name='content' />
+                        </Column>
                         <Row gap={'sm'}>
-                            <strong className={styles.registerName}>
-                                {getWriterDisplayName(reply)}
-                            </strong>
-                            <span className={styles.date}>
-                                {dayjs(reply.registerYmdt).format(
-                                    'YYYY.MM.DD HH:MM',
-                                )}
-                            </span>
+                            <button
+                                type='submit'
+                                className={styles.registerButton}
+                                disabled={isSubmitting}
+                            >
+                                수정
+                            </button>
+                            <button
+                                type='button'
+                                className={styles.registerButton}
+                                onClick={toggleEdit}
+                                disabled={isSubmitting}
+                            >
+                                취소
+                            </button>
                         </Row>
-
-                        {isMyComment && !isEditing && (
-                            <Row gap={'xs'}>
-                                <button
-                                    className={styles.headerButton}
-                                    onClick={toggleEdit}
-                                >
-                                    수정
-                                </button>
-                                <button
-                                    className={styles.headerButton}
-                                    onClick={handleDeleteClick}
-                                >
-                                    삭제
-                                </button>
+                    </form>
+                ) : (
+                    <>
+                        <div className={styles.commentItemHeader}>
+                            <Row gap={'sm'} align='center'>
+                                <strong className={styles.registerName}>
+                                    {getWriterDisplayName(reply)}
+                                </strong>
+                                <span className={styles.date}>
+                                    {dayjs(reply.registerYmdt).format(
+                                        'YYYY.MM.DD HH:MM',
+                                    )}
+                                </span>
                             </Row>
-                        )}
-                    </div>
-                    <p className={styles.content}>{reply.content}</p>
-                </>
-            )}
-        </li>
+
+                            {isMyComment && !isEditing && (
+                                <Row gap={'xs'}>
+                                    <button
+                                        className={styles.headerButton}
+                                        onClick={toggleEdit}
+                                    >
+                                        수정
+                                    </button>
+                                    <button
+                                        className={styles.headerButton}
+                                        onClick={handleDeleteClick}
+                                    >
+                                        삭제
+                                    </button>
+                                </Row>
+                            )}
+                        </div>
+                        <p className={styles.content}>{reply.content}</p>
+                    </>
+                )}
+            </li>
+        </FormProvider>
     );
 };
 

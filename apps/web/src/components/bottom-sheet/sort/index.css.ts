@@ -11,14 +11,22 @@ export const queryList = style({
 });
 
 export const queryListItem = style({
+    width: '100%',
     borderBottom: `1px solid ${vars.color.gray['20']}`,
+    selectors: {
+        '&:last-child': {
+            borderBottom: 'none',
+        },
+    },
 });
 
 export const optionButton = recipe({
     base: [
         textStyles.body1Regular,
         {
+            width: '100%',
             padding: '12px 0',
+            textAlign: 'left',
         },
     ],
     variants: {

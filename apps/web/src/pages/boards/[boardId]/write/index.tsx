@@ -6,10 +6,12 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import upload from '@/api/storage/image';
+import { Button } from '@/components/ui';
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
 import {
     InputCheckbox,
+    InputContainer,
     InputField,
     InputFieldContainer,
     InputLabel,
@@ -21,16 +23,17 @@ import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import {
     useBoardArticle,
     useBoardCategoryList,
-    useBoardConfig,
 } from '@/hooks/query/manage/board';
 import { useTermList } from '@/hooks/query/manage/terms';
 import { useProfile } from '@/hooks/query/member/profile';
+import useBoardConfig from '@/hooks/suspenseQuery/manage/board/useBoardConfig';
+import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useDialog, useResponsive } from '@/hooks/utils';
+import { useResponsive } from '@/hooks/utils';
 import { UploadFileBlob } from '@/hooks/utils/useFileUpload';
 import type { ImagesType } from '@/models/manage';
 import type { PostArticleParams } from '@/models/manage/board';
-import * as styles from '@/pages/boards/[boardNo]/write/index.css';
+import * as styles from '@/pages/boards/[boardId]/write/index.css';
 import {
     articleWriteSchema,
     ArticleWriteSchemaType,
@@ -46,11 +49,11 @@ const ArticleWritePage = () => {
 
     const { isMobile } = useResponsive();
 
-    const { openAsyncDialog } = useDialog();
+    const { addToast } = useToast();
 
     const router = useRouter();
 
-    const boardNo = router.query.boardNo as string;
+    const boardNo = router.query.boardId as string;
 
     const articleNo = router.query.articleNo;
 
@@ -69,27 +72,26 @@ const ArticleWritePage = () => {
     const { data: boardConfigData } = useBoardConfig();
 
     const currentBoardConfig = useMemo(() => {
-        if (!boardConfigData?.boardConfigs) {
-            return null;
-        }
         if (!boardNo) {
             return null;
         }
 
-        return boardConfigData.boardConfigs.find(
-            (config) => config.boardId === boardNo,
+        return (
+            boardConfigData.boardConfigs.find(
+                (config) => config.boardId === boardNo,
+            ) ?? null
         );
     }, [boardConfigData, boardNo]);
 
-    const isVisible = {
-        password: isLogin === false,
-        term:
+    const fieldVisibility = {
+        isVisiblePassword: isLogin === false,
+        isVisibleTerm:
             !isLogin &&
             termData?.pi_collection_and_use_for_guest_on_article?.used,
-        attachment: currentBoardConfig?.attachmentUsed,
-        secret: currentBoardConfig?.secretPostingUsed,
-        category: currentBoardConfig?.categoryUsed,
-        thumbnail: currentBoardConfig?.thumbnailUsed,
+        isVisibleAttachment: currentBoardConfig?.attachmentUsed,
+        isVisibleSecret: currentBoardConfig?.secretPostingUsed,
+        isVisibleCategory: currentBoardConfig?.categoryUsed,
+        isVisibleThumbnail: currentBoardConfig?.thumbnailUsed,
     };
 
     const { data: categoryData } = useBoardCategoryList({
@@ -109,8 +111,8 @@ const ArticleWritePage = () => {
 
     const articleWriteSchemaResolver = articleWriteSchema({
         isLogin: !!isLogin,
-        isTermRequired: !!isVisible.term,
-        isCategoryRequired: !!isVisible.category,
+        isTermRequired: !!fieldVisibility.isVisibleTerm,
+        isCategoryRequired: !!fieldVisibility.isVisibleCategory,
     });
 
     const categoryOptions = useMemo<CategoryOption[]>(() => {
@@ -148,8 +150,8 @@ const ArticleWritePage = () => {
 
         return {
             writerName: isLogin
-                ? (profileData?.memberName ?? articleData.registerName ?? '')
-                : (articleData.registerName ?? ''),
+                ? profileData?.memberName ?? articleData.registerName ?? ''
+                : articleData.registerName ?? '',
             password: '',
             boardCategoryNo: articleData.categoryNo ?? undefined,
             articleTitle: articleData.title ?? '',
@@ -159,9 +161,9 @@ const ArticleWritePage = () => {
                 (a) => a.downloadFileUrl,
             ),
             secreted: articleData.secreted ?? false,
-            agreeTerm: !!isVisible.term,
+            agreeTerm: !!fieldVisibility.isVisibleTerm,
         };
-    }, [articleData, isLogin, isVisible.term, profileData]);
+    }, [articleData, isLogin, fieldVisibility.isVisibleTerm, profileData]);
 
     const methods = useForm<ArticleWriteSchemaType>({
         resolver: zodResolver(articleWriteSchemaResolver),
@@ -169,7 +171,14 @@ const ArticleWritePage = () => {
         values: isModify ? articleWriteValuesFromData : undefined,
     });
 
-    const { register, handleSubmit, control, setValue, reset } = methods;
+    const {
+        register,
+        handleSubmit,
+        control,
+        setValue,
+        reset,
+        formState: { isSubmitting, errors },
+    } = methods;
 
     useEffect(() => {
         if (isModify) {
@@ -285,7 +294,7 @@ const ArticleWritePage = () => {
                     data: submitData,
                 });
 
-                await openAsyncDialog({
+                addToast({
                     message: t('게시글이 수정되었습니다.'),
                 });
             } else {
@@ -294,7 +303,7 @@ const ArticleWritePage = () => {
                     data: submitData,
                 });
 
-                await openAsyncDialog({
+                addToast({
                     message: t('게시글이 등록되었습니다.'),
                 });
             }
@@ -302,7 +311,7 @@ const ArticleWritePage = () => {
             router.push(`/boards/${boardNo}`);
         } catch (error) {
             if (isAxiosError(error)) {
-                await openAsyncDialog({
+                addToast({
                     message:
                         error.response?.data?.message ??
                         t('이미지 업로드에 실패했습니다.'),
@@ -334,23 +343,25 @@ const ArticleWritePage = () => {
                                 readOnly={(isLogin || isModify) ?? false}
                                 {...register('writerName')}
                                 type='text'
+                                data-error={!!errors.writerName}
                             />
                             <ErrorMessage name='writerName' />
                         </InputFieldContainer>
 
-                        {isVisible.password && (
-                            <InputFieldContainer>
+                        {fieldVisibility.isVisiblePassword && (
+                            <InputContainer>
                                 <InputLabel isRequired>비밀번호</InputLabel>
                                 <InputField
                                     {...register('password')}
                                     type='password'
+                                    data-error={!!errors.password}
                                 />
                                 <ErrorMessage name='password' />
-                            </InputFieldContainer>
+                            </InputContainer>
                         )}
 
-                        {isVisible.category && (
-                            <InputFieldContainer>
+                        {fieldVisibility.isVisibleCategory && (
+                            <InputContainer>
                                 <InputLabel isRequired>카테고리</InputLabel>
                                 <Controller
                                     control={control}
@@ -374,7 +385,7 @@ const ArticleWritePage = () => {
                                     )}
                                 />
                                 <ErrorMessage name='boardCategoryNo' />
-                            </InputFieldContainer>
+                            </InputContainer>
                         )}
 
                         <InputFieldContainer>
@@ -382,17 +393,21 @@ const ArticleWritePage = () => {
                             <InputField
                                 {...register('articleTitle')}
                                 type='text'
+                                data-error={!!errors.articleTitle}
                             />
                             <ErrorMessage name='articleTitle' />
                         </InputFieldContainer>
                         <InputFieldContainer>
                             <InputLabel isRequired>내용</InputLabel>
-                            <TextArea {...register('articleContent')} />
+                            <TextArea
+                                {...register('articleContent')}
+                                data-error={!!errors.articleContent}
+                            />
                             <ErrorMessage name='articleContent' />
                         </InputFieldContainer>
 
-                        {isVisible.thumbnail && (
-                            <InputFieldContainer>
+                        {fieldVisibility.isVisibleThumbnail && (
+                            <InputContainer>
                                 <InputLabel>대표 이미지</InputLabel>
                                 <Column gap='8px'>
                                     <FileUpload
@@ -420,11 +435,11 @@ const ArticleWritePage = () => {
                                         - 업로드 용량은 5MB 이하로만 가능합니다.
                                     </p>
                                 </Column>
-                            </InputFieldContainer>
+                            </InputContainer>
                         )}
 
-                        {isVisible.attachment && (
-                            <InputFieldContainer>
+                        {fieldVisibility.isVisibleAttachment && (
+                            <InputContainer>
                                 <InputLabel>첨부 이미지</InputLabel>
                                 <Column gap='8px'>
                                     <FileUpload
@@ -452,10 +467,10 @@ const ArticleWritePage = () => {
                                         - 업로드 용량은 5MB 이하로만 가능합니다.
                                     </p>
                                 </Column>
-                            </InputFieldContainer>
+                            </InputContainer>
                         )}
 
-                        {isVisible.secret && (
+                        {fieldVisibility.isVisibleSecret && (
                             <label className={styles.label}>
                                 <Controller
                                     name='secreted'
@@ -471,7 +486,7 @@ const ArticleWritePage = () => {
                             </label>
                         )}
 
-                        {isVisible.term && (
+                        {fieldVisibility.isVisibleTerm && (
                             <Column gap='8px'>
                                 <label className={styles.label}>
                                     <Controller
@@ -505,14 +520,28 @@ const ArticleWritePage = () => {
                     </form>
                 </div>
 
-                <Row justify='center'>
-                    <button
+                <Row
+                    justify='center'
+                    gap='8px'
+                    className={styles.buttonContainer}
+                >
+                    <Button
+                        frame='outlined'
+                        variant='secondary'
+                        type='button'
+                        onClick={() => router.back()}
+                    >
+                        뒤로가기
+                    </Button>
+                    <Button
+                        frame='solid'
+                        variant='primary'
                         type='submit'
                         form='article-write-form'
-                        className={styles.registerButton}
+                        disabled={isSubmitting}
                     >
                         {t(`${isModify ? '수정' : '등록'}하기`)}
-                    </button>
+                    </Button>
                 </Row>
             </Column>
         </FormProvider>

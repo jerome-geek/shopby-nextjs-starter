@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { board } from '@/api/manage';
 import { boardKeys } from '@/hooks/queryKeys';
-import { useDialog } from '@/hooks/utils';
-import type {
+import { useToast } from '@/hooks/ui';
+import {
     DeleteArticleData,
     PostArticleParams,
     ReportArticleData,
@@ -16,7 +16,7 @@ import type {
 const useBoardMutation = () => {
     const { t } = useTranslation();
 
-    const { openDialog } = useDialog();
+    const { addToast } = useToast();
 
     const queryClient = useQueryClient();
     const invalidate = () => {
@@ -40,7 +40,7 @@ const useBoardMutation = () => {
     };
 
     const onErrorHandler = (error: Error) => {
-        openDialog({
+        addToast({
             message: t(
                 isAxiosError(error)
                     ? error.response?.data.message

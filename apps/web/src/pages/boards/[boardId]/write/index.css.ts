@@ -1,8 +1,8 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const page = style({
     width: '100%',
@@ -36,39 +36,15 @@ export const container = style({
     },
 });
 
-export const registerButton = style([
-    textStyles.headlineSemibold,
-    {
-        width: '200px',
-        height: '53px',
-        borderRadius: '4px',
-        backgroundColor: vars.color.gray['20'],
-        color: vars.color.gray['60'],
-        selectors: {
-            '&:hover': {
-                opacity: 0.85,
-            },
-        },
-        '@media': {
-            [media.desktop]: {
-                width: '200px',
-                height: '63px',
-                fontSize: '18px',
-                lineHeight: '1.5',
-                letterSpacing: '-1.3%',
-            },
-        },
-    },
-]);
-
 export const form = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+    gap: '28px',
 
     '@media': {
         [media.desktop]: {
             maxWidth: '70%',
+            gap: '32px',
         },
     },
 });
@@ -122,4 +98,10 @@ globalStyle(`${termContents} p`, {
     lineHeight: '1.3 !important',
     letterSpacing: '-1.3% !important',
     color: vars.color.gray['80'],
+});
+
+export const buttonContainer = style({
+    maxWidth: '668px',
+    width: '100%',
+    margin: '0 auto',
 });

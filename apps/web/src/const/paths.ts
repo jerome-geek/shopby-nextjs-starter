@@ -96,9 +96,9 @@ export const PATHS = {
 
     BOARDS: {
         /** 게시글 리스트 */
-        MAIN: '/boards/[boardNo]',
+        MAIN: '/boards/[boardId]',
         /** 게시글 상세 페이지 */
-        DETAIL: '/boards/[boardNo]/[articleNo]',
+        DETAIL: '/boards/[boardId]/[articleNo]',
     },
 
     /** 검색 */

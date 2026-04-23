@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const title = style([
     textStyles.display1Semibold,
@@ -14,7 +14,7 @@ export const title = style([
 export const container = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+    gap: vars.spacing.lg,
     paddingTop: '20px',
     minWidth: 0,
     width: '100%',
@@ -40,10 +40,16 @@ export const articleHeader = style({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
+    gap: '8px',
     width: '100%',
-    padding: '10px',
+    padding: '20px',
     backgroundColor: vars.color.green['20'],
     borderBottom: `1px solid ${vars.color.gray['20']}`,
+    '@media': {
+        [media.mobile]: {
+            padding: '16px',
+        },
+    },
 });
 
 export const articleHeaderInfo = style({
@@ -94,8 +100,13 @@ export const articleContent = style([
     {
         width: '100%',
         minHeight: '20vh',
-        padding: '10px',
+        padding: '20px',
         whiteSpace: 'pre-wrap',
+        '@media': {
+            [media.mobile]: {
+                padding: '16px',
+            },
+        },
     },
 ]);
 
@@ -145,5 +156,8 @@ export const listLink = style([
         color: vars.color.black,
         border: `1px solid ${vars.color.gray['50']}`,
         borderRadius: '4px',
+        maxWidth: '330px',
+        width: '100%',
+        margin: '0 auto',
     },
 ]);
