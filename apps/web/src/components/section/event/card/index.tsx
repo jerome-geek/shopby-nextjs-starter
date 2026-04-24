@@ -1,4 +1,4 @@
-import { head, isEmpty } from '@fxts/core';
+import { head, isEmpty, pipe, prop, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
@@ -7,6 +7,7 @@ import ProductCardRow from '@/components/product/card-row';
 import * as styles from '@/components/section/event/card/index.css';
 import { EventProductsSkeleton } from '@/components/section/event/skeleton';
 import { PATHS } from '@/const/paths';
+import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useEventProductSection } from '@/hooks/query/display/event';
 import { useResponsive } from '@/hooks/utils';
 import type { GetEventResponse } from '@/models/display/event';
@@ -54,6 +55,20 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
         },
     });
 
+    const products = useMemo(() => {
+        if (!eventProductSectionData) {
+            return [];
+        }
+
+        return pipe(
+            eventProductSectionData,
+            prop('products'),
+            toArray,
+        );
+    }, [eventProductSectionData]);
+
+    const { productsWithDiscounts } = useProductsWithAdditionalDiscounts(products);
+
     const textRender = () => {
         return (
             <div className={styles.textWrapper}>
@@ -98,7 +113,7 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
 
                 {isEventProductSectionLoading ? (
                     <EventProductsSkeleton />
-                ) : isEmpty(eventProductSectionData?.products) ? (
+                ) : isEmpty(productsWithDiscounts) ? (
                     <NoResult
                         text='진열된 상품이 없습니다.'
                         style={{

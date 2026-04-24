@@ -1,14 +1,14 @@
-import Link from 'next/link';
 import { Bookmark } from 'lucide-react';
+import Link from 'next/link';
 
 import ProductAdditionalDiscount from '@/components/product/additional-discount';
 import { ProductCardProps } from '@/components/product/card';
 import * as styles from '@/components/product/card-row/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
+import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
-import { vars } from '@/styles/theme.css';
 
 const ProductCardRow = ({
     productNo,
@@ -49,7 +49,6 @@ const ProductCardRow = ({
 
             <ProductAdditionalDiscount
                 type='thumbnail'
-                productNo={productNo}
                 isTimeSaleEnabled={isTimeSaleEnabled}
             />
 

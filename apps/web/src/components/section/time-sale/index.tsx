@@ -8,6 +8,7 @@ import { CountdownTimer, ProductCard } from '@/components/product';
 import * as styles from '@/components/section/time-sale/index.css';
 import { PATHS } from '@/const/paths';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
+import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useTimeSaleSectionProducts } from '@/hooks/query/shop/timeSale';
 import { useProductSectionById } from '@/hooks/suspenseQuery/display/productSection';
 import type { ImageUrlType } from '@/models/product';
@@ -48,26 +49,31 @@ export const TimeSale = memo(
             },
             options: { enabled: sectionNo > 0 },
         });
+        console.log('🚀 ~ todayOpenData:', todayOpenData);
+        const products = todayOpenData?.products ?? [];
+
+        const { productsWithDiscounts } =
+            useProductsWithAdditionalDiscounts(products);
 
         const filteredProducts = useMemo(() => {
-            return todayOpenData
-                ? todayOpenData.products
-                      // ?.filter((product) => (product.additionDiscountAmt || 0) > 0)
-                      .map((product) => ({
-                          ...product,
-                          imageUrlInfo: product.imageUrlInfo?.map((img) => ({
-                              url: img.url,
-                              type: 'IMAGE_URL',
-                          })),
-                          stickerInfos:
-                              product.stickerInfos?.map((sticker) => ({
-                                  type: sticker.type,
-                                  label: sticker.label,
-                                  name: sticker.label,
-                              })) || [],
-                      }))
-                : [];
-        }, [todayOpenData]);
+            return (
+                productsWithDiscounts
+                    // ?.filter((product) => (product.additionDiscountAmt || 0) > 0)
+                    .map((product) => ({
+                        ...product,
+                        imageUrlInfo: product.imageUrlInfo?.map((img) => ({
+                            url: img.url,
+                            type: 'IMAGE_URL',
+                        })),
+                        stickerInfos:
+                            product.stickerInfos?.map((sticker) => ({
+                                type: sticker.type,
+                                label: sticker.label,
+                                name: sticker.label,
+                            })) || [],
+                    }))
+            );
+        }, [productsWithDiscounts]);
 
         const isEmptyProducts = filteredProducts.length === 0;
 
@@ -163,6 +169,9 @@ export const TimeSale = memo(
                                         reviewRating={product.reviewRating}
                                         totalReviewCount={
                                             product.totalReviewCount
+                                        }
+                                        additionalDiscount={
+                                            product.additionalDiscount
                                         }
                                     />
                                 </SwiperSlide>

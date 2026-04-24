@@ -60,6 +60,7 @@ export const IntegratedSearchResults = ({
     collectionFetchNextPage,
     collectionHasNextPage,
 }: IntegratedSearchResultsProps) => {
+    console.log('🚀 ~ IntegratedSearchResults ~ productList:', productList);
     const { isTablet } = useResponsive();
 
     const hasMoreShopping = !isEmpty(productList) && shoppingHasNextPage;
@@ -95,8 +96,7 @@ export const IntegratedSearchResults = ({
                             <FetchBoundary
                                 fallback={<ShoppingRecommendSectionSkeleton />}
                             >
-                                <ShoppingRecommendSection
-                                />
+                                <ShoppingRecommendSection />
                             </FetchBoundary>
                         </Column>
                     ) : (

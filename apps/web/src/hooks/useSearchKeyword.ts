@@ -1,21 +1,14 @@
 import { useRouter } from 'next/router';
-import { ParsedUrlQueryInput } from 'querystring';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { PATHS } from '@/const/paths';
-import {
-    COLLECTION_PAGE_QUERY_KEY,
-    RECIPE_PAGE_QUERY_KEY,
-} from '@/const/search';
-import { getSafeQueryString } from '@/utils/query';
+import { useProductSearchParams } from '@/entities/search/hooks/useProductSearchParams';
 
 export const useSearchKeyword = () => {
     const router = useRouter();
+    const [params, setParams] = useProductSearchParams();
 
-    const keywordFromQuery = useMemo(
-        () => getSafeQueryString(router.query.keyword),
-        [router.query.keyword],
-    );
+    const keywordFromQuery = params.keyword;
 
     const searchByKeyword = useCallback(
         (value: string): boolean => {
@@ -26,24 +19,24 @@ export const useSearchKeyword = () => {
             }
 
             const isSearchPage = router.pathname === PATHS.SEARCH;
-            const nextQuery: ParsedUrlQueryInput = isSearchPage
-                ? {
-                      ...router.query,
-                      keyword,
-                      pageNumber: '1',
-                      [RECIPE_PAGE_QUERY_KEY]: '1',
-                      [COLLECTION_PAGE_QUERY_KEY]: '1',
-                  }
-                : { keyword };
 
-            router.push({
-                pathname: PATHS.SEARCH,
-                query: nextQuery,
-            });
+            if (isSearchPage) {
+                setParams({
+                    keyword,
+                    pageNumber: 1,
+                    'recipe.page': 1,
+                    'collection.page': 1,
+                });
+            } else {
+                router.push({
+                    pathname: PATHS.SEARCH,
+                    query: { keyword },
+                });
+            }
 
             return true;
         },
-        [router],
+        [router, setParams],
     );
 
     return { keywordFromQuery, searchByKeyword };

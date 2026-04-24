@@ -1,8 +1,8 @@
-import { flatMap, indexBy, map, pipe, prop, toArray } from '@fxts/core';
+import { flatMap, pipe, prop, toArray } from '@fxts/core';
 import { ReactNode, useMemo } from 'react';
 
+import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useNewProductParams } from '@/entities/products/new/hooks/useNewProductParams';
-import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import {
     useProductList,
 } from '@/hooks/query/product/product';
@@ -87,37 +87,7 @@ export const NewProductListContainer = ({
         return productListData?.items ?? [];
     }, [isMobile, productListData, infiniteProductListData]);
 
-    const productNos = useMemo(
-        () => pipe(products, map(prop('productNo')), toArray),
-        [products],
-    );
-
-    const { data: additionalDiscountsData } = useAdditionalDiscountByProductNos(
-        {
-            searchParams: {
-                productNos,
-            },
-            options: {
-                enabled: productNos.length > 0,
-            },
-        },
-    );
-
-    const productsWithDiscounts = useMemo(() => {
-        const discountMap = pipe(
-            additionalDiscountsData?.data ?? [],
-            indexBy(prop('productNo')),
-        );
-
-        return pipe(
-            products,
-            map((product) => ({
-                ...product,
-                additionalDiscount: discountMap[product.productNo] ?? null,
-            })),
-            toArray,
-        );
-    }, [products, additionalDiscountsData]);
+    const { productsWithDiscounts } = useProductsWithAdditionalDiscounts(products);
 
     if (isFetching && products.length === 0) {
         return <>{renderSkeleton()}</>;
