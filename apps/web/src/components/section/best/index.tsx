@@ -11,6 +11,7 @@ import * as styles from '@/components/section/best/index.css';
 import { CATEGORY_CODE } from '@/const/category';
 import { PATHS } from '@/const/paths';
 import { useBestSellerProductList } from '@/hooks/query/product/product';
+import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useMainCategory } from '@/hooks/useMainCategory';
 import { BREAKPOINTS } from '@/styles/media';
 
@@ -45,7 +46,14 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
         },
     });
 
-    const bestSellerProductList = bestSellerProductListData?.items || [];
+    const bestSellerProductList = useMemo(
+        () => bestSellerProductListData?.items || [],
+        [bestSellerProductListData],
+    );
+
+    const { productsWithDiscounts } = useProductsWithAdditionalDiscounts(
+        bestSellerProductList,
+    );
 
     return (
         <section className={styles.section}>
@@ -137,7 +145,7 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
             </div>
 
             <div className={styles.swiperContainer}>
-                {bestSellerProductList.length > 0 ? (
+                {productsWithDiscounts.length > 0 ? (
                     <Swiper
                         slidesPerView={2.2}
                         grid={{
@@ -156,7 +164,7 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                             },
                         }}
                     >
-                        {bestSellerProductList.map((product, index) => (
+                        {productsWithDiscounts.map((product, index) => (
                             <SwiperSlide
                                 key={product.productNo}
                                 className={styles.productGridItem}
@@ -182,6 +190,9 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                                     liked={product.liked}
                                     reviewRating={product.reviewRating}
                                     totalReviewCount={product.totalReviewCount}
+                                    additionalDiscount={
+                                        product.additionalDiscount
+                                    }
                                 />
                             </SwiperSlide>
                         ))}

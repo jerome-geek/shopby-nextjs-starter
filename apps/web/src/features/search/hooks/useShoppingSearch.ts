@@ -2,6 +2,7 @@ import { flatMap, pipe, toArray } from '@fxts/core';
 import { useMemo } from 'react';
 
 import { useProductSearchParams } from '@/entities/search/hooks/useProductSearchParams';
+import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useInfiniteProductList } from '@/hooks/infiniteQuery/product/product';
 import { useProductList } from '@/hooks/query/product/product';
 import { useMainCategory } from '@/hooks/useMainCategory';
@@ -75,6 +76,8 @@ export const useShoppingSearch = ({
         return queryData?.items ?? [];
     }, [isInfinite, infiniteData, queryData]);
 
+    const { productsWithDiscounts } = useProductsWithAdditionalDiscounts(products);
+
     const totalCount = isInfinite
         ? (infiniteData?.pages[0]?.data.totalCount ?? 0)
         : (queryData?.totalCount ?? 0);
@@ -82,7 +85,7 @@ export const useShoppingSearch = ({
     const isFetching = isInfinite ? isInfiniteFetching : isQueryFetching;
 
     return {
-        products,
+        products: productsWithDiscounts,
         totalCount,
         hasNextPage: hasNextPage ?? false,
         fetchNextPage,

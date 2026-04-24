@@ -1,16 +1,14 @@
-import { flatMap, pipe, prop, toArray } from '@fxts/core';
+import { flatMap, pipe, toArray } from '@fxts/core';
 import { ReactNode, useMemo } from 'react';
 
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useNewProductParams } from '@/entities/products/new/hooks/useNewProductParams';
-import {
-    useProductList,
-} from '@/hooks/query/product/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
+import { useProductList } from '@/hooks/query/product/product';
 import { useResponsive } from '@/hooks/utils';
+import type { OrderByType, OrderDirectionType } from '@/models';
 import type { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
 import type { ProductItem } from '@/models/product/product';
-import type { OrderByType, OrderDirectionType } from '@/models';
 
 interface NewProductListContainerProps {
     selectedCategory: number;
@@ -87,7 +85,8 @@ export const NewProductListContainer = ({
         return productListData?.items ?? [];
     }, [isMobile, productListData, infiniteProductListData]);
 
-    const { productsWithDiscounts } = useProductsWithAdditionalDiscounts(products);
+    const { productsWithDiscounts } =
+        useProductsWithAdditionalDiscounts(products);
 
     if (isFetching && products.length === 0) {
         return <>{renderSkeleton()}</>;
@@ -96,7 +95,8 @@ export const NewProductListContainer = ({
     return (
         <>
             {children({
-                products: productsWithDiscounts,
+                // TODO: 타입체크 필요
+                products: productsWithDiscounts as any,
                 totalCount,
                 hasNextPage,
                 fetchNextPage,

@@ -41,7 +41,7 @@ import { useSb } from '@/hooks/libs/shopby';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
-import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
+import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { cartKeys, productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import { useCustomDialog, useToast } from '@/hooks/ui';
@@ -97,9 +97,10 @@ function ProductDetailView({
         productNo,
     });
 
-    const { data: additionalDiscountData } = useAdditionalDiscount({
-        searchParams: { productNo },
-    });
+    const { data: additionalDiscountByProductNosData } =
+        useAdditionalDiscountByProductNos({
+            searchParams: { productNos: [productNo] },
+        });
 
     const productContent = useMemo(() => {
         if (!productDetailData) {
@@ -450,10 +451,12 @@ function ProductDetailView({
                     </div>
 
                     <div className={styles.additionalInfoContainer}>
-                        {additionalDiscountData && (
+                        {additionalDiscountByProductNosData && (
                             <ProductAdditionalDiscount
                                 type='detail'
-                                productNo={productNo}
+                                additionalDiscount={
+                                    additionalDiscountByProductNosData.data[0]
+                                }
                             />
                         )}
 

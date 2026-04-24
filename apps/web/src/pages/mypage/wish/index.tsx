@@ -12,6 +12,8 @@ import ProductCard from '@/components/product/card';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
 import Paging from '@/components/ui/paging';
+import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
+import { toWishProductCardModel } from '@/entities/product/utils/mapper';
 import { useProductProfileMutation } from '@/hooks/mutations';
 import useLikeProductList from '@/hooks/query/product/profile/useLikeProductList';
 import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
@@ -21,37 +23,6 @@ import type { ProductWishItem } from '@/models/product';
 import * as styles from '@/pages/mypage/wish/index.css';
 
 const PAGE_SIZE = 20;
-
-const pickListImages = (product: ProductWishItem) => {
-    if (!isEmpty(product.listImageInfo)) {
-        return product.listImageInfo;
-    }
-
-    return product.imageInfo ?? [];
-};
-
-const toProductCardModel = (product: ProductWishItem) => {
-    return {
-        productNo: product.productNo,
-        productName: product.productName,
-        imageUrlInfo: pickListImages(product),
-        brandNo: product.brandNo,
-        brandName:
-            product.brandNameKo ||
-            product.brandNameEn ||
-            product.brandName ||
-            '',
-        stickerInfos: product.stickerInfos ?? [],
-        likeCount: product.likeCount,
-        liked: product.liked,
-        reviewRating: product.reviewRating,
-        totalReviewCount: product.totalReviewCount,
-        salePrice: product.salePrice,
-        immediateDiscountAmt: product.immediateDiscountAmt,
-        additionDiscountAmt: product.additionDiscountAmt,
-        isHideLikeButton: true,
-    };
-};
 
 export const MypageWish = () => {
     const { t } = useTranslation();
@@ -77,7 +48,7 @@ export const MypageWish = () => {
         [pageNumber],
     );
 
-    const { data: likeListData, isLoading: isLikeListLoading } =
+    const { data: likeListData, isLoading: isRawLikeListLoading } =
         useLikeProductList({
             searchParams,
         });
@@ -85,6 +56,12 @@ export const MypageWish = () => {
     const productList = useMemo(() => {
         return likeListData?.items ?? [];
     }, [likeListData]);
+
+    const { productsWithDiscounts, isLoadingAdditionalDiscounts } =
+        useProductsWithAdditionalDiscounts(productList);
+
+    const isLikeListLoading =
+        isRawLikeListLoading || isLoadingAdditionalDiscounts;
 
     const totalCount = useMemo(() => {
         return likeListData?.totalCount ?? 0;
@@ -109,8 +86,8 @@ export const MypageWish = () => {
     );
 
     const productNosInList = useMemo(() => {
-        return new Set(productList.map((product) => product.productNo));
-    }, [productList]);
+        return new Set(productsWithDiscounts.map((product) => product.productNo));
+    }, [productsWithDiscounts]);
 
     const selectedInList = useMemo(() => {
         return new Set(
@@ -136,14 +113,14 @@ export const MypageWish = () => {
         (checked: boolean) => {
             if (checked) {
                 setSelected(
-                    new Set(productList.map((product) => product.productNo)),
+                    new Set(productsWithDiscounts.map((product) => product.productNo)),
                 );
                 return;
             }
 
             setSelected(new Set());
         },
-        [productList],
+        [productsWithDiscounts],
     );
 
     const toggleProductSelect = useCallback(
@@ -247,9 +224,9 @@ export const MypageWish = () => {
 
                 <div className={card.list}>
                     <LoadingWrapper isLoading={isLikeListLoading}>
-                        {!isEmpty(productList) ? (
+                        {!isEmpty(productsWithDiscounts) ? (
                             <ul className={styles.productGrid}>
-                                {productList.map((product) => (
+                                {productsWithDiscounts.map((product) => (
                                     <li
                                         key={product.productNo}
                                         className={styles.productGridItem}
@@ -283,7 +260,7 @@ export const MypageWish = () => {
                                                 />
                                             </div>
                                             <ProductCard
-                                                {...toProductCardModel(product)}
+                                                {...toWishProductCardModel(product)}
                                             />
                                         </div>
                                     </li>

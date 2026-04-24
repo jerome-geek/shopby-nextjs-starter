@@ -9,42 +9,13 @@ import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import ProductCard from '@/components/product/card';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
+import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
+import { toRecentProductCardModel } from '@/entities/product/utils/mapper';
 import { useProductProfileMutation } from '@/hooks/mutations';
 import { useRecentViewProductList } from '@/hooks/query/product/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
-import type { RecentViewProductsContents } from '@/models/product/profile';
 import * as styles from '@/pages/mypage/recent-products/index.css';
-
-const pickListImages = (product: RecentViewProductsContents) => {
-    if (!isEmpty(product.listImageUrlInfo)) {
-        return [product.listImageUrlInfo];
-    }
-
-    return [product.imageUrlInfo];
-};
-
-const toProductCardModel = (product: RecentViewProductsContents) => {
-    return {
-        productNo: product.productNo,
-        productName: product.productName,
-        imageUrlInfo: pickListImages(product),
-        brandNo: product.brandNo,
-        brandName:
-            product.brandNameKo ||
-            product.brandNameEn ||
-            product.brandName ||
-            '',
-        stickerInfos: product.stickerInfos ?? [],
-        likeCount: product.likeCount,
-        liked: product.liked,
-        reviewRating: product.reviewRating,
-        totalReviewCount: product.totalReviewCount,
-        salePrice: product.salePrice,
-        immediateDiscountAmt: product.immediateDiscountAmt,
-        additionDiscountAmt: product.additionDiscountAmt,
-    };
-};
 
 export const MypageRecentProducts = () => {
     const { t } = useTranslation();
@@ -53,7 +24,7 @@ export const MypageRecentProducts = () => {
 
     const [selected, setSelected] = useState<Set<number>>(() => new Set());
 
-    const { data: recentViewProductListData, isLoading } =
+    const { data: recentViewProductListData, isLoading: isProductListLoading } =
         useRecentViewProductList({
             searchParams: {
                 soldout: true,
@@ -66,13 +37,22 @@ export const MypageRecentProducts = () => {
         return recentViewProductListData ?? [];
     }, [recentViewProductListData]);
 
-    const totalCount = recentViewProductList.length;
+    const { productsWithDiscounts, isLoadingAdditionalDiscounts } =
+        useProductsWithAdditionalDiscounts(recentViewProductList);
+    console.log(
+        '🚀 ~ MypageRecentProducts ~ productsWithDiscounts:',
+        productsWithDiscounts,
+    );
+
+    const isLoading = isProductListLoading || isLoadingAdditionalDiscounts;
+
+    const totalCount = productsWithDiscounts.length;
 
     const productNosInList = useMemo(() => {
         return new Set(
-            recentViewProductList.map((product) => product.productNo),
+            productsWithDiscounts.map((product) => product.productNo),
         );
-    }, [recentViewProductList]);
+    }, [productsWithDiscounts]);
 
     const selectedInList = useMemo(() => {
         return new Set(
@@ -99,7 +79,7 @@ export const MypageRecentProducts = () => {
             if (checked) {
                 setSelected(
                     new Set(
-                        recentViewProductList.map(
+                        productsWithDiscounts.map(
                             (product) => product.productNo,
                         ),
                     ),
@@ -109,7 +89,7 @@ export const MypageRecentProducts = () => {
 
             setSelected(new Set());
         },
-        [recentViewProductList],
+        [productsWithDiscounts],
     );
 
     const toggleProductSelect = useCallback(
@@ -207,9 +187,9 @@ export const MypageRecentProducts = () => {
 
                 <div className={card.list}>
                     <LoadingWrapper isLoading={isLoading}>
-                        {!isEmpty(recentViewProductList) ? (
+                        {!isEmpty(productsWithDiscounts) ? (
                             <ul className={styles.productGrid}>
-                                {recentViewProductList.map((product) => (
+                                {productsWithDiscounts.map((product) => (
                                     <li
                                         key={product.productNo}
                                         className={styles.productGridItem}
@@ -243,7 +223,9 @@ export const MypageRecentProducts = () => {
                                                 />
                                             </div>
                                             <ProductCard
-                                                {...toProductCardModel(product)}
+                                                {...toRecentProductCardModel(
+                                                    product,
+                                                )}
                                             />
                                         </div>
                                     </li>

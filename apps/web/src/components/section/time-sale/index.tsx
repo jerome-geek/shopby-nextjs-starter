@@ -49,30 +49,25 @@ export const TimeSale = memo(
             },
             options: { enabled: sectionNo > 0 },
         });
-        console.log('🚀 ~ todayOpenData:', todayOpenData);
         const products = todayOpenData?.products ?? [];
 
         const { productsWithDiscounts } =
             useProductsWithAdditionalDiscounts(products);
 
         const filteredProducts = useMemo(() => {
-            return (
-                productsWithDiscounts
-                    // ?.filter((product) => (product.additionDiscountAmt || 0) > 0)
-                    .map((product) => ({
-                        ...product,
-                        imageUrlInfo: product.imageUrlInfo?.map((img) => ({
-                            url: img.url,
-                            type: 'IMAGE_URL',
-                        })),
-                        stickerInfos:
-                            product.stickerInfos?.map((sticker) => ({
-                                type: sticker.type,
-                                label: sticker.label,
-                                name: sticker.label,
-                            })) || [],
-                    }))
-            );
+            return productsWithDiscounts.map((product) => ({
+                ...product,
+                imageUrlInfo: product.imageUrlInfo?.map((img) => ({
+                    url: img.url,
+                    type: 'IMAGE_URL',
+                })),
+                stickerInfos:
+                    product.stickerInfos?.map((sticker) => ({
+                        type: sticker.type,
+                        label: sticker.label,
+                        name: sticker.label,
+                    })) || [],
+            }));
         }, [productsWithDiscounts]);
 
         const isEmptyProducts = filteredProducts.length === 0;

@@ -66,11 +66,11 @@ export const brandInfoWrapper = style({
     flexDirection: 'column',
     alignItems: 'stretch',
     gap: 0,
-    minHeight: '48px',
+    // minHeight: '48px',
+
     '@media': {
-        'screen and (min-width: 768px)': {
+        [media.desktop]: {
             gap: '4px',
-            minHeight: '56px',
         },
     },
 });
@@ -78,11 +78,9 @@ export const brandInfoWrapper = style({
 export const brand = style([
     textStyles.caption1Regular,
     {
-        color: vars.color.gray[60],
+        color: vars.color.gray['60'],
         display: 'flex',
         alignItems: 'center',
-        fontSize: '1.2rem',
-        fontWeight: 600,
     },
 ]);
 
@@ -95,8 +93,11 @@ export const productName = style([
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         color: vars.color.black,
+        lineHeight: '1.4',
+        height: '2.8em', // line-height(1.4) * 2 lines
+
         '@media': {
-            'screen and (min-width: 768px)': {
+            [media.desktop]: {
                 fontSize: '1.4rem',
             },
         },
@@ -124,7 +125,9 @@ export const discountPrice = style([
 
 export const stickerList = style({
     display: 'flex',
-    gap: '2px',
+    flexWrap: 'wrap',
+    columnGap: '2px',
+    rowGap: '4px',
     alignItems: 'center',
 });
 

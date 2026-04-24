@@ -25,6 +25,7 @@ const ProductCardRow = ({
     immediateDiscountAmt = 0,
     additionDiscountAmt = 0,
     isAdditionalDiscount,
+    additionalDiscount,
     isHideLikeButton = false,
     rank,
     isTimeSaleEnabled = true,
@@ -47,10 +48,13 @@ const ProductCardRow = ({
                 {!!rank && <span className={styles.rank}>{rank}</span>}
             </Link>
 
-            <ProductAdditionalDiscount
-                type='thumbnail'
-                isTimeSaleEnabled={isTimeSaleEnabled}
-            />
+            {additionalDiscount && (
+                <ProductAdditionalDiscount
+                    type='thumbnail'
+                    additionalDiscount={additionalDiscount}
+                    isTimeSaleEnabled={isTimeSaleEnabled}
+                />
+            )}
 
             <div className={styles.productInfoContainer}>
                 <div className={styles.brandInfoWrapper}>

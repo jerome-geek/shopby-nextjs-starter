@@ -60,14 +60,11 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
             return [];
         }
 
-        return pipe(
-            eventProductSectionData,
-            prop('products'),
-            toArray,
-        );
+        return pipe(eventProductSectionData, prop('products'), toArray);
     }, [eventProductSectionData]);
 
-    const { productsWithDiscounts } = useProductsWithAdditionalDiscounts(products);
+    const { productsWithDiscounts } =
+        useProductsWithAdditionalDiscounts(products);
 
     const textRender = () => {
         return (
@@ -122,7 +119,7 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
                     />
                 ) : (
                     <ul className={styles.productList}>
-                        {eventProductSectionData?.products.map((product) => (
+                        {productsWithDiscounts.map((product) => (
                             <li
                                 key={product.productNo}
                                 className={styles.productItem}

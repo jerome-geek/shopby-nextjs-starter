@@ -5,6 +5,7 @@ import ProductAdditionalDiscount from '@/components/product/additional-discount'
 import * as styles from '@/components/product/card/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
+import type { DeliveryConditionType } from '@/models';
 import type { StickerInfo } from '@/models/display';
 import type { ImageUrlType } from '@/models/product';
 import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
@@ -26,6 +27,8 @@ export interface ProductCardProps {
     immediateDiscountAmt?: number;
     additionDiscountAmt?: number;
     isAdditionalDiscount?: boolean;
+    couponDiscountAmt?: number;
+    deliveryConditionType?: DeliveryConditionType;
     isHideLikeButton?: boolean;
     rank?: number;
     isTimeSaleEnabled?: boolean;
@@ -44,6 +47,8 @@ const ProductCard = ({
     immediateDiscountAmt = 0,
     additionDiscountAmt = 0,
     isHideLikeButton = false,
+    couponDiscountAmt = 0,
+    deliveryConditionType,
     rank,
     isTimeSaleEnabled = true,
     additionalDiscount,
@@ -117,9 +122,26 @@ const ProductCard = ({
                     </span>
                 </div>
 
-                {stickerInfos && stickerInfos.length > 0 && (
-                    <ul className={styles.stickerList}>
-                        {stickerInfos.map((sticker) => {
+                <ul className={styles.stickerList}>
+                    {couponDiscountAmt > 0 && (
+                        <li>
+                            <span className={styles.textSticker}>쿠폰</span>
+                        </li>
+                    )}
+                    {deliveryConditionType && (
+                        <li>
+                            <span className={styles.textSticker}>
+                                {deliveryConditionType === 'FREE' && '무료배송'}
+                                {deliveryConditionType === 'CONDITIONAL' &&
+                                    '조건부 무료'}
+                                {deliveryConditionType === 'FIXED_FEE' &&
+                                    '유료(고정 배송비)'}
+                            </span>
+                        </li>
+                    )}
+                    {stickerInfos &&
+                        stickerInfos.length > 0 &&
+                        stickerInfos.map((sticker) => {
                             return (
                                 <li key={`product-sticker-${sticker.name}`}>
                                     {sticker.type === 'IMAGE' && (
@@ -140,8 +162,7 @@ const ProductCard = ({
                                 </li>
                             );
                         })}
-                    </ul>
-                )}
+                </ul>
             </div>
         </article>
     );
