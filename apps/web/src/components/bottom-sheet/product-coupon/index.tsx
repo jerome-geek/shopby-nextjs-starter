@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { ProductCoupon } from '@/components/layer-contents/product-coupon';
+import * as styles from '@/components/layer-contents/product-coupon/index.css';
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
@@ -29,6 +30,7 @@ export const ProductCouponBottomSheet = ({
                     type='submit'
                     form='product-coupon-form'
                     id='product-coupon-form-submit-button'
+                    className={styles.downloadAllButton}
                 >
                     {t('쿠폰 모두 받기')}
                 </Button>,

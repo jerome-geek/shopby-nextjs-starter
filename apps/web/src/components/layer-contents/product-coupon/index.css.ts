@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -40,6 +41,13 @@ export const couponInfo = style({
     flexDirection: 'column',
     justifyContent: 'center',
     gap: '6px',
+
+    '@media': {
+        [media.mobile]: {
+            padding: '16px',
+            gap: '8px',
+        },
+    },
 });
 
 export const discountValue = style([
@@ -47,18 +55,39 @@ export const discountValue = style([
     {
         color: vars.color.pink['100'],
     },
+    {
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.8rem',
+                lineHeight: '1.5',
+            },
+        },
+    },
 ]);
 
 export const couponNameContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
+
+    '@media': {
+        [media.mobile]: {
+            gap: '0',
+        },
+    },
 });
 
 export const couponName = style([
     textStyles.headlineMedium,
     {
         color: vars.color.black,
+    },
+    {
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+            },
+        },
     },
 ]);
 
@@ -94,6 +123,13 @@ export const downloadBtn = style({
     ':hover': {
         filter: 'brightness(0.98)',
     },
+
+    '@media': {
+        [media.mobile]: {
+            width: 'auto',
+            padding: '0 16px',
+        },
+    },
 });
 
 export const downloadText = style([
@@ -102,3 +138,11 @@ export const downloadText = style([
         color: vars.color.gray['60'],
     },
 ]);
+
+export const downloadAllButton = style({
+    '@media': {
+        [media.mobile]: {
+            fontSize: '1.5rem',
+        },
+    },
+});
