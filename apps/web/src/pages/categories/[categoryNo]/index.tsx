@@ -1,4 +1,12 @@
-import { isEmpty } from '@fxts/core';
+import {
+    flatMap,
+    indexBy,
+    isEmpty,
+    map,
+    pipe,
+    prop,
+    toArray,
+} from '@fxts/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
@@ -14,6 +22,7 @@ import { ProductListSideBar } from '@/components/product-list/side-bar';
 import { Paging } from '@/components/ui';
 import { SORT_OPTIONS } from '@/const/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
+import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { useProductList } from '@/hooks/query/product/product';
 import { useProductFilter } from '@/hooks/useProductFilter';
 import { useResponsive } from '@/hooks/utils';
@@ -57,18 +66,6 @@ export default function CategoryPage() {
         },
     });
 
-    const productList = useMemo(() => {
-        if (isMobile) {
-            return (
-                infiniteProductListData?.pages.flatMap(
-                    (page) => page.data.items,
-                ) ?? []
-            );
-        }
-
-        return productListData?.items ?? [];
-    }, [infiniteProductListData, productListData, isMobile]);
-
     const totalCount = productListData?.totalCount ?? 0;
 
     const selectedSortOptionId = useMemo(() => {
@@ -80,6 +77,50 @@ export default function CategoryPage() {
             )?.id ?? SORT_OPTIONS[0].id
         );
     }, [appliedSearchParams.order?.by, appliedSearchParams.order?.direction]);
+
+    const products = useMemo(() => {
+        if (isMobile) {
+            return pipe(
+                infiniteProductListData?.pages ?? [],
+                flatMap((page) => page.data.items),
+                toArray,
+            );
+        }
+
+        return productListData?.items ?? [];
+    }, [isMobile, productListData, infiniteProductListData]);
+
+    const productNos = useMemo(
+        () => pipe(products, map(prop('productNo')), toArray),
+        [products],
+    );
+
+    const { data: additionalDiscountsData } = useAdditionalDiscountByProductNos(
+        {
+            searchParams: {
+                productNos,
+            },
+            options: {
+                enabled: productNos.length > 0,
+            },
+        },
+    );
+
+    const productsWithDiscounts = useMemo(() => {
+        const discountMap = pipe(
+            additionalDiscountsData?.data ?? [],
+            indexBy(prop('productNo')),
+        );
+
+        return pipe(
+            products,
+            map((product) => ({
+                ...product,
+                additionalDiscount: discountMap[product.productNo] ?? null,
+            })),
+            toArray,
+        );
+    }, [products, additionalDiscountsData]);
 
     return (
         <div className={styles.container}>
@@ -186,12 +227,12 @@ export default function CategoryPage() {
                             : isProductListLoading
                     }
                 >
-                    {isEmpty(productList) ? (
+                    {isEmpty(productsWithDiscounts) ? (
                         <NoResult text={t('상품이 없습니다.')} />
                     ) : (
                         <>
                             <div className={styles.productList}>
-                                {productList.map((product) => (
+                                {productsWithDiscounts.map((product) => (
                                     <ProductCard
                                         key={product.productNo}
                                         {...product}

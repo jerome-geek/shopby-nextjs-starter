@@ -7,6 +7,7 @@ import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
 import type { StickerInfo } from '@/models/display';
 import type { ImageUrlType } from '@/models/product';
+import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
 
@@ -28,6 +29,7 @@ export interface ProductCardProps {
     isHideLikeButton?: boolean;
     rank?: number;
     isTimeSaleEnabled?: boolean;
+    additionalDiscount?: Nullable<AdditionalDiscountWithProductNo>;
 }
 
 const ProductCard = ({
@@ -37,17 +39,14 @@ const ProductCard = ({
     brandNo,
     brandName,
     stickerInfos,
-    likeCount,
     liked,
-    reviewRating,
-    totalReviewCount,
     salePrice,
     immediateDiscountAmt = 0,
     additionDiscountAmt = 0,
-    isAdditionalDiscount,
     isHideLikeButton = false,
     rank,
     isTimeSaleEnabled = true,
+    additionalDiscount,
 }: ProductCardProps) => {
     const { onLikeButtonClick } = useProductLike();
 
@@ -76,11 +75,13 @@ const ProductCard = ({
                 {rank && <span className={styles.rank}>{rank}</span>}
             </Link>
 
-            <ProductAdditionalDiscount
-                type='thumbnail'
-                productNo={productNo}
-                isTimeSaleEnabled={isTimeSaleEnabled}
-            />
+            {additionalDiscount && (
+                <ProductAdditionalDiscount
+                    type='thumbnail'
+                    isTimeSaleEnabled={isTimeSaleEnabled}
+                    additionalDiscount={additionalDiscount}
+                />
+            )}
 
             <div className={styles.productInfoContainer}>
                 <div className={styles.brandInfoWrapper}>

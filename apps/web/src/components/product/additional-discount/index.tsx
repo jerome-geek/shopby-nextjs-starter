@@ -3,27 +3,19 @@ import { Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import * as styles from '@/components/product/additional-discount/index.css';
-import { useAdditionalDiscount } from '@/hooks/query/product/additionalDiscount';
+import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
 
 interface ProductAdditionalDiscountProps {
     type: 'thumbnail' | 'detail';
-    productNo: number;
     isTimeSaleEnabled?: boolean;
+    additionalDiscount: AdditionalDiscountWithProductNo;
 }
 
 const ProductAdditionalDiscount = ({
     type,
-    productNo,
-    isTimeSaleEnabled = true,
+    additionalDiscount,
 }: ProductAdditionalDiscountProps) => {
-    const { data, isError } = useAdditionalDiscount({
-        searchParams: { productNo },
-        options: {
-            enabled: isTimeSaleEnabled,
-            throwOnError: false,
-            staleTime: 1000 * 60 * 5, // 5 minutes stale time to avoid frequent refetches
-        },
-    });
+    const endDateTime = additionalDiscount?.endDateTime;
 
     const calculateTimeLeft = (targetDate?: string) => {
         if (!targetDate) return '';
@@ -50,14 +42,14 @@ const ProductAdditionalDiscount = ({
     };
 
     const [timeLeft, setTimeLeft] = useState(() =>
-        calculateTimeLeft(data?.endDateTime),
+        calculateTimeLeft(endDateTime),
     );
 
     useEffect(() => {
-        if (!data?.endDateTime) return;
+        if (!endDateTime) return;
 
         const timerId = setInterval(() => {
-            const time = calculateTimeLeft(data.endDateTime);
+            const time = calculateTimeLeft(endDateTime);
             setTimeLeft(time);
             if (!time) {
                 clearInterval(timerId);
@@ -65,9 +57,9 @@ const ProductAdditionalDiscount = ({
         }, 1000);
 
         return () => clearInterval(timerId);
-    }, [data?.endDateTime]);
+    }, [endDateTime]);
 
-    if (isError || !data || !timeLeft) {
+    if (!timeLeft) {
         return null;
     }
 

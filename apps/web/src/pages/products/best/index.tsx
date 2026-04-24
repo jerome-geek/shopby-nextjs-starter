@@ -90,6 +90,9 @@ const BestProductsPage = () => {
                                             additionDiscountAmt={
                                                 product.additionDiscountAmt
                                             }
+                                            additionalDiscount={
+                                                product.additionalDiscount
+                                            }
                                             rank={
                                                 isMobile
                                                     ? index + 1
