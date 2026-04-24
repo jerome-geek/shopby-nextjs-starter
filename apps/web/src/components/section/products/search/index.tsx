@@ -38,10 +38,10 @@ const ProductsSearchContent = (props: ProductSearchProps) => {
         : parsedCategoryNos;
 
     const parsedSearchParams: ProductSearchParams = {
-        ...searchParams,
         categoryNos,
         pageNumber: 1,
         pageSize: 12,
+        ...searchParams,
     };
 
     const { data: productListData } = useProductList({
@@ -56,7 +56,11 @@ const ProductsSearchContent = (props: ProductSearchProps) => {
         return productListData.items ?? [];
     }, [productListData, filter]);
 
-    if (isEmpty(filteredProductListData)) {
+    const slicedProductListData = useMemo(() => {
+        return filteredProductListData.slice(0, 12);
+    }, [filteredProductListData]);
+
+    if (isEmpty(slicedProductListData)) {
         return null;
     }
 
@@ -64,7 +68,7 @@ const ProductsSearchContent = (props: ProductSearchProps) => {
         <Products
             title={title}
             description={description}
-            products={filteredProductListData}
+            products={slicedProductListData}
         />
     );
 };

@@ -1,5 +1,6 @@
-import { filter, pipe, toArray } from '@fxts/core';
+import { filter, pipe, sortBy, toArray } from '@fxts/core';
 import { keepPreviousData } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
@@ -105,9 +106,10 @@ const SectionGroup = () => {
                             soldout: true,
                         },
                         order: {
-                            by: 'RECENT_PRODUCT',
+                            by: 'POPULAR',
                             direction: 'DESC',
                         },
+                        pageSize: 30,
                     }}
                     filter={(items) => {
                         const filteredItems = pipe(
@@ -141,6 +143,25 @@ const SectionGroup = () => {
                             by: 'SALE_YMD',
                             direction: 'DESC',
                         },
+                        pageSize: 30,
+                    }}
+                    filter={(items) => {
+                        const filteredItems = pipe(
+                            items,
+                            filter((item) =>
+                                dayjs(item.saleStartYmdt).isSame(
+                                    dayjs(),
+                                    'day',
+                                ),
+                            ),
+                            toArray,
+                        );
+
+                        if (filteredItems.length <= 2) {
+                            return [];
+                        }
+
+                        return filteredItems;
                     }}
                 />
             </LazyRender>
@@ -192,11 +213,22 @@ const SectionGroup = () => {
                     searchParams={{
                         filter: {
                             soldout: true,
+                            totalReviewCount: true,
                         },
                         order: {
                             by: 'REVIEW',
                             direction: 'DESC',
                         },
+                        pageSize: 30,
+                    }}
+                    filter={(items) => {
+                        const sortedItems = pipe(
+                            items,
+                            sortBy((item) => -(item.totalReviewCount ?? 0)),
+                            toArray,
+                        );
+
+                        return sortedItems;
                     }}
                 />
             </LazyRender>
