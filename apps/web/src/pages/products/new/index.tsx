@@ -17,7 +17,7 @@ import { useProductList } from '@/hooks/query/product/product';
 import { useMainCategory } from '@/hooks/useMainCategory';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderByType, OrderDirectionType } from '@/models';
-import * as styles from '@/pages/products/best/index.css';
+import * as styles from '@/pages/products/new/index.css';
 
 const PAGE_SIZE = 20;
 

@@ -75,6 +75,10 @@ export interface GetAdditionalDiscountByProductNosParams {
     productNos: number[];
 }
 
+export interface AdditionalDiscountWithProductNo extends GetAdditionalDiscountResponse {
+    productNo: number;
+}
+
 export interface GetAdditionalDiscountByProductNosResponse {
-    data: GetAdditionalDiscountResponse[];
+    data: AdditionalDiscountWithProductNo[];
 }
