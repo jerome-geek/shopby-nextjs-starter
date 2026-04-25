@@ -1,15 +1,12 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import * as styles from '@/styles/404.css';
-import Head from 'next/head';
+import Seo from '@/components/common/seo';
 
 export default function Custom404() {
     return (
         <>
-            <Head>
-                <title>404 - Page Not Found | My Shop</title>
-                <meta name="robots" content="noindex" />
-            </Head>
+            <Seo title="404 - Page Not Found" noindex={true} />
             <main className={styles.container}>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

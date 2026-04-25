@@ -1,5 +1,5 @@
 import { SuspenseQuery } from '@suspensive/react-query';
-import Head from 'next/head';
+import Seo from '@/components/common/seo';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,9 +24,7 @@ const RecipeWritePage = () => {
 
     return (
         <>
-            <Head>
-                <title>{t('레시피 만들기')} | JollyPot</title>
-            </Head>
+            <Seo title={t('레시피 만들기')} />
 
             <div className={styles.container}>
                 {!isMobile && (

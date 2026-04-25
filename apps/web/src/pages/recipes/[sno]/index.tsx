@@ -13,7 +13,7 @@ import type {
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import Head from 'next/head';
+import Seo from '@/components/common/seo';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -175,9 +175,10 @@ const RecipeDetailPage = ({
 
     return (
         <div className={styles.container}>
-            <Head>
-                <title>{recipeDetailData.title} | JollyPot</title>
-            </Head>
+            <Seo
+                title={recipeDetailData.title}
+                description={recipeDetailData.description}
+            />
 
             {/* --- HEADER AREA --- */}
             <section className={styles.headerArea}>

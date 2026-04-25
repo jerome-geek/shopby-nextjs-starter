@@ -1,8 +1,7 @@
 import { keepPreviousData } from '@tanstack/react-query';
-import Head from 'next/head';
+import Seo from '@/components/common/seo';
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
@@ -59,13 +58,10 @@ const Events = () => {
 
     return (
         <section className={styles.pageContainer}>
-            <Head>
-                <title>{t('기획전')} | JollyPot</title>
-                <meta
-                    name='description'
-                    content={t('졸리팟의 다양한 기획전을 만나보세요.')}
-                />
-            </Head>
+            <Seo
+                title={t('기획전')}
+                description={t('졸리팟의 다양한 기획전을 만나보세요.')}
+            />
 
             {!isMobile && <h1 className={styles.title}>{t('기획전')}</h1>}
 

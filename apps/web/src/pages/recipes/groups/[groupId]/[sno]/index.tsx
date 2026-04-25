@@ -5,7 +5,7 @@ import type {
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import Head from 'next/head';
+import Seo from '@/components/common/seo';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -62,15 +62,12 @@ const RecipeGroupContent = ({
 
     return (
         <>
-            <Head>
-                <title>{group.groupName} | JollyPot</title>
-                <meta
-                    name='description'
-                    content={
-                        group.description ?? `${group.groupName} 레시피 모음`
-                    }
-                />
-            </Head>
+            <Seo
+                title={group.groupName}
+                description={
+                    group.description ?? `${group.groupName} 레시피 모음`
+                }
+            />
 
             <div className={styles.container}>
                 {/* ── 좌측 고정 패널 ── */}

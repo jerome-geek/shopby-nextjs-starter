@@ -6,7 +6,7 @@ import type {
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import Head from 'next/head';
+import Seo from '@/components/common/seo';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -150,16 +150,13 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
     return (
         <>
-            <Head>
-                <title>{sharedCollectionData.title} | JollyPot</title>
-                <meta
-                    name='description'
-                    content={
-                        sharedCollectionData.description ??
-                        `${sharedCollectionData.memberName ?? ''}님의 레시피 컬렉션`
-                    }
-                />
-            </Head>
+            <Seo
+                title={sharedCollectionData.title}
+                description={
+                    sharedCollectionData.description ??
+                    `${sharedCollectionData.memberName ?? ''}님의 레시피 컬렉션`
+                }
+            />
 
             <div className={styles.container}>
                 {/* --- Hero Section --- */}

@@ -67,7 +67,7 @@ export async function getStaticProps() {
 export default function Home() {
     return (
         <>
-            <Seo title='JollyPot' description='Welcome to our online store' />
+            <Seo description='Welcome to our online store' />
 
             <div className={`${styles.main}`}>
                 {/* Full-width HeroBanner */}
