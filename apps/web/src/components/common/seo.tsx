@@ -34,6 +34,8 @@ interface SeoProps {
 
 // ─── Component ───────────────────────────────────────────
 
+const SITE_NAME = 'JollyPot';
+
 export default function Seo({
     title,
     description,
@@ -48,10 +50,12 @@ export default function Seo({
     brandName,
     jsonLd,
 }: SeoProps) {
+    const fullTitle = title ? `${title} || ${SITE_NAME}` : SITE_NAME;
+
     return (
         <Head>
             {/* ── 기본 메타 태그 ── */}
-            {title && <title>{title}</title>}
+            <title>{fullTitle}</title>
             {description && <meta name='description' content={description} />}
             {keywords && <meta name='keywords' content={keywords} />}
             {author && <meta name='author' content={author} />}
@@ -63,7 +67,7 @@ export default function Seo({
 
             {/* ── Open Graph (카카오톡 · 페이스북 · 네이버 등) ── */}
             {type && <meta property='og:type' content={type} />}
-            {title && <meta property='og:title' content={title} />}
+            <meta property='og:title' content={fullTitle} />
             {description && (
                 <meta property='og:description' content={description} />
             )}
@@ -99,7 +103,7 @@ export default function Seo({
 
             {/* ── Twitter · 슬랙 · 디스코드 ── */}
             <meta name='twitter:card' content='summary_large_image' />
-            {title && <meta name='twitter:title' content={title} />}
+            <meta name='twitter:title' content={fullTitle} />
             {description && (
                 <meta name='twitter:description' content={description} />
             )}
@@ -130,7 +134,7 @@ export default function Seo({
             />
             <meta
                 name='apple-mobile-web-app-title'
-                content={title || 'JollyPot'}
+                content={title || SITE_NAME}
             />
             <link rel='manifest' href='/site.webmanifest' />
         </Head>

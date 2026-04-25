@@ -9,7 +9,7 @@ import * as styles from '@/components/recipe/detail-card/index.css';
 import { Tooltip, VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useBookmark } from '@/hooks/recipe';
-import { useDialog } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
@@ -21,6 +21,8 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
     const router = useRouter();
 
     const { t } = useTranslation();
+
+    const { isMobile } = useResponsive();
 
     const { openAsyncDialog } = useDialog();
 
@@ -74,123 +76,136 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
 
     return (
         <article className={styles.recipeLink}>
-            <div className={styles.cardHeader}>
-                <div className={styles.cardTitleArea}>
-                    <div className={styles.titleRow}>
-                        <Link
-                            href={href}
-                            prefetch={false}
-                            style={{ flex: 1, minWidth: 0 }}
+            <div className={styles.cardBody}>
+                <div className={styles.headerSection}>
+                    <div className={styles.cardHeader}>
+                        <div className={styles.cardTitleArea}>
+                            <div className={styles.titleRow}>
+                                <Link
+                                    href={href}
+                                    prefetch={false}
+                                    className={styles.titleLink}
+                                >
+                                    <h4 className={styles.recipeTitle}>
+                                        {recipe.title}
+                                    </h4>
+                                </Link>
+                                {!isExcludedPath && (
+                                    <VerticalMoreMenu
+                                        id={String(recipe.sno)}
+                                        onEdit={handleEdit}
+                                        onEditText={t('레시피 수정')}
+                                        onDelete={handleDelete}
+                                        onDeleteText={t('레시피 삭제')}
+                                    />
+                                )}
+                            </div>
+                            {author && (
+                                <span className={styles.recipeAuthor}>
+                                    {author}
+                                </span>
+                            )}
+                        </div>
+
+                        <button
+                            className={styles.bookmarkIcon}
+                            onClick={handleBookmarkClick}
+                            type='button'
+                            aria-label={
+                                recipe.bookmarked
+                                    ? '북마크 해제'
+                                    : '북마크 추가'
+                            }
+                            aria-pressed={recipe.bookmarked}
                         >
-                            <h4 className={styles.recipeTitle}>
-                                {recipe.title}
-                            </h4>
-                        </Link>
-                        {!isExcludedPath && (
-                            <VerticalMoreMenu
-                                id={String(recipe.sno)}
-                                onEdit={handleEdit}
-                                onEditText={t('레시피 수정')}
-                                onDelete={handleDelete}
-                                onDeleteText={t('레시피 삭제')}
+                            <Bookmark
+                                size={24}
+                                className={styles.bookmarkIcon}
+                                fill={
+                                    recipe.bookmarked
+                                        ? vars.color.green['100']
+                                        : 'none'
+                                }
                             />
-                        )}
+                        </button>
                     </div>
-                    {author && (
-                        <span className={styles.recipeAuthor}>{author}</span>
-                    )}
+
+                    <div className={styles.recipeMeta}>
+                        <span className={styles.iconTimerText}>
+                            <TimerIcon currentColor={vars.color.gray['80']} />
+                            {cookingMinutes > 0 ? `${cookingMinutes}분` : '-'}
+                        </span>
+
+                        <span className={styles.iconText}>
+                            <PeopleIcon currentColor={vars.color.gray['60']} />
+                            {recipe.servings ? `${recipe.servings}인분` : '-'}
+                        </span>
+
+                        <span className={styles.iconText}>
+                            <CalorieIcon currentColor={vars.color.gray['60']} />
+                            {!!recipe.caloriesPerServingKcal
+                                ? `${recipe.caloriesPerServingKcal} kcal`
+                                : '-'}
+                        </span>
+                    </div>
                 </div>
 
-                <button
-                    className={styles.bookmarkIcon}
-                    onClick={handleBookmarkClick}
-                    type='button'
-                    aria-label={
-                        recipe.bookmarked ? '북마크 해제' : '북마크 추가'
-                    }
-                    aria-pressed={recipe.bookmarked}
-                >
-                    <Bookmark
-                        size={24}
-                        className={styles.bookmarkIcon}
-                        fill={
-                            recipe.bookmarked ? vars.color.green['100'] : 'none'
-                        }
-                    />
-                </button>
-            </div>
+                <div className={styles.ingredientContent}>
+                    <Link href={href} prefetch={false}>
+                        <div className={styles.recipeThumbArea}>
+                            <img
+                                src={recipe.thumbnailUrl ?? ''}
+                                className={styles.recipeThumb}
+                                alt={recipe.title}
+                            />
+                        </div>
+                    </Link>
 
-            <div className={styles.recipeMeta}>
-                <span className={styles.iconTimerText}>
-                    <TimerIcon currentColor={vars.color.gray['80']} />
-                    {cookingMinutes > 0 ? `${cookingMinutes}분` : '-'}
-                </span>
-                <span className={styles.iconText}>
-                    <PeopleIcon currentColor={vars.color.gray['60']} />
-                    {recipe.servings ? `${recipe.servings}인분` : '-'}
-                </span>
-
-                <span className={styles.iconText}>
-                    <CalorieIcon currentColor={vars.color.gray['60']} />
-                    {!!recipe.caloriesPerServingKcal
-                        ? `${recipe.caloriesPerServingKcal} kcal`
-                        : '-'}
-                </span>
-            </div>
-
-            <div className={styles.ingredientContent}>
-                <Link href={href} prefetch={false}>
-                    <div className={styles.recipeThumbArea}>
-                        <img
-                            src={recipe.thumbnailUrl ?? ''}
-                            className={styles.recipeThumb}
-                            alt={recipe.title}
-                        />
-                    </div>
-                </Link>
-
-                <div className={styles.ingredientContainer}>
-                    <div className={styles.ingredientHeader}>
-                        <h5 className={styles.ingredientTitle}>
-                            요리 재료 List
-                        </h5>
-                        <Tooltip
-                            content={
-                                '재료는 최대 6개까지 노출됩니다.\n자세한 사항은 상세 페이지를 참고해주세요.'
-                            }
-                        >
-                            <div className={styles.infoDot}>i</div>
-                        </Tooltip>
-                    </div>
-
-                    <ul className={styles.ingredientList}>
-                        {ingredients.slice(0, 6).map((ing, i) => (
-                            <li
-                                key={`${recipe.sno}-ing-${i}`}
-                                className={styles.ingredientListItem}
+                    <div className={styles.ingredientContainer}>
+                        <div className={styles.ingredientHeader}>
+                            <h5 className={styles.ingredientTitle}>
+                                요리 재료 List
+                            </h5>
+                            <Tooltip
+                                content={
+                                    '재료는 최대 6개까지 노출됩니다.\n자세한 사항은 상세 페이지를 참고해주세요.'
+                                }
                             >
-                                <span className={styles.ingredientName}>
-                                    {ing.name}
-                                </span>
-                                {!!ing.amount && (
-                                    <>
-                                        <span
-                                            style={{
-                                                color: vars.color.gray['50'],
-                                            }}
-                                        >
-                                            -
-                                        </span>
-                                        <span
-                                            className={styles.ingredientAmount}
-                                        >
-                                            {ing.amount}
-                                        </span>
-                                    </>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+                                <div className={styles.infoDot}>i</div>
+                            </Tooltip>
+                        </div>
+
+                        <ul className={styles.ingredientList}>
+                            {ingredients.slice(0, 6).map((ing, i) => (
+                                <li
+                                    key={`${recipe.sno}-ing-${i}`}
+                                    className={styles.ingredientListItem}
+                                >
+                                    <span className={styles.ingredientName}>
+                                        {ing.name}
+                                    </span>
+                                    {!!ing.amount && (
+                                        <>
+                                            <span
+                                                className={
+                                                    styles.ingredientSeparator
+                                                }
+                                            >
+                                                -
+                                            </span>
+                                            <span
+                                                className={
+                                                    styles.ingredientAmount
+                                                }
+                                            >
+                                                {ing.amount}
+                                            </span>
+                                        </>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
 

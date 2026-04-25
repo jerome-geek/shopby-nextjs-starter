@@ -2,11 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
-
-export const headingBold = textStyles.headingBold;
-export const body2Semibold = textStyles.body2Semibold;
-export const body2Regular = textStyles.body2Regular;
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const container = style({
     display: 'flex',
@@ -55,6 +51,14 @@ export const titleArea = style({
     maxWidth: '1200px',
     width: '100%',
     margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '40px',
+        },
+    },
 });
 
 export const tabList = style({
@@ -129,64 +133,9 @@ export const activeIndicator = style({
     boxShadow: '0 4px 12px rgba(141, 162, 135, 0.3)',
 });
 
-/* Product Grid */
-export const productGrid = style({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '12px',
-    '@media': {
-        [media.desktop]: {
-            gridTemplateColumns: 'repeat(5, 1fr)',
-            gap: '20px',
-        },
-    },
-});
+export const headingBold = textStyles.headingBold;
+export const body2Regular = textStyles.body2Regular;
 
-export const productImg = style({
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
-export const productInfo = style({
-    marginTop: '12px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-});
-
-export const cardTitleContainer = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-});
-
-export const productName = style([
-    textStyles.headingSemibold,
-    {
-        color: vars.color.black,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        display: '-webkit-box',
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: 'vertical',
-    },
-]);
-
-export const brandName = style([
-    textStyles.body2Regular,
-    {
-        color: vars.color.gray['60'],
-    },
-]);
-
-export const badgeArea = style({
-    display: 'flex',
-    gap: '4px',
-    marginTop: '8px',
-});
-
-/* Recipe Cards */
 export const recipeGrid = style({
     display: 'grid',
     listStyle: 'none',
@@ -200,29 +149,6 @@ export const recipeGrid = style({
             gap: '20px',
         },
     },
-});
-
-export const recipeImgArea = style({
-    position: 'relative',
-    aspectRatio: '3 / 4',
-    borderRadius: '16px',
-    overflow: 'hidden',
-});
-
-export const recipeMeta = style([
-    textStyles.caption2Regular,
-    {
-        display: 'flex',
-        gap: '8px',
-        color: vars.color.gray['40'],
-        marginTop: '4px',
-    },
-]);
-
-export const iconText = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
 });
 
 export const primaryButton = style([
@@ -297,12 +223,28 @@ export const detailTitle = style([
 
 export const detailSubtitle = style([
     textStyles.body2Regular,
-    { color: vars.color.gray['80'] },
+    {
+        color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineRegular,
+            },
+        },
+    },
 ]);
 
 export const detailMeta = style([
     textStyles.caption1Regular,
-    { color: vars.color.gray['60'] },
+    {
+        color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Regular,
+            },
+        },
+    },
 ]);
 
 export const viewToggleArea = style({
@@ -368,7 +310,6 @@ export const toggleActiveBg = style({
     },
 });
 
-/* Recipe Detail Card */
 export const recipeDetailGrid = style({
     display: 'grid',
     listStyle: 'none',
@@ -389,167 +330,6 @@ export const recipeDetailGrid = style({
     },
 });
 
-export const recipeDetailCard = style({
-    backgroundColor: vars.color.ivory['10'],
-    borderRadius: '8px',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
-});
-
-export const cardContent = style({
-    padding: '24px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-});
-
-export const cardHeader = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-});
-
-export const cardTitleArea = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-});
-
-export const recipeDetailTitle = style([
-    textStyles.title2Semibold,
-    { color: vars.color.black },
-]);
-
-export const recipeDetailAuthor = style([
-    textStyles.caption1Regular,
-    { color: vars.color.gray['40'] },
-]);
-
-export const recipeDetailMeta = style({
-    display: 'flex',
-    gap: '12px',
-    color: vars.color.gray['40'],
-    fontSize: '13px',
-});
-
-export const ingredientSection = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-});
-
-export const ingredientHeader = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-});
-
-export const ingredientTitle = style([
-    textStyles.body2Semibold,
-    { color: vars.color.black },
-]);
-
-export const ingredientContent = style({
-    display: 'flex',
-    gap: '12px',
-    '@media': {
-        [media.desktop]: {
-            gap: '16px',
-        },
-    },
-});
-
-export const recipeDetailImgArea = style({
-    width: '80px',
-    height: '80px',
-    borderRadius: '12px',
-    overflow: 'hidden',
-    flexShrink: 0,
-    '@media': {
-        [media.desktop]: {
-            width: '100px',
-            height: '100px',
-        },
-    },
-});
-
-export const recipeDetailImg = style({
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-});
-
-export const ingredientsList = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-    flex: 1,
-});
-
-export const ingredientItem = style([
-    textStyles.caption1Regular,
-    {
-        display: 'flex',
-        justifyContent: 'space-between',
-        color: vars.color.black,
-    },
-]);
-
-export const stepSection = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    marginTop: '8px',
-});
-
-export const stepTitle = style([
-    textStyles.body2Semibold,
-    { color: vars.color.black },
-]);
-
-export const stepList = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-});
-
-export const stepItem = style({
-    display: 'flex',
-    gap: '12px',
-    alignItems: 'flex-start',
-});
-
-export const stepNumber = style([
-    textStyles.caption1Semibold,
-    {
-        width: '20px',
-        height: '20px',
-        borderRadius: '50%',
-        backgroundColor: '#8da287',
-        color: vars.color.white,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-        fontSize: '11px',
-    },
-]);
-
-export const stepText = style([
-    textStyles.caption1Regular,
-    {
-        color: vars.color.gray['80'],
-        lineHeight: '1.5',
-    },
-]);
-
-export const recipeLink = style({
-    display: 'block',
-    textDecoration: 'none',
-    color: 'inherit',
-    height: '100%',
-});
-
-/* Empty State */
 export const emptyContainer = style({
     display: 'flex',
     flexDirection: 'column',

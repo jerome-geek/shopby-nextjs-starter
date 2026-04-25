@@ -4,17 +4,16 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { CollectionCard } from '@/components/collection';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
 import * as styles from '@/components/recipe/scrap/summary/index.css';
+import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useCollectionList } from '@/hooks/query/shop/collection';
 import { useBookmark } from '@/hooks/recipe';
 import { useCustomDialog } from '@/hooks/ui';
-import { VerticalMoreMenu } from '@/components/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
