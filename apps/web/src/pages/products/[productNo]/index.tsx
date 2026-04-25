@@ -27,7 +27,7 @@ import {
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
-import { type GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { type GetStaticPaths, type GetStaticProps, InferGetStaticPropsType } from 'next';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo } from 'react';
 
@@ -592,7 +592,7 @@ export default function ProductDetailPage({
     errorStatusCode,
     errorMessage,
     seoData,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
     // 1단계 [비즈니스 에러]: API에서 받은 메시지를 그대로 사용자에게 노출
     if (errorStatusCode) {
         return (
@@ -623,11 +623,14 @@ export default function ProductDetailPage({
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-    res,
-    params,
-    query,
-}) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: 'blocking',
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
     const queryClient = new QueryClient();
 
     const productNo = Number(params?.productNo) || 0;
@@ -636,8 +639,8 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     const searchParams = {
-        channelType: (query.channelType as ChannelType) || null,
-        preview: query.preview === 'true',
+        channelType: null,
+        preview: false,
     };
 
     let seoData = null;
@@ -646,10 +649,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         const productData = await queryClient.fetchQuery({
             queryKey: productKeys.detail(productNo, searchParams),
             queryFn: async () => {
-                const { data } = await product.getProductDetail(
-                    productNo,
-                    searchParams,
-                );
+                const { data } = await product.getProductDetail(productNo, searchParams);
 
                 return data;
             },
@@ -659,26 +659,16 @@ export const getServerSideProps: GetServerSideProps = async ({
         if (productData?.baseInfo) {
             const { baseInfo, brand, price, reviewRate, counter } = productData;
 
-            const title = brand?.name
-                ? `[${brand.name}] ${baseInfo.productName}`
-                : baseInfo.productName;
+            const title = brand?.name ? `[${brand.name}] ${baseInfo.productName}` : baseInfo.productName;
 
-            const description =
-                baseInfo.promotionText || baseInfo.productName || '';
+            const description = baseInfo.promotionText || baseInfo.productName || '';
 
-            const image =
-                baseInfo.imageUrls?.[0] ||
-                baseInfo.imageUrlInfo?.[0]?.url ||
-                '';
+            const image = baseInfo.imageUrls?.[0] || baseInfo.imageUrlInfo?.[0]?.url || '';
 
             const finalPrice =
-                price.salePrice -
-                (price.immediateDiscountAmt || 0) -
-                (price.additionDiscountAmt || 0);
+                price.salePrice - (price.immediateDiscountAmt || 0) - (price.additionDiscountAmt || 0);
 
-            const url = `${
-                process.env.NEXT_PUBLIC_BASE_URL || ''
-            }/products/${productNo}`;
+            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/products/${productNo}`;
 
             seoData = {
                 title,
@@ -719,28 +709,21 @@ export const getServerSideProps: GetServerSideProps = async ({
         }
     } catch (error) {
         if (isAxiosError(error)) {
-            const status =
-                error.response?.status || HttpStatusCode.InternalServerError;
+            const status = error.response?.status || HttpStatusCode.InternalServerError;
 
-            // ⚠️ [비즈니스 에러]: 4xx 에러 (권한 없음, 존재하지 않음 등) 처리
             if (status >= 400 && status < 500) {
-                res.statusCode = status; // SEO 대응
-
                 return {
                     props: {
                         productNo,
                         searchParams,
                         errorStatusCode: status,
-                        errorMessage:
-                            error.response?.data?.message ||
-                            '상품을 불러올 수 없습니다.',
+                        errorMessage: error.response?.data?.message || '상품을 불러올 수 없습니다.',
                     },
+                    revalidate: 10,
                 };
             }
-
-            // [시스템 에러]: 5xx 에러는 그대로 두어 클라이언트 ErrorBoundary 유도
-            console.warn('🚀 getServerSideProps fetch failure:', error);
         }
+        return { notFound: true };
     }
 
     return {
@@ -750,5 +733,6 @@ export const getServerSideProps: GetServerSideProps = async ({
             seoData,
             dehydratedState: dehydrate(queryClient),
         },
+        revalidate: 60 * 60, // 1시간
     };
 };

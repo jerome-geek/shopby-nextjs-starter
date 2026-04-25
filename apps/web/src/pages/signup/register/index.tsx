@@ -11,7 +11,7 @@ import {
 } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import type { GetServerSideProps } from 'next';
+import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -61,22 +61,35 @@ type SignupRegisterProps = {
     certificationKey: string;
 };
 
-const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
-    accessToken,
-    provider,
-    refreshToken,
-    terms,
-    smsAgreed,
-    directMailAgreed,
-    isSocialLogin,
-    certificationKey,
-    expiry,
-}) => {
+const SignupRegister: NextPageWithLayout = () => {
     const { t } = useTranslation();
 
     const { openDialog } = useDialog();
 
     const router = useRouter();
+    const { query, isReady } = router;
+
+    const certificationKey = getSafeQueryString(query.key);
+    const accessToken = getSafeQueryString(query.accessToken);
+    const provider = getSafeQueryString(query.provider) as NcpOpenIdProviderType | '';
+    const refreshToken = getSafeQueryString(query.refreshToken);
+    const expiry = Number(getSafeQueryString(query.expiry)) || 0;
+
+    const termsStr = getSafeQueryString(query.terms);
+    const terms = useMemo(() => (termsStr ? termsStr.split(',') : []), [termsStr]);
+    const smsAgreed = query?.smsAgreed === 'true';
+    const directMailAgreed = query?.directMailAgreed === 'true';
+
+    const isSocialLogin = !!provider;
+
+    useEffect(() => {
+        if (!isReady) return;
+
+        const isValidEntry = 'terms' in query || isSocialLogin;
+        if (!isValidEntry) {
+            router.replace(PATHS.SIGNUP.REGISTER_METHOD);
+        }
+    }, [isReady, query, isSocialLogin, router]);
 
     const { countryCd, isKorean, isJapan } = useGlobal();
 
@@ -400,53 +413,3 @@ SignupRegister.getLayout = (page) => (
 );
 
 export default SignupRegister;
-
-export const getServerSideProps: GetServerSideProps<
-    SignupRegisterProps
-> = async (context) => {
-    const query = context.query;
-
-    const certificationKey = getSafeQueryString(query.key);
-    const accessToken = getSafeQueryString(query.accessToken);
-    const provider = getSafeQueryString(query.provider) as
-        | NcpOpenIdProviderType
-        | '';
-    const refreshToken = getSafeQueryString(query.refreshToken);
-    const expiry = Number(getSafeQueryString(query.expiry)) || 0;
-
-    const termsStr = getSafeQueryString(query.terms);
-    const terms = (termsStr ? termsStr.split(',') : []) as any;
-    const smsAgreed = query?.smsAgreed === 'true';
-    const directMailAgreed = query?.directMailAgreed === 'true';
-
-    const isSocialLogin = !!provider;
-
-    // NOTE : 정상 진입 경로 체크:
-    // - 일반 가입: /signup/terms에서 terms query param을 전달
-    // - 소셜 가입: provider query param이 존재
-    // 두 경우 모두 없으면 URL 직접 접근으로 판단 → 진입점으로 리다이렉트
-    const isValidEntry = 'terms' in query || isSocialLogin;
-
-    if (!isValidEntry) {
-        return {
-            redirect: {
-                destination: PATHS.SIGNUP.REGISTER_METHOD,
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: {
-            accessToken,
-            refreshToken,
-            provider,
-            expiry,
-            terms,
-            smsAgreed,
-            directMailAgreed,
-            isSocialLogin,
-            certificationKey,
-        },
-    };
-};
