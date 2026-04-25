@@ -1,7 +1,11 @@
 import { compact, isEmpty, isUndefined, pipe, sum } from '@fxts/core';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import type {
+    GetStaticPaths,
+    GetStaticProps,
+    InferGetStaticPropsType,
+} from 'next';
 import { useCallback, useMemo, useState } from 'react';
 
 import { event } from '@/api/display';
@@ -16,22 +20,23 @@ import EventSectionTab from '@/components/event/detail/event-section-tab';
 import EventTop from '@/components/event/detail/event-top';
 import { eventKeys } from '@/hooks/queryKeys';
 import { useEvent } from '@/hooks/suspenseQuery/display/event';
+import { ONE_HOUR_IN_SECONDS, ONE_MINUTE_IN_SECONDS } from '@/const/time';
 import {
     GetEventParams,
     GetEventProductDisplaySectionParams,
     GetEventProductDisplaySectionResponse,
 } from '@/models/display';
-import * as styles from '@/pages/events/[eventNo].css';
 
-const EventDetailView = ({
-    eventNo,
-    searchParams,
-}: {
-    eventNo: number;
+import * as styles from '@/pages/events/[eventNoOrId]/index.css';
+
+interface EventDetailViewProps {
+    eventKey: string | number;
     searchParams: GetEventParams;
-}) => {
+}
+
+const EventDetailView = ({ eventKey, searchParams }: EventDetailViewProps) => {
     const { data: eventData } = useEvent({
-        eventKey: eventNo,
+        eventKey,
         searchParams,
     });
 
@@ -68,7 +73,7 @@ const EventDetailView = ({
     const queryClient = useQueryClient();
 
     const totalCount = useMemo(() => {
-        if (!eventNo) {
+        if (!eventKey) {
             return;
         }
 
@@ -77,7 +82,7 @@ const EventDetailView = ({
                 const data =
                     queryClient.getQueryData<GetEventProductDisplaySectionResponse>(
                         eventKeys.productSection(
-                            Number(eventNo),
+                            Number(eventData.eventNo),
                             section.sectionNo,
                             productSectionSearchParams,
                         ),
@@ -99,7 +104,13 @@ const EventDetailView = ({
             console.error(error);
             return;
         }
-    }, [visibleSections, eventNo, productSectionSearchParams, queryClient]);
+    }, [
+        visibleSections,
+        eventKey,
+        eventData.eventNo,
+        productSectionSearchParams,
+        queryClient,
+    ]);
 
     return (
         <div className={styles.pageContainer}>
@@ -156,12 +167,12 @@ const EventDetailView = ({
 };
 
 export default function EventDetailPage({
-    eventNo,
+    eventKey,
     searchParams,
     errorStatusCode,
     errorMessage,
     seoData,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
     // 1단계 [비즈니스 에러]: API에서 받은 메시지를 그대로 사용자에게 노출
     if (errorStatusCode) {
         return (
@@ -189,7 +200,7 @@ export default function EventDetailPage({
                 }
             >
                 <EventDetailView
-                    eventNo={eventNo}
+                    eventKey={eventKey}
                     searchParams={searchParams}
                 />
             </ShopbyApiErrorBoundary>
@@ -197,20 +208,28 @@ export default function EventDetailPage({
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-    res,
-    params,
-    query,
-}) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [], // 초기 빌드 시에는 비워두고 접속 시 생성 (blocking)
+        fallback: 'blocking',
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
     const queryClient = new QueryClient();
 
-    const eventNo = Number(params?.eventNo) || 0;
-    if (!eventNo) {
+    const eventNoOrId = (params?.eventNoOrId as string) || '';
+    if (!eventNoOrId) {
         return { notFound: true };
     }
 
+    // 숫자인 경우 숫자로 변환, 아니면 문자열 그대로 사용
+    const eventKey = !isNaN(Number(eventNoOrId))
+        ? Number(eventNoOrId)
+        : eventNoOrId;
+
     const searchParams = {
-        preview: query.preview === 'true',
+        preview: false, // ISR에서는 빌드 시점/백그라운드 갱신 시점이므로 preview는 false가 기본
         includeNonMemberCoupon: true,
     };
 
@@ -218,9 +237,16 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     try {
         const eventData = await queryClient.fetchQuery({
-            queryKey: eventKeys.detail(eventNo, searchParams),
+            queryKey: eventKeys.detail(eventKey, searchParams),
             queryFn: async () => {
-                const { data } = await event.getEvent(eventNo, searchParams);
+                if (typeof eventKey === 'string') {
+                    const { data } = await event.getEventById(
+                        eventKey,
+                        searchParams,
+                    );
+                    return data;
+                }
+                const { data } = await event.getEvent(eventKey, searchParams);
 
                 return data;
             },
@@ -229,20 +255,13 @@ export const getServerSideProps: GetServerSideProps = async ({
         // ── SEO 데이터 추출 ──
         if (eventData?.label) {
             const { label, promotionText } = eventData;
-
-            const title = `${label} | JollyPot`;
-
             const description = promotionText || `${label} 기획전`;
-
             const image =
                 eventData.pcImageUrl || eventData.mobileimageUrl || '';
-
-            const url = `${
-                process.env.NEXT_PUBLIC_BASE_URL || ''
-            }/events/${eventNo}`;
+            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/events/${eventData.eventNo}`;
 
             seoData = {
-                title,
+                title: label,
                 description,
                 image,
                 url,
@@ -260,33 +279,30 @@ export const getServerSideProps: GetServerSideProps = async ({
             const status =
                 error.response?.status || HttpStatusCode.InternalServerError;
 
-            // ⚠️ [비즈니스 에러]: 4xx 에러 (권한 없음, 존재하지 않음 등) 처리
             if (status >= 400 && status < 500) {
-                res.statusCode = status; // SEO 대응
-
                 return {
                     props: {
-                        eventNo,
+                        eventKey,
                         searchParams,
                         errorStatusCode: status,
                         errorMessage:
                             error.response?.data?.message ||
                             '기획전을 불러올 수 없습니다.',
                     },
+                    revalidate: ONE_MINUTE_IN_SECONDS, // 에러 발생 시 짧은 주기로 재시도
                 };
             }
-
-            // [시스템 에러]: 5xx 에러는 그대로 두어 클라이언트 ErrorBoundary 유도
-            console.warn('🚀 getServerSideProps fetch failure:', error);
         }
+        return { notFound: true };
     }
 
     return {
         props: {
-            eventNo,
+            eventKey,
             searchParams,
             seoData,
             dehydratedState: dehydrate(queryClient),
         },
+        revalidate: ONE_HOUR_IN_SECONDS,
     };
 };

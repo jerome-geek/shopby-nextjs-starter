@@ -12,6 +12,7 @@ import * as styles from '@/components/event/list/event-item.css';
 
 const EventItem = ({
     eventNo,
+    id,
     pcImageUrl,
     mobileimageUrl,
     label,
@@ -19,13 +20,14 @@ const EventItem = ({
     startYmdt,
     endYmdt,
     eventYn,
+    displayPeriodType,
 }: EventContent) => {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
 
     const detailPath = PATHS.EVENTS.DETAIL.replace(
-        '[eventNo]',
-        eventNo.toString(),
+        '[eventNoOrId]',
+        id || eventNo.toString(),
     );
 
     const getDateText = () => {
@@ -35,6 +37,11 @@ const EventItem = ({
                 t('이벤트 기간: 별도 명시 없음')
             );
         }
+
+        if (displayPeriodType === 'REGULAR') {
+            return t('상시 진행');
+        }
+
         return `${dayjs(startYmdt).format('YY.MM.DD')}-${dayjs(endYmdt).format(
             'YY.MM.DD',
         )}`;

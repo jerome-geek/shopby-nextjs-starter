@@ -92,7 +92,7 @@ export const PATHS = {
         /** 기획전 리스트 */
         MAIN: '/events',
         /** 기획전 상세페이지 */
-        DETAIL: '/events/[eventNo]',
+        DETAIL: '/events/[eventNoOrId]',
     },
 
     BOARDS: {

@@ -198,7 +198,7 @@ const event = {
     ) => {
         return shopbyRequest<GetEventResponse>({
             method: 'GET',
-            url: `/display/events/${eventKey}/`,
+            url: `/display/events/${eventKey}`,
             params,
             ...options,
             headers: {

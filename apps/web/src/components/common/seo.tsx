@@ -50,7 +50,7 @@ export default function Seo({
     brandName,
     jsonLd,
 }: SeoProps) {
-    const fullTitle = title ? `${title} || ${SITE_NAME}` : SITE_NAME;
+    const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 
     return (
         <Head>

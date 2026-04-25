@@ -36,10 +36,14 @@ const useEvent = <T = GetEventResponse>({
     return useSuspenseQuery({
         queryKey: eventKeys.detail(eventKey, defaultSearchParams),
         queryFn: async () => {
-            const { data } = await event.getEvent(
-                eventKey,
-                defaultSearchParams,
-            );
+            if (typeof eventKey === 'string') {
+                const { data } = await event.getEventById(
+                    eventKey,
+                    defaultSearchParams,
+                );
+                return data;
+            }
+            const { data } = await event.getEvent(eventKey, defaultSearchParams);
 
             return data;
         },
