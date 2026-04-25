@@ -32,6 +32,7 @@ import {
     type GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
+import { parseAsBoolean, parseAsString, useQueryStates } from 'nuqs';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo } from 'react';
 
@@ -87,6 +88,10 @@ function ProductDetailView({
         productNo,
         searchParams,
     });
+    console.log(
+        '🚀 ~ ProductDetailView ~ productDetailData:',
+        productDetailData,
+    );
 
     const { baseInfo, price, counter, brand } = productDetailData;
 
@@ -590,13 +595,26 @@ function ProductDetailView({
     );
 }
 
+const productSearchParamsSchema = {
+    channelType: parseAsString.withDefault(''),
+    preview: parseAsBoolean.withDefault(false),
+};
+
 export default function ProductDetailPage({
     productNo,
-    searchParams,
     errorStatusCode,
     errorMessage,
     seoData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+    const [query] = useQueryStates(productSearchParamsSchema);
+
+    const searchParams = useMemo(
+        () => ({
+            channelType: (query.channelType as ChannelType) || undefined,
+            preview: query.preview,
+        }),
+        [query.channelType, query.preview],
+    );
     // 1단계 [비즈니스 에러]: API에서 받은 메시지를 그대로 사용자에게 노출
     if (errorStatusCode) {
         return (
@@ -731,7 +749,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 return {
                     props: {
                         productNo,
-                        searchParams,
                         errorStatusCode: status,
                         errorMessage:
                             error.response?.data?.message ||
@@ -747,7 +764,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
         props: {
             productNo,
-            searchParams,
             seoData,
             dehydratedState: dehydrate(queryClient),
         },
