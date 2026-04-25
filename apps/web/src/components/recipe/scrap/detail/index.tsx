@@ -13,7 +13,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import * as styles from '@/pages/recipes/scrap/index.css';
+import * as styles from './index.css';
 import { vars } from '@/styles/theme.css';
 
 interface RecipeScrapDetailProps {
