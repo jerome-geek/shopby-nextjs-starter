@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { type GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { type GetStaticPaths, type GetStaticProps, InferGetStaticPropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
@@ -38,7 +38,7 @@ export default function BoardArticle({
     errorStatusCode,
     errorMessage,
     errorCode,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
     const { t } = useTranslation();
 
     const router = useRouter();
@@ -530,27 +530,19 @@ export default function BoardArticle({
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-    res,
-    req,
-    params,
-}) => {
-    const queryClient = new QueryClient();
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [],
+        fallback: 'blocking',
+    };
+};
 
-    const cookieCtx = { req, res };
-    const accessToken = accessTokenCookie.get(cookieCtx);
-    const shopbyAuthHeaders = accessToken
-        ? { 'Shop-By-Authorization': `Bearer ${accessToken}` }
-        : undefined;
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const queryClient = new QueryClient();
 
     // boardId는 숫자 ID가 아니라 게시판 식별자 문자열(예: "free")일 수 있음
     const boardNoParam = params?.boardId;
-    const boardNo =
-        typeof boardNoParam === 'string'
-            ? boardNoParam
-            : Array.isArray(boardNoParam)
-            ? boardNoParam[0]
-            : '';
+    const boardNo = typeof boardNoParam === 'string' ? boardNoParam : Array.isArray(boardNoParam) ? boardNoParam[0] : '';
     if (!boardNo) {
         return { notFound: true };
     }
@@ -566,20 +558,9 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     try {
         const postData = await queryClient.fetchQuery({
-            queryKey: boardKeys.postDetail(
-                String(boardNo),
-                articleNo,
-                searchParams,
-            ),
+            queryKey: boardKeys.postDetail(String(boardNo), articleNo, searchParams),
             queryFn: async () => {
-                const { data } = await board.getArticleV2(
-                    String(boardNo),
-                    articleNo,
-                    searchParams,
-                    shopbyAuthHeaders
-                        ? { headers: shopbyAuthHeaders }
-                        : undefined,
-                );
+                const { data } = await board.getArticleV2(String(boardNo), articleNo, searchParams);
 
                 return data;
             },
@@ -588,12 +569,8 @@ export const getServerSideProps: GetServerSideProps = async ({
         // ── SEO 데이터 추출 ──
         if (postData) {
             const title = postData.title;
-
             const description = postData?.content?.slice(0, 120);
-
-            const url = `${
-                process.env.NEXT_PUBLIC_BASE_URL || ''
-            }/boards/${boardNo}/${articleNo}`;
+            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/boards/${boardNo}/${articleNo}`;
 
             seoData = {
                 title,
@@ -603,29 +580,21 @@ export const getServerSideProps: GetServerSideProps = async ({
         }
     } catch (error) {
         if (isAxiosError(error)) {
-            const status =
-                error.response?.status || HttpStatusCode.InternalServerError;
+            const status = error.response?.status || HttpStatusCode.InternalServerError;
 
-            // ⚠️ [비즈니스 에러]: 4xx 에러 (권한 없음, 존재하지 않음 등) 처리
             if (status >= 400 && status < 500) {
-                res.statusCode = status; // SEO 대응
-
                 return {
                     props: {
                         boardNo: String(boardNo),
                         articleNo,
                         searchParams,
                         errorStatusCode: status,
-                        errorMessage:
-                            error.response?.data?.message ||
-                            '게시글을 불러올 수 없습니다.',
+                        errorMessage: error.response?.data?.message || '게시글을 불러올 수 없습니다.',
                         errorCode: error.response?.data?.code || '',
                     },
+                    revalidate: 10,
                 };
             }
-
-            // [시스템 에러]: 5xx 에러는 그대로 두어 클라이언트 ErrorBoundary 유도
-            console.warn('🚀 getServerSideProps fetch failure:', error);
         }
     }
 
@@ -637,5 +606,6 @@ export const getServerSideProps: GetServerSideProps = async ({
             seoData,
             dehydratedState: dehydrate(queryClient),
         },
+        revalidate: 60 * 60, // 1시간
     };
 };

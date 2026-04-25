@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from 'next';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
 import { HeroBanner } from '@/components/banner/hero';
@@ -40,13 +40,20 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+    return {
+        paths: [{ params: { slug: 'life' } }, { params: { slug: 'kids' } }],
+        fallback: 'blocking',
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
     const slug = params?.slug as string | undefined;
 
     // 허용된 경로 목록
     const validPaths = ['life', 'kids'];
 
-    // life, kids 외의 경로로 들어오거나 slug가 없을 경우 /shop으로 리다이렉트
+    // life, kids 외의 경로로 들어오거나 slug가 없을 경우 404 또는 리다이렉트
     if (!slug || !validPaths.includes(slug)) {
         return {
             redirect: {
@@ -62,5 +69,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         props: {
             type,
         },
+        revalidate: 60 * 60, // 1시간
     };
 };
