@@ -1,7 +1,6 @@
-import { map, pipe, toArray } from '@fxts/core';
+import { map, pipe, take, toArray } from '@fxts/core';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
-import type { GetStaticPaths, GetStaticProps } from 'next';
-import dynamic from 'next/dynamic';
+import type { GetServerSideProps } from 'next';
 
 import { banner, event, productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
@@ -51,21 +50,14 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
     );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-    return {
-        paths: [{ params: { slug: 'life' } }, { params: { slug: 'kids' } }],
-        fallback: 'blocking',
-    };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const slug = params?.slug as string | undefined;
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    const slug = (params?.slug as string) || '';
 
     // 허용된 경로 목록
     const validPaths = ['life', 'kids'];
 
     // life, kids 외의 경로로 들어오거나 slug가 없을 경우 404 또는 리다이렉트
-    if (!slug || !validPaths.includes(slug)) {
+    if (!validPaths.includes(slug)) {
         return {
             redirect: {
                 destination: '/shop',
@@ -105,7 +97,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                     const { data } = await banner.getBannersByIds([
                         `${BANNER_ID_PREFIX}-${heroBannerType}`,
                     ]);
-                    return data;
+                    return data ?? null;
                 },
             }),
             // Prefetch Infinite Event List and first few event details
@@ -114,9 +106,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
                 if (data?.contents) {
                     // Prefetch top 3 event details to avoid skeletons in initial view
-                    const topEventNos = data.contents
-                        .slice(0, 3)
-                        .map((e) => e.eventNo);
+                    const topEventNos = pipe(
+                        data.contents,
+                        take(3),
+                        map((e) => e.eventNo),
+                        toArray,
+                    );
 
                     await Promise.all(
                         topEventNos.map((eventNo) =>
@@ -125,27 +120,27 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                                 queryFn: async () => {
                                     const { data: detailData } =
                                         await event.getEvent(eventNo);
-                                    return detailData;
+                                    return detailData ?? null;
                                 },
                             }),
                         ),
                     );
 
                     // Optimization: Trim event list data
-                    // Since SectionGroup only uses eventNo, we can trim heavily
-                    data.contents = data.contents.map(
-                        (item) =>
-                            ({
-                                eventNo: item.eventNo,
-                                label: item.label,
-                            } as any),
-                    );
+                    data.contents = pipe(
+                        data.contents,
+                        map((item) => ({
+                            eventNo: item.eventNo,
+                            label: item.label ?? '',
+                        })),
+                        toArray,
+                    ) as any;
                 }
 
                 await queryClient.prefetchInfiniteQuery({
                     queryKey: eventKeys.infiniteList(eventSearchParams),
                     initialPageParam: 1,
-                    queryFn: () => data,
+                    queryFn: () => data ?? null,
                 });
             })(),
             // Prefetch TimeSale Data
@@ -158,7 +153,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
                 await queryClient.prefetchQuery({
                     queryKey: productSectionKeys.detail(timeSaleSectionId),
-                    queryFn: () => sectionData,
+                    queryFn: () => sectionData ?? null,
                 });
 
                 if (sectionNo > 0) {
@@ -184,39 +179,44 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
                             // Optimization: Trim time sale product data
                             if (timeSaleData?.products) {
-                                timeSaleData.products = timeSaleData.products
-                                    .slice(0, 12)
-                                    .map((product) => ({
+                                timeSaleData.products = pipe(
+                                    timeSaleData.products,
+                                    take(12),
+                                    map((product) => ({
                                         productNo: product.productNo,
                                         productName: product.productName,
-                                        brandName: product.brandName,
-                                        brandNo: product.brandNo,
+                                        brandName: product.brandName ?? '',
+                                        brandNo: product.brandNo ?? 0,
                                         salePrice: product.salePrice,
                                         immediateDiscountAmt:
-                                            product.immediateDiscountAmt,
+                                            product.immediateDiscountAmt ?? 0,
                                         additionDiscountAmt:
-                                            product.additionDiscountAmt,
-                                        imageUrlInfo:
-                                            product.imageUrlInfo?.map(
-                                                (img) => ({
-                                                    url: img.url,
-                                                }),
-                                            ),
-                                        stickerInfos:
-                                            product.stickerInfos?.map(
-                                                (sticker) => ({
-                                                    type: sticker.type,
-                                                    label: sticker.label,
-                                                }),
-                                            ),
-                                        likeCount: product.likeCount,
-                                        liked: product.liked,
-                                        reviewRating: product.reviewRating,
+                                            product.additionDiscountAmt ?? 0,
+                                        imageUrlInfo: pipe(
+                                            product.imageUrlInfo ?? [],
+                                            map((img) => ({
+                                                url: img.url ?? '',
+                                            })),
+                                            toArray,
+                                        ),
+                                        stickerInfos: pipe(
+                                            product.stickerInfos ?? [],
+                                            map((sticker) => ({
+                                                type: sticker.type ?? '',
+                                                label: sticker.label ?? '',
+                                            })),
+                                            toArray,
+                                        ),
+                                        likeCount: product.likeCount ?? 0,
+                                        liked: product.liked ?? false,
+                                        reviewRating: product.reviewRating ?? 0,
                                         totalReviewCount:
-                                            product.totalReviewCount,
-                                    })) as any;
+                                            product.totalReviewCount ?? 0,
+                                    })),
+                                    toArray,
+                                ) as any;
                             }
-                            return timeSaleData;
+                            return timeSaleData ?? null;
                         },
                     });
                 }
@@ -224,16 +224,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         ]);
     } catch (error) {
         console.error(
-            `[Shop Page getStaticProps] Prefetching failed for ${slug}:`,
+            `[Shop Page getServerSideProps] Prefetching failed for ${slug}:`,
             error,
         );
     }
 
+    const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)));
+
     return {
         props: {
             type,
-            dehydratedState: dehydrate(queryClient),
+            dehydratedState,
         },
-        revalidate: 60 * 60, // 1시간
     };
 };

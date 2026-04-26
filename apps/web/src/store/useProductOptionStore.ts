@@ -66,6 +66,8 @@ export const useProductOptionStore = createStore<ProductOptionState>(
         inputNo: number;
         inputValue: string;
         optionNo?: number;
+        inputLabel?: string;
+        required?: boolean;
     }) =>
         set((state) => ({
             selectedOptionList: pipe(
@@ -78,17 +80,36 @@ export const useProductOptionStore = createStore<ProductOptionState>(
                     )
                         return item;
 
+                    const optionInputs = item.optionInputs ?? [];
+                    const hasInput = some(
+                        (input) => input.inputNo === params.inputNo,
+                        optionInputs,
+                    );
+
                     return {
                         ...item,
-                        optionInputs: pipe(
-                            item.optionInputs ?? [],
-                            map((input) =>
-                                input.inputNo === params.inputNo
-                                    ? { ...input, inputValue: params.inputValue }
-                                    : input,
-                            ),
-                            toArray,
-                        ),
+                        optionInputs: hasInput
+                            ? pipe(
+                                  optionInputs,
+                                  map((input) =>
+                                      input.inputNo === params.inputNo
+                                          ? {
+                                                ...input,
+                                                inputValue: params.inputValue,
+                                            }
+                                          : input,
+                                  ),
+                                  toArray,
+                              )
+                            : [
+                                  ...optionInputs,
+                                  {
+                                      inputNo: params.inputNo,
+                                      inputValue: params.inputValue,
+                                      required: params.required ?? false,
+                                      inputLabel: params.inputLabel ?? '',
+                                  },
+                              ],
                     };
                 }),
                 toArray,

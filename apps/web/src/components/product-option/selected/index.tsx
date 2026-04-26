@@ -21,6 +21,10 @@ export const SelectedProductOption = ({
     const { textOptionInputs } = useProductOption({
         productNo,
     });
+    console.log(
+        '🚀 ~ SelectedProductOption ~ textOptionInputs:',
+        textOptionInputs,
+    );
 
     const {
         selectedOptionList,
@@ -28,6 +32,35 @@ export const SelectedProductOption = ({
         removeOption,
         updateTextOptionValue,
     } = useProductOptionStore();
+    console.log(
+        '🚀 ~ SelectedProductOption ~ selectedOptionList:',
+        selectedOptionList,
+    );
+
+    const getInputOptionDefaultValue = (inputNo: number, optionNo?: number) => {
+        const findOption = optionNo
+            ? selectedOptionList.find((a) => a.optionNo === optionNo)
+            : selectedOptionList[0];
+
+        return (
+            findOption?.optionInputs?.find((a) => a.inputNo === inputNo)
+                ?.inputValue || ''
+        );
+    };
+
+    const handleTextOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { inputNo, optionNo } = e.target.dataset;
+        const inputValue = e.target.value;
+
+        updateTextOptionValue({
+            inputNo: Number(inputNo),
+            inputValue,
+            optionNo: Number(optionNo) || undefined,
+            productNo,
+            // inputLabel,
+            // required: required === 'true',
+        });
+    };
 
     if (selectedOptionList.length === 0) {
         return null;
@@ -52,12 +85,16 @@ export const SelectedProductOption = ({
                     </div>
 
                     {/* 옵션별 텍스트 입력항목 (OPTION 매칭 타입) */}
-                    {(textOptionInputs.OPTION ?? []).length > 0 && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            {(textOptionInputs.OPTION ?? []).map((input) => (
-                                <InputContainer
-                                    key={input.inputNo}
-                                >
+                    {textOptionInputs['OPTION'].length > 0 && (
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '12px',
+                            }}
+                        >
+                            {textOptionInputs['OPTION'].map((input) => (
+                                <InputContainer key={input.inputNo}>
                                     <InputLabel>{input.inputLabel}</InputLabel>
                                     <InputField
                                         placeholder={t(
@@ -66,8 +103,7 @@ export const SelectedProductOption = ({
                                         value={
                                             option.optionInputs.find(
                                                 (v) =>
-                                                    v.inputNo ===
-                                                    input.inputNo,
+                                                    v.inputNo === input.inputNo,
                                             )?.inputValue || ''
                                         }
                                         onChange={(e) =>
@@ -75,7 +111,9 @@ export const SelectedProductOption = ({
                                                 productNo,
                                                 inputNo: input.inputNo,
                                                 inputValue: e.target.value,
-                                                optionNo: option.optionNo
+                                                optionNo: option.optionNo,
+                                                // inputLabel: input.inputLabel,
+                                                // required: input.required,
                                             })
                                         }
                                     />
@@ -122,6 +160,30 @@ export const SelectedProductOption = ({
                     </div>
                 </li>
             ))}
+
+            {textOptionInputs['PRODUCT'].map(
+                ({ inputNo, inputLabel, required, inputValue }) => (
+                    <InputContainer key={inputNo}>
+                        <InputLabel
+                            isRequired={required}
+                            htmlFor={`product-text-option-${inputNo}`}
+                        >
+                            {t(`${inputLabel} (상품별 옵션)`)}
+                        </InputLabel>
+
+                        <InputField
+                            id={`product-text-option-${inputNo}`}
+                            placeholder={t(`${inputLabel} 을/를 입력해주세요.`)}
+                            value={inputValue || ''}
+                            required={required}
+                            data-input-no={inputNo}
+                            data-input-label={inputLabel}
+                            data-required={required}
+                            onChange={handleTextOptionChange}
+                        />
+                    </InputContainer>
+                ),
+            )}
         </ul>
     );
 };
