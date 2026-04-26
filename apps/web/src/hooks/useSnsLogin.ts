@@ -1,17 +1,11 @@
-'use client';
-
+import { includes } from '@fxts/core';
 import { useMutation } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { authentication } from '@/api/auth';
-import { PATHS } from '@/const/paths';
-import { useMall } from '@/hooks/query/admin/mall';
-// import { useMyApp } from '@/hooks/myapp';
-import useDialog from '@/hooks/utils/useDialog';
-import type { NcpOpenIdProviderType } from '@/models';
-// import { shopbyTokenStorage } from '@/utils/storage';
 import {
     AppleIcon,
     FacebookIcon,
@@ -20,7 +14,10 @@ import {
     LineIcon,
     NaverIcon,
 } from '@/components/icons/login';
-import { includes } from '@fxts/core';
+import { PATHS } from '@/const/paths';
+import { useMall } from '@/hooks/query/admin/mall';
+import useDialog from '@/hooks/utils/useDialog';
+import type { NcpOpenIdProviderType, OpenIdJoinProvider } from '@/models';
 
 const useSnsLogin = () => {
     const { t } = useTranslation();
@@ -29,22 +26,25 @@ const useSnsLogin = () => {
 
     const { data: mallData } = useMall();
 
-    // const { isInAppBrowser, isMyApp } = useMyApp();
+    const openIdJoinProviders = useMemo(
+        () => mallData?.openIdJoinConfig.providers || [],
+        [mallData],
+    );
+
     const searchParams = useSearchParams();
     const returnUrl = searchParams.get('returnUrl') || '';
 
-    // const [, setOpenReturnUrl] = useLocalStorage(
-    //     'openReturnUrl',
-    //     window.location.origin,
-    // );
+    const [, setOpenReturnUrl] = useLocalStorage(
+        'openReturnUrl',
+        window.location.origin,
+    );
 
     const openLoginTab = (loginUrl: string, snsReturnUrl?: string) => {
-        // setOpenReturnUrl(snsReturnUrl || returnUrl);
+        setOpenReturnUrl(snsReturnUrl || returnUrl);
 
         window.location.replace(loginUrl);
     };
 
-    // const { data: mallData } = useMall();
     const { mutateAsync } = useMutation({
         mutationFn: async ({
             provider,
@@ -63,32 +63,6 @@ const useSnsLogin = () => {
             return response.data;
         },
     });
-
-    // const customTabOpen = (provider: 'google' | 'facebook') => {
-    //     const accessToken =
-    //         shopbyTokenStorage.getAccessToken()?.accessToken ?? '';
-    //     const refreshToken = shopbyTokenStorage.getRefreshToken() ?? '';
-
-    //     if (accessToken && refreshToken) {
-    //         const url = `${window.location.origin}${
-    //             PATHS.APP.OPEN_AUTH
-    //         }${encodeURIComponent(
-    //             `?provider=${provider}&next=${encodeURIComponent(
-    //                 `${window.location.origin}${PATHS.MYPAGE.EDIT}?socialAuthentication=true`
-    //             )}&accessToken=${accessToken}&refreshToken=${refreshToken}`
-    //         )}`;
-
-    //         window.location.href = `${window.myapp.helpers.getShopScheme()}.customtabs://${provider}?links=${JSON.stringify(
-    //             { url }
-    //         )}`;
-    //     } else {
-    //         openDialog({
-    //             message: t(
-    //                 '로그인 정보가 찾을 수 없습니다. 로그아웃 후 다시 로그인 해주세요.'
-    //             ),
-    //         });
-    //     }
-    // };
 
     const openNaverRegister = async ({
         returnUrl,
@@ -152,14 +126,6 @@ const useSnsLogin = () => {
         openLoginTab(response.loginUrl, returnUrl);
     };
 
-    const openKcpAuthRegister = () => {
-        window.open(
-            PATHS.CALLBACK.KCP_AUTH,
-            'auth_popup',
-            'width=500,height=500,location=no,status=no,scrollbars=yes',
-        );
-    };
-
     const openAppleRegister = async ({
         returnUrl,
     }: { returnUrl?: string } = {}) => {
@@ -191,11 +157,6 @@ const useSnsLogin = () => {
             return;
         }
 
-        // if (isMyApp && !isInAppBrowser) {
-        //     customTabOpen('facebook');
-        //     return;
-        // }
-
         openLoginTab(response.loginUrl, returnUrl);
     };
 
@@ -212,11 +173,6 @@ const useSnsLogin = () => {
             });
             return;
         }
-
-        // if (isMyApp && !isInAppBrowser) {
-        //     customTabOpen('google');
-        //     return;
-        // }
 
         openLoginTab(response.loginUrl, returnUrl);
     };
@@ -238,16 +194,27 @@ const useSnsLogin = () => {
         openLoginTab(response.loginUrl, returnUrl);
     };
 
+    const openKcpAuthRegister = () => {
+        window.open(
+            PATHS.CALLBACK.KCP_AUTH,
+            'auth_popup',
+            'width=500,height=500,location=no,status=no,scrollbars=yes',
+        );
+    };
+
+    const isAvailableProvider = useCallback(
+        (provider: OpenIdJoinProvider) => {
+            return includes(provider, openIdJoinProviders);
+        },
+        [openIdJoinProviders],
+    );
+
     const socialLoginList = [
         {
             provider: 'kakao' as const,
             providerType: 'KAKAO' as const,
             label: t('카카오로 로그인'),
-            // TODO: SNS 연동 이후 수정 필요
-            isAvailable: includes(
-                'kakao',
-                mallData?.openIdJoinConfig.providers || [],
-            ),
+            isAvailable: isAvailableProvider('kakao'),
             onClick: openKakaoRegister,
             Icon: KakaoIcon,
         },
@@ -255,11 +222,7 @@ const useSnsLogin = () => {
             provider: 'kakao-sync' as const,
             providerType: 'KAKAO_SYNC' as const,
             label: t('카카오로 로그인'),
-            // TODO: SNS 연동 이후 수정 필요
-            isAvailable: includes(
-                'kakao-sync',
-                mallData?.openIdJoinConfig.providers || [],
-            ),
+            isAvailable: isAvailableProvider('kakao-sync'),
             onClick: openKakaoSync,
             Icon: KakaoIcon,
         },
@@ -267,11 +230,7 @@ const useSnsLogin = () => {
             provider: 'naver' as const,
             providerType: 'NAVER' as const,
             label: t('네이버로 로그인'),
-            // TODO: SNS 연동 이후 수정 필요
-            isAvailable: includes(
-                'naver',
-                mallData?.openIdJoinConfig.providers || [],
-            ),
+            isAvailable: isAvailableProvider('naver'),
             onClick: openNaverRegister,
             Icon: NaverIcon,
         },
@@ -279,11 +238,7 @@ const useSnsLogin = () => {
             provider: 'apple' as const,
             providerType: 'APPLE' as const,
             label: t('Apple로 로그인'),
-            // TODO: SNS 연동 이후 수정 필요
-            isAvailable: includes(
-                'apple',
-                mallData?.openIdJoinConfig.providers || [],
-            ),
+            isAvailable: isAvailableProvider('apple'),
             onClick: openAppleRegister,
             Icon: AppleIcon,
         },
@@ -291,11 +246,7 @@ const useSnsLogin = () => {
             provider: 'facebook' as const,
             providerType: 'FACEBOOK' as const,
             label: t('페이스북으로 로그인'),
-            // TODO: SNS 연동 이후 수정 필요
-            isAvailable: includes(
-                'facebook',
-                mallData?.openIdJoinConfig.providers || [],
-            ),
+            isAvailable: isAvailableProvider('facebook'),
             onClick: openFacebookRegister,
             Icon: FacebookIcon,
         },
@@ -303,11 +254,7 @@ const useSnsLogin = () => {
             provider: 'google' as const,
             providerType: 'GOOGLE' as const,
             label: t('구글로 로그인'),
-            // TODO: SNS 연동 이후 수정 필요
-            isAvailable: includes(
-                'google',
-                mallData?.openIdJoinConfig.providers || [],
-            ),
+            isAvailable: isAvailableProvider('google'),
             onClick: openGoogleRegister,
             Icon: GoogleIcon,
         },
@@ -315,11 +262,7 @@ const useSnsLogin = () => {
             provider: 'line' as const,
             providerType: 'LINE' as const,
             label: t('라인으로 로그인'),
-            // TODO: SNS 연동 이후 수정 필요
-            isAvailable: includes(
-                'line',
-                mallData?.openIdJoinConfig.providers || [],
-            ),
+            isAvailable: isAvailableProvider('line'),
             onClick: openLineRegister,
             Icon: LineIcon,
         },
