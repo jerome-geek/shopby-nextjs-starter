@@ -32,15 +32,17 @@ import {
     type GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import { parseAsBoolean, parseAsString, useQueryStates } from 'nuqs';
+import { parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo } from 'react';
 
 import { product } from '@/api/product';
+import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import { OVERLAY_ID } from '@/const/overlay';
+import { CHANNEL_TYPES } from '@/const/product';
 import { toOrderSheetOption, toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
@@ -53,29 +55,26 @@ import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
-import type { ChannelType } from '@/models';
 import * as styles from '@/pages/products/[productNo]/index.css';
 import { useCartStore } from '@/store/useCartStore';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 
-import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 interface ProductDetailViewProps {
     productNo: number;
-    searchParams: {
-        channelType?: ChannelType;
-        preview?: boolean;
-    };
 }
 
-function ProductDetailView({
-    productNo,
-    searchParams,
-}: ProductDetailViewProps) {
+const productSearchParamsSchema = {
+    channelType: parseAsStringLiteral(CHANNEL_TYPES),
+};
+
+function ProductDetailView({ productNo }: ProductDetailViewProps) {
+    const [{ channelType }] = useQueryStates(productSearchParamsSchema);
+
     const isLogin = useAuth();
 
     const { isMobile, isTablet } = useResponsive();
@@ -86,7 +85,6 @@ function ProductDetailView({
 
     const { data: productDetailData } = useProductDetail({
         productNo,
-        searchParams,
     });
     console.log(
         '🚀 ~ ProductDetailView ~ productDetailData:',
@@ -159,11 +157,7 @@ function ProductDetailView({
     const openOptionBottomSheet = () => {
         overlay.open(
             (props) => (
-                <OptionSelectBottomSheet
-                    {...props}
-                    productNo={productNo}
-                    channelType={searchParams.channelType}
-                />
+                <OptionSelectBottomSheet {...props} productNo={productNo} />
             ),
             {
                 overlayId: OVERLAY_ID.OPTION_BOTTOM_SHEET,
@@ -203,11 +197,6 @@ function ProductDetailView({
                         option,
                         productNo,
                         undefined,
-                        // TODO: 무한루프로 인하여 일단 제거
-                        // [
-                        //     ...textOptionInputsRef.current['OPTION'],
-                        //     ...textOptionInputsRef.current['PRODUCT'],
-                        // ],
                         [],
                         minBuyCnt,
                     ),
@@ -230,17 +219,8 @@ function ProductDetailView({
         sum,
     );
 
-    // const { ensureAddToCart, ensureOrder } = useOrderActionValidation({
-    //     productNo,
-    // });
-
     const {
-        register: {
-            mutate: registerCartMutate,
-            mutateAsync: registerCartMutateAsync,
-        },
-        // modify: { mutate: modifyCartMutate },
-        // delete: { mutateAsync: deleteCartMutateAsync },
+        register: { mutate: registerCartMutate },
     } = useCartMutation();
     const { addToast } = useToast();
 
@@ -259,7 +239,7 @@ function ProductDetailView({
             data: {
                 products: pipe(
                     selectedOptionList,
-                    map((a) => toOrderSheetOption(a, searchParams.channelType)),
+                    map((a) => toOrderSheetOption(a, channelType)),
                     toArray,
                 ),
                 productCoupons: [],
@@ -279,9 +259,7 @@ function ProductDetailView({
                 {
                     data: pipe(
                         selectedOptionList,
-                        map((a) =>
-                            toOrderSheetOption(a, searchParams.channelType),
-                        ),
+                        map((a) => toOrderSheetOption(a, channelType)),
                         toArray,
                     ),
                 },
@@ -330,15 +308,11 @@ function ProductDetailView({
             return;
         }
 
-        // if (!ensureOrder()) {
-        //     return;
-        // }
-
         writeOrderSheetMutate({
             data: {
                 products: pipe(
                     selectedOptionList,
-                    map((a) => toOrderSheetOption(a, searchParams.channelType)),
+                    map((a) => toOrderSheetOption(a, channelType)),
                     toArray,
                 ),
                 productCoupons: [],
@@ -361,10 +335,7 @@ function ProductDetailView({
             <div className={styles.mainSection}>
                 <div className={styles.leftColumn}>
                     <div className={styles.thumbnailContainer}>
-                        <ProductMainImage
-                            productNo={productNo}
-                            searchParams={searchParams}
-                        />
+                        <ProductMainImage productNo={productNo} />
                     </div>
 
                     {!isTablet && (
@@ -513,17 +484,6 @@ function ProductDetailView({
                                 <SelectedProductOption
                                     isRemovable={!isDefaultOptionUsed}
                                 />
-
-                                {/* <SelectedProductOption
-        selectedOptionList={filteredSelectedOptionList}
-        onOptionDeleteClick={onOptionDeleteClickV2}
-        onPlusClick={onPlusClick}
-        onMinusClick={onMinusClick}
-        onChangeProductCount={onChangeProductCount}
-        getSelectedOptionValue={getSelectedOptionValue}
-        textOptionList={textOptionInputs['OPTION'] ?? []}
-        onInputOptionChange={onInputOptionChange}
-    /> */}
                             </div>
 
                             <div className={styles.orderContainer}>
@@ -595,26 +555,12 @@ function ProductDetailView({
     );
 }
 
-const productSearchParamsSchema = {
-    channelType: parseAsString.withDefault(''),
-    preview: parseAsBoolean.withDefault(false),
-};
-
 export default function ProductDetailPage({
     productNo,
     errorStatusCode,
     errorMessage,
     seoData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-    const [query] = useQueryStates(productSearchParamsSchema);
-
-    const searchParams = useMemo(
-        () => ({
-            channelType: (query.channelType as ChannelType) || undefined,
-            preview: query.preview,
-        }),
-        [query.channelType, query.preview],
-    );
     // 1단계 [비즈니스 에러]: API에서 받은 메시지를 그대로 사용자에게 노출
     if (errorStatusCode) {
         return (
@@ -636,10 +582,7 @@ export default function ProductDetailPage({
                     </div>
                 }
             >
-                <ProductDetailView
-                    productNo={productNo}
-                    searchParams={searchParams}
-                />
+                <ProductDetailView productNo={productNo} />
             </ShopbyApiErrorBoundary>
         </>
     );
@@ -661,7 +604,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
 
     const searchParams = {
-        channelType: undefined,
         preview: false,
     };
 
@@ -689,7 +631,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 : baseInfo.productName;
 
             const description =
-                baseInfo.promotionText || baseInfo.productName || '';
+                baseInfo.promotionText ||
+                `${brand?.name ? `[${brand.name}] ` : ''}${baseInfo.productName} 상품을 만나보세요.`;
 
             const image =
                 baseInfo.imageUrls?.[0] ||

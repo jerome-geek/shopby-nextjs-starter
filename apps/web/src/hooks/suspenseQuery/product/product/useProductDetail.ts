@@ -3,17 +3,15 @@ import {
     type UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
+import { parseAsBoolean, parseAsStringLiteral, useQueryStates } from 'nuqs';
 
 import { product } from '@/api/product';
+import { CHANNEL_TYPES } from '@/const/product';
 import { productKeys } from '@/hooks/queryKeys';
-import type {
-    GetProductDetailParams,
-    ProductDetailResponse,
-} from '@/models/product/product';
+import type { ProductDetailResponse } from '@/models/product/product';
 
 interface UseProductDetailParams<T = ProductDetailResponse> {
     productNo: number;
-    searchParams?: GetProductDetailParams;
     options?: Omit<
         UseSuspenseQueryOptions<
             ProductDetailResponse,
@@ -25,11 +23,24 @@ interface UseProductDetailParams<T = ProductDetailResponse> {
     >;
 }
 
+const productSearchParamsSchema = {
+    channelType: parseAsStringLiteral(CHANNEL_TYPES),
+    preview: parseAsBoolean.withDefault(false),
+};
+
 const useProductDetail = <T = ProductDetailResponse>({
     productNo,
-    searchParams,
     options,
 }: UseProductDetailParams<T>) => {
+    const [{ channelType, preview }] = useQueryStates(
+        productSearchParamsSchema,
+    );
+
+    const searchParams = {
+        ...(channelType && { channelType }),
+        ...(preview && { preview }),
+    };
+
     return useSuspenseQuery({
         queryKey: productKeys.detail(productNo, searchParams),
         queryFn: async () => {

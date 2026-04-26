@@ -1,18 +1,14 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import { useSearchParams } from 'next/navigation';
+import { parseAsBoolean, parseAsStringLiteral, useQueryStates } from 'nuqs';
 
 import { product } from '@/api/product';
+import { CHANNEL_TYPES } from '@/const/product';
 import { productKeys } from '@/hooks/queryKeys';
-import type { ChannelType } from '@/models';
-import type {
-    GetProductDetailParams,
-    ProductDetailResponse,
-} from '@/models/product/product';
+import type { ProductDetailResponse } from '@/models/product/product';
 
 interface UseProductDetailParams<T = ProductDetailResponse> {
     productNo: number;
-    searchParams?: GetProductDetailParams;
     options?: Omit<
         UseQueryOptions<
             ProductDetailResponse,
@@ -24,28 +20,34 @@ interface UseProductDetailParams<T = ProductDetailResponse> {
     >;
 }
 
+const productSearchParamsSchema = {
+    channelType: parseAsStringLiteral(CHANNEL_TYPES),
+    preview: parseAsBoolean.withDefault(false),
+};
+
 const useProductDetail = <T = ProductDetailResponse>({
     productNo,
-    searchParams,
     options,
 }: UseProductDetailParams<T>) => {
-    const query = useSearchParams();
-    const preview = query.get('preview') === 'true';
-    const channelType = query.get('channelType') as ChannelType;
+    const [{ channelType, preview }] = useQueryStates(
+        productSearchParamsSchema,
+    );
+
+    const searchParams = {
+        ...(channelType && { channelType }),
+        ...(preview && { preview }),
+    };
 
     return useQuery({
         queryKey: productKeys.detail(productNo, searchParams),
         queryFn: async () => {
-            const { data } = await product.getProductDetail(productNo, {
-                channelType,
-                ...(preview && { preview }),
-                ...searchParams,
-            });
+            const { data } = await product.getProductDetail(
+                productNo,
+                searchParams,
+            );
 
             return data;
         },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10,
         ...options,
     });
 };

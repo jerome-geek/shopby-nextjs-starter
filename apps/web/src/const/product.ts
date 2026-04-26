@@ -1,4 +1,5 @@
 import type {
+    ChannelType,
     DiscountedComparisonType,
     OrderByType,
     OrderDirectionType,
@@ -98,4 +99,13 @@ export const PRICE_FILTER_OPTIONS: PriceFilter[] = [
         discountedComparison: 'GTE',
         discountedPrices: [200000],
     },
+];
+
+export const CHANNEL_TYPES: ChannelType[] = [
+    'NAVER_EP',
+    'DANAWA',
+    'ENURI',
+    'WONDER',
+    'COOCHA',
+    'FACEBOOK',
 ];

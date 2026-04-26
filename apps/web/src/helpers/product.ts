@@ -1,6 +1,9 @@
 import type { ChannelType } from '@/models';
 import type { OptionInputs } from '@/models/order';
-import type { FlatOption, TextOptionInput } from '@/models/product/productOption';
+import type {
+    FlatOption,
+    TextOptionInput,
+} from '@/models/product/productOption';
 import { SelectedOption } from '@/store/useProductOptionStore';
 // import { SelectedOption } from '@/state/slices/productOption';
 
@@ -36,25 +39,25 @@ export const toSelectedOption = <T extends FlatOption>(
 
 export const toOrderSheetOption = (
     option: SelectedOption,
-    channelType?: ChannelType,
+    channelType?: Nullable<ChannelType>,
 ) => {
     return {
         ...option,
-        channelType,
+        ...(channelType && { channelType }),
     };
 };
 
 export const toModifiableOption = (
     option: SelectedOption,
     productNo: number,
-    channelType?: ChannelType,
+    channelType?: Nullable<ChannelType>,
     cartNo: number = 0,
 ) => {
     return {
         ...option,
         productNo,
         cartNo,
-        channelType,
+        ...(channelType && { channelType }),
     };
 };
 

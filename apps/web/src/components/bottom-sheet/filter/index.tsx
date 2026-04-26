@@ -2,7 +2,6 @@ import { clsx } from 'clsx';
 import { X } from 'lucide-react';
 import { RadioGroup } from 'radix-ui';
 import { useId, useMemo, useState } from 'react';
-import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/bottom-sheet/filter/index.css';
@@ -18,6 +17,7 @@ import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductSearchSummary } from '@/hooks/query/product/product';
 import { useProductFilter } from '@/hooks/useProductFilter';
 import type { GetProductSearchSummaryParams } from '@/models/product/product';
+import 'swiper/css';
 
 export type FilterBottomSheetTab = 'productInfo' | 'price' | 'brands';
 

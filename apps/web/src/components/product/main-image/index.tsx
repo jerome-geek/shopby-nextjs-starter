@@ -5,7 +5,6 @@ import { Swiper, SwiperClass, SwiperProps, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/product/main-image/index.css';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
-import type { ChannelType } from '@/models';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -13,19 +12,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 
-const ProductMainImage = ({
-    productNo,
-    searchParams,
-}: {
-    productNo: number;
-    searchParams: {
-        channelType?: ChannelType;
-        preview?: boolean;
-    };
-}) => {
+const ProductMainImage = ({ productNo }: { productNo: number }) => {
     const { data: productDetailData } = useProductDetail({
         productNo,
-        searchParams,
     });
 
     const imageUrls = productDetailData?.baseInfo?.imageUrls || [];
