@@ -1,17 +1,3 @@
-import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
-import {
-    PhotoReview,
-    ProductAdditionalDiscount,
-    ProductErrorState,
-    ProductMainImage,
-    ProductTabs,
-} from '@/components/product';
-import {
-    FlatProductOption,
-    MultiProductOption,
-    SelectedProductOption,
-} from '@/components/product-option';
-import { Button } from '@/components/ui/button';
 import {
     each,
     filter,
@@ -37,10 +23,24 @@ import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo } from 'react';
 
 import { product } from '@/api/product';
+import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
 import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
+import {
+    PhotoReview,
+    ProductAdditionalDiscount,
+    ProductErrorState,
+    ProductMainImage,
+    ProductTabs,
+} from '@/components/product';
+import {
+    FlatProductOption,
+    MultiProductOption,
+    SelectedProductOption,
+} from '@/components/product-option';
+import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
 import { CHANNEL_TYPES } from '@/const/product';
 import { toOrderSheetOption, toSelectedOption } from '@/helpers/product';
@@ -86,10 +86,6 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const { data: productDetailData } = useProductDetail({
         productNo,
     });
-    console.log(
-        '🚀 ~ ProductDetailView ~ productDetailData:',
-        productDetailData,
-    );
 
     const { baseInfo, price, counter, brand } = productDetailData;
 

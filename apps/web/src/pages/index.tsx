@@ -1,3 +1,4 @@
+import { map, pipe, take, toArray } from '@fxts/core';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 
@@ -27,14 +28,14 @@ const RecipeGroupSection = dynamic(
 export async function getStaticProps() {
     const queryClient = new QueryClient();
 
+    const bannerId = `${BANNER_ID_PREFIX}-HOME`;
+
     try {
         await Promise.all([
             queryClient.prefetchQuery({
-                queryKey: bannerKeys.list([`${BANNER_ID_PREFIX}-HOME`]),
+                queryKey: bannerKeys.list([bannerId]),
                 queryFn: async () => {
-                    const { data } = await banner.getBannersByIds([
-                        `${BANNER_ID_PREFIX}-HOME`,
-                    ]);
+                    const { data } = await banner.getBannersByIds([bannerId]);
                     return data;
                 },
             }),
@@ -45,6 +46,53 @@ export async function getStaticProps() {
                         await collection.getCollectionExposureGroup(
                             'collection_group_1',
                         );
+
+                    // Optimization using fxts: Trim data and slice recipes
+                    if (data?.groups) {
+                        data.groups = pipe(
+                            data.groups,
+                            map((group) => ({
+                                ...group,
+                                collection: {
+                                    ...group.collection,
+                                    recipes: pipe(
+                                        group.collection.recipes ?? [],
+                                        take(4),
+                                        map((recipe) => ({
+                                            ...recipe,
+                                            ingredients: pipe(
+                                                recipe.ingredients ?? [],
+                                                take(6),
+                                                map((ing) => ({
+                                                    sno: ing.sno,
+                                                    name: ing.name,
+                                                    amount: ing.amount,
+                                                    isEssential: ing.isEssential,
+                                                    coupangProduct: null,
+                                                })),
+                                                toArray,
+                                            ),
+                                            steps: pipe(
+                                                recipe.steps ?? [],
+                                                map((step) => ({
+                                                    sno: step.sno,
+                                                    stepNumber: step.stepNumber,
+                                                    description: step.description,
+                                                    stepImageUrl: null,
+                                                    timestampSeconds: null,
+                                                })),
+                                                toArray,
+                                            ),
+                                            extraData: {},
+                                        })),
+                                        toArray,
+                                    ),
+                                },
+                            })),
+                            toArray,
+                        );
+                    }
+
                     return data;
                 },
             }),
