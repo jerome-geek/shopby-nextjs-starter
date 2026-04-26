@@ -23,7 +23,7 @@ const variants: Variants = {
     }),
 };
 
-const ProductErrorState = ({
+export const ProductErrorState = ({
     errorStatusCode,
     errorMessage,
 }: ProductErrorStateProps) => {
@@ -89,5 +89,3 @@ const ProductErrorState = ({
         </div>
     );
 };
-
-export default ProductErrorState;

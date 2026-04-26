@@ -1,4 +1,4 @@
-import * as styles from './index.css';
+import * as styles from '@/features/products/best/components/product-card-skeleton/index.css';
 
 export const ProductCardSkeleton = () => {
     return (

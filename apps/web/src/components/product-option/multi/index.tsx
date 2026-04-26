@@ -16,7 +16,7 @@ interface MultiProductOptionProps {
     classNames?: Props<MultiLevelOption>['classNames'];
 }
 
-const MultiProductOption = ({
+export const MultiProductOption = ({
     productNo,
     onChange,
     checkOptionDisabled,
@@ -134,5 +134,3 @@ const MultiProductOption = ({
         </div>
     );
 };
-
-export default MultiProductOption;

@@ -15,7 +15,7 @@ import { BREAKPOINTS } from '@/styles/media';
 
 import 'swiper/css';
 
-const PhotoReview = () => {
+export const PhotoReview = () => {
     const router = useRouter();
     const productNo = Number(router.query.productNo) || 0;
 
@@ -110,5 +110,3 @@ const PhotoReview = () => {
         </LoadingWrapper>
     );
 };
-
-export default PhotoReview;

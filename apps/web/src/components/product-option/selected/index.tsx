@@ -1,110 +1,127 @@
 import { Minus, Plus, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/product-option/selected/index.css';
+import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { useProductOption } from '@/hooks/product';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
 interface SelectedProductOptionProps {
+    productNo: number;
     isRemovable?: boolean;
 }
 
-const SelectedProductOption = ({
+export const SelectedProductOption = ({
+    productNo,
     isRemovable = false,
 }: SelectedProductOptionProps) => {
-    const { selectedOptionList, updateOptionCnt, removeOption } =
-        useProductOptionStore();
+    const { t } = useTranslation();
+
+    const { textOptionInputs } = useProductOption({
+        productNo,
+    });
+
+    const {
+        selectedOptionList,
+        updateOptionCnt,
+        removeOption,
+        updateTextOptionValue,
+    } = useProductOptionStore();
 
     if (selectedOptionList.length === 0) {
         return null;
     }
 
-    const handleMinusClick = (optionNo: number, currentCnt: number) => {
-        if (currentCnt > 1) {
-            updateOptionCnt(optionNo, currentCnt - 1);
-        }
-    };
-
-    const handlePlusClick = (
-        optionNo: number,
-        currentCnt: number,
-        stockCnt: number,
-    ) => {
-        if (stockCnt === -999 || currentCnt < stockCnt) {
-            updateOptionCnt(optionNo, currentCnt + 1);
-        }
-    };
-
-    const handleRemoveClick = (optionNo: number) => {
-        removeOption(optionNo);
-    };
-
     return (
         <ul className={styles.optionList}>
-            {selectedOptionList.map((option) => {
-                return (
-                    <li key={option.optionNo} className={styles.optionListItem}>
-                        <div className={styles.optionHeader}>
-                            <p className={styles.optionLabel}>{option.label}</p>
-                            {isRemovable && (
-                                <button
-                                    className={styles.deleteButton}
-                                    onClick={() =>
-                                        handleRemoveClick(option.optionNo)
-                                    }
-                                    aria-label='옵션 삭제'
-                                >
-                                    <X size={20} />
-                                </button>
-                            )}
-                        </div>
+            {selectedOptionList.map((option) => (
+                <li key={option.optionNo} className={styles.optionListItem}>
+                    <div className={styles.optionHeader}>
+                        <span className={styles.optionLabel}>
+                            {option.label}
+                        </span>
+                        {isRemovable && (
+                            <button
+                                className={styles.deleteButton}
+                                onClick={() => removeOption(option.optionNo)}
+                            >
+                                <X size={16} />
+                            </button>
+                        )}
+                    </div>
 
-                        <div className={styles.optionFooter}>
-                            <div className={styles.quantitySelector}>
-                                <button
-                                    className={styles.countButton}
-                                    onClick={() =>
-                                        handleMinusClick(
-                                            option.optionNo,
-                                            option.orderCnt,
-                                        )
-                                    }
-                                    disabled={option.orderCnt <= 1}
-                                    aria-label='수량 감소'
+                    {/* 옵션별 텍스트 입력항목 (OPTION 매칭 타입) */}
+                    {(textOptionInputs.OPTION ?? []).length > 0 && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            {(textOptionInputs.OPTION ?? []).map((input) => (
+                                <InputContainer
+                                    key={input.inputNo}
                                 >
-                                    <Minus size={20} />
-                                </button>
-                                <div className={styles.countValue}>
-                                    {option.orderCnt}
-                                </div>
-                                <button
-                                    className={styles.countButton}
-                                    onClick={() =>
-                                        handlePlusClick(
-                                            option.optionNo,
-                                            option.orderCnt,
-                                            option.stockCnt,
-                                        )
-                                    }
-                                    disabled={
-                                        option.stockCnt !== -999 &&
-                                        option.orderCnt >= option.stockCnt
-                                    }
-                                    aria-label='수량 증가'
-                                >
-                                    <Plus size={20} />
-                                </button>
-                            </div>
-                            <div className={styles.priceValue}>
-                                {CURRENCY(
-                                    option.price * option.orderCnt,
-                                ).format()}
-                            </div>
+                                    <InputLabel>{input.inputLabel}</InputLabel>
+                                    <InputField
+                                        placeholder={t(
+                                            '메시지를 입력해주세요.',
+                                        )}
+                                        value={
+                                            option.optionInputs.find(
+                                                (v) =>
+                                                    v.inputNo ===
+                                                    input.inputNo,
+                                            )?.inputValue || ''
+                                        }
+                                        onChange={(e) =>
+                                            updateTextOptionValue({
+                                                productNo,
+                                                inputNo: input.inputNo,
+                                                inputValue: e.target.value,
+                                                optionNo: option.optionNo
+                                            })
+                                        }
+                                    />
+                                </InputContainer>
+                            ))}
                         </div>
-                    </li>
-                );
-            })}
+                    )}
+
+                    <div className={styles.optionFooter}>
+                        <div className={styles.quantitySelector}>
+                            <button
+                                className={styles.countButton}
+                                disabled={option.orderCnt <= 1}
+                                onClick={() =>
+                                    updateOptionCnt(
+                                        option.optionNo,
+                                        option.orderCnt - 1,
+                                    )
+                                }
+                            >
+                                <Minus size={14} />
+                            </button>
+                            <span className={styles.countValue}>
+                                {option.orderCnt}
+                            </span>
+                            <button
+                                className={styles.countButton}
+                                onClick={() =>
+                                    updateOptionCnt(
+                                        option.optionNo,
+                                        option.orderCnt + 1,
+                                    )
+                                }
+                            >
+                                <Plus size={14} />
+                            </button>
+                        </div>
+                        <span className={styles.priceValue}>
+                            {CURRENCY(
+                                (option.price + option.addPrice) *
+                                    option.orderCnt,
+                            ).format()}
+                        </span>
+                    </div>
+                </li>
+            ))}
         </ul>
     );
 };
-
-export default SelectedProductOption;

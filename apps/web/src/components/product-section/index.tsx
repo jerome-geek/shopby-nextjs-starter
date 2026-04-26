@@ -4,17 +4,16 @@ import Link from 'next/link';
 import { Grid } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/grid';
-
 import { SmallCaretIcon } from '@/components/icons';
-import ProductCard from '@/components/product/card';
+import { ProductCard } from '@/components/product';
+import * as styles from '@/components/product-section/index.css';
 import {
     useProductSectionById,
     useProductSectionProductList,
 } from '@/hooks/query/display/productSection';
 
-import * as styles from './index.css';
+import 'swiper/css';
+import 'swiper/css/grid';
 
 const ProductSection = ({ sectionId }: { sectionId: string }) => {
     // MAIN_01

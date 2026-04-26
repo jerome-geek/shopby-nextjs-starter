@@ -164,10 +164,6 @@ export const priceInfo = style({
     gap: '2px',
 });
 
-export const actionButtons = style({
-    display: 'flex',
-    gap: '8px',
-});
 
 export const cartButton = style({
     flex: 1,
@@ -420,43 +416,7 @@ export const optionDivider = style({
     border: `1px solid ${vars.color.gray['20']}`,
 });
 
-export const buttonDivider = style({
-    width: '100%',
-    border: `2px solid ${vars.color.green['80']}`,
-});
 
-export const totalPriceContainer = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-});
-
-export const totalPriceTitle = style([
-    textStyles.headingSemibold,
-    { color: vars.color.black },
-]);
-
-export const totalPrice = style([
-    textStyles.title1Bold,
-    {
-        color: vars.color.pink['100'],
-    },
-]);
-
-export const orderContainer = style({
-    display: 'flex',
-    flexDirection: 'column',
-    '@media': {
-        [media.desktop]: {
-            gap: '12px',
-            backgroundColor: vars.color.white,
-            paddingTop: '12px',
-            paddingBottom: '12px',
-            // 버튼 영역에 그림자를 주어 경계를 명확히 함
-            boxShadow: `0 -10px 10px -5px ${vars.color.white}`,
-        },
-    },
-});
 
 export const optionContainer = style({
     display: 'flex',

@@ -4,11 +4,11 @@ import { overlay } from 'overlay-kit';
 import { FormProvider, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { CouponApplyOverlay } from '@/components/order/coupon/apply';
+import * as styles from '@/components/order/coupon/index.css';
 import { useOrderSheetCalculate } from '@/hooks/order';
 import { PaymentReserveSchemaType } from '@/schema';
 import { CURRENCY } from '@/utils/currency';
-import { CouponApplyOverlay } from './apply';
-import * as styles from './index.css';
 
 const Coupon = () => {
     const { t } = useTranslation();

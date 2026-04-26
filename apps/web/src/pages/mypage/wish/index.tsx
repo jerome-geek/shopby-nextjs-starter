@@ -8,7 +8,7 @@ import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import ProductCard from '@/components/product/card';
+import { ProductCard } from '@/components/product';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
 import Paging from '@/components/ui/paging';
@@ -19,9 +19,7 @@ import useLikeProductList from '@/hooks/query/product/profile/useLikeProductList
 import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
-import type { ProductWishItem } from '@/models/product';
 import * as styles from '@/pages/mypage/wish/index.css';
-
 const PAGE_SIZE = 20;
 
 export const MypageWish = () => {
@@ -86,7 +84,9 @@ export const MypageWish = () => {
     );
 
     const productNosInList = useMemo(() => {
-        return new Set(productsWithDiscounts.map((product) => product.productNo));
+        return new Set(
+            productsWithDiscounts.map((product) => product.productNo),
+        );
     }, [productsWithDiscounts]);
 
     const selectedInList = useMemo(() => {
@@ -113,7 +113,11 @@ export const MypageWish = () => {
         (checked: boolean) => {
             if (checked) {
                 setSelected(
-                    new Set(productsWithDiscounts.map((product) => product.productNo)),
+                    new Set(
+                        productsWithDiscounts.map(
+                            (product) => product.productNo,
+                        ),
+                    ),
                 );
                 return;
             }
@@ -260,7 +264,9 @@ export const MypageWish = () => {
                                                 />
                                             </div>
                                             <ProductCard
-                                                {...toWishProductCardModel(product)}
+                                                {...toWishProductCardModel(
+                                                    product,
+                                                )}
                                             />
                                         </div>
                                     </li>

@@ -8,9 +8,8 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 
+import * as styles from '@/components/error-boundary/shopby/index.css';
 import { Button } from '@/components/ui/button';
-
-import * as styles from './index.css';
 
 interface ShopbyApiErrorBoundaryProps {
     children: ReactNode;

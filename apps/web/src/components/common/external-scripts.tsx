@@ -1,6 +1,6 @@
 import Script from 'next/script';
 
-function ExternalScripts() {
+export function ExternalScripts() {
     return (
         <>
             {/* 샵바이 관련 */}
@@ -19,5 +19,3 @@ function ExternalScripts() {
         </>
     );
 }
-
-export default ExternalScripts;

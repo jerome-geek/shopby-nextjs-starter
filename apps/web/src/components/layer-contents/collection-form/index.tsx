@@ -1,10 +1,11 @@
-import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 
-import * as styles from './index.css';
+import { collection as collectionApi } from '@/api/shop';
+import * as styles from '@/components/layer-contents/collection-form/index.css';
 import {
     InputField,
     InputFieldContainer,
@@ -12,9 +13,8 @@ import {
     TextArea,
 } from '@/components/ui/input';
 import { useCollectionMutation } from '@/hooks/mutations';
-import { recipeKeys, collectionKeys } from '@/hooks/queryKeys';
+import { collectionKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui';
-import { collection as collectionApi } from '@/api/shop';
 
 export interface CollectionFormData {
     title: string;

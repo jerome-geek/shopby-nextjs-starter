@@ -237,7 +237,10 @@ export const OptionSelectBottomSheet = ({
                         />
                     )}
 
-                    <SelectedProductOption isRemovable={!isDefaultOptionUsed} />
+                    <SelectedProductOption
+                        productNo={productNo}
+                        isRemovable={!isDefaultOptionUsed}
+                    />
                 </div>
             </div>
         </BottomSheetLayout>

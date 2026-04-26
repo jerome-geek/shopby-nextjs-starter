@@ -1,16 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-
+import * as styles from '@/components/cart/recommend/index.css';
 import { SmallCaretIcon } from '@/components/icons';
-import ProductCard from '@/components/product/card';
+import { ProductCard } from '@/components/product';
 import { useProductSectionProductList } from '@/hooks/query/display/productSection';
 
-import * as styles from './index.css';
+import 'swiper/css';
 
 const Recommend = () => {
     const { data: productSectionProductListData } =

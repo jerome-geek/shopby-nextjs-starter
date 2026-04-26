@@ -6,15 +6,14 @@ import { Grid, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ArrowIcon } from '@/components/icons/ArrowIcon';
-import ProductCard from '@/components/product/card';
+import { ProductCard } from '@/components/product';
 import * as styles from '@/components/section/best/index.css';
 import { CATEGORY_CODE } from '@/const/category';
 import { PATHS } from '@/const/paths';
-import { useBestSellerProductList } from '@/hooks/query/product/product';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
+import { useBestSellerProductList } from '@/hooks/query/product/product';
 import { useMainCategory } from '@/hooks/useMainCategory';
 import { BREAKPOINTS } from '@/styles/media';
-
 import 'swiper/css';
 import 'swiper/css/grid';
 import 'swiper/css/pagination';

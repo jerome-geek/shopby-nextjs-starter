@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Grid2X2, Row2 } from '@/components/icons';
 import { RecipeCard, RecipeDetailCard } from '@/components/recipe';
+import * as styles from '@/components/recipe/scrap/detail/index.css';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
@@ -13,7 +14,6 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import * as styles from './index.css';
 import { vars } from '@/styles/theme.css';
 
 interface RecipeScrapDetailProps {

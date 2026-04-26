@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import * as styles from './index.css';
+import * as styles from '@/components/common/observer-target/index.css';
 
 interface ObserverTargetProps {
     hasNextPage?: boolean;

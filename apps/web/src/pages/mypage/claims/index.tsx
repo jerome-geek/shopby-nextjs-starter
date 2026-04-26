@@ -1,16 +1,17 @@
 import { isEmpty } from '@fxts/core';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
 
-import { MypageLayout } from '@/components/layout';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
-import Paging from '@/components/ui/paging';
-import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
+import { MypageLayout } from '@/components/layout';
+import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
+import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import { OrderOptions } from '@/components/mypage/orders/order-options';
+import Paging from '@/components/ui/paging';
 import {
     useInfiniteMemberClaimList,
     useMemberClaimList,
@@ -18,8 +19,7 @@ import {
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
 import type { ClaimType } from '@/models';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import * as styles from './index.css';
+import * as styles from '@/pages/mypage/claims/index.css';
 
 const Claims = () => {
     const { isMobile } = useResponsive();

@@ -12,6 +12,7 @@ import {
     DefaultModalLayoutProps,
     ModalLayout,
 } from '@/components/layout';
+import * as styles from '@/components/order/coupon/apply/index.css';
 import { Button } from '@/components/ui';
 import Image from '@/components/ui/image';
 import { useOrderSheetMutation } from '@/hooks/mutations';
@@ -21,7 +22,6 @@ import { useAvailableCouponList } from '@/hooks/query/order/orderSheet';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';
 import { CURRENCY } from '@/utils/currency';
-import * as styles from './index.css';
 
 interface CouponItem {
     couponIssueNo: number;

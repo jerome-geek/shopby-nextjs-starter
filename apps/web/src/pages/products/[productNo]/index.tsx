@@ -1,15 +1,4 @@
-import {
-    each,
-    filter,
-    includes,
-    join,
-    map,
-    pipe,
-    prop,
-    sum,
-    take,
-    toArray,
-} from '@fxts/core';
+import { each, filter, join, map, pipe, prop, take } from '@fxts/core';
 import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
@@ -33,6 +22,7 @@ import {
     ProductAdditionalDiscount,
     ProductErrorState,
     ProductMainImage,
+    ProductOrderAction,
     ProductTabs,
 } from '@/components/product';
 import {
@@ -43,20 +33,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
 import { CHANNEL_TYPES } from '@/const/product';
-import { toOrderSheetOption, toSelectedOption } from '@/helpers/product';
+import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
-import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
+import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
 import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
-import { cartKeys, productKeys } from '@/hooks/queryKeys';
+import { productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
-import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
-import { useCartStore } from '@/store/useCartStore';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
@@ -87,9 +76,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         productNo,
     });
 
-    const { baseInfo, price, counter, brand } = productDetailData;
-
-    const liked = !!productDetailData.liked;
+    const { baseInfo, price, counter, brand, liked } = productDetailData;
 
     const {
         isDefaultOptionUsed,
@@ -99,6 +86,10 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     } = useProductOption({
         productNo,
     });
+    console.log(
+        '🚀 ~ ProductDetailView ~ productOptionListData:',
+        productOptionListData,
+    );
 
     const { data: additionalDiscountByProductNosData } =
         useAdditionalDiscountByProductNos({
@@ -150,24 +141,26 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const overlayData = useOverlayData();
     const isOptionBottomSheetOpen =
         overlayData[OVERLAY_ID.OPTION_BOTTOM_SHEET]?.isOpen;
+
     const openOptionBottomSheet = () => {
         overlay.open(
             (props) => (
                 <OptionSelectBottomSheet {...props} productNo={productNo} />
             ),
-            {
-                overlayId: OVERLAY_ID.OPTION_BOTTOM_SHEET,
-            },
+            { overlayId: OVERLAY_ID.OPTION_BOTTOM_SHEET },
         );
     };
+
+    const { onGiftButtonClick, onOrderButtonClick } = useProductOrderAction(
+        productNo,
+        { openOptionBottomSheet, isOptionBottomSheetOpen },
+    );
 
     const { onFlatOptionChange, onMultiOptionChange } = useProductOptionChange({
         productNo,
     });
 
-    const addGuestCartItem = useCartStore((state) => state.addItem);
-    const { selectedOptionList, addOption, clearOptions } =
-        useProductOptionStore();
+    const { addOption, clearOptions } = useProductOptionStore();
 
     useEffect(() => {
         return () => {
@@ -208,113 +201,6 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         productNo,
         addOption,
     ]);
-
-    const totalPrice = pipe(
-        selectedOptionList,
-        map((option) => option.buyPrice * option.orderCnt),
-        sum,
-    );
-
-    const {
-        register: { mutate: registerCartMutate },
-    } = useCartMutation();
-    const { addToast } = useToast();
-
-    const onGiftButtonClick = () => {
-        if (isTablet && !isOptionBottomSheetOpen) {
-            openOptionBottomSheet();
-            return;
-        }
-
-        if (selectedOptionList.length === 0) {
-            addToast({ message: '옵션을 선택해 주세요.' });
-            return;
-        }
-
-        writeOrderSheetMutate({
-            data: {
-                products: pipe(
-                    selectedOptionList,
-                    map((a) => toOrderSheetOption(a, channelType)),
-                    toArray,
-                ),
-                productCoupons: [],
-            },
-            type: 'gift',
-        });
-    };
-
-    const onCartButtonClick = () => {
-        if (isTablet && !isOptionBottomSheetOpen) {
-            openOptionBottomSheet();
-            return;
-        }
-
-        if (isLogin) {
-            registerCartMutate(
-                {
-                    data: pipe(
-                        selectedOptionList,
-                        map((a) => toOrderSheetOption(a, channelType)),
-                        toArray,
-                    ),
-                },
-                {
-                    onSuccess: () => {
-                        openAddCartDialog();
-
-                        queryClient.invalidateQueries({
-                            predicate: (query) => {
-                                return includes(query.queryKey[0], [
-                                    ...cartKeys.all,
-                                ]);
-                            },
-                        });
-
-                        if (!isDefaultOptionUsed) {
-                            clearOptions();
-                        }
-                    },
-                },
-            );
-        } else {
-            selectedOptionList.forEach((option) => {
-                addGuestCartItem({
-                    productNo: option.productNo,
-                    optionNo: option.optionNo,
-                    orderCnt: option.orderCnt,
-                });
-            });
-
-            openAddCartDialog();
-
-            if (!isDefaultOptionUsed) {
-                clearOptions();
-            }
-        }
-    };
-
-    const {
-        write: { mutate: writeOrderSheetMutate },
-    } = useOrderSheetMutation();
-
-    const onOrderButtonClick = () => {
-        if (isTablet && !isOptionBottomSheetOpen) {
-            openOptionBottomSheet();
-            return;
-        }
-
-        writeOrderSheetMutate({
-            data: {
-                products: pipe(
-                    selectedOptionList,
-                    map((a) => toOrderSheetOption(a, channelType)),
-                    toArray,
-                ),
-                productCoupons: [],
-            },
-        });
-    };
 
     const { addRecentProduct } = useRecentViewProducts();
 
@@ -478,44 +364,12 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                 )}
 
                                 <SelectedProductOption
+                                    productNo={productNo}
                                     isRemovable={!isDefaultOptionUsed}
                                 />
                             </div>
 
-                            <div className={styles.orderContainer}>
-                                <hr className={styles.buttonDivider} />
-
-                                <div className={styles.totalPriceContainer}>
-                                    <p className={styles.totalPriceTitle}>
-                                        총 상품금액
-                                    </p>
-                                    <p className={styles.totalPrice}>
-                                        {CURRENCY(totalPrice).format()}
-                                    </p>
-                                </div>
-
-                                <div className={styles.actionButtons}>
-                                    <button
-                                        className={styles.giftButtonDesktop}
-                                        onClick={onGiftButtonClick}
-                                    >
-                                        <Gift size={24} />
-                                    </button>
-                                    <Button
-                                        frame='outlined'
-                                        onClick={onCartButtonClick}
-                                    >
-                                        장바구니
-                                    </Button>
-                                    <Button
-                                        frame='solid'
-                                        variant='primary'
-                                        onClick={onOrderButtonClick}
-                                    >
-                                        구매하기
-                                    </Button>
-                                </div>
-                            </div>
+                            <ProductOrderAction productNo={productNo} />
                         </>
                     )}
                 </div>

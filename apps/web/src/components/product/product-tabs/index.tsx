@@ -10,7 +10,7 @@ import Inquiries from '@/components/product/product-tabs/inquiries';
 import PopularProducts from '@/components/product/product-tabs/popular-products';
 import RelatedProducts from '@/components/product/product-tabs/related-products';
 import Review from '@/components/product/product-tabs/review';
-import RelatedProductList from '@/components/product/related-product-list';
+import { RelatedProductList } from '@/components/product';
 import { useResponsive } from '@/hooks/utils';
 import { ProductDetailResponse } from '@/models/product/product';
 
@@ -21,7 +21,7 @@ interface ProductTabsProps {
     productDetailData: ProductDetailResponse;
 }
 
-export default function ProductTabs({
+export function ProductTabs({
     reviewCount = 0,
     inquiryCount = 0,
     productContent,

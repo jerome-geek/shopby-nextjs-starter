@@ -11,7 +11,7 @@ interface ProductAdditionalDiscountProps {
     additionalDiscount: AdditionalDiscountWithProductNo;
 }
 
-const ProductAdditionalDiscount = ({
+export const ProductAdditionalDiscount = ({
     type,
     additionalDiscount,
 }: ProductAdditionalDiscountProps) => {
@@ -82,5 +82,3 @@ const ProductAdditionalDiscount = ({
         );
     }
 };
-
-export default ProductAdditionalDiscount;

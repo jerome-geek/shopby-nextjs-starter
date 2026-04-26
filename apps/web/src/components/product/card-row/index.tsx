@@ -1,8 +1,10 @@
 import { Bookmark } from 'lucide-react';
 import Link from 'next/link';
 
-import ProductAdditionalDiscount from '@/components/product/additional-discount';
-import { ProductCardProps } from '@/components/product/card';
+import {
+    ProductAdditionalDiscount,
+    ProductCardProps,
+} from '@/components/product';
 import * as styles from '@/components/product/card-row/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';

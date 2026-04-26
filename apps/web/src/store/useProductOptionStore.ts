@@ -10,6 +10,12 @@ interface ProductOptionState {
     addOption: (option: SelectedOption) => void;
     removeOption: (optionNo: number) => void;
     updateOptionCnt: (optionNo: number, orderCnt: number) => void;
+    updateTextOptionValue: (params: {
+        productNo: number;
+        inputNo: number;
+        inputValue: string;
+        optionNo?: number;
+    }) => void;
     clearOptions: () => void;
 }
 
@@ -51,6 +57,40 @@ export const useProductOptionStore = createStore<ProductOptionState>(
                 map((item) =>
                     item.optionNo === optionNo ? { ...item, orderCnt } : item,
                 ),
+                toArray,
+            ),
+        })),
+
+    updateTextOptionValue: (params: {
+        productNo: number;
+        inputNo: number;
+        inputValue: string;
+        optionNo?: number;
+    }) =>
+        set((state) => ({
+            selectedOptionList: pipe(
+                state.selectedOptionList,
+                map((item) => {
+                    if (item.productNo !== params.productNo) return item;
+                    if (
+                        params.optionNo !== undefined &&
+                        item.optionNo !== params.optionNo
+                    )
+                        return item;
+
+                    return {
+                        ...item,
+                        optionInputs: pipe(
+                            item.optionInputs ?? [],
+                            map((input) =>
+                                input.inputNo === params.inputNo
+                                    ? { ...input, inputValue: params.inputValue }
+                                    : input,
+                            ),
+                            toArray,
+                        ),
+                    };
+                }),
                 toArray,
             ),
         })),

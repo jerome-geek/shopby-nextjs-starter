@@ -1,13 +1,12 @@
 import { isEmpty } from '@fxts/core';
-import dayjs from 'dayjs';
 import { clsx } from 'clsx';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import * as styles from '@/components/mypage/product-inquiries/accordion-content/index.css';
 import { PATHS } from '@/const/paths';
 import type { InquiryItem } from '@/models/display/productInquiry';
-
-import * as styles from './index.css';
 
 interface ProductInquiryContentProps extends InquiryItem {
     onDeleteButtonClick: (inquiryNo: number) => void;
@@ -90,4 +89,3 @@ export const ProductInquiryContent = ({
         </div>
     );
 };
-

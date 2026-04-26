@@ -1,4 +1,2 @@
-import ExternalScripts from '@/components/common/external-scripts';
-import LazyRender from '@/components/common/lazy-render';
-
-export { ExternalScripts, LazyRender };
+export { ExternalScripts } from '@/components/common/external-scripts';
+export { LazyRender } from '@/components/common/lazy-render';

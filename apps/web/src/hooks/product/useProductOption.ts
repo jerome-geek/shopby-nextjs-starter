@@ -184,8 +184,9 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
                 filter((a) =>
                     some(
                         (b) =>
-                            b.optionInputs?.some(
+                            some(
                                 (c) => c.inputNo === a.inputNo,
+                                b.optionInputs ?? [],
                             ),
                         selectedOptionList,
                     ),

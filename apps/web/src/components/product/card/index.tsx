@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
-import ProductAdditionalDiscount from '@/components/product/additional-discount';
+import { ProductAdditionalDiscount } from '@/components/product';
 import * as styles from '@/components/product/card/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
@@ -35,7 +35,7 @@ export interface ProductCardProps {
     additionalDiscount?: Nullable<AdditionalDiscountWithProductNo>;
 }
 
-const ProductCard = ({
+export const ProductCard = ({
     productNo,
     productName,
     imageUrlInfo,
@@ -167,5 +167,3 @@ const ProductCard = ({
         </article>
     );
 };
-
-export default ProductCard;

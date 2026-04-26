@@ -16,7 +16,7 @@ interface FlatProductOptionProps {
     classNames?: Props<FlatOption>['classNames'];
 }
 
-const FlatProductOption = ({
+export const FlatProductOption = ({
     productNo,
     onChange,
     checkOptionDisabled,
@@ -72,5 +72,3 @@ const FlatProductOption = ({
         </div>
     );
 };
-
-export default FlatProductOption;

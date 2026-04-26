@@ -1,4 +1,4 @@
-import ProductCard from '@/components/product/card';
+import { ProductCard } from '@/components/product';
 import { useEventProductSection } from '@/hooks/suspenseQuery/display/event';
 import { GetEventProductDisplaySectionParams } from '@/models/display';
 

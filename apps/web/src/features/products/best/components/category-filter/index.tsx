@@ -1,6 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
+
+import * as styles from '@/features/products/best/components/category-filter/index.css';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
-import * as styles from './index.css';
 
 interface BestCategoryFilterProps {
     selectedCategory: number;

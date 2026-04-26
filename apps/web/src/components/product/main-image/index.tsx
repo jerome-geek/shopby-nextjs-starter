@@ -12,7 +12,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/thumbs';
 
-const ProductMainImage = ({ productNo }: { productNo: number }) => {
+export const ProductMainImage = ({ productNo }: { productNo: number }) => {
     const { data: productDetailData } = useProductDetail({
         productNo,
     });
@@ -105,14 +105,6 @@ const ProductMainImage = ({ productNo }: { productNo: number }) => {
                             );
                         })}
                     </Swiper>
-
-                    {/* 커스텀 내비게이션 버튼 추가 */}
-                    <button className={`swiper-prev ${styles.prevButton}`}>
-                        <ChevronLeft size={24} />
-                    </button>
-                    <button className={`swiper-next ${styles.nextButton}`}>
-                        <ChevronRight size={24} />
-                    </button>
                 </div>
 
                 {/* 세로형 썸네일 스와이퍼 (데스크탑 전용) */}
@@ -154,5 +146,3 @@ const ProductMainImage = ({ productNo }: { productNo: number }) => {
         </div>
     );
 };
-
-export default ProductMainImage;

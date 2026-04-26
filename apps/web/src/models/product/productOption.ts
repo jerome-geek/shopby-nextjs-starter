@@ -173,6 +173,7 @@ export interface TextOptionInput {
     required: boolean;
     /** 텍스트 옵션 번호 */
     inputNo: number;
+    inputValue: string;
 }
 
 /** 렌탈 정보 (옵션이 없는 상품의 경우 조회, 옵션이 있는 상품의 경우 옵션 조회 API(/products/{productNo}/options) 에서 렌탈 정보 조회 가능) */

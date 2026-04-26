@@ -6,7 +6,7 @@ import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import ProductCard from '@/components/product/card';
+import { ProductCard } from '@/components/product';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
@@ -16,7 +16,6 @@ import { useRecentViewProductList } from '@/hooks/query/product/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/recent-products/index.css';
-
 export const MypageRecentProducts = () => {
     const { t } = useTranslation();
     const { openAsyncDialog } = useDialog();

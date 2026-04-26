@@ -12,7 +12,7 @@ interface RelatedProductListProps {
     productNo?: number;
 }
 
-export default function RelatedProductList({
+export function RelatedProductList({
     productNo: productNoProps,
 }: RelatedProductListProps) {
     const router = useRouter();
