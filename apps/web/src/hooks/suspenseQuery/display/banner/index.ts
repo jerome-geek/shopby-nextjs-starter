@@ -1,3 +1,5 @@
-import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
+import useBannerList, {
+    bannerListOptions,
+} from '@/hooks/suspenseQuery/display/banner/useBannerList';
 
-export { useBannerList };
+export { useBannerList, bannerListOptions };

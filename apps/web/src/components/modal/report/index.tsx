@@ -1,7 +1,7 @@
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
+import { type DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/report/index.css';
 import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';

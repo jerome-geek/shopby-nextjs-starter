@@ -1,14 +1,26 @@
-import type { KakaoSDK } from '@/types/kakao';
-import type { PlatformType } from '@/models';
+import type { ClientPlatformType, PlatformType } from '@/models';
 import type { CartList, OrderDetailResponse } from '@/models/order';
 import type { ProductDetailResponse } from '@/models/product';
+import type { KakaoSDK } from '@/types/kakao';
 
 // 모듈 형식으로 선언하여 TypeScript 충돌 방지
 export {};
 
 declare global {
     interface Window {
-        ShopbyExternalScript: any;
+        ShopbyExternalScript: {
+            setGlobalObjectSb: (param: unknown) => void;
+            setPageScriptType: (type: Nullable<string>) => void;
+            script: string[];
+            initialize: (param: {
+                apiOption: {
+                    clientId: string;
+                    profile: 'real';
+                    platform: ClientPlatformType;
+                };
+            }) => void;
+            clearGlobalObjectSb: () => void;
+        };
         sb: {
             getPlatform?: () => PlatformType;
             /** 회원정보 조회 API */

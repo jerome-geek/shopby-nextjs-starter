@@ -4,14 +4,17 @@ import { AnimatePresence, motion } from 'motion/react';
 import { overlay } from 'overlay-kit';
 import { useState } from 'react';
 
-import ShareDialog from '@/components/ui/dialog/share';
+import ShareBottomSheet from '@/components/bottom-sheet/share';
+import ShareModal from '@/components/modal/share';
 import * as styles from '@/components/ui/scroll-to-top/index.css';
+import { useResponsive } from '@/hooks/utils';
 
 interface ScrollToTopProps {
     threshold?: number;
 }
 
 export const ScrollToTop = ({ threshold = 300 }: ScrollToTopProps) => {
+    const { isMobile } = useResponsive();
     const [isVisible, setIsVisible] = useState(false);
 
     const lenis = useLenis(({ scroll }) => {
@@ -35,7 +38,11 @@ export const ScrollToTop = ({ threshold = 300 }: ScrollToTopProps) => {
 
     const onShareButtonClick = () => {
         overlay.open((props) => {
-            return <ShareDialog {...props} />;
+            return isMobile ? (
+                <ShareBottomSheet {...props} />
+            ) : (
+                <ShareModal {...props} />
+            );
         });
     };
 
