@@ -29,6 +29,12 @@ export const section = style({
     },
 });
 
+export const sectionHeader = style({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+});
+
 export const sectionTitle = style([
     textStyles.headingSemibold,
     {

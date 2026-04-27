@@ -404,7 +404,7 @@ export interface BookmarkedRecipeCollection {
         /** 영양 정보 추정 여부 */
         nutritionEstimated: boolean;
         /** 추가 메타 정보 */
-        extraData: any;
+        extraData: Record<string, unknown>;
         /** 등록일시 */
         regDt: string;
         /** 수정일시 */

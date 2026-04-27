@@ -5,14 +5,18 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
+import { ProductGridSection } from '@/components/product/grid-section';
+import { ProductGridSkeleton } from '@/components/product/grid-section/skeleton';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
+import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
 import * as styles from '@/components/recipe/scrap/summary/index.css';
+import { CollectionGridSkeleton } from '@/components/recipe/scrap/summary/skeleton';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useCollectionList } from '@/hooks/query/shop/collection';
 import { useBookmark } from '@/hooks/recipe';
+import { useCollectionList } from '@/hooks/suspenseQuery/shop/collection';
 import { useCustomDialog } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
@@ -28,6 +32,8 @@ const RecipeScrapSummary = () => {
     const { isMobile } = useResponsive();
 
     const { data: profileData } = useProfile();
+    const memberNo = profileData?.memberNo ?? 0;
+
     const { data: collectionListData = [] } = useCollectionList({
         options: {
             select: (data) => {
@@ -71,232 +77,178 @@ const RecipeScrapSummary = () => {
             className={styles.container}
         >
             {/* 컬렉션 섹션 */}
-            <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>{t('컬렉션')}</h2>
+            <FetchBoundary fallback={<CollectionGridSkeleton />}>
+                <section className={styles.section}>
+                    <div className={styles.sectionHeader}>
+                        <h2 className={styles.sectionTitle}>{t('컬렉션')}</h2>
+                    </div>
 
-                <ul className={styles.collectionGrid}>
-                    {collectionListData.map((c) => (
-                        <motion.li
-                            key={c.sno}
-                            whileHover={{ y: -8 }}
-                            className={styles.collectionItem}
-                        >
-                            <article style={{ width: '100%', minWidth: 0 }}>
-                                <Link
-                                    href={PATHS.RECIPES.COLLECTIONS.replace(
-                                        '[shareCode]',
-                                        c.shareCode,
-                                    )}
-                                    className={styles.collectionCard}
-                                >
-                                    {c.recipeImageUrls &&
-                                    c.recipeImageUrls.length > 0 ? (
-                                        <div className={styles.collageGrid}>
-                                            {c.recipeImageUrls
-                                                .slice(0, 5)
-                                                .map((url, idx) => (
-                                                    <img
-                                                        key={idx}
-                                                        src={url}
-                                                        className={
-                                                            styles.collageImage
-                                                        }
-                                                        alt={`${c.title} ${idx}`}
-                                                    />
-                                                ))}
-                                        </div>
-                                    ) : (
-                                        <div
-                                            className={
-                                                styles.collagePlaceholder
-                                            }
-                                        >
-                                            <Bookmark
-                                                size={32}
-                                                fill={vars.color.green['80']}
-                                                color={vars.color.green['80']}
-                                            />
-                                        </div>
-                                    )}
-                                    <div className={styles.collectionInfo}>
-                                        <div
-                                            className={
-                                                styles.collectionTitleArea
-                                            }
-                                        >
-                                            <h3
+                    <ul className={styles.collectionGrid}>
+                        {collectionListData.map((c) => (
+                            <motion.li
+                                key={c.sno}
+                                whileHover={{ y: -8 }}
+                                className={styles.collectionItem}
+                            >
+                                <article style={{ width: '100%', minWidth: 0 }}>
+                                    <Link
+                                        href={PATHS.RECIPES.COLLECTIONS.replace(
+                                            '[shareCode]',
+                                            c.shareCode,
+                                        )}
+                                        className={styles.collectionCard}
+                                    >
+                                        {c.recipeImageUrls &&
+                                        c.recipeImageUrls.length > 0 ? (
+                                            <div className={styles.collageGrid}>
+                                                {c.recipeImageUrls
+                                                    .slice(0, 5)
+                                                    .map((url, idx) => (
+                                                        <img
+                                                            key={idx}
+                                                            src={url}
+                                                            className={
+                                                                styles.collageImage
+                                                            }
+                                                            alt={`${c.title} ${idx}`}
+                                                        />
+                                                    ))}
+                                            </div>
+                                        ) : (
+                                            <div
                                                 className={
-                                                    styles.collectionTitle
+                                                    styles.collagePlaceholder
                                                 }
-                                            >
-                                                {c.title}
-                                            </h3>
-                                            <p
-                                                className={
-                                                    styles.collectionDesc
-                                                }
-                                            >
-                                                {c.description}
-                                            </p>
-                                            <p
-                                                className={
-                                                    styles.collectionFooter
-                                                }
-                                            >
-                                                By {c.memberName || t('나')} ·{' '}
-                                                {c.recipeCount}
-                                                {t('개')}
-                                            </p>
-                                        </div>
-
-                                        <div className={styles.buttonContainer}>
-                                            {profileData?.memberNo ===
-                                                c.memberNo && (
-                                                <VerticalMoreMenu
-                                                    id={String(c.sno)}
-                                                    onEdit={() =>
-                                                        handleEditCollection(
-                                                            c.shareCode,
-                                                        )
-                                                    }
-                                                    onDelete={() =>
-                                                        handleDeleteCollection(
-                                                            c.sno,
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                            <button
-                                                type='button'
-                                                className={
-                                                    styles.bookmarkButton
-                                                }
-                                                onClick={withRequiredAuth(
-                                                    () => {
-                                                        toggleCollectionBookmark(
-                                                            {
-                                                                sno: c.sno,
-                                                                bookmarked:
-                                                                    c.bookmarked,
-                                                            },
-                                                        );
-                                                    },
-                                                )}
                                             >
                                                 <Bookmark
-                                                    size={24}
-                                                    strokeWidth={1.5}
+                                                    size={32}
                                                     fill={
-                                                        c.bookmarked
-                                                            ? vars.color.green[
-                                                                  '100'
-                                                              ]
-                                                            : 'none'
+                                                        vars.color.green['80']
                                                     }
                                                     color={
-                                                        c.bookmarked
-                                                            ? vars.color.green[
-                                                                  '100'
-                                                              ]
-                                                            : vars.color.gray[
-                                                                  '40'
-                                                              ]
+                                                        vars.color.green['80']
                                                     }
                                                 />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </Link>
-                            </article>
-                        </motion.li>
-                    ))}
-                </ul>
+                                            </div>
+                                        )}
+                                        <div className={styles.collectionInfo}>
+                                            <div
+                                                className={
+                                                    styles.collectionTitleArea
+                                                }
+                                            >
+                                                <h3
+                                                    className={
+                                                        styles.collectionTitle
+                                                    }
+                                                >
+                                                    {c.title}
+                                                </h3>
+                                                <p
+                                                    className={
+                                                        styles.collectionDesc
+                                                    }
+                                                >
+                                                    {c.description}
+                                                </p>
+                                                <p
+                                                    className={
+                                                        styles.collectionFooter
+                                                    }
+                                                >
+                                                    By {c.memberName || t('나')}{' '}
+                                                    · {c.recipeCount}
+                                                    {t('개')}
+                                                </p>
+                                            </div>
 
-                <button
-                    type='button'
-                    className={styles.createButton}
-                    onClick={() => openCollectionForm()}
-                >
-                    <Plus size={isMobile ? 18 : 20} />
-                    <span>{t('새 컬렉션 만들기')}</span>
-                </button>
-            </section>
+                                            <div
+                                                className={
+                                                    styles.buttonContainer
+                                                }
+                                            >
+                                                {memberNo === c.memberNo && (
+                                                    <VerticalMoreMenu
+                                                        id={String(c.sno)}
+                                                        onEdit={() =>
+                                                            handleEditCollection(
+                                                                c.shareCode,
+                                                            )
+                                                        }
+                                                        onDelete={() =>
+                                                            handleDeleteCollection(
+                                                                c.sno,
+                                                            )
+                                                        }
+                                                    />
+                                                )}
+                                                <button
+                                                    type='button'
+                                                    className={
+                                                        styles.bookmarkButton
+                                                    }
+                                                    onClick={withRequiredAuth(
+                                                        () => {
+                                                            toggleCollectionBookmark(
+                                                                {
+                                                                    sno: c.sno,
+                                                                    bookmarked:
+                                                                        c.bookmarked,
+                                                                },
+                                                            );
+                                                        },
+                                                    )}
+                                                >
+                                                    <Bookmark
+                                                        size={24}
+                                                        strokeWidth={1.5}
+                                                        fill={
+                                                            c.bookmarked
+                                                                ? vars.color
+                                                                      .green[
+                                                                      '100'
+                                                                  ]
+                                                                : 'none'
+                                                        }
+                                                        color={
+                                                            c.bookmarked
+                                                                ? vars.color
+                                                                      .green[
+                                                                      '100'
+                                                                  ]
+                                                                : vars.color
+                                                                      .gray[
+                                                                      '40'
+                                                                  ]
+                                                        }
+                                                    />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </article>
+                            </motion.li>
+                        ))}
+                    </ul>
+
+                    <button
+                        type='button'
+                        className={styles.createButton}
+                        onClick={() => openCollectionForm()}
+                    >
+                        <Plus size={isMobile ? 18 : 20} />
+                        <span>{t('새 컬렉션 만들기')}</span>
+                    </button>
+                </section>
+            </FetchBoundary>
 
             {/* 상품 섹션 */}
-            {/* <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>{t('상품')}</h2>
-                    <div className={styles.viewAll}>
-                        {t('전체보기')} <ChevronRight size={14} />
-                    </div>
-                </div>
-                <div className={styles.productGrid}>
-                    {MOCK_PRODUCTS.map((p) => (
-                        <motion.div key={p.id} whileHover={{ y: -4 }}>
-                            <div className={styles.productThumb}>
-                                <img
-                                    src={p.img}
-                                    className={styles.productImg}
-                                    alt={p.name}
-                                />
-                                {p.isSoldOut && (
-                                    <div className={styles.soldOutOverlay}>
-                                        {t('품절')}
-                                    </div>
-                                )}
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: '8px',
-                                        right: '8px',
-                                    }}
-                                >
-                                    <Bookmark
-                                        size={18}
-                                        fill='white'
-                                        color='white'
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.productInfo}>
-                                <span className={styles.brandName}>
-                                    {p.brand}
-                                </span>
-                                <h3 className={styles.productName}>{p.name}</h3>
-                                <div className={styles.priceArea}>
-                                    {p.discount && (
-                                        <span className={styles.discount}>
-                                            {p.discount}%
-                                        </span>
-                                    )}
-                                    <span className={styles.price}>
-                                        {p.price.toLocaleString()}
-                                    </span>
-                                </div>
-                                <div className={styles.badgeArea}>
-                                    {p.badges.map((b: string) => (
-                                        <span key={b} className={styles.badge}>
-                                            {b}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-                <div className={styles.pagination}>
-                    <span style={{ color: vars.color.black, fontWeight: 700 }}>
-                        1
-                    </span>
-                    <span>2</span>
-                    <span>3</span>
-                    <ChevronRight size={14} />
-                </div>
-            </section> */}
+            <FetchBoundary fallback={<ProductGridSkeleton />}>
+                <ProductGridSection />
+            </FetchBoundary>
 
             {/* 레시피 섹션 */}
-            {/* TODO: 페이징처리를 위해 useQuery를 사용해서 내부적으로 skeleton보여줘야함 */}
-            <FetchBoundary>
+            <FetchBoundary fallback={<RecipeGridSkeleton />}>
                 <RecipeGridSection />
             </FetchBoundary>
         </motion.div>

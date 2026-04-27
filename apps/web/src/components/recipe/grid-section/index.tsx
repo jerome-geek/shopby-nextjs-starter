@@ -1,26 +1,24 @@
 import { ChefHat, CirclePlusIcon } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 import { RecipeCard } from '@/components/recipe/card';
 import * as styles from '@/components/recipe/grid-section/index.css';
-import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
 import { ViewAllLink } from '@/components/ui';
 import PagingV2 from '@/components/ui/paging-v2';
-import { useSearchMyRecipeList } from '@/hooks/query/shop/recipe';
+import { PATHS } from '@/const/paths';
+import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import type { SearchRecipesParams } from '@/models/shop/recipe';
 
-import { PATHS } from '@/const/paths';
-import 'swiper/css';
-
 export const RecipeGridSection = () => {
     const { t } = useTranslation();
-
     const { isMobile } = useResponsive();
+    const [isPending, startTransition] = useTransition();
 
     const { openRecipeCreateSelection } = useCustomDialog();
 
@@ -32,7 +30,7 @@ export const RecipeGridSection = () => {
         order: 'DESC',
     });
 
-    const { data: searchMyRecipeListData, isPending } = useSearchMyRecipeList({
+    const { data: searchMyRecipeListData } = useSearchMyRecipeList({
         searchParams: {
             ...searchParams,
             take: pageSize,
@@ -41,10 +39,6 @@ export const RecipeGridSection = () => {
 
     const recipeList = searchMyRecipeListData?.data ?? [];
     const isRecipeListVisible = recipeList.length > 0;
-
-    if (isPending) {
-        return <RecipeGridSkeleton />;
-    }
 
     return (
         <section className={styles.section}>
@@ -57,59 +51,66 @@ export const RecipeGridSection = () => {
                 )}
             </div>
 
-            {isRecipeListVisible ? (
-                isMobile ? (
-                    <Swiper
-                        className={styles.swiperContainer}
-                        slidesPerView='auto'
-                        spaceBetween={16}
-                        slidesOffsetAfter={20}
-                    >
-                        {recipeList.map((r) => (
-                            <SwiperSlide
-                                key={r.sno}
-                                className={styles.swiperSlide}
-                            >
-                                <RecipeCard recipe={r} />
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
+            <div
+                style={{
+                    opacity: isPending ? 0.5 : 1,
+                    transition: 'opacity 0.2s',
+                }}
+            >
+                {isRecipeListVisible ? (
+                    isMobile ? (
+                        <Swiper
+                            className={styles.swiperContainer}
+                            slidesPerView='auto'
+                            spaceBetween={16}
+                            slidesOffsetAfter={20}
+                        >
+                            {recipeList.map((r) => (
+                                <SwiperSlide
+                                    key={r.sno}
+                                    className={styles.swiperSlide}
+                                >
+                                    <RecipeCard recipe={r} />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    ) : (
+                        <div className={styles.recipeGrid}>
+                            {recipeList.map((r) => (
+                                <RecipeCard key={r.sno} recipe={r} />
+                            ))}
+                        </div>
+                    )
                 ) : (
-                    <div className={styles.recipeGrid}>
-                        {recipeList.map((r) => (
-                            <RecipeCard key={r.sno} recipe={r} />
-                        ))}
-                    </div>
-                )
-            ) : (
-                <motion.div
-                    className={styles.emptyState}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                >
-                    <div className={styles.emptyIconArea}>
-                        <ChefHat size={32} />
-                    </div>
-                    <div>
-                        <h3 className={styles.emptyTitle}>
-                            {t('등록된 레시피가 없습니다')}
-                        </h3>
-                        <p className={styles.emptyDescription}>
-                            {t('아직 등록된 레시피가 없습니다.')}
-                            <br />
-                            {t('나만의 특별한 레시피를 등록하고 관리해보세요!')}
-                        </p>
-                    </div>
-                    <button
-                        className={styles.createRecipeButton}
-                        type='button'
-                        onClick={openRecipeCreateSelection}
+                    <motion.div
+                        className={styles.emptyState}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
                     >
-                        <CirclePlusIcon size={20} />
-                        <span>{t('레시피 만들기')}</span>
-                    </button>
-                </motion.div>
-            )}
+                        <div className={styles.emptyIconArea}>
+                            <ChefHat size={32} />
+                        </div>
+                        <div>
+                            <h3 className={styles.emptyTitle}>
+                                {t('등록된 레시피가 없습니다')}
+                            </h3>
+                            <p className={styles.emptyDescription}>
+                                {t('아직 등록된 레시피가 없습니다.')}
+                                <br />
+                                {t('나만의 특별한 레시피를 등록하고 관리해보세요!')}
+                            </p>
+                        </div>
+                        <button
+                            className={styles.createRecipeButton}
+                            type='button'
+                            onClick={openRecipeCreateSelection}
+                        >
+                            <CirclePlusIcon size={20} />
+                            <span>{t('레시피 만들기')}</span>
+                        </button>
+                    </motion.div>
+                )}
+            </div>
 
             {!isMobile && isRecipeListVisible && (
                 <PagingV2
@@ -117,10 +118,12 @@ export const RecipeGridSection = () => {
                     totalCount={searchMyRecipeListData?.count ?? 0}
                     pageSize={pageSize}
                     onPageClick={(nextPage) =>
-                        setSearchParams((prev) => ({
-                            ...prev,
-                            page: nextPage,
-                        }))
+                        startTransition(() => {
+                            setSearchParams((prev) => ({
+                                ...prev,
+                                page: nextPage,
+                            }));
+                        })
                     }
                 />
             )}
