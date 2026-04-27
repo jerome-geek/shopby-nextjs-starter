@@ -46,8 +46,8 @@ export const main = style({
 
     '@media': {
         [media.desktop]: {
-            padding: '0',
             gap: '96px',
+            marginTop: '-12px',
         },
         [media.mobile]: {
             padding: '12px 0 0',

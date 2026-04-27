@@ -1,6 +1,8 @@
+import Seo from '@/components/common/seo';
 import { filter, pipe, toArray, uniq } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { useLenis } from 'lenis/react';
 import {
     Bookmark,
     ChevronLeft,
@@ -13,15 +15,13 @@ import type {
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import Seo from '@/components/common/seo';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Swiper as SwiperType } from 'swiper';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-import { useRouter } from 'next/router';
 
 import { recipe } from '@/api/shop';
 import FetchBoundary from '@/components/common/FetchBoundary';
@@ -65,6 +65,8 @@ const RecipeDetailPage = ({
     const { addToast } = useToast();
     const { openLoginDialog } = useCustomDialog();
     const { toggleRecipeBookmark } = useBookmark();
+
+    const lenis = useLenis();
 
     const isLogin = useAuth();
 
@@ -161,13 +163,13 @@ const RecipeDetailPage = ({
                 ? HEADER_HEIGHT_MOBILE
                 : HEADER_HEIGHT;
 
-            const top =
-                element.getBoundingClientRect().top +
-                window.scrollY -
-                headerHeight -
-                SCROLL_OFFSET_MARGIN;
+            const top = headerHeight + SCROLL_OFFSET_MARGIN;
 
-            window.scrollTo({ top, behavior: 'smooth' });
+            lenis?.scrollTo(element, {
+                offset: -top,
+                duration: 0.9,
+                immediate: false,
+            });
         }
     };
 
@@ -284,7 +286,11 @@ const RecipeDetailPage = ({
                         </div>
 
                         <p className={styles.author}>
-                            {`By ${recipeDetailData.authorName ?? recipeDetailData.memberName ?? recipeDetailData.memberId}`}
+                            {`By ${
+                                recipeDetailData.authorName ??
+                                recipeDetailData.memberName ??
+                                recipeDetailData.memberId
+                            }`}
                         </p>
 
                         <p className={styles.description}>

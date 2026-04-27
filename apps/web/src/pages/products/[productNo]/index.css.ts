@@ -8,14 +8,13 @@ import { textStyles } from '@/styles/typography.css';
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
-    paddingBottom:
-        'calc(var(--bottom-nav-active-height, 64px) + 80px + env(safe-area-inset-bottom))',
+    paddingBottom: `calc(${globalVars.header.bottomNavHeight} + 80px + env(safe-area-inset-bottom))`,
     maxWidth: '1200px',
     margin: '0 auto',
 
     '@media': {
         [media.desktop]: {
-            padding: '40px 0',
+            padding: '0',
         },
     },
 });
@@ -163,7 +162,6 @@ export const priceInfo = style({
     flexDirection: 'column',
     gap: '2px',
 });
-
 
 export const cartButton = style({
     flex: 1,
@@ -313,7 +311,7 @@ export const badgeActive = style({
 
 export const bottomSticky = style({
     position: 'fixed',
-    bottom: 'calc(var(--bottom-nav-active-height, 64px) + env(safe-area-inset-bottom))',
+    bottom: `calc(${globalVars.header.bottomNavHeight} + env(safe-area-inset-bottom))`,
     left: 0,
     right: 0,
     backgroundColor: vars.color.white,
@@ -415,8 +413,6 @@ export const optionDivider = style({
     width: '100%',
     border: `1px solid ${vars.color.gray['20']}`,
 });
-
-
 
 export const optionContainer = style({
     display: 'flex',

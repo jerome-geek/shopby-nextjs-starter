@@ -9,7 +9,7 @@ export const headerInner = style({
     width: '100%',
     display: 'flex',
     alignItems: 'end',
-    padding: '0 0 8px',
+    padding: '0 20px 8px',
 });
 
 export const container = style({

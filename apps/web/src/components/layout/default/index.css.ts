@@ -10,6 +10,14 @@ export const layout = style({
     width: '100%',
 });
 
+export const scrollWrapper = style({
+    height: '100dvh',
+    width: '100%',
+    overflowY: 'auto',
+    overflowX: 'clip',
+    WebkitOverflowScrolling: 'touch',
+});
+
 export const main = style({
     flex: 1,
     width: '100%',
@@ -43,12 +51,15 @@ export const shopMain = style({
 export const container = style({
     maxWidth: '1240px',
     margin: '0 auto',
-    padding: '24px 20px 40px',
+    padding: '32px 20px 120px',
     width: '100%',
 
     '@media': {
+        [media.tablet]: {
+            padding: '24px 20px 80px',
+        },
         [media.mobile]: {
-            padding: '0 20px 40px',
+            padding: '0 20px 60px',
         },
     },
 });

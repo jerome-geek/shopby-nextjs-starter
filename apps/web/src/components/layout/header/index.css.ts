@@ -12,7 +12,6 @@ export const header = style({
     right: 0,
     zIndex: 999,
     backgroundColor: vars.color.white,
-    padding: '0 20px',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
@@ -44,7 +43,6 @@ export const headerInner = style({
     '@media': {
         [media.tablet]: {
             gap: '16px',
-            padding: '0',
         },
         [media.mobile]: {
             alignItems: 'flex-end',

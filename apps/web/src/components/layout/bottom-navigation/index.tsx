@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import { motion, useMotionValueEvent, useScroll } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -75,20 +75,6 @@ export default function BottomNavigation() {
     };
 
     useMotionValueEvent(scrollY, 'change', handleScroll);
-
-    useEffect(() => {
-        if (typeof document !== 'undefined') {
-            document.documentElement.style.setProperty(
-                '--bottom-nav-active-height',
-                hidden ? '0px' : '64px',
-            );
-        }
-        return () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-        };
-    }, [hidden]);
 
     if (isRecipeDetail) return null;
 

@@ -3,6 +3,7 @@ import { useLenis } from 'lenis/react';
 import { motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
+import { RelatedProductList } from '@/components/product';
 import ProductContents from '@/components/product/product-tabs/contents';
 import DutyInfo from '@/components/product/product-tabs/duty-info';
 import * as styles from '@/components/product/product-tabs/index.css';
@@ -10,7 +11,6 @@ import Inquiries from '@/components/product/product-tabs/inquiries';
 import PopularProducts from '@/components/product/product-tabs/popular-products';
 import RelatedProducts from '@/components/product/product-tabs/related-products';
 import Review from '@/components/product/product-tabs/review';
-import { RelatedProductList } from '@/components/product';
 import { useResponsive } from '@/hooks/utils';
 import { ProductDetailResponse } from '@/models/product/product';
 

@@ -232,7 +232,10 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     )}
                 </div>
 
-                <div className={styles.content} data-lenis-prevent>
+                <div
+                    className={styles.content}
+                    {...(isTablet ? {} : { 'data-lenis-prevent': true })}
+                >
                     <header className={styles.header}>
                         <div className={styles.titleInfo}>
                             {brand && (
@@ -482,7 +485,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
             const description =
                 baseInfo.promotionText ||
-                `${brand?.name ? `[${brand.name}] ` : ''}${baseInfo.productName} 상품을 만나보세요.`;
+                `${brand?.name ? `[${brand.name}] ` : ''}${
+                    baseInfo.productName
+                } 상품을 만나보세요.`;
 
             const image =
                 baseInfo.imageUrls?.[0] ||
@@ -494,7 +499,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 (price.immediateDiscountAmt || 0) -
                 (price.additionDiscountAmt || 0);
 
-            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/products/${productNo}`;
+            const url = `${
+                process.env.NEXT_PUBLIC_BASE_URL || ''
+            }/products/${productNo}`;
 
             seoData = {
                 title,

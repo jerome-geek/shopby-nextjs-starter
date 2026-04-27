@@ -1,7 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
+import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
 export const bottomNavigationContainer = style({
@@ -9,7 +10,7 @@ export const bottomNavigationContainer = style({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '64px',
+    height: globalVars.header.bottomNavHeight,
     backgroundColor: vars.color.white,
     borderTop: `1px solid ${vars.color.gray[20]}`,
     display: 'flex',

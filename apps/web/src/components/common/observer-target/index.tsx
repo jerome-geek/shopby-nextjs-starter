@@ -45,7 +45,7 @@ export const ObserverTarget = ({
     }, [onIntersect, rootMargin]);
 
     if (hasNextPage === false) {
-        return <div className={styles.endMessage} />;
+        return null;
     }
 
     return <div ref={ref} className={styles.target} aria-hidden='true' />;

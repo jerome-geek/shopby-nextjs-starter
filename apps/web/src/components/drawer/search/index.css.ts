@@ -1,7 +1,9 @@
+import { globalStyle, style } from '@vanilla-extract/css';
+
+import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { globalStyle, style } from '@vanilla-extract/css';
 
 export const dimmed = style({
     position: 'fixed',
@@ -17,7 +19,7 @@ export const container = style({
     top: 0,
     right: 0,
     width: '100%',
-    height: 'calc(100dvh - 64px)', // view height - bottom navigation height
+    height: `calc(100dvh - ${globalVars.header.bottomNavHeight})`, // view height - bottom navigation height
     maxHeight: '100vh',
     backgroundColor: vars.color.white,
     willChange: 'transform',
