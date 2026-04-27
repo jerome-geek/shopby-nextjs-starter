@@ -1,27 +1,26 @@
+import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { includes } from '@fxts/core';
 
 import { productProfile } from '@/api/product';
+import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
 import type {
     DeleteRecentViewProductsParams,
     GetRecentViewProductsResponse,
     RegisterRecentViewProductData,
     UpdateProductsLikeData,
 } from '@/models/product/profile';
-import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
 
 const useProductProfileMutation = () => {
     const queryClient = useQueryClient();
 
     const invalidate = useCallback(() => {
-        queryClient.invalidateQueries({
+        return queryClient.invalidateQueries({
             predicate: (query) =>
                 includes(query.queryKey[0], [
                     ...productKeys.all,
                     ...productProfileKeys.all,
                 ]),
-            refetchType: 'all',
         });
     }, [queryClient]);
 

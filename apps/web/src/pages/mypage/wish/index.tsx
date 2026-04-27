@@ -1,10 +1,15 @@
-import { includes, isEmpty } from '@fxts/core';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
-import { type ReactNode, useCallback, useMemo, useState } from 'react';
+import { isEmpty } from '@fxts/core';
+import { parseAsInteger, useQueryState } from 'nuqs';
+import {
+    type ReactNode,
+    useCallback,
+    useMemo,
+    useState,
+    useTransition,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
+import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
@@ -12,26 +17,29 @@ import { ProductCard } from '@/components/product';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
 import Paging from '@/components/ui/paging';
+import { MypageWishSkeleton } from '@/pages/mypage/wish/skeleton';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { toWishProductCardModel } from '@/entities/product/utils/mapper';
 import { useProductProfileMutation } from '@/hooks/mutations';
-import useLikeProductList from '@/hooks/query/product/profile/useLikeProductList';
-import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
+import { useLikeProductList } from '@/hooks/suspenseQuery/product/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/wish/index.css';
-const PAGE_SIZE = 20;
 
-export const MypageWish = () => {
+const PAGE_SIZE = 10;
+
+const MypageWishContent = () => {
     const { t } = useTranslation();
-    const router = useRouter();
-    const queryClient = useQueryClient();
     const { openAsyncDialog } = useDialog();
     const { addToast } = useToast();
 
-    const [selected, setSelected] = useState<Set<number>>(() => new Set());
+    const [isPending, startTransition] = useTransition();
+    const [pageNumber, setPageNumber] = useQueryState(
+        'pageNumber',
+        parseAsInteger.withDefault(1).withOptions({ shallow: true }),
+    );
 
-    const pageNumber = Number(router.query.pageNumber) || 1;
+    const [selected, setSelected] = useState<Set<number>>(() => new Set());
 
     const {
         like: { mutate: updateLikesMutate, isPending: isUnlikePending },
@@ -46,10 +54,9 @@ export const MypageWish = () => {
         [pageNumber],
     );
 
-    const { data: likeListData, isLoading: isRawLikeListLoading } =
-        useLikeProductList({
-            searchParams,
-        });
+    const { data: likeListData } = useLikeProductList({
+        searchParams,
+    });
 
     const productList = useMemo(() => {
         return likeListData?.items ?? [];
@@ -58,30 +65,11 @@ export const MypageWish = () => {
     const { productsWithDiscounts, isLoadingAdditionalDiscounts } =
         useProductsWithAdditionalDiscounts(productList);
 
-    const isLikeListLoading =
-        isRawLikeListLoading || isLoadingAdditionalDiscounts;
+    const isLikeListLoading = isLoadingAdditionalDiscounts;
 
     const totalCount = useMemo(() => {
         return likeListData?.totalCount ?? 0;
     }, [likeListData]);
-
-    const setQuery = useCallback(
-        (next: Record<string, string | number | undefined>) => {
-            router.replace(
-                {
-                    pathname: router.pathname,
-                    query: {
-                        ...router.query,
-                        ...next,
-                        ...(next.pageNumber ? {} : { pageNumber: 1 }),
-                    },
-                },
-                undefined,
-                { shallow: true },
-            );
-        },
-        [router],
-    );
 
     const productNosInList = useMemo(() => {
         return new Set(
@@ -144,17 +132,6 @@ export const MypageWish = () => {
         [],
     );
 
-    const invalidateProductLikeQueries = useCallback(() => {
-        queryClient.invalidateQueries({
-            predicate: (query) =>
-                includes(query.queryKey[0], [
-                    ...productKeys.all,
-                    ...productProfileKeys.all,
-                ]),
-            refetchType: 'all',
-        });
-    }, [queryClient]);
-
     const onDeleteSelected = useCallback(async () => {
         if (selectedInList.size === 0) {
             return;
@@ -181,7 +158,6 @@ export const MypageWish = () => {
             { data: { items } },
             {
                 onSuccess: () => {
-                    invalidateProductLikeQueries();
                     setSelected(new Set());
                     addToast({
                         message: t('선택한 상품을 찜 목록에서 삭제했습니다.'),
@@ -189,14 +165,7 @@ export const MypageWish = () => {
                 },
             },
         );
-    }, [
-        addToast,
-        invalidateProductLikeQueries,
-        openAsyncDialog,
-        selectedInList,
-        t,
-        updateLikesMutate,
-    ]);
+    }, [addToast, openAsyncDialog, selectedInList, t, updateLikesMutate]);
 
     return (
         <div className={card.container}>
@@ -226,56 +195,54 @@ export const MypageWish = () => {
                     </Button>
                 </div>
 
-                <div className={card.list}>
-                    <LoadingWrapper isLoading={isLikeListLoading}>
-                        {!isEmpty(productsWithDiscounts) ? (
-                            <ul className={styles.productGrid}>
-                                {productsWithDiscounts.map((product) => (
-                                    <li
-                                        key={product.productNo}
-                                        className={styles.productGridItem}
-                                    >
-                                        <div className={styles.cardSelectWrap}>
-                                            <div
-                                                className={
-                                                    styles.checkboxAnchor
-                                                }
-                                                onClick={(event) => {
-                                                    event.preventDefault();
-                                                    event.stopPropagation();
-                                                }}
-                                                onPointerDown={(event) => {
-                                                    event.stopPropagation();
-                                                }}
-                                            >
-                                                <InputCheckbox
-                                                    id={`wish-product-${product.productNo}`}
-                                                    checked={selectedInList.has(
-                                                        product.productNo,
-                                                    )}
-                                                    onCheckedChange={(
-                                                        checked,
-                                                    ) => {
-                                                        toggleProductSelect(
-                                                            product.productNo,
-                                                            checked,
-                                                        );
-                                                    }}
-                                                />
-                                            </div>
-                                            <ProductCard
-                                                {...toWishProductCardModel(
-                                                    product,
+                <div
+                    className={card.list}
+                    style={{
+                        opacity: isPending || isLikeListLoading ? 0.5 : 1,
+                        transition: 'opacity 0.2s',
+                    }}
+                >
+                    {!isEmpty(productsWithDiscounts) ? (
+                        <ul className={styles.productGrid}>
+                            {productsWithDiscounts.map((product) => (
+                                <li
+                                    key={product.productNo}
+                                    className={styles.productGridItem}
+                                >
+                                    <div className={styles.cardSelectWrap}>
+                                        <div
+                                            className={styles.checkboxAnchor}
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                                event.stopPropagation();
+                                            }}
+                                            onPointerDown={(event) => {
+                                                event.stopPropagation();
+                                            }}
+                                        >
+                                            <InputCheckbox
+                                                id={`wish-product-${product.productNo}`}
+                                                checked={selectedInList.has(
+                                                    product.productNo,
                                                 )}
+                                                onCheckedChange={(checked) => {
+                                                    toggleProductSelect(
+                                                        product.productNo,
+                                                        checked,
+                                                    );
+                                                }}
                                             />
                                         </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <NoResult text={t('찜한 아이템이 없습니다.')} />
-                        )}
-                    </LoadingWrapper>
+                                        <ProductCard
+                                            {...toWishProductCardModel(product)}
+                                        />
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <NoResult text={t('찜한 아이템이 없습니다.')} />
+                    )}
                 </div>
 
                 <div className={card.paging}>
@@ -284,12 +251,22 @@ export const MypageWish = () => {
                         totalCount={totalCount}
                         pageSize={PAGE_SIZE}
                         onPageClick={(page) => {
-                            setQuery({ pageNumber: page });
+                            startTransition(() => {
+                                setPageNumber(page);
+                            });
                         }}
                     />
                 </div>
             </section>
         </div>
+    );
+};
+
+export const MypageWish = () => {
+    return (
+        <FetchBoundary fallback={<MypageWishSkeleton />}>
+            <MypageWishContent />
+        </FetchBoundary>
     );
 };
 
