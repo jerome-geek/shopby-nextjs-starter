@@ -1,5 +1,6 @@
 import { DragEndEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
+import { filter, map, pipe, range, toArray, uniqBy, zip } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
@@ -16,8 +17,6 @@ import { useFileUpload } from '@/hooks/utils';
 import type {
     CreateManualRecipeData,
     GetRecipeDetailResponse,
-    RecipeIngredient,
-    RecipeStep,
     UpdateRecipeData,
 } from '@/models/shop/recipe';
 import {
@@ -55,10 +54,7 @@ export const useRecipeForm = ({
     });
 
     // Zustand store
-    const tempImages = useRecipeManualStore(({ tempImages }) => {
-        return tempImages;
-    });
-    console.log('🚀 ~ useRecipeForm ~ tempImages:', tempImages);
+    const tempImages = useRecipeManualStore(({ tempImages }) => tempImages);
     const setTempImages = useRecipeManualStore(
         ({ setTempImages }) => setTempImages,
     );
@@ -74,9 +70,6 @@ export const useRecipeForm = ({
         defaultValues: {
             title: '',
             description: '',
-            cookTimeMinutes: 1,
-            servings: 1,
-            caloriesPerServingKcal: 1,
             thumbnailUrl: null,
             ingredients: [{ name: '', amount: '' }],
             steps: [
@@ -140,21 +133,21 @@ export const useRecipeForm = ({
             thumbnailUrl: recipeDetailData.thumbnailUrl,
             ingredients:
                 recipeDetailData.ingredients.length > 0
-                    ? recipeDetailData.ingredients.map(
-                          (ing: RecipeIngredient) => ({
-                              name: ing.name,
-                              amount: ing.amount || '',
-                          }),
-                      )
+                    ? recipeDetailData.ingredients.map(({ name, amount }) => ({
+                          name,
+                          amount: amount || '',
+                      }))
                     : [{ name: '', amount: '' }],
             steps:
                 recipeDetailData.steps.length > 0
-                    ? recipeDetailData.steps.map((step: RecipeStep) => ({
-                          stepNumber: step.stepNumber,
-                          description: step.description || '',
-                          stepImageUrl: step.stepImageUrl,
-                          tempImageSno: null,
-                      }))
+                    ? recipeDetailData.steps.map(
+                          ({ stepNumber, description, stepImageUrl }) => ({
+                              stepNumber,
+                              description: description || '',
+                              stepImageUrl: stepImageUrl,
+                              tempImageSno: null,
+                          }),
+                      )
                     : [
                           {
                               stepNumber: 1,
@@ -167,25 +160,23 @@ export const useRecipeForm = ({
 
         // 수정 모드 시 tempImages 스토어 복원
         if (isModify && tempImages.length === 0) {
-            const initialTempImages: ManualTempImage[] = recipeDetailData.steps
-                .filter((step) => step.sno) // 이미지가 있는 단계만 스토어에 추가
-                .map((step, idx) => ({
+            const uniqueImages = pipe(
+                recipeDetailData.steps,
+                filter((step) => !!step.sno),
+                uniqBy((step) => step.sno),
+                (iter) => zip(range(1, Infinity), iter),
+                map(([idx, step]) => ({
                     sno: step.sno as number,
                     uploadPath: '',
                     imageUrl: step.stepImageUrl as string,
-                    sortOrder: step.stepNumber || idx + 1,
+                    sortOrder: step.stepNumber || idx,
                     status: 'REGISTERED',
-                }));
-
-            // 중복 및 순서 처리 (sno 기준 unique)
-            const uniqueImages = Array.from(
-                new Map(
-                    initialTempImages.map((item) => [item.sno, item]),
-                ).values(),
+                })),
+                toArray,
             );
             setTempImages(uniqueImages);
         }
-    }, [recipeDetailData, reset, isModify, setTempImages]); // tempImages는 제외 (최초 1회만 실행되도록)
+    }, [tempImages.length, recipeDetailData, reset, isModify, setTempImages]); // tempImages는 제외 (최초 1회만 실행되도록)
 
     // 1. 페이지 이탈 시에만 스토어 초기화 (명시적 경로 감시)
     useEffect(() => {
