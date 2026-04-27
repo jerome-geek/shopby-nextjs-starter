@@ -6,7 +6,7 @@ import { KCPCertification } from '@/api/auth';
 import { PATHS } from '@/const/paths';
 import useApiError from '@/hooks/useApiError';
 
-export const KcpAuthCallbackPage = () => {
+const KcpAuthCallbackPage = () => {
     const router = useRouter();
 
     const { handleErrorDialog } = useApiError();
@@ -60,3 +60,5 @@ export const KcpAuthCallbackPage = () => {
 
     return null;
 };
+
+export default KcpAuthCallbackPage;

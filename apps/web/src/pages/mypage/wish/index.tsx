@@ -17,7 +17,7 @@ import { ProductCard } from '@/components/product';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
 import Paging from '@/components/ui/paging';
-import { MypageWishSkeleton } from '@/pages/mypage/wish/skeleton';
+import { MypageWishSkeleton } from '@/components/mypage/wish/skeleton';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { toWishProductCardModel } from '@/entities/product/utils/mapper';
 import { useProductProfileMutation } from '@/hooks/mutations';

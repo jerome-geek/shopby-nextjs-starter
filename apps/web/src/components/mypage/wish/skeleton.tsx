@@ -20,13 +20,11 @@ const WishCardSkeleton = () => {
 };
 
 export const MypageWishSkeleton = () => {
-    // 모바일 3열, 태블릿/데스크탑 5열에 맞게 개수 조절
     const skeletonItems = Array.from({ length: 10 });
 
     return (
         <div className={cardStyles.container} aria-busy='true'>
             <section className={cardStyles.section}>
-                {/* 상단 액션 바 스켈레톤 */}
                 <div className={styles.actionsWrapper}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Skeleton width={20} height={20} style={{ borderRadius: 4 }} />
@@ -35,7 +33,6 @@ export const MypageWishSkeleton = () => {
                     <Skeleton width={50} height={18} style={{ borderRadius: 4 }} />
                 </div>
 
-                {/* 상품 그리드 스켈레톤 */}
                 <div className={cardStyles.list}>
                     <ul className={styles.productGrid}>
                         {skeletonItems.map((_, idx) => (
