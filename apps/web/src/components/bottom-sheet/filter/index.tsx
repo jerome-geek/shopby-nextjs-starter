@@ -35,6 +35,12 @@ const TAB_LIST: { type: FilterBottomSheetTab; label: string }[] = [
     { type: 'brands', label: '브랜드' },
 ];
 
+const DELIVERY_FILTER_LABELS = {
+    FREE: '무료배송',
+    CONDITIONAL: '조건부 무료배송',
+    FIXED_FEE: '유료배송',
+} as const;
+
 export const FilterBottomSheet = ({
     isOpen,
     close,
@@ -96,8 +102,8 @@ export const FilterBottomSheet = ({
                 ...(appliedSearchParams.filter?.keywords && {
                     keywords: appliedSearchParams.filter.keywords,
                 }),
-                ...(pendingFilters.deliveryConditionType === 'FREE' && {
-                    deliveryConditionType: 'FREE' as const,
+                ...(pendingFilters.deliveryConditionType && {
+                    deliveryConditionType: pendingFilters.deliveryConditionType,
                 }),
                 ...(priceOption?.discountedComparison &&
                     priceOption.discountedPrices && {
@@ -172,7 +178,7 @@ export const FilterBottomSheet = ({
     );
 
     const hasSelectedFilters = useMemo(() => {
-        if (pendingFilters.deliveryConditionType === 'FREE') {
+        if (pendingFilters.deliveryConditionType) {
             return true;
         }
         if (pendingFilters.onlySaleProduct) {
@@ -273,8 +279,41 @@ export const FilterBottomSheet = ({
                             >
                                 무료배송
                             </button>
-                            <button className={styles.filterChip} disabled>
-                                빠른배송
+                            <button
+                                className={styles.filterChip}
+                                aria-pressed={
+                                    pendingFilters.deliveryConditionType ===
+                                    'CONDITIONAL'
+                                }
+                                onClick={() =>
+                                    setPendingFilter(
+                                        'deliveryConditionType',
+                                        pendingFilters.deliveryConditionType ===
+                                            'CONDITIONAL'
+                                            ? undefined
+                                            : 'CONDITIONAL',
+                                    )
+                                }
+                            >
+                                조건부 무료배송
+                            </button>
+                            <button
+                                className={styles.filterChip}
+                                aria-pressed={
+                                    pendingFilters.deliveryConditionType ===
+                                    'FIXED_FEE'
+                                }
+                                onClick={() =>
+                                    setPendingFilter(
+                                        'deliveryConditionType',
+                                        pendingFilters.deliveryConditionType ===
+                                            'FIXED_FEE'
+                                            ? undefined
+                                            : 'FIXED_FEE',
+                                    )
+                                }
+                            >
+                                유료배송
                             </button>
                             <button
                                 className={styles.filterChip}
@@ -480,8 +519,7 @@ export const FilterBottomSheet = ({
                             spaceBetween={4}
                             watchOverflow
                         >
-                            {pendingFilters.deliveryConditionType ===
-                                'FREE' && (
+                            {pendingFilters.deliveryConditionType && (
                                 <SwiperSlide style={{ width: 'auto' }}>
                                     <button
                                         className={styles.selectedFilterButton}
@@ -492,7 +530,13 @@ export const FilterBottomSheet = ({
                                             )
                                         }
                                     >
-                                        <span>무료배송</span>
+                                        <span>
+                                            {
+                                                DELIVERY_FILTER_LABELS[
+                                                    pendingFilters.deliveryConditionType
+                                                ]
+                                            }
+                                        </span>
                                         <span>
                                             <X size={16} strokeWidth={1.5} />
                                         </span>

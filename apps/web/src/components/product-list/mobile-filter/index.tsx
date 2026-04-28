@@ -2,7 +2,7 @@ import { ChevronDown, RotateCcw, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import type { ParsedUrlQueryInput } from 'querystring';
-import { useEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -24,6 +24,11 @@ export type MobileFilterProps = {
 };
 
 const DEFAULT_SORT_OPTION_ID = SORT_OPTIONS[0].id;
+const DELIVERY_FILTER_LABELS = {
+    FREE: '무료배송',
+    CONDITIONAL: '조건부 무료배송',
+    FIXED_FEE: '유료배송',
+} as const;
 
 export const MobileFilter = ({ categoryNo }: MobileFilterProps) => {
     const { t } = useTranslation();
@@ -58,8 +63,10 @@ export const MobileFilter = ({ categoryNo }: MobileFilterProps) => {
 
     const productInfoLabel = useMemo(() => {
         const parts: string[] = [];
-        if (appliedFilters.deliveryConditionType === 'FREE') {
-            parts.push('무료배송');
+        if (appliedFilters.deliveryConditionType) {
+            parts.push(
+                DELIVERY_FILTER_LABELS[appliedFilters.deliveryConditionType],
+            );
         }
         if (appliedFilters.onlySaleProduct) {
             parts.push('세일중');
@@ -71,7 +78,7 @@ export const MobileFilter = ({ categoryNo }: MobileFilterProps) => {
     }, [appliedFilters]);
 
     const productInfoActive =
-        appliedFilters.deliveryConditionType === 'FREE' ||
+        !!appliedFilters.deliveryConditionType ||
         !!appliedFilters.onlySaleProduct ||
         appliedFilters.soldout === false;
 
@@ -109,32 +116,34 @@ export const MobileFilter = ({ categoryNo }: MobileFilterProps) => {
     const hasAppliedFilters =
         sortActive || productInfoActive || priceActive || brandActive;
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const swiper = swiperRef.current;
         if (!swiper) {
             return;
         }
 
-        const rafId = window.requestAnimationFrame(() => {
-            swiper.update();
-
-            if (swiper.isLocked) {
-                swiper.slideTo(0, 0);
+        let cancelled = false;
+        const moveToStart = () => {
+            if (cancelled || swiperRef.current !== swiper || swiper.destroyed) {
                 return;
             }
+            swiper.update();
+            swiper.slideTo(0, 0);
+        };
 
-            const maxTranslate = swiper.maxTranslate();
-            if (swiper.translate < maxTranslate) {
-                swiper.slideTo(swiper.slides.length - 1, 0);
-            }
-        });
+        moveToStart();
+
+        const rafId = window.requestAnimationFrame(moveToStart);
+        const timeoutId = window.setTimeout(moveToStart, 80);
 
         return () => {
+            cancelled = true;
             window.cancelAnimationFrame(rafId);
+            window.clearTimeout(timeoutId);
         };
     }, [
-        appliedFilters,
         selectedSortOption.id,
+        sortLabel,
         productInfoLabel,
         priceLabel,
         brandLabel,
@@ -223,6 +232,9 @@ export const MobileFilter = ({ categoryNo }: MobileFilterProps) => {
             slidesPerView={'auto'}
             slidesOffsetBefore={20}
             slidesOffsetAfter={20}
+            watchOverflow
+            observer
+            observeParents
             onSwiper={(swiper) => {
                 swiperRef.current = swiper;
             }}

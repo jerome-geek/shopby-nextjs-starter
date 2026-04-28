@@ -7,9 +7,10 @@ import type { OrderByType, OrderDirectionType } from '@/models';
 import type { ProductSearchParams } from '@/models/product/product';
 
 type PriceFilterId = (typeof PRICE_FILTER_OPTIONS)[number]['id'] | 'custom';
+type DeliveryFilterType = 'FREE' | 'CONDITIONAL' | 'FIXED_FEE';
 
 export interface PendingProductFilter {
-    deliveryConditionType?: 'FREE';
+    deliveryConditionType?: DeliveryFilterType;
     onlySaleProduct?: true;
     soldout?: false;
     priceFilterId?: PriceFilterId;
@@ -102,7 +103,11 @@ const parsePendingFilters = (query: ParsedUrlQuery): PendingProductFilter => {
     const brandNos = parseBrandNos(query.brandNos);
 
     return {
-        ...(deliveryConditionType === 'FREE' && { deliveryConditionType }),
+        ...((deliveryConditionType === 'FREE' ||
+            deliveryConditionType === 'CONDITIONAL' ||
+            deliveryConditionType === 'FIXED_FEE') && {
+            deliveryConditionType,
+        }),
         ...(parseBoolean(query.onlySaleProduct) === true && {
             onlySaleProduct: true as const,
         }),
@@ -201,7 +206,7 @@ export const useProductFilter = ({
             delete nextQuery[key];
         });
 
-        const replacePromise = router.replace(
+        router.replace(
             {
                 pathname: router.pathname,
                 query: nextQuery,
@@ -209,7 +214,6 @@ export const useProductFilter = ({
             undefined,
             { shallow: true },
         );
-        void replacePromise.finally(() => setIsDirty(false));
     }, [router]);
 
     const appliedSearchParams = useMemo((): ProductSearchParams => {
@@ -249,6 +253,15 @@ export const useProductFilter = ({
                 : keywords != null && keywords.trim().length > 0
                 ? keywords.trim()
                 : undefined;
+        const deliveryConditionType = getSingleValue(
+            query.deliveryConditionType,
+        );
+        const resolvedDeliveryConditionType =
+            deliveryConditionType === 'FREE' ||
+            deliveryConditionType === 'CONDITIONAL' ||
+            deliveryConditionType === 'FIXED_FEE'
+                ? deliveryConditionType
+                : undefined;
 
         return {
             ...(resolvedCategoryNos.length > 0 && {
@@ -265,8 +278,8 @@ export const useProductFilter = ({
             },
             filter: {
                 soldout: parseBoolean(query.soldout) === false ? false : true,
-                ...(getSingleValue(query.deliveryConditionType) === 'FREE' && {
-                    deliveryConditionType: 'FREE' as const,
+                ...(resolvedDeliveryConditionType && {
+                    deliveryConditionType: resolvedDeliveryConditionType,
                 }),
                 ...(priceOption?.discountedComparison &&
                     priceOption.discountedPrices && {

@@ -21,6 +21,7 @@ export const ProductListFilter = ({
     categoryNo = 0,
 }: ProductListFilterProps) => {
     const priceRadioGroupId = useId();
+    const deliveryRadioGroupId = useId();
     const {
         pendingFilters,
         appliedSearchParams,
@@ -38,6 +39,15 @@ export const ProductListFilter = ({
                 label: option.name,
             })),
             { value: 'custom', label: '직접 선택' },
+        ],
+        [],
+    );
+
+    const deliveryRadioOptions = useMemo(
+        () => [
+            { value: 'FREE', label: '무료배송' },
+            { value: 'CONDITIONAL', label: '조건부 무료배송' },
+            { value: 'FIXED_FEE', label: '유료배송' },
         ],
         [],
     );
@@ -64,8 +74,8 @@ export const ProductListFilter = ({
                 ...(appliedSearchParams.filter?.keywords && {
                     keywords: appliedSearchParams.filter.keywords,
                 }),
-                ...(pendingFilters.deliveryConditionType === 'FREE' && {
-                    deliveryConditionType: 'FREE' as const,
+                ...(pendingFilters.deliveryConditionType && {
+                    deliveryConditionType: pendingFilters.deliveryConditionType,
                 }),
                 ...(priceOption?.discountedComparison &&
                     priceOption.discountedPrices && {
@@ -153,39 +163,69 @@ export const ProductListFilter = ({
                                 content: (
                                     <ul className={styles.filterContentList}>
                                         <li>
-                                            <label
-                                                className={styles.filterLabel}
+                                            <RadioGroup.Root
+                                                className={
+                                                    styles.priceRadioRoot
+                                                }
+                                                value={
+                                                    pendingFilters.deliveryConditionType ??
+                                                    ''
+                                                }
+                                                onValueChange={(value) => {
+                                                    setPendingFilter(
+                                                        'deliveryConditionType',
+                                                        value as
+                                                            | 'FREE'
+                                                            | 'CONDITIONAL'
+                                                            | 'FIXED_FEE',
+                                                    );
+                                                }}
                                             >
-                                                무료배송
-                                                <InputCheckbox
-                                                    checked={
-                                                        pendingFilters.deliveryConditionType ===
-                                                        'FREE'
-                                                    }
-                                                    onCheckedChange={(
-                                                        checked,
-                                                    ) =>
-                                                        setPendingFilter(
-                                                            'deliveryConditionType',
-                                                            checked
-                                                                ? 'FREE'
-                                                                : undefined,
-                                                        )
-                                                    }
-                                                />
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label
-                                                className={styles.filterLabel}
-                                            >
-                                                빠른배송
-                                                <InputCheckbox
-                                                    checked={false}
-                                                    disabled
-                                                    onCheckedChange={() => {}}
-                                                />
-                                            </label>
+                                                {deliveryRadioOptions.map(
+                                                    (option) => {
+                                                        const itemId = `${deliveryRadioGroupId}-${option.value}`;
+
+                                                        return (
+                                                            <div
+                                                                key={
+                                                                    option.value
+                                                                }
+                                                                className={
+                                                                    styles.radioContainer
+                                                                }
+                                                            >
+                                                                <label
+                                                                    className={
+                                                                        styles.filterLabel
+                                                                    }
+                                                                    htmlFor={
+                                                                        itemId
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        option.label
+                                                                    }
+                                                                </label>
+                                                                <RadioGroup.Item
+                                                                    className={
+                                                                        radioStyles.radioItem
+                                                                    }
+                                                                    id={itemId}
+                                                                    value={
+                                                                        option.value
+                                                                    }
+                                                                >
+                                                                    <RadioGroup.Indicator
+                                                                        className={
+                                                                            radioStyles.radioIndicator
+                                                                        }
+                                                                    />
+                                                                </RadioGroup.Item>
+                                                            </div>
+                                                        );
+                                                    },
+                                                )}
+                                            </RadioGroup.Root>
                                         </li>
                                         <li>
                                             <label
