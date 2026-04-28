@@ -1,5 +1,4 @@
 import { isEmpty } from '@fxts/core';
-import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,52 +11,39 @@ import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filt
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import { OrderOptions } from '@/components/mypage/orders/order-options';
 import Paging from '@/components/ui/paging';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
+import {
+    claimsTabSpec,
+} from '@/entities/mypage/utils/tabs';
 import {
     useInfiniteMemberClaimList,
     useMemberClaimList,
 } from '@/hooks/query/claim/member';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
-import type { ClaimType } from '@/models';
 import * as styles from '@/pages/mypage/claims/index.css';
 
 const Claims = () => {
     const { isMobile } = useResponsive();
     const { t } = useTranslation();
-    const router = useRouter();
 
-    const claimTabList = [
-        { value: 'ALL', label: t('전체') },
-        { value: 'CANCEL', label: t('취소') },
-        { value: 'EXCHANGE', label: t('교환') },
-        { value: 'RETURN', label: t('반품') },
-    ];
+    const claimTabList = useMemo(() => claimsTabSpec.options(t), [t]);
 
-    const claimType = String(router.query.claimType ?? '') || undefined;
-
-    const parseClaimType = useMemo((): ClaimType | undefined => {
-        switch (claimType) {
-            case 'CANCEL':
-                return 'CANCEL';
-            case 'EXCHANGE':
-                return 'EXCHANGE';
-            case 'RETURN':
-                return 'RETURN';
-            default:
-                return undefined;
-        }
-    }, [claimType]);
-
-    const startYmd = String(router.query.startYmd ?? '');
-    const endYmd = String(router.query.endYmd ?? '');
+    const [{ startYmd, endYmd, pageNumber, claimType }, setQuery] =
+        useMypageListQueryParams(
+            {
+                claimType: claimsTabSpec.parser,
+            },
+            { history: 'push' },
+        );
 
     const parseSearchParams = {
-        pageNumber: Number(router.query.pageNumber) || 1,
+        pageNumber,
         pageSize: 10,
         hasTotalCount: true,
         startYmd,
         endYmd,
-        claimTypes: parseClaimType ? [parseClaimType] : null,
+        claimTypes: claimsTabSpec.resolveClaimTypes(claimType),
     };
 
     const { data: profileData } = useProfile();
@@ -108,20 +94,6 @@ const Claims = () => {
         ? isInfiniteMemberClaimListLoading
         : isMemberClaimListLoading;
 
-    const setQuery = (next: Record<string, string | number | undefined>) => {
-        void router.replace(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    ...next,
-                },
-            },
-            undefined,
-            { shallow: true },
-        );
-    };
-
     return (
         <div className={card.container}>
             <section className={card.section}>
@@ -130,12 +102,14 @@ const Claims = () => {
                         <SegmentedToggle
                             className={card.toggleGroup}
                             buttonClassName={card.toggleButton}
-                            defaultValue={parseClaimType ?? 'ALL'}
+                            defaultValue='ALL'
+                            value={claimType}
                             options={claimTabList}
                             onChange={(value) => {
-                                setQuery({
-                                    claimType: value,
-                                });
+                                setQuery(
+                                    { claimType: value },
+                                    { resetPage: true },
+                                );
                             }}
                         />
 

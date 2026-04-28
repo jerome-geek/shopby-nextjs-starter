@@ -1,11 +1,16 @@
 import { isEmpty } from '@fxts/core';
-import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQueryStates } from 'nuqs';
 
 import { SearchIcon } from '@/components/icons';
 import * as styles from '@/components/mypage/filters/keyword-search-query-filter/index.css';
 import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
+import {
+    parseAsEnum,
+    parseAsOptionalString,
+    parseAsPositiveInt,
+} from '@/entities/mypage/utils/parsers';
 import { useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
@@ -23,13 +28,6 @@ export interface MypageKeywordSearchQueryFilterProps {
     pageKey?: string;
     placeholder?: string;
 }
-
-const getQueryString = (query: string | string[] | undefined) => {
-    if (Array.isArray(query)) {
-        return query[0];
-    }
-    return query;
-};
 
 type RowProps = {
     keywordKey: string;
@@ -57,23 +55,46 @@ const MypageKeywordSearchFilterRow = ({
     const { isMobile } = useResponsive();
 
     const { t } = useTranslation();
-    const router = useRouter();
     const keywordInputRef = useRef<HTMLInputElement>(null);
 
     const isTypeSelectUsed = !isEmpty(typeOptions);
+
+    const allowedTypeValues = useMemo(() => {
+        return typeOptions.map((option) => option.value);
+    }, [typeOptions]);
+
+    const [query, setQueryStates] = useQueryStates(
+        {
+            [keywordKey]: parseAsOptionalString,
+            ...(isTypeSelectUsed
+                ? {
+                      [typeKey]: parseAsEnum(allowedTypeValues).withDefault(
+                          typeDefault,
+                      ),
+                  }
+                : {}),
+            [pageKey]: parseAsPositiveInt.withDefault(1),
+        } as never,
+        { shallow: true, history: 'push' },
+    );
+
+    const keywordFromUrl = (query as Record<string, string | null>)[keywordKey];
+    const typeFromUrl = isTypeSelectUsed
+        ? (query as Record<string, string | null>)[typeKey]
+        : undefined;
 
     const typeOptionFromUrl = useMemo(() => {
         if (!isTypeSelectUsed) {
             return undefined;
         }
 
-        const current = type ?? typeDefault;
+        const current = typeFromUrl ?? typeDefault;
 
         return (
             typeOptions.find((option) => option.value === current) ??
             typeOptions[0]
         );
-    }, [isTypeSelectUsed, typeDefault, type, typeOptions]);
+    }, [isTypeSelectUsed, typeDefault, typeFromUrl, typeOptions]);
 
     const [typeDraft, setTypeDraft] = useState<
         KeywordSearchQueryTypeOption | undefined
@@ -82,7 +103,7 @@ const MypageKeywordSearchFilterRow = ({
             return undefined;
         }
 
-        const current = type ?? typeDefault;
+        const current = typeFromUrl ?? typeDefault;
 
         return (
             typeOptions.find((option) => option.value === current) ??
@@ -91,20 +112,26 @@ const MypageKeywordSearchFilterRow = ({
     });
 
     const setQuery = (next: Record<string, string | number | undefined>) => {
-        const isPageKeyIncludedInPatch = Boolean(next[pageKey]);
+        const isPageKeyIncludedInPatch = next[pageKey] !== undefined;
 
-        void router.replace(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    ...next,
-                    ...(isPageKeyIncludedInPatch ? {} : { [pageKey]: 1 }),
-                },
-            },
-            undefined,
-            { shallow: true },
-        );
+        const patch: Record<string, string | number | null> = {};
+        if (keywordKey in next) {
+            patch[keywordKey] = next[keywordKey]
+                ? String(next[keywordKey])
+                : null;
+        }
+
+        if (isTypeSelectUsed && typeKey in next) {
+            patch[typeKey] = next[typeKey] ? String(next[typeKey]) : null;
+        }
+
+        if (isPageKeyIncludedInPatch) {
+            patch[pageKey] = Number(next[pageKey]) || 1;
+        } else {
+            patch[pageKey] = 1;
+        }
+
+        setQueryStates(patch as never);
     };
 
     const onSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -154,9 +181,9 @@ const MypageKeywordSearchFilterRow = ({
 
                 <div className={styles.inputWrapper}>
                     <InputField
-                        key={`${keywordKey}-${keyword ?? ''}`}
+                        key={`${keywordKey}-${keywordFromUrl ?? ''}`}
                         ref={keywordInputRef}
-                        defaultValue={keyword ?? ''}
+                        defaultValue={keywordFromUrl ?? ''}
                         placeholder={
                             placeholder ?? t('검색어를 입력해 주세요.')
                         }
@@ -180,28 +207,12 @@ export const MypageKeywordSearchQueryFilter = ({
     pageKey = 'pageNumber',
     placeholder,
 }: MypageKeywordSearchQueryFilterProps) => {
-    const router = useRouter();
-
     const isTypeSelectUsed = !isEmpty(typeOptions);
 
     const typeDefault = typeDefaultProp ?? typeOptions?.[0]?.value ?? '';
 
-    const keyword = getQueryString(router.query[keywordKey]);
-
-    const type = isTypeSelectUsed
-        ? getQueryString(router.query[typeKey])
-        : undefined;
-
-    const optionValuesKey =
-        typeOptions?.map((option) => option.value).join('\0') ?? '';
-
-    const mountKey = isTypeSelectUsed
-        ? `${typeKey}:${type ?? typeDefault}:${optionValuesKey}`
-        : 'keyword-only';
-
     return (
         <MypageKeywordSearchFilterRow
-            key={mountKey}
             keywordKey={keywordKey}
             typeKey={typeKey}
             pageKey={pageKey}
@@ -209,8 +220,6 @@ export const MypageKeywordSearchQueryFilter = ({
             typeOmitValue={typeOmitValue}
             typeOptions={typeOptions}
             typeDefault={typeDefault}
-            type={type}
-            keyword={keyword}
         />
     );
 };

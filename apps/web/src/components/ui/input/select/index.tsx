@@ -37,6 +37,19 @@ export const Select = <
             isSearchable={false}
             noOptionsMessage={() => t('검색 결과가 없습니다.')}
             components={{
+                Menu: (menuProps) => {
+                    return (
+                        <components.Menu
+                            {...menuProps}
+                            className={clsx(
+                                menuProps.className,
+                                menuProps.placement === 'top'
+                                    ? s.menuTop
+                                    : s.menuBottom,
+                            )}
+                        />
+                    );
+                },
                 MenuList: (props) => {
                     return (
                         <div data-lenis-prevent>
@@ -62,7 +75,6 @@ export const Select = <
                 control: (state) =>
                     clsx(
                         s.control({
-                            isFocused: state.isFocused,
                             isDisabled: state.isDisabled,
                         }),
                         overridenClassNames?.control?.(state),

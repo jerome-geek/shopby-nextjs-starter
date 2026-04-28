@@ -1,21 +1,23 @@
 import { isEmpty } from '@fxts/core';
 import dayjs from 'dayjs';
 import { Star } from 'lucide-react';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import OptionText from '@/components/mypage/common/option-text';
 import * as styles from '@/components/mypage/review/review-list/index.css';
 import { Button } from '@/components/ui/button';
 import Paging from '@/components/ui/paging';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { useMyReviewList } from '@/hooks/query/display/review';
-import { useMypageQueryState } from '@/hooks/useMypageQueryState';
 import { useResponsive } from '@/hooks/utils';
-import OptionText from '@/components/mypage/common/option-text';
+
+const PAGE_SIZE = 12;
 
 export const MyReviewListView = () => {
     const { t } = useTranslation();
@@ -23,18 +25,18 @@ export const MyReviewListView = () => {
 
     const { isMobile } = useResponsive();
 
-    const { startYmd, endYmd, pageNumber, pageSize, setQuery } =
-        useMypageQueryState();
+    const [{ startYmd, endYmd, pageNumber }, setQuery] =
+        useMypageListQueryParams();
 
     const searchParams = useMemo(
         () => ({
             pageNumber,
-            pageSize,
+            pageSize: PAGE_SIZE,
             hasTotalCount: true,
             startYmd,
             endYmd,
         }),
-        [pageNumber, pageSize, startYmd, endYmd],
+        [pageNumber, startYmd, endYmd],
     );
 
     const { data: myReviewListData, isLoading: isMyReviewListLoading } =
@@ -215,8 +217,10 @@ export const MyReviewListView = () => {
                     <Paging
                         currentPage={pageNumber}
                         totalCount={totalCount}
-                        pageSize={pageSize}
-                        onPageClick={(page) => setQuery({ pageNumber: page })}
+                        pageSize={PAGE_SIZE}
+                        onPageClick={(page) =>
+                            setQuery({ pageNumber: page })
+                        }
                     />
                 </div>
             </LoadingWrapper>

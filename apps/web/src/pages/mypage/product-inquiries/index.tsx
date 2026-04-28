@@ -17,38 +17,21 @@ import { CustomAccordion } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import Paging from '@/components/ui/paging';
 import { PATHS } from '@/const/paths';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
+import {
+    productInquiriesAnsweredTabSpec,
+    productInquiriesSearchKeywordParser,
+    productInquiriesSearchTypeParser,
+} from '@/entities/mypage/utils/tabs';
 import { useProductInquiryMutation } from '@/hooks/mutations';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useMyProductInquiryList } from '@/hooks/query/display/productInquiry';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import type { ProductInquirySearchType } from '@/models';
 import * as styles from '@/pages/mypage/product-inquiries/index.css';
 
 const PAGE_SIZE = 10;
-
-const toAnswered = (value?: string): boolean | undefined => {
-    switch (value) {
-        case 'true':
-            return true;
-        case 'false':
-            return false;
-        default:
-            return undefined;
-    }
-};
-
-const toSearchType = (value?: string): ProductInquirySearchType | undefined => {
-    switch (value) {
-        case 'ALL':
-        case 'PRODUCT_NAME':
-        case 'CONTENT':
-            return value;
-        default:
-            return undefined;
-    }
-};
 
 export const MypageProductInquiries = () => {
     const { t } = useTranslation();
@@ -60,29 +43,29 @@ export const MypageProductInquiries = () => {
     const { data: profileData } = useProfile();
     const { data: mallData } = useMall();
 
-    const answeredQuery = router.query.answered as string | undefined;
-    const searchTypeQuery = router.query.searchType as string | undefined;
-    const searchKeywordQuery = router.query.searchKeyword as string | undefined;
-    const startYmd = String(router.query.startYmd ?? '') || undefined;
-    const endYmd = String(router.query.endYmd ?? '') || undefined;
-    const pageNumber = Number(router.query.pageNumber) || 1;
-
-    const parsedAnswered = useMemo(
-        () => toAnswered(answeredQuery),
-        [answeredQuery],
+    const [
+        { startYmd, endYmd, pageNumber, answered, searchType, searchKeyword },
+        setQuery,
+    ] = useMypageListQueryParams(
+        {
+            answered: productInquiriesAnsweredTabSpec.parser,
+            searchType: productInquiriesSearchTypeParser,
+            searchKeyword: productInquiriesSearchKeywordParser,
+        },
+        { history: 'push' },
     );
 
+    const parsedAnswered = useMemo(
+        () => productInquiriesAnsweredTabSpec.resolveAnsweredParam(answered),
+        [answered],
+    );
     const parsedSearchType = useMemo(
-        () => toSearchType(searchTypeQuery ?? 'ALL'),
-        [searchTypeQuery],
+        () => (searchType === 'ALL' ? undefined : searchType),
+        [searchType],
     );
 
     const tabOptions = useMemo(
-        () => [
-            { value: 'ALL' as const, label: t('전체') },
-            { value: 'false' as const, label: t('답변 대기') },
-            { value: 'true' as const, label: t('답변 완료') },
-        ],
+        () => productInquiriesAnsweredTabSpec.options(t),
         [t],
     );
 
@@ -95,24 +78,6 @@ export const MypageProductInquiries = () => {
         [t],
     );
 
-    const setQuery = useCallback(
-        (next: Record<string, string | number | undefined>) => {
-            router.replace(
-                {
-                    pathname: router.pathname,
-                    query: {
-                        ...router.query,
-                        ...next,
-                        ...(next.pageNumber ? {} : { pageNumber: 1 }),
-                    },
-                },
-                undefined,
-                { shallow: true },
-            );
-        },
-        [router],
-    );
-
     const searchParams = useMemo(
         () => ({
             pageSize: PAGE_SIZE,
@@ -120,7 +85,7 @@ export const MypageProductInquiries = () => {
             startYmd,
             endYmd,
             answered: parsedAnswered,
-            searchKeyword: searchKeywordQuery || undefined,
+            searchKeyword: searchKeyword || undefined,
             searchType: parsedSearchType,
             pageNumber,
         }),
@@ -128,7 +93,7 @@ export const MypageProductInquiries = () => {
             startYmd,
             endYmd,
             parsedAnswered,
-            searchKeywordQuery,
+            searchKeyword,
             parsedSearchType,
             pageNumber,
         ],
@@ -189,19 +154,13 @@ export const MypageProductInquiries = () => {
                             className={card.toggleGroup}
                             buttonClassName={card.toggleButton}
                             defaultValue='ALL'
-                            value={
-                                parsedAnswered === undefined
-                                    ? 'ALL'
-                                    : String(parsedAnswered)
-                            }
+                            value={answered}
                             options={tabOptions}
                             onChange={(nextValue) => {
-                                setQuery({
-                                    answered:
-                                        nextValue === 'ALL'
-                                            ? undefined
-                                            : nextValue,
-                                });
+                                setQuery(
+                                    { answered: nextValue },
+                                    { resetPage: true },
+                                );
                             }}
                         />
 

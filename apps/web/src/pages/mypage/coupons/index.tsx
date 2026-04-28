@@ -1,22 +1,23 @@
+import { isEmpty } from '@fxts/core';
 import dayjs from 'dayjs';
 import { AnimatePresence, motion } from 'motion/react';
-import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isBoolean, isEmpty } from '@fxts/core';
 
 import { CouponRegisterBottomSheet } from '@/components/bottom-sheet/coupon-register';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
 import { CouponRegisterModal } from '@/components/modal/coupon-register';
+import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { CouponConstraintDetailContent } from '@/components/mypage/coupons/constraint-detail-content';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
 import Paging from '@/components/ui/paging';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
+import { couponUsableTabSpec } from '@/entities/mypage/utils/tabs';
 import { useUserCoupons } from '@/hooks/query/promotion/coupon';
 import { useResponsive } from '@/hooks/utils';
 import { useCoupons } from '@/hooks/utils/useCoupons';
@@ -25,39 +26,22 @@ import * as styles from '@/pages/mypage/coupons/index.css';
 
 const PAGE_SIZE = 10;
 
-const toCouponUsable = (usable?: string) => {
-    switch (usable) {
-        case 'true':
-            return true;
-        case 'false':
-            return false;
-        default:
-            return undefined;
-    }
-};
-
 export const MypageCoupons = () => {
     const { t } = useTranslation();
-    const router = useRouter();
     const { isMobile } = useResponsive();
     const { getBenefitAmt, getCouponType } = useCoupons();
 
-    const usableQuery = router.query.usable as string;
+    const tabOptions = useMemo(() => couponUsableTabSpec.options(t), [t]);
 
-    const tabOptions = useMemo(
-        () => [
-            { value: 'all', label: t('전체') },
-            { value: 'true', label: t('사용 가능 쿠폰') },
-            { value: 'false', label: t('사용 불가 쿠폰') },
-        ],
-        [t],
-    );
+    const [{ startYmd, endYmd, pageNumber, usable }, setQuery] =
+        useMypageListQueryParams(
+            {
+                usable: couponUsableTabSpec.parser,
+            },
+            { history: 'push' },
+        );
 
-    const usableTab = toCouponUsable(usableQuery);
-
-    const startYmd = String(router.query.startYmd ?? '') || undefined;
-    const endYmd = String(router.query.endYmd ?? '') || undefined;
-    const pageNumber = Number(router.query.pageNumber) || 1;
+    const usableTab = couponUsableTabSpec.resolveUsable(usable);
 
     const searchParams = useMemo(
         () => ({
@@ -71,21 +55,6 @@ export const MypageCoupons = () => {
         }),
         [pageNumber, startYmd, endYmd, usableTab],
     );
-
-    const setQuery = (next: Record<string, string | number | undefined>) => {
-        router.replace(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    ...next,
-                    ...(next.pageNumber ? {} : { pageNumber: 1 }),
-                },
-            },
-            undefined,
-            { shallow: true },
-        );
-    };
 
     const { data: couponListData, isLoading: isCouponListLoading } =
         useUserCoupons({
@@ -155,17 +124,13 @@ export const MypageCoupons = () => {
                             className={card.toggleGroup}
                             buttonClassName={card.toggleButton}
                             defaultValue='all'
-                            value={
-                                isBoolean(usableTab) ? String(usableTab) : 'all'
-                            }
+                            value={usable}
                             options={tabOptions}
                             onChange={(nextValue) => {
-                                setQuery({
-                                    usable:
-                                        nextValue === 'all'
-                                            ? undefined
-                                            : nextValue,
-                                });
+                                setQuery(
+                                    { usable: nextValue },
+                                    { resetPage: true },
+                                );
                             }}
                         />
 

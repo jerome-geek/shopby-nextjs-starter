@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { motion } from 'motion/react';
+import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/mypage/filters/segmented-toggle/index.css';
@@ -39,6 +40,8 @@ export const SegmentedToggle = <T extends string>({
     className,
     buttonClassName,
 }: SegmentedToggleProps<T>) => {
+    const router = useRouter();
+
     const activeSegment = isOptionValue(options, value)
         ? value
         : isOptionValue(options, defaultValue)
@@ -73,7 +76,7 @@ export const SegmentedToggle = <T extends string>({
                             {option.value === activeSegment && (
                                 <motion.div
                                     className={styles.indicator}
-                                    layoutId='tab-indicator'
+                                    layoutId={`${router.pathname}-tab-indicator`}
                                     initial={{
                                         y: 'none',
                                     }}

@@ -1,12 +1,13 @@
 import { pipe, when } from '@fxts/core';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { DayPicker, type DateRange } from 'react-day-picker';
+import { DayPicker, type DateRange, type DropdownProps } from 'react-day-picker';
 import { ko } from 'react-day-picker/locale';
 import { useTranslation } from 'react-i18next';
 
-import { type DefaultModalLayoutProps } from '@/components/layout/modal';
 import * as styles from '@/components/layer-contents/period-range-picker/index.css';
+import { type DefaultModalLayoutProps } from '@/components/layout';
+import { Select } from '@/components/ui/input/select';
 import useResponsive from '@/hooks/utils/useResponsive';
 import { vars } from '@/styles/theme.css';
 
@@ -14,6 +15,42 @@ interface PeriodRangePickerProps extends DefaultModalLayoutProps {
     initialRange?: DateRange;
     onApply: (range: DateRange) => void;
 }
+
+const DayPickerDropdown = ({
+    options = [],
+    value,
+    onChange,
+    disabled,
+    name,
+    'aria-label': ariaLabel,
+}: DropdownProps) => {
+    const normalizedOptions = options.map((option) => ({
+        value: option.value,
+        label: option.label,
+        isDisabled: option.disabled,
+    }));
+
+    const selected =
+        normalizedOptions.find((option) => option.value === Number(value)) ?? null;
+
+    return (
+        <Select
+            instanceId={name ?? ariaLabel ?? 'daypicker-dropdown'}
+            aria-label={ariaLabel ?? name}
+            isDisabled={disabled}
+            menuPortalTarget={typeof document === 'undefined' ? null : document.body}
+            value={selected}
+            options={normalizedOptions}
+            onChange={(next) => {
+                const nextValue =
+                    next && typeof next === 'object' && 'value' in next
+                        ? String(next.value)
+                        : '';
+                onChange?.({ target: { value: nextValue, name } } as never);
+            }}
+        />
+    );
+};
 
 export const PeriodRangePicker = ({
     close,
@@ -56,7 +93,7 @@ export const PeriodRangePicker = ({
                 ? `${range?.from?.toLocaleDateString()} - ${range?.to?.toLocaleDateString()}`
                 : t('기간 선택');
         submitButton.disabled = !range?.from || !range?.to;
-    }, [range]);
+    }, [range, t]);
 
     return (
         <div className={styles.container} data-lenis-prevent>
@@ -72,6 +109,7 @@ export const PeriodRangePicker = ({
                     hideNavigation
                     locale={ko}
                     captionLayout='dropdown'
+                    components={{ Dropdown: DayPickerDropdown }}
                     startMonth={dayjs()
                         .subtract(10, 'year')
                         .startOf('year')

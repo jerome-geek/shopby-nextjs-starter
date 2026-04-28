@@ -36,7 +36,15 @@ globalStyle(`.${calendarWrapper} .rdp-root`, {
 } as unknown as Record<string, string>);
 
 globalStyle(`.${calendarWrapper} .rdp-months`, {
-    margin: '0 auto',
+    width: '100%',
+});
+
+globalStyle(`.${calendarWrapper} .rdp-month`, {
+    width: '100%',
+});
+
+globalStyle(`.${calendarWrapper} .rdp-month_grid`, {
+    margin: '20px auto 0',
 });
 
 globalStyle(`.${calendarWrapper} .rdp-day_button`, {
@@ -77,7 +85,15 @@ globalStyle(`.${calendarWrapper} .rdp-month_caption`, {
     padding: '24px 0',
 });
 
+globalStyle(`.${calendarWrapper} .rdp-dropdowns`, {
+    width: '100%',
+    display: 'flex',
+    gap: 8,
+});
+
 globalStyle(`.${calendarWrapper} .rdp-dropdown_root`, {
+    flex: '1 1 0',
+    width: '50%',
     padding: '0 6px',
 });
 

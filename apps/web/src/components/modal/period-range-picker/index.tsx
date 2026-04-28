@@ -25,7 +25,7 @@ export const PeriodRangePickerModal = ({
             close={close}
             unmount={unmount}
             title={t('기간 선택')}
-            size='medium'
+            size='small'
             footerButtonList={[
                 <Button
                     key='period-range-picker-submit-button'

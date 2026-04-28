@@ -1,9 +1,9 @@
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 
 import * as styles from '@/components/layout/modal/index.css';
-import { useKeyDown } from '@/hooks/utils';
+import { useKeyDown, useResponsive } from '@/hooks/utils';
 
 export interface DefaultModalLayoutProps {
     overlayId?: string;
@@ -34,7 +34,17 @@ export const ModalLayout = ({
     height,
     modalContentClass,
 }: ModalLayoutProps) => {
-    // ESC 키로 모달 닫기 지원
+    const { isMobile } = useResponsive();
+
+    useEffect(
+        function unmountOnMobile() {
+            if (isMobile) {
+                unmount();
+            }
+        },
+        [isMobile, unmount],
+    );
+
     useKeyDown({
         key: 'Escape',
         fn: () => {

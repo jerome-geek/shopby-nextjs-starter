@@ -1,38 +1,40 @@
+import { isEmpty } from '@fxts/core';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
-import { isEmpty } from '@fxts/core';
 
-import { MypageLayout } from '@/components/layout';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
-import Paging from '@/components/ui/paging';
-import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
+import { MypageLayout } from '@/components/layout';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
-import { useInfiniteMyOrderList } from '@/hooks/query/order/myOrder';
+import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
+import Paging from '@/components/ui/paging';
+import useProfile from '@/hooks/query/member/profile/useProfile';
 import {
+    useInfiniteMyOrderList,
     useMyOrderList,
     useOrderStatusSummary,
 } from '@/hooks/query/order/myOrder';
-import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
-import { DEFAULT_ORDER_TAB_TYPES } from '@/const/order';
-import type { OrderRequestStatusType } from '@/models';
-import { OrderOptions } from '@/components/mypage/orders/order-options';
+
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import { OrderOptions } from '@/components/mypage/orders/order-options';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
+import { ordersStatusTabSpec } from '@/entities/mypage/utils/tabs';
 
 const PAGE_SIZE = 10;
 
 export const Orders = () => {
     const { isMobile } = useResponsive();
     const { t } = useTranslation();
-    const router = useRouter();
 
-    const startYmd = String(router.query.startYmd ?? '') || undefined;
-    const endYmd = String(router.query.endYmd ?? '') || undefined;
-    const pageNumber = Number(router.query.pageNumber) || 1;
-    const orderStatus = String(router.query.orderStatus ?? '');
+    const [{ startYmd, endYmd, pageNumber, orderStatus }, setQuery] =
+        useMypageListQueryParams(
+            {
+                orderStatus: ordersStatusTabSpec.parser,
+            },
+            { history: 'push' },
+        );
 
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo || 0;
@@ -42,58 +44,13 @@ export const Orders = () => {
     });
 
     const orderTabList = useMemo(
-        () => [
-            {
-                value: DEFAULT_ORDER_TAB_TYPES.join(','),
-                label: t('전체'),
-            },
-            {
-                value: 'DEPOSIT_WAIT',
-                label:
-                    t('입금대기') +
-                    ` ${orderStatusSummaryData?.depositWaitCnt ?? 0}`,
-            },
-            {
-                value: 'PAY_DONE',
-                label:
-                    t('결제완료') +
-                    ` ${orderStatusSummaryData?.payDoneCnt ?? 0}`,
-            },
-            {
-                value: 'PRODUCT_PREPARE,DELIVERY_PREPARE',
-                label:
-                    t('출고대기') +
-                    ` ${orderStatusSummaryData?.productPrepareCnt ?? 0}`,
-            },
-            {
-                value: 'DELIVERY_ING',
-                label:
-                    t('배송중') +
-                    ` ${orderStatusSummaryData?.deliveryIngCnt ?? 0}`,
-            },
-            {
-                value: 'DELIVERY_DONE',
-                label:
-                    t('배송완료') +
-                    ` ${orderStatusSummaryData?.deliveryDoneCnt ?? 0}`,
-            },
-            {
-                value: 'BUY_CONFIRM',
-                label:
-                    t('구매확정') +
-                    ` ${orderStatusSummaryData?.buyConfirmCnt ?? 0}`,
-            },
-        ],
+        () => ordersStatusTabSpec.options(t, orderStatusSummaryData),
         [orderStatusSummaryData, t],
     );
 
     const parseOrderStatus = useMemo(() => {
-        const found = orderTabList.find((tab) => tab.value === orderStatus);
-        if (found) {
-            return found.value.split(',') as OrderRequestStatusType[];
-        }
-        return DEFAULT_ORDER_TAB_TYPES;
-    }, [orderStatus, orderTabList]);
+        return ordersStatusTabSpec.resolveRequestTypes(orderStatus);
+    }, [orderStatus]);
 
     const searchParams = useMemo(
         () => ({
@@ -106,21 +63,6 @@ export const Orders = () => {
         }),
         [pageNumber, startYmd, endYmd, parseOrderStatus],
     );
-
-    const setQuery = (next: Record<string, string | number | undefined>) => {
-        void router.replace(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    ...next,
-                    ...(next.pageNumber ? {} : { pageNumber: 1 }),
-                },
-            },
-            undefined,
-            { shallow: true },
-        );
-    };
 
     const { data: myOrderListData, isLoading: isMyOrderListLoading } =
         useMyOrderList({
@@ -172,13 +114,14 @@ export const Orders = () => {
                         <SegmentedToggle
                             className={card.toggleGroup}
                             buttonClassName={card.toggleButton}
-                            value={
-                                orderStatus || DEFAULT_ORDER_TAB_TYPES.join(',')
-                            }
-                            defaultValue={DEFAULT_ORDER_TAB_TYPES.join(',')}
+                            value={orderStatus}
+                            defaultValue={ordersStatusTabSpec.defaultValue}
                             options={orderTabList}
                             onChange={(value) => {
-                                setQuery({ orderStatus: value });
+                                setQuery(
+                                    { orderStatus: value },
+                                    { resetPage: true },
+                                );
                             }}
                         />
 

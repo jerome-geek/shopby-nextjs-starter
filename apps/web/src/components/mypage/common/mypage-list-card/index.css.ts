@@ -48,12 +48,6 @@ export const toolbar = style({
     alignItems: 'stretch',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
-
-    '@media': {
-        [media.mobile]: {
-            display: 'none',
-        },
-    },
 });
 
 export const toolbarTop = style({

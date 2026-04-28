@@ -1,16 +1,17 @@
 import dayjs from 'dayjs';
 import { clsx } from 'clsx';
-import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DateRange } from 'react-day-picker';
 import { overlay } from 'overlay-kit';
+import { useQueryStates } from 'nuqs';
 
 import { Select } from '@/components/ui/input';
 import { PeriodRangePickerModal } from '@/components/modal/period-range-picker';
 import * as styles from '@/components/mypage/filters/period-query-filter/index.css';
 import { useResponsive } from '@/hooks/utils';
 import { PeriodRangePickerBottomSheet } from '@/components/bottom-sheet/period-range-picker';
+import { parseAsPositiveInt, parseAsYmd } from '@/entities/mypage/utils/parsers';
 
 export type PeriodPreset = '7d' | '3m' | '6m' | '1y' | 'custom';
 export type PeriodPresetOption = { value: PeriodPreset; label: string };
@@ -74,12 +75,20 @@ export const PeriodQueryFilter = ({
     className,
 }: PeriodQueryFilterProps) => {
     const { t } = useTranslation();
-    const router = useRouter();
 
     const { isMobile } = useResponsive();
 
-    const startYmd = String(router.query[startKey] ?? '');
-    const endYmd = String(router.query[endKey] ?? '');
+    const [query, setQueryStates] = useQueryStates(
+        {
+            [startKey]: parseAsYmd,
+            [endKey]: parseAsYmd,
+            ...(pageKey ? { [pageKey]: parseAsPositiveInt } : {}),
+        } as const,
+        { shallow: true, history: 'push' },
+    );
+
+    const startYmd = String((query as Record<string, string | number | null>)[startKey] ?? '');
+    const endYmd = String((query as Record<string, string | number | null>)[endKey] ?? '');
 
     const activePreset = useMemo(
         () => getActivePreset(startYmd, endYmd),
@@ -99,19 +108,7 @@ export const PeriodQueryFilter = ({
 
     const setQuery = (next: Record<string, string | number | undefined>) => {
         const pageReset = pageKey ? { [pageKey]: 1 } : {};
-
-        void router.replace(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    ...next,
-                    ...pageReset,
-                },
-            },
-            undefined,
-            { shallow: true },
-        );
+        setQueryStates({ ...(next as object), ...(pageReset as object) } as never);
     };
 
     const openCustomPicker = () => {

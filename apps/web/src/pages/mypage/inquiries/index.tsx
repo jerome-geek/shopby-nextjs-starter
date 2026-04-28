@@ -16,37 +16,21 @@ import { CustomAccordion } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import Paging from '@/components/ui/paging';
 import { PATHS } from '@/const/paths';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
+import {
+    inquiriesKeywordParser,
+    inquiriesSearchTypeParser,
+    inquiriesStatusTabSpec,
+} from '@/entities/mypage/utils/tabs';
 import { useInquiryMutation } from '@/hooks/mutations';
 import { useInquiryList } from '@/hooks/query/manage/inquiry';
 import { useToast } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import type { InquirySearchType, InquiryStatusType } from '@/models';
 import * as styles from '@/pages/mypage/inquiries/index.css';
 
 const PAGE_SIZE = 10;
 
 type SearchTypeTab = 'ALL' | 'TITLE' | 'CONTENT';
-
-const toInquiryStatus = (value?: string): InquiryStatusType | undefined => {
-    switch (value) {
-        case 'ISSUED':
-        case 'ANSWERED':
-            return value;
-        default:
-            return undefined;
-    }
-};
-
-const toSearchType = (value?: string): InquirySearchType | undefined => {
-    switch (value) {
-        case 'ALL':
-        case 'TITLE':
-        case 'CONTENT':
-            return value;
-        default:
-            return undefined;
-    }
-};
 
 export const MypageInquiries = () => {
     const { t } = useTranslation();
@@ -54,34 +38,19 @@ export const MypageInquiries = () => {
     const { isMobile } = useResponsive();
     const { openAsyncDialog } = useDialog();
     const { addToast } = useToast();
-
-    const inquiryStatusQuery = router.query.inquiryStatus as string | undefined;
-    const searchTypeQuery =
-        (router.query.searchType as string | undefined) ?? 'ALL';
-    const keywordQuery = router.query.keyword as string | undefined;
-
-    const startYmd = String(router.query.startYmd ?? '') || undefined;
-    const endYmd = String(router.query.endYmd ?? '') || undefined;
-    const pageNumber = Number(router.query.pageNumber) || 1;
-
-    const parseInquiryStatus = useMemo(
-        () => toInquiryStatus(inquiryStatusQuery),
-        [inquiryStatusQuery],
+    const [
+        { startYmd, endYmd, pageNumber, inquiryStatus, searchType, keyword },
+        setQuery,
+    ] = useMypageListQueryParams(
+        {
+            inquiryStatus: inquiriesStatusTabSpec.parser,
+            searchType: inquiriesSearchTypeParser,
+            keyword: inquiriesKeywordParser,
+        },
+        { history: 'push' },
     );
 
-    const parseSearchType = useMemo(
-        () => toSearchType(searchTypeQuery),
-        [searchTypeQuery],
-    );
-
-    const tabOptions = useMemo(
-        () => [
-            { value: 'ALL' as const, label: t('전체') },
-            { value: 'ISSUED' as const, label: t('답변 대기') },
-            { value: 'ANSWERED' as const, label: t('답변 완료') },
-        ],
-        [t],
-    );
+    const tabOptions = useMemo(() => inquiriesStatusTabSpec.options(t), [t]);
 
     const searchTypeOptions = useMemo(
         () => [
@@ -92,43 +61,18 @@ export const MypageInquiries = () => {
         [t],
     );
 
-    const setQuery = useCallback(
-        (next: Record<string, string | number | undefined>) => {
-            router.replace(
-                {
-                    pathname: router.pathname,
-                    query: {
-                        ...router.query,
-                        ...next,
-                        ...(next.pageNumber ? {} : { pageNumber: 1 }),
-                    },
-                },
-                undefined,
-                { shallow: true },
-            );
-        },
-        [router],
-    );
-
     const searchParams = useMemo(
         () => ({
             pageSize: PAGE_SIZE,
             hasTotalCount: true,
-            inquiryStatus: parseInquiryStatus,
+            inquiryStatus: inquiryStatus === 'ALL' ? undefined : inquiryStatus,
             startYmd,
             endYmd,
-            keyword: keywordQuery || undefined,
-            searchType: parseSearchType,
+            keyword: keyword || undefined,
+            searchType: searchType === 'ALL' ? undefined : searchType,
             pageNumber,
         }),
-        [
-            parseInquiryStatus,
-            startYmd,
-            endYmd,
-            keywordQuery,
-            parseSearchType,
-            pageNumber,
-        ],
+        [inquiryStatus, startYmd, endYmd, keyword, searchType, pageNumber],
     );
 
     const { data: inquiryListData, isLoading: isInquiryListLoading } =
@@ -181,15 +125,15 @@ export const MypageInquiries = () => {
                             className={card.toggleGroup}
                             buttonClassName={card.toggleButton}
                             defaultValue='ALL'
-                            value={parseInquiryStatus ?? 'ALL'}
+                            value={inquiryStatus}
                             options={tabOptions}
                             onChange={(nextValue) => {
-                                setQuery({
-                                    inquiryStatus:
-                                        nextValue === 'ALL'
-                                            ? undefined
-                                            : nextValue,
-                                });
+                                setQuery(
+                                    {
+                                        inquiryStatus: nextValue,
+                                    },
+                                    { resetPage: true },
+                                );
                             }}
                         />
 

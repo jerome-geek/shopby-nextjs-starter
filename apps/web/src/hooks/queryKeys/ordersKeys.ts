@@ -34,15 +34,12 @@ const ordersKeys = {
 
     /** 이전 주문내역 조회 */
     previous: () => [...ordersKeys.all, 'previous'] as const,
-    previousList: (memberNo: number, searchParams: GetPreviousOrdersParams) =>
-        [...ordersKeys.previous(), memberNo, searchParams] as const,
-    infinitePreviousList: (
-        memberNo: number,
-        searchParams: GetPreviousOrdersParams,
-    ) =>
-        [...ordersKeys.previous(), 'infinite', memberNo, searchParams] as const,
-    previousDetail: (orderNo: string, memberNo: number) =>
-        [...ordersKeys.previous(), orderNo, memberNo] as const,
+    previousList: (searchParams: GetPreviousOrdersParams) =>
+        [...ordersKeys.previous(), searchParams] as const,
+    infinitePreviousList: (searchParams: GetPreviousOrdersParams) =>
+        [...ordersKeys.previous(), 'infinite', searchParams] as const,
+    previousDetail: (orderNo: string) =>
+        [...ordersKeys.previous(), orderNo] as const,
 
     /** 클레임을 위한 상세 조회 */
     detailsByOrderNo: (

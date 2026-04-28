@@ -1,9 +1,9 @@
-import { recipe } from '@vanilla-extract/recipes';
 import { style } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const container = style({
     width: '100%',
@@ -22,7 +22,6 @@ export const control = recipe({
         height: '44px',
         padding: '0 2px 0 12px',
         backgroundColor: vars.color.white,
-        transition: 'all 0.2s',
         cursor: 'pointer',
 
         '@media': {
@@ -32,11 +31,6 @@ export const control = recipe({
         },
     },
     variants: {
-        isFocused: {
-            true: {
-                borderColor: vars.color.gray['70'],
-            },
-        },
         isDisabled: {
             true: {
                 cursor: 'not-allowed',
@@ -57,17 +51,35 @@ export const menu = style([
     {
         backgroundColor: vars.color.white,
         border: `1px solid ${vars.color.gray['50']}`,
-        borderRadius: '4px',
         boxShadow: vars.shadow.sm,
         overflow: 'hidden',
         animation: 'slideDownFade 0.2s ease-out forwards',
         zIndex: 10,
-        marginTop: 0,
     },
 ]);
 
+export const menuBottom = style({
+    borderRadius: '0 0 4px 4px',
+    marginTop: '-3px',
+});
+
+export const menuTop = style({
+    borderRadius: '4px 4px 0 0',
+    marginBottom: '-3px',
+});
+
 export const menuList = style({
     padding: 0,
+
+    selectors: {
+        '&::-webkit-scrollbar': {
+            width: '4px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: vars.color.gray['30'],
+            borderRadius: '10px',
+        },
+    },
 });
 
 export const option = recipe({

@@ -1,17 +1,20 @@
+import { isEmpty } from '@fxts/core';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isEmpty } from '@fxts/core';
 
-import { CustomAccordion } from '@/components/ui/accordion';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
+import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import { CustomAccordion } from '@/components/ui/accordion';
 import Paging from '@/components/ui/paging';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
+import {
+    accumulationsReasonTabSpec,
+} from '@/entities/mypage/utils/tabs';
 import useAccumulationList from '@/hooks/query/manage/accumulation/useAccumulationList';
 import useAccumulationSummary from '@/hooks/query/manage/accumulation/useAccumulationSummary';
 import useWaitingAccumulation from '@/hooks/query/manage/accumulation/useWaitingAccumulation';
@@ -22,65 +25,34 @@ import { POINT } from '@/utils/currency';
 
 const PAGE_SIZE = 10;
 
-const toAccumulationReason = (reason?: string) => {
-    switch (reason) {
-        case 'ADD':
-            return 'ADD';
-        case 'SUB':
-            return 'SUB';
-        default:
-            return undefined;
-    }
-};
-
 export const MypageAccumulation = () => {
     const { t } = useTranslation();
-    const router = useRouter();
     const { isMobile } = useResponsive();
 
-    const accumulationReasonQuery = router.query.accumulationReason as string;
+    const tabOptions = useMemo(() => accumulationsReasonTabSpec.options(t), [t]);
 
-    const tabOptions = useMemo(
-        () => [
-            { value: 'ALL', label: t('전체') },
-            { value: 'ADD', label: t('적립') },
-            { value: 'SUB', label: t('사용') },
-        ],
-        [t],
-    );
-
-    const accumulationReason = toAccumulationReason(accumulationReasonQuery);
-
-    const startYmd = String(router.query.startYmd ?? '') || undefined;
-    const endYmd = String(router.query.endYmd ?? '') || undefined;
-    const pageNumber = Number(router.query.pageNumber) || 1;
+    const [{ startYmd, endYmd, pageNumber, accumulationReason }, setQuery] =
+        useMypageListQueryParams(
+            {
+                accumulationReason: accumulationsReasonTabSpec.parser,
+            },
+            { history: 'push' },
+        );
 
     const searchParams = useMemo(
         () => ({
             pageNumber,
             pageSize: PAGE_SIZE,
-            accumulationReason: accumulationReason as AccumulationReasonType,
+            accumulationReason:
+                accumulationReason === 'ALL'
+                    ? undefined
+                    : (accumulationReason as AccumulationReasonType),
             hasTotalCount: true,
             startYmd,
             endYmd,
         }),
         [pageNumber, accumulationReason, startYmd, endYmd],
     );
-
-    const setQuery = (next: Record<string, string | number | undefined>) => {
-        router.replace(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    ...next,
-                    ...(next.pageNumber ? {} : { pageNumber: 1 }),
-                },
-            },
-            undefined,
-            { shallow: true },
-        );
-    };
 
     const { data: accumulationSummaryData } = useAccumulationSummary();
     const { data: waitingAccumulationData } = useWaitingAccumulation();
@@ -170,15 +142,13 @@ export const MypageAccumulation = () => {
                             className={card.toggleGroup}
                             buttonClassName={card.toggleButton}
                             defaultValue='ALL'
-                            value={accumulationReason ?? 'ALL'}
+                            value={accumulationReason}
                             options={tabOptions}
                             onChange={(nextValue) => {
-                                setQuery({
-                                    accumulationReason:
-                                        nextValue === 'ALL'
-                                            ? undefined
-                                            : nextValue,
-                                });
+                                setQuery(
+                                    { accumulationReason: nextValue },
+                                    { resetPage: true },
+                                );
                             }}
                         />
 

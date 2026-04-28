@@ -1,7 +1,8 @@
 import { isEmpty } from '@fxts/core';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
@@ -12,27 +13,30 @@ import { Button } from '@/components/ui';
 import Paging from '@/components/ui/paging';
 import { ORDER_STATUS_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
+import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { useReviewableProductList } from '@/hooks/query/display/review';
-import { useMypageQueryState } from '@/hooks/useMypageQueryState';
 import { useResponsive } from '@/hooks/utils';
+
+const PAGE_SIZE = 12;
 
 export const ReviewableListView = () => {
     const { t } = useTranslation();
+    const router = useRouter();
 
     const { isMobile } = useResponsive();
 
-    const { router, startYmd, endYmd, pageNumber, pageSize, setQuery } =
-        useMypageQueryState();
+    const [{ startYmd, endYmd, pageNumber }, setQuery] =
+        useMypageListQueryParams();
 
     const searchParams = useMemo(
         () => ({
             pageNumber,
-            pageSize,
+            pageSize: PAGE_SIZE,
             hasTotalCount: true,
             startDate: startYmd,
             endDate: endYmd,
         }),
-        [pageNumber, pageSize, startYmd, endYmd],
+        [pageNumber, startYmd, endYmd],
     );
 
     const {
@@ -194,8 +198,10 @@ export const ReviewableListView = () => {
                     <Paging
                         currentPage={pageNumber}
                         totalCount={totalCount}
-                        pageSize={pageSize}
-                        onPageClick={(page) => setQuery({ pageNumber: page })}
+                        pageSize={PAGE_SIZE}
+                        onPageClick={(page) =>
+                            setQuery({ pageNumber: page })
+                        }
                     />
                 </div>
             </LoadingWrapper>

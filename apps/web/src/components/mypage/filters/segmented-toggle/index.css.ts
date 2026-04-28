@@ -9,7 +9,13 @@ export const group = style({
     border: `1px solid ${vars.color.gray['30']}`,
     borderRadius: '4px',
     padding: '2px',
-    maxWidth: '100%',
+    maxWidth: 'calc(100% - 192px)',
+
+    '@media': {
+        [media.mobile]: {
+            maxWidth: '100%',
+        },
+    },
 });
 
 export const button = style([
