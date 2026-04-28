@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -33,27 +34,28 @@ import {
     SignupFormSex,
     SignupFormTelephone,
 } from '@/components/signup/form';
+import MemberConfig from '@/components/signup/member-config';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
 import { useProfileMutation } from '@/hooks/mutations';
 import { useMyApp } from '@/hooks/myapp';
 import { useMall } from '@/hooks/query/admin/mall';
+import { useMemberExtraInfo } from '@/hooks/query/member/memberConfig';
 import { useSignupInitialize } from '@/hooks/signup';
 import { useDialog, useGlobal } from '@/hooks/utils';
 import type { NcpOpenIdProviderType } from '@/models';
 import { NextPageWithLayout } from '@/pages/_app';
+import * as styles from '@/pages/signup/register/index.css';
 import { createSignupFormSchema, SignupFormSchemaType } from '@/schema';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 import { getSafeQueryString } from '@/utils/query';
-import { useMemberExtraInfo } from '@/hooks/query/member/memberConfig';
-import MemberConfig from '@/components/signup/member-config';
-import * as styles from '@/pages/signup/register/index.css';
 
 type SignupRegisterProps = {
     accessToken: string;
     refreshToken: string;
     provider: NcpOpenIdProviderType | '';
     expiry: number;
+    refreshTokenExpiresIn: number;
     terms: any;
     smsAgreed: boolean;
     directMailAgreed: boolean;
@@ -65,6 +67,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
     accessToken,
     provider,
     refreshToken,
+    refreshTokenExpiresIn,
     terms,
     smsAgreed,
     directMailAgreed,
@@ -86,6 +89,8 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
 
     const { data: memberExtraInfoData } = useMemberExtraInfo();
 
+    const [isNavigating, setIsNavigating] = useState(false);
+
     const schema = createSignupFormSchema({ isSocialLogin });
 
     const methods = useForm<SignupFormSchemaType>({
@@ -96,7 +101,6 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
             type: 'personal',
             joinTermsAgreements: terms,
             isRegistrationNoChecked: false,
-            isDuplicateMemberId: true,
             isDuplicateEmail: true,
             isDuplicateNickname: true,
             openIdAccessToken: accessToken ?? undefined,
@@ -109,6 +113,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
             smsAgreed,
             directMailAgreed,
             countryCd,
+            isDuplicateMemberId: true,
             isBirthdayRequired: false,
             isNicknameRequired: false,
             isMobileNoRequired: false,
@@ -157,6 +162,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
             });
 
             if (isSocialLogin) {
+                setIsNavigating(true);
                 await openIdRegisterMutate({
                     data: submitData,
                     accessToken,
@@ -168,7 +174,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 }
 
                 accessTokenCookie.set(accessToken, expiry);
-                refreshTokenCookie.set(refreshToken, expiry * 1000);
+                refreshTokenCookie.set(refreshToken, refreshTokenExpiresIn);
 
                 window.location.replace(PATHS.SIGNUP.COMPLETE);
                 return;
@@ -264,42 +270,41 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                   ).filter((v) => v !== null)
                 : undefined;
 
-            await registerMutate(
-                {
-                    data: {
-                        ...submitData,
-                        extraInfo: extraInfoList,
-                        memberId,
-                        password,
-                    },
+            setIsNavigating(true);
+
+            await registerMutate({
+                data: {
+                    ...submitData,
+                    extraInfo: extraInfoList,
+                    memberId,
+                    password,
                 },
-                {
-                    onSuccess: async () => {
-                        if (isMyApp) {
-                            router.replace(PATHS.SIGNUP.COMPLETE);
-                            return;
-                        }
+            });
 
-                        const { data } = await oauth2.issueAccessToken({
-                            memberId,
-                            password,
-                            keepLogin: true,
-                        });
+            if (isMyApp) {
+                router.replace(PATHS.SIGNUP.COMPLETE);
+                return;
+            }
 
-                        accessTokenCookie.set(
-                            data.accessToken || '',
-                            data.expiresIn,
-                        );
-                        refreshTokenCookie.set(
-                            data.refreshToken || '',
-                            data.refreshTokenExpiresIn,
-                        );
+            const { data: oauth2Data } = await oauth2.issueAccessToken({
+                memberId,
+                password,
+                keepLogin: true,
+            });
 
-                        window.location.replace(PATHS.SIGNUP.COMPLETE);
-                    },
-                },
+            accessTokenCookie.set(
+                oauth2Data.accessToken || '',
+                oauth2Data.expiresIn,
             );
+            refreshTokenCookie.set(
+                oauth2Data.refreshToken || '',
+                oauth2Data.refreshTokenExpiresIn,
+            );
+
+            window.location.replace(PATHS.SIGNUP.COMPLETE);
         } catch (error) {
+            setIsNavigating(false);
+
             if (isAxiosError(error)) {
                 const message = isAxiosError(error)
                     ? error.response?.data.message
@@ -413,6 +418,8 @@ export const getServerSideProps: GetServerSideProps<
         | '';
     const refreshToken = getSafeQueryString(query.refreshToken);
     const expiry = Number(getSafeQueryString(query.expiry)) || 0;
+    const refreshTokenExpiresIn =
+        Number(getSafeQueryString(query.refreshTokenExpiresIn)) || 0;
 
     const termsStr = getSafeQueryString(query.terms);
     const terms = (termsStr ? termsStr.split(',') : []) as any;
@@ -442,6 +449,7 @@ export const getServerSideProps: GetServerSideProps<
             refreshToken,
             provider,
             expiry,
+            refreshTokenExpiresIn,
             terms,
             smsAgreed,
             directMailAgreed,

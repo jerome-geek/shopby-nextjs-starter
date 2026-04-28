@@ -42,7 +42,7 @@ const useSnsLogin = () => {
     const openLoginTab = (loginUrl: string, snsReturnUrl?: string) => {
         setOpenReturnUrl(snsReturnUrl || returnUrl);
 
-        window.location.replace(loginUrl);
+        window.location.href = loginUrl;
     };
 
     const { mutateAsync } = useMutation({

@@ -51,6 +51,7 @@ type ExtraJoinData = {
     refreshToken?: string | string[];
     code?: string | string[];
     expiry?: string | string[];
+    refreshTokenExpiresIn?: string | string[];
     returnUrl?: string | string[];
     key?: string;
 };
@@ -200,8 +201,15 @@ const SignupTerms: NextPageWithLayout = () => {
             return;
         }
 
-        const { provider, accessToken, refreshToken, code, expiry, returnUrl } =
-            router.query;
+        const {
+            provider,
+            accessToken,
+            refreshToken,
+            code,
+            expiry,
+            returnUrl,
+            refreshTokenExpiresIn,
+        } = router.query;
 
         moveNextPage({
             provider,
@@ -209,6 +217,7 @@ const SignupTerms: NextPageWithLayout = () => {
             refreshToken,
             code,
             expiry,
+            refreshTokenExpiresIn,
             returnUrl,
         });
     };

@@ -43,9 +43,9 @@ export const AuthCallbackPage = () => {
         refreshTokenCookie.set(refreshToken, refreshTokenExpiresIn);
 
         if (openReturnUrl) {
-            window.location.replace(openReturnUrl);
+            router.replace(openReturnUrl);
         } else {
-            window.location.replace(PATHS.MAIN);
+            router.replace(PATHS.MAIN);
         }
     };
 
@@ -63,7 +63,7 @@ export const AuthCallbackPage = () => {
                 await openAsyncDialog({
                     message: '잘못된 접근입니다. 메인 페이지로 이동합니다.',
                 });
-                window.location.replace(PATHS.MAIN);
+                router.replace(PATHS.MAIN);
                 return;
             }
 
@@ -71,13 +71,24 @@ export const AuthCallbackPage = () => {
             if (isLoggedIn) {
                 try {
                     // NOTE : 로그인 상태일 경우 회원 재인증 로직 타도록 로직 추가
+                    const accessToken = accessTokenCookie.get();
+                    const refreshToken = refreshTokenCookie.get();
+
                     const { data: tokenData } =
-                        await oauth2.refreshOpenIdAccessToken({
-                            provider,
-                            keepLogin: false,
-                            code,
-                            redirectUri: `${window.location.origin}${PATHS.CALLBACK.AUTH}?provider=${provider}`,
-                        });
+                        await oauth2.refreshOpenIdAccessToken(
+                            {
+                                provider,
+                                keepLogin: false,
+                                code,
+                                redirectUri: `${window.location.origin}${PATHS.CALLBACK.AUTH}?provider=${provider}`,
+                            },
+                            {
+                                headers: {
+                                    'Shop-By-Authorization': `Bearer ${accessToken}`,
+                                    'Refresh-Token': refreshToken,
+                                },
+                            },
+                        );
 
                     if (tokenData) {
                         accessTokenCookie.set(
@@ -136,10 +147,11 @@ export const AuthCallbackPage = () => {
                         refreshToken,
                         code,
                         expiry,
+                        refreshTokenExpiresIn,
                         returnUrl,
                     })}`;
 
-                    window.location.replace(nextPath);
+                    router.replace(nextPath);
                     return;
                 }
 
@@ -151,8 +163,7 @@ export const AuthCallbackPage = () => {
                 });
             } catch (error) {
                 await handleErrorDialog(error);
-
-                window.location.replace(PATHS.MAIN);
+                router.replace(PATHS.MAIN);
                 return;
             }
         })();

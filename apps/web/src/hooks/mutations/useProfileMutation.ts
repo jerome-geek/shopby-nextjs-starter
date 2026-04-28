@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
@@ -35,21 +34,10 @@ const useProfileMutation = () => {
                 accessToken: string;
             }) =>
                 await profile.signUpByOpenId(data, {
-                    headers: { accessToken },
+                    headers: {
+                        'Shop-By-Authorization': `Bearer ${accessToken}`,
+                    },
                 }),
-            onError: (error) => {
-                const errorMessage = isAxiosError(error)
-                    ? (error.response?.data.message ??
-                      t(
-                          '회원가입에 실패했습니다.<br />관리자에게 문의해주세요.',
-                      ))
-                    : t(
-                          '회원가입에 실패했습니다.<br />관리자에게 문의해주세요.',
-                      );
-                openDialog({
-                    message: errorMessage,
-                });
-            },
         }),
 
         update: useMutation({

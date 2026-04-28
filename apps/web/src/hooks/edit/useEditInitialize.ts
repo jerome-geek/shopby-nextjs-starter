@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import { UseFormReset } from 'react-hook-form';
 
+import { profile } from '@/api/member';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useMall } from '@/hooks/query/admin/mall';
+import { useDialog, useGlobal, useKcpCertification } from '@/hooks/utils';
 import type { GetProfileResponse } from '@/models/member/profile';
 import { UpdateProfileSchemaType } from '@/schema/profile.schema';
-import { useDialog, useGlobal, useKcpCertification } from '@/hooks/utils';
-import { profile } from '@/api/member';
 
 const useEditInitialize = ({
     reset,
@@ -105,14 +105,22 @@ const useEditInitialize = ({
     }, [mallData, reset]);
 
     const formValueDisabled = {
-        name: isAuthenticationByPhone && isCertificated,
-        mobileNo: isAuthenticationByPhone && isCertificated,
+        name: isSocialLogin
+            ? !!profileData.memberName
+            : isAuthenticationByPhone && isCertificated,
+        mobileNo: isSocialLogin
+            ? !!profileData.mobileNo
+            : isAuthenticationByPhone && isCertificated,
         email:
             (isSocialLogin && !isLine && !isApple && !isGoogle) ||
             // (isAuthenticationByEmail && !isEmailReauthRequested),
             isAuthenticationByEmail,
-        birthday: isAuthenticationByPhone && isCertificated,
-        sex: isAuthenticationByPhone && isCertificated,
+        birthday: isSocialLogin
+            ? !!profileData.birthday
+            : isAuthenticationByPhone && isCertificated,
+        sex: isSocialLogin
+            ? profileData.sex === 'F' || profileData.sex === 'M'
+            : isAuthenticationByPhone && isCertificated,
     };
 
     return {

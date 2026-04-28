@@ -260,6 +260,10 @@ const createSignupFormSchema = ({ isSocialLogin }: SignupSchemaOptions) =>
         )
         .refine(
             (data) => {
+                if (isSocialLogin) {
+                    return true;
+                }
+
                 if (data.isDuplicateMemberId) {
                     return false;
                 }
@@ -326,8 +330,8 @@ const createSignupFormSchema = ({ isSocialLogin }: SignupSchemaOptions) =>
 type SignupFormSchemaType = z.infer<ReturnType<typeof createSignupFormSchema>>;
 
 export {
-    signupDuplicateCheckMemberIdSchema,
-    signupDuplicateCheckEmailSchema,
     createSignupFormSchema,
+    signupDuplicateCheckEmailSchema,
+    signupDuplicateCheckMemberIdSchema,
     type SignupFormSchemaType,
 };
