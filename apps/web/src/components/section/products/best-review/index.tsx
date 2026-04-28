@@ -49,7 +49,10 @@ const BestReviewContent = () => {
 
 const BestReview = () => {
     return (
-        <FetchBoundary fallback={<ProductsSectionSkeleton />}>
+        <FetchBoundary
+            fallback={<ProductsSectionSkeleton />}
+            errorFallback={<></>}
+        >
             <BestReviewContent />
         </FetchBoundary>
     );

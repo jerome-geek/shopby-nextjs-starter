@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { HeroBanner } from '@/components/banner/hero';
 import IconBanner from '@/components/banner/icon';
 import { LazyRender } from '@/components/common';
+import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
@@ -26,14 +27,19 @@ export default function ShopMain() {
             </section>
 
             {/* 라이프 타임특가 */}
-            <TimeSale title='라이프 타임특가' type='LIFE' />
+
+            <ShopbyApiErrorBoundary errorFallback={<></>}>
+                <TimeSale title='라이프 타임특가' type='LIFE' />
+            </ShopbyApiErrorBoundary>
 
             {/* 영상(기획전) */}
             <Event index={1} />
 
             {/* 키즈 타임특가 */}
             <LazyRender minHeight={400}>
-                <TimeSale title='키즈 타임특가' type='KIDS' />
+                <ShopbyApiErrorBoundary errorFallback={<></>}>
+                    <TimeSale title='키즈 타임특가' type='KIDS' />
+                </ShopbyApiErrorBoundary>
             </LazyRender>
 
             {/* 영상(기획전) */}
@@ -43,7 +49,9 @@ export default function ShopMain() {
 
             {/* 라이프 베스트 */}
             <LazyRender minHeight={500}>
-                <Best type='LIFE' />
+                <ShopbyApiErrorBoundary errorFallback={<></>}>
+                    <Best type='LIFE' />
+                </ShopbyApiErrorBoundary>
             </LazyRender>
 
             {/* 영상(기획전) */}
@@ -53,7 +61,9 @@ export default function ShopMain() {
 
             {/* 키즈 베스트 */}
             <LazyRender minHeight={500}>
-                <Best type='KIDS' />
+                <ShopbyApiErrorBoundary errorFallback={<></>}>
+                    <Best type='KIDS' />
+                </ShopbyApiErrorBoundary>
             </LazyRender>
 
             {/* 영상(기획전) */}

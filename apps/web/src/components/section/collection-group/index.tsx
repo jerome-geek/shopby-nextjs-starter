@@ -41,7 +41,10 @@ const CollectionGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
 
 const CollectionGroupSection = ({ groupId }: { groupId: GroupId }) => {
     return (
-        <FetchBoundary fallback={<CollectionSectionSkeleton />}>
+        <FetchBoundary
+            fallback={<CollectionSectionSkeleton />}
+            errorFallback={<></>}
+        >
             <CollectionGroupSectionContent groupId={groupId} />
         </FetchBoundary>
     );

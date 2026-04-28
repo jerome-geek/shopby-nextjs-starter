@@ -42,7 +42,10 @@ const RecipeGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
 
 const RecipeGroupSection = ({ groupId }: { groupId: GroupId }) => {
     return (
-        <FetchBoundary fallback={<RecipeGroupSectionSkeleton />}>
+        <FetchBoundary
+            fallback={<RecipeGroupSectionSkeleton />}
+            errorFallback={<></>}
+        >
             <RecipeGroupSectionContent groupId={groupId} />
         </FetchBoundary>
     );

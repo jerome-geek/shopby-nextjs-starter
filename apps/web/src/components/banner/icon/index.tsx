@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { Suspense, useMemo } from 'react';
+import { useMemo } from 'react';
 import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
 import { BANNER_ID_PREFIX, HeroBannerType } from '@/components/banner/hero';
 import * as styles from '@/components/banner/icon/index.css';
+import FetchBoundary from '@/components/common/FetchBoundary';
 import Skeleton from '@/components/ui/skeleton';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import type { Banner } from '@/models/display/banner';
@@ -100,9 +101,9 @@ const IconBannerContent = ({ type }: { type: HeroBannerType }) => {
 
 const IconBanner = ({ type }: { type: HeroBannerType }) => {
     return (
-        <Suspense fallback={<IconBannerSkeleton />}>
+        <FetchBoundary fallback={<IconBannerSkeleton />} errorFallback={<></>}>
             <IconBannerContent type={type} />
-        </Suspense>
+        </FetchBoundary>
     );
 };
 

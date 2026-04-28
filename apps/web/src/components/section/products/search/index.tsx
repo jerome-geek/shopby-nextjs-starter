@@ -75,7 +75,10 @@ const ProductsSearchContent = (props: ProductSearchProps) => {
 
 const ProductsSearch = (props: ProductSearchProps) => {
     return (
-        <FetchBoundary fallback={<ProductsSectionSkeleton />}>
+        <FetchBoundary
+            fallback={<ProductsSectionSkeleton />}
+            errorFallback={<></>}
+        >
             <ProductsSearchContent {...props} />
         </FetchBoundary>
     );

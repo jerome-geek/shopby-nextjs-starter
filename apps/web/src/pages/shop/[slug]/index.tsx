@@ -6,6 +6,7 @@ import { banner, event, productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
 import { BANNER_ID_PREFIX, HeroBanner } from '@/components/banner/hero';
 import IconBanner from '@/components/banner/icon';
+import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import SectionGroup from '@/components/section/group';
 import TimeSale from '@/components/section/time-sale';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
@@ -42,10 +43,14 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
                 <IconBanner type={heroBannerType} />
             </section>
 
-            <TimeSale type={heroBannerType} title={'오늘만 특가'} />
+            <ShopbyApiErrorBoundary errorFallback={<></>}>
+                <TimeSale type={heroBannerType} title={'오늘만 특가'} />
+            </ShopbyApiErrorBoundary>
 
             {/* 기획전 및 상품진열 그룹 */}
-            <SectionGroup />
+            <ShopbyApiErrorBoundary errorFallback={<></>}>
+                <SectionGroup />
+            </ShopbyApiErrorBoundary>
         </div>
     );
 }

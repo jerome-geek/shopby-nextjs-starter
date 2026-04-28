@@ -23,7 +23,10 @@ const Event = ({ index, eventNo }: { index?: number; eventNo?: number }) => {
     }
 
     return (
-        <FetchBoundary fallback={<EventSectionSkeleton />}>
+        <FetchBoundary
+            fallback={<EventSectionSkeleton />}
+            errorFallback={<></>}
+        >
             <SuspenseQuery
                 queryKey={eventKeys.detail(eventKey)}
                 queryFn={() => event.getEvent(eventKey)}

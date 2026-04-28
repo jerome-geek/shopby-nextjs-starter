@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 
 import { LazyRender } from '@/components/common';
 import { ObserverTarget } from '@/components/common/observer-target';
+import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import ProductsSearch from '@/components/section/products/search';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
@@ -88,7 +89,9 @@ const SectionGroup = () => {
             <Event eventNo={eventNoList?.[0]} />
 
             <LazyRender minHeight={500}>
-                <Best type={type === 'kids' ? 'KIDS' : 'LIFE'} />
+                <ShopbyApiErrorBoundary errorFallback={<></>}>
+                    <Best type={type === 'kids' ? 'KIDS' : 'LIFE'} />
+                </ShopbyApiErrorBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>

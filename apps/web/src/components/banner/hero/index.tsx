@@ -1,6 +1,8 @@
 'use client';
 
 import * as styles from '@/components/banner/hero/index.css';
+import FetchBoundary from '@/components/common/FetchBoundary';
+import ImageWrapper from '@/components/ui/image';
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 import type { Banner } from '@/models/display/banner';
 import { BREAKPOINTS } from '@/styles/media';
@@ -11,7 +13,7 @@ import {
 } from '@/utils/shopby';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import Link from 'next/link';
-import { Suspense, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import {
     Autoplay,
@@ -21,7 +23,6 @@ import {
 } from 'swiper/modules';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
-import ImageWrapper from '@/components/ui/image';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
@@ -301,8 +302,8 @@ function HeroBannerSkeleton() {
 
 export function HeroBanner({ type }: { type: HeroBannerType }) {
     return (
-        <Suspense fallback={<HeroBannerSkeleton />}>
+        <FetchBoundary fallback={<HeroBannerSkeleton />} errorFallback={<></>}>
             <HeroBannerContent type={type} />
-        </Suspense>
+        </FetchBoundary>
     );
 }

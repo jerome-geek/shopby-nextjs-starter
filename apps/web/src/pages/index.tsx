@@ -7,6 +7,7 @@ import { collection } from '@/api/shop';
 import { BANNER_ID_PREFIX, HeroBanner } from '@/components/banner/hero';
 import { LazyRender } from '@/components/common';
 import Seo from '@/components/common/seo';
+import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import CollectionGroupSection from '@/components/section/collection-group';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerKeys, collectionKeys } from '@/hooks/queryKeys';
@@ -67,7 +68,8 @@ export async function getStaticProps() {
                                                     sno: ing.sno,
                                                     name: ing.name,
                                                     amount: ing.amount,
-                                                    isEssential: ing.isEssential,
+                                                    isEssential:
+                                                        ing.isEssential,
                                                     coupangProduct: null,
                                                 })),
                                                 toArray,
@@ -77,7 +79,8 @@ export async function getStaticProps() {
                                                 map((step) => ({
                                                     sno: step.sno,
                                                     stepNumber: step.stepNumber,
-                                                    description: step.description,
+                                                    description:
+                                                        step.description,
                                                     stepImageUrl: null,
                                                     timestampSeconds: null,
                                                 })),
@@ -127,7 +130,9 @@ export default function Home() {
 
                 {/* 라이프 타임특가 */}
                 <LazyRender minHeight={400}>
-                    <TimeSale type='LIFE' title='라이프 타임특가' />
+                    <ShopbyApiErrorBoundary errorFallback={<></>}>
+                        <TimeSale type='LIFE' title='라이프 타임특가' />
+                    </ShopbyApiErrorBoundary>
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -136,7 +141,9 @@ export default function Home() {
 
                 {/* 키즈 타임특가 */}
                 <LazyRender minHeight={400}>
-                    <TimeSale type='KIDS' title='키즈 타임특가' />
+                    <ShopbyApiErrorBoundary errorFallback={<></>}>
+                        <TimeSale type='KIDS' title='키즈 타임특가' />
+                    </ShopbyApiErrorBoundary>
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -145,7 +152,9 @@ export default function Home() {
 
                 {/* 라이프 베스트 */}
                 <LazyRender minHeight={500}>
-                    <Best type='LIFE' />
+                    <ShopbyApiErrorBoundary errorFallback={<></>}>
+                        <Best type='LIFE' />
+                    </ShopbyApiErrorBoundary>
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -154,7 +163,9 @@ export default function Home() {
 
                 {/* 키즈 베스트 */}
                 <LazyRender minHeight={500}>
-                    <Best type='KIDS' />
+                    <ShopbyApiErrorBoundary errorFallback={<></>}>
+                        <Best type='KIDS' />
+                    </ShopbyApiErrorBoundary>
                 </LazyRender>
             </div>
         </>

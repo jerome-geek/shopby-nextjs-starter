@@ -4,13 +4,14 @@ import { memo, useMemo } from 'react';
 import { Grid } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import { CountdownTimer, ProductCard } from '@/components/product';
 import * as styles from '@/components/section/time-sale/index.css';
 import { PATHS } from '@/const/paths';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
+import { useProductSectionById } from '@/hooks/query/display/productSection';
 import { useTimeSaleSectionProducts } from '@/hooks/query/shop/timeSale';
-import { useProductSectionById } from '@/hooks/suspenseQuery/display/productSection';
 import type { ImageUrlType } from '@/models/product';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import { BREAKPOINTS } from '@/styles/media';
@@ -35,13 +36,19 @@ export const TimeSale = memo(
             type === 'KIDS' ? 'kids' : 'life'
         }`;
 
-        const { data: productSectionByIdData } = useProductSectionById({
+        const {
+            data: productSectionByIdData,
+            isLoading: isProductSectionByIdLoading,
+        } = useProductSectionById({
             sectionId,
         });
 
         const sectionNo = productSectionByIdData?.sectionNo ?? 0;
 
-        const { data: todayOpenData } = useTimeSaleSectionProducts({
+        const {
+            data: todayOpenData,
+            isLoading: isTimeSaleSectionProductsLoading,
+        } = useTimeSaleSectionProducts({
             sectionNo,
             searchParams: {
                 ...TIME_SALE_LIST_BASE_PARAMS,
@@ -49,6 +56,10 @@ export const TimeSale = memo(
             },
             options: { enabled: sectionNo > 0 },
         });
+
+        const isLoading =
+            isProductSectionByIdLoading || isTimeSaleSectionProductsLoading;
+
         const products = todayOpenData?.products ?? [];
 
         const { productsWithDiscounts } =
@@ -105,75 +116,82 @@ export const TimeSale = memo(
                     </Link>
                 </div>
 
-                {isEmptyProducts ? (
-                    <div className={styles.emptyMessage}>
-                        <p>오늘 시작한 타임특가 상품이 없습니다.</p>
-                    </div>
-                ) : (
-                    <div className={styles.swiperContainer}>
-                        <Swiper
-                            modules={[Grid]}
-                            grid={{
-                                rows: 2,
-                                fill: 'row',
-                            }}
-                            slidesPerView={3}
-                            spaceBetween={4}
-                            breakpoints={{
-                                [BREAKPOINTS.SM]: {
-                                    slidesPerView: 4.2,
-                                    spaceBetween: 16,
-                                    grid: {
-                                        rows: 2,
-                                        fill: 'row',
+                <LoadingWrapper
+                    isLoading={isLoading}
+                    containerStyle={{
+                        height: '98px',
+                    }}
+                >
+                    {isEmptyProducts ? (
+                        <div className={styles.emptyMessage}>
+                            <p>오늘 시작한 타임특가 상품이 없습니다.</p>
+                        </div>
+                    ) : (
+                        <div className={styles.swiperContainer}>
+                            <Swiper
+                                modules={[Grid]}
+                                grid={{
+                                    rows: 2,
+                                    fill: 'row',
+                                }}
+                                slidesPerView={3}
+                                spaceBetween={4}
+                                breakpoints={{
+                                    [BREAKPOINTS.SM]: {
+                                        slidesPerView: 4.2,
+                                        spaceBetween: 16,
+                                        grid: {
+                                            rows: 2,
+                                            fill: 'row',
+                                        },
                                     },
-                                },
-                                [BREAKPOINTS.MD]: {
-                                    slidesPerView: 6,
-                                    spaceBetween: 16,
-                                    grid: {
-                                        rows: 2,
-                                        fill: 'row',
+                                    [BREAKPOINTS.MD]: {
+                                        slidesPerView: 6,
+                                        spaceBetween: 16,
+                                        grid: {
+                                            rows: 2,
+                                            fill: 'row',
+                                        },
                                     },
-                                },
-                            }}
-                        >
-                            {filteredProducts.map((product) => (
-                                <SwiperSlide
-                                    key={product.productNo}
-                                    className={styles.productItem}
-                                >
-                                    <ProductCard
-                                        productNo={product.productNo}
-                                        productName={product.productName}
-                                        brandName={product.brandName}
-                                        brandNo={product.brandNo}
-                                        salePrice={product.salePrice}
-                                        immediateDiscountAmt={
-                                            product.immediateDiscountAmt
-                                        }
-                                        additionDiscountAmt={
-                                            product.additionDiscountAmt
-                                        }
-                                        imageUrlInfo={
-                                            product.imageUrlInfo as ImageUrlType[]
-                                        }
-                                        stickerInfos={product.stickerInfos}
-                                        likeCount={product.likeCount}
-                                        liked={product.liked}
-                                        reviewRating={product.reviewRating}
-                                        totalReviewCount={
-                                            product.totalReviewCount
-                                        }
-                                        additionalDiscount={
-                                            product.additionalDiscount
-                                        }
-                                    />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
-                )}
+                                }}
+                            >
+                                {filteredProducts.map((product) => (
+                                    <SwiperSlide
+                                        key={product.productNo}
+                                        className={styles.productItem}
+                                    >
+                                        <ProductCard
+                                            productNo={product.productNo}
+                                            productName={product.productName}
+                                            brandName={product.brandName}
+                                            brandNo={product.brandNo}
+                                            salePrice={product.salePrice}
+                                            immediateDiscountAmt={
+                                                product.immediateDiscountAmt
+                                            }
+                                            additionDiscountAmt={
+                                                product.additionDiscountAmt
+                                            }
+                                            imageUrlInfo={
+                                                product.imageUrlInfo as ImageUrlType[]
+                                            }
+                                            stickerInfos={product.stickerInfos}
+                                            likeCount={product.likeCount}
+                                            liked={product.liked}
+                                            reviewRating={product.reviewRating}
+                                            totalReviewCount={
+                                                product.totalReviewCount
+                                            }
+                                            additionalDiscount={
+                                                product.additionalDiscount
+                                            }
+                                        />
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
+                    )}
+                </LoadingWrapper>
 
                 <Link
                     href={hrefLink}

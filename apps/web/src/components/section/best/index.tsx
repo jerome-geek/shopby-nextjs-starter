@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Grid, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import { ArrowIcon } from '@/components/icons/ArrowIcon';
 import { ProductCard } from '@/components/product';
 import * as styles from '@/components/section/best/index.css';
@@ -14,6 +15,7 @@ import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/use
 import { useBestSellerProductList } from '@/hooks/query/product/product';
 import { useMainCategory } from '@/hooks/useMainCategory';
 import { BREAKPOINTS } from '@/styles/media';
+
 import 'swiper/css';
 import 'swiper/css/grid';
 import 'swiper/css/pagination';
@@ -21,7 +23,10 @@ import 'swiper/css/pagination';
 export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
     const { t } = useTranslation();
 
-    const { mainCategoryChildrenList } = useMainCategory();
+    const {
+        mainCategoryChildrenList,
+        isLoading: isMainCategoryChildrenListLoading,
+    } = useMainCategory();
 
     const currentCategory = useMemo(() => {
         return mainCategoryChildrenList?.find(
@@ -34,7 +39,10 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
     const activeCategory =
         selectedCategory || (currentCategory?.categoryNo ?? 0);
 
-    const { data: bestSellerProductListData } = useBestSellerProductList({
+    const {
+        data: bestSellerProductListData,
+        isLoading: isBestSellerProductListLoading,
+    } = useBestSellerProductList({
         searchParams: {
             pageNumber: 1,
             pageSize: 10,
@@ -44,6 +52,9 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
             enabled: activeCategory !== 0,
         },
     });
+
+    const isLoading =
+        isMainCategoryChildrenListLoading || isBestSellerProductListLoading;
 
     const bestSellerProductList = useMemo(
         () => bestSellerProductListData?.items || [],
@@ -143,65 +154,74 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                 </Swiper>
             </div>
 
-            <div className={styles.swiperContainer}>
-                {productsWithDiscounts.length > 0 ? (
-                    <Swiper
-                        slidesPerView={2.2}
-                        grid={{
-                            rows: 2,
-                            fill: 'row',
-                        }}
-                        spaceBetween={16}
-                        modules={[Grid, Pagination]}
-                        breakpoints={{
-                            768: {
-                                slidesPerView: 5,
-                                grid: {
-                                    rows: 2,
-                                    fill: 'row',
+            <LoadingWrapper
+                isLoading={isLoading}
+                containerStyle={{
+                    height: '98px',
+                }}
+            >
+                <div className={styles.swiperContainer}>
+                    {productsWithDiscounts.length > 0 ? (
+                        <Swiper
+                            slidesPerView={2.2}
+                            grid={{
+                                rows: 2,
+                                fill: 'row',
+                            }}
+                            spaceBetween={16}
+                            modules={[Grid, Pagination]}
+                            breakpoints={{
+                                768: {
+                                    slidesPerView: 5,
+                                    grid: {
+                                        rows: 2,
+                                        fill: 'row',
+                                    },
                                 },
-                            },
-                        }}
-                    >
-                        {productsWithDiscounts.map((product, index) => (
-                            <SwiperSlide
-                                key={product.productNo}
-                                className={styles.productGridItem}
-                            >
-                                <div className={styles.rankBadge}>
-                                    <span>{index + 1}</span>
-                                </div>
-                                <ProductCard
-                                    productNo={product.productNo}
-                                    productName={product.productName}
-                                    brandName={product.brandName}
-                                    brandNo={product.brandNo}
-                                    salePrice={product.salePrice}
-                                    immediateDiscountAmt={
-                                        product.immediateDiscountAmt
-                                    }
-                                    additionDiscountAmt={
-                                        product.additionDiscountAmt
-                                    }
-                                    imageUrlInfo={product.imageUrlInfo}
-                                    stickerInfos={product.stickerInfos}
-                                    likeCount={product.likeCount}
-                                    liked={product.liked}
-                                    reviewRating={product.reviewRating}
-                                    totalReviewCount={product.totalReviewCount}
-                                    additionalDiscount={
-                                        product.additionalDiscount
-                                    }
-                                />
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                ) : (
-                    <div className={styles.emptyMessage}>
-                        {t('등록된 상품이 없습니다.')}
-                    </div>
-                )}
-            </div>
+                            }}
+                        >
+                            {productsWithDiscounts.map((product, index) => (
+                                <SwiperSlide
+                                    key={product.productNo}
+                                    className={styles.productGridItem}
+                                >
+                                    <div className={styles.rankBadge}>
+                                        <span>{index + 1}</span>
+                                    </div>
+                                    <ProductCard
+                                        productNo={product.productNo}
+                                        productName={product.productName}
+                                        brandName={product.brandName}
+                                        brandNo={product.brandNo}
+                                        salePrice={product.salePrice}
+                                        immediateDiscountAmt={
+                                            product.immediateDiscountAmt
+                                        }
+                                        additionDiscountAmt={
+                                            product.additionDiscountAmt
+                                        }
+                                        imageUrlInfo={product.imageUrlInfo}
+                                        stickerInfos={product.stickerInfos}
+                                        likeCount={product.likeCount}
+                                        liked={product.liked}
+                                        reviewRating={product.reviewRating}
+                                        totalReviewCount={
+                                            product.totalReviewCount
+                                        }
+                                        additionalDiscount={
+                                            product.additionalDiscount
+                                        }
+                                    />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    ) : (
+                        <div className={styles.emptyMessage}>
+                            {t('등록된 상품이 없습니다.')}
+                        </div>
+                    )}
+                </div>
+            </LoadingWrapper>
 
             <Link
                 href={`${PATHS.PRODUCTS.BEST}?categoryNo=${currentCategory?.categoryNo}`}
