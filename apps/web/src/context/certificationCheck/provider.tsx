@@ -1,18 +1,18 @@
 import { includes } from '@fxts/core';
+import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useProfile } from '@/hooks/query/member/profile';
+import { useAuth } from '@/hooks/useAuth';
 import useSnsLogin from '@/hooks/useSnsLogin';
 import { useKcpCertification, useLocale } from '@/hooks/utils';
 import useUpdateProfile from '@/hooks/utils/useUpdateProfile';
-import { isLoggedIn } from '@/utils/auth';
 
 function CertificationCheckProvider({
     children,
@@ -23,9 +23,11 @@ function CertificationCheckProvider({
 
     const { isKorean } = useLocale();
 
+    const isLogin = useAuth();
+
     const { data: profileData } = useProfile({
         options: {
-            enabled: isLoggedIn(),
+            enabled: !!isLogin,
         },
     });
 
@@ -95,7 +97,7 @@ function CertificationCheckProvider({
         ];
 
         return !includes(pathname, CERTIFICATION_FREE_ROUTES);
-    }, [mallData?.mallJoinConfig.authenticationType, pathname]);
+    }, [pathname]);
 
     useEffect(() => {
         if (!isKorean) {
@@ -106,7 +108,7 @@ function CertificationCheckProvider({
             return;
         }
 
-        if (!isLoggedIn()) {
+        if (!!!isLogin) {
             return;
         }
 
@@ -124,6 +126,7 @@ function CertificationCheckProvider({
             showCertificationDialog();
         }
     }, [
+        isLogin,
         isCertified,
         isAuthenticationByPhone,
         showCertificationDialog,
@@ -134,7 +137,7 @@ function CertificationCheckProvider({
 
     useKcpCertification({
         onNext: (data: { key?: string }) => {
-            if (isLoggedIn() && isCertificationNeeded && data?.key) {
+            if (!!isLogin && isCertificationNeeded && data?.key) {
                 updateProfile(data.key);
             }
         },

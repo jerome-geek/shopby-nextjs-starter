@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { flatMap, filter, pipe, toArray } from '@fxts/core';
 
-import { useMypageMenu } from '@/components/layout';
+import { useMypageMenu } from '@/context/mypageMenu';
 import * as styles from '@/components/mypage/main/mobile-paths/index.css';
 
 const MyPageMainMobilePaths = () => {
