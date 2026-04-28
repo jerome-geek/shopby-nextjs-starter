@@ -178,3 +178,15 @@ export const authorName = style([
     textStyles.body2Regular,
     { color: vars.color.gray['60'] },
 ]);
+
+export const listContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '40px',
+    transition: 'opacity 0.2s',
+});
+
+export const isPending = style({
+    opacity: 0.5,
+    pointerEvents: 'none',
+});
