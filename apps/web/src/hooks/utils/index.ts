@@ -8,6 +8,7 @@ import useLocale from '@/hooks/utils/useLocale';
 import usePage from '@/hooks/utils/usePage';
 import useResponsive from '@/hooks/utils/useResponsive';
 import useRouteChange from '@/hooks/utils/useRouteChange';
+import useRouteScroll from '@/hooks/utils/useRouteScroll';
 import useScrollLock from '@/hooks/utils/useScrollLock';
 
 export {
@@ -21,5 +22,6 @@ export {
     usePage,
     useResponsive,
     useRouteChange,
+    useRouteScroll,
     useScrollLock,
 };

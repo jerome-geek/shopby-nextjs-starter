@@ -1,21 +1,20 @@
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-const useRouteChange = (fn: (...args: any[]) => void) => {
-    const pathname = usePathname();
-    const ref = useRef('');
-
-    useEffect(() => {
-        if (ref.current) {
-            if (ref.current !== pathname) {
-                fn();
-            }
-        }
-    });
+const useRouteChange = (fn: () => void) => {
+    const router = useRouter();
 
     useEffect(() => {
-        ref.current = pathname;
-    }, [pathname]);
+        const handleRouteChangeComplete = () => {
+            fn();
+        };
+
+        router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChangeComplete);
+        };
+    }, [fn, router]);
 
     return null;
 };
