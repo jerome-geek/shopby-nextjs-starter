@@ -1,3 +1,4 @@
+import { concat, map, pipe, sort, toArray, zip } from '@fxts/core';
 import clsx from 'clsx';
 import { Minus, Plus, X } from 'lucide-react';
 import Link from 'next/link';
@@ -40,6 +41,23 @@ export const OrderProductItem = ({
     onDelete,
 }: OrderProductItemProps) => {
     const { product, option } = item;
+
+    const optionLabels = pipe(
+        option.optionInputs ?? [],
+        sort((a, b) => (a.inputNo ?? 0) - (b.inputNo ?? 0)),
+        map((c) => `${c.inputLabel}: ${c.inputValue}`),
+        concat(
+            option.optionType === 'PRODUCT_ONLY'
+                ? []
+                : pipe(
+                      option.optionValue.split('|'),
+                      zip(option.optionName.split('|')),
+                      map(([value, name]) => `${name}: ${value}`),
+                  ),
+        ),
+        toArray,
+    );
+
     const canAdjustQuantity = !isInvalidProduct && !!onQuantityChange;
     const handleCheckChange = onCheckChange ?? (() => {});
 
@@ -93,11 +111,13 @@ export const OrderProductItem = ({
                         <span className={styles.itemName}>
                             {product.productName}
                         </span>
-                        {option.optionTitle && (
-                            <span className={styles.itemOption}>
-                                {option.optionTitle}
-                            </span>
-                        )}
+                        <div className={styles.itemOptionList}>
+                            {optionLabels.map((label, index) => (
+                                <span key={index} className={styles.itemOption}>
+                                    {label}
+                                </span>
+                            ))}
+                        </div>
                     </div>
 
                     {canAdjustQuantity ? (

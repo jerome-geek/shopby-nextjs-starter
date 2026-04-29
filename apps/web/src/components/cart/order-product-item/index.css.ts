@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const cartItem = style({
     display: 'flex',
@@ -92,11 +92,10 @@ export const itemBrand = style([
     textStyles.caption1Regular,
     {
         color: vars.color.gray['60'],
+
         '@media': {
             [media.desktop]: {
-                fontSize: '1.4rem',
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
+                ...textStyleTokens.body1Regular,
             },
         },
     },
@@ -111,27 +110,25 @@ export const itemName = style([
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
+
         '@media': {
             [media.desktop]: {
-                fontSize: '1.5rem',
-                lineHeight: '1.4',
-                letterSpacing: '-0.2%',
+                ...textStyleTokens.headlineMedium,
             },
         },
     },
 ]);
 
+export const itemOptionList = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+});
+
 export const itemOption = style([
     textStyles.caption1Regular,
     {
-        color: vars.color.gray['50'],
-        '@media': {
-            [media.desktop]: {
-                fontSize: '1.4rem',
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
-            },
-        },
+        color: vars.color.gray['60'],
     },
 ]);
 
@@ -158,6 +155,7 @@ export const quantityController = style({
     backgroundColor: vars.color.white,
     borderRadius: '2px',
     padding: '6px',
+
     '@media': {
         [media.desktop]: {
             border: `1px solid ${vars.color.gray['30']}`,
@@ -177,6 +175,7 @@ export const quantityButton = style({
     border: 'none',
     cursor: 'pointer',
     color: vars.color.gray['90'],
+
     '@media': {
         [media.desktop]: {
             width: '24px',
@@ -192,12 +191,10 @@ export const quantityValue = style([
         width: '15px',
         textAlign: 'center',
         color: vars.color.gray['80'],
+
         '@media': {
             [media.desktop]: {
-                width: '32px',
-                fontSize: '1.3rem',
-                lineHeight: '1.3',
-                letterSpacing: '-1.3%',
+                ...textStyleTokens.body2Regular,
             },
         },
     },
@@ -207,6 +204,7 @@ export const itemPriceArea = style({
     display: 'flex',
     alignItems: 'center',
     gap: '3px',
+
     '@media': {
         [media.desktop]: {
             alignItems: 'baseline',
@@ -220,9 +218,7 @@ export const itemDiscount = style([
         color: vars.color.pink['100'],
         '@media': {
             [media.desktop]: {
-                fontSize: '1.8rem',
-                lineHeight: '1.5',
-                letterSpacing: '-1.3%',
+                ...textStyleTokens.headingBold,
             },
         },
     },
@@ -232,11 +228,10 @@ export const itemPrice = style([
     textStyles.headlineBold,
     {
         color: vars.color.black,
+
         '@media': {
             [media.desktop]: {
-                fontSize: '1.8rem',
-                lineHeight: '1.5',
-                letterSpacing: '-1.3%',
+                ...textStyleTokens.headingBold,
             },
         },
     },
@@ -257,12 +252,5 @@ export const invalidMessage = style([
         color: vars.color.white,
         textAlign: 'center',
         zIndex: '2',
-        '@media': {
-            [media.desktop]: {
-                fontSize: '18px',
-                lineHeight: '1.5',
-                letterSpacing: '-1.3%',
-            },
-        },
     },
 ]);

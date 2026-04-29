@@ -115,6 +115,7 @@ const ShopbyApiErrorBoundary = ({
                         if (typeof errorFallback === 'function') {
                             return <>{errorFallback(props)}</>;
                         }
+
                         if (errorFallback) {
                             return <>{errorFallback}</>;
                         }

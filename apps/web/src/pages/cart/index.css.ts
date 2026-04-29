@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const container = style({
     display: 'flex',
@@ -44,9 +44,7 @@ export const summaryLabel = style([
 
         '@media': {
             [media.desktop]: {
-                fontSize: '1.5rem',
-                lineHeight: '1.4',
-                letterSpacing: '-0.2%',
+                ...textStyleTokens.headlineMedium,
             },
         },
     },
@@ -63,7 +61,7 @@ export const contentWrapper = style({
             width: '100%',
             marginLeft: '0',
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) 486px',
+            gridTemplateColumns: 'minmax(0, 1fr) clamp(320px, 38%, 486px)',
             columnGap: '48px',
             rowGap: '32px',
             maxWidth: '1200px',
@@ -192,9 +190,7 @@ export const partnerName = style([
 
         '@media': {
             [media.desktop]: {
-                fontSize: '1.8rem',
-                lineHeight: '1.5',
-                letterSpacing: '-1.3%',
+                ...textStyleTokens.headingSemibold,
             },
         },
     },
@@ -229,6 +225,7 @@ export const thickDivider = style({
     height: '6px',
     backgroundColor: vars.color.gray['20'],
     width: '100%',
+
     '@media': {
         [media.desktop]: {
             display: 'none',
@@ -240,6 +237,7 @@ export const emptyCartContainer = style({
     display: 'flex',
     flexDirection: 'column',
     padding: '40px 20px',
+
     '@media': {
         [media.desktop]: {
             gap: '10px',

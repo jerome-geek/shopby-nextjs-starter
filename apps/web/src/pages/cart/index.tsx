@@ -7,6 +7,7 @@ import { OrderProductItem } from '@/components/cart/order-product-item';
 import CartSummary from '@/components/cart/summary';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
 import { InputCheckbox, InputLabel } from '@/components/ui/input';
@@ -16,23 +17,27 @@ import useCart from '@/hooks/cart/useCart';
 import { useCartMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useDialog, useResponsive } from '@/hooks/utils';
+import { useDialog } from '@/hooks/utils';
 import type { UpdateCartData } from '@/models/order/cart';
 import * as styles from '@/pages/cart/index.css';
 import { useCartStore } from '@/store/useCartStore';
 
 const CartPage = () => {
+    const { t } = useTranslation();
+
     return (
-        <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
-            <CartContent />
-        </ShopbyApiErrorBoundary>
+        <>
+            <Seo title={t('장바구니')} />
+
+            <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
+                <CartContent />
+            </ShopbyApiErrorBoundary>
+        </>
     );
 };
 
 const CartContent = () => {
     const { t } = useTranslation();
-
-    const { isMobile } = useResponsive();
 
     const isLogin = useAuth();
 
@@ -44,7 +49,11 @@ const CartContent = () => {
 
     const { cartInfo, isLoading } = useCart();
 
-    const deliveryGroups = cartInfo?.deliveryGroups ?? [];
+    const deliveryGroups = useMemo(
+        () => cartInfo?.deliveryGroups ?? [],
+        [cartInfo],
+    );
+
     const invalidProducts = useMemo(
         () => cartInfo?.invalidProducts ?? [],
         [cartInfo],
@@ -52,8 +61,11 @@ const CartContent = () => {
 
     const invalidCartNoList = useMemo(
         () =>
-            invalidProducts.flatMap((product) =>
-                product.orderProductOptions.map((option) => option.cartNo),
+            pipe(
+                invalidProducts,
+                flatMap((product) => product.orderProductOptions),
+                map((option) => option.cartNo),
+                toArray,
             ),
         [invalidProducts],
     );
@@ -347,50 +359,54 @@ const CartContent = () => {
                                                     {group.orderProducts.map(
                                                         (product) =>
                                                             product.orderProductOptions.map(
-                                                                (option) => (
-                                                                    <OrderProductItem
-                                                                        key={`${product.productNo}-${option.optionNo}`}
-                                                                        item={{
-                                                                            product,
-                                                                            option,
-                                                                        }}
-                                                                        isChecked={checkedCartNoList.includes(
-                                                                            option.cartNo,
-                                                                        )}
-                                                                        onCheckChange={(
-                                                                            checked,
-                                                                        ) =>
-                                                                            handleSelectOption(
+                                                                (option) => {
+                                                                    return (
+                                                                        <OrderProductItem
+                                                                            key={
+                                                                                option.cartNo
+                                                                            }
+                                                                            item={{
+                                                                                product,
+                                                                                option,
+                                                                            }}
+                                                                            isChecked={checkedCartNoList.includes(
                                                                                 option.cartNo,
+                                                                            )}
+                                                                            onCheckChange={(
                                                                                 checked,
-                                                                            )
-                                                                        }
-                                                                        onQuantityChange={(
-                                                                            nextOrderCnt,
-                                                                        ) =>
-                                                                            onOrderCntChangeButtonClick(
-                                                                                {
-                                                                                    cartNo: option.cartNo,
-                                                                                    orderCnt:
-                                                                                        nextOrderCnt,
-                                                                                    productNo:
-                                                                                        product.productNo,
-                                                                                    optionNo:
-                                                                                        option.optionNo,
-                                                                                    optionInputs:
-                                                                                        option.optionInputs,
-                                                                                },
-                                                                            )
-                                                                        }
-                                                                        onDelete={() =>
-                                                                            onDeleteButtonClick(
-                                                                                [
+                                                                            ) =>
+                                                                                handleSelectOption(
                                                                                     option.cartNo,
-                                                                                ],
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                ),
+                                                                                    checked,
+                                                                                )
+                                                                            }
+                                                                            onQuantityChange={(
+                                                                                nextOrderCnt,
+                                                                            ) =>
+                                                                                onOrderCntChangeButtonClick(
+                                                                                    {
+                                                                                        cartNo: option.cartNo,
+                                                                                        orderCnt:
+                                                                                            nextOrderCnt,
+                                                                                        productNo:
+                                                                                            product.productNo,
+                                                                                        optionNo:
+                                                                                            option.optionNo,
+                                                                                        optionInputs:
+                                                                                            option.optionInputs,
+                                                                                    },
+                                                                                )
+                                                                            }
+                                                                            onDelete={() =>
+                                                                                onDeleteButtonClick(
+                                                                                    [
+                                                                                        option.cartNo,
+                                                                                    ],
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                    );
+                                                                },
                                                             ),
                                                     )}
                                                 </ul>
