@@ -1,9 +1,16 @@
+import { filter, map, pipe, takeRight, toArray } from '@fxts/core';
 import { useLenis } from 'lenis/react';
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { type MutableRefObject, useEffect, useRef } from 'react';
 
 const SCROLL_STORAGE_KEY = 'route-scroll-positions';
 const RESTORE_SCROLL_FRAME_COUNT = 3;
+const MAX_SCROLL_ENTRIES = 10;
+
+type ScrollStorage = {
+    positions: Record<string, number>;
+    order: string[];
+};
 
 const useRouteScroll = () => {
     const router = useRouter();
@@ -13,16 +20,15 @@ const useRouteScroll = () => {
     const lenis = useLenis();
 
     useEffect(() => {
-        const handlePopState = () => {
+        router.beforePopState(() => {
             isHistoryNavigationRef.current = true;
-        };
-
-        window.addEventListener('popstate', handlePopState);
+            return true;
+        });
 
         return () => {
-            window.removeEventListener('popstate', handlePopState);
+            router.beforePopState(() => true);
         };
-    }, []);
+    }, [router]);
 
     useEffect(() => {
         const handleRouteChangeStart = () => {
@@ -58,18 +64,18 @@ const saveScrollPosition = (
     path: string,
     lenis: ReturnType<typeof useLenis>,
 ) => {
-    const scrollPositions = getScrollPositions();
-    scrollPositions[path] = lenis?.scroll ?? window.scrollY;
-    sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify(scrollPositions));
+    const scroll = lenis?.scroll ?? window.scrollY;
+    const nextStorage = pipeScrollStorage(readScrollStorage(), path, scroll);
+    writeScrollStorage(nextStorage);
 };
 
 const restoreScrollPosition = (
     path: string,
     lenis: ReturnType<typeof useLenis>,
-    restoreAnimationFrameRef: React.MutableRefObject<number | null>,
+    restoreAnimationFrameRef: MutableRefObject<number | null>,
 ) => {
-    const scrollPositions = getScrollPositions();
-    const savedScroll = scrollPositions[path];
+    const storage = readScrollStorage();
+    const savedScroll = storage.positions[path];
 
     if (savedScroll === undefined) {
         return;
@@ -101,7 +107,7 @@ const restoreScrollPosition = (
 };
 
 const cancelRestoreAnimation = (
-    restoreAnimationFrameRef: React.MutableRefObject<number | null>,
+    restoreAnimationFrameRef: MutableRefObject<number | null>,
 ) => {
     if (restoreAnimationFrameRef.current === null) {
         return;
@@ -120,16 +126,101 @@ const scrollToTop = (lenis: ReturnType<typeof useLenis>) => {
     window.scrollTo({ top: 0, behavior: 'auto' });
 };
 
-const getScrollPositions = (): Record<string, number> => {
+const pipeScrollStorage = (
+    storage: ScrollStorage,
+    path: string,
+    scroll: number,
+): ScrollStorage =>
+    pipe(
+        storage,
+        (currentStorage) => setScrollPosition(currentStorage, path, scroll),
+        (currentStorage) => appendScrollOrder(currentStorage, path),
+        limitScrollStorageEntries,
+    );
+
+const setScrollPosition = (
+    storage: ScrollStorage,
+    path: string,
+    scroll: number,
+): ScrollStorage => ({
+    ...storage,
+    positions: {
+        ...storage.positions,
+        [path]: scroll,
+    },
+});
+
+const appendScrollOrder = (
+    storage: ScrollStorage,
+    path: string,
+): ScrollStorage => ({
+    ...storage,
+    order: pipe(
+        storage.order,
+        filter((item) => item !== path),
+        toArray,
+        (order) => [...order, path],
+    ),
+});
+
+const limitScrollStorageEntries = (storage: ScrollStorage) => {
+    const nextOrder = pipe(
+        storage.order,
+        takeRight(MAX_SCROLL_ENTRIES),
+        toArray,
+    );
+    const nextPositions = Object.fromEntries(
+        pipe(
+            nextOrder,
+            map((key) => {
+                const value = storage.positions[key];
+
+                return value === undefined ? null : ([key, value] as const);
+            }),
+            filter((entry) => entry !== null),
+            toArray,
+        ),
+    );
+
+    return {
+        positions: nextPositions,
+        order: nextOrder,
+    };
+};
+
+const readScrollStorage = (): ScrollStorage => {
     const stored = sessionStorage.getItem(SCROLL_STORAGE_KEY);
 
     if (!stored) {
-        return {};
+        return { positions: {}, order: [] };
     }
 
     try {
-        return JSON.parse(stored) as Record<string, number>;
+        const parsed = JSON.parse(stored) as unknown;
+
+        if (
+            parsed &&
+            typeof parsed === 'object' &&
+            'positions' in parsed &&
+            'order' in parsed
+        ) {
+            const typed = parsed as ScrollStorage;
+            return {
+                positions: typed.positions ?? {},
+                order: Array.isArray(typed.order) ? typed.order : [],
+            };
+        }
+
+        return { positions: {}, order: [] };
     } catch {
-        return {};
+        return { positions: {}, order: [] };
+    }
+};
+
+const writeScrollStorage = (storage: ScrollStorage) => {
+    try {
+        sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify(storage));
+    } catch (error) {
+        console.error(error);
     }
 };
