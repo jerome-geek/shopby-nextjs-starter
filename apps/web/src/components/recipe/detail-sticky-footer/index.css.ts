@@ -1,7 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
+import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
 export const footer = style({
@@ -9,14 +10,12 @@ export const footer = style({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '64px',
     backgroundColor: vars.color.white,
     borderTop: `1px solid ${vars.color.gray['20']}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '20px',
-    paddingBottom: 'calc(20px + env(safe-area-inset-bottom))',
+    padding: '0 20px env(safe-area-inset-bottom)',
     zIndex: 1000,
     boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
 
@@ -33,6 +32,7 @@ export const footer = style({
 export const buttonContainer = style({
     display: 'flex',
     gap: '16px',
+    height: globalVars.bottomNav.height,
 });
 
 export const actionButton = style([

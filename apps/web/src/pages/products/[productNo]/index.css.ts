@@ -8,7 +8,7 @@ import { textStyles } from '@/styles/typography.css';
 export const container = style({
     backgroundColor: vars.color.white,
     minHeight: '100vh',
-    paddingBottom: `calc(${globalVars.header.bottomNavHeight} + 80px + env(safe-area-inset-bottom))`,
+    paddingBottom: `calc(${globalVars.bottomNav.height} + 80px)`,
     maxWidth: '1200px',
     margin: '0 auto',
 
@@ -311,7 +311,7 @@ export const badgeActive = style({
 
 export const bottomSticky = style({
     position: 'fixed',
-    bottom: `calc(${globalVars.header.bottomNavHeight} + env(safe-area-inset-bottom))`,
+    bottom: `var(--bottom-nav-active-height, 0px)`,
     left: 0,
     right: 0,
     backgroundColor: vars.color.white,

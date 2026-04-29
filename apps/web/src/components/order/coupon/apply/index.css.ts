@@ -1,4 +1,3 @@
-import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 import { style } from '@vanilla-extract/css';
@@ -133,17 +132,3 @@ export const footerButtonContainer = style({
     width: '100%',
     padding: '20px',
 });
-
-export const footerButton = style([
-    textStyles.body1Bold,
-    {
-        width: '100%',
-        height: '52px',
-
-        '@media': {
-            [media.mobile]: {
-                fontSize: '14px',
-            },
-        },
-    },
-]);

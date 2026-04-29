@@ -67,7 +67,9 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
                     couponIssueNo: a.couponIssueNo,
                     couponName: a.couponName,
                     couponDiscountAmt: a.couponDiscountAmt,
-                    displayCouponName: `${a.couponName} - ${CURRENCY(a.couponDiscountAmt).format()}`,
+                    displayCouponName: `${a.couponName} - ${CURRENCY(
+                        a.couponDiscountAmt,
+                    ).format()}`,
                     isNotProductCouponUsable: !a.productCouponUsable,
                 })),
                 toArray,
@@ -217,8 +219,8 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
 
                     openDialog({
                         message: isAxiosError(error)
-                            ? (error.response?.data.message ??
-                              t('쿠폰 적용에 실패했습니다.'))
+                            ? error.response?.data.message ??
+                              t('쿠폰 적용에 실패했습니다.')
                             : t('쿠폰 적용에 실패했습니다.'),
                     });
                 },
@@ -317,8 +319,8 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
 
                     openDialog({
                         message: isAxiosError(error)
-                            ? (error.response?.data.message ??
-                              t('쿠폰 적용에 실패했습니다.'))
+                            ? error.response?.data.message ??
+                              t('쿠폰 적용에 실패했습니다.')
                             : t('쿠폰 적용에 실패했습니다.'),
                     });
                 },
@@ -348,7 +350,11 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
                                             couponName: c.couponName,
                                             couponDiscountAmt:
                                                 c.couponDiscountAmt,
-                                            displayCouponName: `${c.couponName} - ${CURRENCY(c.couponDiscountAmt).format()}`,
+                                            displayCouponName: `${
+                                                c.couponName
+                                            } - ${CURRENCY(
+                                                c.couponDiscountAmt,
+                                            ).format()}`,
                                             cartCouponUsable:
                                                 c.cartCouponUsable,
                                             isSelected:
@@ -519,7 +525,9 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
                                                     >
                                                         {option.couponDiscountAmt >
                                                             0 &&
-                                                            `-${CURRENCY(option.couponDiscountAmt).format()}`}
+                                                            `-${CURRENCY(
+                                                                option.couponDiscountAmt,
+                                                            ).format()}`}
                                                     </span>
                                                 </div>
                                             )}
@@ -578,7 +586,9 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
                                 </div>
                                 <span className={styles.couponPrice}>
                                     {option.couponDiscountAmt > 0 &&
-                                        `-${CURRENCY(option.couponDiscountAmt).format()}`}
+                                        `-${CURRENCY(
+                                            option.couponDiscountAmt,
+                                        ).format()}`}
                                 </span>
                             </div>
                         )}
@@ -589,18 +599,16 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
     );
 
     const footer = [
-        <div key='footer' className={styles.footerButtonContainer}>
-            <Button
-                frame='solid'
-                variant='primary'
-                onClick={close}
-                className={styles.footerButton}
-            >
-                {t('쿠폰 적용 완료 (할인 금액: {{amt}})', {
-                    amt: totalCouponAmt,
-                })}
-            </Button>
-        </div>,
+        <Button
+            key='coupon-apply-complete-button'
+            frame='solid'
+            variant='primary'
+            onClick={close}
+        >
+            {t('쿠폰 적용 완료 (할인 금액: {{amt}})', {
+                amt: totalCouponAmt,
+            })}
+        </Button>,
     ];
 
     if (isMobile) {

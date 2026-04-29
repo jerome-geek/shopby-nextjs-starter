@@ -1,6 +1,6 @@
-import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const formContent = style({
     display: 'flex',
@@ -48,35 +48,3 @@ export const footer = style({
     gap: '12px',
     borderTop: `1px solid ${vars.color.gray['10']}`,
 });
-
-export const cancelButton = style([
-    textStyles.body1Semibold,
-    {
-        flex: 1,
-        height: '56px',
-        borderRadius: '8px',
-        border: `1px solid ${vars.color.gray['30']}`,
-        backgroundColor: vars.color.white,
-        color: vars.color.gray['80'],
-        cursor: 'pointer',
-        ':hover': {
-            backgroundColor: vars.color.gray['10'],
-        },
-    },
-]);
-
-export const submitButton = style([
-    textStyles.body1Semibold,
-    {
-        flex: 1,
-        height: '56px',
-        borderRadius: '8px',
-        border: 'none',
-        backgroundColor: vars.color.black,
-        color: vars.color.white,
-        cursor: 'pointer',
-        ':hover': {
-            opacity: 0.9,
-        },
-    },
-]);

@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -10,6 +11,12 @@ export const list = style({
     gap: '18px',
     margin: '0 auto',
     padding: '8px 0',
+
+    '@media': {
+        [media.mobile]: {
+            padding: '8px 0 0',
+        },
+    },
 });
 
 export const listButton = style({

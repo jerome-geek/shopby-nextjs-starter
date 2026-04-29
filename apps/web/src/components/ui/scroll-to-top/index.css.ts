@@ -1,14 +1,22 @@
 import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 
 export const container = style({
     position: 'fixed',
-    bottom: '80px',
+    bottom: '200px',
     right: '20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
     zIndex: 999,
+
+    '@media': {
+        [media.mobile]: {
+            bottom: 'calc(var(--bottom-nav-active-height, 0px) + 90px)',
+        },
+    },
 });
 
 export const button = style({

@@ -6,9 +6,10 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import { ModalLayout, BottomSheetLayout } from '@/components/layout';
+import { BottomSheetLayout, ModalLayout } from '@/components/layout';
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
+import { Button } from '@/components/ui';
 import { ErrorMessage } from '@/components/ui/form';
 import {
     InputCheckbox,
@@ -203,23 +204,24 @@ const ShippingAddressCreateModal = ({
     const isPending = isRegisterPending || isUpdatePending;
 
     const footerButtonList = [
-        <button
+        <Button
             key='cancel-btn'
             type='button'
-            className={styles.cancelButton}
+            frame='outlined'
+            variant='secondary'
             onClick={onClose}
         >
             {t('취소하기')}
-        </button>,
-        <button
+        </Button>,
+        <Button
             key='submit-btn'
-            type='button'
-            className={styles.submitButton}
+            frame='solid'
+            variant='apple'
             disabled={isPending}
             onClick={onSubmit}
         >
             {t(isEditMode ? '수정하기' : '등록하기')}
-        </button>,
+        </Button>,
     ];
 
     const formContent = (
@@ -359,9 +361,7 @@ const ShippingAddressCreateModal = ({
                     options={ADDRESS_MEMO_LIST}
                     getOptionLabel={(option) => t(option.label)}
                     getOptionValue={(option) => option.value}
-                    value={findAddressMemoOption(
-                        addressMemoWatch ?? '',
-                    )}
+                    value={findAddressMemoOption(addressMemoWatch ?? '')}
                     onChange={(e) => {
                         if (e?.value === t('직접 입력')) {
                             setValue('addressMemo', '');

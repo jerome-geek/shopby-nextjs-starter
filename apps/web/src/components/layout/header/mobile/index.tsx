@@ -49,17 +49,25 @@ export const MobileHeader = ({
     const { depth2CategoryLabel } = useCategoryMenu(Number(categoryNo) || 0);
 
     const handleShare = async () => {
-        const url = window.location.href;
-        if (navigator.share) {
-            await navigator.share({ title: document.title, url });
-            return;
-        }
+        try {
+            const url = window.location.href;
 
-        await navigator.clipboard.writeText(url);
-        addToast({
-            message: t('링크가 복사되었습니다.'),
-            variant: 'success',
-        });
+            if (navigator.share) {
+                await navigator.share({ title: document.title, url });
+                return;
+            }
+
+            await navigator.clipboard.writeText(url);
+            addToast({
+                message: t('링크가 복사되었습니다.'),
+                variant: 'success',
+            });
+        } catch {
+            addToast({
+                message: t('주소 복사에 실패했습니다.'),
+                variant: 'error',
+            });
+        }
     };
 
     const BackButton = (

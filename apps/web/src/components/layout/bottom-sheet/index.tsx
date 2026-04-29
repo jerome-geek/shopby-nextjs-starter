@@ -68,7 +68,7 @@ export const BottomSheetLayout = ({
     });
 
     const computedMaxHeight =
-        type === 'fullscreen' ? '100vh' : maxHeight || '80vh';
+        type === 'fullscreen' ? '100dvh' : maxHeight || '80vh';
 
     return (
         <AnimatePresence

@@ -1,4 +1,6 @@
 import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -7,6 +9,12 @@ export const container = style({
     flexDirection: 'column',
     gap: '24px',
     padding: '8px 0',
+
+    '@media': {
+        [media.mobile]: {
+            padding: '8px 0 0',
+        },
+    },
 });
 
 export const description = style([

@@ -19,18 +19,20 @@ export const container = style({
     transform: 'translate(-50%, -50%)',
     backgroundColor: vars.color.white,
     zIndex: 1004,
-    minWidth: '432px',
+    minWidth: '400px',
     borderRadius: '24px',
     overflow: 'hidden',
     padding: '48px 24px 24px 24px',
     display: 'flex',
     flexDirection: 'column',
     gap: '36px',
+    width: '100%',
+    maxWidth: '450px',
 
     '@media': {
         [media.mobile]: {
             minWidth: '300px',
-            maxWidth: '100%',
+            maxWidth: '370px',
         },
     },
 });

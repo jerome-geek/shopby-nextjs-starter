@@ -1,6 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
 
-import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
@@ -191,7 +190,7 @@ export const totalPrice = style([
 
 export const bottomSticky = style({
     position: 'fixed',
-    bottom: `calc(${globalVars.header.bottomNavHeight} + env(safe-area-inset-bottom))`,
+    bottom: `var(--bottom-nav-active-height, 0px)`,
     left: 0,
     width: '100%',
     backgroundColor: vars.color.white,

@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import { motion, useMotionValueEvent, useScroll } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -17,6 +17,7 @@ import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
+import { globalVars } from '@/styles/global.css';
 
 type NavItem = {
     label: string;
@@ -75,6 +76,22 @@ export default function BottomNavigation() {
     };
 
     useMotionValueEvent(scrollY, 'change', handleScroll);
+
+    useEffect(() => {
+        if (typeof document !== 'undefined') {
+            document.documentElement.style.setProperty(
+                '--bottom-nav-active-height',
+                hidden
+                    ? '0px'
+                    : `calc(${globalVars.bottomNav.height} + env(safe-area-inset-bottom))`,
+            );
+        }
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [hidden]);
 
     if (isRecipeDetail) return null;
 

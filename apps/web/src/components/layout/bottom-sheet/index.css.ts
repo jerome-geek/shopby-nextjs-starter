@@ -25,6 +25,7 @@ export const bottomSheetContainer = recipe({
         backgroundColor: vars.color.white,
         padding: 0,
         zIndex: 1004,
+        paddingBottom: 'env(safe-area-inset-bottom)',
     },
     variants: {
         type: {
@@ -74,7 +75,6 @@ export const bottomSheetContent = recipe({
         flex: 1,
         overflowY: 'auto',
         overflowX: 'hidden',
-        padding: '0 20px 20px',
 
         selectors: {
             '&::-webkit-scrollbar': {
@@ -92,8 +92,8 @@ export const bottomSheetContent = recipe({
             false: {},
         },
         isFooter: {
-            true: {},
-            false: {},
+            true: { padding: '0 20px 20px' },
+            false: { padding: '0 20px 12px' },
         },
     },
     compoundVariants: [
@@ -120,7 +120,7 @@ export const bottomSheetFooter = style({
     display: 'flex',
     alignItems: 'center',
     gap: 8,
-    padding: '12px 20px 60px',
+    padding: '12px 20px',
     borderTop: `1px solid ${vars.color.gray['20']}`,
 });
 

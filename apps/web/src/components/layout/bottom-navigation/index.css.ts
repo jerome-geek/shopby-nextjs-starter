@@ -10,7 +10,6 @@ export const bottomNavigationContainer = style({
     bottom: 0,
     left: 0,
     right: 0,
-    height: globalVars.header.bottomNavHeight,
     backgroundColor: vars.color.white,
     borderTop: `1px solid ${vars.color.gray[20]}`,
     display: 'flex',
@@ -38,6 +37,7 @@ export const navItem = style({
     gap: '4px',
     textDecoration: 'none',
     color: vars.color.gray[60],
+    height: globalVars.bottomNav.height,
     flex: 1,
 });
 

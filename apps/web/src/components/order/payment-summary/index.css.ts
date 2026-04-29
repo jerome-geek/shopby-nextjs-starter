@@ -35,10 +35,9 @@ export const buttonWrapper = style({
             left: 0,
             right: 0,
             zIndex: 100,
-            backgroundColor: '#fff',
-            padding: '12px 20px calc(12px + env(safe-area-inset-bottom, 0px))',
+            backgroundColor: vars.color.white,
+            padding: '12px 20px calc(12px + env(safe-area-inset-bottom))',
             borderTop: `1px solid ${vars.color.gray['20']}`,
-            boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.06)',
         },
     },
 });

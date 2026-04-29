@@ -1,6 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
@@ -19,8 +18,8 @@ export const container = style({
     top: 0,
     right: 0,
     width: '100%',
-    height: `calc(100dvh - ${globalVars.header.bottomNavHeight})`, // view height - bottom navigation height
-    maxHeight: '100vh',
+    height: `calc(100dvh - var(--bottom-nav-active-height, 0px) - 1px)`, // view height - bottom navigation height
+    maxHeight: '100dvh',
     backgroundColor: vars.color.white,
     willChange: 'transform',
     '@media': {

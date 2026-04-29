@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 
-import { useKeyDown } from '@/hooks/utils';
 import * as styles from '@/components/layout/dialog/index.css';
+import { useKeyDown } from '@/hooks/utils';
 
 export interface DefaultDialogProps {
     overlayId?: string;
@@ -66,7 +66,6 @@ export const DialogLayout = ({
                         initial='init'
                         animate='show'
                         exit='hide'
-                        style={{ maxWidth }}
                     >
                         {children}
                     </motion.div>

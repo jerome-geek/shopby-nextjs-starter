@@ -7,7 +7,7 @@ import { textStyles } from '@/styles/typography.css';
 export const queryList = style({
     display: 'flex',
     flexDirection: 'column',
-    padding: '24px 0 40px',
+    padding: '24px 0 0',
 });
 
 export const queryListItem = style({
