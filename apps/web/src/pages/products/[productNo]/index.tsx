@@ -1,5 +1,5 @@
 import { each, filter, join, map, pipe, prop, take } from '@fxts/core';
-import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
 import {
@@ -7,7 +7,6 @@ import {
     type GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import { parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect, useMemo } from 'react';
 
@@ -32,7 +31,6 @@ import {
 } from '@/components/product-option';
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
-import { CHANNEL_TYPES } from '@/const/product';
 import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
@@ -41,8 +39,6 @@ import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
-import { useCustomDialog } from '@/hooks/ui';
-import { useAuth } from '@/hooks/useAuth';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
@@ -57,26 +53,15 @@ interface ProductDetailViewProps {
     productNo: number;
 }
 
-const productSearchParamsSchema = {
-    channelType: parseAsStringLiteral(CHANNEL_TYPES),
-};
-
 function ProductDetailView({ productNo }: ProductDetailViewProps) {
-    const [{ channelType }] = useQueryStates(productSearchParamsSchema);
-
-    const isLogin = useAuth();
-
     const { isMobile, isTablet } = useResponsive();
-
-    const { openAddCartDialog } = useCustomDialog();
-
-    const queryClient = useQueryClient();
 
     const { data: productDetailData } = useProductDetail({
         productNo,
     });
 
-    const { baseInfo, price, counter, brand, liked } = productDetailData;
+    const { baseInfo, price, counter, brand, liked, deliveryFee } =
+        productDetailData;
 
     const {
         isDefaultOptionUsed,
@@ -273,8 +258,8 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             onClick={onLikeButtonClick(productNo, liked)}
                         >
                             <BookmarkIcon
-                                width={36}
-                                height={36}
+                                width={isMobile ? 24 : 36}
+                                height={isMobile ? 24 : 36}
                                 fill={liked ? vars.color.green['100'] : 'none'}
                                 stroke={
                                     liked
@@ -334,12 +319,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                 <span
                                     className={`${styles.badge} ${styles.badgeActive}`}
                                 >
-                                    무료배송
-                                </span>
-                                <span
-                                    className={`${styles.badge} ${styles.badgeActive}`}
-                                >
-                                    빠른배송
+                                    {deliveryFee.defaultDeliveryConditionLabel}
                                 </span>
                             </div>
                         </div>

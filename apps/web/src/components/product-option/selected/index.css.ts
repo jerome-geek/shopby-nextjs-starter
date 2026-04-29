@@ -90,3 +90,9 @@ export const priceValue = style([
         color: vars.color.black,
     },
 ]);
+
+export const textOptionList = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+});

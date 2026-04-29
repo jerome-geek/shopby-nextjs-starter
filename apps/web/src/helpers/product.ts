@@ -33,6 +33,7 @@ export const toSelectedOption = <T extends FlatOption>(
             inputValue: input.inputValue || '',
             required: input.required,
             inputLabel: input.inputLabel,
+            inputMatchingType: input.inputMatchingType,
         })),
     };
 };
