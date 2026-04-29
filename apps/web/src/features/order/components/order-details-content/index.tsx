@@ -1,3 +1,4 @@
+import { filter, map, pipe, toArray } from '@fxts/core';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useMemo } from 'react';
@@ -19,6 +20,7 @@ interface OrderDetailsContentProps {
  * [공통 주문 정보 UI 컴포넌트]
  */
 const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
+    console.log('🚀 ~ OrderDetailsContent ~ orderInfo:', orderInfo);
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
     const isLogin = useAuth();
@@ -158,12 +160,34 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                                 <h3 className={styles.productName}>
                                     {option.productName}
                                 </h3>
-                                {option.optionName && (
-                                    <p className={styles.productOptionText}>
-                                        {option.optionName}:{' '}
-                                        {option.optionValue}
-                                    </p>
-                                )}
+                                <div className={styles.optionList}>
+                                    {pipe(
+                                        [
+                                            option.optionName
+                                                ? {
+                                                      name: option.optionName,
+                                                      value: option.optionValue,
+                                                  }
+                                                : null,
+                                            ...(option.inputs?.map((input) => ({
+                                                name: input.inputLabel,
+                                                value: input.inputValue,
+                                            })) ?? []),
+                                        ],
+                                        filter((item) => !!item),
+                                        map((item) => (
+                                            <p
+                                                key={`${item?.name}-${item?.value}`}
+                                                className={
+                                                    styles.productOptionText
+                                                }
+                                            >
+                                                {item?.name}: {item?.value}
+                                            </p>
+                                        )),
+                                        toArray,
+                                    )}
+                                </div>
                                 <div className={styles.productFooter}>
                                     <p className={styles.orderCount}>
                                         {t('수량')} {option.orderCnt}

@@ -7,12 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { CollectionFormSheet } from '@/components/bottom-sheet/collection-form';
 import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
 import { RecipeImageUploadSheet } from '@/components/bottom-sheet/recipe-image-upload';
+import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
 import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
 import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
 import { ImageDetailModal } from '@/components/modal';
 import { CollectionFormModal } from '@/components/modal/collection-form';
 import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
 import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
+import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendation';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
 import ConfirmDialog from '@/components/ui/dialog/confirm';
@@ -43,8 +45,9 @@ export const useCustomDialog = () => {
     );
 
     const openAddCartDialog = useCallback(async <T = boolean,>() => {
-        return await overlay.openAsync<T>((props) => {
-            return (
+        return await overlay.openAsync<T>(
+            (props) => {
+                return (
                 <ConfirmDialog
                     {...props}
                     type='confirm'
@@ -91,13 +94,14 @@ export const useCustomDialog = () => {
                     cancelText={t('쇼핑 계속하기')}
                 />
             );
-        });
+        }, { overlayId: OVERLAY_ID.ADD_TO_CART });
     }, [t, router]);
 
     const openLoginDialog = useCallback(
         (returnUrl?: string) => {
-            overlay.open((props) => {
-                return (
+            overlay.open(
+                (props) => {
+                    return (
                     <ConfirmDialog
                         {...props}
                         type='confirm'
@@ -136,7 +140,7 @@ export const useCustomDialog = () => {
                         cancelText={t('닫기')}
                     />
                 );
-            });
+            }, { overlayId: OVERLAY_ID.LOGIN_DIALOG });
         },
         [t, router],
     );
@@ -189,19 +193,25 @@ export const useCustomDialog = () => {
 
     const _openRecipeUrlInput = useCallback(() => {
         if (isMobile) {
-            overlay.open((props) => (
-                <RecipeUrlInputSheet
-                    {...props}
-                    close={removeModalQuery(props.close)}
-                />
-            ));
+            overlay.open(
+                (props) => (
+                    <RecipeUrlInputSheet
+                        {...props}
+                        close={removeModalQuery(props.close)}
+                    />
+                ),
+                { overlayId: OVERLAY_ID.RECIPE_URL_INPUT },
+            );
         } else {
-            overlay.open((props) => (
-                <RecipeUrlInput
-                    {...props}
-                    close={removeModalQuery(props.close)}
-                />
-            ));
+            overlay.open(
+                (props) => (
+                    <RecipeUrlInput
+                        {...props}
+                        close={removeModalQuery(props.close)}
+                    />
+                ),
+                { overlayId: OVERLAY_ID.RECIPE_URL_INPUT },
+            );
         }
     }, [isMobile, removeModalQuery]);
 
@@ -212,9 +222,13 @@ export const useCustomDialog = () => {
 
     const _openRecipeImageUpload = useCallback(() => {
         if (isMobile) {
-            overlay.open((props) => <RecipeImageUploadSheet {...props} />);
+            overlay.open((props) => <RecipeImageUploadSheet {...props} />, {
+                overlayId: OVERLAY_ID.RECIPE_IMAGE_UPLOAD,
+            });
         } else {
-            overlay.open((props) => <RecipeImageUploadModal {...props} />);
+            overlay.open((props) => <RecipeImageUploadModal {...props} />, {
+                overlayId: OVERLAY_ID.RECIPE_IMAGE_UPLOAD,
+            });
         }
     }, [isMobile]);
 
@@ -224,24 +238,32 @@ export const useCustomDialog = () => {
     );
 
     const openImageDetail = useCallback((src: string) => {
-        overlay.open((props) => <ImageDetailModal {...props} src={src} />);
+        overlay.open((props) => <ImageDetailModal {...props} src={src} />, {
+            overlayId: OVERLAY_ID.IMAGE_DETAIL,
+        });
     }, []);
 
     const _openRecipeCreateSelection = useCallback(() => {
         if (isMobile) {
-            overlay.open((props) => (
-                <RecipeCreateSelectionSheet
-                    {...props}
-                    close={removeModalQuery(props.close)}
-                />
-            ));
+            overlay.open(
+                (props) => (
+                    <RecipeCreateSelectionSheet
+                        {...props}
+                        close={removeModalQuery(props.close)}
+                    />
+                ),
+                { overlayId: OVERLAY_ID.RECIPE_CREATE_SELECTION },
+            );
         } else {
-            overlay.open((props) => (
-                <RecipeCreateSelection
-                    {...props}
-                    close={removeModalQuery(props.close)}
-                />
-            ));
+            overlay.open(
+                (props) => (
+                    <RecipeCreateSelection
+                        {...props}
+                        close={removeModalQuery(props.close)}
+                    />
+                ),
+                { overlayId: OVERLAY_ID.RECIPE_CREATE_SELECTION },
+            );
         }
     }, [isMobile, removeModalQuery]);
 
@@ -300,21 +322,27 @@ export const useCustomDialog = () => {
             };
 
             if (isMobile) {
-                overlay.open((props) => (
-                    <RecipeSaveSheet
-                        {...props}
-                        {...sharedProps}
-                        close={removeModalQuery(props.close)}
-                    />
-                ));
+                overlay.open(
+                    (props) => (
+                        <RecipeSaveSheet
+                            {...props}
+                            {...sharedProps}
+                            close={removeModalQuery(props.close)}
+                        />
+                    ),
+                    { overlayId: OVERLAY_ID.RECIPE_SAVE },
+                );
             } else {
-                overlay.open((props) => (
-                    <RecipeSaveModal
-                        {...props}
-                        {...sharedProps}
-                        close={removeModalQuery(props.close)}
-                    />
-                ));
+                overlay.open(
+                    (props) => (
+                        <RecipeSaveModal
+                            {...props}
+                            {...sharedProps}
+                            close={removeModalQuery(props.close)}
+                        />
+                    ),
+                    { overlayId: OVERLAY_ID.RECIPE_SAVE },
+                );
             }
         },
         [isMobile, removeModalQuery, openCollectionCreate],
@@ -324,6 +352,18 @@ export const useCustomDialog = () => {
         _openRecipeSave,
         MODAL_TYPE.RECIPE_SAVE,
     );
+
+    const openRecipeRecommendation = useCallback(() => {
+        if (isMobile) {
+            overlay.open((props) => <RecipeRecommendationBottomSheet {...props} />, {
+                overlayId: OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION,
+            });
+        } else {
+            overlay.open((props) => <RecipeRecommendationModal {...props} />, {
+                overlayId: OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION,
+            });
+        }
+    }, [isMobile]);
 
     return {
         openAddCartDialog,
@@ -335,6 +375,7 @@ export const useCustomDialog = () => {
         openCollectionCreate,
         openCollectionForm,
         openImageDetail,
+        openRecipeRecommendation,
         withRequiredAuth,
     };
 };

@@ -1,37 +1,36 @@
 import { useRouter } from 'next/router';
-import { overlay } from 'overlay-kit';
-import { Suspense, useEffect, useRef } from 'react';
-import { isMobile } from 'react-device-detect';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
+import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
-import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendation';
+import { PATHS } from '@/const/paths';
 import GuestOrderContent from '@/features/order/components/guest-order-content';
 import MemberOrderContent from '@/features/order/components/member-order-content';
 import OrderFail from '@/features/order/components/order-fail';
+import { useCustomDialog } from '@/hooks/ui/useCustomDialog';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/order/complete/index.css';
 
 const OrderComplete = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const isLogin = useAuth();
-    const hasOpenedRef = useRef(false);
+    const { isMobile } = useResponsive();
+    const { openRecipeRecommendation } = useCustomDialog();
 
-    const {
-        orderNo,
-        result = 'SUCCESS',
-        // guestToken = null,
-    } = router.query as {
+    const { orderNo, result = 'SUCCESS' } = router.query as {
         orderNo: string;
         result: 'SUCCESS' | 'FAIL';
         guestToken?: string;
     };
 
+    const isOrderSuccess = !!orderNo && result === 'SUCCESS';
+
     useEffect(() => {
-        if (!router.isReady || hasOpenedRef.current) {
+        if (!router.isReady) {
             return;
         }
 
@@ -43,47 +42,39 @@ const OrderComplete = () => {
         }
 
         if (result === 'SUCCESS' && orderNo) {
-            hasOpenedRef.current = true;
-            if (isMobile) {
-                overlay.open(({ isOpen, close, unmount }) => (
-                    <RecipeRecommendationBottomSheet
-                        isOpen={isOpen}
-                        close={close}
-                        unmount={unmount}
-                    />
-                ));
-            } else {
-                overlay.open(({ isOpen, close, unmount }) => (
-                    <RecipeRecommendationModal
-                        isOpen={isOpen}
-                        close={close}
-                        unmount={unmount}
-                    />
-                ));
-            }
+            openRecipeRecommendation();
         }
-    }, [router.isReady, result, orderNo]);
+    }, [isMobile, router.isReady, result, orderNo, openRecipeRecommendation]);
 
     if (router.isReady && !orderNo && result === 'SUCCESS') {
-        void router.replace('/');
+        void router.replace(PATHS.MAIN);
         return null;
     }
 
     return (
-        <CSRLayout>
-            <div className={styles.pageWrapper}>
-                {result === 'SUCCESS' && orderNo ? (
-                    <ShopbyApiErrorBoundary
-                        fallback={
-                            <div className={styles.loadingWrapper}>
-                                {t('데이터를 불러오는 중 오류가 발생했습니다.')}
-                            </div>
-                        }
-                    >
-                        <Suspense
+        <>
+            <Seo title={t('주문 완료')} />
+
+            <CSRLayout
+                fallback={
+                    <div className={styles.loadingWrapper}>
+                        {t('로딩 중...')}
+                    </div>
+                }
+            >
+                <div className={styles.pageWrapper}>
+                    {isOrderSuccess ? (
+                        <ShopbyApiErrorBoundary
                             fallback={
                                 <div className={styles.loadingWrapper}>
                                     {t('로딩 중...')}
+                                </div>
+                            }
+                            errorFallback={
+                                <div className={styles.loadingWrapper}>
+                                    {t(
+                                        '데이터를 불러오는 중 오류가 발생했습니다.',
+                                    )}
                                 </div>
                             }
                         >
@@ -92,13 +83,13 @@ const OrderComplete = () => {
                             ) : (
                                 <GuestOrderContent orderNo={orderNo} />
                             )}
-                        </Suspense>
-                    </ShopbyApiErrorBoundary>
-                ) : (
-                    <OrderFail />
-                )}
-            </div>
-        </CSRLayout>
+                        </ShopbyApiErrorBoundary>
+                    ) : (
+                        <OrderFail />
+                    )}
+                </div>
+            </CSRLayout>
+        </>
     );
 };
 

@@ -192,6 +192,14 @@ export const productOptionText = style({
     marginBottom: '4px',
 });
 
+export const optionList = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    marginTop: '4px',
+    marginBottom: '8px',
+});
+
 export const productFooter = style({
     display: 'flex',
     alignItems: 'center',

@@ -6,7 +6,6 @@ import type { AxiosError } from 'axios';
 
 import { guestOrder } from '@/api/order';
 import { guestOrderKeys } from '@/hooks/queryKeys';
-import { useAuth } from '@/hooks/useAuth';
 import type { OrderDetailResponse } from '@/models/order';
 import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
@@ -29,8 +28,6 @@ const useGuestOrderDetail = <T = OrderDetailResponse>({
     params,
     options,
 }: UseGuestOrderDetailParams<T>) => {
-    const isLogin = useAuth();
-
     return useSuspenseQuery({
         queryKey: guestOrderKeys.detail(orderNo, params),
         queryFn: async () => {
@@ -38,8 +35,6 @@ const useGuestOrderDetail = <T = OrderDetailResponse>({
 
             return data;
         },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
         ...options,
     });
 };

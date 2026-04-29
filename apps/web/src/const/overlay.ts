@@ -13,6 +13,12 @@ export const OVERLAY_ID = {
     TOAST: 'toast',
     LOADING: 'loading',
     COLLECTION_FORM: 'collection-form',
-    ORDER_COMPLETE_RECIPE_RECOMMENDATION: 'order-complete-recipe-recommendation',
-    ORDER_COMPLETE_RECIPE_RECOMMENDATION_MODAL: 'order-complete-recipe-recommendation-modal',
+    ORDER_COMPLETE_RECIPE_RECOMMENDATION:
+        'order-complete-recipe-recommendation',
+    LOGIN_DIALOG: 'login-dialog',
+    RECIPE_URL_INPUT: 'recipe-url-input',
+    RECIPE_IMAGE_UPLOAD: 'recipe-image-upload',
+    IMAGE_DETAIL: 'image-detail',
+    RECIPE_CREATE_SELECTION: 'recipe-create-selection',
+    RECIPE_SAVE: 'recipe-save',
 } as const;
