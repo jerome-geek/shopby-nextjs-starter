@@ -1,7 +1,7 @@
 import { each, filter, join, map, pipe, prop, take } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { BookmarkIcon, Gift, Star, Truck } from 'lucide-react';
+import { Gift, Star, Truck } from 'lucide-react';
 import {
     type GetStaticPaths,
     type GetStaticProps,
@@ -15,6 +15,7 @@ import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select
 import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import {
     PhotoReview,
@@ -258,14 +259,9 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             onClick={onLikeButtonClick(productNo, liked)}
                         >
                             <BookmarkIcon
-                                width={isMobile ? 24 : 36}
-                                height={isMobile ? 24 : 36}
-                                fill={liked ? vars.color.green['100'] : 'none'}
-                                stroke={
-                                    liked
-                                        ? vars.color.green['100']
-                                        : 'currentColor'
-                                }
+                                width={isMobile ? 20 : 20}
+                                height={isMobile ? 20 : 28}
+                                variant={liked ? 'filled' : 'outline'}
                             />
 
                             <span className={styles.likeCount}>

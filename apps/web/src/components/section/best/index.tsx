@@ -165,13 +165,13 @@ export default function Best({ type }: { type: 'KIDS' | 'LIFE' }) {
                         <Swiper
                             slidesPerView={2.2}
                             grid={{
-                                rows: 2,
+                                rows: productsWithDiscounts.length > 5 ? 2 : 1,
                                 fill: 'row',
                             }}
                             spaceBetween={16}
                             modules={[Grid, Pagination]}
                             breakpoints={{
-                                768: {
+                                [BREAKPOINTS.SM]: {
                                     slidesPerView: 5,
                                     grid: {
                                         rows: 2,

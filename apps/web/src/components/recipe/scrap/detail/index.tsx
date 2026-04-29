@@ -41,6 +41,7 @@ export const RecipeScrapDetail = ({
     const { data: profileData } = useProfile();
     const { data: sharedCollectionData } = useSharedCollection({
         shareCode,
+        memberNo: profileData?.memberNo,
     });
 
     const {

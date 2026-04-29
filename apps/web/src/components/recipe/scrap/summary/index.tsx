@@ -167,7 +167,7 @@ const RecipeScrapSummary = () => {
                                                     styles.buttonContainer
                                                 }
                                             >
-                                                {memberNo === c.memberNo && (
+                                                {memberNo === c.memberNo ? (
                                                     <VerticalMoreMenu
                                                         id={String(c.sno)}
                                                         onEdit={() =>
@@ -181,48 +181,50 @@ const RecipeScrapSummary = () => {
                                                             )
                                                         }
                                                     />
+                                                ) : (
+                                                    <button
+                                                        type='button'
+                                                        className={
+                                                            styles.bookmarkButton
+                                                        }
+                                                        onClick={withRequiredAuth(
+                                                            (e) => {
+                                                                e.preventDefault();
+                                                                toggleCollectionBookmark(
+                                                                    {
+                                                                        sno: c.sno,
+                                                                        bookmarked:
+                                                                            c.bookmarked,
+                                                                    },
+                                                                );
+                                                            },
+                                                        )}
+                                                    >
+                                                        <Bookmark
+                                                            size={24}
+                                                            strokeWidth={1.5}
+                                                            fill={
+                                                                c.bookmarked
+                                                                    ? vars.color
+                                                                          .green[
+                                                                          '100'
+                                                                      ]
+                                                                    : 'none'
+                                                            }
+                                                            color={
+                                                                c.bookmarked
+                                                                    ? vars.color
+                                                                          .green[
+                                                                          '100'
+                                                                      ]
+                                                                    : vars.color
+                                                                          .gray[
+                                                                          '40'
+                                                                      ]
+                                                            }
+                                                        />
+                                                    </button>
                                                 )}
-                                                <button
-                                                    type='button'
-                                                    className={
-                                                        styles.bookmarkButton
-                                                    }
-                                                    onClick={withRequiredAuth(
-                                                        () => {
-                                                            toggleCollectionBookmark(
-                                                                {
-                                                                    sno: c.sno,
-                                                                    bookmarked:
-                                                                        c.bookmarked,
-                                                                },
-                                                            );
-                                                        },
-                                                    )}
-                                                >
-                                                    <Bookmark
-                                                        size={24}
-                                                        strokeWidth={1.5}
-                                                        fill={
-                                                            c.bookmarked
-                                                                ? vars.color
-                                                                      .green[
-                                                                      '100'
-                                                                  ]
-                                                                : 'none'
-                                                        }
-                                                        color={
-                                                            c.bookmarked
-                                                                ? vars.color
-                                                                      .green[
-                                                                      '100'
-                                                                  ]
-                                                                : vars.color
-                                                                      .gray[
-                                                                      '40'
-                                                                  ]
-                                                        }
-                                                    />
-                                                </button>
                                             </div>
                                         </div>
                                     </Link>

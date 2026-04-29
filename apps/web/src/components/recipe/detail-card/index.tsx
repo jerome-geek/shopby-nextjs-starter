@@ -1,10 +1,14 @@
-import { Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
+import {
+    BookmarkIcon,
+    CalorieIcon,
+    PeopleIcon,
+    TimerIcon,
+} from '@/components/icons';
 import * as styles from '@/components/recipe/detail-card/index.css';
 import { Tooltip, VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
@@ -118,13 +122,9 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                             }
                             aria-pressed={recipe.bookmarked}
                         >
-                            <Bookmark
-                                size={24}
-                                className={styles.bookmarkIcon}
-                                fill={
-                                    recipe.bookmarked
-                                        ? vars.color.green['100']
-                                        : 'none'
+                            <BookmarkIcon
+                                variant={
+                                    recipe.bookmarked ? 'filled' : 'outline'
                                 }
                             />
                         </button>
@@ -181,9 +181,16 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                                     key={`${recipe.sno}-ing-${i}`}
                                     className={styles.ingredientListItem}
                                 >
-                                    <span className={styles.ingredientName}>
-                                        {ing.name}
-                                    </span>
+                                    <Link
+                                        href={ing.coupangProduct?.url ?? ''}
+                                        target='_blank'
+                                        prefetch={false}
+                                    >
+                                        <span className={styles.ingredientName}>
+                                            {ing.name}
+                                        </span>
+                                    </Link>
+
                                     {!!ing.amount && (
                                         <>
                                             <span

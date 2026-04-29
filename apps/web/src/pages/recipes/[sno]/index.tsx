@@ -263,6 +263,7 @@ const RecipeDetailPage = ({
                                     <Heart
                                         size={36}
                                         fill={liked ? 'currentColor' : 'none'}
+                                        strokeWidth={1}
                                     />
                                     <span>{likeCount}</span>
                                 </button>
@@ -277,6 +278,7 @@ const RecipeDetailPage = ({
                                         fill={
                                             bookmarked ? 'currentColor' : 'none'
                                         }
+                                        strokeWidth={1}
                                     />
                                     <span>
                                         {bookmarkCount.toLocaleString()}

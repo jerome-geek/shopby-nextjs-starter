@@ -5,9 +5,9 @@ import { useDeferredValue } from 'react';
 import { RecipeCard } from '@/components/recipe/card';
 import { RecipeDetailCard } from '@/components/recipe/detail-card';
 import { Paging } from '@/components/ui/paging';
+import * as styles from '@/features/recipe/components/RecipeList.css';
 import { usePublicRecipeSearch } from '@/hooks/suspenseQuery/shop/recipe';
 import type { SearchPublicRecipesParams } from '@/models/shop/recipe';
-import * as styles from './RecipeList.css';
 
 export interface RecipeQueryParams extends SearchPublicRecipesParams {
     viewMode: 'grid' | 'details';
@@ -44,7 +44,9 @@ export const RecipeList = ({
 
     return (
         <div
-            className={`${styles.listContainer} ${isPending ? styles.isPending : ''}`}
+            className={`${styles.listContainer} ${
+                isPending ? styles.isPending : ''
+            }`}
         >
             <ul
                 className={

@@ -1,5 +1,5 @@
-import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import { style } from '@vanilla-extract/css';
 
 export const moreButton = style({
     display: 'flex',
@@ -26,7 +26,7 @@ export const dropdownContent = style({
     padding: '8px',
     boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
     border: `1px solid ${vars.color.gray['20']}`,
-    zIndex: 1000,
+    zIndex: 10,
 });
 
 export const dropdownItem = style({

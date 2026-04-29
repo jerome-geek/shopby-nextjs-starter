@@ -1,5 +1,5 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Bookmark, EllipsisVertical, Heart } from 'lucide-react';
+import { Edit, EllipsisVertical, Trash } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
@@ -43,12 +43,13 @@ export const VerticalMoreMenu = ({
     };
 
     return (
-        <DropdownMenu.Root open={isOpen} onOpenChange={handleOpenChange}>
+        <DropdownMenu.Root
+            open={isOpen}
+            onOpenChange={handleOpenChange}
+            modal={false}
+        >
             <DropdownMenu.Trigger asChild>
-                <button
-                    className={styles.moreButton}
-                    aria-label={t('더보기')}
-                >
+                <button className={styles.moreButton} aria-label={t('더보기')}>
                     <EllipsisVertical size={iconSize ?? (isMobile ? 16 : 20)} />
                 </button>
             </DropdownMenu.Trigger>
@@ -82,7 +83,7 @@ export const VerticalMoreMenu = ({
                                         onEdit();
                                     }}
                                 >
-                                    <Heart size={16} />
+                                    <Edit size={16} />
                                     <span>{onEditText ?? t('수정')}</span>
                                 </DropdownMenu.Item>
                                 <DropdownMenu.Item
@@ -95,7 +96,7 @@ export const VerticalMoreMenu = ({
                                         onDelete();
                                     }}
                                 >
-                                    <Bookmark size={16} />
+                                    <Trash size={16} />
                                     <span>{onDeleteText ?? t('삭제')}</span>
                                 </DropdownMenu.Item>
                             </motion.div>

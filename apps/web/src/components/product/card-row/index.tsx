@@ -1,4 +1,3 @@
-import { Bookmark } from 'lucide-react';
 import Link from 'next/link';
 
 import {
@@ -8,9 +7,10 @@ import {
 import * as styles from '@/components/product/card-row/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
-import { vars } from '@/styles/theme.css';
 import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/utils/shopby';
+
+import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 
 const ProductCardRow = ({
     productNo,
@@ -59,19 +59,15 @@ const ProductCardRow = ({
             )}
 
             <div className={styles.productInfoContainer}>
-                <div className={styles.brandInfoWrapper}>
-                    {!!brandName && (
-                        <Link
-                            prefetch={false}
-                            href={`${PATHS.BRANDS.MAIN}/${brandNo}`}
-                            className={styles.brand}
-                        >
-                            <span>{brandName}</span>
-                        </Link>
-                    )}
+                <Link
+                    href={`${PATHS.PRODUCTS.MAIN}/${productNo}`}
+                    prefetch={false}
+                    className={styles.brandInfoWrapper}
+                >
+                    {!!brandName && <span>{brandName}</span>}
 
                     <h3 className={styles.productName}>{productName}</h3>
-                </div>
+                </Link>
 
                 <div className={styles.priceWrapper}>
                     {(immediateDiscountAmt > 0 || additionDiscountAmt > 0) && (
@@ -124,10 +120,7 @@ const ProductCardRow = ({
                     className={styles.likeButton}
                     onClick={onLikeButtonClick(productNo, liked)}
                 >
-                    <Bookmark
-                        size={20}
-                        fill={liked ? vars.color.green['100'] : 'none'}
-                    />
+                    <BookmarkIcon variant={liked ? 'filled' : 'outline'} />
                 </button>
             )}
         </article>

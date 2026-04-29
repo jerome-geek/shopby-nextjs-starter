@@ -1,3 +1,4 @@
+import Seo from '@/components/common/seo';
 import { filter, map, pipe, take, toArray } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Bookmark, BookmarkCheck, Share2, Users } from 'lucide-react';
@@ -6,7 +7,6 @@ import type {
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import Seo from '@/components/common/seo';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,9 +33,16 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
     const { openAsyncDialog } = useDialog();
     const { openCollectionForm, openLoginDialog } = useCustomDialog();
 
+    const { data: profileData } = useProfile();
+
     const router = useRouter();
 
-    const { data: sharedCollectionData } = useSharedCollection({ shareCode });
+    const { data: sharedCollectionData } = useSharedCollection({
+        shareCode,
+        memberNo: profileData?.memberNo,
+    });
+
+    console.log(sharedCollectionData);
 
     const {
         bookmarkCollection: { mutate: bookmarkCollectionMutate },
@@ -104,7 +111,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
     const hasImages = previewImages.length > 0;
 
-    const { data: profileData } = useProfile();
     const isEditable = sharedCollectionData.memberNo === profileData?.memberNo;
 
     const {
@@ -245,28 +251,31 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
                         </div>
 
                         <div className={styles.actionRow}>
-                            <button
-                                className={styles.bookmarkButton}
-                                data-bookmarked={
-                                    sharedCollectionData.bookmarked
-                                }
-                                onClick={() =>
-                                    handleBookmarkCollection(
-                                        sharedCollectionData.sno,
-                                        sharedCollectionData.bookmarked,
-                                    )
-                                }
-                                id='btn-bookmark-collection'
-                            >
-                                {sharedCollectionData.bookmarked ? (
-                                    <BookmarkCheck size={18} />
-                                ) : (
-                                    <Bookmark size={18} />
-                                )}
-                                {sharedCollectionData.bookmarked
-                                    ? t('북마크됨')
-                                    : t('컬렉션 북마크')}
-                            </button>
+                            {sharedCollectionData.memberNo !==
+                                profileData?.memberNo && (
+                                <button
+                                    className={styles.bookmarkButton}
+                                    data-bookmarked={
+                                        sharedCollectionData.bookmarked
+                                    }
+                                    onClick={() =>
+                                        handleBookmarkCollection(
+                                            sharedCollectionData.sno,
+                                            sharedCollectionData.bookmarked,
+                                        )
+                                    }
+                                    id='btn-bookmark-collection'
+                                >
+                                    {sharedCollectionData.bookmarked ? (
+                                        <BookmarkCheck size={18} />
+                                    ) : (
+                                        <Bookmark size={18} />
+                                    )}
+                                    {sharedCollectionData.bookmarked
+                                        ? t('북마크됨')
+                                        : t('컬렉션 북마크')}
+                                </button>
+                            )}
 
                             <button
                                 className={styles.shareButton}
@@ -380,7 +389,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     try {
         await queryClient.fetchQuery({
-            queryKey: collectionKeys.detail(shareCode),
+            queryKey: collectionKeys.detail(shareCode, 0),
             queryFn: async () => {
                 const { data } = await collection.getShared(shareCode);
 

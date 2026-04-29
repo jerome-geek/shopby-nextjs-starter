@@ -319,6 +319,12 @@ export const ingredientName = style({
     textDecorationThickness: '5%',
     lineHeight: '1.4',
 
+    selectors: {
+        '&:hover': {
+            color: vars.color.green['80'],
+        },
+    },
+
     '@media': {
         [media.desktop]: {
             textUnderlineOffset: '15%',
@@ -424,7 +430,11 @@ export const stepText = style([
 
 export const bookmarkIcon = style({
     flexShrink: 0,
-    color: vars.color.green['100'],
+    width: '24px',
+    height: '24px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 });
 
 export const divider = style({

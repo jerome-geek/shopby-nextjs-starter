@@ -6,6 +6,7 @@ export const gridList = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '16px',
+    rowGap: '40px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
@@ -14,6 +15,7 @@ export const gridList = style({
         [media.desktop]: {
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: '24px',
+            rowGap: '60px',
         },
     },
 });
@@ -22,14 +24,21 @@ export const detailList = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(1, 1fr)',
     gap: '32px',
+    rowGap: '60px',
     listStyle: 'none',
     padding: 0,
     margin: 0,
 
     '@media': {
+        [media.tablet]: {
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '32px',
+            rowGap: '60px',
+        },
         [media.desktop]: {
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '40px',
+            rowGap: '60px',
         },
     },
 });

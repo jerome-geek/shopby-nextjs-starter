@@ -1,7 +1,6 @@
 import { LayoutGrid, List } from 'lucide-react';
 import { motion } from 'motion/react';
 import { parseAsInteger, parseAsStringLiteral, useQueryStates } from 'nuqs';
-import { useDeferredValue } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
