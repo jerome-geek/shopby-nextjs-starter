@@ -11,50 +11,25 @@ import {
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { type PhonePrefixType } from '@/schema/common.schema';
+import { parsePhoneStringByHyphen } from '@/entities/order/utils/phone';
+import { usePG } from '@/hooks/order';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
 import { useOrderSheet } from '@/hooks/query/order/orderSheet';
-import { usePG } from '@/hooks/order';
+import { useAuth } from '@/hooks/useAuth';
 import { useGlobal } from '@/hooks/utils';
+import { type PhonePrefixType } from '@/schema/common.schema';
 import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
-
-const parsePhoneString = (phone: string) => {
-    return {
-        prefix: phone.slice(0, 3) as PhonePrefixType,
-        middle: phone.slice(3, -4),
-        suffix: phone.slice(-4),
-    };
-};
-
-const parsePhoneStringByHyphen = (phone: string | null | undefined) => {
-    if (!phone)
-        return { prefix: '010' as PhonePrefixType, middle: '', suffix: '' };
-
-    // 하이픈이 포함된 경우 split 처리
-    if (phone.includes('-')) {
-        const [prefix, middle, suffix] = phone.split('-');
-        return {
-            prefix: (prefix || '010') as PhonePrefixType,
-            middle: middle || '',
-            suffix: suffix || '',
-        };
-    }
-
-    // 하이픈이 없는 경우 기존 slice 방식 활용
-    return parsePhoneString(phone);
-};
 
 interface UseOrderSheetInitializeProps {
     orderSheetNo: string;
-    isLogin: boolean | null;
 }
 
 const useOrderSheetInitialize = ({
     orderSheetNo,
-    isLogin,
 }: UseOrderSheetInitializeProps) => {
-    const { isKorean, defaultMobileCountryCode } = useGlobal();
+    const isLogin = useAuth();
+    const { isKorean } = useGlobal();
 
     const { setValue, reset } = useFormContext<PaymentReserveSchemaType>();
 
@@ -77,7 +52,7 @@ const useOrderSheetInitialize = ({
     });
 
     // NOTE: 주문서 기본 정보 세팅
-    useEffect(() => {
+    useEffect(function syncOrderSheetInfo() {
         if (!orderSheetData) {
             return;
         }
@@ -151,17 +126,12 @@ const useOrderSheetInitialize = ({
     }, [orderSheetData, setValue, orderConfigurationData, reset]);
 
     // NOTE: 주문자 정보 세팅
-    useEffect(() => {
+    useEffect(function syncOrdererInfo() {
         if (!profileData) {
             return;
         }
 
         setValue('orderer.ordererEmail', profileData.email ?? '');
-        // setValue('orderer.ordererContact2', profileData.telephoneNo);
-        // setValue(
-        //     'orderer.ordererMobileCountryCd',
-        //     profileData.mobileCountryCode ?? defaultMobileCountryCode,
-        // );
 
         if (isKorean) {
             setValue('orderer.ordererName', profileData.memberName ?? '');
@@ -174,11 +144,8 @@ const useOrderSheetInitialize = ({
         } else {
             setValue('orderer.ordererLastName', profileData.lastName ?? '');
             setValue('orderer.ordererFirstName', profileData.firstName ?? '');
-            // setValue('orderer.ordererContact1', {
-            //     prefix: profileData.mobileNo ?? '',
-            // });
         }
-    }, [profileData, setValue, isKorean, defaultMobileCountryCode]);
+    }, [profileData, setValue, isKorean]);
 };
 
 export default useOrderSheetInitialize;

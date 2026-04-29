@@ -1,12 +1,10 @@
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
+import { overlay } from 'overlay-kit';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
-
-// import { authCookieManager } from '@/utils/cookie';
 
 import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
@@ -20,7 +18,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
 import * as styles from '@/pages/order/complete/index.css';
-import { overlay } from 'overlay-kit';
 
 /**
  * [회원 주문 내역 렌더러]

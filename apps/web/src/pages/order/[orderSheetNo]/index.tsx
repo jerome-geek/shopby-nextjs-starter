@@ -4,17 +4,12 @@ import {
 } from '@/schema/payment.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { HttpStatusCode } from 'axios';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import { useMemo } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
-import { useMyApp } from '@/hooks/myapp';
-import { useOrderSheetInitialize } from '@/hooks/order';
-import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
-import { useAuth } from '@/hooks/useAuth';
-
 import Accumulation from '@/components/order/accumulation';
 import Coupon from '@/components/order/coupon';
 import OrderProducts from '@/components/order/order-products';
@@ -22,15 +17,17 @@ import OrdererInfo from '@/components/order/orderer-info';
 import PaymentMethod from '@/components/order/payment-method';
 import OrderPaymentSummary from '@/components/order/payment-summary';
 import ShippingAddress from '@/components/order/shipping-address';
+import { PATHS } from '@/const/paths';
+import { useOrderSheetInitialize } from '@/entities/order/hooks';
 import { useSb } from '@/hooks/libs/shopby';
+import { useMyApp } from '@/hooks/myapp';
+import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
+import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 import payment from '@/utils/order/payment';
 
-const OrderSheetPage = () => {
-    const router = useRouter();
-    const orderSheetNo = router.query.orderSheetNo as string;
-
+const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
     const isLogin = useAuth();
     const { isMyApp } = useMyApp();
 
@@ -79,41 +76,30 @@ const OrderSheetPage = () => {
         },
     });
 
-    if (router.isReady && !orderSheetNo) {
-        void router.replace('/');
-        return null;
-    }
-
     return (
         <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
             <FormProvider {...methods}>
                 <CSRLayout>
-                    <OrderSheetContent
-                        orderSheetNo={orderSheetNo}
-                        isLogin={isLogin}
-                    />
+                    <OrderSheetContent orderSheetNo={orderSheetNo} />
                 </CSRLayout>
             </FormProvider>
         </ShopbyApiErrorBoundary>
     );
 };
 
-const OrderSheetContent = ({
-    orderSheetNo,
-    isLogin,
-}: {
-    orderSheetNo: string;
-    isLogin: boolean | null;
-}) => {
+const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
+    const isLogin = useAuth();
     const { openAsyncDialog } = useDialog();
+
     useOrderSheetInitialize({
         orderSheetNo,
-        isLogin,
     });
+
     const { data: orderSheetData } = useOrderSheet({
         orderSheetNo,
         searchParams: { includeMemberAddress: true },
     });
+
     useSb({ orderSheet: orderSheetData });
 
     const { handleSubmit } = useFormContext<PaymentReserveSchemaType>();
@@ -218,6 +204,25 @@ const OrderSheetContent = ({
             </div>
         </form>
     );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    const orderSheetNo = params?.orderSheetNo as string;
+
+    if (!orderSheetNo) {
+        return {
+            redirect: {
+                destination: PATHS.MAIN,
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: {
+            orderSheetNo,
+        },
+    };
 };
 
 export default OrderSheetPage;
