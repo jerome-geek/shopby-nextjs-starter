@@ -66,7 +66,7 @@ export const PATHS = {
         SALE: '/products/sale',
 
         /** 특정 카테고리 상품 리스트 */
-        LIST: '/categories/[categoryNo]/products',
+        LIST: '/categories/[categoryNo]',
 
         /** 상품 상세 페이지 */
         DETAIL: '/products/[productNo]',

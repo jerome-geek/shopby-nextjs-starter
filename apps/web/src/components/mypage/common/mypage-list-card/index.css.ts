@@ -28,7 +28,7 @@ export const section = style({
 
     '@media': {
         [media.mobile]: {
-            padding: '16px',
+            padding: '12px',
             borderRadius: '4px',
 
             selectors: {
@@ -180,7 +180,7 @@ export const listItem = style({
     display: 'grid',
     gridTemplateColumns: '1fr',
     gap: '10px',
-    padding: '16px 0',
+    padding: '12px 0',
     borderBottom: `1px solid ${vars.color.gray['20']}`,
     selectors: {
         '&:hover': {
@@ -193,13 +193,13 @@ export const listItem = style({
             gridTemplateColumns: '1.3fr 1fr 1fr 0.8fr 0.9fr',
             alignItems: 'center',
             gap: '16px',
-            padding: '16px 12px',
+            padding: '16px 0',
         },
         [media.desktop]: {
             gridTemplateColumns: '1.3fr 1fr 1fr 0.8fr 0.9fr',
             alignItems: 'center',
             gap: '16px',
-            padding: '16px 12px',
+            padding: '16px 0',
         },
     },
 });

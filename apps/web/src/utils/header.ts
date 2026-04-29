@@ -1,7 +1,12 @@
 import { PATHS } from '@/const/paths';
 import { flatMap, pipe, toArray, values } from '@fxts/core';
 
-export type MobileHeaderType = 'LOGO' | 'TITLE' | 'SCRAP' | 'SEARCH';
+export type MobileHeaderType =
+    | 'LOGO'
+    | 'TITLE'
+    | 'SCRAP'
+    | 'SEARCH'
+    | 'PRODUCT_LIST';
 export type MobileIconListType =
     | 'EMPTY'
     | 'SEARCH'
@@ -17,6 +22,7 @@ export const getHeaderType = (pathname: string) => {
 
     const isScrapTypePaths = [PATHS.RECIPES.SCRAP];
     const isSearchTypePaths = [PATHS.SEARCH];
+    const isProductListTypePaths = [PATHS.PRODUCTS.LIST];
 
     const includesPath = (paths: string[]) => paths.includes(pathname);
 
@@ -28,6 +34,9 @@ export const getHeaderType = (pathname: string) => {
     }
     if (includesPath(isSearchTypePaths)) {
         return 'SEARCH';
+    }
+    if (includesPath(isProductListTypePaths)) {
+        return 'PRODUCT_LIST';
     }
 
     return 'TITLE';
@@ -67,6 +76,7 @@ export const getIconListType = (pathname: string) => {
         ...MYPAGE_PATHS,
         PATHS.BOARDS.MAIN,
         PATHS.EVENTS.MAIN,
+        PATHS.PRODUCTS.LIST,
     ];
 
     const isSearchTypePaths = [

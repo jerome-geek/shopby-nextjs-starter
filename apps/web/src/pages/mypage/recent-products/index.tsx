@@ -2,35 +2,36 @@ import { isEmpty } from '@fxts/core';
 import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
+import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import { MypageWishSkeleton } from '@/components/mypage/wish/skeleton';
 import { ProductCard } from '@/components/product';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { toRecentProductCardModel } from '@/entities/product/utils/mapper';
 import { useProductProfileMutation } from '@/hooks/mutations';
-import { useRecentViewProductList } from '@/hooks/query/product/profile';
+import { useRecentViewProductList } from '@/hooks/suspenseQuery/product/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/recent-products/index.css';
-export const MypageRecentProducts = () => {
+
+export const MypageRecentProductsContent = () => {
     const { t } = useTranslation();
     const { openAsyncDialog } = useDialog();
     const { addToast } = useToast();
 
     const [selected, setSelected] = useState<Set<number>>(() => new Set());
 
-    const { data: recentViewProductListData, isLoading: isProductListLoading } =
-        useRecentViewProductList({
-            searchParams: {
-                soldout: true,
-                hasOptionValues: true,
-                hasMaxCouponAmt: true,
-            },
-        });
+    const { data: recentViewProductListData } = useRecentViewProductList({
+        searchParams: {
+            soldout: true,
+            hasOptionValues: true,
+            hasMaxCouponAmt: true,
+        },
+    });
 
     const recentViewProductList = useMemo(() => {
         return recentViewProductListData ?? [];
@@ -43,7 +44,7 @@ export const MypageRecentProducts = () => {
         productsWithDiscounts,
     );
 
-    const isLoading = isProductListLoading || isLoadingAdditionalDiscounts;
+    const isRecentProductsLoading = isLoadingAdditionalDiscounts;
 
     const totalCount = productsWithDiscounts.length;
 
@@ -171,7 +172,10 @@ export const MypageRecentProducts = () => {
                     </Button>
                 </div>
 
-                <div className={card.metaRow} style={{ marginTop: 0 }}>
+                <div
+                    className={card.metaRow}
+                    style={{ marginTop: 0, marginBottom: 12 }}
+                >
                     <div className={card.metaRowLeft}>
                         <span
                             className={card.count}
@@ -184,61 +188,67 @@ export const MypageRecentProducts = () => {
                     </div>
                 </div>
 
-                <div className={card.list}>
-                    <LoadingWrapper isLoading={isLoading}>
-                        {!isEmpty(productsWithDiscounts) ? (
-                            <ul className={styles.productGrid}>
-                                {productsWithDiscounts.map((product) => (
-                                    <li
-                                        key={product.productNo}
-                                        className={styles.productGridItem}
-                                    >
-                                        <div className={styles.cardSelectWrap}>
-                                            <div
-                                                className={
-                                                    styles.checkboxAnchor
-                                                }
-                                                onClick={(event) => {
-                                                    event.preventDefault();
-                                                    event.stopPropagation();
-                                                }}
-                                                onPointerDown={(event) => {
-                                                    event.stopPropagation();
-                                                }}
-                                            >
-                                                <InputCheckbox
-                                                    id={`recent-product-${product.productNo}`}
-                                                    checked={selectedInList.has(
-                                                        product.productNo,
-                                                    )}
-                                                    onCheckedChange={(
-                                                        checked,
-                                                    ) => {
-                                                        toggleProductSelect(
-                                                            product.productNo,
-                                                            checked,
-                                                        );
-                                                    }}
-                                                />
-                                            </div>
-                                            <ProductCard
-                                                {...toRecentProductCardModel(
-                                                    product,
+                <div
+                    className={card.list}
+                    style={{
+                        opacity: isRecentProductsLoading ? 0.5 : 1,
+                        transition: 'opacity 0.2s',
+                    }}
+                >
+                    {!isEmpty(productsWithDiscounts) ? (
+                        <ul className={styles.productGrid}>
+                            {productsWithDiscounts.map((product) => (
+                                <li
+                                    key={product.productNo}
+                                    className={styles.productGridItem}
+                                >
+                                    <div className={styles.cardSelectWrap}>
+                                        <div
+                                            className={styles.checkboxAnchor}
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                                event.stopPropagation();
+                                            }}
+                                            onPointerDown={(event) => {
+                                                event.stopPropagation();
+                                            }}
+                                        >
+                                            <InputCheckbox
+                                                id={`recent-product-${product.productNo}`}
+                                                checked={selectedInList.has(
+                                                    product.productNo,
                                                 )}
+                                                onCheckedChange={(checked) => {
+                                                    toggleProductSelect(
+                                                        product.productNo,
+                                                        checked,
+                                                    );
+                                                }}
                                             />
                                         </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <NoResult
-                                text={t('최근 본 상품 내역이 없습니다.')}
-                            />
-                        )}
-                    </LoadingWrapper>
+                                        <ProductCard
+                                            {...toRecentProductCardModel(
+                                                product,
+                                            )}
+                                        />
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <NoResult text={t('최근 본 상품 내역이 없습니다.')} />
+                    )}
                 </div>
             </section>
         </div>
+    );
+};
+
+export const MypageRecentProducts = () => {
+    return (
+        <FetchBoundary fallback={<MypageWishSkeleton />}>
+            <MypageRecentProductsContent />
+        </FetchBoundary>
     );
 };
 

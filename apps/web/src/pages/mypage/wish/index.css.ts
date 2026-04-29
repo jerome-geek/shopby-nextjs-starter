@@ -70,13 +70,7 @@ export const actionsWrapper = style({
     border: `1px solid ${vars.color.gray['30']}`,
     borderRadius: '4px',
     padding: '12px',
-    marginBottom: '20px',
-
-    '@media': {
-        [media.mobile]: {
-            marginBottom: '16px',
-        },
-    },
+    marginBottom: '12px',
 });
 
 export const deleteButton = style([

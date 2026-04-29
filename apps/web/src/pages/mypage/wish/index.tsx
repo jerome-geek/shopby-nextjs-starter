@@ -13,11 +13,11 @@ import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import { MypageWishSkeleton } from '@/components/mypage/wish/skeleton';
 import { ProductCard } from '@/components/product';
 import { Button } from '@/components/ui/button';
 import { InputCheckbox } from '@/components/ui/input';
 import Paging from '@/components/ui/paging';
-import { MypageWishSkeleton } from '@/components/mypage/wish/skeleton';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { toWishProductCardModel } from '@/entities/product/utils/mapper';
 import { useProductProfileMutation } from '@/hooks/mutations';
@@ -193,6 +193,22 @@ const MypageWishContent = () => {
                     >
                         {t('선택삭제')}
                     </Button>
+                </div>
+
+                <div
+                    className={card.metaRow}
+                    style={{ marginTop: 0, marginBottom: 12 }}
+                >
+                    <div className={card.metaRowLeft}>
+                        <span
+                            className={card.count}
+                            dangerouslySetInnerHTML={{
+                                __html: t('총 <b>{{totalCount}}</b>개', {
+                                    totalCount,
+                                }),
+                            }}
+                        />
+                    </div>
                 </div>
 
                 <div

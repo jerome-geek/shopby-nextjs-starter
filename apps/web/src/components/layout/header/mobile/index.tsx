@@ -12,6 +12,7 @@ import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
 import { useToast } from '@/hooks/ui';
+import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
 import { vars } from '@/styles/theme.css';
 import {
     getHeaderType,
@@ -43,6 +44,9 @@ export const MobileHeader = ({
     const headerType = getHeaderType(router.pathname);
     const iconListType = getIconListType(router.pathname);
     const pathTitle = getPathTitle(router.pathname);
+
+    const categoryNo = router.query.categoryNo as string;
+    const { depth2CategoryLabel } = useCategoryMenu(Number(categoryNo) || 0);
 
     const handleShare = async () => {
         const url = window.location.href;
@@ -144,6 +148,15 @@ export const MobileHeader = ({
                     left: <h1 className={styles.title}>{pathTitle}</h1>,
                     center: <span />,
                     right: renderIconList([ShareButton]),
+                };
+            case 'PRODUCT_LIST':
+                return {
+                    wrapperClassName: styles.container,
+                    left: BackButton,
+                    center: (
+                        <h1 className={styles.title}>{depth2CategoryLabel}</h1>
+                    ),
+                    right: renderIconList(iconItemsByType[iconListType]),
                 };
             default:
                 return {

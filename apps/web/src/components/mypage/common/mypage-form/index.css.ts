@@ -23,6 +23,12 @@ export const content = style({
     borderRadius: '8px',
     border: `1px solid ${vars.color.gray['20']}`,
     backgroundColor: vars.color.gray['10'],
+
+    '@media': {
+        [media.mobile]: {
+            padding: '12px',
+        },
+    },
 });
 
 /** 마이페이지 폼 공통 하단 액션 영역 */
