@@ -40,7 +40,6 @@ const useOrderSheet = <T = GetOrderSheetResponse>({
 
             return data;
         },
-        refetchOnWindowFocus: true,
         ...options,
     });
 };

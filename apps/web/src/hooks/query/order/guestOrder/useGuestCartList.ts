@@ -1,10 +1,9 @@
-import { includes } from '@fxts/core';
 import {
     UseQueryOptions,
     keepPreviousData,
     useQuery,
 } from '@tanstack/react-query';
-import { type AxiosError, isAxiosError } from 'axios';
+import { type AxiosError } from 'axios';
 
 // import { request } from '@/api/core';
 import { guestOrder } from '@/api/order';
@@ -53,7 +52,6 @@ const useGuestCartList = <T = GetCartResponse>({
             return response.data;
         },
         staleTime: 10 * 1000,
-        refetchOnWindowFocus: true,
         placeholderData: keepPreviousData,
         // // NOTE : 비회원 장바구니 에러 시 장바구니 초기화 처리
         // throwOnError: (error) => {

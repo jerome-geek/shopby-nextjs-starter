@@ -7,8 +7,11 @@ import type { AxiosError } from 'axios';
 
 import { cart } from '@/api/order';
 import { cartKeys } from '@/hooks/queryKeys';
-import type { GetCartListParams, GetCartListResponse } from '@/models/order/cart';
 import { useAuth } from '@/hooks/useAuth';
+import type {
+    GetCartListParams,
+    GetCartListResponse,
+} from '@/models/order/cart';
 
 interface UseCartListParams<T = GetCartListResponse> {
     searchParams?: GetCartListParams;
@@ -38,7 +41,6 @@ const useCartList = <T = GetCartListResponse>({
         },
         placeholderData: keepPreviousData,
         staleTime: 10 * 1000,
-        refetchOnWindowFocus: true,
         ...options,
         enabled: (options?.enabled ?? true) && !!isLogin,
     });

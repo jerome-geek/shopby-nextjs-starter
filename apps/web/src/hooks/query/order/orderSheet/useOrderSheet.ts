@@ -37,7 +37,6 @@ const useOrderSheet = <T = GetOrderSheetResponse>({
 
             return data;
         },
-        refetchOnWindowFocus: true,
         ...options,
         enabled: (options?.enabled ?? true) && !!orderSheetNo,
     });
