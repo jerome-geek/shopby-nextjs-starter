@@ -1,4 +1,12 @@
-import { filter, flatMap, map, pipe, prop, toArray } from '@fxts/core';
+import {
+    filter,
+    flatMap,
+    includes,
+    map,
+    pipe,
+    prop,
+    toArray,
+} from '@fxts/core';
 import { Loader2 } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,11 +14,10 @@ import { useTranslation } from 'react-i18next';
 import * as styles from '@/components/cart/summary/index.css';
 import { Button } from '@/components/ui';
 import useCart from '@/hooks/cart/useCart';
-import { useOrderSheetMutation } from '@/hooks/mutations';
+import { useCartOrderAction } from '@/hooks/order/useCartOrderAction';
 import { useCartPrice } from '@/hooks/query/order/cart';
 import useGuestCartList from '@/hooks/query/order/guestOrder/useGuestCartList';
 import { useAuth } from '@/hooks/useAuth';
-import { useDialog } from '@/hooks/utils';
 import type { GetCartData } from '@/models/order/guestOrder';
 import { CURRENCY } from '@/utils/currency';
 
@@ -21,10 +28,11 @@ interface CartSummaryProps {
 const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
     const { t } = useTranslation();
 
-    const { openDialog } = useDialog();
     const isLogin = useAuth();
 
     const { cartInfo } = useCart();
+    const { onOrderButtonClick, isOrderSheetPending } = useCartOrderAction();
+
     const products = useMemo(() => {
         if (!cartInfo) {
             return [];
@@ -36,12 +44,15 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
                 prop('deliveryGroups'),
                 flatMap((a) => a.orderProducts),
                 flatMap((b) => b.orderProductOptions),
-                filter((c) => checkedCartNoList.includes(c.cartNo)),
+                filter((c) => includes(c.cartNo, checkedCartNoList)),
                 map((c) => ({
                     productNo: c.productNo,
                     optionNo: c.optionNo,
-                    // optionInputs: c.optionInput,
                     orderCnt: c.orderCnt,
+                    optionInputs: c.optionInputs?.map((input) => ({
+                        inputLabel: input.inputLabel,
+                        inputValue: input.inputValue,
+                    })),
                 })),
                 toArray,
             );
@@ -100,25 +111,11 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
     const totalAmt =
         checkedCartNoList.length > 0 ? calculate?.totalAmt || 0 : 0;
 
-    const {
-        write: {
-            mutate: writeOrderSheetMutate,
-            isPending: writeOrderSheetMutatePending,
-        },
-    } = useOrderSheetMutation();
-
     const onPurchaseClick = () => {
-        if (checkedCartNoList.length === 0) {
-            openDialog({ message: t('상품을 선택해주세요.') });
-            return;
-        }
-
-        const orderData = {
+        onOrderButtonClick({
             products,
             cartNos: checkedCartNoList,
-        };
-
-        writeOrderSheetMutate({ data: orderData });
+        });
     };
 
     return (
@@ -190,7 +187,7 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
                     frame='solid'
                     variant='primary'
                     onClick={onPurchaseClick}
-                    disabled={isPriceFetching || writeOrderSheetMutatePending}
+                    disabled={isPriceFetching || isOrderSheetPending}
                     className={styles.orderButton}
                     style={{
                         display: 'flex',

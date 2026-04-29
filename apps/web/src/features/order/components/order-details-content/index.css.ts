@@ -3,18 +3,6 @@ import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
 
-export const pageWrapper = style({
-    minHeight: '100vh',
-    background: vars.color.white,
-    display: 'flex',
-    justifyContent: 'center',
-});
-
-export const loadingWrapper = style({
-    padding: '100px',
-    textAlign: 'center',
-});
-
 export const container = style({
     width: '100%',
     maxWidth: '792px',
@@ -47,7 +35,6 @@ export const bannerIcon = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '48px',
 });
 
 export const bannerTitle = style([
@@ -57,6 +44,12 @@ export const bannerTitle = style([
         textAlign: 'center',
     },
 ]);
+
+export const bannerDate = style({
+    marginTop: '12px',
+    color: vars.color.gray['60'],
+    fontSize: '14px',
+});
 
 /* ─── Info Grid ─── */
 export const infoGrid = style({
@@ -108,6 +101,10 @@ export const infoValue = style([
     },
 ]);
 
+export const bankLimitDate = style({
+    color: '#ff4d4d',
+});
+
 /* ─── Divider ─── */
 export const divider = style({
     border: 'none',
@@ -133,18 +130,12 @@ export const productList = style({
     flexDirection: 'column',
     gap: '24px',
     width: '100%',
+    marginTop: '20px',
     '@media': {
         'screen and (max-width: 480px)': {
             gap: '12px',
         },
     },
-});
-
-export const productSection = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-    width: '100%',
 });
 
 export const productItem = style({
@@ -172,13 +163,6 @@ export const productContent = style({
     minWidth: 0,
 });
 
-export const productTitleBlock = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2px',
-    width: '100%',
-});
-
 export const productBrand = style([
     textStyles.body1Regular,
     {
@@ -202,6 +186,12 @@ export const productName = style([
     },
 ]);
 
+export const productOptionText = style({
+    fontSize: '12px',
+    color: vars.color.gray['40'],
+    marginBottom: '4px',
+});
+
 export const productFooter = style({
     display: 'flex',
     alignItems: 'center',
@@ -219,7 +209,7 @@ export const orderCount = style([
     },
 ]);
 
-export const productPrice = style([
+export const productPriceText = style([
     textStyles.headingBold,
     {
         color: vars.color.black,
@@ -239,13 +229,6 @@ export const summaryContainer = style({
     width: '100%',
 });
 
-export const summaryRows = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    width: '100%',
-});
-
 export const summaryRow = style([
     textStyles.headlineRegular,
     {
@@ -256,13 +239,6 @@ export const summaryRow = style([
         width: '100%',
     },
 ]);
-
-export const summaryDivider = style({
-    border: 'none',
-    borderTop: `1px solid ${vars.color.gray['20']}`,
-    width: '100%',
-    margin: 0,
-});
 
 export const totalRow = style({
     display: 'flex',
@@ -279,10 +255,10 @@ export const totalLabel = style([
     },
 ]);
 
-export const totalPrice = style([
+export const totalPriceText = style([
     textStyles.title1Bold,
     {
-        color: '#F12345',
+        color: vars.color.primary,
         flex: '1 0 0',
         textAlign: 'right',
     },
@@ -336,32 +312,5 @@ export const primaryButton = style([
         ':hover': {
             opacity: 0.9,
         },
-    },
-]);
-
-export const failContainer = style({
-    textAlign: 'center',
-    padding: '100px 20px',
-});
-
-export const failIcon = style({
-    fontSize: '64px',
-    marginBottom: '20px',
-});
-
-export const failTitle = style([
-    textStyles.title1Bold,
-    {
-        marginBottom: '12px',
-        color: vars.color.black,
-    },
-]);
-
-export const failDescription = style([
-    textStyles.headlineRegular,
-    {
-        color: vars.color.gray['60'],
-        marginBottom: '40px',
-        lineHeight: '1.6',
     },
 ]);

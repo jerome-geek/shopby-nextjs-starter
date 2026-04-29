@@ -60,6 +60,13 @@ export const productTextContainer = style({
     gap: '2px',
 });
 
+export const optionList = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    marginTop: '4px',
+});
+
 export const brandName = style([
     textStyles.body1Regular,
     {
