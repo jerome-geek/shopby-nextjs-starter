@@ -1,17 +1,26 @@
 'use client';
 
-import { useState } from 'react';
-import { Swiper as SwiperType } from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import * as styles from '@/components/cart/recommend/index.css';
 import { SmallCaretIcon } from '@/components/icons';
 import { ProductCard } from '@/components/product';
-import { useProductSectionProductList } from '@/hooks/query/display/productSection';
+import * as styles from '@/features/cart/components/recommend-section/index.css';
+import { CartRecommendSectionSkeleton } from '@/features/cart/components/recommend-section/skeleton';
+import {
+    useProductSectionById,
+    useProductSectionProductList,
+} from '@/hooks/suspenseQuery/display/productSection';
 
 import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
-const Recommend = () => {
+export const CartRecommendSection = () => {
+    const { data: productSectionByIdData } = useProductSectionById({
+        sectionId: 'CART',
+    });
+
     const { data: productSectionProductListData } =
         useProductSectionProductList({
             sectionId: 'CART',
@@ -28,27 +37,41 @@ const Recommend = () => {
         });
 
     const products = productSectionProductListData?.products ?? [];
-    const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(
-        null,
-    );
-    const [currentIndex, setCurrentIndex] = useState(1);
-
-    if (products.length === 0) return null;
 
     const totalPage = products.length;
 
+    if (products.length === 0) return null;
+
     return (
         <section className={styles.container}>
-            <h3 className={styles.title}>함께 구매하면 좋은 상품</h3>
+            <h3 className={styles.title}>{productSectionByIdData.label}</h3>
             <Swiper
                 className={styles.swiperContainer}
                 spaceBetween={15}
                 slidesPerView='auto'
-                onSwiper={(swiper) => {
-                    setSwiperInstance(swiper);
+                modules={[Navigation, Pagination]}
+                slidesOffsetBefore={20}
+                slidesOffsetAfter={20}
+                breakpoints={{
+                    1025: {
+                        slidesOffsetBefore: 0,
+                        slidesOffsetAfter: 0,
+                    },
                 }}
-                onSlideChange={(swiper) => {
-                    setCurrentIndex(swiper.realIndex + 1);
+                navigation={{
+                    prevEl: '.recommend-prev',
+                    nextEl: '.recommend-next',
+                }}
+                pagination={{
+                    el: '.recommend-pagination',
+                    type: 'fraction',
+                    renderFraction: (currentClass, totalClass) => {
+                        return (
+                            `<span class="${currentClass} ${styles.paginationCurrent}"></span>` +
+                            `<span class="${styles.paginationDivider}">&nbsp;/&nbsp;</span>` +
+                            `<span class="${totalClass} ${styles.paginationTotal}"></span>`
+                        );
+                    },
                 }}
             >
                 {products.map((product) => (
@@ -89,9 +112,9 @@ const Recommend = () => {
             {totalPage > 1 && (
                 <div className={styles.paginationWrapper}>
                     <button
-                        className={styles.paginationButton}
-                        onClick={() => swiperInstance?.slidePrev()}
+                        className={`${styles.paginationButton} recommend-prev`}
                         aria-label='이전 상품'
+                        type='button'
                     >
                         <SmallCaretIcon
                             direction='left'
@@ -99,15 +122,13 @@ const Recommend = () => {
                             height={16}
                         />
                     </button>
-                    <span className={styles.paginationCurrent}>
-                        {currentIndex}
-                    </span>
-                    <span className={styles.paginationDivider}>/</span>
-                    <span className={styles.paginationTotal}>{totalPage}</span>
+                    <div
+                        className={`${styles.recommendPagination} recommend-pagination`}
+                    />
                     <button
-                        className={styles.paginationButton}
-                        onClick={() => swiperInstance?.slideNext()}
+                        className={`${styles.paginationButton} recommend-next`}
                         aria-label='다음 상품'
+                        type='button'
                     >
                         <SmallCaretIcon
                             direction='right'
@@ -121,4 +142,4 @@ const Recommend = () => {
     );
 };
 
-export default Recommend;
+CartRecommendSection.Skeleton = CartRecommendSectionSkeleton;

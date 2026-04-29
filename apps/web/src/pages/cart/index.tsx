@@ -4,13 +4,14 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OrderProductItem } from '@/components/cart/order-product-item';
-import Recommend from '@/components/cart/recommend';
 import CartSummary from '@/components/cart/summary';
+import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
 import { InputCheckbox, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
+import { CartRecommendSection } from '@/features/cart/components/recommend-section';
 import useCart from '@/hooks/cart/useCart';
 import { useCartMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
@@ -455,7 +456,9 @@ const CartContent = () => {
                 )}
 
                 <div className={styles.recommendArea}>
-                    <Recommend />
+                    <FetchBoundary fallback={<CartRecommendSection.Skeleton />}>
+                        <CartRecommendSection />
+                    </FetchBoundary>
                 </div>
             </div>
         </div>

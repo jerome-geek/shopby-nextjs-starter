@@ -205,7 +205,7 @@ export const recommendArea = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
-    padding: '36px 20px',
+    padding: '36px 0',
     order: 3,
 
     '@media': {

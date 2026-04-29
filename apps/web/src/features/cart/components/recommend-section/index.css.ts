@@ -19,18 +19,19 @@ export const title = style([
     {
         color: vars.color.black,
         margin: 0,
+        padding: '0 20px',
+
+        '@media': {
+            [media.desktop]: {
+                padding: '0',
+            },
+        },
     },
 ]);
 
 export const swiperContainer = style({
     width: '100%',
-    overflow: 'visible',
-
-    '@media': {
-        [media.desktop]: {
-            overflow: 'hidden',
-        },
-    },
+    overflow: 'hidden',
 });
 
 export const swiperSlide = style({
@@ -39,17 +40,30 @@ export const swiperSlide = style({
 
 export const paginationWrapper = style({
     width: '100%',
-    display: 'flex',
+    display: 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px',
+    gap: '12px',
+
+    '@media': {
+        [media.desktop]: {
+            display: 'flex',
+        },
+    },
+});
+
+export const recommendPagination = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    width: 'fit-content',
+    position: 'static', // Reset swiper default
 });
 
 export const paginationCurrent = style([
     textStyles.body1Semibold,
     {
         color: vars.color.black,
-        width: '19px',
         textAlign: 'center',
     },
 ]);
@@ -66,7 +80,6 @@ export const paginationTotal = style([
     textStyles.body1Medium,
     {
         color: vars.color.gray[60],
-        width: '19px',
         textAlign: 'center',
     },
 ]);
