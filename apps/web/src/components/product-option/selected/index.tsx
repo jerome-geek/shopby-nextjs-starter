@@ -21,10 +21,6 @@ export const SelectedProductOption = ({
     const { textOptionInputs } = useProductOption({
         productNo,
     });
-    console.log(
-        '🚀 ~ SelectedProductOption ~ textOptionInputs:',
-        textOptionInputs,
-    );
 
     const {
         selectedOptionList,
@@ -146,10 +142,9 @@ export const SelectedProductOption = ({
                             </button>
                         </div>
                         <span className={styles.priceValue}>
-                            {CURRENCY(
-                                (option.price + option.addPrice) *
-                                    option.orderCnt,
-                            ).format()}
+                            {CURRENCY(option.buyPrice)
+                                .multiply(option.orderCnt)
+                                .format()}
                         </span>
                     </div>
                 </li>
