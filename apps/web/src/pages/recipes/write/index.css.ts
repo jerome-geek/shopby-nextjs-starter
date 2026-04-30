@@ -101,6 +101,9 @@ export const imageSlot = style({
     cursor: 'pointer',
     position: 'relative',
     overflow: 'visible',
+    // 모바일에서 터치 스크롤 제스처가 드래그를 가로채지 않도록 함
+    touchAction: 'none',
+    WebkitUserSelect: 'none',
     transition: 'all 0.2s ease',
     '@media': {
         [media.desktop]: {

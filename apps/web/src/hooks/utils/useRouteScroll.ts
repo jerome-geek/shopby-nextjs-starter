@@ -1,4 +1,5 @@
-import { filter, map, pipe, takeRight, toArray } from '@fxts/core';
+import { MODAL_QUERY_KEY } from '@/const/modal';
+import { filter, last, map, pipe, takeRight, toArray } from '@fxts/core';
 import { useLenis } from 'lenis/react';
 import { useRouter } from 'next/router';
 import { type MutableRefObject, useEffect, useRef } from 'react';
@@ -39,6 +40,23 @@ const useRouteScroll = () => {
             if (isHistoryNavigationRef.current) {
                 isHistoryNavigationRef.current = false;
                 restoreScrollPosition(url, lenis, restoreAnimationFrameRef);
+                return;
+            }
+
+            let lastPath = '';
+
+            try {
+                const storage = last(readScrollStorage()?.order ?? []);
+
+                lastPath = storage ?? '';
+            } catch (error) {
+                console.error(error);
+            }
+
+            if (
+                url.includes(MODAL_QUERY_KEY) ||
+                lastPath.includes(MODAL_QUERY_KEY)
+            ) {
                 return;
             }
 

@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import common from '@/api/shop/common';
 import recipe from '@/api/shop/recipe';
+import useApiError from '@/hooks/useApiError';
 import { useRecipeManualStore } from '@/store/useRecipeManualStore';
 
 /**
@@ -22,6 +23,7 @@ const blobUrlToFile = async (blobUrl: string, index: number): Promise<File> => {
 
 const useRecipeImageUploadMutation = () => {
     const { setTempImages } = useRecipeManualStore();
+    const { handleErrorToast } = useApiError();
 
     /**
      * 이미지 업로드 + 임시 이미지 등록을 한 번에 수행합니다.
@@ -80,6 +82,9 @@ const useRecipeImageUploadMutation = () => {
 
             // 기존 이미지 뒤에 추가
             setTempImages([...currentImages, ...newSortedImages]);
+        },
+        onError: (error) => {
+            handleErrorToast(error);
         },
     });
 

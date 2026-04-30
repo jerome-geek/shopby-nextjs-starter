@@ -4,6 +4,7 @@ import {
     DndContext,
     KeyboardSensor,
     PointerSensor,
+    TouchSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
@@ -45,6 +46,12 @@ export const RecipeImageSection = ({
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const sensors = useSensors(
+        useSensor(TouchSensor, {
+            activationConstraint: {
+                delay: 80,
+                tolerance: 6,
+            },
+        }),
         useSensor(PointerSensor, {
             activationConstraint: {
                 distance: 8,

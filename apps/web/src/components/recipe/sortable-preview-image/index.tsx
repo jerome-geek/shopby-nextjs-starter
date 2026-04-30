@@ -37,6 +37,8 @@ export const SortablePreviewImage = ({
         zIndex: isDragging ? 100 : 1,
         opacity: isDragging ? 0.5 : 1,
         cursor: isDragging ? 'grabbing' : 'grab',
+        touchAction: 'none' as const,
+        WebkitUserSelect: 'none' as const,
     };
 
     return (

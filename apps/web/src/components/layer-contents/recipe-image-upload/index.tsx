@@ -3,6 +3,7 @@ import {
     DndContext,
     KeyboardSensor,
     PointerSensor,
+    TouchSensor,
     useSensor,
     useSensors,
     type DragEndEvent,
@@ -139,6 +140,9 @@ export const RecipeImageUpload = ({
     }, []);
 
     const sensors = useSensors(
+        useSensor(TouchSensor, {
+            activationConstraint: { delay: 80, tolerance: 6 },
+        }),
         useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
