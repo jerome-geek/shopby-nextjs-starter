@@ -10,8 +10,8 @@ import { ObserverTarget } from '@/components/common/observer-target';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
+import { PreviousOrderItem } from '@/components/mypage/previous-orders/item';
 import Paging from '@/components/ui/paging';
-import { orderMap } from '@/const/order';
 import { PATHS } from '@/const/paths';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { useInfinitePreviousOrderList } from '@/hooks/infiniteQuery/order/previousOrder';
@@ -19,7 +19,6 @@ import { usePreviousOrderList } from '@/hooks/query/order/previousOrder';
 import { useResponsive } from '@/hooks/utils';
 import type { GetPreviousOrdersResponse } from '@/models/order/previousOrder';
 import * as styles from '@/pages/mypage/previous-orders/index.css';
-import { CURRENCY } from '@/utils/currency';
 
 const PAGE_SIZE = 10;
 
@@ -115,14 +114,19 @@ const PreviousOrders = () => {
 
                 <div className={card.list}>
                     {!isMobile && (
-                        <div className={card.headerRow}>
+                        <div
+                            className={card.headerRow}
+                            style={{
+                                gridTemplateColumns:
+                                    'minmax(0, 1fr) minmax(120px, 160px)',
+                            }}
+                        >
                             <div className={card.headerCell}>
                                 {t('주문번호 / 주문일자 / 상품정보')}
                             </div>
                             <div className={card.headerCell}>
                                 {t('주문상태')}
                             </div>
-                            <div className={card.headerCell}>{t('선택')}</div>
                         </div>
                     )}
 
@@ -174,130 +178,39 @@ const PreviousOrders = () => {
                                                     )}
                                                 </div>
 
-                                                {order.orderOptions?.map(
-                                                    (
-                                                        option: GetPreviousOrdersResponse['contents'][number]['orderOptions'][number],
-                                                    ) => {
-                                                        const statusLabel = t(
-                                                            orderMap[
-                                                                option.orderStatusType as keyof typeof orderMap
-                                                            ] ??
-                                                                option.orderStatusType,
-                                                        );
-
-                                                        const isPrimaryStatus =
-                                                            option.orderStatusType ===
-                                                            'BUY_CONFIRM';
-
-                                                        return (
-                                                            <div
+                                                <ul
+                                                    className={
+                                                        styles.orderOptionList
+                                                    }
+                                                >
+                                                    {order.orderOptions?.map(
+                                                        (option) => (
+                                                            <PreviousOrderItem
                                                                 key={
                                                                     option.optionNo
                                                                 }
-                                                                className={
-                                                                    styles.orderItemRow
+                                                                productName={
+                                                                    option.productName
                                                                 }
-                                                            >
-                                                                <div
-                                                                    className={
-                                                                        styles.productCell
-                                                                    }
-                                                                >
-                                                                    <div
-                                                                        className={
-                                                                            styles.thumbnail
-                                                                        }
-                                                                        aria-hidden='true'
-                                                                    />
-                                                                    <div
-                                                                        className={
-                                                                            styles.productInfo
-                                                                        }
-                                                                    >
-                                                                        <span
-                                                                            className={`${
-                                                                                styles.mobileStatusBadge
-                                                                            } ${
-                                                                                isPrimaryStatus
-                                                                                    ? styles.mobileStatusBadgePrimary
-                                                                                    : ''
-                                                                            }`}
-                                                                        >
-                                                                            {
-                                                                                statusLabel
-                                                                            }
-                                                                        </span>
-
-                                                                        <p
-                                                                            className={
-                                                                                styles.productName
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                option.productName
-                                                                            }
-                                                                        </p>
-                                                                        <p
-                                                                            className={
-                                                                                styles.optionText
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                option.optionName
-                                                                            }
-                                                                            {option.optionValue
-                                                                                ? `: ${option.optionValue}`
-                                                                                : ''}{' '}
-                                                                            |{' '}
-                                                                            {
-                                                                                option.orderCnt
-                                                                            }
-                                                                            {t(
-                                                                                '개',
-                                                                            )}
-                                                                        </p>
-                                                                        <p
-                                                                            className={
-                                                                                styles.priceText
-                                                                            }
-                                                                        >
-                                                                            {CURRENCY(
-                                                                                option.salePrice ??
-                                                                                    0,
-                                                                            ).format()}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div
-                                                                    className={
-                                                                        styles.statusCell
-                                                                    }
-                                                                >
-                                                                    <span
-                                                                        className={`${
-                                                                            styles.statusText
-                                                                        } ${
-                                                                            isPrimaryStatus
-                                                                                ? styles.statusTextPrimary
-                                                                                : ''
-                                                                        }`}
-                                                                    >
-                                                                        {
-                                                                            statusLabel
-                                                                        }
-                                                                    </span>
-                                                                </div>
-
-                                                                <div
-                                                                    className={
-                                                                        styles.actionsCell
-                                                                    }
-                                                                />
-                                                            </div>
-                                                        );
-                                                    },
-                                                )}
+                                                                optionName={
+                                                                    option.optionName
+                                                                }
+                                                                optionValue={
+                                                                    option.optionValue
+                                                                }
+                                                                orderCnt={
+                                                                    option.orderCnt
+                                                                }
+                                                                salePrice={
+                                                                    option.salePrice
+                                                                }
+                                                                orderStatusType={
+                                                                    option.orderStatusType
+                                                                }
+                                                            />
+                                                        ),
+                                                    )}
+                                                </ul>
                                             </div>
                                         );
                                     },

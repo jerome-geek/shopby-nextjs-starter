@@ -63,6 +63,14 @@ export const orderGroup = style({
     },
 });
 
+export const orderOptionList = style({
+    margin: 0,
+    padding: 0,
+    listStyle: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+});
+
 /** 주문번호/날짜 헤더 행 */
 export const orderGroupHeader = style({
     display: 'flex',
@@ -87,7 +95,7 @@ export const orderItemRow = style({
     display: 'grid',
     gridTemplateColumns: '1fr',
     gap: '10px',
-    padding: '14px 0',
+    padding: '16px 0',
 
     selectors: {
         '&:hover': {
@@ -100,16 +108,16 @@ export const orderItemRow = style({
 
     '@media': {
         [media.tablet]: {
-            gridTemplateColumns: '1.8fr 0.8fr 0.8fr',
+            gridTemplateColumns: '55% 15% 30%',
             alignItems: 'center',
             gap: '16px',
-            padding: '16px 12px',
+            padding: '24px 12px',
         },
         [media.desktop]: {
-            gridTemplateColumns: '1.8fr 0.8fr 0.8fr',
+            gridTemplateColumns: '55% 15% 30%',
             alignItems: 'center',
             gap: '16px',
-            padding: '16px 12px',
+            padding: '24px 12px',
         },
     },
 });
@@ -119,27 +127,26 @@ export const productCell = style({
     display: 'flex',
     flexDirection: 'row',
     gap: '12px',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     minWidth: 0,
 });
 
 export const thumbnail = style({
     flexShrink: 0,
-    width: '72px',
-    height: '72px',
-    objectFit: 'cover',
+    width: '80px',
+    height: '80px',
     borderRadius: '4px',
     border: `1px solid ${vars.color.gray['20']}`,
     backgroundColor: vars.color.gray['10'],
 
     '@media': {
         [media.tablet]: {
-            width: '80px',
-            height: '80px',
+            width: '90px',
+            height: '90px',
         },
         [media.desktop]: {
-            width: '80px',
-            height: '80px',
+            width: '90px',
+            height: '90px',
         },
     },
 });
@@ -183,32 +190,62 @@ export const productBadge = style([
 ]);
 
 export const productName = style([
-    textStyles.body2Semibold,
     {
+        fontSize: '14px',
+        fontWeight: '500',
         color: vars.color.black,
+        lineHeight: '1.4',
         wordBreak: 'break-all',
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
         overflow: 'hidden',
-        textAlign: 'left',
+
+        '@media': {
+            [media.tablet]: {
+                fontSize: '15px',
+            },
+            [media.desktop]: {
+                fontSize: '15px',
+            },
+        },
     },
 ]);
 
 export const optionText = style([
-    textStyles.caption1Regular,
     {
+        fontSize: '12px',
         color: vars.color.gray['60'],
-        fontSize: '1.2rem',
-        textAlign: 'left',
+        marginTop: '2px',
+
+        '@media': {
+            [media.tablet]: {
+                fontSize: '13px',
+                marginTop: '4px',
+            },
+            [media.desktop]: {
+                fontSize: '13px',
+                marginTop: '4px',
+            },
+        },
     },
 ]);
 
 export const priceText = style([
-    textStyles.body2Semibold,
     {
+        fontSize: '14px',
+        fontWeight: '700',
         color: vars.color.black,
-        textAlign: 'left',
+        marginTop: '4px',
+
+        '@media': {
+            [media.tablet]: {
+                fontSize: '16px',
+            },
+            [media.desktop]: {
+                fontSize: '16px',
+            },
+        },
     },
 ]);
 

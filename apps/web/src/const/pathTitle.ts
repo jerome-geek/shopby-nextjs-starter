@@ -78,6 +78,10 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         title: '이전주문 내역',
     },
     {
+        pathname: PATHS.MYPAGE.PREVIOUS_ORDERS.DETAIL,
+        title: '이전주문상세',
+    },
+    {
         pathname: PATHS.MYPAGE.COUPONS,
         title: '쿠폰',
     },

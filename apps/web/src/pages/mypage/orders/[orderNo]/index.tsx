@@ -3,15 +3,14 @@ import { useRouter } from 'next/router';
 import React, { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
 import * as orderStyles from '@/components/mypage/orders/order-options.css';
 import { RETURN_WAY_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
-import useOrderDetail from '@/hooks/query/order/myOrder/useOrderDetail';
-import useOrderConfiguration from '@/hooks/query/order/orderConfiguration/useOrderConfiguration';
+import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
+import useOrderConfiguration from '@/hooks/suspenseQuery/order/orderConfiguration/useOrderConfiguration';
 import { useResponsive } from '@/hooks/utils';
 import type {
     AdditionalPayInfo,
@@ -597,8 +596,8 @@ const OrderDetail = () => {
 
     const orderNo = String(router.query.orderNo ?? '');
 
-    const { data: orderDetailData, isLoading } = useOrderDetail({ orderNo });
     const { data: orderConfigurationData } = useOrderConfiguration();
+    const { data: orderDetailData } = useOrderDetail({ orderNo });
 
     const orderOptionsGroupByPartner =
         orderDetailData?.orderOptionsGroupByPartner ?? [];
@@ -824,198 +823,168 @@ const OrderDetail = () => {
                         </div>
                     )}
 
-                    <LoadingWrapper isLoading={isLoading}>
-                        {orderDetailData && (
-                            <ul className={orderStyles.orderList}>
-                                <li className={orderStyles.orderListItem}>
-                                    <div
-                                        className={
-                                            orderStyles.orderTitleContainer
-                                        }
-                                    >
-                                        <span
-                                            className={orderStyles.orderNoLink}
-                                            style={{ cursor: 'default' }}
-                                        >
-                                            {orderDetailData.orderNo}
-                                        </span>
-                                        <span className={orderStyles.orderDate}>
-                                            {dayjs(
-                                                orderDetailData.orderYmdt,
-                                            ).format('YYYY.MM.DD')}
-                                        </span>
-                                    </div>
+                    <ul className={orderStyles.orderList}>
+                        <li className={orderStyles.orderListItem}>
+                            <div className={orderStyles.orderTitleContainer}>
+                                <span
+                                    className={orderStyles.orderNoLink}
+                                    style={{ cursor: 'default' }}
+                                >
+                                    {orderDetailData.orderNo}
+                                </span>
+                                <span className={orderStyles.orderDate}>
+                                    {dayjs(orderDetailData.orderYmdt).format(
+                                        'YYYY.MM.DD',
+                                    )}
+                                </span>
+                            </div>
 
-                                    <div>
-                                        {orderOptionsGroupByPartner.map(
-                                            (partner) => (
+                            <div>
+                                {orderOptionsGroupByPartner.map((partner) => (
+                                    <div
+                                        key={partner.partnerNo}
+                                        style={{
+                                            marginTop: '20px',
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                padding: '12px 0',
+                                                fontSize: '14px',
+                                                fontWeight: 'bold',
+                                                borderBottom: `1px solid #f0f0f0`,
+                                            }}
+                                        >
+                                            {partner.partnerName}
+                                        </div>
+                                        {partner.orderOptionsGroupByDelivery.map(
+                                            (delivery) => (
                                                 <div
-                                                    key={partner.partnerNo}
+                                                    key={delivery.deliveryNo}
                                                     style={{
-                                                        marginTop: '20px',
+                                                        borderBottom:
+                                                            '1px solid #f0f0f0',
                                                     }}
                                                 >
+                                                    <ul
+                                                        className={
+                                                            orderStyles.orderOptionList
+                                                        }
+                                                    >
+                                                        {delivery.orderOptions.map(
+                                                            (option) => (
+                                                                <OrderOptionsItem
+                                                                    key={
+                                                                        option.orderOptionNo
+                                                                    }
+                                                                    {...option}
+                                                                    inputs={
+                                                                        option.inputs
+                                                                    }
+                                                                    orderNo={
+                                                                        orderDetailData.orderNo
+                                                                    }
+                                                                />
+                                                            ),
+                                                        )}
+                                                    </ul>
                                                     <div
                                                         style={{
-                                                            padding: '12px 0',
-                                                            fontSize: '14px',
-                                                            fontWeight: 'bold',
-                                                            borderBottom: `1px solid #f0f0f0`,
+                                                            padding: '12px',
+                                                            background:
+                                                                '#fcfcfc',
+                                                            fontSize: '12px',
+                                                            color: '#666',
+                                                            display: 'flex',
+                                                            flexWrap: 'wrap',
+                                                            gap: '16px',
                                                         }}
                                                     >
-                                                        {partner.partnerName}
-                                                    </div>
-                                                    {partner.orderOptionsGroupByDelivery.map(
-                                                        (delivery) => (
-                                                            <div
-                                                                key={
-                                                                    delivery.deliveryNo
-                                                                }
-                                                                style={{
-                                                                    borderBottom:
-                                                                        '1px solid #f0f0f0',
-                                                                }}
-                                                            >
-                                                                <ul
-                                                                    className={
-                                                                        orderStyles.orderOptionList
+                                                        {delivery.invoiceNo ? (
+                                                            <>
+                                                                <span>
+                                                                    {
+                                                                        delivery.deliveryCompanyTypeLabel
                                                                     }
-                                                                >
-                                                                    {delivery.orderOptions.map(
-                                                                        (
-                                                                            option,
-                                                                        ) => (
-                                                                            <OrderOptionsItem
-                                                                                key={
-                                                                                    option.orderOptionNo
-                                                                                }
-                                                                                {...option}
-                                                                                inputs={
-                                                                                    option.inputs
-                                                                                }
-                                                                                orderNo={
-                                                                                    orderDetailData.orderNo
-                                                                                }
-                                                                            />
-                                                                        ),
+                                                                </span>
+                                                                <span>
+                                                                    {t(
+                                                                        '운송장 번호',
                                                                     )}
-                                                                </ul>
-                                                                <div
-                                                                    style={{
-                                                                        padding:
-                                                                            '12px',
-                                                                        background:
-                                                                            '#fcfcfc',
-                                                                        fontSize:
-                                                                            '12px',
-                                                                        color: '#666',
-                                                                        display:
-                                                                            'flex',
-                                                                        flexWrap:
-                                                                            'wrap',
-                                                                        gap: '16px',
-                                                                    }}
-                                                                >
-                                                                    {delivery.invoiceNo ? (
-                                                                        <>
-                                                                            <span>
-                                                                                {
-                                                                                    delivery.deliveryCompanyTypeLabel
-                                                                                }
-                                                                            </span>
-                                                                            <span>
-                                                                                {t(
-                                                                                    '운송장 번호',
-                                                                                )}
-
-                                                                                :{' '}
-                                                                                <strong>
-                                                                                    {
-                                                                                        delivery.invoiceNo
-                                                                                    }
-                                                                                </strong>
-                                                                            </span>
-                                                                        </>
-                                                                    ) : (
-                                                                        <span>
-                                                                            {t(
-                                                                                '배송 정보 준비중',
-                                                                            )}
-                                                                        </span>
-                                                                    )}
-                                                                    <span>
-                                                                        {t(
-                                                                            '배송비',
-                                                                        )}
-                                                                        :{' '}
-                                                                        <strong>
-                                                                            {delivery.deliveryAmt >
-                                                                            0
-                                                                                ? CURRENCY(
-                                                                                      delivery.deliveryAmt,
-                                                                                  ).format()
-                                                                                : t(
-                                                                                      '무료',
-                                                                                  )}
-                                                                        </strong>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        ),
-                                                    )}
+                                                                    :{' '}
+                                                                    <strong>
+                                                                        {
+                                                                            delivery.invoiceNo
+                                                                        }
+                                                                    </strong>
+                                                                </span>
+                                                            </>
+                                                        ) : (
+                                                            <span>
+                                                                {t(
+                                                                    '배송 정보 준비중',
+                                                                )}
+                                                            </span>
+                                                        )}
+                                                        <span>
+                                                            {t('배송비')}:{' '}
+                                                            <strong>
+                                                                {delivery.deliveryAmt >
+                                                                0
+                                                                    ? CURRENCY(
+                                                                          delivery.deliveryAmt,
+                                                                      ).format()
+                                                                    : t('무료')}
+                                                            </strong>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             ),
                                         )}
                                     </div>
-                                </li>
-                            </ul>
-                        )}
-                    </LoadingWrapper>
+                                ))}
+                            </div>
+                        </li>
+                    </ul>
 
-                    {orderDetailData && !isLoading && (
-                        <>
-                            <InfoSection
-                                title={t('주문자 정보')}
-                                infoList={orderInfoList}
-                            />
-                            <InfoSection
-                                title={t('배송지 정보')}
-                                infoList={deliveryInfoList}
-                            />
-                            <PaymentSection
-                                title={t('결제 정보')}
-                                paymentInfoList={paymentInfoList}
+                    <InfoSection
+                        title={t('주문자 정보')}
+                        infoList={orderInfoList}
+                    />
+                    <InfoSection
+                        title={t('배송지 정보')}
+                        infoList={deliveryInfoList}
+                    />
+                    <PaymentSection
+                        title={t('결제 정보')}
+                        paymentInfoList={paymentInfoList}
+                        receiptInfos={orderDetailData.receiptInfos}
+                    />
+                    {orderDetailData.cashReceiptInfo &&
+                        orderConfigurationData?.cashReceipt && (
+                            <CashReceiptSection
+                                cashReceiptInfo={
+                                    orderDetailData.cashReceiptInfo
+                                }
                                 receiptInfos={orderDetailData.receiptInfos}
                             />
-                            {orderDetailData.cashReceiptInfo &&
-                                orderConfigurationData?.cashReceipt && (
-                                    <CashReceiptSection
-                                        cashReceiptInfo={
-                                            orderDetailData.cashReceiptInfo
-                                        }
-                                        receiptInfos={
-                                            orderDetailData.receiptInfos
-                                        }
-                                    />
-                                )}
-                            {orderDetailData.additionalPayInfos?.map((info) => (
-                                <Fragment key={`additional-${info.claimNo}`}>
-                                    <AdditionalPaySection {...info} />
-                                    <ReturnSection {...info} />
-                                    <ExchangeSection {...info} />
-                                </Fragment>
-                            ))}
-                            {orderDetailData.refundInfos?.map((info) => (
-                                <Fragment key={`refund-${info.claimNo}`}>
-                                    {info.refundType !== 'ZERO_REFUND' && (
-                                        <RefundSection {...info} />
-                                    )}
-                                    <ReturnSection {...info} />
-                                    <ExchangeSection {...info} />
-                                </Fragment>
-                            ))}
-                        </>
-                    )}
+                        )}
+                    {orderDetailData.additionalPayInfos?.map((info) => (
+                        <Fragment key={`additional-${info.claimNo}`}>
+                            <AdditionalPaySection {...info} />
+                            <ReturnSection {...info} />
+                            <ExchangeSection {...info} />
+                        </Fragment>
+                    ))}
+                    {orderDetailData.refundInfos?.map((info) => (
+                        <Fragment key={`refund-${info.claimNo}`}>
+                            {info.refundType !== 'ZERO_REFUND' && (
+                                <RefundSection {...info} />
+                            )}
+                            <ReturnSection {...info} />
+                            <ExchangeSection {...info} />
+                        </Fragment>
+                    ))}
                 </div>
             </section>
 
