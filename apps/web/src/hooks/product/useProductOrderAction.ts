@@ -4,11 +4,11 @@ import { parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
 import { CHANNEL_TYPES } from '@/const/product';
+import { useProductInfo } from '@/entities/product/hooks';
 import { toOrderSheetOption } from '@/helpers/product';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption } from '@/hooks/product';
 import { cartKeys } from '@/hooks/queryKeys';
-import useProductDetail from '@/hooks/suspenseQuery/product/product/useProductDetail';
 import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useCartStore } from '@/store/useCartStore';
@@ -25,7 +25,10 @@ interface UseProductOrderActionOptions {
 
 export const useProductOrderAction = (
     productNo: number,
-    { openOptionBottomSheet, isOptionBottomSheetOpen }: UseProductOrderActionOptions,
+    {
+        openOptionBottomSheet,
+        isOptionBottomSheetOpen,
+    }: UseProductOrderActionOptions,
 ) => {
     const { t } = useTranslation();
     const [{ channelType }] = useQueryStates(productSearchParamsSchema);
@@ -34,7 +37,7 @@ export const useProductOrderAction = (
     const queryClient = useQueryClient();
     const { addToast } = useToast();
 
-    const { data: productDetailData } = useProductDetail({ productNo });
+    const { isSaleEnd, saleStatusType } = useProductInfo(productNo);
 
     const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
         useProductOption({ productNo });
@@ -63,7 +66,8 @@ export const useProductOrderAction = (
 
     const hasOptions = isMultiLevelOptionUsed || isFlatOptionUsed;
 
-    const needsBottomSheet = !isOptionBottomSheetOpen && hasOptions && filteredOptions.length === 0;
+    const needsBottomSheet =
+        !isOptionBottomSheetOpen && hasOptions && filteredOptions.length === 0;
 
     const onGiftButtonClick = () => {
         if (needsBottomSheet) {
@@ -164,8 +168,7 @@ export const useProductOrderAction = (
 
     return {
         totalPrice,
-        saleStatusType: productDetailData.status.saleStatusType,
-        isStopSale: productDetailData.status.saleStatusType === 'STOP',
+        saleStatusType,
         onGiftButtonClick,
         onCartButtonClick,
         onOrderButtonClick,

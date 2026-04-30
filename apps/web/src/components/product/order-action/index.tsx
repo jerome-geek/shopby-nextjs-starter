@@ -6,6 +6,7 @@ import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select
 import * as styles from '@/components/product/order-action/index.css';
 import ButtonV2 from '@/components/ui/button/v2';
 import { OVERLAY_ID } from '@/const/overlay';
+import { useProductInfo } from '@/entities/product/hooks';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
 import { CURRENCY } from '@/utils/currency';
 
@@ -29,12 +30,13 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
         );
     };
 
+    const { isSaleEnd } = useProductInfo(productNo);
+
     const {
         totalPrice,
         onGiftButtonClick,
         onCartButtonClick,
         onOrderButtonClick,
-        isStopSale,
     } = useProductOrderAction(productNo, {
         openOptionBottomSheet,
         isOptionBottomSheetOpen,
@@ -52,7 +54,7 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
             </div>
 
             <div className={styles.actionButtons}>
-                {isStopSale ? (
+                {isSaleEnd ? (
                     <ButtonV2
                         frame='solid'
                         variant='secondary'
@@ -74,7 +76,6 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
                             frame='outlined'
                             variant='secondary'
                             onClick={onCartButtonClick}
-                            style={{ flex: 1, height: '63px' }}
                         >
                             {t('장바구니')}
                         </ButtonV2>
@@ -82,7 +83,6 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
                             frame='solid'
                             variant='primary'
                             onClick={onOrderButtonClick}
-                            style={{ flex: 1, height: '63px' }}
                         >
                             {t('구매하기')}
                         </ButtonV2>

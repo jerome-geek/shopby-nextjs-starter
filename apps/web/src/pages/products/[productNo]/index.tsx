@@ -1,4 +1,4 @@
-import { each, filter, join, map, pipe, prop, take } from '@fxts/core';
+import { each, map, pipe, prop, take } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { Gift, Star, Truck } from 'lucide-react';
@@ -8,7 +8,8 @@ import {
     InferGetStaticPropsType,
 } from 'next';
 import { overlay, useOverlayData } from 'overlay-kit';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { product } from '@/api/product';
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
@@ -31,7 +32,9 @@ import {
     SelectedProductOption,
 } from '@/components/product-option';
 import { Button } from '@/components/ui/button';
+import ButtonV2 from '@/components/ui/button/v2';
 import { OVERLAY_ID } from '@/const/overlay';
+import { useProductInfo, useProductPrice } from '@/entities/product/hooks';
 import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
@@ -45,7 +48,7 @@ import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
-import { CURRENCY } from '@/utils/currency';
+import { CURRENCY, RATE } from '@/utils/currency';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -55,6 +58,8 @@ interface ProductDetailViewProps {
 }
 
 function ProductDetailView({ productNo }: ProductDetailViewProps) {
+    const { t } = useTranslation();
+
     const { isMobile, isTablet } = useResponsive();
 
     const { data: productDetailData } = useProductDetail({
@@ -64,6 +69,12 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const { baseInfo, price, counter, brand, liked, deliveryFee } =
         productDetailData;
 
+    const { isSaleEnd, productContent } = useProductInfo(productNo);
+
+    const { discountRate, buyPrice, salePrice } = useProductPrice({
+        price,
+    });
+
     const {
         isDefaultOptionUsed,
         isFlatOptionUsed,
@@ -72,45 +83,11 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     } = useProductOption({
         productNo,
     });
-    console.log(
-        '🚀 ~ ProductDetailView ~ productOptionListData:',
-        productOptionListData,
-    );
 
     const { data: additionalDiscountByProductNosData } =
         useAdditionalDiscountByProductNos({
             searchParams: { productNos: [productNo] },
         });
-
-    const productContent = useMemo(() => {
-        if (!productDetailData) {
-            return '';
-        }
-
-        const {
-            contentHeader = '',
-            content = '',
-            contentFooter = '',
-        } = productDetailData.baseInfo;
-
-        return pipe(
-            [contentHeader, content, contentFooter],
-            filter((a) => !!a),
-            join(''),
-        );
-    }, [productDetailData]);
-
-    const discountRate = Math.round(
-        ((price.salePrice -
-            (price.immediateDiscountAmt || 0) -
-            (price.additionDiscountAmt || 0)) /
-            price.salePrice) *
-            100,
-    );
-    const finalPrice =
-        price.salePrice -
-        (price.immediateDiscountAmt || 0) -
-        (price.additionDiscountAmt || 0);
 
     const { onLikeButtonClick } = useProductLike();
 
@@ -241,7 +218,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
 
                             <div className={styles.ratingContainer}>
                                 <Star
-                                    size={20}
+                                    size={isMobile ? 16 : 20}
                                     fill={vars.color.pink['80']}
                                     stroke={vars.color.pink['80']}
                                 />
@@ -259,7 +236,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             onClick={onLikeButtonClick(productNo, liked)}
                         >
                             <BookmarkIcon
-                                width={isMobile ? 20 : 20}
+                                width={isMobile ? 20 : 28}
                                 height={isMobile ? 20 : 28}
                                 variant={liked ? 'filled' : 'outline'}
                             />
@@ -273,18 +250,18 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     <div className={styles.priceSection}>
                         <div className={styles.priceInfo}>
                             {discountRate > 0 && (
-                                <span className={styles.originalPrice}>
-                                    {CURRENCY(price.salePrice).format()}
+                                <span className={styles.salePrice}>
+                                    {CURRENCY(salePrice).format()}
                                 </span>
                             )}
                             <div className={styles.priceContainer}>
                                 {discountRate > 0 && (
                                     <span className={styles.discountRate}>
-                                        {discountRate}%
+                                        {RATE(discountRate).format()}
                                     </span>
                                 )}
                                 <span className={styles.finalPrice}>
-                                    {CURRENCY(finalPrice).format()}
+                                    {CURRENCY(buyPrice).format()}
                                 </span>
                             </div>
                         </div>
@@ -292,7 +269,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             className={styles.couponButton}
                             onClick={onCouponDownloadClick}
                         >
-                            쿠폰 받기
+                            {t('쿠폰 받기')}
                         </button>
                     </div>
 
@@ -307,16 +284,19 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                         )}
 
                         <div className={styles.deliveryBox}>
-                            <div className={styles.deliveryTitle}>
-                                <Truck size={18} />
-                                지금 주문하면 내일 받을 수 있어요
-                            </div>
-                            <div className={styles.badgeList}>
-                                <span
-                                    className={`${styles.badge} ${styles.badgeActive}`}
-                                >
-                                    {deliveryFee.defaultDeliveryConditionLabel}
+                            <Truck size={isMobile ? 20 : 24} />
+                            <div className={styles.deliveryContentContainer}>
+                                <span className={styles.deliveryTitle}>
+                                    지금 주문하면 내일 받을 수 있어요
                                 </span>
+
+                                <div className={styles.badgeList}>
+                                    <span className={styles.badge}>
+                                        {
+                                            deliveryFee.defaultDeliveryConditionLabel
+                                        }
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -366,19 +346,27 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
             </div>
 
             <div className={styles.bottomSticky}>
-                <button
-                    className={styles.giftButton}
-                    onClick={onGiftButtonClick}
-                >
-                    <Gift size={24} color='#333' />
-                </button>
-                <Button
-                    frame='solid'
-                    variant='primary'
-                    onClick={onOrderButtonClick}
-                >
-                    구매하기
-                </Button>
+                {isSaleEnd ? (
+                    <ButtonV2 frame='solid' variant='secondary' disabled>
+                        {t('판매가 종료된 상품입니다.')}
+                    </ButtonV2>
+                ) : (
+                    <>
+                        <button
+                            className={styles.giftButton}
+                            onClick={onGiftButtonClick}
+                        >
+                            <Gift size={24} color='#333' />
+                        </button>
+                        <Button
+                            frame='solid'
+                            variant='primary'
+                            onClick={onOrderButtonClick}
+                        >
+                            {t('구매하기')}
+                        </Button>
+                    </>
+                )}
             </div>
         </div>
     );

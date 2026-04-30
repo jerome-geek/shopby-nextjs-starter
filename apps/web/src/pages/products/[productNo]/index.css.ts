@@ -3,7 +3,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const container = style({
     backgroundColor: vars.color.white,
@@ -209,23 +209,43 @@ export const priceContainer = style({
     marginTop: '4px',
 });
 
-export const discountRate = style({
-    fontSize: '20px',
-    fontWeight: 700,
-    color: vars.color.pink['100'],
-});
+export const discountRate = style([
+    textStyles.headingBold,
+    {
+        color: vars.color.pink['100'],
 
-export const finalPrice = style({
-    fontSize: '20px',
-    fontWeight: 700,
-    color: vars.color.black,
-});
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
+            },
+        },
+    },
+]);
 
-export const originalPrice = style([
+export const finalPrice = style([
+    textStyles.headingBold,
+    {
+        color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
+            },
+        },
+    },
+]);
+
+export const salePrice = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['50'],
         textDecoration: 'line-through',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
     },
 ]);
 
@@ -241,16 +261,23 @@ export const timeSaleBar = style({
     fontWeight: 600,
 });
 
-export const couponButton = style({
-    backgroundColor: vars.color.black,
-    color: vars.color.white,
-    padding: '8px 16px',
-    borderRadius: '4px',
-    fontSize: '14px',
-    fontWeight: 600,
-    border: 'none',
-    cursor: 'pointer',
-});
+export const couponButton = style([
+    textStyles.body2Semibold,
+    {
+        backgroundColor: vars.color.black,
+        color: vars.color.white,
+        padding: '8px 16px',
+        borderRadius: '4px',
+        border: 'none',
+        cursor: 'pointer',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineSemibold,
+            },
+        },
+    },
+]);
 
 export const ratingContainer = style({
     display: 'flex',
@@ -263,6 +290,12 @@ export const reviewRate = style([
     textStyles.body2Semibold,
     {
         color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Semibold,
+            },
+        },
     },
 ]);
 
@@ -270,44 +303,69 @@ export const reviewCount = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
     },
 ]);
 
 export const deliveryBox = style({
-    backgroundColor: vars.color.gray['10'],
-    padding: '16px',
+    backgroundColor: vars.color.green['20'],
+    padding: '12px',
     borderRadius: '8px',
+    display: 'flex',
+    // flexDirection: 'column',
+    gap: '12px',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '16px',
+        },
+    },
+});
+
+export const deliveryContentContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
 });
 
-export const deliveryTitle = style({
-    fontSize: '14px',
-    fontWeight: 600,
-    color: vars.color.black,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-});
+export const deliveryTitle = style([
+    textStyles.body2Semibold,
+    {
+        color: vars.color.gray['90'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Semibold,
+            },
+        },
+    },
+]);
 
 export const badgeList = style({
     display: 'flex',
     gap: '6px',
 });
 
-export const badge = style({
-    padding: '4px 8px',
-    fontSize: '11px',
-    borderRadius: '4px',
-    backgroundColor: vars.color.gray[20],
-    color: vars.color.gray[60],
-});
+export const badge = style([
+    textStyles.caption2Semibold,
+    {
+        padding: '3px 6px',
+        borderRadius: '2px',
+        backgroundColor: vars.color.secondary,
+        color: vars.color.white,
 
-export const badgeActive = style({
-    backgroundColor: vars.color.secondary,
-    color: vars.color.white,
-});
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.caption1Semibold,
+            },
+        },
+    },
+]);
 
 export const bottomSticky = style({
     position: 'fixed',
