@@ -7,6 +7,7 @@ import {
     useSensors,
     type DragEndEvent,
 } from '@dnd-kit/core';
+import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 import {
     arrayMove,
     rectSortingStrategy,
@@ -43,7 +44,11 @@ interface SortableImageItemProps {
     onDelete: (index: number) => void;
 }
 
-const SortableImageItem = ({ src, index, onDelete }: SortableImageItemProps) => {
+const SortableImageItem = ({
+    src,
+    index,
+    onDelete,
+}: SortableImageItemProps) => {
     const {
         attributes,
         listeners,
@@ -92,7 +97,7 @@ const SortableImageItem = ({ src, index, onDelete }: SortableImageItemProps) => 
                     }}
                     aria-label='이미지 삭제'
                 >
-                    <X size={14} strokeWidth={2.5} />
+                    <X size={16} strokeWidth={2.5} />
                 </motion.button>
             </motion.div>
         </li>
@@ -116,9 +121,12 @@ export const RecipeImageUpload = ({
 
     const imagesRef = useRef<string[]>([]);
 
-    useEffect(function syncImagesRef() {
-        imagesRef.current = images;
-    }, [images]);
+    useEffect(
+        function syncImagesRef() {
+            imagesRef.current = images;
+        },
+        [images],
+    );
 
     useEffect(() => {
         return function cleanupAllMemory() {
@@ -193,6 +201,7 @@ export const RecipeImageUpload = ({
                     sensors={sensors}
                     collisionDetection={closestCenter}
                     onDragEnd={handleDragEnd}
+                    modifiers={[restrictToFirstScrollableAncestor]}
                 >
                     <ul className={styles.imageGrid}>
                         <motion.li

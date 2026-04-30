@@ -1,6 +1,6 @@
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
@@ -18,7 +18,9 @@ export const container = style({
     transition: 'all 0.2s ease',
 
     '@media': {
-        [media.desktop]: {},
+        [media.desktop]: {
+            maxWidth: '130px',
+        },
     },
 
     selectors: {
@@ -67,7 +69,7 @@ export const previewImage = style({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    borderRadius: '12px',
+    borderRadius: '4px',
 });
 
 export const deleteButtonWrapper = style({

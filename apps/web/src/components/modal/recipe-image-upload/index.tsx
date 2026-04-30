@@ -11,12 +11,16 @@ export const RecipeImageUploadModal = (props: DefaultModalLayoutProps) => {
 
     const handleClose = () => {
         const newQuery = { ...router.query };
-        delete newQuery[MODAL_QUERY_KEY];
-        router.replace(
-            { pathname: router.pathname, query: newQuery },
-            undefined,
-            { shallow: true },
-        );
+
+        if (newQuery[MODAL_QUERY_KEY]) {
+            delete newQuery[MODAL_QUERY_KEY];
+            router.replace(
+                { pathname: router.pathname, query: newQuery },
+                undefined,
+                { shallow: true },
+            );
+        }
+
         props.close();
     };
 

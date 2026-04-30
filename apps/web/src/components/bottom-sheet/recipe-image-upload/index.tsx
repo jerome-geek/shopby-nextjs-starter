@@ -2,7 +2,10 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { RecipeImageUpload } from '@/components/layer-contents/recipe-image-upload';
-import { BottomSheetLayout, type DefaultBottomSheetProps } from '@/components/layout';
+import {
+    BottomSheetLayout,
+    type DefaultBottomSheetProps,
+} from '@/components/layout';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 
 export const RecipeImageUploadSheet = (props: DefaultBottomSheetProps) => {
@@ -11,12 +14,16 @@ export const RecipeImageUploadSheet = (props: DefaultBottomSheetProps) => {
 
     const handleClose = () => {
         const newQuery = { ...router.query };
-        delete newQuery[MODAL_QUERY_KEY];
-        router.replace(
-            { pathname: router.pathname, query: newQuery },
-            undefined,
-            { shallow: true },
-        );
+
+        if (newQuery[MODAL_QUERY_KEY]) {
+            delete newQuery[MODAL_QUERY_KEY];
+            router.replace(
+                { pathname: router.pathname, query: newQuery },
+                undefined,
+                { shallow: true },
+            );
+        }
+
         props.close();
     };
 

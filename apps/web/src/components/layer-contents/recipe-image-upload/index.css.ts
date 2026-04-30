@@ -83,7 +83,6 @@ export const imageWrapper = style({
     width: '100%',
     height: '100%',
     borderRadius: '4px',
-    overflow: 'hidden',
     position: 'relative',
     border: `1px solid ${vars.color.gray['20']}`,
 });
@@ -120,9 +119,9 @@ export const imageDeleteBtn = style({
     width: '28px',
     height: '28px',
     borderRadius: '50%',
-    backgroundColor: vars.color.red['40'],
-    color: vars.color.white,
-    border: `2.5px solid ${vars.color.white}`,
+    backgroundColor: vars.color.white,
+    color: vars.color.gray['40'],
+    border: `2.5px solid ${vars.color.gray['40']}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -132,7 +131,7 @@ export const imageDeleteBtn = style({
     transition: 'all 0.2s ease',
 
     ':hover': {
-        backgroundColor: vars.color.red['50'],
+        backgroundColor: vars.color.white,
         transform: 'scale(1.1) rotate(90deg)',
     },
 });

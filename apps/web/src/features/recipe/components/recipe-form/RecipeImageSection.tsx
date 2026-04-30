@@ -1,19 +1,21 @@
-import { closestCenter, DndContext } from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
 import {
-    rectSortingStrategy,
-    SortableContext,
-    sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
-import {
+    closestCenter,
+    DndContext,
     KeyboardSensor,
     PointerSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
+import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
+import {
+    rectSortingStrategy,
+    SortableContext,
+    sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { ImageIcon, Plus } from 'lucide-react';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { DragEndEvent } from '@dnd-kit/core';
 
 import { SortablePreviewImage } from '@/components/recipe/sortable-preview-image';
 import { InputLabel } from '@/components/ui/input';
@@ -21,7 +23,11 @@ import * as styles from '@/pages/recipes/write/index.css';
 import { vars } from '@/styles/theme.css';
 
 interface RecipeImageSectionProps {
-    displayImages: { url: string; isMain: boolean; sno: number | null | undefined }[];
+    displayImages: {
+        url: string;
+        isMain: boolean;
+        sno: number | null | undefined;
+    }[];
     onDragEnd: (event: DragEndEvent) => void;
     onImageClick: (index: number) => void;
     onDeleteImage: (index: number) => void;
@@ -71,7 +77,7 @@ export const RecipeImageSection = ({
                 >
                     <Plus size={'40px'} color={vars.color.gray['50']} />
                 </div>
-                
+
                 <input
                     type='file'
                     multiple
@@ -85,6 +91,7 @@ export const RecipeImageSection = ({
                     sensors={sensors}
                     collisionDetection={closestCenter}
                     onDragEnd={onDragEnd}
+                    modifiers={[restrictToFirstScrollableAncestor]}
                 >
                     <SortableContext
                         items={displayImages.map((img) => img.sno ?? img.url)}

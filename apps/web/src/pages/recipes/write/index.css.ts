@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const container = style({
     transition: 'all 0.3s ease',
@@ -42,6 +42,7 @@ export const pageTitle = style([
 ]);
 
 export const section = style({
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
