@@ -29,10 +29,14 @@ const Event = ({ index, eventNo }: { index?: number; eventNo?: number }) => {
         >
             <SuspenseQuery
                 queryKey={eventKeys.detail(eventKey)}
-                queryFn={() => event.getEvent(eventKey)}
+                queryFn={async () => {
+                    const { data } = await event.getEvent(eventKey);
+
+                    return data;
+                }}
             >
                 {({ data }) => {
-                    return <EventCardContent event={data.data} />;
+                    return <EventCardContent event={data} />;
                 }}
             </SuspenseQuery>
         </FetchBoundary>

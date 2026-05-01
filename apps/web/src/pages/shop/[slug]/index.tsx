@@ -1,20 +1,23 @@
-import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 
-import { event } from '@/api/display';
+import { event, productSection } from '@/api/display';
+import { timeSale } from '@/api/shop';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import SectionGroup from '@/components/section/group';
-import TimeSale from '@/components/section/time-sale';
+import TimeSaleSection from '@/components/section/time-sale';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
+import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
 import { bannerListOptions } from '@/entities/banner/queries';
 import {
     BANNER_ID_PREFIX,
     HeroBanner,
 } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
-import { eventKeys } from '@/hooks/queryKeys';
+import { eventKeys, productSectionKeys, timeSaleKeys } from '@/hooks/queryKeys';
 import type { GetEventsV2Params } from '@/models/display/event';
+import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import * as styles from '@/styles/Home.css';
 
 const SHOP_TYPES = {
@@ -26,9 +29,15 @@ export type ShopType = (typeof SHOP_TYPES)[keyof typeof SHOP_TYPES];
 
 interface ShopMainPageProps {
     type: ShopType;
+    eventSearchParams: GetEventsV2Params;
+    sectionId: string;
 }
 
-export default function ShopMainPage({ type }: ShopMainPageProps) {
+export default function ShopMainPage({
+    type,
+    eventSearchParams,
+    sectionId,
+}: ShopMainPageProps) {
     const heroBannerType = type === 'kids' ? 'KIDS' : 'LIFE';
 
     return (
@@ -40,12 +49,16 @@ export default function ShopMainPage({ type }: ShopMainPageProps) {
             </section>
 
             <ShopbyApiErrorBoundary errorFallback={<></>}>
-                <TimeSale type={heroBannerType} title={'오늘만 특가'} />
+                <TimeSaleSection
+                    type={heroBannerType}
+                    sectionId={sectionId}
+                    title={'오늘만 특가'}
+                />
             </ShopbyApiErrorBoundary>
 
             {/* 기획전 및 상품진열 그룹 */}
             <ShopbyApiErrorBoundary errorFallback={<></>}>
-                <SectionGroup />
+                <SectionGroup eventSearchParams={eventSearchParams} />
             </ShopbyApiErrorBoundary>
         </div>
     );
@@ -73,6 +86,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     const type = slug === 'life' ? SHOP_TYPES.LIFE : SHOP_TYPES.KIDS;
     const heroBannerType = type === 'kids' ? 'KIDS' : 'LIFE';
+    const sectionId =
+        heroBannerType === 'KIDS' ? 'TIMESALE_KIDS' : 'TIMESALE_LIFE';
 
     const queryClient = new QueryClient();
 
@@ -90,29 +105,73 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     try {
         await Promise.all([
-            // Prefetch Banners
+            // 1. 배너 프리페칭 (목록 조회와 무관하게 병렬 실행)
             queryClient.prefetchQuery(
                 bannerListOptions({
                     banners: [`${BANNER_ID_PREFIX}-${heroBannerType}`],
                 }),
             ),
 
-            // Prefetch first page of infinite event list
-            queryClient.prefetchInfiniteQuery({
-                queryKey: eventKeys.infiniteList(eventSearchParams),
-                initialPageParam: 1,
-                queryFn: async ({ pageParam }) => {
-                    const { data } = await event.getEventsV2({
-                        ...eventSearchParams,
-                        page: {
-                            ...eventSearchParams.page,
-                            number: Number(pageParam) || 1,
-                        },
-                    });
+            // 2. 이벤트 목록 조회 및 첫 번째 이벤트 상세 조회 (순차 의존성 해결 + 배너와는 병렬)
+            (async () => {
+                const { data: eventListData } =
+                    await event.getEventsV2(eventSearchParams);
 
-                    return data;
-                },
-            }),
+                // 무한 스크롤 캐시 구조 수동 주입 (하이드레이션 미스 방지)
+                queryClient.setQueryData(
+                    eventKeys.infiniteList(eventSearchParams),
+                    {
+                        pages: [eventListData],
+                        pageParams: [1],
+                    },
+                );
+
+                const firstEventNo = eventListData?.contents?.[0]?.eventNo;
+
+                if (firstEventNo) {
+                    const { data: detailData } =
+                        await event.getEvent(firstEventNo);
+
+                    // 이벤트 상세 캐시 주입 (EventSection 스켈레톤 제거)
+                    queryClient.setQueryData(
+                        eventKeys.detail(firstEventNo),
+                        detailData,
+                    );
+                }
+            })(),
+
+            // 3. 타임세일 섹션 및 상품 조회 (순차 의존성 해결)
+            (async () => {
+                // 섹션 정보 조회
+                const { data: sectionData } =
+                    await productSection.getProductSectionById(sectionId);
+
+                queryClient.setQueryData(
+                    productSectionKeys.detail(sectionId),
+                    sectionData,
+                );
+
+                const sectionNo = sectionData?.sectionNo;
+
+                if (sectionNo) {
+                    // 타임세일 상품 조회
+                    const searchParams = {
+                        ...TIME_SALE_LIST_BASE_PARAMS,
+                        sortingType: SORTING_TYPE_BY_STATUS['today-open'],
+                    };
+
+                    const { data: timeSaleData } =
+                        await timeSale.getTimeSaleSectionProducts(sectionNo, {
+                            ...searchParams,
+                            pageNumber: 1,
+                        });
+
+                    queryClient.setQueryData(
+                        timeSaleKeys.sectionProducts(sectionNo, searchParams),
+                        timeSaleData,
+                    );
+                }
+            })(),
         ]);
     } catch (error) {
         console.error(
@@ -126,6 +185,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
         props: {
             type,
+            eventSearchParams,
+            sectionId,
             dehydratedState,
         },
         revalidate: ONE_HOUR_IN_SECONDS,

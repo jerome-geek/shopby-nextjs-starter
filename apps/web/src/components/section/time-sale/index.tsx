@@ -17,19 +17,20 @@ import type { ImageUrlType } from '@/models/product';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import { BREAKPOINTS } from '@/styles/media';
 
-interface TimeSaleProps {
+interface TimeSaleSectionProps {
+    sectionId: string;
     title?: string;
     subtitle?: string;
     type?: 'KIDS' | 'LIFE';
 }
 
-export const TimeSale = memo(
+export const TimeSaleSection = memo(
     ({
+        sectionId,
         title = '오늘만 특가',
         subtitle = '매일 오전 10시 새 업데이트',
         type = 'KIDS',
-    }: TimeSaleProps) => {
-        const sectionId = type === 'KIDS' ? 'TIMESALE_KIDS' : 'TIMESALE_LIFE';
+    }: TimeSaleSectionProps) => {
         const buttonLabel =
             type === 'KIDS' ? '키즈 타임특가 더보기' : '라이프 타임특가 더보기';
 
@@ -188,6 +189,6 @@ export const TimeSale = memo(
     },
 );
 
-TimeSale.displayName = 'TimeSale';
+TimeSaleSection.displayName = 'TimeSaleSection';
 
-export default TimeSale;
+export default TimeSaleSection;

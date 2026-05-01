@@ -1,4 +1,4 @@
-import { filter, flatMap, map, pipe, prop, toArray } from '@fxts/core';
+import { filter, flatMap, map, pipe, prop, sortBy, toArray } from '@fxts/core';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -9,7 +9,6 @@ import { ObserverTarget } from '@/components/common/observer-target';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import EventSection from '@/components/section/event';
 import ProductsSearch from '@/components/section/products/search';
-import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import type { GetEventsV2Params } from '@/models/display/event';
 import { ShopType } from '@/pages/shop/[slug]';
@@ -30,23 +29,13 @@ const ProductDisplay = dynamic(
     },
 );
 
-const SectionGroup = () => {
+const SectionGroup = ({
+    eventSearchParams,
+}: {
+    eventSearchParams: GetEventsV2Params;
+}) => {
     const router = useRouter();
     const type = router.query.slug as ShopType;
-
-    const searchParams: GetEventsV2Params = {
-        page: {
-            number: 1,
-            size: 7,
-        },
-        order: {
-            by: 'REGISTER_DATE',
-            direction: 'DESC',
-        },
-        categoryNos: [
-            EVENT_DISPLAY_CATEGORY_NO[type === 'kids' ? 'KIDS' : 'LIFE'],
-        ],
-    };
 
     const {
         data: infiniteEventListData,
@@ -54,7 +43,7 @@ const SectionGroup = () => {
         fetchNextPage,
         isFetchingNextPage,
     } = useInfiniteEventList({
-        searchParams,
+        searchParams: eventSearchParams,
     });
     console.log(
         '🚀 ~ SectionGroup ~ infiniteEventListData:',
