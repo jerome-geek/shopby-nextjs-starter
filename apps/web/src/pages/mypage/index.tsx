@@ -8,7 +8,7 @@ import Summary from '@/components/mypage/main/summary/index';
 import useResponsive from '@/hooks/utils/useResponsive';
 import * as styles from '@/pages/mypage/index.css';
 
-export default function MypageMain() {
+export default function MypageMainPage() {
     const { isMobile } = useResponsive();
 
     return (

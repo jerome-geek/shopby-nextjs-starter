@@ -17,7 +17,7 @@ const Event = dynamic(() => import('@/components/section/event'), {
 });
 
 // 쇼핑몰 기본 홈은 발견
-export default function ShopMain() {
+export default function ShopMainPage() {
     return (
         <div className={styles.main}>
             {/* Full-width HeroBanner */}

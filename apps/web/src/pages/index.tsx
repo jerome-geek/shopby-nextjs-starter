@@ -115,7 +115,7 @@ export async function getStaticProps() {
     };
 }
 
-export default function Home() {
+export default function HomePage() {
     return (
         <>
             <Seo description='Welcome to our online store' />

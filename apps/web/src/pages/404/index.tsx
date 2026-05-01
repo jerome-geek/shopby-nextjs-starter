@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import * as styles from '@/styles/404.css';
 import Seo from '@/components/common/seo';
 
-export default function Custom404() {
+export default function Custom404Page() {
     return (
         <>
             <Seo title="404 - Page Not Found" noindex={true} />

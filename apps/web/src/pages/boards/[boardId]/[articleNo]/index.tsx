@@ -30,7 +30,7 @@ import { GetArticleV2Params } from '@/models/manage/board';
 import * as styles from '@/pages/boards/[boardId]/[articleNo]/index.css';
 import { accessTokenCookie } from '@/utils/cookie';
 
-export default function BoardArticle({
+export default function BoardArticlePage({
     boardNo,
     articleNo,
     searchParams,
