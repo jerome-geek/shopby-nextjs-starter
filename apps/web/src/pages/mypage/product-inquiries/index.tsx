@@ -33,7 +33,7 @@ import * as styles from '@/pages/mypage/product-inquiries/index.css';
 
 const PAGE_SIZE = 10;
 
-export const MypageProductInquiries = () => {
+export default function MypageProductInquiriesPage() {
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
@@ -305,10 +305,8 @@ export const MypageProductInquiries = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageProductInquiries.getLayout = (page: ReactNode) => {
+MypageProductInquiriesPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageProductInquiries;

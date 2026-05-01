@@ -6,7 +6,7 @@ import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { ReviewForm } from '@/components/mypage/review/review-form';
 import { PATHS } from '@/const/paths';
 
-export const MypageReviewWrite = () => {
+export default function MypageReviewWritePage() {
     const router = useRouter();
     const productNo = Number(router.query.productNo) || 0;
     const optionNo = Number(router.query.optionNo) || 0;
@@ -30,10 +30,8 @@ export const MypageReviewWrite = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageReviewWrite.getLayout = (page: ReactNode) => {
+MypageReviewWritePage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageReviewWrite;

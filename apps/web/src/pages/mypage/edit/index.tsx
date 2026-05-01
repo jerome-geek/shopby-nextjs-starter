@@ -7,7 +7,7 @@ import { CheckAccountForm } from '@/components/mypage/edit/check-account-form';
 import { EditForm } from '@/components/mypage/edit/edit-form';
 import { PATHS } from '@/const/paths';
 
-export const MypageEdit = () => {
+export default function MypageEditPage() {
     const router = useRouter();
 
     const [password, setPassword] = useState<string | 'SOCIAL_LOGIN' | null>(
@@ -34,10 +34,8 @@ export const MypageEdit = () => {
     ) : (
         <CheckAccountForm setPassword={(p) => setPassword(p)} />
     );
-};
+}
 
-MypageEdit.getLayout = (page: ReactNode) => {
+MypageEditPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageEdit;

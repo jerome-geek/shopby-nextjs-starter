@@ -589,7 +589,7 @@ const RefundSection = (info: RefundInfo) => {
     return <InfoSection title={t('환불 정보')} infoList={infoList} />;
 };
 
-const OrderDetail = () => {
+export default function MypageOrderDetailPage() {
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
@@ -1013,10 +1013,8 @@ const OrderDetail = () => {
             </div>
         </div>
     );
-};
+}
 
-OrderDetail.getLayout = (page: React.ReactNode) => {
+MypageOrderDetailPage.getLayout = (page: React.ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default OrderDetail;

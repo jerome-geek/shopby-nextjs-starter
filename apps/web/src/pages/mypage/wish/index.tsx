@@ -278,16 +278,14 @@ const MypageWishContent = () => {
     );
 };
 
-export const MypageWish = () => {
+export default function MypageWishPage() {
     return (
         <FetchBoundary fallback={<MypageWishSkeleton />}>
             <MypageWishContent />
         </FetchBoundary>
     );
-};
+}
 
-MypageWish.getLayout = (page: ReactNode) => {
+MypageWishPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageWish;

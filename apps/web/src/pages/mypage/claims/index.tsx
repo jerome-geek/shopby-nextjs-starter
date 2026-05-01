@@ -23,7 +23,7 @@ import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/claims/index.css';
 
-const Claims = () => {
+export default function MypageClaimsPage() {
     const { isMobile } = useResponsive();
     const { t } = useTranslation();
 
@@ -190,10 +190,8 @@ const Claims = () => {
             </section>
         </div>
     );
-};
+}
 
-Claims.getLayout = (page: React.ReactNode) => {
+MypageClaimsPage.getLayout = (page: React.ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default Claims;

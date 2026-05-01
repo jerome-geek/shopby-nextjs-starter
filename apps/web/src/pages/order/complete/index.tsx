@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/order/complete/index.css';
 
-const OrderComplete = () => {
+const OrderCompletePage = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const isLogin = useAuth();
@@ -41,10 +41,10 @@ const OrderComplete = () => {
             }, 500);
         }
 
-        if (result === 'SUCCESS' && orderNo) {
+        if (isOrderSuccess) {
             openRecipeRecommendation();
         }
-    }, [isMobile, router.isReady, result, orderNo, openRecipeRecommendation]);
+    }, [isMobile, router.isReady, isOrderSuccess, openRecipeRecommendation]);
 
     if (router.isReady && !orderNo && result === 'SUCCESS') {
         void router.replace(PATHS.MAIN);
@@ -93,4 +93,4 @@ const OrderComplete = () => {
     );
 };
 
-export default OrderComplete;
+export default OrderCompletePage;

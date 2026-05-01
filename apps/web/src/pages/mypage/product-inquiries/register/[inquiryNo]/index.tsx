@@ -5,7 +5,7 @@ import { MypageLayout } from '@/components/layout';
 import { ProductInquiryRegisterForm } from '@/components/mypage/product-inquiries/product-inquiry-register-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 
-const MypageProductInquiryEditPage = () => {
+export default function MypageProductInquiryEditPage() {
     const router = useRouter();
 
     const inquiryNo = Number(router.query.inquiryNo) || 0;
@@ -17,11 +17,9 @@ const MypageProductInquiryEditPage = () => {
             </section>
         </div>
     );
-};
+}
 
 MypageProductInquiryEditPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageProductInquiryEditPage;
 

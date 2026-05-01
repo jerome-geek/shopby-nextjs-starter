@@ -26,7 +26,7 @@ import * as styles from '@/pages/mypage/coupons/index.css';
 
 const PAGE_SIZE = 10;
 
-export const MypageCoupons = () => {
+export default function MypageCouponsPage() {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
     const { getBenefitAmt, getCouponType } = useCoupons();
@@ -350,10 +350,8 @@ export const MypageCoupons = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageCoupons.getLayout = (page: React.ReactNode) => {
+MypageCouponsPage.getLayout = (page: React.ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageCoupons;

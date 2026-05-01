@@ -4,7 +4,7 @@ import { MypageLayout } from '@/components/layout';
 import { ProductInquiryRegisterForm } from '@/components/mypage/product-inquiries/product-inquiry-register-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 
-const MypageProductInquiryRegisterPage = () => {
+export default function MypageProductInquiryRegisterPage() {
     return (
         <div className={card.container}>
             <section className={card.section} data-type='form'>
@@ -12,11 +12,9 @@ const MypageProductInquiryRegisterPage = () => {
             </section>
         </div>
     );
-};
+}
 
 MypageProductInquiryRegisterPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageProductInquiryRegisterPage;
 

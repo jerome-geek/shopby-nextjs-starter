@@ -22,7 +22,7 @@ import * as styles from '@/pages/mypage/previous-orders/index.css';
 
 const PAGE_SIZE = 10;
 
-const PreviousOrders = () => {
+export default function MypagePreviousOrdersPage() {
     const { isMobile } = useResponsive();
     const { t } = useTranslation();
     const [{ startYmd, endYmd, pageNumber }, setQuery] =
@@ -247,10 +247,8 @@ const PreviousOrders = () => {
             </section>
         </div>
     );
-};
+}
 
-PreviousOrders.getLayout = (page: React.ReactNode) => (
+MypagePreviousOrdersPage.getLayout = (page: React.ReactNode) => (
     <MypageLayout>{page}</MypageLayout>
 );
-
-export default PreviousOrders;

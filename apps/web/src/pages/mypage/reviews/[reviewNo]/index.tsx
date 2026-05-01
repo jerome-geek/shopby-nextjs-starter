@@ -23,7 +23,7 @@ import useApiError from '@/hooks/useApiError';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/reviews/[reviewNo]/index.css';
 
-export const MypageReviewDetail = () => {
+export default function MypageReviewDetailPage() {
     const { t } = useTranslation();
     const router = useRouter();
     const { openAsyncDialog } = useDialog();
@@ -273,10 +273,8 @@ export const MypageReviewDetail = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageReviewDetail.getLayout = (page: ReactNode) => {
+MypageReviewDetailPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageReviewDetail;

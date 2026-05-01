@@ -244,16 +244,14 @@ export const MypageRecentProductsContent = () => {
     );
 };
 
-export const MypageRecentProducts = () => {
+export default function MypageRecentProductsPage() {
     return (
         <FetchBoundary fallback={<MypageWishSkeleton />}>
             <MypageRecentProductsContent />
         </FetchBoundary>
     );
-};
+}
 
-MypageRecentProducts.getLayout = (page: ReactNode) => {
+MypageRecentProductsPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageRecentProducts;

@@ -25,7 +25,7 @@ import { POINT } from '@/utils/currency';
 
 const PAGE_SIZE = 10;
 
-export const MypageAccumulation = () => {
+export default function MypageAccumulationPage() {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
 
@@ -400,10 +400,8 @@ export const MypageAccumulation = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageAccumulation.getLayout = (page: React.ReactNode) => (
+MypageAccumulationPage.getLayout = (page: React.ReactNode) => (
     <MypageLayout>{page}</MypageLayout>
 );
-
-export default MypageAccumulation;

@@ -10,7 +10,7 @@ import { CLAIM_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { useDialog } from '@/hooks/utils';
 
-export const ClaimRequest = () => {
+export default function MypageClaimRequestPage() {
     const { t } = useTranslation();
     const router = useRouter();
     const { openDialog } = useDialog();
@@ -47,10 +47,8 @@ export const ClaimRequest = () => {
             {claimType === 'EXCHANGE' && <ClaimExchangeForm />}
         </>
     );
-};
+}
 
-ClaimRequest.getLayout = (page: React.ReactNode) => {
+MypageClaimRequestPage.getLayout = (page: React.ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default ClaimRequest;

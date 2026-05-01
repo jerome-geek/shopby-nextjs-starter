@@ -36,6 +36,16 @@ src/hooks/useClickOutside.ts             (X) - 카멜 케이스
 - 무조건 **첫 문자를 대문자로 시작하는 PascalCase**를 준수하세요.
 - **페이지 컴포넌트**: 일반 컴포넌트와 구분하기 위해 컴포넌트명 뒤에 반드시 **`Page`** 접미사를 붙입니다. (예: `LoginPage`, `EventDetailPage`)
 
+### 컴포넌트 선언 방식: function vs arrow function
+컴포넌트의 역할과 엔트리 포인트 여부에 따라 선언 방식을 구분하여 코드의 가독성과 디버깅 편의성을 높입니다.
+
+- **페이지 컴포넌트 (Entry Point)**: **함수 선언문 (`function`)** 방식을 권장합니다.
+    - Next.js 공식 문서의 표준 예제와 일치하며, React DevTools에서 컴포넌트명이 명확하게 표시되어 디버깅에 유리합니다.
+    - 예: `export default function LoginPage() { ... }`
+- **일반 컴포넌트 (Feature/Shared)**: **화살표 함수 (`const`)** 방식을 권장합니다.
+    - 코드의 간결함을 유지하고 일반적인 유틸리티 로직과 시각적으로 구분하기 좋습니다.
+    - 예: `const UserProfile = () => { ... }`
+
 ### 일반 변수, 함수, 훅스(Hooks): 카멜 케이스 (camelCase)
 - 무조건 변수와 일반 함수형 로직은 `camelCase`를 준수하세요.
 

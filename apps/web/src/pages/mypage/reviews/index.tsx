@@ -16,7 +16,7 @@ import {
 
 const PAGE_SIZE = 12;
 
-export const MypageReviews = () => {
+export default function MypageReviewsPage() {
     const { t } = useTranslation();
 
     const [{ startYmd, endYmd, pageNumber, reviewType }, setQuery] =
@@ -122,10 +122,8 @@ export const MypageReviews = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageReviews.getLayout = (page: React.ReactNode) => {
+MypageReviewsPage.getLayout = (page: React.ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageReviews;

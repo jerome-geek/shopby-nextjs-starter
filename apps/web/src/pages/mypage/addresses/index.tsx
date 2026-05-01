@@ -16,7 +16,7 @@ import { useDialog, useResponsive } from '@/hooks/utils';
 import type { Address } from '@/models/order/shippingAddress';
 import * as styles from '@/pages/mypage/addresses/index.css';
 
-export const MypageAddresses = () => {
+export default function MypageAddressesPage() {
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
@@ -300,10 +300,8 @@ export const MypageAddresses = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageAddresses.getLayout = (page: ReactNode) => {
+MypageAddressesPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageAddresses;

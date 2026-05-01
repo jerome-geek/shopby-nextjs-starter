@@ -5,7 +5,7 @@ import { MypageLayout } from '@/components/layout';
 import { AddressWriteForm } from '@/components/mypage/addresses/address-write-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 
-const MypageAddressEditPage = () => {
+export default function MypageAddressEditPage() {
     const router = useRouter();
 
     const addressNo = Number(router.query.addressNo) || 0;
@@ -17,10 +17,8 @@ const MypageAddressEditPage = () => {
             </section>
         </div>
     );
-};
+}
 
 MypageAddressEditPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageAddressEditPage;

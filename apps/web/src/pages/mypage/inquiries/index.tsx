@@ -32,7 +32,7 @@ const PAGE_SIZE = 10;
 
 type SearchTypeTab = 'ALL' | 'TITLE' | 'CONTENT';
 
-export const MypageInquiries = () => {
+export default function MypageInquiriesPage() {
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
@@ -264,10 +264,8 @@ export const MypageInquiries = () => {
             </section>
         </div>
     );
-};
+}
 
-MypageInquiries.getLayout = (page: React.ReactNode) => {
+MypageInquiriesPage.getLayout = (page: React.ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default MypageInquiries;

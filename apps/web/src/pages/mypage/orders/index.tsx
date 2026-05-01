@@ -24,7 +24,7 @@ import { ordersStatusTabSpec } from '@/entities/mypage/utils/tabs';
 
 const PAGE_SIZE = 10;
 
-export const Orders = () => {
+export default function MypageOrdersPage() {
     const { isMobile } = useResponsive();
     const { t } = useTranslation();
 
@@ -198,10 +198,8 @@ export const Orders = () => {
             </section>
         </div>
     );
-};
+}
 
-Orders.getLayout = (page: React.ReactNode) => (
+MypageOrdersPage.getLayout = (page: React.ReactNode) => (
     <MypageLayout>{page}</MypageLayout>
 );
-
-export default Orders;

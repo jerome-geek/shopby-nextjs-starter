@@ -12,7 +12,7 @@ import { usePreviousOrderDetail } from '@/hooks/suspenseQuery/order/previousOrde
 import * as styles from '@/pages/mypage/previous-orders/[orderNo]/index.css';
 import { CURRENCY } from '@/utils/currency';
 
-const PreviousOrderDetail = () => {
+export default function MypagePreviousOrderDetailPage() {
     const router = useRouter();
     const { t } = useTranslation();
 
@@ -76,7 +76,7 @@ const PreviousOrderDetail = () => {
             content: previousOrderDetailData?.firstPayment
                 ? CURRENCY(
                       previousOrderDetailData.firstPayment.standardAmt,
-                  ).format()
+                   ).format()
                 : '-',
         },
         {
@@ -84,7 +84,7 @@ const PreviousOrderDetail = () => {
             content: previousOrderDetailData?.firstPayment
                 ? CURRENCY(
                       previousOrderDetailData.firstPayment.discountAmt,
-                  ).format()
+                   ).format()
                 : '-',
         },
         {
@@ -92,7 +92,7 @@ const PreviousOrderDetail = () => {
             content: previousOrderDetailData?.firstPayment
                 ? CURRENCY(
                       previousOrderDetailData.firstPayment.deliveryAmt,
-                  ).format()
+                   ).format()
                 : '-',
         },
         {
@@ -100,7 +100,7 @@ const PreviousOrderDetail = () => {
             content: previousOrderDetailData?.firstPayment
                 ? CURRENCY(
                       previousOrderDetailData.firstPayment.mainPayAmt,
-                  ).format()
+                   ).format()
                 : '-',
         },
     ];
@@ -115,7 +115,7 @@ const PreviousOrderDetail = () => {
             content: previousOrderDetailData?.refund?.refundCompleteYmdt
                 ? dayjs(
                       previousOrderDetailData.refund.refundCompleteYmdt,
-                  ).format('YYYY.MM.DD HH:mm')
+                   ).format('YYYY.MM.DD HH:mm')
                 : '-',
         },
         {
@@ -124,7 +124,7 @@ const PreviousOrderDetail = () => {
                 typeof previousOrderDetailData?.refund?.refundAmt === 'number'
                     ? CURRENCY(
                           previousOrderDetailData.refund.refundAmt,
-                      ).format()
+                       ).format()
                     : '-',
         },
         {
@@ -242,10 +242,8 @@ const PreviousOrderDetail = () => {
             </div>
         </LoadingWrapper>
     );
-};
+}
 
-PreviousOrderDetail.getLayout = (page: React.ReactNode) => {
+MypagePreviousOrderDetailPage.getLayout = (page: React.ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-
-export default PreviousOrderDetail;
