@@ -45,6 +45,7 @@ export const leftColumn = style({
         [media.desktop]: {
             flex: 1,
             maxWidth: '666px',
+            gap: '40px',
         },
     },
 });

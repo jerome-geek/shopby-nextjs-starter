@@ -31,7 +31,7 @@ export interface ProductCardProps {
     deliveryConditionType?: DeliveryConditionType;
     isHideLikeButton?: boolean;
     rank?: number;
-    isTimeSaleEnabled?: boolean;
+    isTimeSaleEnabled?: boolean; // TODO: API 교체 후 제거 예정
     additionalDiscount?: Nullable<AdditionalDiscountWithProductNo>;
 }
 

@@ -42,7 +42,6 @@ import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
 import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { productKeys } from '@/hooks/queryKeys';
-import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
@@ -62,17 +61,17 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
 
     const { isMobile, isTablet } = useResponsive();
 
-    const { data: productDetailData } = useProductDetail({
-        productNo,
-    });
-
-    const { baseInfo, price, counter, brand, liked, deliveryFee } =
-        productDetailData;
-
-    const { isSaleEnd, productContent } = useProductInfo(productNo);
-
+    const {
+        isSaleEnd,
+        productContent,
+        counter,
+        brand,
+        liked,
+        deliveryFee,
+        productDetailData,
+    } = useProductInfo(productNo);
     const { discountRate, buyPrice, salePrice } = useProductPrice({
-        price,
+        productNo,
     });
 
     const {
@@ -184,14 +183,12 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     </div>
 
                     {!isTablet && (
-                        <div style={{ marginTop: '40px' }}>
-                            <ProductTabs
-                                reviewCount={counter.reviewCnt || 0}
-                                inquiryCount={counter.inquiryCnt || 0}
-                                productContent={productContent}
-                                productDetailData={productDetailData}
-                            />
-                        </div>
+                        <ProductTabs
+                            reviewCount={counter.reviewCnt || 0}
+                            inquiryCount={counter.inquiryCnt || 0}
+                            productContent={productContent}
+                            productDetailData={productDetailData}
+                        />
                     )}
                 </div>
 
@@ -208,11 +205,11 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             )}
 
                             <h1 className={styles.productName}>
-                                {baseInfo.productName}
+                                {productDetailData.baseInfo.productName}
                             </h1>
-                            {baseInfo.promotionText && (
+                            {productDetailData.baseInfo.promotionText && (
                                 <p className={styles.promotionText}>
-                                    {baseInfo.promotionText}
+                                    {productDetailData.baseInfo.promotionText}
                                 </p>
                             )}
 

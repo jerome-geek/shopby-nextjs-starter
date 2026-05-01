@@ -6,7 +6,7 @@ import * as styles from '@/components/product/grid-section/index.css';
 import Skeleton from '@/components/ui/skeleton';
 import { useResponsive } from '@/hooks/utils';
 
-const ProductCardSkeleton = () => {
+export const ProductCardSkeleton = () => {
     return (
         <article className={productCardStyles.container} aria-hidden='true'>
             <div className={productCardStyles.thumbWrapper}>

@@ -1,4 +1,4 @@
-import * as styles from '@/components/event/detail/event-top/index.css';
+import * as styles from '@/features/event/detail/components/event-top/index.css';
 
 interface EventTopProps {
     label: string;

@@ -2,7 +2,7 @@ import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
 import Seo from '@/components/common/seo';
-import EventItem from '@/components/event/list/event-item';
+import EventItem from '@/features/event/list/components/event-item';
 import { EVENT_LIST } from '@/const/event';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import { useResponsive } from '@/hooks/utils';

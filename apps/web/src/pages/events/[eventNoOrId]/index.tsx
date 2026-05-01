@@ -1,37 +1,34 @@
-import { compact, isEmpty, isUndefined, pipe, sum } from '@fxts/core';
-import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
+import { isEmpty } from '@fxts/core';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import type {
     GetStaticPaths,
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import { useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 
 import { event } from '@/api/display';
 import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import EventContents from '@/components/event/detail/event-contents';
-import EventErrorState from '@/components/event/detail/event-error-state';
-import EventProductSection from '@/components/event/detail/event-product-section';
-import EventSectionTab from '@/components/event/detail/event-section-tab';
-import EventTop from '@/components/event/detail/event-top';
+import EventErrorState from '@/features/event/detail/components/event-error-state';
+import EventProductSection from '@/features/event/detail/components/event-product-section';
+import EventSectionTab from '@/features/event/detail/components/event-section-tab';
+import EventTop from '@/features/event/detail/components/event-top';
+import { ONE_HOUR_IN_SECONDS, ONE_MINUTE_IN_SECONDS } from '@/const/time';
 import { eventKeys } from '@/hooks/queryKeys';
 import { useEvent } from '@/hooks/suspenseQuery/display/event';
-import { ONE_HOUR_IN_SECONDS, ONE_MINUTE_IN_SECONDS } from '@/const/time';
-import {
-    GetEventParams,
-    GetEventProductDisplaySectionParams,
-    GetEventProductDisplaySectionResponse,
-} from '@/models/display';
 
+import EventContents from '@/features/event/detail/components/event-contents';
 import * as styles from '@/pages/events/[eventNoOrId]/index.css';
 
 interface EventDetailViewProps {
     eventKey: string | number;
-    searchParams: GetEventParams;
+    searchParams: {
+        preview: boolean;
+        includeNonMemberCoupon: boolean;
+    };
 }
 
 const EventDetailView = ({ eventKey, searchParams }: EventDetailViewProps) => {
@@ -40,77 +37,24 @@ const EventDetailView = ({ eventKey, searchParams }: EventDetailViewProps) => {
         searchParams,
     });
 
-    const [activeSectionNo, setActiveSectionNo] = useState<number | null>(null);
+    const [activeSectionNo, setActiveSectionNo] = useState<number | null>(
+        eventData.section?.[0]?.sectionNo ?? null,
+    );
 
-    const handleTabClick = useCallback((sectionNo: number | null) => {
+    const handleTabClick = useCallback((sectionNo: number) => {
         setActiveSectionNo(sectionNo);
     }, []);
 
-    const visibleSections = useMemo(() => {
-        if (!eventData) {
-            return [];
-        }
-
+    const visibleSection = useMemo(() => {
         if (activeSectionNo === null) {
-            return eventData.section;
+            return null;
         }
 
-        return eventData.section.filter((s) => s.sectionNo === activeSectionNo);
-    }, [eventData, activeSectionNo]);
-
-    const productSectionSearchParams: GetEventProductDisplaySectionParams =
-        useMemo(() => {
-            return {
-                pageNumber: 1,
-                pageSize: 30,
-                order: 'ADMIN_SETTING',
-                // TODO: 추후 판매 상태 수정 필요
-                // saleStatus: 'RESERVATION_AND_ONSALE',
-                // includeStopProduct: true,
-            };
-        }, []);
-
-    const queryClient = useQueryClient();
-
-    const totalCount = useMemo(() => {
-        if (!eventKey) {
-            return;
-        }
-
-        try {
-            const totalCountList = visibleSections.map((section) => {
-                const data =
-                    queryClient.getQueryData<GetEventProductDisplaySectionResponse>(
-                        eventKeys.productSection(
-                            Number(eventData.eventNo),
-                            section.sectionNo,
-                            productSectionSearchParams,
-                        ),
-                    );
-
-                if (!data) {
-                    return;
-                }
-
-                return data.totalCount;
-            });
-
-            if (totalCountList?.some((count) => isUndefined(count))) {
-                return;
-            }
-
-            return pipe(totalCountList, compact, sum);
-        } catch (error) {
-            console.error(error);
-            return;
-        }
-    }, [
-        visibleSections,
-        eventKey,
-        eventData.eventNo,
-        productSectionSearchParams,
-        queryClient,
-    ]);
+        return (
+            eventData.section.find((s) => s.sectionNo === activeSectionNo) ??
+            null
+        );
+    }, [eventData.section, activeSectionNo]);
 
     return (
         <div className={styles.pageContainer}>
@@ -128,40 +72,47 @@ const EventDetailView = ({ eventKey, searchParams }: EventDetailViewProps) => {
                 </div>
             </div>
 
-            <EventContents top={eventData.top} />
+            {eventData.orders.map((order, index) => {
+                const key = `${order}-${index}`;
 
-            {/* 섹션 탭 */}
-            {!isEmpty(eventData.section) && (
-                <>
-                    <EventSectionTab
-                        sectionTabList={eventData.section}
-                        activeSectionNo={activeSectionNo}
-                        onTabClick={handleTabClick}
-                    />
+                switch (order) {
+                    case 'TOP':
+                        return <EventContents key={key} top={eventData.top} />;
 
-                    <div className={styles.divisor} />
+                    case 'COUPONS':
+                        // TODO: 기획전 쿠폰 영역 구현 필요
+                        return null;
 
-                    {/* 상품 섹션 목록 */}
-                    <div className={styles.contentWrapper}>
-                        {totalCount === 0 ? (
-                            <NoResult text='진열된 상품이 없습니다.' />
-                        ) : (
-                            <ul className={styles.productsSection} role='list'>
-                                {visibleSections.map((section) => (
+                    case 'SECTIONS':
+                        if (isEmpty(eventData.section) || !visibleSection) {
+                            return null;
+                        }
+
+                        return (
+                            <Fragment key={key}>
+                                <EventSectionTab
+                                    sectionTabList={eventData.section}
+                                    activeSectionNo={activeSectionNo!}
+                                    onTabClick={handleTabClick}
+                                />
+
+                                <div className={styles.divisor} />
+
+                                {/* 상품 섹션 목록 - 내부에서 Suspense/ErrorBoundary/Pagination 처리 */}
+                                <div className={styles.contentWrapper}>
                                     <EventProductSection
-                                        key={section.sectionNo}
+                                        key={visibleSection.sectionNo}
                                         eventNo={eventData.eventNo}
-                                        sectionNo={section.sectionNo}
-                                        searchParams={
-                                            productSectionSearchParams
-                                        }
+                                        sectionNo={visibleSection.sectionNo}
                                     />
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-                </>
-            )}
+                                </div>
+                            </Fragment>
+                        );
+
+                    default:
+                        return null;
+                }
+            })}
         </div>
     );
 };
@@ -229,7 +180,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         : eventNoOrId;
 
     const searchParams = {
-        preview: false, // ISR에서는 빌드 시점/백그라운드 갱신 시점이므로 preview는 false가 기본
+        preview: false,
         includeNonMemberCoupon: true,
     };
 
@@ -289,7 +240,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                             error.response?.data?.message ||
                             '기획전을 불러올 수 없습니다.',
                     },
-                    revalidate: ONE_MINUTE_IN_SECONDS, // 에러 발생 시 짧은 주기로 재시도
+                    revalidate: ONE_MINUTE_IN_SECONDS,
                 };
             }
         }

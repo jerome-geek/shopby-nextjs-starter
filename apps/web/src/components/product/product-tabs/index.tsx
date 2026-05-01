@@ -78,8 +78,8 @@ export function ProductTabs({
                 inquiryTop <= threshold
                     ? 'inquiry'
                     : reviewTop <= threshold
-                    ? 'review'
-                    : 'info';
+                      ? 'review'
+                      : 'info';
             return prev === next ? prev : next;
         });
     });
@@ -105,7 +105,7 @@ export function ProductTabs({
     ];
 
     return (
-        <>
+        <section>
             <div className={styles.tabsContainer}>
                 {tabList.map((tab) => (
                     <button
@@ -177,6 +177,6 @@ export function ProductTabs({
             </div>
 
             <RelatedProductList />
-        </>
+        </section>
     );
 }

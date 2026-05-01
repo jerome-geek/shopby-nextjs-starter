@@ -8,3 +8,4 @@ export * from '@/components/product/product-tabs';
 export * from '@/components/product/related-product-list';
 export * from '@/components/product/order-action';
 export * from '@/components/product/card-row';
+export * from '@/components/product/grid-section/skeleton';

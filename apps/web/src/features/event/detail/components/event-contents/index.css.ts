@@ -3,23 +3,23 @@ import { style } from '@vanilla-extract/css';
 import { media } from '@/styles/media';
 
 export const contentWrapper = style({
-    display: 'block',
-    margin: '60px 0',
+    display: 'none',
 
     '@media': {
-        [media.mobile]: {
-            display: 'none',
+        [media.desktop]: {
+            display: 'block',
+            margin: '60px 0',
         },
     },
 });
 
 export const mobileContentWrapper = style({
-    display: 'none',
+    display: 'block',
+    margin: '40px 0',
 
     '@media': {
-        [media.mobile]: {
-            display: 'block',
-            margin: '40px 0',
+        [media.desktop]: {
+            display: 'none',
         },
     },
 });

@@ -8,8 +8,17 @@ export const useProductInfo = (productNo: number) => {
     const { data: productDetailData } = useProductDetail({ productNo });
 
     return useMemo(() => {
-        const { status, baseInfo, stock, reservationData, brand } =
-            productDetailData;
+        const {
+            status,
+            baseInfo,
+            stock,
+            reservationData,
+            brand,
+            price,
+            counter,
+            liked,
+            deliveryFee,
+        } = productDetailData;
 
         // 1. 상태 관련 (Status)
         const isSoldOut = checkSoldout(
@@ -36,9 +45,15 @@ export const useProductInfo = (productNo: number) => {
             isStopSale,
             isReady,
             saleStatusType: status.saleStatusType,
+            // BaseInfo
+            productDetailData,
             // Info
+            brand,
+            price,
+            counter,
+            liked,
+            deliveryFee,
             productContent,
-            brandName: brand?.name || '',
             productName: baseInfo.productName,
             promotionText: baseInfo.promotionText,
         };

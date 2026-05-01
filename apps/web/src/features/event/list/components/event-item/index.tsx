@@ -8,7 +8,7 @@ import { useResponsive } from '@/hooks/utils';
 import type { EventContent } from '@/models/display';
 import { normalizeImageUrl } from '@/utils/shopby';
 
-import * as styles from '@/components/event/list/event-item.css';
+import * as styles from '@/features/event/list/components/event-item/index.css';
 
 const EventItem = ({
     eventNo,

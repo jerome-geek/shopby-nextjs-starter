@@ -1,13 +1,17 @@
 import { useMemo } from 'react';
 
-import { Price } from '@/models/product';
+import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import { discountRate as getDiscountRate } from '@/utils/currency';
 
 interface UseProductPriceParams {
-    price: Price | undefined;
+    productNo: number;
 }
 
-export const useProductPrice = ({ price }: UseProductPriceParams) => {
+export const useProductPrice = ({ productNo }: UseProductPriceParams) => {
+    const { data: productDetailData } = useProductDetail({ productNo });
+
+    const { price } = productDetailData;
+
     return useMemo(() => {
         if (!price) {
             return {

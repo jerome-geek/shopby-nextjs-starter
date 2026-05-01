@@ -1,14 +1,14 @@
 import { clsx } from 'clsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import * as styles from '@/components/event/detail/event-section-tab/index.css';
+import * as styles from '@/features/event/detail/components/event-section-tab/index.css';
 import type { EventSection } from '@/models/display';
 import { BREAKPOINTS } from '@/styles/media';
 
 interface EventSectionTabProps {
     sectionTabList: EventSection[];
-    activeSectionNo: number | null;
-    onTabClick: (sectionNo: number | null) => void;
+    activeSectionNo: number;
+    onTabClick: (sectionNo: number) => void;
 }
 
 const EventSectionTab = ({
@@ -28,23 +28,6 @@ const EventSectionTab = ({
                     },
                 }}
             >
-                <SwiperSlide
-                    style={{
-                        width: 'auto',
-                    }}
-                >
-                    <button
-                        className={clsx(
-                            styles.sectionTabButton,
-                            activeSectionNo === null &&
-                                styles.sectionTabButtonActive,
-                        )}
-                        onClick={() => onTabClick(null)}
-                        aria-pressed={activeSectionNo === null}
-                    >
-                        전체
-                    </button>
-                </SwiperSlide>
 
                 {sectionTabList.map((tab) => {
                     return (
