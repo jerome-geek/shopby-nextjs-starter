@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { CountdownTimer, ProductCard } from '@/components/product';
 import * as styles from '@/components/section/time-sale/index.css';
+import { ViewAllLink } from '@/components/ui/view-all-link';
 import { PATHS } from '@/const/paths';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
@@ -93,27 +94,9 @@ export const TimeSale = memo(
                         </div>
                         <p className={styles.subtitle}>{subtitle}</p>
                     </div>
-                    <Link
-                        prefetch={false}
-                        href={hrefLink}
-                        className={styles.viewAll}
-                    >
+                    <ViewAllLink href={hrefLink} prefetch={false}>
                         전체보기
-                        <svg
-                            width='16'
-                            height='16'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                        >
-                            <path
-                                d='M9 18l6-6-6-6'
-                                stroke='currentColor'
-                                strokeWidth='2'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                            />
-                        </svg>
-                    </Link>
+                    </ViewAllLink>
                 </div>
 
                 <LoadingWrapper

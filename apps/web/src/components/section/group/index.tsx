@@ -1,5 +1,4 @@
-import { filter, pipe, sortBy, toArray } from '@fxts/core';
-import { keepPreviousData } from '@tanstack/react-query';
+import { filter, flatMap, map, pipe, prop, toArray } from '@fxts/core';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -8,6 +7,7 @@ import { useMemo } from 'react';
 import { LazyRender } from '@/components/common';
 import { ObserverTarget } from '@/components/common/observer-target';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import EventSection from '@/components/section/event';
 import ProductsSearch from '@/components/section/products/search';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
@@ -15,9 +15,6 @@ import type { GetEventsV2Params } from '@/models/display/event';
 import { ShopType } from '@/pages/shop/[slug]';
 
 const Best = dynamic(() => import('@/components/section/best'), {
-    ssr: false,
-});
-const Event = dynamic(() => import('@/components/section/event'), {
     ssr: false,
 });
 const BestReview = dynamic(
@@ -58,22 +55,30 @@ const SectionGroup = () => {
         isFetchingNextPage,
     } = useInfiniteEventList({
         searchParams,
-        options: {
-            placeholderData: keepPreviousData,
-        },
     });
-
-    const eventList = useMemo(
-        () =>
-            infiniteEventListData?.pages?.flatMap((page) => page.contents) ??
-            [],
-        [infiniteEventListData],
+    console.log(
+        '🚀 ~ SectionGroup ~ infiniteEventListData:',
+        infiniteEventListData,
     );
 
-    const eventNoList = useMemo(
-        () => eventList?.map((event) => event.eventNo),
-        [eventList],
-    );
+    const eventNoList = useMemo(() => {
+        if (!infiniteEventListData) {
+            return [];
+        }
+
+        try {
+            return pipe(
+                infiniteEventListData,
+                prop('pages'),
+                flatMap((a) => a.contents),
+                map((b) => b.eventNo),
+                toArray,
+            );
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }, [infiniteEventListData]);
 
     const filteredEventNoList = useMemo(() => {
         return eventNoList.slice(7);
@@ -86,7 +91,7 @@ const SectionGroup = () => {
 
     return (
         <>
-            <Event eventNo={eventNoList?.[0]} />
+            <EventSection eventNo={eventNoList?.[0]} />
 
             <LazyRender minHeight={500}>
                 <ShopbyApiErrorBoundary errorFallback={<></>}>
@@ -95,7 +100,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[1]} />
+                <EventSection eventNo={eventNoList?.[1]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -131,7 +136,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[2]} />
+                <EventSection eventNo={eventNoList?.[2]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -170,7 +175,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[3]} />
+                <EventSection eventNo={eventNoList?.[3]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -178,7 +183,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[4]} />
+                <EventSection eventNo={eventNoList?.[4]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -198,7 +203,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[5]} />
+                <EventSection eventNo={eventNoList?.[5]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -206,7 +211,7 @@ const SectionGroup = () => {
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[6]} />
+                <EventSection eventNo={eventNoList?.[6]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -238,7 +243,7 @@ const SectionGroup = () => {
 
             {filteredEventNoList.map((eventNo) => (
                 <LazyRender minHeight={400} key={eventNo}>
-                    <Event eventNo={eventNo} />
+                    <EventSection eventNo={eventNo} />
                 </LazyRender>
             ))}
 

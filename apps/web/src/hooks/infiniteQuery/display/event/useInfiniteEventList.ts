@@ -1,13 +1,17 @@
 import {
     InfiniteData,
+    keepPreviousData,
     useInfiniteQuery,
-    UseInfiniteQueryOptions,
+    type UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
-import eventKeys from '@/hooks/queryKeys/eventKeys';
-import type { GetEventsResponse, GetEventsV2Params } from '@/models/display/event';
+import { eventKeys } from '@/hooks/queryKeys';
+import type {
+    GetEventsResponse,
+    GetEventsV2Params,
+} from '@/models/display/event';
 
 interface UseInfiniteEventListParams {
     searchParams: GetEventsV2Params;
@@ -25,11 +29,7 @@ const useInfiniteEventList = ({
     searchParams,
     options,
 }: UseInfiniteEventListParams) => {
-    return useInfiniteQuery<
-        GetEventsResponse,
-        AxiosError<ShopByErrorResponse>,
-        InfiniteData<GetEventsResponse>
-    >({
+    return useInfiniteQuery({
         queryKey: eventKeys.infiniteList(searchParams),
         initialPageParam: searchParams.page.number ?? 1,
         queryFn: async ({ pageParam }) => {
@@ -53,6 +53,7 @@ const useInfiniteEventList = ({
             }
             return allPages.length + 1;
         },
+        placeholderData: keepPreviousData,
         ...options,
     });
 };
