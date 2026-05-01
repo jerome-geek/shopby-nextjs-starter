@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 
-import { HeroBanner } from '@/components/banner/hero';
-import IconBanner from '@/components/banner/icon';
+import { HeroBanner } from '@/features/banner/components/hero-banner';
+import IconBanner from '@/features/banner/components/icon-banner';
 import { LazyRender } from '@/components/common';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import * as styles from '@/styles/Home.css';

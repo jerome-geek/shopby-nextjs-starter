@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
-import { BANNER_ID_PREFIX, HeroBannerType } from '@/components/banner/hero';
-import * as styles from '@/components/banner/icon/index.css';
+import { BANNER_ID_PREFIX, type HeroBannerType } from '@/features/banner/components/hero-banner';
+import * as styles from '@/features/banner/components/icon-banner/index.css';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import Skeleton from '@/components/ui/skeleton';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';

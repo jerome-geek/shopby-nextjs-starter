@@ -1,16 +1,5 @@
 'use client';
 
-import * as styles from '@/components/banner/hero/index.css';
-import FetchBoundary from '@/components/common/FetchBoundary';
-import ImageWrapper from '@/components/ui/image';
-import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
-import type { Banner } from '@/models/display/banner';
-import { BREAKPOINTS } from '@/styles/media';
-import { getLandingUrl, getLinkTarget } from '@/utils/banner';
-import {
-    extractBannerContentsByAccountIndex,
-    normalizeImageUrl,
-} from '@/utils/shopby';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo, useRef, useState } from 'react';
@@ -23,6 +12,17 @@ import {
 } from 'swiper/modules';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
+import FetchBoundary from '@/components/common/FetchBoundary';
+import ImageWrapper from '@/components/ui/image';
+import * as styles from '@/features/banner/components/hero-banner/index.css';
+import { BREAKPOINTS } from '@/styles/media';
+import { getLandingUrl, getLinkTarget } from '@/utils/banner';
+import {
+    extractBannerContentsByAccountIndex,
+    normalizeImageUrl,
+} from '@/utils/shopby';
+
+import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
@@ -31,17 +31,18 @@ import 'swiper/css/pagination';
 export type HeroBannerType = 'HOME' | 'SHOP' | 'KIDS' | 'LIFE';
 export const BANNER_ID_PREFIX = 'MAIN-BANNER';
 
-function HeroBannerContent({ type }: { type: HeroBannerType }) {
-    const { data: banners } = useBannerList<Banner[]>({
+const HeroBannerContent = ({ type }: { type: HeroBannerType }) => {
+    const { data: bannerListData } = useBannerList({
         type: 'id',
         banners: [`${BANNER_ID_PREFIX}-${type}`],
         options: {
             select: (data) => extractBannerContentsByAccountIndex(data, 0),
         },
     });
+    const isBannerListVisible = bannerListData.length > 0;
+    const hasMultipleBanners = bannerListData.length > 1;
 
     const swiperRef = useRef<SwiperType | null>(null);
-    const hasMultipleBanners = banners.length > 1;
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const [isSwiperReady, setIsSwiperReady] = useState(false);
 
@@ -122,7 +123,7 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
         [hasMultipleBanners, isAutoPlaying],
     );
 
-    const onAutoPlayButtonClick = () => {
+    const handleAutoPlayButtonClick = () => {
         const swiper = swiperRef.current;
 
         if (!swiper?.autoplay) {
@@ -139,8 +140,8 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
         });
     };
 
-    if (banners.length === 0) {
-        return <HeroBannerSkeleton />;
+    if (!isBannerListVisible) {
+        return null;
     }
 
     return (
@@ -167,7 +168,7 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
                             visibility: isSwiperReady ? 'visible' : 'hidden',
                         }}
                     >
-                        {banners.map((banner, index) => (
+                        {bannerListData.map((banner, index) => (
                             <SwiperSlide
                                 key={
                                     banner.bannerNo || banner.imageUrl || index
@@ -259,7 +260,7 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
 
                         <button
                             className={styles.controlButton}
-                            onClick={onAutoPlayButtonClick}
+                            onClick={handleAutoPlayButtonClick}
                             aria-label={isAutoPlaying ? '일시정지' : '재생'}
                         >
                             {isAutoPlaying ? <Pause /> : <Play />}
@@ -269,9 +270,9 @@ function HeroBannerContent({ type }: { type: HeroBannerType }) {
             </div>
         </section>
     );
-}
+};
 
-function HeroBannerSkeletonCards() {
+const HeroBannerSkeletonCards = () => {
     return (
         <div className={styles.skeletonWrapper}>
             {[0, 1, 2].map((i) => (
@@ -285,9 +286,9 @@ function HeroBannerSkeletonCards() {
             ))}
         </div>
     );
-}
+};
 
-function HeroBannerSkeleton() {
+const HeroBannerSkeleton = () => {
     return (
         <section className={styles.container}>
             <div className={styles.heroBanner}>
@@ -298,12 +299,12 @@ function HeroBannerSkeleton() {
             </div>
         </section>
     );
-}
+};
 
-export function HeroBanner({ type }: { type: HeroBannerType }) {
+export const HeroBanner = ({ type }: { type: HeroBannerType }) => {
     return (
         <FetchBoundary fallback={<HeroBannerSkeleton />} errorFallback={<></>}>
             <HeroBannerContent type={type} />
         </FetchBoundary>
     );
-}
+};

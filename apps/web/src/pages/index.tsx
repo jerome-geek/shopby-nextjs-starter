@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { banner } from '@/api/display';
 import { collection } from '@/api/shop';
-import { BANNER_ID_PREFIX, HeroBanner } from '@/components/banner/hero';
+import { BANNER_ID_PREFIX, HeroBanner } from '@/features/banner/components/hero-banner';
 import { LazyRender } from '@/components/common';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';

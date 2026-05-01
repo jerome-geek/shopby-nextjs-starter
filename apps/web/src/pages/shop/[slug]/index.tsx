@@ -4,8 +4,8 @@ import type { GetServerSideProps } from 'next';
 
 import { banner, event, productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
-import { BANNER_ID_PREFIX, HeroBanner } from '@/components/banner/hero';
-import IconBanner from '@/components/banner/icon';
+import { BANNER_ID_PREFIX, HeroBanner } from '@/features/banner/components/hero-banner';
+import IconBanner from '@/features/banner/components/icon-banner';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import SectionGroup from '@/components/section/group';
 import TimeSale from '@/components/section/time-sale';

@@ -33,6 +33,7 @@ src/hooks/useClickOutside.ts             (X) - 카멜 케이스
 리액트(JSX)는 컴포넌트명의 첫 글자가 대문자여야만 커스텀 컴포넌트(`<ScrollToTop />`)로 인식하며, 소문자일 경우 표준 HTML 내장 태그(`<button>`, `<header>`)로 해석해버립니다.
 
 - 무조건 **첫 문자를 대문자로 시작하는 PascalCase**를 준수하세요.
+- **페이지 컴포넌트**: 일반 컴포넌트와 구분하기 위해 컴포넌트명 뒤에 반드시 **`Page`** 접미사를 붙입니다. (예: `LoginPage`, `EventDetailPage`)
 
 ### 일반 변수, 함수, 훅스(Hooks): 카멜 케이스 (camelCase)
 - 무조건 변수와 일반 함수형 로직은 `camelCase`를 준수하세요.
