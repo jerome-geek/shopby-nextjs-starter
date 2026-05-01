@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic';
 
+import { LazyRender } from '@/components/common';
 import { HeroBanner } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
-import { LazyRender } from '@/components/common';
-import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
@@ -27,19 +27,26 @@ export default function ShopMainPage() {
             </section>
 
             {/* 라이프 타임특가 */}
-
-            <ShopbyApiErrorBoundary errorFallback={<></>}>
-                <TimeSale title='라이프 타임특가' type='LIFE' />
-            </ShopbyApiErrorBoundary>
+            <ShopbyAsyncBoundary errorFallback={<></>}>
+                <TimeSale
+                    type='LIFE'
+                    sectionId='TIMESALE_LIFE'
+                    title='라이프 타임특가'
+                />
+            </ShopbyAsyncBoundary>
 
             {/* 영상(기획전) */}
             <Event index={1} />
 
             {/* 키즈 타임특가 */}
             <LazyRender minHeight={400}>
-                <ShopbyApiErrorBoundary errorFallback={<></>}>
-                    <TimeSale title='키즈 타임특가' type='KIDS' />
-                </ShopbyApiErrorBoundary>
+                <ShopbyAsyncBoundary errorFallback={<></>}>
+                    <TimeSale
+                        type='KIDS'
+                        sectionId='TIMESALE_KIDS'
+                        title='키즈 타임특가'
+                    />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             {/* 영상(기획전) */}
@@ -49,9 +56,9 @@ export default function ShopMainPage() {
 
             {/* 라이프 베스트 */}
             <LazyRender minHeight={500}>
-                <ShopbyApiErrorBoundary errorFallback={<></>}>
+                <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Best type='LIFE' />
-                </ShopbyApiErrorBoundary>
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             {/* 영상(기획전) */}
@@ -61,9 +68,9 @@ export default function ShopMainPage() {
 
             {/* 키즈 베스트 */}
             <LazyRender minHeight={500}>
-                <ShopbyApiErrorBoundary errorFallback={<></>}>
+                <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Best type='KIDS' />
-                </ShopbyApiErrorBoundary>
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             {/* 영상(기획전) */}

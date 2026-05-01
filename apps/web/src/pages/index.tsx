@@ -4,13 +4,16 @@ import dynamic from 'next/dynamic';
 
 import { banner } from '@/api/display';
 import { collection } from '@/api/shop';
-import { BANNER_ID_PREFIX, HeroBanner } from '@/features/banner/components/hero-banner';
 import { LazyRender } from '@/components/common';
 import Seo from '@/components/common/seo';
-import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import CollectionGroupSection from '@/components/section/collection-group';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
+import {
+    BANNER_ID_PREFIX,
+    HeroBanner,
+} from '@/features/banner/components/hero-banner';
 import { bannerKeys, collectionKeys } from '@/hooks/queryKeys';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
@@ -130,9 +133,13 @@ export default function HomePage() {
 
                 {/* 라이프 타임특가 */}
                 <LazyRender minHeight={400}>
-                    <ShopbyApiErrorBoundary errorFallback={<></>}>
-                        <TimeSale type='LIFE' title='라이프 타임특가' />
-                    </ShopbyApiErrorBoundary>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <TimeSale
+                            type='LIFE'
+                            sectionId='TIMESALE_LIFE'
+                            title='라이프 타임특가'
+                        />
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -141,9 +148,13 @@ export default function HomePage() {
 
                 {/* 키즈 타임특가 */}
                 <LazyRender minHeight={400}>
-                    <ShopbyApiErrorBoundary errorFallback={<></>}>
-                        <TimeSale type='KIDS' title='키즈 타임특가' />
-                    </ShopbyApiErrorBoundary>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <TimeSale
+                            type='KIDS'
+                            sectionId='TIMESALE_KIDS'
+                            title='키즈 타임특가'
+                        />
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -152,9 +163,9 @@ export default function HomePage() {
 
                 {/* 라이프 베스트 */}
                 <LazyRender minHeight={500}>
-                    <ShopbyApiErrorBoundary errorFallback={<></>}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
                         <Best type='LIFE' />
-                    </ShopbyApiErrorBoundary>
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
 
                 <LazyRender minHeight={300}>
@@ -163,9 +174,9 @@ export default function HomePage() {
 
                 {/* 키즈 베스트 */}
                 <LazyRender minHeight={500}>
-                    <ShopbyApiErrorBoundary errorFallback={<></>}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
                         <Best type='KIDS' />
-                    </ShopbyApiErrorBoundary>
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
             </div>
         </>
