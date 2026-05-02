@@ -1,20 +1,19 @@
 import { QueryClient, dehydrate } from '@tanstack/react-query';
+import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
-import { collection } from '@/api/shop';
 import { LazyRender } from '@/components/common';
 import Seo from '@/components/common/seo';
 import CollectionGroupSection from '@/components/section/collection-group';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';
+import { collectionExposureGroupOptions } from '@/entities/shop/collection/queries';
 import {
     BANNER_ID_PREFIX,
     HeroBanner,
 } from '@/features/banner/components/hero-banner';
-import { collectionExposureGroupOptions } from '@/entities/shop/collection/queries';
-import { collectionKeys } from '@/hooks/queryKeys';
+import * as styles from '@/pages/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
-import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
     ssr: false,
@@ -94,7 +93,7 @@ export default function HomePage() {
     );
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
     const queryClient = new QueryClient();
 
     const COLLECTION_GROUP_ID = 'collection_group_1';
@@ -126,4 +125,4 @@ export async function getStaticProps() {
         },
         revalidate: ONE_HOUR_IN_SECONDS,
     };
-}
+};

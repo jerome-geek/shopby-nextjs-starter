@@ -3,8 +3,8 @@ import dynamic from 'next/dynamic';
 import { LazyRender } from '@/components/common';
 import { HeroBanner } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
+import * as styles from '@/pages/shop/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
-import * as styles from '@/styles/Home.css';
 
 const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
     ssr: false,
@@ -51,7 +51,9 @@ export default function ShopMainPage() {
 
             {/* 영상(기획전) */}
             <LazyRender minHeight={400}>
-                <Event index={2} />
+                <ShopbyAsyncBoundary errorFallback={<></>}>
+                    <Event index={2} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             {/* 라이프 베스트 */}
@@ -63,7 +65,9 @@ export default function ShopMainPage() {
 
             {/* 영상(기획전) */}
             <LazyRender minHeight={400}>
-                <Event index={3} />
+                <ShopbyAsyncBoundary errorFallback={<></>}>
+                    <Event index={3} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             {/* 키즈 베스트 */}
@@ -75,7 +79,9 @@ export default function ShopMainPage() {
 
             {/* 영상(기획전) */}
             <LazyRender minHeight={400}>
-                <Event index={4} />
+                <ShopbyAsyncBoundary errorFallback={<></>}>
+                    <Event index={4} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
         </div>
     );

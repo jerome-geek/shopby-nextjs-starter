@@ -394,7 +394,6 @@ export const stepNumber = style([
         width: '17px',
         height: '17px',
         aspectRatio: '1 / 1',
-        minWidth: '20px',
         borderRadius: '50%',
         backgroundColor: vars.color.green['80'],
         color: vars.color.white,
@@ -405,6 +404,7 @@ export const stepNumber = style([
 
         '@media': {
             [media.desktop]: {
+                ...textStyleTokens.caption1Semibold,
                 width: '20px',
                 height: '20px',
             },

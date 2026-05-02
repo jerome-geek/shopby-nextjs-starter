@@ -17,8 +17,8 @@ import {
 import IconBanner from '@/features/banner/components/icon-banner';
 import { eventKeys, productSectionKeys, timeSaleKeys } from '@/hooks/queryKeys';
 import type { GetEventsV2Params } from '@/models/display/event';
+import * as styles from '@/pages/shop/[slug]/index.css';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
-import * as styles from '@/styles/Home.css';
 
 const SHOP_TYPES = {
     LIFE: 'life',
