@@ -89,9 +89,12 @@ export const subTitleContainer = style({
 
 export const imageContainer = style({
     width: 'calc(100% + 40px)',
-    height: 'calc(100% + 40px)',
     margin: '0 -20px',
     aspectRatio: '1/1',
+    backgroundColor: vars.color.gray['10'],
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 
     '@media': {
         [media.desktop]: {
@@ -107,7 +110,7 @@ export const imageContainer = style({
 export const image = style({
     width: '100%',
     height: '100%',
-    objectFit: 'cover',
+    objectFit: 'contain',
 });
 
 export const sectionContainer = style({
