@@ -37,7 +37,7 @@ const palette = {
         '100': '#39532E',
     },
     ivory: {
-        '10': '#FFFBF9CC',
+        '10': '#FFFBF9',
     },
 
     // 소셜 로그인 색상
