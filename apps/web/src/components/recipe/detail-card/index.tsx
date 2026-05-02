@@ -13,7 +13,7 @@ import * as styles from '@/components/recipe/detail-card/index.css';
 import { Tooltip, VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useBookmark } from '@/hooks/recipe';
-import { useDialog, useResponsive } from '@/hooks/utils';
+import { useDialog } from '@/hooks/utils';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
@@ -25,8 +25,6 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
     const router = useRouter();
 
     const { t } = useTranslation();
-
-    const { isMobile } = useResponsive();
 
     const { openAsyncDialog } = useDialog();
 

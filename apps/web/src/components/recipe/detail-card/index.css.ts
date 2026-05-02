@@ -418,9 +418,12 @@ export const stepText = style([
         color: vars.color.gray['80'],
         flex: 1,
         minWidth: 0,
-        whiteSpace: 'nowrap',
+        display: '-webkit-box',
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: 'vertical',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        lineHeight: '1.5',
     },
 ]);
 
