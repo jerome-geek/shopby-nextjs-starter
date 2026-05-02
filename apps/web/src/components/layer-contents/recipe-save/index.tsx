@@ -10,23 +10,28 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useCollectionList } from '@/hooks/query/shop/collection';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui/useToast';
+import { useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
+
+interface RecipeSaveContentProps {
+    close: () => void;
+    recipeSno?: number;
+    onAddCollection?: () => void;
+}
 
 export const RecipeSaveContent = ({
     close,
     recipeSno,
     onAddCollection,
-}: {
-    close: () => void;
-    recipeSno?: number;
-    onAddCollection?: () => void;
-}) => {
-    console.log('🚀 ~ RecipeSaveContent ~ recipeSno:', recipeSno);
-
+}: RecipeSaveContentProps) => {
     const { t } = useTranslation();
+
+    const { isMobile } = useResponsive();
+
+    const { addToast } = useToast();
+
     const queryClient = useQueryClient();
     const { bookmarkRecipe } = useRecipeMutation();
-    const { addToast } = useToast();
 
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo || 0;
@@ -34,7 +39,9 @@ export const RecipeSaveContent = ({
     const { data = [] } = useCollectionList();
 
     const handleBookmark = async (collectionSno: number, title: string) => {
-        if (!recipeSno) return;
+        if (!recipeSno) {
+            return;
+        }
 
         try {
             await bookmarkRecipe.mutateAsync({
@@ -55,6 +62,7 @@ export const RecipeSaveContent = ({
                 variant: 'success',
                 message: t("'{{title}}' 컬렉션에 저장되었습니다.", { title }),
             });
+
             close();
         } catch (error) {
             const errorMessage = isAxiosError(error)
@@ -71,41 +79,40 @@ export const RecipeSaveContent = ({
             </p>
 
             <ul className={styles.collectionList}>
-                {data.map((collection) => (
-                    <li key={collection.sno} className={styles.collectionItem}>
-                        <div className={styles.collectionInfo}>
-                            <span className={styles.collectionTitle}>
-                                {collection.title}
-                            </span>
-                            <span className={styles.collectionCount}>
-                                {collection.recipeCount}개
-                            </span>
-                        </div>
+                {data.map((collection) => {
+                    return (
+                        <li key={collection.sno}>
+                            <button
+                                type='button'
+                                className={styles.collectionItem}
+                                onClick={() =>
+                                    handleBookmark(
+                                        collection.sno,
+                                        collection.title,
+                                    )
+                                }
+                                disabled={bookmarkRecipe.isPending}
+                            >
+                                <div className={styles.collectionInfo}>
+                                    <span className={styles.collectionTitle}>
+                                        {collection.title}
+                                    </span>
+                                    <span className={styles.collectionCount}>
+                                        {collection.recipeCount}개
+                                    </span>
+                                </div>
 
-                        <button
-                            type='button'
-                            className={styles.addButton}
-                            onClick={() =>
-                                handleBookmark(collection.sno, collection.title)
-                            }
-                            disabled={bookmarkRecipe.isPending}
-                        >
-                            <Plus size={24} color={vars.color.gray['40']} />
-                        </button>
-                    </li>
-                ))}
+                                <div className={styles.addButton}>
+                                    <Plus
+                                        size={24}
+                                        color={vars.color.gray['40']}
+                                    />
+                                </div>
+                            </button>
+                        </li>
+                    );
+                })}
             </ul>
-
-            <div className={styles.footer}>
-                <button
-                    type='button'
-                    className={styles.createButton}
-                    onClick={onAddCollection}
-                >
-                    <Plus size={20} />
-                    {t('새 컬렉션 만들기')}
-                </button>
-            </div>
         </div>
     );
 };

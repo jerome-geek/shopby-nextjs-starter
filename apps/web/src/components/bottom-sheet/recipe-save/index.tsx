@@ -1,7 +1,9 @@
-import { useTranslation } from 'react-i18next';
+import { Plus } from 'lucide-react';
 
-import { BottomSheetLayout } from '@/components/layout';
 import { RecipeSaveContent } from '@/components/layer-contents/recipe-save';
+import * as styles from '@/components/layer-contents/recipe-save/index.css';
+import { BottomSheetLayout } from '@/components/layout';
+import { useResponsive } from '@/hooks/utils';
 
 interface RecipeSaveSheetProps {
     isOpen: boolean;
@@ -18,15 +20,26 @@ export const RecipeSaveSheet = ({
     recipeSno,
     onAddCollection,
 }: RecipeSaveSheetProps) => {
-    const { t } = useTranslation();
+    const { isMobile } = useResponsive();
 
     return (
         <BottomSheetLayout
             isOpen={isOpen}
             close={close}
             unmount={unmount}
-            title={t('레시피 저장')}
+            title={'레시피 저장'}
             isUnmountCondition={false}
+            footerButtonList={[
+                <button
+                    key='create-collection'
+                    type='button'
+                    className={styles.createButton}
+                    onClick={onAddCollection}
+                >
+                    <Plus size={isMobile ? 16 : 20} />
+                    <span>새 컬렉션 만들기</span>
+                </button>,
+            ]}
         >
             <RecipeSaveContent
                 close={close}

@@ -1,7 +1,9 @@
-import { useTranslation } from 'react-i18next';
+import { Plus } from 'lucide-react';
 
+import * as styles from '@/components/layer-contents/recipe-save/index.css';
 import { ModalLayout } from '@/components/layout';
 import { RecipeSaveContent } from '@/components/layer-contents/recipe-save';
+import { useResponsive } from '@/hooks/utils';
 
 interface RecipeSaveModalProps {
     isOpen: boolean;
@@ -18,16 +20,27 @@ export const RecipeSaveModal = ({
     recipeSno,
     onAddCollection,
 }: RecipeSaveModalProps) => {
-    const { t } = useTranslation();
+    const { isMobile } = useResponsive();
 
     return (
         <ModalLayout
             isOpen={isOpen}
             close={close}
             unmount={unmount}
-            title={t('레시피 저장')}
+            title={'레시피 저장'}
             size='small'
             width='540px'
+            footerButtonList={[
+                <button
+                    key='create-collection'
+                    type='button'
+                    className={styles.createButton}
+                    onClick={onAddCollection}
+                >
+                    <Plus size={isMobile ? 16 : 20} />
+                    <span>새 컬렉션 만들기</span>
+                </button>,
+            ]}
         >
             <RecipeSaveContent
                 close={close}

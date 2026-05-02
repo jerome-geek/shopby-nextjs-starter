@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const container = style({
     display: 'flex',
@@ -41,10 +41,18 @@ export const collectionItem = style({
     borderRadius: '4px',
     backgroundColor: vars.color.green['20'],
     transition: 'background-color 0.2s ease',
+    width: '100%',
+    border: 'none',
+    cursor: 'pointer',
+    textAlign: 'left',
 
     selectors: {
-        '&:hover': {
+        '&:hover:not(:disabled)': {
             backgroundColor: vars.color.green['40'],
+        },
+        '&:disabled': {
+            cursor: 'default',
+            opacity: 0.7,
         },
     },
 });
@@ -52,20 +60,38 @@ export const collectionItem = style({
 export const collectionInfo = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '2px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '4px',
+        },
+    },
 });
 
 export const collectionTitle = style([
     textStyles.headlineSemibold,
     {
         color: vars.color.gray['90'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineSemibold,
+            },
+        },
     },
 ]);
 
 export const collectionCount = style([
-    textStyles.body2Regular,
+    textStyles.caption1Regular,
     {
         color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Regular,
+            },
+        },
     },
 ]);
 
@@ -84,12 +110,12 @@ export const footer = style({
 });
 
 export const createButton = style([
-    textStyles.body2Semibold,
+    textStyles.headlineSemibold,
     {
         width: '100%',
-        padding: '16px',
-        borderRadius: '12px',
-        border: `1px solid ${vars.color.gray['20']}`,
+        padding: '16px 0',
+        borderRadius: '4px',
+        border: `1px solid ${vars.color.gray['50']}`,
         backgroundColor: vars.color.white,
         color: vars.color.black,
         display: 'flex',
@@ -101,6 +127,13 @@ export const createButton = style([
         selectors: {
             '&:hover': {
                 backgroundColor: vars.color.gray['10'],
+            },
+        },
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingSemibold,
+                padding: '18px 0',
             },
         },
     },
