@@ -1,18 +1,18 @@
-import { map, pipe, take, toArray } from '@fxts/core';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 
-import { banner } from '@/api/display';
 import { collection } from '@/api/shop';
 import { LazyRender } from '@/components/common';
 import Seo from '@/components/common/seo';
 import CollectionGroupSection from '@/components/section/collection-group';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
+import { bannerListOptions } from '@/entities/banner/queries';
 import {
     BANNER_ID_PREFIX,
     HeroBanner,
 } from '@/features/banner/components/hero-banner';
-import { bannerKeys, collectionKeys } from '@/hooks/queryKeys';
+import { collectionExposureGroupOptions } from '@/entities/shop/collection/queries';
+import { collectionKeys } from '@/hooks/queryKeys';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import * as styles from '@/styles/Home.css';
 
@@ -28,95 +28,6 @@ const RecipeGroupSection = dynamic(
         ssr: false,
     },
 );
-
-export async function getStaticProps() {
-    const queryClient = new QueryClient();
-
-    const bannerId = `${BANNER_ID_PREFIX}-HOME`;
-
-    try {
-        await Promise.all([
-            queryClient.prefetchQuery({
-                queryKey: bannerKeys.list([bannerId]),
-                queryFn: async () => {
-                    const { data } = await banner.getBannersByIds([bannerId]);
-                    return data;
-                },
-            }),
-            queryClient.prefetchQuery({
-                queryKey: collectionKeys.exposureGroup('collection_group_1'),
-                queryFn: async () => {
-                    const { data } =
-                        await collection.getCollectionExposureGroup(
-                            'collection_group_1',
-                        );
-
-                    // Optimization using fxts: Trim data and slice recipes
-                    if (data?.groups) {
-                        data.groups = pipe(
-                            data.groups,
-                            map((group) => ({
-                                ...group,
-                                collection: {
-                                    ...group.collection,
-                                    recipes: pipe(
-                                        group.collection.recipes ?? [],
-                                        take(4),
-                                        map((recipe) => ({
-                                            ...recipe,
-                                            ingredients: pipe(
-                                                recipe.ingredients ?? [],
-                                                take(6),
-                                                map((ing) => ({
-                                                    sno: ing.sno,
-                                                    name: ing.name,
-                                                    amount: ing.amount,
-                                                    isEssential:
-                                                        ing.isEssential,
-                                                    coupangProduct: null,
-                                                })),
-                                                toArray,
-                                            ),
-                                            steps: pipe(
-                                                recipe.steps ?? [],
-                                                map((step) => ({
-                                                    sno: step.sno,
-                                                    stepNumber: step.stepNumber,
-                                                    description:
-                                                        step.description,
-                                                    stepImageUrl: null,
-                                                    timestampSeconds: null,
-                                                })),
-                                                toArray,
-                                            ),
-                                            extraData: {},
-                                        })),
-                                        toArray,
-                                    ),
-                                },
-                            })),
-                            toArray,
-                        );
-                    }
-
-                    return data;
-                },
-            }),
-        ]);
-    } catch (error) {
-        console.error('[Home Page getStaticProps] Prefetching failed:', {
-            message: error instanceof Error ? error.message : String(error),
-            stack: error instanceof Error ? error.stack : undefined,
-        });
-    }
-
-    return {
-        props: {
-            dehydratedState: dehydrate(queryClient),
-        },
-        revalidate: ONE_HOUR_IN_SECONDS,
-    };
-}
 
 export default function HomePage() {
     return (
@@ -181,4 +92,38 @@ export default function HomePage() {
             </div>
         </>
     );
+}
+
+export async function getStaticProps() {
+    const queryClient = new QueryClient();
+
+    const COLLECTION_GROUP_ID = 'collection_group_1';
+    const HOME_BANNER_ID = `${BANNER_ID_PREFIX}-HOME`;
+
+    try {
+        await Promise.all([
+            queryClient.prefetchQuery(
+                bannerListOptions({
+                    banners: [HOME_BANNER_ID],
+                }),
+            ),
+            queryClient.prefetchQuery(
+                collectionExposureGroupOptions({
+                    groupId: COLLECTION_GROUP_ID,
+                }),
+            ),
+        ]);
+    } catch (error) {
+        console.error('[Home Page getStaticProps] Prefetching failed:', {
+            message: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+        });
+    }
+
+    return {
+        props: {
+            dehydratedState: dehydrate(queryClient),
+        },
+        revalidate: ONE_HOUR_IN_SECONDS,
+    };
 }

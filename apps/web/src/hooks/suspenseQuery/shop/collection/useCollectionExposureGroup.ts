@@ -1,45 +1,15 @@
-import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { collection } from '@/api/shop';
-import { collectionKeys } from '@/hooks/queryKeys';
+import {
+    collectionExposureGroupOptions,
+    type CollectionExposureGroupParams,
+} from '@/entities/shop/collection/queries';
 import type { CollectionExposureGroupResponse } from '@/models/shop/collection';
 
-interface UseCollectionExposureGroupParams<
-    T = CollectionExposureGroupResponse,
-> {
-    groupId: string;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            CollectionExposureGroupResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof collectionKeys)['exposureGroup']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useCollectionExposureGroup = <T = CollectionExposureGroupResponse>({
-    groupId,
-    options,
-}: UseCollectionExposureGroupParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: collectionKeys.exposureGroup(groupId),
-        queryFn: async () => {
-            const { data } = await collection.getCollectionExposureGroup(
-                groupId,
-            );
-
-            return data;
-        },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10,
-        ...options,
-    });
+const useCollectionExposureGroup = <T = CollectionExposureGroupResponse>(
+    params: CollectionExposureGroupParams<T>,
+) => {
+    return useSuspenseQuery(collectionExposureGroupOptions(params));
 };
 
 export default useCollectionExposureGroup;
