@@ -1,15 +1,15 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError, HttpStatusCode, isAxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from 'next/router';
 
 import { oauth2 } from '@/api/auth';
 import { profile } from '@/api/member';
 import { PATHS } from '@/const/paths';
 import { useDialog } from '@/hooks/utils';
-import { catchErrorTyped } from '@/utils/promise';
 import { accessTokenCookie } from '@/utils/cookie';
+import { catchErrorTyped } from '@geek/utils';
 
 const useUpdateProfile = () => {
     const { openDialog } = useDialog();

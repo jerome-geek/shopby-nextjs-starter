@@ -16,5 +16,8 @@
         "ymdt",
         "soldout",
         "nuqs"
-    ]
+    ],
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "typescript.suggest.paths": true,
+    "typescript.tsc.autoDetect": "on"
 }
