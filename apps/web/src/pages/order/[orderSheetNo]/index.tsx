@@ -8,6 +8,7 @@ import { GetServerSideProps } from 'next';
 import { useMemo } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
+import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
 import Accumulation from '@/components/order/accumulation';
@@ -26,6 +27,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 import payment from '@/utils/order/payment';
+import { useTranslation } from 'react-i18next';
 
 const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
     const isLogin = useAuth();
@@ -88,7 +90,10 @@ const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
 };
 
 const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
+    const { t } = useTranslation();
+
     const isLogin = useAuth();
+
     const { openAsyncDialog } = useDialog();
 
     useOrderSheetInitialize({
@@ -106,6 +111,17 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
 
     const onSubmit = handleSubmit(
         async (data) => {
+            const originalAlert: typeof window.alert =
+                window.alert.bind(window);
+
+            const restoreAlert = () => {
+                Object.defineProperty(window, 'alert', {
+                    value: originalAlert,
+                    writable: true,
+                    configurable: true,
+                });
+            };
+
             try {
                 const { orderer, shippingAddress } = data;
                 const submitData = {
@@ -119,25 +135,23 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
                         receiverContact1: `${shippingAddress.receiverContact1.prefix}${shippingAddress.receiverContact1.middle}${shippingAddress.receiverContact1.suffix}`,
                     },
                 };
-                console.log('🚀 ~ OrderSheetContent ~ submitData:', submitData);
 
-                const originalAlert = window.alert;
-
-                // eslint-disable-next-line
-                window.alert = () => {
-                    return;
-                };
+                Object.defineProperty(window, 'alert', {
+                    value: () => {
+                        return;
+                    },
+                    writable: true,
+                    configurable: true,
+                });
 
                 const successCallback = () => {
-                    window.alert = originalAlert;
+                    restoreAlert();
                 };
 
                 const errorCallback = async (error: ShopByErrorResponse) => {
-                    console.log('에러 발생', error);
+                    restoreAlert();
 
                     if (error.status === HttpStatusCode.Unauthorized) {
-                        // NOTE : 401에러 떨어지면 주문 정보를 다시 조회하여 토큰 재발급 로직 실행 or 로그인 만료 처리
-                        // orderSheetRefetch();
                         return;
                     }
 
@@ -146,14 +160,18 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
                         onConfirmReturnValue: false,
                         onCloseReturnValue: false,
                     });
-
-                    window.alert = originalAlert;
                 };
 
                 payment.setConfiguration();
 
                 payment.reservation(submitData, successCallback, errorCallback);
-            } catch (error) {}
+            } catch (error) {
+                restoreAlert();
+                console.error(error);
+                await openAsyncDialog({
+                    message: '주문 데이터 처리 중 오류가 발생했습니다.',
+                });
+            }
         },
         (error) => {
             console.log('🚀 ~ OrderSheetContent ~ error:', error);
@@ -161,48 +179,52 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
     );
 
     return (
-        <form
-            id='order-sheet-container'
-            className={styles.container}
-            onSubmit={onSubmit}
-        >
-            <h1 className={styles.title}>주문하기</h1>
+        <>
+            <Seo title={t('주문서')} />
 
-            <div className={styles.contentWrapper}>
-                <article className={styles.articleContent}>
-                    <OrderProducts
-                        deliveryGroups={orderSheetData.deliveryGroups}
-                    />
+            <form
+                id='order-sheet-container'
+                className={styles.container}
+                onSubmit={onSubmit}
+            >
+                <h1 className={styles.title}>{t('주문하기')}</h1>
 
-                    <hr className={styles.contentDivider} />
+                <div className={styles.contentWrapper}>
+                    <article className={styles.articleContent}>
+                        <OrderProducts
+                            deliveryGroups={orderSheetData.deliveryGroups}
+                        />
 
-                    <OrdererInfo />
+                        <hr className={styles.contentDivider} />
 
-                    <hr className={styles.contentDivider} />
+                        <OrdererInfo />
 
-                    <ShippingAddress />
+                        <hr className={styles.contentDivider} />
 
-                    {isLogin && (
-                        <>
-                            <hr className={styles.contentDivider} />
+                        <ShippingAddress />
 
-                            <Coupon />
+                        {isLogin && (
+                            <>
+                                <hr className={styles.contentDivider} />
 
-                            <hr className={styles.contentDivider} />
+                                <Coupon />
 
-                            <Accumulation />
-                        </>
-                    )}
+                                <hr className={styles.contentDivider} />
 
-                    <hr className={styles.contentDivider} />
+                                <Accumulation />
+                            </>
+                        )}
 
-                    <PaymentMethod />
-                </article>
+                        <hr className={styles.contentDivider} />
 
-                {/* 우측: 사이드바 (aside 사용) */}
-                <OrderPaymentSummary orderSheetNo={orderSheetNo} />
-            </div>
-        </form>
+                        <PaymentMethod />
+                    </article>
+
+                    {/* 우측: 사이드바 (aside 사용) */}
+                    <OrderPaymentSummary orderSheetNo={orderSheetNo} />
+                </div>
+            </form>
+        </>
     );
 };
 

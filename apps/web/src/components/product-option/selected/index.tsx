@@ -61,6 +61,9 @@ export const SelectedProductOption = ({
         }
     };
 
+    const isMainProductOption = (currentProductNo: number) =>
+        currentProductNo === productNo;
+
     if (selectedOptionList.length === 0) {
         return null;
     }
@@ -72,6 +75,7 @@ export const SelectedProductOption = ({
                     <div className={styles.optionHeader}>
                         <span className={styles.optionLabel}>
                             {option.label}
+                            {option.value && ` [${option.value.replace(/\|/g, ' / ')}]`}
                         </span>
                         {isRemovable && (
                             <button
@@ -84,33 +88,37 @@ export const SelectedProductOption = ({
                     </div>
 
                     {/* 옵션별 텍스트 입력항목 (OPTION 매칭 타입) */}
-                    {textOptionInputs['OPTION']?.length > 0 && (
-                        <div className={styles.textOptionList}>
-                            {textOptionInputs['OPTION'].map((input) => (
-                                <InputContainer key={input.inputNo}>
-                                    <InputLabel>{input.inputLabel}</InputLabel>
-                                    <InputField
-                                        placeholder={t(
-                                            '메시지를 입력해주세요.',
-                                        )}
-                                        value={
-                                            option.optionInputs.find(
-                                                (v) =>
-                                                    v.inputNo === input.inputNo,
-                                            )?.inputValue || ''
-                                        }
-                                        onChange={(e) =>
-                                            handleTextOptionChange(
-                                                e.target.value,
-                                                input.inputNo,
-                                                option.optionNo,
-                                            )
-                                        }
-                                    />
-                                </InputContainer>
-                            ))}
-                        </div>
-                    )}
+                    {isMainProductOption(option.productNo) &&
+                        textOptionInputs['OPTION']?.length > 0 && (
+                            <div className={styles.textOptionList}>
+                                {textOptionInputs['OPTION'].map((input) => (
+                                    <InputContainer key={input.inputNo}>
+                                        <InputLabel>
+                                            {input.inputLabel}
+                                        </InputLabel>
+                                        <InputField
+                                            placeholder={t(
+                                                '메시지를 입력해주세요.',
+                                            )}
+                                            value={
+                                                option.optionInputs.find(
+                                                    (v) =>
+                                                        v.inputNo ===
+                                                        input.inputNo,
+                                                )?.inputValue || ''
+                                            }
+                                            onChange={(e) =>
+                                                handleTextOptionChange(
+                                                    e.target.value,
+                                                    input.inputNo,
+                                                    option.optionNo,
+                                                )
+                                            }
+                                        />
+                                    </InputContainer>
+                                ))}
+                            </div>
+                        )}
 
                     <div className={styles.optionFooter}>
                         <div className={styles.quantitySelector}>
@@ -150,28 +158,34 @@ export const SelectedProductOption = ({
                 </li>
             ))}
 
-            {textOptionInputs['PRODUCT']?.map(
-                ({ inputNo, inputLabel, required, inputValue }) => (
-                    <InputContainer key={inputNo}>
-                        <InputLabel
-                            isRequired={required}
-                            htmlFor={`product-text-option-${inputNo}`}
-                        >
-                            {t(`${inputLabel} (상품별 옵션)`)}
-                        </InputLabel>
+            {selectedOptionList.some((opt) => isMainProductOption(opt.productNo)) &&
+                textOptionInputs['PRODUCT']?.map(
+                    ({ inputNo, inputLabel, required, inputValue }) => (
+                        <InputContainer key={inputNo}>
+                            <InputLabel
+                                isRequired={required}
+                                htmlFor={`product-text-option-${inputNo}`}
+                            >
+                                {t(`${inputLabel} (상품별 옵션)`)}
+                            </InputLabel>
 
-                        <InputField
-                            id={`product-text-option-${inputNo}`}
-                            placeholder={t(`${inputLabel} 을/를 입력해주세요.`)}
-                            value={inputValue || ''}
-                            required={required}
-                            onChange={(e) =>
-                                handleTextOptionChange(e.target.value, inputNo)
-                            }
-                        />
-                    </InputContainer>
-                ),
-            )}
+                            <InputField
+                                id={`product-text-option-${inputNo}`}
+                                placeholder={t(
+                                    `${inputLabel} 을/를 입력해주세요.`,
+                                )}
+                                value={inputValue || ''}
+                                required={required}
+                                onChange={(e) =>
+                                    handleTextOptionChange(
+                                        e.target.value,
+                                        inputNo,
+                                    )
+                                }
+                            />
+                        </InputContainer>
+                    ),
+                )}
         </ul>
     );
 };

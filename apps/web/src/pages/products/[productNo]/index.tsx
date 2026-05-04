@@ -19,6 +19,7 @@ import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import {
+    ExtraProductList,
     PhotoReview,
     ProductAdditionalDiscount,
     ProductErrorState,
@@ -39,12 +40,13 @@ import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
-import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
+import { useTrackRecentViewProduct } from '@/hooks/product/useRecentViewProduct';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { productKeys } from '@/hooks/queryKeys';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
@@ -164,12 +166,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         addOption,
     ]);
 
-    const { addRecentProduct } = useRecentViewProducts();
-
-    useEffect(() => {
-        addRecentProduct(productNo);
-    }, []);
-
+    useTrackRecentViewProduct(productNo);
     useSb({
         product: productDetailData,
     });
@@ -318,6 +315,10 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                         onChange={onMultiOptionChange}
                                     />
                                 )}
+
+                                <ShopbyAsyncBoundary>
+                                    <ExtraProductList productNo={productNo} />
+                                </ShopbyAsyncBoundary>
 
                                 <SelectedProductOption
                                     productNo={productNo}

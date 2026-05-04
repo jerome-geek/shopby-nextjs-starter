@@ -20,7 +20,6 @@ interface OrderDetailsContentProps {
  * [공통 주문 정보 UI 컴포넌트]
  */
 const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
-    console.log('🚀 ~ OrderDetailsContent ~ orderInfo:', orderInfo);
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
     const isLogin = useAuth();
@@ -143,64 +142,90 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
             <div>
                 <h2 className={styles.sectionTitle}>{t('결제 정보')}</h2>
                 <div className={styles.productList}>
-                    {orderOptions.map((option, idx) => (
-                        <div
-                            key={`${option.orderOptionNo}-${idx}`}
-                            className={styles.productItem}
-                        >
-                            <img
-                                src={option.imageUrl}
-                                alt={option.productName}
-                                className={styles.productImage}
-                            />
-                            <div className={styles.productContent}>
-                                <div className={styles.productBrand}>
-                                    {option.brandName}
-                                </div>
-                                <h3 className={styles.productName}>
-                                    {option.productName}
-                                </h3>
-                                <div className={styles.optionList}>
-                                    {pipe(
-                                        [
-                                            option.optionName
-                                                ? {
-                                                      name: option.optionName,
-                                                      value: option.optionValue,
-                                                  }
-                                                : null,
-                                            ...(option.inputs?.map((input) => ({
-                                                name: input.inputLabel,
-                                                value: input.inputValue,
-                                            })) ?? []),
-                                        ],
-                                        filter((item) => !!item),
-                                        map((item) => (
-                                            <p
-                                                key={`${item?.name}-${item?.value}`}
-                                                className={
-                                                    styles.productOptionText
-                                                }
-                                            >
-                                                {item?.name}: {item?.value}
+                    {orderOptions.map((option, idx) => {
+                        const imageSize = isMobile ? '144x144' : '256x256';
+                        const optionLabels = pipe(
+                            [
+                                option.optionName
+                                    ? {
+                                          label: option.optionName,
+                                          value: option.optionValue,
+                                      }
+                                    : null,
+                                ...(option.inputs?.map((input) => ({
+                                    label: input.inputLabel,
+                                    value: input.inputValue,
+                                })) ?? []),
+                            ],
+                            filter((item) => !!item),
+                            toArray,
+                        );
+
+                        return (
+                            <article
+                                key={`${option.orderOptionNo}-${idx}`}
+                                className={styles.productItem}
+                            >
+                                <img
+                                    src={`${option.imageUrl}?${imageSize}`}
+                                    alt={option.productName}
+                                    className={styles.productImage}
+                                />
+                                <div className={styles.productContent}>
+                                    <div className={styles.productTextContainer}>
+                                        {option.brandName && (
+                                            <p className={styles.productBrand}>
+                                                {option.brandName}
                                             </p>
-                                        )),
-                                        toArray,
-                                    )}
+                                        )}
+                                        <h4 className={styles.productName}>
+                                            {option.productName}
+                                        </h4>
+                                        <dl className={styles.optionList}>
+                                            {optionLabels.map(
+                                                ({ label, value }, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={
+                                                            styles.optionItem
+                                                        }
+                                                    >
+                                                        <dt
+                                                            className={
+                                                                styles.optionLabel
+                                                            }
+                                                        >
+                                                            {label}
+                                                        </dt>
+                                                        <dd
+                                                            className={
+                                                                styles.optionValue
+                                                            }
+                                                        >
+                                                            {value}
+                                                        </dd>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </dl>
+                                    </div>
+                                    <div className={styles.productFooter}>
+                                        <p className={styles.orderCount}>
+                                            {t('수량')} {option.orderCnt}
+                                            {t('개')}
+                                        </p>
+                                        <data
+                                            className={styles.productPriceText}
+                                            value={option.price.buyAmt}
+                                        >
+                                            {option.price.buyAmt.toLocaleString()}
+                                            {t('원')}
+                                        </data>
+                                    </div>
                                 </div>
-                                <div className={styles.productFooter}>
-                                    <p className={styles.orderCount}>
-                                        {t('수량')} {option.orderCnt}
-                                        {t('개')}
-                                    </p>
-                                    <p className={styles.productPriceText}>
-                                        {option.price.buyAmt.toLocaleString()}
-                                        {t('원')}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                            </article>
+                        );
+                    })}
                 </div>
             </div>
 

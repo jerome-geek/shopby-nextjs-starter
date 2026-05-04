@@ -20,7 +20,7 @@ export const control = recipe({
         justifyContent: 'space-between',
         width: '100%',
         height: '44px',
-        padding: '0 2px 0 12px',
+        padding: '12px 12px',
         backgroundColor: vars.color.white,
         cursor: 'pointer',
 
@@ -49,6 +49,7 @@ export const valueContainer = style({
 export const menu = style([
     textStyles.body1Medium,
     {
+        color: vars.color.gray['80'],
         backgroundColor: vars.color.white,
         border: `1px solid ${vars.color.gray['50']}`,
         boxShadow: vars.shadow.sm,
@@ -88,7 +89,7 @@ export const option = recipe({
             position: 'relative',
             display: 'block',
             width: '100%',
-            padding: '16px',
+            padding: '12px',
             cursor: 'pointer',
             color: vars.color.gray['80'],
             transition: 'all 0.2s',
@@ -106,6 +107,12 @@ export const option = recipe({
                     transform: 'translateX(-50%)',
                     height: '1px',
                     backgroundColor: vars.color.gray['20'],
+                },
+            },
+
+            '@media': {
+                [media.desktop]: {
+                    padding: '16px',
                 },
             },
         },
@@ -141,24 +148,15 @@ export const placeholder = style([
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        // '@media': {
-        //     'screen and (min-width: 768px)': {
-        //         fontSize: '1.5rem',
-        //     },
-        // },
     },
 ]);
 
-export const singleValue = style({
-    fontSize: '1.4rem',
-    fontWeight: '500',
-    color: vars.color.gray[70],
-    '@media': {
-        'screen and (min-width: 768px)': {
-            fontSize: '1.5rem',
-        },
+export const singleValue = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.gray['80'],
     },
-});
+]);
 
 export const dropdownIndicator = recipe({
     base: {

@@ -3,8 +3,9 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Props, SingleValue } from 'react-select';
 
-import { Select } from '@/components/ui/input';
 import * as bottomSheetStyles from '@/components/bottom-sheet/option-select/index.css';
+import * as styles from '@/components/product-option/multi/index.css';
+import { Select } from '@/components/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useResponsive } from '@/hooks/utils';
 import type { MultiLevelOption } from '@/models/product/productOption';
@@ -57,6 +58,9 @@ export const MultiProductOption = ({
     const onOptionChange = (v: MultiLevelOption, index: number) => {
         if (!v) return;
 
+        const isLastIndex =
+            index === (productOptionListData?.labels.length ?? 0) - 1;
+
         // 1. 새로운 선택 상태 계산 (현재 인덱스 이후는 모두 초기화)
         const nextValueList = selectedValueList.map((prev, i) => {
             if (i < index) {
@@ -68,9 +72,7 @@ export const MultiProductOption = ({
             return null;
         });
 
-        setSelectedValueList(nextValueList);
-
-        // 2. 부모에게 변경 알림 (레이블 조합)
+        // 2. 부모에게 변경 알림 (레이블 조합) - 상태 초기화 전에 먼저 알림
         onChange({
             ...v,
             label: `${t('옵션')} : ${pipe(
@@ -80,6 +82,13 @@ export const MultiProductOption = ({
                 join('|'),
             )}`,
         });
+
+        // 3. 상태 업데이트 (마지막 인덱스면 초기화, 아니면 현재 선택 유지)
+        if (isLastIndex) {
+            setSelectedValueList([null, null, null, null, null]);
+        } else {
+            setSelectedValueList(nextValueList);
+        }
     };
 
     if (!productOptionListData) {
@@ -90,12 +99,13 @@ export const MultiProductOption = ({
         <div
             role='group'
             aria-label={t('분리형 옵션')}
-            style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+            className={styles.container}
         >
             {productOptionListData.labels.map((label, index) => (
                 <div key={`${label}-${index}`}>
                     <p className={bottomSheetStyles.optionLabel}>
-                        {label} <span className={bottomSheetStyles.required}>*</span>
+                        {label}{' '}
+                        <span className={bottomSheetStyles.required}>*</span>
                     </p>
                     <Select
                         placeholder={t('옵션을 선택하세요')}

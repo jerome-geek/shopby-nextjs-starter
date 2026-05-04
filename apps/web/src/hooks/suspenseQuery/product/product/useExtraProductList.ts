@@ -1,14 +1,17 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import {
+    useSuspenseQuery,
+    UseSuspenseQueryOptions,
+} from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
 import type { GetExtraProductsResponse } from '@/models/product/product';
 
-interface UseShippingInfoParams<T = GetExtraProductsResponse> {
+interface UseExtraProductListParams<T = GetExtraProductsResponse> {
     productNo: number;
     options?: Omit<
-        UseQueryOptions<
+        UseSuspenseQueryOptions<
             GetExtraProductsResponse,
             AxiosError<ShopByErrorResponse>,
             T,
@@ -18,20 +21,19 @@ interface UseShippingInfoParams<T = GetExtraProductsResponse> {
     >;
 }
 
-const useExtraProducts = <T = GetExtraProductsResponse>({
+const useExtraProductList = <T = GetExtraProductsResponse>({
     productNo = 0,
     options,
-}: UseShippingInfoParams<T>) => {
-    return useQuery({
+}: UseExtraProductListParams<T>) => {
+    return useSuspenseQuery({
         queryKey: productKeys.extraProducts(productNo),
         queryFn: async () => {
             const { data } = await product.getExtraProducts(productNo);
 
             return data;
         },
-        enabled: productNo !== 0,
         ...options,
     });
 };
 
-export default useExtraProducts;
+export default useExtraProductList;

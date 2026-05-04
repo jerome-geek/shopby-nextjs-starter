@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const container = style({
     width: '100%',
@@ -140,92 +140,132 @@ export const productList = style({
 
 export const productItem = style({
     display: 'flex',
-    gap: '24px',
+    gap: '16px',
     alignItems: 'center',
     width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
 });
 
 export const productImage = style({
-    width: '128px',
-    height: '128px',
+    width: '72px',
+    height: '72px',
     objectFit: 'cover',
     borderRadius: '4px',
     flexShrink: 0,
+
+    '@media': {
+        [media.desktop]: {
+            width: '128px',
+            height: '128px',
+        },
+    },
 });
 
 export const productContent = style({
-    flex: '1 0 0',
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignSelf: 'stretch',
-    paddingTop: '4px',
     minWidth: 0,
 });
 
+export const productTextContainer = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+});
+
 export const productBrand = style([
-    textStyles.body1Regular,
+    textStyles.caption1Regular,
     {
         color: vars.color.gray['60'],
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        width: '100%',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
     },
 ]);
 
 export const productName = style([
-    textStyles.headlineMedium,
+    textStyles.body1Medium,
     {
         color: vars.color.black,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        maxHeight: '20px',
-        width: '100%',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineMedium,
+            },
+        },
     },
 ]);
-
-export const productOptionText = style({
-    fontSize: '12px',
-    color: vars.color.gray['40'],
-    marginBottom: '4px',
-});
 
 export const optionList = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '2px',
-    marginTop: '4px',
-    marginBottom: '8px',
 });
+
+export const optionItem = style({
+    display: 'flex',
+    gap: '4px',
+    alignItems: 'center',
+});
+
+export const optionLabel = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+        '::after': {
+            content: '":"',
+        },
+    },
+]);
+
+export const optionValue = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+    },
+]);
 
 export const productFooter = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
+    marginTop: 'auto',
 });
 
 export const orderCount = style([
-    textStyles.body2Semibold,
+    textStyles.caption1Semibold,
     {
         color: vars.color.gray['60'],
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Semibold,
+            },
+        },
     },
 ]);
 
 export const productPriceText = style([
-    textStyles.headingBold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.black,
-        flex: '1 0 0',
-        textAlign: 'right',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingBold,
+            },
+        },
     },
 ]);
 

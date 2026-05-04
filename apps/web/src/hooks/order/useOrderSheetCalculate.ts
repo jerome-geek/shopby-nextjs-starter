@@ -1,6 +1,6 @@
-import { Control, useFormContext, useWatch } from 'react-hook-form';
-import { useMemo } from 'react';
 import { filter, includes, pipe, toArray } from '@fxts/core';
+import { useMemo } from 'react';
+import { Control, useFormContext, useWatch } from 'react-hook-form';
 
 import { useCountryList } from '@/hooks/queries/useCountryList';
 import {
@@ -9,13 +9,15 @@ import {
 } from '@/hooks/query/order/orderSheet';
 import { PaymentReserveSchemaType } from '@/schema';
 
+interface UseOrderSheetCalculateProps {
+    orderSheetNo: string;
+    controlProp?: Control<PaymentReserveSchemaType>;
+}
+
 const useOrderSheetCalculate = ({
     orderSheetNo,
     controlProp,
-}: {
-    orderSheetNo: string;
-    controlProp?: Control<PaymentReserveSchemaType>;
-}) => {
+}: UseOrderSheetCalculateProps) => {
     const method = useFormContext<PaymentReserveSchemaType>();
 
     const control = controlProp ?? method?.control;
@@ -88,10 +90,6 @@ const useOrderSheetCalculate = ({
             enabled: isOrderSheetFetched,
         },
     });
-    console.log(
-        '🚀 ~ useOrderSheetCalculate ~ calculateOrderSheetData:',
-        calculateOrderSheetData,
-    );
 
     const countryCodeList = useMemo(() => {
         if (!orderSheetData) {

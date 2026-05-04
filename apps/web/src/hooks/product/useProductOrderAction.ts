@@ -37,12 +37,13 @@ export const useProductOrderAction = (
     const queryClient = useQueryClient();
     const { addToast } = useToast();
 
-    const { isSaleEnd, saleStatusType } = useProductInfo(productNo);
+    const { saleStatusType } = useProductInfo(productNo);
 
     const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
         useProductOption({ productNo });
 
     const { selectedOptionList, clearOptions } = useProductOptionStore();
+
     const addGuestCartItem = useCartStore((state) => state.addItem);
 
     const {
@@ -54,7 +55,9 @@ export const useProductOrderAction = (
 
     const filteredOptions = pipe(
         selectedOptionList,
-        filter((option) => option.productNo === productNo),
+        filter(
+            (a) => a.productNo === productNo || a.baseProductNo === productNo,
+        ),
         toArray,
     );
 

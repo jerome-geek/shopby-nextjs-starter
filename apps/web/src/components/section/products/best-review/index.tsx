@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import Products from '@/components/section/products/section';
 import ProductsSectionSkeleton from '@/components/section/products/section/skeleton';
-import useBestReviewProductList from '@/hooks/suspenseQuery/product/product/useBestSellerProductList';
+import useBestReviewProductList from '@/hooks/suspenseQuery/product/product/useBestReviewProductList';
 import { useSuspenseMainCategory } from '@/hooks/useMainCategory';
 import { ShopType } from '@/pages/shop/[slug]';
 

@@ -1,16 +1,24 @@
 import { concat, map, pipe, sort, toArray, zip } from '@fxts/core';
+import { useTranslation } from 'react-i18next';
+
+import * as styles from '@/components/order/order-products/index.css';
+import { useResponsive } from '@/hooks/utils';
 import type { DeliveryGroup } from '@/models/order/orderSheet';
 import { CURRENCY } from '@/utils/currency';
-import * as styles from '@/components/order/order-products/index.css';
 
 interface OrderProductsProps {
     deliveryGroups: DeliveryGroup[];
 }
 
 const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
+    const { t } = useTranslation();
+    const { isMobile } = useResponsive();
+
+    const imageSize = isMobile ? '144x144' : '256x256';
+
     return (
         <section className={styles.container}>
-            <h3 className={styles.title}>주문 상품</h3>
+            <h3 className={styles.title}>{t('주문 상품')}</h3>
 
             <ul className={styles.productList}>
                 {deliveryGroups.map((group) =>
@@ -19,19 +27,23 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                             const optionLabels = pipe(
                                 option.optionInputs ?? [],
                                 sort(
-                                    (a, b) => (a.inputNo ?? 0) - (b.inputNo ?? 0),
+                                    (a, b) =>
+                                        (a.inputNo ?? 0) - (b.inputNo ?? 0),
                                 ),
-                                map((c) => `${c.inputLabel}: ${c.inputValue}`),
+                                map((c) => ({
+                                    label: c.inputLabel,
+                                    value: c.inputValue,
+                                })),
                                 concat(
                                     option.optionType === 'PRODUCT_ONLY'
                                         ? []
                                         : pipe(
                                               option.optionValue.split('|'),
                                               zip(option.optionName.split('|')),
-                                              map(
-                                                  ([value, name]) =>
-                                                      `${name}: ${value}`,
-                                              ),
+                                              map(([value, name]) => ({
+                                                  label: name,
+                                                  value,
+                                              })),
                                           ),
                                 ),
                                 toArray,
@@ -43,13 +55,11 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                                     className={styles.productItem}
                                 >
                                     <img
-                                        src={
-                                            option.imageUrl || product.imageUrl
-                                        }
-                                        alt={product.productName}
+                                        src={`${option.imageUrl || product.imageUrl}?${imageSize}`}
+                                        alt={`${product.productName}${option.optionValue ? ` - ${option.optionValue}` : ''}`}
                                         className={styles.thumbnail}
                                     />
-                                    <div className={styles.productInfo}>
+                                    <article className={styles.productInfo}>
                                         <div
                                             className={
                                                 styles.productTextContainer
@@ -60,23 +70,39 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                                                     {product.brandName}
                                                 </p>
                                             )}
-                                            <p className={styles.productName}>
+                                            <h4 className={styles.productName}>
                                                 {product.productName}
-                                            </p>
-                                            <div className={styles.optionList}>
+                                            </h4>
+                                            <dl className={styles.optionList}>
                                                 {optionLabels.map(
-                                                    (label, index) => (
-                                                        <span
+                                                    (
+                                                        { label, value },
+                                                        index,
+                                                    ) => (
+                                                        <div
                                                             key={index}
                                                             className={
-                                                                styles.optionText
+                                                                styles.optionItem
                                                             }
                                                         >
-                                                            {label}
-                                                        </span>
+                                                            <dt
+                                                                className={
+                                                                    styles.optionLabel
+                                                                }
+                                                            >
+                                                                {label}
+                                                            </dt>
+                                                            <dd
+                                                                className={
+                                                                    styles.optionValue
+                                                                }
+                                                            >
+                                                                {value}
+                                                            </dd>
+                                                        </div>
                                                     ),
                                                 )}
-                                            </div>
+                                            </dl>
                                         </div>
 
                                         <div className={styles.priceContainer}>
@@ -84,13 +110,16 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                                                 {`수량 ${option.orderCnt}개`}
                                             </p>
 
-                                            <p className={styles.buyAmt}>
+                                            <data
+                                                className={styles.buyAmt}
+                                                value={option.price.buyAmt}
+                                            >
                                                 {CURRENCY(
                                                     option.price.buyAmt,
                                                 ).format()}
-                                            </p>
+                                            </data>
                                         </div>
-                                    </div>
+                                    </article>
                                 </li>
                             );
                         }),

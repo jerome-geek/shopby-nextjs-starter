@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const container = style({
     display: 'flex',
@@ -22,17 +22,29 @@ export const productList = style({
     listStyle: 'none',
     margin: '0',
     padding: '0',
-    gap: '24px',
+    gap: '12px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
 });
 
 export const productItem = style({
     display: 'flex',
-    gap: '24px',
+    gap: '16px',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '24px',
+        },
+    },
 });
 
 export const thumbnail = style({
-    width: '80px',
-    height: '80px',
+    width: '72px',
+    height: '72px',
     aspectRatio: '1 / 1',
     objectFit: 'cover',
     borderRadius: '4px',
@@ -57,37 +69,65 @@ export const productInfo = style({
 export const productTextContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '2px',
+    gap: '4px',
 });
 
 export const optionList = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '2px',
-    marginTop: '4px',
 });
 
-export const brandName = style([
-    textStyles.body1Regular,
+export const optionItem = style({
+    display: 'flex',
+    gap: '4px',
+    alignItems: 'center',
+});
+
+export const optionLabel = style([
+    textStyles.caption1Regular,
     {
         color: vars.color.gray['60'],
+        '::after': {
+            content: '":"',
+        },
+    },
+]);
+
+export const optionValue = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+    },
+]);
+
+export const brandName = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
     },
 ]);
 
 export const productName = style([
-    textStyles.headlineMedium,
+    textStyles.body1Medium,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineMedium,
+            },
+        },
     },
 ]);
 
-export const optionText = style([
-    textStyles.caption1Regular,
-    {
-        color: vars.color.gray['60'],
-        marginTop: '4px',
-    },
-]);
+// 기존 optionText 제거 (optionLabel, optionValue로 대체됨)
 
 export const priceContainer = style({
     display: 'flex',
@@ -96,15 +136,27 @@ export const priceContainer = style({
 });
 
 export const orderCnt = style([
-    textStyles.body2Semibold,
+    textStyles.caption1Semibold,
     {
         color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Semibold,
+            },
+        },
     },
 ]);
 
 export const buyAmt = style([
-    textStyles.headingBold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingBold,
+            },
+        },
     },
 ]);
