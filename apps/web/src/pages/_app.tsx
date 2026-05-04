@@ -90,6 +90,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     const defaultSeo = generateDefaultSeo({
         titleTemplate: '%s | JollyPot',
         defaultTitle: 'JollyPot',
+        noindex: true,
+        nofollow: true,
     });
 
     const pathnameKey = useMemo(() => {
