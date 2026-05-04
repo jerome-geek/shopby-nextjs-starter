@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { HttpStatusCode, isAxiosError } from 'axios';
+import ReactLenis from 'lenis/react';
 import { motion } from 'motion/react';
 import type { NextPage } from 'next';
 import { generateDefaultSeo } from 'next-seo/pages';
@@ -24,7 +25,6 @@ import { AppProviders } from '@/providers';
 
 import '@/i18n/config';
 import '@/styles/global.css.ts';
-import ReactLenis from 'lenis/react';
 import 'react-day-picker/dist/style.css';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {

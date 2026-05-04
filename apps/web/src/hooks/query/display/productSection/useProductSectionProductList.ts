@@ -1,45 +1,15 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { productSection } from '@/api/display';
-import type {
-    GetProductSectionProductsParams,
-    GetProductSectionProductsResponse,
-} from '@/models/display/productSection';
-import { productSectionKeys } from '@/hooks/queryKeys';
+import {
+    productSectionProductListOptions,
+    type ProductSectionProductListParams,
+} from '@/entities/display/queries';
+import type { GetProductSectionProductsResponse } from '@/models/display/productSection';
 
-interface UseProductSectionProductList<T = GetProductSectionProductsResponse> {
-    sectionId: string;
-    searchParams: GetProductSectionProductsParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetProductSectionProductsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productSectionKeys)['products']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-// TODO: id 또는 no로 조회할 수 있도록
-const useProductSectionProductList = <T = GetProductSectionProductsResponse>({
-    sectionId,
-    searchParams,
-    options,
-}: UseProductSectionProductList<T>) => {
-    return useQuery({
-        queryKey: productSectionKeys.products(sectionId, searchParams),
-        queryFn: async () => {
-            const { data } = await productSection.getProductSectionProductsById(
-                sectionId,
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
-    });
+const useProductSectionProductList = <T = GetProductSectionProductsResponse>(
+    params: ProductSectionProductListParams<T>,
+) => {
+    return useQuery(productSectionProductListOptions(params));
 };
 
 export default useProductSectionProductList;

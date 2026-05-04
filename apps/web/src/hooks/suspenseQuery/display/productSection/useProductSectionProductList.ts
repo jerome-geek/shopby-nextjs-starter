@@ -1,47 +1,15 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    productSectionProductListOptions,
+    type ProductSectionProductListParams,
+} from '@/entities/display/queries';
+import type { GetProductSectionProductsResponse } from '@/models/display/productSection';
 
-import { productSection } from '@/api/display';
-import { productSectionKeys } from '@/hooks/queryKeys';
-import type {
-    GetProductSectionProductsParams,
-    GetProductSectionProductsResponse,
-} from '@/models/display/productSection';
-
-interface UseProductSectionProductList<T = GetProductSectionProductsResponse> {
-    sectionId: string;
-    searchParams: GetProductSectionProductsParams;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetProductSectionProductsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productSectionKeys)['products']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useProductSectionProductList = <T = GetProductSectionProductsResponse>({
-    sectionId,
-    searchParams,
-    options,
-}: UseProductSectionProductList<T>) => {
-    return useSuspenseQuery({
-        queryKey: productSectionKeys.products(sectionId, searchParams),
-        queryFn: async () => {
-            const { data } = await productSection.getProductSectionProductsById(
-                sectionId,
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
-    });
+const useProductSectionProductList = <T = GetProductSectionProductsResponse>(
+    params: ProductSectionProductListParams<T>,
+) => {
+    return useSuspenseQuery(productSectionProductListOptions(params));
 };
 
 export default useProductSectionProductList;

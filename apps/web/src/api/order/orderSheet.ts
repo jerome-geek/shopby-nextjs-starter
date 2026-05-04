@@ -1,7 +1,10 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import type { ApplyCouponParams, ApplyCouponResponse } from '@/models/order';
+import type {
+    ApplyCouponResponse,
+    GetAvailableCouponsParams,
+} from '@/models/order';
 import type {
     CouponApplyData,
     CouponApplyResponse,
@@ -76,11 +79,10 @@ const orderSheet = {
     /**
      * 적용할 수 있는 쿠폰 정보 조회하기
      *  - 해당 주문에 적용할 수 있는 쿠폰을 조회하는 API 입니다
-     * TODO: 체크해보기
      */
     getAvailableCoupons: (
         orderSheetNo: string,
-        params?: ApplyCouponParams,
+        params?: GetAvailableCouponsParams,
         options?: AxiosRequestConfig,
     ) => {
         return shopbyRequest<ApplyCouponResponse>({

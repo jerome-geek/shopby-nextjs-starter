@@ -6,12 +6,15 @@ import type { AxiosError } from 'axios';
 
 import { orderSheet } from '@/api/order';
 import { orderSheetKeys } from '@/hooks/queryKeys';
-import type { ApplyCouponResponse } from '@/models/order';
+import type {
+    ApplyCouponResponse,
+    GetAvailableCouponsParams,
+} from '@/models/order';
 
 interface UseAvailableCouponParams<T = ApplyCouponResponse> {
     orderSheetNo: string;
     memberNo?: number;
-    searchParams?: { channelType: string };
+    searchParams?: GetAvailableCouponsParams;
     options?: Omit<
         UseSuspenseQueryOptions<
             ApplyCouponResponse,

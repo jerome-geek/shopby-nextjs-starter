@@ -6,6 +6,7 @@ import type {
     CashReceiptIssuePurposeType,
     CashReceiptIssueType,
     CashReceiptKeyType,
+    ChannelType,
     ClaimClassType,
     ClaimReasonType,
     ClaimStatusType,
@@ -993,8 +994,13 @@ export interface FreeGift {
     productName: string;
 }
 
+export interface GetAvailableCouponsParams {
+    /** 채널 타입 */
+    channelType?: ChannelType;
+}
+
 export interface ApplyCouponParams {
-    /** 채널타입^|NAVER_EP */
+    /** 채널타입 */
     channelType?: string;
 }
 
