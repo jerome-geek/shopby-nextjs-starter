@@ -6,12 +6,15 @@ import Link from 'next/link';
 import * as styles from '@/components/cart/order-product-item/index.css';
 import { InputCheckbox } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
+import { PRODUCT_IMAGE_RESIZE } from '@/const/product';
+import { useResponsive } from '@/hooks/utils';
 import type {
     InvalidProduct,
     OrderProduct,
     OrderProductOption,
 } from '@/models/order';
 import { CURRENCY } from '@/utils/currency';
+import { useTranslation } from 'react-i18next';
 
 type OrderInvalidProduct = Omit<
     InvalidProduct,
@@ -40,19 +43,26 @@ export const OrderProductItem = ({
     onQuantityChange,
     onDelete,
 }: OrderProductItemProps) => {
+    const { t } = useTranslation();
+    const { isMobile } = useResponsive();
+
+    const imageSize = isMobile
+        ? PRODUCT_IMAGE_RESIZE.MOBILE
+        : PRODUCT_IMAGE_RESIZE.DESKTOP;
+
     const { product, option } = item;
 
     const optionLabels = pipe(
         option.optionInputs ?? [],
         sort((a, b) => (a.inputNo ?? 0) - (b.inputNo ?? 0)),
-        map((c) => `${c.inputLabel}: ${c.inputValue}`),
+        map((c) => t('{{label}}: {{value}}', { label: c.inputLabel, value: c.inputValue })),
         concat(
             option.optionType === 'PRODUCT_ONLY'
                 ? []
                 : pipe(
                       option.optionValue.split('|'),
                       zip(option.optionName.split('|')),
-                      map(([value, name]) => `${name}: ${value}`),
+                      map(([value, name]) => t('{{name}}: {{value}}', { name, value })),
                   ),
         ),
         toArray,
@@ -65,7 +75,7 @@ export const OrderProductItem = ({
 
     const isSoldOut = option.validInfo.errorCode === 'OUT_OF_STOCK';
 
-    const invalidMessage = isSoldOut ? 'SOLD OUT' : option.validInfo.message;
+    const invalidMessage = isSoldOut ? t('품절') : option.validInfo.message;
 
     return (
         <li
@@ -89,7 +99,7 @@ export const OrderProductItem = ({
                     href={`${PATHS.PRODUCTS.MAIN}/${product.productNo}`}
                 >
                     <img
-                        src={option.imageUrl || product.imageUrl}
+                        src={`${option.imageUrl || product.imageUrl}?${imageSize}`}
                         alt={product.productName}
                         className={styles.itemImage}
                     />
@@ -148,7 +158,9 @@ export const OrderProductItem = ({
                         </div>
                     ) : (
                         <span className={styles.itemOption}>
-                            수량: {option.orderCnt}
+                            {t('수량 : {{orderCnt}}', {
+                                orderCnt: option.orderCnt,
+                            })}
                         </span>
                     )}
 

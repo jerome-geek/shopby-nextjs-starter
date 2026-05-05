@@ -2,9 +2,8 @@ import { concat, map, pipe, sort, toArray, zip } from '@fxts/core';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/order-products/index.css';
-import { useResponsive } from '@/hooks/utils';
+import { OrderProductItem } from '@/components/order/order-product-item';
 import type { DeliveryGroup } from '@/models/order/orderSheet';
-import { CURRENCY } from '@/utils/currency';
 
 interface OrderProductsProps {
     deliveryGroups: DeliveryGroup[];
@@ -12,9 +11,6 @@ interface OrderProductsProps {
 
 const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
     const { t } = useTranslation();
-    const { isMobile } = useResponsive();
-
-    const imageSize = isMobile ? '144x144' : '256x256';
 
     return (
         <section className={styles.container}>
@@ -52,74 +48,17 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                             return (
                                 <li
                                     key={`${product.productNo}-${option.optionNo}`}
-                                    className={styles.productItem}
                                 >
-                                    <img
-                                        src={`${option.imageUrl || product.imageUrl}?${imageSize}`}
-                                        alt={`${product.productName}${option.optionValue ? ` - ${option.optionValue}` : ''}`}
-                                        className={styles.thumbnail}
+                                    <OrderProductItem
+                                        imageUrl={
+                                            option.imageUrl || product.imageUrl
+                                        }
+                                        productName={product.productName}
+                                        brandName={product.brandName}
+                                        optionLabels={optionLabels}
+                                        orderCnt={option.orderCnt}
+                                        buyAmt={option.price.buyAmt}
                                     />
-                                    <article className={styles.productInfo}>
-                                        <div
-                                            className={
-                                                styles.productTextContainer
-                                            }
-                                        >
-                                            {product.brandName && (
-                                                <p className={styles.brandName}>
-                                                    {product.brandName}
-                                                </p>
-                                            )}
-                                            <h4 className={styles.productName}>
-                                                {product.productName}
-                                            </h4>
-                                            <dl className={styles.optionList}>
-                                                {optionLabels.map(
-                                                    (
-                                                        { label, value },
-                                                        index,
-                                                    ) => (
-                                                        <div
-                                                            key={index}
-                                                            className={
-                                                                styles.optionItem
-                                                            }
-                                                        >
-                                                            <dt
-                                                                className={
-                                                                    styles.optionLabel
-                                                                }
-                                                            >
-                                                                {label}
-                                                            </dt>
-                                                            <dd
-                                                                className={
-                                                                    styles.optionValue
-                                                                }
-                                                            >
-                                                                {value}
-                                                            </dd>
-                                                        </div>
-                                                    ),
-                                                )}
-                                            </dl>
-                                        </div>
-
-                                        <div className={styles.priceContainer}>
-                                            <p className={styles.orderCnt}>
-                                                {`수량 ${option.orderCnt}개`}
-                                            </p>
-
-                                            <data
-                                                className={styles.buyAmt}
-                                                value={option.price.buyAmt}
-                                            >
-                                                {CURRENCY(
-                                                    option.price.buyAmt,
-                                                ).format()}
-                                            </data>
-                                        </div>
-                                    </article>
                                 </li>
                             );
                         }),

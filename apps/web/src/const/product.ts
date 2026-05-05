@@ -109,3 +109,21 @@ export const CHANNEL_TYPES: ChannelType[] = [
     'COOCHA',
     'FACEBOOK',
 ];
+
+/** 상품 이미지 기본 크기 (단위: px) */
+export const PRODUCT_IMAGE_BASE_SIZE = {
+    MOBILE: 72,
+    DESKTOP: 128,
+} as const;
+
+/** CSS 적용을 위한 px 문자열 */
+export const PRODUCT_IMAGE_CSS_SIZE = {
+    MOBILE: `${PRODUCT_IMAGE_BASE_SIZE.MOBILE}px`,
+    DESKTOP: `${PRODUCT_IMAGE_BASE_SIZE.DESKTOP}px`,
+} as const;
+
+/** API 리사이즈 파라미터 (Retina 대응을 위해 2배수 사용) */
+export const PRODUCT_IMAGE_RESIZE = {
+    MOBILE: `${PRODUCT_IMAGE_BASE_SIZE.MOBILE * 2}x${PRODUCT_IMAGE_BASE_SIZE.MOBILE * 2}`,
+    DESKTOP: `${PRODUCT_IMAGE_BASE_SIZE.DESKTOP * 2}x${PRODUCT_IMAGE_BASE_SIZE.DESKTOP * 2}`,
+} as const;

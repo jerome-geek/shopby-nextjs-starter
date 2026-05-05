@@ -1,12 +1,9 @@
-import {
-    getPaymentSchema,
-    PaymentReserveSchemaType,
-} from '@/schema/payment.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
 import { useMemo } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
@@ -26,8 +23,11 @@ import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
+import {
+    getPaymentSchema,
+    type PaymentReserveSchemaType,
+} from '@/schema/payment.schema';
 import payment from '@/utils/order/payment';
-import { useTranslation } from 'react-i18next';
 
 const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
     const isLogin = useAuth();

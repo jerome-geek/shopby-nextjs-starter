@@ -3,12 +3,14 @@ import { style } from '@vanilla-extract/css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles, textStyleTokens } from '@/styles/typography.css';
+import { PRODUCT_IMAGE_CSS_SIZE } from '@/const/product';
 
 export const cartItem = style({
     display: 'flex',
     gap: '12px',
     position: 'relative',
     alignItems: 'flex-start',
+
     '@media': {
         [media.desktop]: {
             gap: '16px',
@@ -47,17 +49,17 @@ export const itemContent = style({
 
 export const itemImageLink = style({
     position: 'relative',
-    width: '72px',
-    height: '72px',
+    width: PRODUCT_IMAGE_CSS_SIZE.MOBILE,
+    height: PRODUCT_IMAGE_CSS_SIZE.MOBILE,
     borderRadius: '4px',
     overflow: 'hidden',
     display: 'block',
     flexShrink: 0,
+
     '@media': {
         [media.desktop]: {
-            width: '128px',
-            height: '128px',
-            borderRadius: '4px',
+            width: PRODUCT_IMAGE_CSS_SIZE.DESKTOP,
+            height: PRODUCT_IMAGE_CSS_SIZE.DESKTOP,
         },
     },
 });

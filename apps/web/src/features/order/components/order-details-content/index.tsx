@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CongratulationIcon } from '@/components/icons/login/Congratulation';
 import { PATHS } from '@/const/paths';
+import { OrderProductItem } from '@/components/order/order-product-item';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
@@ -143,7 +144,6 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                 <h2 className={styles.sectionTitle}>{t('결제 정보')}</h2>
                 <div className={styles.productList}>
                     {orderOptions.map((option, idx) => {
-                        const imageSize = isMobile ? '144x144' : '256x256';
                         const optionLabels = pipe(
                             [
                                 option.optionName
@@ -162,68 +162,15 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                         );
 
                         return (
-                            <article
+                            <OrderProductItem
                                 key={`${option.orderOptionNo}-${idx}`}
-                                className={styles.productItem}
-                            >
-                                <img
-                                    src={`${option.imageUrl}?${imageSize}`}
-                                    alt={option.productName}
-                                    className={styles.productImage}
-                                />
-                                <div className={styles.productContent}>
-                                    <div className={styles.productTextContainer}>
-                                        {option.brandName && (
-                                            <p className={styles.productBrand}>
-                                                {option.brandName}
-                                            </p>
-                                        )}
-                                        <h4 className={styles.productName}>
-                                            {option.productName}
-                                        </h4>
-                                        <dl className={styles.optionList}>
-                                            {optionLabels.map(
-                                                ({ label, value }, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={
-                                                            styles.optionItem
-                                                        }
-                                                    >
-                                                        <dt
-                                                            className={
-                                                                styles.optionLabel
-                                                            }
-                                                        >
-                                                            {label}
-                                                        </dt>
-                                                        <dd
-                                                            className={
-                                                                styles.optionValue
-                                                            }
-                                                        >
-                                                            {value}
-                                                        </dd>
-                                                    </div>
-                                                ),
-                                            )}
-                                        </dl>
-                                    </div>
-                                    <div className={styles.productFooter}>
-                                        <p className={styles.orderCount}>
-                                            {t('수량')} {option.orderCnt}
-                                            {t('개')}
-                                        </p>
-                                        <data
-                                            className={styles.productPriceText}
-                                            value={option.price.buyAmt}
-                                        >
-                                            {option.price.buyAmt.toLocaleString()}
-                                            {t('원')}
-                                        </data>
-                                    </div>
-                                </div>
-                            </article>
+                                imageUrl={option.imageUrl}
+                                productName={option.productName}
+                                brandName={option.brandName}
+                                optionLabels={optionLabels}
+                                orderCnt={option.orderCnt}
+                                buyAmt={option.price.buyAmt}
+                            />
                         );
                     })}
                 </div>
