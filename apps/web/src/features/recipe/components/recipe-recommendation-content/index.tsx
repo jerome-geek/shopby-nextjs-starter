@@ -1,0 +1,151 @@
+'use client';
+
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { SmallCaretIcon } from '@/components/icons';
+import { RecipeCard } from '@/components/recipe/card';
+import { PATHS } from '@/const/paths';
+import * as styles from '@/features/recipe/components/recipe-recommendation-content/index.css';
+import usePublicRecipeSearch from '@/hooks/suspenseQuery/shop/recipe/usePublicRecipeSearch';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+interface RecipeRecommendationLayerContentProps {
+    close: () => void;
+}
+
+export const RecipeRecommendationLayerContent = ({
+    close,
+}: RecipeRecommendationLayerContentProps) => {
+    const { t } = useTranslation();
+    const router = useRouter();
+
+    const { data: publicRecipeSearchData } = usePublicRecipeSearch({
+        searchParams: {
+            page: 1,
+            take: 10,
+            order: 'DESC',
+            sortBy: 'LATEST',
+        },
+    });
+
+    const recipes = publicRecipeSearchData?.data ?? [];
+
+    const handleMoreClick = () => {
+        router.push(PATHS.RECIPES.MAIN);
+        close();
+    };
+
+    if (recipes.length === 0) return null;
+
+    return (
+        <div className={styles.container}>
+            <div className={styles.titleGroup}>
+                <span
+                    className={styles.titleLine}
+                    dangerouslySetInnerHTML={{
+                        __html: t(
+                            '배송 기다리는 동안<br/>식비를 절반으로 줄여주는 레시피 구경하세요!',
+                        ),
+                    }}
+                />
+            </div>
+
+            <div className={styles.recipeArea}>
+                <Swiper
+                    className={styles.swiperContainer}
+                    spaceBetween={16}
+                    slidesPerView={2.2}
+                    modules={[Navigation, Pagination]}
+                    breakpoints={{
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 24,
+                        },
+                    }}
+                    navigation={{
+                        prevEl: '.recipe-recommend-prev',
+                        nextEl: '.recipe-recommend-next',
+                    }}
+                    pagination={{
+                        el: '.recipe-recommend-pagination',
+                        type: 'fraction',
+                        renderFraction: (currentClass, totalClass) => {
+                            return (
+                                `<span class="${currentClass} ${styles.paginationCurrent}"></span>` +
+                                `<span class="${styles.paginationDivider}">/</span>` +
+                                `<span class="${totalClass} ${styles.paginationTotal}"></span>`
+                            );
+                        },
+                    }}
+                >
+                    {recipes.map((recipe) => (
+                        <SwiperSlide
+                            key={recipe.sno}
+                            className={styles.swiperSlide}
+                        >
+                            <div
+                                className={styles.recipeCardWrapper}
+                                onClick={() => close()}
+                            >
+                                <RecipeCard recipe={recipe} />
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+
+                {recipes.length > 1 && (
+                    <div className={styles.paginationWrapper}>
+                        <button
+                            className={`${styles.paginationButton} recipe-recommend-prev`}
+                            aria-label={t('이전 레시피')}
+                            type='button'
+                        >
+                            <SmallCaretIcon
+                                direction='left'
+                                width={18}
+                                height={18}
+                            />
+                        </button>
+                        <div
+                            className={`${styles.recommendPagination} recipe-recommend-pagination`}
+                        />
+                        <button
+                            className={`${styles.paginationButton} recipe-recommend-next`}
+                            aria-label={t('다음 레시피')}
+                            type='button'
+                        >
+                            <SmallCaretIcon
+                                direction='right'
+                                width={18}
+                                height={18}
+                            />
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            <div className={styles.footerButtonGroup}>
+                <button
+                    className={styles.closeButton}
+                    onClick={close}
+                    type='button'
+                >
+                    {t('닫기')}
+                </button>
+                <button
+                    className={styles.moreButton}
+                    onClick={handleMoreClick}
+                    type='button'
+                >
+                    {t('레시피 더 보러가기')}
+                </button>
+            </div>
+        </div>
+    );
+};

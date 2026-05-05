@@ -15,6 +15,8 @@ export const OVERLAY_ID = {
     COLLECTION_FORM: 'collection-form',
     ORDER_COMPLETE_RECIPE_RECOMMENDATION:
         'order-complete-recipe-recommendation',
+    ORDER_COMPLETE_RECIPE_RECOMMENDATION_BOTTOM_SHEET:
+        'order-complete-recipe-recommendation-bottom-sheet',
     LOGIN_DIALOG: 'login-dialog',
     RECIPE_URL_INPUT: 'recipe-url-input',
     RECIPE_IMAGE_UPLOAD: 'recipe-image-upload',
