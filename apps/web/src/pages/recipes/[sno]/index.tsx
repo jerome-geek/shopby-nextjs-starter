@@ -87,7 +87,10 @@ const RecipeDetailPage = ({
 
     const handleDelete = async () => {
         const isConfirm = await openAsyncDialog({
+            type: 'confirm',
             message: t('정말 삭제하시겠습니까?'),
+            confirmText: t('삭제'),
+            cancelText: t('취소'),
             onConfirmReturnValue: true,
             onCloseReturnValue: false,
         });
@@ -97,7 +100,10 @@ const RecipeDetailPage = ({
                 { sno },
                 {
                     onSuccess: () => {
-                        addToast({ message: t('레시피가 삭제되었습니다.') });
+                        addToast({
+                            variant: 'success',
+                            message: t('레시피가 삭제되었습니다.'),
+                        });
                         router.replace(PATHS.RECIPES.SCRAP);
                     },
                 },
