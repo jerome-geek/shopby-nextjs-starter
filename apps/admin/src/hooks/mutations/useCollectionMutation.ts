@@ -3,9 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 import { collection } from '@/api/collection';
 import {
     CreateCollectionExposureGroupsBody,
+    CreateUserCollectionBody,
     UpdateCollectionExposureGroupsBody,
     UpdateCollectionExposureGroupsSortOrderBody,
-    CreateUserCollectionBody,
 } from '@/model/collection';
 
 const useCollectionMutation = () => {
@@ -13,6 +13,10 @@ const useCollectionMutation = () => {
         createUserCollection: useMutation({
             mutationFn: async (data: CreateUserCollectionBody) =>
                 await collection.createUserCollection(data),
+        }),
+        deleteUserCollection: useMutation({
+            mutationFn: async (sno: number) =>
+                await collection.deleteUserCollection(sno),
         }),
         createCollectionExposureGroups: useMutation({
             mutationFn: async (data: CreateCollectionExposureGroupsBody) =>

@@ -1,4 +1,5 @@
 import { isEmpty } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router';
 
@@ -6,9 +7,14 @@ import PageMeta from '@/components/common/PageMeta';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
+import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
 import useSearchCollectionList from '@/hooks/query/collection/useSearchCollectionList';
+import { collectionKeys } from '@/hooks/queryKeys';
+import useApiError from '@/hooks/useApiError';
+import { useDialog, useToast } from '@/hooks/utils';
 
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
+import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
     minWidth: 'min-w-[860px]',
@@ -17,6 +23,7 @@ const tableLayout = {
         user: 'w-[220px]',
         recipeCount: 'w-[120px]',
         shareCode: 'w-[180px]',
+        actions: 'w-[100px]',
     },
 } as const;
 
@@ -29,6 +36,16 @@ const PAGE_SEARCH_PARAM = 'page';
 const PAGE_SIZE = 10;
 
 const UserCollections = () => {
+    const { addToast } = useToast();
+
+    const { openAsyncDialog } = useDialog();
+    const { handleErrorToast } = useApiError();
+
+    const { deleteUserCollection: deleteUserCollectionMutation } =
+        useCollectionMutation();
+
+    const queryClient = useQueryClient();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const keyword = searchParams.get('keyword') ?? '';
@@ -72,6 +89,35 @@ const UserCollections = () => {
 
             next.delete(PAGE_SEARCH_PARAM);
             return next;
+        });
+    };
+
+    const handleDeleteCollection = async (sno: number) => {
+        const isAgree = await openAsyncDialog({
+            message: '컬렉션을 삭제하시겠습니까?',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (!isAgree) {
+            return;
+        }
+
+        deleteUserCollectionMutation.mutate(sno, {
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
+                    queryKey: collectionKeys.all,
+                    refetchType: 'all',
+                });
+
+                addToast({
+                    message: '컬렉션이 삭제되었습니다.',
+                    variant: 'success',
+                });
+            },
+            onError: (error) => {
+                handleErrorToast(error);
+            },
         });
     };
 
@@ -174,6 +220,11 @@ const UserCollections = () => {
                                         >
                                             공유 코드
                                         </th>
+                                        <th
+                                            className={`${tableLayout.column.actions} ${tableTh.right}`}
+                                        >
+                                            작업
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -226,6 +277,22 @@ const UserCollections = () => {
                                                 </td>
                                                 <td className='px-6 py-6 text-[14px] text-[#6a7282]'>
                                                     {item.shareCode}
+                                                </td>
+                                                <td className='px-6 py-6 text-right'>
+                                                    <div className='flex items-center justify-end gap-2'>
+                                                        <button
+                                                            type='button'
+                                                            className='flex h-8 w-8 items-center justify-center rounded-lg text-error-500 transition-colors hover:bg-error-50'
+                                                            aria-label='삭제'
+                                                            onClick={() =>
+                                                                handleDeleteCollection(
+                                                                    item.collectionSno,
+                                                                )
+                                                            }
+                                                        >
+                                                            <TrashSimpleIcon className='h-4 w-4 text-error-500' />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))

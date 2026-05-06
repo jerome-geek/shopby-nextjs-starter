@@ -1,17 +1,17 @@
 import { request } from '@/api/core/request';
 import {
-    GetCollectionExposureGroupsParams,
+    CollectionExposureGroupDetailResponse,
+    CollectionExposureGroupResponse,
     CreateCollectionExposureGroupsBody,
     CreateCollectionExposureGroupsResponse,
+    CreateUserCollectionBody,
+    GetCollectionExposureGroupsParams,
+    GetCollectionResponse,
     SearchCollectionsParams,
     SearchCollectionsResponse,
-    CollectionExposureGroupResponse,
-    CollectionExposureGroupDetailResponse,
-    UpdateCollectionExposureGroupsResponse,
     UpdateCollectionExposureGroupsBody,
+    UpdateCollectionExposureGroupsResponse,
     UpdateCollectionExposureGroupsSortOrderBody,
-    CreateUserCollectionBody,
-    GetCollectionResponse,
 } from '@/model/collection';
 
 export const collection = {
@@ -20,6 +20,12 @@ export const collection = {
             method: 'POST',
             url: '/admin/recipe/user-collections',
             data,
+        });
+    },
+    deleteUserCollection: (sno: number) => {
+        return request({
+            method: 'DELETE',
+            url: `/admin/recipe/collections/${sno}`,
         });
     },
     getCollection: (sno: number) => {
