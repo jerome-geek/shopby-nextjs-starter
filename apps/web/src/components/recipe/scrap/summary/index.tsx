@@ -37,7 +37,7 @@ const RecipeScrapSummary = () => {
     const { data: collectionListData = [] } = useCollectionList({
         options: {
             select: (data) => {
-                return pipe(data, take(isMobile ? 3 : 6), toArray);
+                return pipe(data, take(6), toArray);
             },
         },
     });

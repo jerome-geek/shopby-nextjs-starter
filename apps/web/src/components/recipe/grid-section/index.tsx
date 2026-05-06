@@ -61,8 +61,9 @@ export const RecipeGridSection = () => {
                     isMobile ? (
                         <Swiper
                             className={styles.swiperContainer}
-                            slidesPerView='auto'
-                            spaceBetween={16}
+                            slidesPerView={2.2}
+                            spaceBetween={12}
+                            slidesOffsetBefore={20}
                             slidesOffsetAfter={20}
                         >
                             {recipeList.map((r) => (

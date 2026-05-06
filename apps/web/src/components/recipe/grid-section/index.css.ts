@@ -70,13 +70,11 @@ export const recipeGrid = style({
 
 export const swiperContainer = style({
     margin: '0 -20px',
-    padding: '0 20px',
     width: 'calc(100% + 40px)',
-    overflow: 'hidden',
 });
 
 export const swiperSlide = style({
-    width: '160px',
+    width: '100%',
     height: 'auto',
 });
 
