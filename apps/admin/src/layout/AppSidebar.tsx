@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
+import { PATHS } from '@/const/paths';
+import { useSidebar } from '@/context/SidebarContext';
 import {
+    ChatIcon,
+    ChefHatIcon,
     ChevronDownIcon,
+    FolderIcon,
     GridIcon,
     HorizontaLDots,
     ListIcon,
-    ChefHatIcon,
-    FolderIcon,
+    LockIcon,
     SettingsIcon,
 } from '@/icons';
-import { PATHS } from '@/const/paths';
-import { useSidebar } from '@/context/SidebarContext';
 
 type NavItem = {
     name: string;
@@ -47,13 +49,23 @@ const recipeItems: NavItem[] = [
 const userItems: NavItem[] = [
     {
         icon: <GridIcon />,
-        name: '사용자 컬렉션 관리',
+        name: '컬렉션 관리',
         path: PATHS.APP.USER_COLLECTION.LIST,
     },
     {
         icon: <ListIcon />,
-        name: '사용자 레시피 관리',
+        name: '레시피 관리',
         path: PATHS.APP.USER_RECIPE.LIST,
+    },
+    {
+        icon: <ChatIcon />,
+        name: '댓글 관리',
+        path: PATHS.APP.COMMENT.LIST,
+    },
+    {
+        icon: <LockIcon />,
+        name: '댓글 블랙리스트 관리',
+        path: PATHS.APP.COMMENT.BLACKLIST,
     },
 ];
 

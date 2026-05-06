@@ -12,6 +12,7 @@ import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
 import { RECIPE_GROUP_ID_OPTIONS } from '@/const/recipe';
+import { TABLE_MIN_WIDTH } from '@/const/table';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useRecipeExposureGroupList } from '@/hooks/query/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
@@ -24,7 +25,7 @@ import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react'
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
-    minWidth: 'min-w-[860px]',
+    minWidth: TABLE_MIN_WIDTH,
     column: {
         exposureLocation: 'w-[100px]',
         sortOrder: 'w-[100px]',

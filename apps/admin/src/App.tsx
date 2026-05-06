@@ -24,6 +24,8 @@ import NotFound from '@/pages/OtherPage/NotFound';
 import RecipeGroupDetail from '@/pages/RecipeGroup/RecipeGroupDetail';
 import RecipeGroupList from '@/pages/RecipeGroup/RecipeGroupList';
 import RecipeSettings from '@/pages/RecipeSettings/RecipeSettings';
+import CommentList from '@/pages/Comment/CommentList';
+import CommentBlacklist from '@/pages/Comment/CommentBlacklist';
 import UserCollectionDetail from '@/pages/UserCollection/UserCollectionDetail';
 import UserCollections from '@/pages/UserCollection/UserCollections';
 import UserRecipeDetail from '@/pages/UserRecipe/UserRecipeDetail';
@@ -116,6 +118,14 @@ export default function App() {
                                 <Route
                                     path={PATHS.APP.USER_RECIPE.DETAIL}
                                     element={<UserRecipeDetail />}
+                                />
+                                <Route
+                                    path={PATHS.APP.COMMENT.LIST}
+                                    element={<CommentList />}
+                                />
+                                <Route
+                                    path={PATHS.APP.COMMENT.BLACKLIST}
+                                    element={<CommentBlacklist />}
                                 />
 
                                 {/* Fallback Route */}

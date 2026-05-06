@@ -8,6 +8,7 @@ import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { PATHS } from '@/const/paths';
+import { TABLE_MIN_WIDTH } from '@/const/table';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useRecipeList } from '@/hooks/query/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
@@ -21,7 +22,7 @@ import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
-    minWidth: 'min-w-[860px]',
+    minWidth: TABLE_MIN_WIDTH,
     column: {
         recipe: '',
         author: 'w-[150px]',
@@ -273,7 +274,7 @@ const UserRecipeList = () => {
                                                                             alt={
                                                                                 item.title
                                                                             }
-                                                                            className='w-10 h-10 min-w-10 min-h-10 aspect-square rounded-xl object-cover'
+                                                                            className='w-14 h-14 min-w-14 min-h-14 aspect-square rounded-md object-cover'
                                                                             style={{
                                                                                 fontSize:
                                                                                     '10px',

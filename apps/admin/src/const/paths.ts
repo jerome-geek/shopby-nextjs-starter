@@ -21,6 +21,10 @@ export const PATHS = {
             LIST: '/user-recipes',
             DETAIL: '/user-recipes/:sno',
         },
+        COMMENT: {
+            LIST: '/comments',
+            BLACKLIST: '/comments/blacklist',
+        },
         RECIPE_SETTINGS: '/recipe-settings',
     },
 };

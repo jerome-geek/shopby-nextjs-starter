@@ -5,13 +5,14 @@ import { DisplayVisibilityBadge } from '@/components/ui/badge/display-visibility
 import { RecipeSourceBadge } from '@/components/ui/badge/recipe-source';
 import { ExternalLinkIconButton } from '@/components/ui/button/ExternalLinkIconButton';
 import { PATHS } from '@/const/paths';
+import { TABLE_MIN_WIDTH } from '@/const/table';
 import { useRecipeExposureGroupDetail } from '@/hooks/suspenseQuery/recipe';
 import type { RecipeExposureGroupDetailResponse } from '@/model/recipe';
 
 import { ReactComponent as ChevronLeftSmallIcon } from '@/icons/chevron-left-small.svg?react';
 
 const tableLayout = {
-    minWidth: 'min-w-[860px]',
+    minWidth: TABLE_MIN_WIDTH,
     column: {
         thumbnail: 'w-[90px]',
         title: '',
@@ -140,7 +141,7 @@ const RecipeGroupDetail = () => {
                                             className='border-b border-[#e5e7eb] transition-colors last:border-b-0 hover:bg-[#fafafa]'
                                         >
                                             <td className='px-6 py-4'>
-                                                <div className='flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-[#f3f4f6] shadow-sm'>
+                                                <div className='flex h-14 w-14 items-center justify-center overflow-hidden rounded-md bg-[#f3f4f6] shadow-sm'>
                                                     <img
                                                         src={
                                                             recipe.thumbnailUrl
@@ -154,7 +155,9 @@ const RecipeGroupDetail = () => {
                                                 <Link
                                                     to={PATHS.APP.USER_RECIPE.DETAIL.replace(
                                                         ':sno',
-                                                        String(recipe.recipeSno),
+                                                        String(
+                                                            recipe.recipeSno,
+                                                        ),
                                                     )}
                                                     className='text-[14px] font-medium text-[#101828] hover:text-[#ff6900] hover:underline'
                                                 >

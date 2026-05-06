@@ -10,6 +10,7 @@ import ErrorMessage from '@/components/form/ErrorMessage';
 import { Input } from '@/components/form/input';
 import AddExceptionUserModal from '@/components/modal/add-exception-user';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
+import { TABLE_MIN_WIDTH } from '@/const/table';
 import useLimitMutation from '@/hooks/mutations/useLimitMutation';
 import { useLimitSettings } from '@/hooks/query/limit';
 import useExceptionList from '@/hooks/query/limit/useExceptionList';
@@ -27,7 +28,7 @@ import { ReactComponent as SettingsIcon } from '@/icons/settings.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
-    minWidth: 'min-w-[860px]',
+    minWidth: TABLE_MIN_WIDTH,
     column: {
         memberNo: 'w-[150px]',
         memberId: 'w-[150px]',

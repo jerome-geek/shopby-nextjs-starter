@@ -1,29 +1,34 @@
 import { isEmpty } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMemo, useRef } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import dayjs from 'dayjs';
+import { overlay } from 'overlay-kit';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
-import { PATHS } from '@/const/paths';
 import { TABLE_MIN_WIDTH } from '@/const/table';
-import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
-import useSearchCollectionList from '@/hooks/query/collection/useSearchCollectionList';
-import { collectionKeys } from '@/hooks/queryKeys';
+import useCommentMutation from '@/hooks/mutations/useCommentMutation';
+import useCommentBlackList from '@/hooks/query/comment/useCommentBlackList';
+import { commentKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import { useDialog, useToast } from '@/hooks/utils';
 
+import AddCommentBlacklistModal from '@/components/modal/add-blacklist-user';
+import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
     minWidth: TABLE_MIN_WIDTH,
     column: {
-        title: '',
-        user: 'w-[220px]',
-        recipeCount: 'w-[120px]',
-        shareCode: 'w-[180px]',
+        member: 'w-[220px]',
+        memberNo: 'w-[120px]',
+        memo: '',
+        regDt: 'w-[140px]',
+        updateDt: 'w-[140px]',
         actions: 'w-[100px]',
     },
 } as const;
@@ -36,23 +41,25 @@ const tableTh = {
 const PAGE_SEARCH_PARAM = 'page';
 const PAGE_SIZE = 10;
 
-const UserCollections = () => {
+const formatDate = (value?: string | null) => {
+    return value ? dayjs(value).format('YYYY.MM.DD') : '-';
+};
+
+type FormValues = {
+    keyword: string;
+};
+
+const CommentBlacklist = () => {
     const { addToast } = useToast();
-
-    const { openAsyncDialog } = useDialog();
-    const { handleErrorToast } = useApiError();
-
-    const { deleteUserCollection: deleteUserCollectionMutation } =
-        useCollectionMutation();
-
-    const queryClient = useQueryClient();
 
     const [searchParams, setSearchParams] = useSearchParams();
 
     const keyword = searchParams.get('keyword') ?? '';
     const page = Number(searchParams.get(PAGE_SEARCH_PARAM)) || 1;
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const { register, handleSubmit } = useForm<FormValues>({
+        defaultValues: { keyword },
+    });
 
     const params = useMemo(() => {
         return {
@@ -62,27 +69,32 @@ const UserCollections = () => {
         };
     }, [keyword, page]);
 
-    const { data: collectionListData, isLoading: isCollectionListLoading } =
-        useSearchCollectionList({
+    const { data: blackListData, isLoading: isBlackListLoading } =
+        useCommentBlackList({
             params,
         });
 
-    const totalCount = collectionListData?.count ?? 0;
-    const lastPage = collectionListData?.lastPage ?? 1;
+    const totalCount = blackListData?.count ?? 0;
+    const lastPage = blackListData?.lastPage ?? 1;
 
-    const collectionList = useMemo(() => {
-        return collectionListData?.data ?? [];
-    }, [collectionListData]);
+    const list = useMemo(() => {
+        return blackListData?.data ?? [];
+    }, [blackListData]);
 
-    const setQuery = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const queryClient = useQueryClient();
+    const { openAsyncDialog } = useDialog();
+    const { handleErrorToast } = useApiError();
 
-        const nextKeyword = inputRef.current?.value ?? '';
+    const { deleteCommentBlacklist: deleteCommentBlacklistMutation } =
+        useCommentMutation();
+
+    const setQuery = handleSubmit((values) => {
+        const nextKeyword = values.keyword?.trim() ?? '';
 
         setSearchParams((prev) => {
             const next = new URLSearchParams(prev);
 
-            if (nextKeyword.trim() === '') {
+            if (!nextKeyword) {
                 next.delete('keyword');
             } else {
                 next.set('keyword', nextKeyword);
@@ -91,11 +103,11 @@ const UserCollections = () => {
             next.delete(PAGE_SEARCH_PARAM);
             return next;
         });
-    };
+    });
 
-    const handleDeleteCollection = async (sno: number) => {
+    const handleDeleteBlacklistMember = async (memberNo: number) => {
         const isAgree = await openAsyncDialog({
-            message: '컬렉션을 삭제하시겠습니까?',
+            message: '블랙리스트에서 삭제하시겠습니까?',
             onConfirmReturnValue: true,
             onCloseReturnValue: false,
         });
@@ -104,15 +116,15 @@ const UserCollections = () => {
             return;
         }
 
-        deleteUserCollectionMutation.mutate(sno, {
+        deleteCommentBlacklistMutation.mutate(memberNo, {
             onSuccess: async () => {
                 await queryClient.invalidateQueries({
-                    queryKey: collectionKeys.all,
+                    queryKey: commentKeys.blackLists(),
                     refetchType: 'all',
                 });
 
                 addToast({
-                    message: '컬렉션이 삭제되었습니다.',
+                    message: '블랙리스트에서 삭제되었습니다.',
                     variant: 'success',
                 });
             },
@@ -122,42 +134,40 @@ const UserCollections = () => {
         });
     };
 
-    // TODO: 컬렉션 생성 모달 임시 주석 처리
-    // const openCreateUserCollectionModal = () => {
-    //     overlay.open((props) => <CreateUserCollectionModal {...props} />);
-    // };
+    const openAddBlacklistUserModal = () => {
+        overlay.open((props) => <AddCommentBlacklistModal {...props} />);
+    };
 
     return (
         <>
             <PageMeta
-                title='사용자 컬렉션 관리 | JollyPot 관리자'
-                description='사용자가 생성한 컬렉션을 관리합니다'
+                title='댓글 블랙리스트 관리 | JollyPot 관리자'
+                description='댓글 블랙리스트 대상자를 관리합니다'
             />
             <div className='flex flex-col gap-6 pt-6 px-6'>
                 <div className='flex items-center justify-between'>
                     <div className='flex flex-col gap-1'>
                         <h2 className='text-2xl font-bold leading-8 tracking-[0.07px] text-[#101828]'>
-                            사용자 컬렉션 관리
+                            댓글 블랙리스트 관리
                         </h2>
                         <p className='text-base font-normal leading-6 tracking-[-0.31px] text-[#6a7282]'>
-                            사용자가 생성한 컬렉션을 관리합니다
+                            댓글 블랙리스트 대상자를 관리합니다
                         </p>
                     </div>
 
-                    {/* 액션 버튼 */}
-                    {/* TODO: 컬렉션 생성 버튼 임시 주석 처리 */}
-                    {/* <button
-                        onClick={openCreateUserCollectionModal}
-                        className='flex h-9 items-center gap-2 rounded-lg bg-brand-500 px-3 text-sm font-medium text-white transition-colors hover:bg-brand-600'
-                    >
-                        <PlusSimpleIcon className='w-4 h-4 text-white' />
-                        컬렉션 생성
-                    </button> */}
+                    <div className='flex items-center gap-3'>
+                        <button
+                            type='button'
+                            onClick={openAddBlacklistUserModal}
+                            className='flex h-9 items-center gap-2 rounded-lg bg-brand-500 px-3 text-sm font-medium text-white transition-colors hover:bg-brand-600'
+                        >
+                            <PlusSimpleIcon className='w-4 h-4 text-white' />
+                            블랙리스트 추가
+                        </button>
+                    </div>
                 </div>
 
-                {/* 테이블 카드 */}
                 <div className='bg-white border border-[#e5e7eb] rounded-[14px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] overflow-hidden'>
-                    {/* 검색 영역 */}
                     <div className='px-4 py-4 border-b border-[#e5e7eb]'>
                         <form
                             onSubmit={setQuery}
@@ -168,9 +178,8 @@ const UserCollections = () => {
                             </span>
                             <input
                                 type='text'
-                                placeholder='컬렉션명 또는 사용자명으로 검색...'
-                                defaultValue={keyword}
-                                ref={inputRef}
+                                placeholder='회원명/아이디/메모로 검색...'
+                                {...register('keyword')}
                                 className='w-full h-10 pl-10 pr-4 py-1 bg-[#f3f3f5] rounded-xl text-[14px] text-[#101828] placeholder:text-[#99a1af] focus:outline-none focus:ring-2 focus:ring-[#ff6900]/20 focus:bg-white transition-all'
                             />
                             <button
@@ -184,12 +193,11 @@ const UserCollections = () => {
                     </div>
 
                     <LoadingWrapper
-                        isLoading={isCollectionListLoading}
+                        isLoading={isBlackListLoading}
                         containerStyle={{
                             height: '50vh',
                         }}
                     >
-                        {/* 테이블 */}
                         <div className='overflow-x-auto'>
                             <table
                                 className={`w-full ${tableLayout.minWidth} table-fixed`}
@@ -197,29 +205,34 @@ const UserCollections = () => {
                                 <thead>
                                     <tr className='bg-[#f9fafb] border-b border-[#e5e7eb]'>
                                         <th
+                                            className={`${tableLayout.column.member} ${tableTh.left}`}
+                                        >
+                                            회원
+                                        </th>
+                                        <th
+                                            className={`${tableLayout.column.memberNo} ${tableTh.left}`}
+                                        >
+                                            회원번호
+                                        </th>
+                                        <th
                                             className={[
-                                                tableLayout.column.title,
+                                                tableLayout.column.memo,
                                                 tableTh.left,
                                             ]
                                                 .filter(Boolean)
                                                 .join(' ')}
                                         >
-                                            컬렉션명
+                                            메모
                                         </th>
                                         <th
-                                            className={`${tableLayout.column.user} ${tableTh.left}`}
+                                            className={`${tableLayout.column.regDt} ${tableTh.left}`}
                                         >
-                                            사용자
+                                            등록일
                                         </th>
                                         <th
-                                            className={`${tableLayout.column.recipeCount} ${tableTh.left}`}
+                                            className={`${tableLayout.column.updateDt} ${tableTh.right}`}
                                         >
-                                            레시피 수
-                                        </th>
-                                        <th
-                                            className={`${tableLayout.column.shareCode} ${tableTh.left}`}
-                                        >
-                                            공유 코드
+                                            수정일
                                         </th>
                                         <th
                                             className={`${tableLayout.column.actions} ${tableTh.right}`}
@@ -229,55 +242,44 @@ const UserCollections = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {isEmpty(collectionList) ? (
+                                    {isEmpty(list) ? (
                                         <tr>
                                             <td
-                                                colSpan={4}
+                                                colSpan={6}
                                                 className='px-6 py-12 text-center text-sm text-[#6a7282]'
                                             >
                                                 검색 결과가 없습니다.
                                             </td>
                                         </tr>
                                     ) : (
-                                        collectionList.map((item) => (
+                                        list.map((item) => (
                                             <tr
-                                                key={item.collectionSno}
-                                                className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors group'
+                                                key={item.memberNo}
+                                                className='border-b border-[#e5e7eb] last:border-b-0 hover:bg-[#fafafa] transition-colors'
                                             >
                                                 <td className='px-6 py-6'>
-                                                    <Link
-                                                        to={PATHS.APP.USER_COLLECTION.DETAIL.replace(
-                                                            ':sno',
-                                                            item.collectionSno.toString(),
-                                                        )}
-                                                        className='text-[15px] font-bold text-[#ff6900] hover:underline whitespace-nowrap overflow-hidden text-ellipsis'
-                                                    >
-                                                        {item.title}
-                                                    </Link>
-                                                    {item.description && (
-                                                        <p className='mt-1 text-[12px] text-[#6a7282] line-clamp-1'>
-                                                            {item.description}
-                                                        </p>
-                                                    )}
-                                                </td>
-                                                <td className='px-6 py-6'>
-                                                    <div className='flex flex-col gap-0.5 text-[14px]'>
-                                                        <span className='font-medium text-[#101828]'>
+                                                    <div className='flex flex-col gap-1'>
+                                                        <p className='text-[14px] font-medium text-[#364153] whitespace-nowrap overflow-hidden text-ellipsis'>
                                                             {item.memberName}
-                                                        </span>
-                                                        <span className='text-[12px] text-[#6a7282]'>
-                                                            회원 번호:{' '}
-                                                            {item.memberNo}
-                                                        </span>
+                                                        </p>
+                                                        <p className='text-[12px] text-[#6a7282] whitespace-nowrap overflow-hidden text-ellipsis'>
+                                                            {item.memberId}
+                                                        </p>
                                                     </div>
                                                 </td>
-                                                <td className='px-6 py-6'>
-                                                    <span className='text-[14px] font-medium text-[#364153]'>
-                                                        {item.recipeCount.toLocaleString()}
-                                                    </span>
+                                                <td className='px-6 py-6 text-[14px] text-[#364153] whitespace-nowrap'>
+                                                    {item.memberNo.toLocaleString()}
                                                 </td>
-                                                <td className='px-6 py-6 text-[14px] text-[#6a7282]'>
-                                                    {item.shareCode}
+                                                <td className='px-6 py-6'>
+                                                    <p className='text-[14px] text-[#364153] line-clamp-2'>
+                                                        {item.memo || '-'}
+                                                    </p>
+                                                </td>
+                                                <td className='px-6 py-6 text-[14px] text-[#364153] whitespace-nowrap'>
+                                                    {formatDate(item.regDt)}
+                                                </td>
+                                                <td className='px-6 py-6 text-right text-[14px] text-[#364153] whitespace-nowrap'>
+                                                    {formatDate(item.updateDt)}
                                                 </td>
                                                 <td className='px-6 py-6 text-right'>
                                                     <div className='flex items-center justify-end gap-2'>
@@ -286,8 +288,8 @@ const UserCollections = () => {
                                                             className='flex h-8 w-8 items-center justify-center rounded-lg text-error-500 transition-colors hover:bg-error-50'
                                                             aria-label='삭제'
                                                             onClick={() =>
-                                                                handleDeleteCollection(
-                                                                    item.collectionSno,
+                                                                handleDeleteBlacklistMember(
+                                                                    item.memberNo,
                                                                 )
                                                             }
                                                         >
@@ -316,4 +318,4 @@ const UserCollections = () => {
     );
 };
 
-export default UserCollections;
+export default CommentBlacklist;
