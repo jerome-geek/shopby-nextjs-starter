@@ -1,8 +1,8 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
-import { textStyles } from '@/styles/typography.css';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const container = style({
     maxWidth: '1200px',
@@ -155,13 +155,22 @@ export const titleContainer = style({
     minWidth: 0,
 });
 
-export const title = style({
-    fontSize: '32px',
-    fontWeight: 'bold',
-    color: vars.color.black,
-    lineHeight: '1.2',
-    wordBreak: 'break-all',
-    overflowWrap: 'break-word',
+export const title = style([
+    textStyles.title1Semibold,
+    {
+        flex: 1,
+        color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.display1Semibold,
+            },
+        },
+    },
+]);
+
+export const moreMenuWrapper = style({
+    flexShrink: 0,
 });
 
 export const actionButtons = style({
@@ -204,16 +213,28 @@ export const actionButton = style([
 ]);
 
 export const author = style([
-    textStyles.headlineRegular,
+    textStyles.body1Regular,
     {
         color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineRegular,
+            },
+        },
     },
 ]);
 
 export const description = style([
-    textStyles.body1Regular,
+    textStyles.body2Regular,
     {
         color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
     },
 ]);
 
@@ -238,6 +259,12 @@ export const iconTimerText = style([
         alignItems: 'center',
         gap: '4px',
         color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Semibold,
+            },
+        },
     },
 ]);
 
@@ -248,37 +275,16 @@ export const iconText = style([
         alignItems: 'center',
         gap: '4px',
         color: vars.color.gray['60'],
-    },
-]);
 
-export const durationMetaItem = style([
-    textStyles.body1Semibold,
-    {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-        color: vars.color.gray['80'],
-    },
-]);
-
-export const metaItem = style([
-    textStyles.body1Semibold,
-    {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-        color: vars.color.gray['60'],
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
     },
 ]);
 
 // --- Section General ---
-export const sectionTitleRow = style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginBottom: '24px',
-});
-
 export const sectionContainer = style({
     display: 'flex',
     flexDirection: 'column',
@@ -292,9 +298,15 @@ export const sectionContainer = style({
 });
 
 export const sectionTitle = style([
-    textStyles.title1Bold,
+    textStyles.headingSemibold,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
+            },
+        },
     },
 ]);
 
@@ -344,19 +356,6 @@ export const ingredientItem = style({
     },
 });
 
-export const ingredientExpandBtn = style({
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%',
-    background: vars.color.secondary,
-    color: vars.color.white,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: 'none',
-    cursor: 'pointer',
-});
-
 export const ingredientInfo = style({
     display: 'flex',
     alignItems: 'center',
@@ -386,21 +385,6 @@ export const buyButton = style([
         cursor: 'pointer',
     },
 ]);
-
-// --- Tools ---
-export const toolsGrid = style({
-    display: 'flex',
-    gap: '16px',
-    overflowX: 'auto',
-    paddingBottom: '16px',
-    scrollSnapType: 'x mandatory',
-});
-
-export const toolCard = style({
-    width: '200px',
-    flexShrink: 0,
-    scrollSnapAlign: 'start',
-});
 
 // --- Steps ---
 const STEP_NUMBER_SIZE = 24;
@@ -482,64 +466,7 @@ export const stepTime = style([
     },
 ]);
 
-export const stepImage = style({
-    width: '200px',
-    height: '200px',
-    borderRadius: '8px',
-    objectFit: 'cover',
-    marginTop: '12px',
-});
-
 // --- Comments ---
-
-// --- Mobile Sticky Footer ---
-
-// TODO: 전역 BottomNavigation과 레이아웃이 겹칠 수 있으므로 추후 공통 레이아웃 작업 시 높이(bottom) 확인 필요
-export const mobileStickyFooter = style({
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '64px',
-    backgroundColor: vars.color.white,
-    borderTop: `1px solid ${vars.color.gray['20']}`,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: '0 16px',
-    paddingBottom: 'env(safe-area-inset-bottom)',
-    zIndex: 100,
-    boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
-
-    '@media': {
-        [media.desktop]: {
-            display: 'none',
-        },
-    },
-});
-
-export const mobileActionButton = style([
-    textStyles.body2Medium,
-    {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        color: vars.color.gray['80'],
-        background: 'none',
-        border: 'none',
-        padding: '8px',
-        cursor: 'pointer',
-
-        selectors: {
-            '&[data-active="true"][data-type="like"]': {
-                color: vars.color.pink['80'],
-            },
-            '&[data-active="true"][data-type="bookmark"]': {
-                color: vars.color.green['100'],
-            },
-        },
-    },
-]);
 
 export const mobileDivider = style({
     backgroundColor: vars.color.gray['20'],

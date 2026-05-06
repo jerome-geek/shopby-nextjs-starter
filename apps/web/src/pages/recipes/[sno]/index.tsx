@@ -15,7 +15,6 @@ import type {
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -110,13 +109,15 @@ const RecipeDetailPage = ({
         ? Math.floor(recipeDetailData.durationSeconds / 60)
         : 0;
 
-    const liked = !!recipeDetailData?.liked;
-    const likeCount = recipeDetailData?.likeCount ?? 0;
+    const liked = !!recipeDetailData.liked;
+    const likeCount = recipeDetailData.likeCount ?? 0;
 
-    const bookmarked = !!recipeDetailData?.bookmarked;
-    const bookmarkCount = recipeDetailData?.bookmarkCount ?? 0;
+    const bookmarked = !!recipeDetailData.bookmarked;
+    const bookmarkCount = recipeDetailData.bookmarkCount ?? 0;
 
-    const ingredients = recipeDetailData?.ingredients ?? [];
+    const sourceUrl = recipeDetailData.sourceUrl;
+
+    const ingredients = recipeDetailData.ingredients ?? [];
     const imageList = pipe(
         [
             recipeDetailData.thumbnailUrl,
@@ -198,15 +199,28 @@ const RecipeDetailPage = ({
                             }}
                             style={{ height: '100%', width: '100%' }}
                         >
-                            {imageList.map((img, idx) => (
-                                <SwiperSlide key={idx}>
-                                    <img
-                                        src={img}
-                                        alt={`recipe image ${idx}`}
-                                        className={styles.carouselImage}
-                                    />
-                                </SwiperSlide>
-                            ))}
+                            {imageList.map((img, idx) => {
+                                return (
+                                    <SwiperSlide key={idx}>
+                                        <a
+                                            href={sourceUrl}
+                                            target='_blank'
+                                            rel='noopener noreferrer'
+                                            style={{
+                                                display: 'block',
+                                                width: '100%',
+                                                height: '100%',
+                                            }}
+                                        >
+                                            <img
+                                                src={img}
+                                                alt={`recipe image ${idx}`}
+                                                className={styles.carouselImage}
+                                            />
+                                        </a>
+                                    </SwiperSlide>
+                                );
+                            })}
                         </Swiper>
                         {isSwiperEnabled && (
                             <>
@@ -244,12 +258,14 @@ const RecipeDetailPage = ({
                                     {recipeDetailData.title}
                                 </h1>
                                 {isEditable && (
-                                    <VerticalMoreMenu
-                                        id={`recipe-more-menu-${recipeDetailData.sno}`}
-                                        iconSize={28}
-                                        onEdit={handleEdit}
-                                        onDelete={handleDelete}
-                                    />
+                                    <div className={styles.moreMenuWrapper}>
+                                        <VerticalMoreMenu
+                                            id={`recipe-more-menu-${recipeDetailData.sno}`}
+                                            iconSize={28}
+                                            onEdit={handleEdit}
+                                            onDelete={handleDelete}
+                                        />
+                                    </div>
                                 )}
                             </div>
 
@@ -311,7 +327,6 @@ const RecipeDetailPage = ({
                                 ? `${recipeDetailData.servings}인분`
                                 : '-'}
                         </span>
-
                         <span className={styles.iconText}>
                             <CalorieIcon currentColor={vars.color.gray['60']} />
                             {!!recipeDetailData.caloriesPerServingKcal
@@ -349,17 +364,18 @@ const RecipeDetailPage = ({
                                         </span>
                                     </div>
                                     {coupangProduct?.url && (
-                                        <Link
+                                        <a
                                             href={coupangProduct.url}
                                             target='_blank'
+                                            rel='noopener noreferrer'
                                             className={styles.buyButton}
                                         >
                                             <ShoppingCart
-                                                size={14}
+                                                size={isMobile ? 14 : 16}
                                                 fill='currentColor'
                                             />
                                             <span>구매</span>
-                                        </Link>
+                                        </a>
                                     )}
                                 </li>
                             );
@@ -396,7 +412,7 @@ const RecipeDetailPage = ({
                                 <p className={styles.stepDescription}>
                                     {step.description}
                                     {step.timestampSeconds && (
-                                        <Link
+                                        <a
                                             href={
                                                 recipeDetailData.sourceType ===
                                                 'YOUTUBE'
@@ -405,6 +421,7 @@ const RecipeDetailPage = ({
                                                       '#'
                                             }
                                             target='_blank'
+                                            rel='noopener noreferrer'
                                             className={styles.stepTime}
                                         >
                                             {dayjs()
@@ -414,7 +431,7 @@ const RecipeDetailPage = ({
                                                     'second',
                                                 )
                                                 .format('mm:ss')}
-                                        </Link>
+                                        </a>
                                     )}
                                 </p>
                             </div>
