@@ -1,8 +1,8 @@
 import { concat, map, pipe, sort, toArray, zip } from '@fxts/core';
 import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/order/order-products/index.css';
 import { OrderProductItem } from '@/components/order/order-product-item';
+import * as styles from '@/components/order/order-products/index.css';
 import type { DeliveryGroup } from '@/models/order/orderSheet';
 
 interface OrderProductsProps {
@@ -27,8 +27,8 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                                         (a.inputNo ?? 0) - (b.inputNo ?? 0),
                                 ),
                                 map((c) => ({
-                                    label: c.inputLabel,
-                                    value: c.inputValue,
+                                    label: c.inputLabel ?? '',
+                                    value: c.inputValue ?? '',
                                 })),
                                 concat(
                                     option.optionType === 'PRODUCT_ONLY'
@@ -54,7 +54,7 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                                             option.imageUrl || product.imageUrl
                                         }
                                         productName={product.productName}
-                                        brandName={product.brandName}
+                                        brandName={product.brandName ?? ''}
                                         optionLabels={optionLabels}
                                         orderCnt={option.orderCnt}
                                         buyAmt={option.price.buyAmt}

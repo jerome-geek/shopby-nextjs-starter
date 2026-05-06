@@ -2,7 +2,6 @@ import { isEmpty } from '@fxts/core';
 import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
@@ -17,6 +16,7 @@ import { useRecentViewProductList } from '@/hooks/suspenseQuery/product/profile'
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/recent-products/index.css';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
 export const MypageRecentProductsContent = () => {
     const { t } = useTranslation();
@@ -28,8 +28,8 @@ export const MypageRecentProductsContent = () => {
     const { data: recentViewProductListData } = useRecentViewProductList({
         searchParams: {
             soldout: true,
-            hasOptionValues: true,
-            hasMaxCouponAmt: true,
+            hasOptionValues: false,
+            hasMaxCouponAmt: false,
         },
     });
 
@@ -39,10 +39,6 @@ export const MypageRecentProductsContent = () => {
 
     const { productsWithDiscounts, isLoadingAdditionalDiscounts } =
         useProductsWithAdditionalDiscounts(recentViewProductList);
-    console.log(
-        '🚀 ~ MypageRecentProducts ~ productsWithDiscounts:',
-        productsWithDiscounts,
-    );
 
     const isRecentProductsLoading = isLoadingAdditionalDiscounts;
 
@@ -67,11 +63,7 @@ export const MypageRecentProductsContent = () => {
             return false;
         }
 
-        if (selectedInList.size === recentViewProductList.length) {
-            return true;
-        }
-
-        return false;
+        return selectedInList.size === recentViewProductList.length;
     }, [recentViewProductList.length, selectedInList.size]);
 
     const onSelectAllChange = useCallback(
@@ -246,9 +238,9 @@ export const MypageRecentProductsContent = () => {
 
 export default function MypageRecentProductsPage() {
     return (
-        <FetchBoundary fallback={<MypageWishSkeleton />}>
+        <ShopbyAsyncBoundary fallback={<MypageWishSkeleton />}>
             <MypageRecentProductsContent />
-        </FetchBoundary>
+        </ShopbyAsyncBoundary>
     );
 }
 
