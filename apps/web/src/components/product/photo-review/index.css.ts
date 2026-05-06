@@ -70,7 +70,7 @@ export const photoReviewImageButton = style({
     aspectRatio: '1 / 1',
     height: 'fit-content',
     objectFit: 'cover',
-    borderRadius: '8px',
+    borderRadius: '4px',
     overflow: 'hidden',
 });
 

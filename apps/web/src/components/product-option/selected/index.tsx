@@ -1,8 +1,11 @@
-import { Minus, Plus, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import { CloseIcon } from '@/components/icons/Close';
+import { MinusIcon } from '@/components/icons/Minus';
+import { PlusIcon } from '@/components/icons/Plus';
 import * as styles from '@/components/product-option/selected/index.css';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+
 import { useProductOption } from '@/hooks/product';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
@@ -82,7 +85,7 @@ export const SelectedProductOption = ({
                                 className={styles.deleteButton}
                                 onClick={() => removeOption(option.optionNo)}
                             >
-                                <X size={16} />
+                                <CloseIcon />
                             </button>
                         )}
                     </div>
@@ -132,7 +135,7 @@ export const SelectedProductOption = ({
                                     )
                                 }
                             >
-                                <Minus size={14} />
+                                <MinusIcon />
                             </button>
                             <span className={styles.countValue}>
                                 {option.orderCnt}
@@ -146,7 +149,7 @@ export const SelectedProductOption = ({
                                     )
                                 }
                             >
-                                <Plus size={14} />
+                                <PlusIcon />
                             </button>
                         </div>
                         <span className={styles.priceValue}>

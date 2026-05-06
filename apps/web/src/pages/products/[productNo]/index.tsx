@@ -1,7 +1,7 @@
 import { each, map, pipe, prop, take } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { Gift, Star, Truck } from 'lucide-react';
+import { Gift, Star } from 'lucide-react';
 import {
     type GetStaticPaths,
     type GetStaticProps,
@@ -19,7 +19,6 @@ import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import {
-    ExtraProductList,
     PhotoReview,
     ProductAdditionalDiscount,
     ProductErrorState,
@@ -40,17 +39,18 @@ import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
-import { useTrackRecentViewProduct } from '@/hooks/product/useRecentViewProduct';
+import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { productKeys } from '@/hooks/queryKeys';
+import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
-import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
 
+import { TruckIcon } from '@/components/icons/TruckIcon';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -63,15 +63,14 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
 
     const { isMobile, isTablet } = useResponsive();
 
-    const {
-        isSaleEnd,
-        productContent,
-        counter,
-        brand,
-        liked,
-        deliveryFee,
-        productDetailData,
-    } = useProductInfo(productNo);
+    const { data: productDetailData } = useProductDetail({
+        productNo,
+    });
+
+    const { baseInfo, counter, brand, liked, deliveryFee } = productDetailData;
+
+    const { isSaleEnd, productContent } = useProductInfo(productNo);
+
     const { discountRate, buyPrice, salePrice } = useProductPrice({
         productNo,
     });
@@ -166,7 +165,12 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         addOption,
     ]);
 
-    useTrackRecentViewProduct(productNo);
+    const { addRecentProduct } = useRecentViewProducts();
+
+    useEffect(() => {
+        addRecentProduct(productNo);
+    }, []);
+
     useSb({
         product: productDetailData,
     });
@@ -180,12 +184,14 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     </div>
 
                     {!isTablet && (
-                        <ProductTabs
-                            reviewCount={counter.reviewCnt || 0}
-                            inquiryCount={counter.inquiryCnt || 0}
-                            productContent={productContent}
-                            productDetailData={productDetailData}
-                        />
+                        <div style={{ marginTop: '40px' }}>
+                            <ProductTabs
+                                reviewCount={counter.reviewCnt || 0}
+                                inquiryCount={counter.inquiryCnt || 0}
+                                productContent={productContent}
+                                productDetailData={productDetailData}
+                            />
+                        </div>
                     )}
                 </div>
 
@@ -202,11 +208,11 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             )}
 
                             <h1 className={styles.productName}>
-                                {productDetailData.baseInfo.productName}
+                                {baseInfo.productName}
                             </h1>
-                            {productDetailData.baseInfo.promotionText && (
+                            {baseInfo.promotionText && (
                                 <p className={styles.promotionText}>
-                                    {productDetailData.baseInfo.promotionText}
+                                    {baseInfo.promotionText}
                                 </p>
                             )}
 
@@ -230,8 +236,8 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             onClick={onLikeButtonClick(productNo, liked)}
                         >
                             <BookmarkIcon
-                                width={isMobile ? 20 : 28}
-                                height={isMobile ? 20 : 28}
+                                width={isMobile ? 24 : 36}
+                                height={isMobile ? 24 : 36}
                                 variant={liked ? 'filled' : 'outline'}
                             />
 
@@ -278,10 +284,16 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                         )}
 
                         <div className={styles.deliveryBox}>
-                            <Truck size={isMobile ? 20 : 24} />
-                            <div className={styles.deliveryContentContainer}>
-                                <span className={styles.deliveryTitle}>
-                                    지금 주문하면 내일 받을 수 있어요
+                            <div className={styles.deliveryTitle}>
+                                <TruckIcon />
+                                지금 주문하면 내일 받을 수 있어요
+                            </div>
+                            <div className={styles.badgeList}>
+                                <span className={`${styles.badge}`}>
+                                    무료배송
+                                </span>
+                                <span className={`${styles.badge}`}>
+                                    빠른배송
                                 </span>
 
                                 <div className={styles.badgeList}>
@@ -315,10 +327,6 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                         onChange={onMultiOptionChange}
                                     />
                                 )}
-
-                                <ShopbyAsyncBoundary>
-                                    <ExtraProductList productNo={productNo} />
-                                </ShopbyAsyncBoundary>
 
                                 <SelectedProductOption
                                     productNo={productNo}

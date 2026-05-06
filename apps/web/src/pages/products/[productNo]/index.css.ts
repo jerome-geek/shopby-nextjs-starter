@@ -51,6 +51,7 @@ export const leftColumn = style({
 });
 
 export const thumbnailContainer = style({
+    position: 'relative',
     margin: '0 -20px',
 
     '@media': {
@@ -179,6 +180,13 @@ export const productName = style([
     textStyles.title1Semibold,
     {
         color: vars.color.black,
+    },
+    {
+        '@media': {
+            [media.mobile]: {
+                ...textStyleTokens.headingSemibold,
+            },
+        },
     },
 ]);
 
@@ -318,7 +326,7 @@ export const deliveryBox = style({
     padding: '12px',
     borderRadius: '8px',
     display: 'flex',
-    // flexDirection: 'column',
+    flexDirection: 'column',
     gap: '12px',
 
     '@media': {
@@ -349,7 +357,7 @@ export const deliveryTitle = style([
 
 export const badgeList = style({
     display: 'flex',
-    gap: '6px',
+    gap: '4px',
 });
 
 export const badge = style([
@@ -480,7 +488,7 @@ export const optionContainer = style({
 
     '@media': {
         [media.desktop]: {
-            gap: '24px',
+            gap: '20px',
         },
     },
 });

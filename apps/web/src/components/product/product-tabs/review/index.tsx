@@ -1,7 +1,6 @@
 import { isEmpty } from '@fxts/core';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { MessageCircle, ThumbsUp } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useState } from 'react';
@@ -9,7 +8,11 @@ import { useState } from 'react';
 import { PhotoReviewListBottomSheet } from '@/components/bottom-sheet/photo-review-list';
 import { ReviewReportBottomSheet } from '@/components/bottom-sheet/review-report';
 import { NoResult } from '@/components/common/no-result';
+import { MessageCircle } from '@/components/icons/MessageCircle';
+import { SolidMessageCircle } from '@/components/icons/SolidMessageCircle';
+import { SolidThumbsUpIcon } from '@/components/icons/SolidThumbsUpIcon';
 import { StarIcon } from '@/components/icons/StarIcon';
+import { ThumbsUpIcon } from '@/components/icons/ThumbsUpIcon';
 import { ImageDetailModal } from '@/components/modal/image-detail';
 import { PhotoReviewListModal } from '@/components/modal/photo-review-list';
 import { ReviewReportModal } from '@/components/modal/review-report';
@@ -25,7 +28,6 @@ import {
 import { useCustomDialog, useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import { vars } from '@/styles/theme.css';
 
 const PAGE_SIZE = 5;
 export const PHOTO_PAGE_SIZE = 12;
@@ -436,19 +438,12 @@ const Review = ({ onClick }: { onClick: () => void }) => {
                                             )
                                         }
                                     >
-                                        <ThumbsUp
-                                            size={14}
-                                            fill={
-                                                r.recommendable
-                                                    ? 'none'
-                                                    : vars.color.primary
-                                            }
-                                            stroke={
-                                                r.recommendable
-                                                    ? vars.color.gray[60]
-                                                    : vars.color.primary
-                                            }
-                                        />
+                                        {r.recommendable ? (
+                                            <ThumbsUpIcon />
+                                        ) : (
+                                            <SolidThumbsUpIcon />
+                                        )}
+
                                         {Number(r.recommendCnt) || 0}
                                     </button>
 
@@ -463,15 +458,12 @@ const Review = ({ onClick }: { onClick: () => void }) => {
                                             )
                                         }
                                     >
-                                        <MessageCircle
-                                            size={14}
-                                            fill={
-                                                openCommentsReviewNo ===
-                                                r.reviewNo
-                                                    ? vars.color.gray[60]
-                                                    : 'none'
-                                            }
-                                        />
+                                        {openCommentsReviewNo === r.reviewNo ? (
+                                            <SolidMessageCircle />
+                                        ) : (
+                                            <MessageCircle />
+                                        )}
+
                                         {Number(r.commentCount) || 0}
                                     </button>
                                 </div>

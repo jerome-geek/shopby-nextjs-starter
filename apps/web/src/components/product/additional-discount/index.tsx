@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
-import { Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import { ClockIcon } from '@/components/icons/ClockIcon';
 import * as styles from '@/components/product/additional-discount/index.css';
 import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
 
 interface ProductAdditionalDiscountProps {
-    type: 'thumbnail' | 'detail';
+    type: 'thumbnail' | 'detail' | 'detail-mobile';
     isTimeSaleEnabled?: boolean;
     additionalDiscount: AdditionalDiscountWithProductNo;
 }
@@ -33,12 +33,17 @@ export const ProductAdditionalDiscount = ({
 
         const hours = end.diff(now, 'hour');
         const minutes = end.diff(now, 'minute') % 60;
+        const seconds = end.diff(now, 'second') % 60;
 
-        // HH:mm format
+        if (type === 'thumbnail') {
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+        }
+
+        // HH:mm:ss format for details
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
             2,
             '0',
-        )}`;
+        )}:${String(seconds).padStart(2, '0')} 남음`;
     };
 
     const [timeLeft, setTimeLeft] = useState(() =>
@@ -74,7 +79,18 @@ export const ProductAdditionalDiscount = ({
     if (type === 'detail') {
         return (
             <div className={styles.detailContainer}>
-                <Clock size={20} />
+                <ClockIcon />
+                <span
+                    className={styles.detailTimeText}
+                >{`타임특가 ${timeLeft}`}</span>
+            </div>
+        );
+    }
+
+    if (type === 'detail-mobile') {
+        return (
+            <div className={styles.detailMobileContainer}>
+                <ClockIcon />
                 <span
                     className={styles.detailTimeText}
                 >{`타임특가 ${timeLeft}`}</span>
