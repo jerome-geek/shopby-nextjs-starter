@@ -15,6 +15,12 @@ export const comment = {
             params,
         });
     },
+    deleteComment: (sno: number) => {
+        return request({
+            method: 'DELETE',
+            url: `/app/comment/admin/${sno}`,
+        });
+    },
     getCommentBlacklist: (params: GetCommentBlacklistParams) => {
         return request<GetCommentBlacklistResponse>({
             method: 'GET',

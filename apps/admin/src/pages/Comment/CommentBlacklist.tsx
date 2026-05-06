@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
+import AddCommentBlacklistModal from '@/components/modal/add-blacklist-user';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
 import { TABLE_MIN_WIDTH } from '@/const/table';
@@ -16,7 +17,6 @@ import { commentKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import { useDialog, useToast } from '@/hooks/utils';
 
-import AddCommentBlacklistModal from '@/components/modal/add-blacklist-user';
 import { ReactComponent as PlusSimpleIcon } from '@/icons/plus-simple.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
 import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
@@ -268,7 +268,7 @@ const CommentBlacklist = () => {
                                                     </div>
                                                 </td>
                                                 <td className='px-6 py-6 text-[14px] text-[#364153] whitespace-nowrap'>
-                                                    {item.memberNo.toLocaleString()}
+                                                    {item.memberNo}
                                                 </td>
                                                 <td className='px-6 py-6'>
                                                     <p className='text-[14px] text-[#364153] line-clamp-2'>

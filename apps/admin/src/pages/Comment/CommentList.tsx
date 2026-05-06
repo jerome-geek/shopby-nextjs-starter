@@ -1,20 +1,27 @@
 import { isEmpty } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { overlay } from 'overlay-kit';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 
 import PageMeta from '@/components/common/PageMeta';
 import AddCommentBlacklistModal from '@/components/modal/add-blacklist-user';
 import ImagePreviewModal from '@/components/modal/image-preview';
 import LoadingWrapper from '@/components/ui/loading-wrapper';
 import TablePaginationFooter from '@/components/ui/table-pagination-footer';
+import { PATHS } from '@/const/paths';
 import { TABLE_MIN_WIDTH } from '@/const/table';
+import useCommentMutation from '@/hooks/mutations/useCommentMutation';
 import useCommentList from '@/hooks/query/comment/useCommentList';
+import { commentKeys } from '@/hooks/queryKeys';
+import useApiError from '@/hooks/useApiError';
+import { useDialog, useToast } from '@/hooks/utils';
 
 import { ReactComponent as LockIcon } from '@/icons/lock.svg?react';
 import { ReactComponent as SearchIcon } from '@/icons/search.svg?react';
+import { ReactComponent as TrashSimpleIcon } from '@/icons/trash-simple.svg?react';
 
 const tableLayout = {
     minWidth: TABLE_MIN_WIDTH,
@@ -48,6 +55,10 @@ type FormValues = {
 };
 
 const CommentList = () => {
+    const { addToast } = useToast();
+    const { openAsyncDialog } = useDialog();
+    const { handleErrorToast } = useApiError();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const keyword = searchParams.get('keyword') ?? '';
@@ -145,6 +156,38 @@ const CommentList = () => {
             return next;
         });
     });
+
+    const { deleteComment } = useCommentMutation();
+    const queryClient = useQueryClient();
+
+    const handleDeleteComment = async (sno: number) => {
+        const isAgree = await openAsyncDialog({
+            message: '댓글을 삭제하시겠습니까?',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        if (!isAgree) {
+            return;
+        }
+
+        deleteComment.mutate(sno, {
+            onSuccess: async () => {
+                await queryClient.invalidateQueries({
+                    queryKey: commentKeys.lists(),
+                    refetchType: 'all',
+                });
+
+                addToast({
+                    message: '댓글이 삭제되었습니다.',
+                    variant: 'success',
+                });
+            },
+            onError: (error) => {
+                handleErrorToast(error);
+            },
+        });
+    };
 
     return (
         <>
@@ -300,11 +343,17 @@ const CommentList = () => {
                                                 >
                                                     <td className='px-6 py-6'>
                                                         <div className='flex flex-col gap-1'>
-                                                            <p className='text-[14px] font-bold text-[#ff6900] whitespace-nowrap overflow-hidden text-ellipsis'>
+                                                            <Link
+                                                                to={PATHS.APP.USER_RECIPE.DETAIL.replace(
+                                                                    ':sno',
+                                                                    item.recipeSno.toString(),
+                                                                )}
+                                                                className='text-[14px] font-bold text-[#ff6900] whitespace-nowrap overflow-hidden text-ellipsis'
+                                                            >
                                                                 {
                                                                     item.recipeTitle
                                                                 }
-                                                            </p>
+                                                            </Link>
                                                             {item.recipeAuthorName ? (
                                                                 <p className='text-[12px] text-[#6a7282] whitespace-nowrap overflow-hidden text-ellipsis'>
                                                                     {
@@ -385,6 +434,17 @@ const CommentList = () => {
                                                                 className='flex h-8 w-8 items-center justify-center rounded-lg text-[#364153] transition-colors hover:bg-gray-100'
                                                             >
                                                                 <LockIcon className='h-4 w-4 text-[#6a7282]' />
+                                                            </button>
+
+                                                            <button
+                                                                type='button'
+                                                                onClick={() =>
+                                                                    handleDeleteComment(
+                                                                        item.sno,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <TrashSimpleIcon className='h-4 w-4 text-error-500' />
                                                             </button>
                                                         </div>
                                                     </td>

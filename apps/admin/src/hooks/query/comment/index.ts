@@ -1,3 +1,4 @@
-import useLimitSettings from '@/hooks/query/limit/useLimitSettings';
+import useCommentBlackList from '@/hooks/query/comment/useCommentBlackList';
+import useCommentList from '@/hooks/query/comment/useCommentList';
 
-export { useLimitSettings };
+export { useCommentBlackList, useCommentList };

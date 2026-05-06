@@ -5,6 +5,9 @@ import { AddCommentBlacklistBody } from '@/model/comment';
 
 const useCommentMutation = () => {
     return {
+        deleteComment: useMutation({
+            mutationFn: async (sno: number) => await comment.deleteComment(sno),
+        }),
         deleteCommentBlacklist: useMutation({
             mutationFn: async (memberNo: number) =>
                 await comment.deleteCommentBlacklist(memberNo),
