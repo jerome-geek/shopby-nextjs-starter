@@ -12,7 +12,6 @@ export const container = style({
     '@media': {
         [media.desktop]: {
             gap: '96px',
-            padding: '40px 0',
         },
     },
 });
@@ -75,11 +74,10 @@ export const collectionCard = style({
     display: 'block',
     textDecoration: 'none',
     color: 'inherit',
-    borderRadius: '16px',
+    borderRadius: '8px',
     overflow: 'hidden',
-    backgroundColor: vars.color.white,
+    background: vars.color.green['20'],
     width: '100%',
-    border: '1px solid rgba(0, 0, 0, 0.05)',
     transition: 'box-shadow 0.3s ease',
     cursor: 'pointer',
     selectors: {

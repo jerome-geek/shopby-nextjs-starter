@@ -25,8 +25,6 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
         e.preventDefault();
         e.stopPropagation();
 
-        console.log(1);
-
         toggleRecipeBookmark({
             sno: recipe.sno,
             bookmarked: recipe.bookmarked,
@@ -70,6 +68,18 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
                         width={32}
                         height={32}
                     />
+                    {/* <BookmarkIcon
+                        variant={recipe.bookmarked ? 'filled' : 'outline'}
+                        fill={
+                            recipe.bookmarked ? vars.color.green['100'] : 'none'
+                        }
+                        strokeColor={
+                            recipe.bookmarked
+                                ? vars.color.green['100']
+                                : vars.color.gray['40']
+                        }
+                        width={24}
+                    /> */}
                 </button>
             </div>
 

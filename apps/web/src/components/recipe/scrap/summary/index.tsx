@@ -1,10 +1,11 @@
 import { pipe, take, toArray } from '@fxts/core';
-import { Bookmark, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
+import { BookmarkIcon } from '@/components/icons';
 import { ProductGridSection } from '@/components/product/grid-section';
 import { ProductGridSkeleton } from '@/components/product/grid-section/skeleton';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
@@ -120,14 +121,15 @@ const RecipeScrapSummary = () => {
                                                     styles.collagePlaceholder
                                                 }
                                             >
-                                                <Bookmark
-                                                    size={32}
+                                                <BookmarkIcon
+                                                    variant='filled'
                                                     fill={
                                                         vars.color.green['80']
                                                     }
-                                                    color={
+                                                    strokeColor={
                                                         vars.color.green['80']
                                                     }
+                                                    width={32}
                                                 />
                                             </div>
                                         )}
@@ -200,9 +202,12 @@ const RecipeScrapSummary = () => {
                                                             },
                                                         )}
                                                     >
-                                                        <Bookmark
-                                                            size={24}
-                                                            strokeWidth={1.5}
+                                                        <BookmarkIcon
+                                                            variant={
+                                                                c.bookmarked
+                                                                    ? 'filled'
+                                                                    : 'outline'
+                                                            }
                                                             fill={
                                                                 c.bookmarked
                                                                     ? vars.color
@@ -211,7 +216,7 @@ const RecipeScrapSummary = () => {
                                                                       ]
                                                                     : 'none'
                                                             }
-                                                            color={
+                                                            strokeColor={
                                                                 c.bookmarked
                                                                     ? vars.color
                                                                           .green[
@@ -222,6 +227,7 @@ const RecipeScrapSummary = () => {
                                                                           '40'
                                                                       ]
                                                             }
+                                                            width={24}
                                                         />
                                                     </button>
                                                 )}

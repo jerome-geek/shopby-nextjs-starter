@@ -23,9 +23,15 @@ export const recipeThumbWrapper = style({
     position: 'relative',
     width: '100%',
     aspectRatio: '3 / 4',
-    borderRadius: '8px',
+    borderRadius: '4px',
     overflow: 'hidden',
     background: vars.color.gray['10'],
+
+    '@media': {
+        [media.desktop]: {
+            borderRadius: '8px',
+        },
+    },
 });
 
 export const recipeThumb = style({

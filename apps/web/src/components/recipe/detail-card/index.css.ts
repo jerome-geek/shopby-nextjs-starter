@@ -427,6 +427,13 @@ export const stepText = style([
     },
 ]);
 
+export const buttonContainer = style({
+    display: 'flex',
+    flexShrink: 0,
+    alignItems: 'center',
+    gap: '2px',
+});
+
 /** ───────────────────────────────────────────────────────
  * 6. Utilities
  * ────────────────────────────────────────────────────── */

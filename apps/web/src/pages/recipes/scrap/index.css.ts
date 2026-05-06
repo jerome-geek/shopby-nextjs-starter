@@ -12,7 +12,7 @@ export const container = style({
     '@media': {
         [media.desktop]: {
             gap: '32px',
-            padding: '40px 0',
+            padding: '36px 0 80px',
             maxWidth: '1200px',
             margin: '0 auto',
         },
@@ -27,22 +27,18 @@ export const title = style([
 ]);
 
 export const titleContainer = style({
-    width: '100vw',
+    width: 'calc(100% + 40px)',
+    marginLeft: '-20px',
     position: 'relative',
-    left: '50%',
-    right: '50%',
-    marginLeft: '-50vw',
-    marginRight: '-50vw',
-    borderBottom: `1px solid ${vars.color.gray['20']}`,
     backgroundColor: vars.color.white,
-    padding: '0 20px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '12px',
 
     '@media': {
         [media.desktop]: {
-            padding: '20px 20px 0 20px',
+            width: '100%',
+            marginLeft: '0',
         },
     },
 });
@@ -56,18 +52,25 @@ export const titleArea = style({
 
     '@media': {
         [media.desktop]: {
-            gap: '40px',
+            gap: '32px',
         },
     },
 });
 
 export const tabList = style({
     display: 'flex',
-    gap: '8px',
+    gap: '4px',
+    padding: '4px 20px 0',
     overflowX: 'auto',
-    padding: '12px 0',
     msOverflowStyle: 'none',
     scrollbarWidth: 'none',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '6px',
+            padding: '0',
+        },
+    },
 
     selectors: {
         '&::-webkit-scrollbar': {
@@ -81,8 +84,8 @@ export const addCollectionButton = style({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
-    width: '40px',
-    height: '40px',
+    width: '32px',
+    height: '32px',
     borderRadius: '50%',
     border: `1px solid ${vars.color.gray['40']}`,
     backgroundColor: vars.color.white,
@@ -96,20 +99,26 @@ export const addCollectionButton = style({
             color: vars.color.green['80'],
         },
     },
+
+    '@media': {
+        [media.desktop]: {
+            width: '37px',
+            height: '37px',
+        },
+    },
 });
 
 export const tabItem = style([
-    textStyles.body2Semibold,
+    textStyles.body1Regular,
     {
         position: 'relative',
-        padding: '10px 20px',
-        borderRadius: '100px',
+        padding: '0 12px',
+        height: '32px',
+        borderRadius: '60px',
         cursor: 'pointer',
         whiteSpace: 'nowrap',
-        color: vars.color.gray['60'],
-        backgroundColor: 'rgba(242, 245, 241, 0.8)',
-        backdropFilter: 'blur(8px)',
-        border: '1px solid rgba(0, 0, 0, 0.02)',
+        color: vars.color.gray['80'],
+        background: vars.color.green['20'],
         transition: 'color 0.3s ease',
         userSelect: 'none',
         selectors: {
@@ -117,12 +126,30 @@ export const tabItem = style([
                 color: vars.color.black,
             },
             '&[data-active="true"]': {
+                fontWeight: '500',
                 color: vars.color.white,
-                backgroundColor: 'transparent',
+                background: vars.color.green['80'],
+            },
+        },
+
+        '@media': {
+            [media.desktop]: {
+                padding: '0 16px',
+                height: '37px',
+                fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.2%',
             },
         },
     },
 ]);
+
+export const divider = style({
+    width: '100vw',
+    marginLeft: 'calc(50% - 50vw)',
+    height: '1px',
+    backgroundColor: vars.color.gray['20'],
+});
 
 export const activeIndicator = style({
     position: 'absolute',

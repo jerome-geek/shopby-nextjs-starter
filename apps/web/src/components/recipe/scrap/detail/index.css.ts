@@ -7,8 +7,8 @@ import { textStyles, textStyleTokens } from '@/styles/typography.css';
 export const detailContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '60px',
-    padding: '32px 0',
+    gap: '20px',
+    padding: '0',
 
     '@media': {
         [media.desktop]: {
@@ -50,8 +50,16 @@ export const detailTitleArea = style({
 });
 
 export const detailTitle = style([
-    textStyles.title1Bold,
-    { color: vars.color.black },
+    textStyles.headingSemibold,
+    {
+        color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
+            },
+        },
+    },
 ]);
 
 export const detailSubtitle = style([

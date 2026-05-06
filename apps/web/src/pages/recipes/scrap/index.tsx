@@ -138,6 +138,7 @@ const RecipeScrapPage = () => {
                             </button>
                         </div>
                     </div>
+                    <div className={styles.divider} />
                 </div>
 
                 <div

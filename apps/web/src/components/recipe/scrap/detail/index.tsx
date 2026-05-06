@@ -1,10 +1,9 @@
-import { Bookmark } from 'lucide-react';
 import { motion, Variants } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid2X2, Row2 } from '@/components/icons';
+import { BookmarkIcon, Grid2X2, Row2 } from '@/components/icons';
 import { RecipeCard, RecipeDetailCard } from '@/components/recipe';
 import * as styles from '@/components/recipe/scrap/detail/index.css';
 import { VerticalMoreMenu } from '@/components/ui';
@@ -214,7 +213,12 @@ export const RecipeScrapDetail = ({
                         variants={itemVariants}
                         className={styles.emptyIconWrapper}
                     >
-                        <Bookmark size={32} />
+                        <BookmarkIcon
+                            variant='filled'
+                            fill={vars.color.green['80']}
+                            strokeColor={vars.color.green['80']}
+                            width={32}
+                        />
                     </motion.div>
 
                     <motion.div

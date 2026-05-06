@@ -109,15 +109,6 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                                         {recipe.title}
                                     </h4>
                                 </Link>
-                                {!isExcludedPath && (
-                                    <VerticalMoreMenu
-                                        id={String(recipe.sno)}
-                                        onEdit={handleEdit}
-                                        onEditText={t('레시피 수정')}
-                                        onDelete={handleDelete}
-                                        onDeleteText={t('레시피 삭제')}
-                                    />
-                                )}
                             </div>
                             {author && (
                                 <span className={styles.recipeAuthor}>
@@ -126,23 +117,41 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                             )}
                         </div>
 
-                        <button
-                            className={styles.bookmarkIcon}
-                            onClick={handleBookmarkClick}
-                            type='button'
-                            aria-label={
-                                recipe.bookmarked
-                                    ? '북마크 해제'
-                                    : '북마크 추가'
-                            }
-                            aria-pressed={recipe.bookmarked}
-                        >
-                            <BookmarkIcon
-                                variant={
-                                    recipe.bookmarked ? 'filled' : 'outline'
+                        <div className={styles.buttonContainer}>
+                            <button
+                                className={styles.bookmarkIcon}
+                                onClick={handleBookmarkClick}
+                                type='button'
+                                aria-label={
+                                    recipe.bookmarked
+                                        ? '북마크 해제'
+                                        : '북마크 추가'
                                 }
-                            />
-                        </button>
+                                aria-pressed={recipe.bookmarked}
+                            >
+                                <BookmarkIcon
+                                    variant={
+                                        recipe.bookmarked ? 'filled' : 'outline'
+                                    }
+                                    strokeColor={
+                                        recipe.bookmarked
+                                            ? vars.color.green['100']
+                                            : vars.color.gray['40']
+                                    }
+                                    width={13}
+                                    height={18}
+                                />
+                            </button>
+                            {!isExcludedPath && (
+                                <VerticalMoreMenu
+                                    id={String(recipe.sno)}
+                                    onEdit={handleEdit}
+                                    onEditText={t('레시피 수정')}
+                                    onDelete={handleDelete}
+                                    onDeleteText={t('레시피 삭제')}
+                                />
+                            )}
+                        </div>
                     </div>
 
                     <div className={styles.recipeMeta}>
