@@ -94,6 +94,7 @@ export const productName = style([
         textOverflow: 'ellipsis',
         color: vars.color.black,
         lineHeight: '1.4',
+        wordBreak: 'break-all',
         height: '2.8em', // line-height(1.4) * 2 lines
 
         '@media': {

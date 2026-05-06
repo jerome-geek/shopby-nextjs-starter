@@ -63,7 +63,7 @@ export const ScrollToTop = ({ threshold = 300 }: ScrollToTopProps) => {
                             onClick={onShareButtonClick}
                             aria-label='공유하기'
                         >
-                            <Share2 size={24} strokeWidth={1.5} />
+                            <Share2 size={22} strokeWidth={1.5} />
                         </button>
                     </li>
                     <li>
@@ -80,4 +80,4 @@ export const ScrollToTop = ({ threshold = 300 }: ScrollToTopProps) => {
             )}
         </AnimatePresence>
     );
-}
+};

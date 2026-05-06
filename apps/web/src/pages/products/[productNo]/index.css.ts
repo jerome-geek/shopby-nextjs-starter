@@ -378,16 +378,17 @@ export const badge = style([
 
 export const bottomSticky = style({
     position: 'fixed',
-    bottom: `var(--bottom-nav-active-height, 0px)`,
     left: 0,
     right: 0,
+    bottom: 0,
     backgroundColor: vars.color.white,
     borderTop: `1px solid ${vars.color.gray[20]}`,
     padding: '12px 20px',
     display: 'flex',
     gap: '6px',
     zIndex: 100,
-    transition: 'bottom 0.2s ease-in-out',
+    willChange: 'transform',
+    transition: 'transform 0.2s ease-in-out',
 
     '@media': {
         [media.tablet]: {

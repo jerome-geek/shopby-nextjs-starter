@@ -32,7 +32,7 @@ export const container = style({
     '@media': {
         [media.mobile]: {
             minWidth: '300px',
-            maxWidth: '370px',
+            maxWidth: '350px',
         },
     },
 });

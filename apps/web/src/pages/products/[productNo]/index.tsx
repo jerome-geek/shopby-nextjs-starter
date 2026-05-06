@@ -2,11 +2,13 @@ import { each, map, pipe, prop, take } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import { Gift, Star } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
     type GetStaticPaths,
     type GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
+import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { product } from '@/api/product';
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
 import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
@@ -32,7 +35,7 @@ import {
     SelectedProductOption,
 } from '@/components/product-option';
 import { Button } from '@/components/ui/button';
-import ButtonV2 from '@/components/ui/button/v2';
+import { ButtonV2 } from '@/components/ui/button/v2';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useProductInfo, useProductPrice } from '@/entities/product/hooks';
 import { toSelectedOption } from '@/helpers/product';
@@ -59,6 +62,8 @@ interface ProductDetailViewProps {
 }
 
 function ProductDetailView({ productNo }: ProductDetailViewProps) {
+    const router = useRouter();
+
     const { t } = useTranslation();
 
     const { isMobile, isTablet } = useResponsive();
@@ -351,29 +356,40 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                 )}
             </div>
 
-            <div className={styles.bottomSticky}>
-                {isSaleEnd ? (
-                    <ButtonV2 frame='solid' variant='secondary' disabled>
-                        {t('판매가 종료된 상품입니다.')}
-                    </ButtonV2>
-                ) : (
-                    <>
-                        <button
-                            className={styles.giftButton}
-                            onClick={onGiftButtonClick}
-                        >
-                            <Gift size={24} color='#333' />
-                        </button>
-                        <Button
-                            frame='solid'
-                            variant='primary'
-                            onClick={onOrderButtonClick}
-                        >
-                            {t('구매하기')}
-                        </Button>
-                    </>
-                )}
-            </div>
+            <AnimatePresence>
+                <motion.div
+                    key={`${router.pathname}-bottom-sticky`}
+                    className={styles.bottomSticky}
+                    initial={{ transform: 'translateY(0)' }}
+                    animate={{
+                        transform:
+                            'translateY(calc(var(--bottom-nav-active-height, 0px) * -1))',
+                    }}
+                    exit={{ transform: 'translateY(0)' }}
+                >
+                    {isSaleEnd ? (
+                        <ButtonV2 frame='solid' variant='secondary' disabled>
+                            {t('판매가 종료된 상품입니다.')}
+                        </ButtonV2>
+                    ) : (
+                        <>
+                            <button
+                                className={styles.giftButton}
+                                onClick={onGiftButtonClick}
+                            >
+                                <Gift size={24} color='#333' />
+                            </button>
+                            <Button
+                                frame='solid'
+                                variant='primary'
+                                onClick={onOrderButtonClick}
+                            >
+                                {t('구매하기')}
+                            </Button>
+                        </>
+                    )}
+                </motion.div>
+            </AnimatePresence>
         </div>
     );
 }
@@ -400,9 +416,14 @@ export default function ProductDetailPage({
 
             <ShopbyApiErrorBoundary
                 fallback={
-                    <div style={{ padding: '100px', textAlign: 'center' }}>
-                        상품 정보를 불러오는 중입니다...
-                    </div>
+                    <LoadingWrapper
+                        isLoading
+                        containerStyle={{
+                            height: '80vh',
+                        }}
+                    >
+                        <span />
+                    </LoadingWrapper>
                 }
             >
                 <ProductDetailView productNo={productNo} />

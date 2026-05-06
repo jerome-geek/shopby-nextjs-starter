@@ -55,8 +55,12 @@ export const PhotoReview = () => {
     return (
         <LoadingWrapper
             isLoading={isPhotoReviewListLoading}
+            isLoadedAnimation
             containerStyle={{
-                height: '146px',
+                height: '0',
+                visibility: 'hidden',
+                opacity: 0,
+                display: 'none',
             }}
         >
             {isEmpty(photoReviews) ? null : (

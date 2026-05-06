@@ -1,5 +1,7 @@
-import { media } from '@/styles/media';
 import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 
 export const container = style({
     position: 'relative',
@@ -55,6 +57,7 @@ export const imageWrapper = style({
     position: 'relative',
     overflow: 'hidden',
     margin: '0 auto',
+    background: vars.color.gray['20'],
 
     '@media': {
         [media.desktop]: {
@@ -103,6 +106,7 @@ export const thumbImageWrapper = style({
     borderRadius: '4px',
     border: `1px solid transparent`,
     transition: 'all 0.2s ease',
+    background: vars.color.gray['20'],
     opacity: 0.5,
 });
 

@@ -10,15 +10,11 @@ import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { RouteChangeOverlay, ScrollToTop } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import { useRouteScroll } from '@/features/scroll';
 import { useModalWatcher } from '@/hooks/common/useModalWatcher';
 import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
 import { useHeaderHeight } from '@/hooks/ui';
-import {
-    usePage,
-    useRouteChange,
-    useRouteScroll,
-    useScrollLock,
-} from '@/hooks/utils';
+import { usePage, useRouteChange, useScrollLock } from '@/hooks/utils';
 import { isLoggedIn } from '@/utils/auth';
 import { accessTokenCookie } from '@/utils/cookie';
 

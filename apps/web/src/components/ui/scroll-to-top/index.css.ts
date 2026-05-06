@@ -14,7 +14,7 @@ export const container = style({
 
     '@media': {
         [media.mobile]: {
-            bottom: 'calc(var(--bottom-nav-active-height, 0px) + 90px)',
+            bottom: '150px',
         },
     },
 });
@@ -35,6 +35,13 @@ export const button = style({
 
     ':hover': {
         backgroundColor: vars.color.green['80'],
+    },
+
+    '@media': {
+        [media.mobile]: {
+            width: '42px',
+            height: '42px',
+        },
     },
 });
 
