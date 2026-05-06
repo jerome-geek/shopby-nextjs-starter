@@ -1,15 +1,16 @@
-import { filter, map, pipe, toArray } from '@fxts/core';
+import { filter, pipe, toArray } from '@fxts/core';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CongratulationIcon } from '@/components/icons/login/Congratulation';
-import { PATHS } from '@/const/paths';
 import { OrderProductItem } from '@/components/order/order-product-item';
+import { PATHS } from '@/const/paths';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
+import { CURRENCY } from '@/utils/currency';
 
 import * as styles from '@/features/order/components/order-details-content/index.css';
 
@@ -153,11 +154,16 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                                       }
                                     : null,
                                 ...(option.inputs?.map((input) => ({
-                                    label: input.inputLabel,
-                                    value: input.inputValue,
+                                    label: input.inputLabel ?? '',
+                                    value: input.inputValue ?? '',
                                 })) ?? []),
                             ],
-                            filter((item) => !!item),
+                            filter(
+                                (
+                                    item,
+                                ): item is { label: string; value: string } =>
+                                    !!item?.label && !!item?.value,
+                            ),
                             toArray,
                         );
 
@@ -166,7 +172,7 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                                 key={`${option.orderOptionNo}-${idx}`}
                                 imageUrl={option.imageUrl}
                                 productName={option.productName}
-                                brandName={option.brandName}
+                                brandName={option.brandName ?? ''}
                                 optionLabels={optionLabels}
                                 orderCnt={option.orderCnt}
                                 buyAmt={option.price.buyAmt}
@@ -180,28 +186,25 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                 <div className={styles.summaryRow}>
                     <span>{t('상품 금액')}</span>
                     <span>
-                        {lastOrderAmount.standardAmt.toLocaleString()}
-                        {t('원')}
+                        {CURRENCY(lastOrderAmount.standardAmt).format()}
                     </span>
                 </div>
                 <div className={styles.summaryRow}>
                     <span>{t('할인 금액')}</span>
                     <span>
-                        -
-                        {(
-                            lastOrderAmount.immediateDiscountAmt +
-                            lastOrderAmount.additionalDiscountAmt +
-                            lastOrderAmount.productCouponDiscountAmt +
-                            lastOrderAmount.cartCouponDiscountAmt
-                        ).toLocaleString()}
-                        {t('원')}
+                        {CURRENCY(lastOrderAmount.immediateDiscountAmt)
+                            .add(lastOrderAmount.additionalDiscountAmt)
+                            .add(lastOrderAmount.productCouponDiscountAmt)
+                            .add(lastOrderAmount.cartCouponDiscountAmt)
+                            .multiply(-1)
+                            .format()}
                     </span>
                 </div>
                 <div className={styles.summaryRow}>
                     <span>{t('배송비')}</span>
                     <span>
                         {lastOrderAmount.deliveryAmt > 0
-                            ? `${lastOrderAmount.deliveryAmt.toLocaleString()}원`
+                            ? CURRENCY(lastOrderAmount.deliveryAmt).format()
                             : t('무료')}
                     </span>
                 </div>
@@ -210,8 +213,7 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                         {t('총 결제 금액')}
                     </span>
                     <span className={styles.totalPriceText}>
-                        {lastOrderAmount.chargeAmt.toLocaleString()}
-                        {t('원')}
+                        {CURRENCY(lastOrderAmount.chargeAmt).format()}
                     </span>
                 </div>
             </div>

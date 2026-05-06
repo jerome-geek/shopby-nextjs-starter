@@ -23,7 +23,7 @@ export const titleGroup = style({
     padding: '0 20px',
 });
 
-export const titleLine = style([
+export const title = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
@@ -90,9 +90,8 @@ export const paginationWrapper = style({
 export const recommendPagination = style({
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: '4px',
-    width: 'fit-content',
-    position: 'static',
 });
 
 export const paginationCurrent = style([
@@ -198,3 +197,44 @@ export const moreButton = style([
         },
     },
 ]);
+
+export const skeletonList = style({
+    display: 'flex',
+    gap: '16px',
+    width: '100%',
+    overflow: 'hidden',
+    padding: '0 20px',
+    listStyle: 'none',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '0',
+            gap: '24px',
+        },
+    },
+});
+
+export const skeletonItem = style({
+    flexShrink: 0,
+    width: '144px',
+
+    '@media': {
+        [media.desktop]: {
+            width: '240px',
+        },
+    },
+});
+
+export const skeletonCardInfo = style({
+    marginTop: '12px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+});
+
+export const skeletonMetaList = style({
+    display: 'flex',
+    gap: '8px',
+    marginTop: '8px',
+    listStyle: 'none',
+});

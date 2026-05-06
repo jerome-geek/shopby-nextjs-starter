@@ -44,21 +44,22 @@ export const RecipeRecommendationLayerContent = ({
     if (recipes.length === 0) return null;
 
     return (
-        <div className={styles.container}>
-            <div className={styles.titleGroup}>
-                <span
-                    className={styles.titleLine}
+        <section className={styles.container}>
+            <header className={styles.titleGroup}>
+                <h2
+                    className={styles.title}
                     dangerouslySetInnerHTML={{
                         __html: t(
                             '배송 기다리는 동안<br/>식비를 절반으로 줄여주는 레시피 구경하세요!',
                         ),
                     }}
                 />
-            </div>
+            </header>
 
             <div className={styles.recipeArea}>
                 <Swiper
                     className={styles.swiperContainer}
+                    wrapperTag='ul'
                     spaceBetween={16}
                     slidesPerView={2.2}
                     modules={[Navigation, Pagination]}
@@ -87,14 +88,15 @@ export const RecipeRecommendationLayerContent = ({
                     {recipes.map((recipe) => (
                         <SwiperSlide
                             key={recipe.sno}
+                            tag='li'
                             className={styles.swiperSlide}
                         >
-                            <div
+                            <article
                                 className={styles.recipeCardWrapper}
                                 onClick={() => close()}
                             >
                                 <RecipeCard recipe={recipe} />
-                            </div>
+                            </article>
                         </SwiperSlide>
                     ))}
                 </Swiper>
@@ -130,7 +132,7 @@ export const RecipeRecommendationLayerContent = ({
                 )}
             </div>
 
-            <div className={styles.footerButtonGroup}>
+            <footer className={styles.footerButtonGroup}>
                 <button
                     className={styles.closeButton}
                     onClick={close}
@@ -145,7 +147,7 @@ export const RecipeRecommendationLayerContent = ({
                 >
                     {t('레시피 더 보러가기')}
                 </button>
-            </div>
-        </div>
+            </footer>
+        </section>
     );
 };
