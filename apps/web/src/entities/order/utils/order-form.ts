@@ -1,0 +1,128 @@
+import {
+    filter,
+    flatMap,
+    head,
+    includes,
+    map,
+    pipe,
+    prop,
+    toArray,
+} from '@fxts/core';
+
+import { parsePhoneStringByHyphen } from '@/entities/order/utils/phone';
+import type { GetProfileResponse } from '@/models/member/profile';
+import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
+import type { PhonePrefixType } from '@/schema/common.schema';
+import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
+
+interface TransformProps {
+    orderSheetData: GetOrderSheetResponse;
+    profileData: GetProfileResponse | null | undefined;
+    isLogin: boolean;
+    isKorean: boolean;
+    isMyApp: boolean;
+    orderSheetNo: string;
+}
+
+type OrdererType = PaymentReserveSchemaType['orderer'];
+type ShippingAddressType = PaymentReserveSchemaType['shippingAddress'];
+
+export const getInitialOrderFormValues = ({
+    orderSheetData,
+    profileData,
+    isLogin,
+    isKorean,
+    isMyApp,
+    orderSheetNo,
+}: TransformProps): Partial<PaymentReserveSchemaType> => {
+    const mainAddress = orderSheetData?.orderSheetAddress?.mainAddress;
+    const tradeBankAccountInfos = orderSheetData?.tradeBankAccountInfos ?? [];
+    const availablePayTypes = orderSheetData?.availablePayTypes ?? [];
+    const lastPayType = orderSheetData?.lastPayType;
+
+    // NOTE: 마지막 결제수단에 해당하는 PG 타입 계산
+    const pgType = pipe(
+        availablePayTypes,
+        filter((a) => a.payType === lastPayType),
+        flatMap((b) => b.pgTypes),
+        head,
+    );
+    const payType =
+        lastPayType &&
+        includes(lastPayType, pipe(availablePayTypes, map(prop('payType'))))
+            ? lastPayType
+            : undefined;
+
+    // NOTE: shippingAddress 스키마는 단일 flat 객체 타입 (Union 아님)
+    // isKorean에 따라 값만 달라지므로 단언 없이 직접 할당 가능
+    const orderer: OrdererType = {
+        ordererEmail: profileData?.email ?? '',
+        ordererName: isKorean ? (profileData?.memberName ?? '') : '',
+        ordererLastName: !isKorean ? (profileData?.lastName ?? '') : '',
+        ordererFirstName: !isKorean ? (profileData?.firstName ?? '') : '',
+        ordererMobileCountryCd: '',
+        ordererContact1: {
+            prefix: (profileData?.mobileNo?.slice(0, 3) ??
+                '010') as PhonePrefixType,
+            middle: isKorean ? (profileData?.mobileNo?.slice(3, 7) ?? '') : '',
+            suffix: isKorean ? (profileData?.mobileNo?.slice(7) ?? '') : '',
+        },
+    };
+
+    const shippingAddress: ShippingAddressType = {
+        countryCd: mainAddress?.countryCd || (isKorean ? 'KR' : 'US'),
+        addressNo: mainAddress?.addressNo || 0,
+        addressName: mainAddress?.addressName || '',
+        receiverName: isKorean ? mainAddress?.receiverName || '' : '',
+        receiverContact1: parsePhoneStringByHyphen(
+            mainAddress?.receiverContact1,
+        ),
+        receiverAddress: mainAddress?.receiverAddress || '',
+        receiverJibunAddress: isKorean
+            ? mainAddress?.receiverJibunAddress || ''
+            : '',
+        receiverDetailAddress: mainAddress?.receiverDetailAddress || '',
+        receiverZipCd: mainAddress?.receiverZipCd || '',
+        receiverCity: !isKorean ? mainAddress?.receiverCity || '' : '',
+        receiverState: !isKorean ? mainAddress?.receiverState || '' : '',
+        receiverFirstName: '',
+        receiverLastName: '',
+        receiverMobileCountryCd: '',
+    };
+
+    return {
+        orderSheetNo,
+        inAppYn: isMyApp ? 'Y' : 'N',
+        member: isLogin,
+        orderMemo: '',
+        updateMember: false,
+        useDefaultAddress: false,
+        subPayAmt: 0,
+        savesLastPayType: true,
+        customTermsAgrees: [],
+        saveAddressBook: false,
+        applyCashReceipt: orderSheetData?.applyCashReceiptForAccount ?? true,
+        cashReceipt: {
+            cashReceiptIssuePurposeType: 'INCOME_TAX_DEDUCTION',
+            cashReceiptKeyType: 'MOBILE_NO',
+        },
+        orderer,
+        shippingAddress,
+        // 약관 동의
+        agreementTermsAgrees: pipe(
+            orderSheetData?.termsInfos ?? [],
+            map((a) => ({ isAgree: false, termsType: a.termsType })),
+            toArray,
+        ),
+        // 무통장 입금 계좌
+        bankAccountToDeposit: tradeBankAccountInfos[0]
+            ? {
+                  bankAccount: tradeBankAccountInfos[0].bankAccount,
+                  bankCode: tradeBankAccountInfos[0].bankCode,
+                  bankDepositorName: tradeBankAccountInfos[0].bankDepositorName,
+              }
+            : undefined,
+        payType,
+        pgType,
+    };
+};

@@ -54,9 +54,11 @@ const createOrderShippingAddressSchema = (isGlobalMall?: boolean) => {
 export const getPaymentSchema = ({
     isLogin,
     isGlobalMall,
+    requireCustomsIdNumber,
 }: {
     isLogin?: boolean;
     isGlobalMall?: boolean;
+    requireCustomsIdNumber?: boolean;
 }) => {
     const shippingAddressSchema =
         createOrderShippingAddressSchema(isGlobalMall);
@@ -322,6 +324,24 @@ export const getPaymentSchema = ({
             {
                 message: '발급 번호를 입력해주세요.',
                 path: ['cashReceipt', 'cashReceiptKey'],
+            },
+        )
+        .refine(
+            (data) => {
+                if (requireCustomsIdNumber) {
+                    return (
+                        !!data.shippingAddress.customsIdNumber &&
+                        regEx.customsId.test(
+                            data.shippingAddress.customsIdNumber,
+                        )
+                    );
+                }
+                return true;
+            },
+            {
+                message:
+                    '개인통관고유부호를 입력해주세요 (P로 시작하는 13자리)',
+                path: ['shippingAddress', 'customsIdNumber'],
             },
         );
 };

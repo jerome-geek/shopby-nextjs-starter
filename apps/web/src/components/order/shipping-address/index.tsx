@@ -3,24 +3,40 @@ import { overlay } from 'overlay-kit';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { ShippingAddressListBottomSheet } from '@/components/bottom-sheet/shipping-address-list';
+import { ShippingAddressListModal } from '@/components/modal';
+import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
 import * as styles from '@/components/order/shipping-address/index.css';
+import { ErrorMessage } from '@/components/ui/form';
+import {
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+} from '@/components/ui/input';
+import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';
-import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
-import { ShippingAddressListModal } from '@/components/modal';
-import { ShippingAddressListBottomSheet } from '@/components/bottom-sheet/shipping-address-list';
 
-const ShippingAddress = () => {
+interface ShippingAddressProps {
+    orderSheetNo: string;
+}
+
+const ShippingAddress = ({ orderSheetNo }: ShippingAddressProps) => {
     const { t } = useTranslation();
 
     const isLogin = useAuth();
+
     const { isMobile } = useResponsive();
 
     const methods = useFormContext<PaymentReserveSchemaType>();
-    const { control } = methods;
+    const { control, register } = methods;
     const shippingAddress = useWatch({ control, name: 'shippingAddress' });
-    console.log('🚀 ~ ShippingAddress ~ shippingAddress:', shippingAddress);
+
+    const { data: orderSheetData } = useOrderSheet({
+        orderSheetNo,
+        searchParams: { includeMemberAddress: true },
+    });
 
     const handleSelectAddress = () => {
         if (isMobile) {
@@ -51,7 +67,6 @@ const ShippingAddress = () => {
     if (isLogin === null) {
         return null;
     }
-
 
     return (
         <section className={styles.container}>
@@ -101,6 +116,31 @@ const ShippingAddress = () => {
                         </div>
                     </div>
                 )}
+
+            {orderSheetData.requireCustomsIdNumber && (
+                <>
+                    <InputFieldContainer>
+                        <InputLabel isRequired htmlFor='customsIdNumber'>
+                            {t('개인통관고유부호')}
+                        </InputLabel>
+                        <InputField
+                            id='customsIdNumber'
+                            placeholder={t('P로 시작하는 13자리')}
+                            {...register('shippingAddress.customsIdNumber')}
+                        />
+                        <a
+                            href='https://unipass.customs.go.kr/csp/persIndex.do'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className={styles.selectAddressButton}
+                        >
+                            <span>{t('개인통관고유부호 발급 바로가기')}</span>
+                            <ChevronRightIcon width='16px' />
+                        </a>
+                    </InputFieldContainer>
+                    <ErrorMessage name='shippingAddress.customsIdNumber' />
+                </>
+            )}
         </section>
     );
 };
