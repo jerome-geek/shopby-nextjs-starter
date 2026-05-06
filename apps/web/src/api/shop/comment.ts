@@ -17,7 +17,7 @@ const comment = {
     create: (data: CreateCommentRequest, options?: AxiosRequestConfig) => {
         return geekRequest<CommentResponse>({
             method: 'POST',
-            url: '/shop/app/comment',
+            url: '/shop/recipe/comments',
             data,
             ...options,
         });

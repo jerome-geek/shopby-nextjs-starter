@@ -20,14 +20,16 @@ export const useGeekInterceptor = () => {
                     '#30D158',
                 );
 
-                config.headers['appToken'] =
-                    `Bearer ${env.NEXT_PUBLIC_GEEK_APP_TOKEN}`;
+                config.headers[
+                    'authorization'
+                ] = `Bearer ${env.NEXT_PUBLIC_GEEK_APP_TOKEN}`;
 
                 const accessToken = accessTokenCookie.get();
                 if (accessToken) {
                     config.headers['clientId'] = env.NEXT_PUBLIC_CLIENT_ID;
-                    config.headers['Shop-By-Authorization'] =
-                        `Bearer ${accessToken}`;
+                    config.headers[
+                        'Shop-By-Authorization'
+                    ] = `Bearer ${accessToken}`;
                     config.headers['shopApiUrl'] = '/profile';
                     config.headers['apiMethod'] = 'GET';
                 }
@@ -40,7 +42,9 @@ export const useGeekInterceptor = () => {
             (response) => {
                 const { method, url } = response.config;
                 logOnDev(
-                    `[GEEK] ${method?.toUpperCase()} ${url} | ${response.status}`,
+                    `[GEEK] ${method?.toUpperCase()} ${url} | ${
+                        response.status
+                    }`,
                 );
                 return response;
             },
