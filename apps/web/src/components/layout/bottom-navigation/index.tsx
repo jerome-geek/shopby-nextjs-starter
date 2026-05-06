@@ -1,3 +1,4 @@
+import { includes } from '@fxts/core';
 import { clsx } from 'clsx';
 import { motion, useMotionValueEvent, useScroll } from 'motion/react';
 import Link from 'next/link';
@@ -19,7 +20,7 @@ import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { globalVars } from '@/styles/global.css';
 
-type NavItem = {
+interface NavItem {
     label: string;
     href: string | null;
     icon: React.ComponentType<{
@@ -28,7 +29,7 @@ type NavItem = {
         currentColor?: string;
     }>;
     onClick?: () => void;
-};
+}
 
 // UX 설정을 위한 상수값
 const SCROLL_THRESHOLD_PX = {
@@ -40,7 +41,7 @@ const IDLE_DETECTION_DELAY_MS = 600;
 const ANIMATION_DURATION_SEC = 0.2;
 const ICON_SIZE_PX = 24;
 
-export default function BottomNavigation() {
+const BottomNavigation = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const { scrollY } = useScroll();
@@ -49,7 +50,10 @@ export default function BottomNavigation() {
     const [hidden, setHidden] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const isRecipeDetail = router.pathname === '/recipes/[sno]';
+    const isInvisible = includes(router.pathname, [
+        PATHS.RECIPES.DETAIL,
+        PATHS.PRODUCTS.DETAIL,
+    ]);
 
     const handleScroll = (latest: number) => {
         const scrollHeight = document.documentElement.scrollHeight;
@@ -93,8 +97,6 @@ export default function BottomNavigation() {
         };
     }, [hidden]);
 
-    if (isRecipeDetail) return null;
-
     const handleCreateClick = () => {
         if (!isLogin) {
             const [basePath, existingSearch] = router.asPath.split('?');
@@ -131,6 +133,10 @@ export default function BottomNavigation() {
         { label: t('스크랩북'), href: PATHS.RECIPES.SCRAP, icon: ScrapIcon },
         { label: t('마이'), href: PATHS.MYPAGE.MAIN, icon: MyPageIcon },
     ];
+
+    if (isInvisible) {
+        return null;
+    }
 
     return (
         <motion.nav
@@ -189,4 +195,6 @@ export default function BottomNavigation() {
             })}
         </motion.nav>
     );
-}
+};
+
+export default BottomNavigation;
