@@ -1,8 +1,8 @@
-import { Gift } from 'lucide-react';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
+import { GiftIcon } from '@/components/icons/GiftIcon';
 import * as styles from '@/components/product/order-action/index.css';
 import ButtonV2 from '@/components/ui/button/v2';
 import { OVERLAY_ID } from '@/const/overlay';
@@ -70,7 +70,7 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
                             onClick={onGiftButtonClick}
                             aria-label={t('선물하기')}
                         >
-                            <Gift size={24} />
+                            <GiftIcon />
                         </button>
                         <ButtonV2
                             frame='outlined'

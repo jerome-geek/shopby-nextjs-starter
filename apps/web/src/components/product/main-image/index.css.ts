@@ -1,5 +1,4 @@
 import { media } from '@/styles/media';
-import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
@@ -60,7 +59,7 @@ export const imageWrapper = style({
     '@media': {
         [media.desktop]: {
             maxWidth: '564px',
-            borderRadius: '8px',
+            borderRadius: '4px',
         },
     },
 });
@@ -101,13 +100,14 @@ export const thumbImageWrapper = style({
     cursor: 'pointer',
     position: 'relative',
     overflow: 'hidden',
-    borderRadius: '8px',
+    borderRadius: '4px',
     border: `1px solid transparent`,
     transition: 'all 0.2s ease',
+    opacity: 0.5,
 });
 
 export const activeThumb = style({
-    borderColor: vars.color.black,
+    opacity: 1,
 });
 
 export const thumbImage = style({

@@ -1,6 +1,8 @@
+import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { style } from '@vanilla-extract/css';
 
 export const container = style({
     position: 'absolute',
@@ -29,14 +31,46 @@ export const detailContainer = style([
     textStyles.body1Semibold,
     {
         position: 'relative',
+        display: 'none',
+        alignItems: 'center',
+        justifyContent: 'left',
+        gap: '12px',
+        padding: '16px 16px',
+        color: vars.color.gray['90'],
+        backgroundColor: vars.color.pink['20'],
+        backdropFilter: 'blur(6px)',
+        borderRadius: '8px',
+
+        '@media': {
+            [media.desktop]: {
+                display: 'flex',
+            },
+        },
+    },
+]);
+
+export const detailMobileContainer = style([
+    textStyles.body1Semibold,
+    {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '4px',
         padding: '12px 0',
         color: vars.color.gray['90'],
-        backgroundColor: vars.color.pink['20'],
-        backdropFilter: 'blur(6px)',
+        backgroundColor: 'rgba(255, 235, 238, 0.8)',
+        backdropFilter: 'blur(3px)',
+        zIndex: 10,
+
+        '@media': {
+            [media.desktop]: {
+                display: 'none',
+            },
+        },
     },
 ]);
 

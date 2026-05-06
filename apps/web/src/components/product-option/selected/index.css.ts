@@ -29,7 +29,7 @@ export const optionHeader = style({
 export const optionLabel = style([
     textStyles.body1Semibold,
     {
-        color: vars.color.black,
+        color: vars.color.gray['90'],
         wordBreak: 'break-all',
     },
 ]);

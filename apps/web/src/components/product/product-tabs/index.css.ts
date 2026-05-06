@@ -61,11 +61,11 @@ export const tabButton = style([
 
 export const activeTabIndicator = style({
     position: 'absolute',
-    bottom: 0,
+    bottom: '-1px',
     left: 0,
     width: '100%',
     height: '2px',
-    backgroundColor: vars.color.green['100'],
+    backgroundColor: vars.color.green['80'],
 });
 
 export const tabContentContainer = style({

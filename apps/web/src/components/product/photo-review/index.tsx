@@ -1,5 +1,4 @@
 import { isEmpty } from '@fxts/core';
-import { ThumbsUp } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,6 +12,8 @@ import { usePhotoReviewList } from '@/hooks/query/display/review';
 import { useResponsive } from '@/hooks/utils';
 import { BREAKPOINTS } from '@/styles/media';
 
+import { StarIcon } from '@/components/icons';
+import { vars } from '@/styles/theme.css';
 import 'swiper/css';
 
 export const PhotoReview = () => {
@@ -96,7 +97,9 @@ export const PhotoReview = () => {
                                     </button>
 
                                     <div className={styles.photoReviewRating}>
-                                        <ThumbsUp size={14} />
+                                        <StarIcon
+                                            baseColor={vars.color.pink['80']}
+                                        />
                                         <span>
                                             {Number(review.recommendCnt) || 0}
                                         </span>
