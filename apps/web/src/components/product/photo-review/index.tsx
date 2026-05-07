@@ -5,15 +5,15 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { PhotoReviewListBottomSheet } from '@/components/bottom-sheet/photo-review-list';
 import LoadingWrapper from '@/components/common/loading-wrapper';
+import { StarIcon } from '@/components/icons';
 import { PhotoReviewListModal } from '@/components/modal/photo-review-list';
 import * as styles from '@/components/product/photo-review/index.css';
 import { PHOTO_PAGE_SIZE } from '@/components/product/product-tabs/review';
 import { usePhotoReviewList } from '@/hooks/query/display/review';
 import { useResponsive } from '@/hooks/utils';
 import { BREAKPOINTS } from '@/styles/media';
-
-import { StarIcon } from '@/components/icons';
 import { vars } from '@/styles/theme.css';
+
 import 'swiper/css';
 
 export const PhotoReview = () => {
@@ -21,6 +21,20 @@ export const PhotoReview = () => {
     const productNo = Number(router.query.productNo) || 0;
 
     const { isMobile } = useResponsive();
+
+    // const { data } = useProductReviewListV2({
+    //     productNo,
+    //     searchParams: {
+    //         hasAttachmentFile: 'Y',
+    //         order: {
+    //             by: 'RATING',
+    //             direction: 'DESC',
+    //         },
+    //         pageNumber: 1,
+    //         pageSize: PHOTO_PAGE_SIZE,
+    //         hasTotalCount: true,
+    //     },
+    // });
 
     const { data: photoReviewListData, isLoading: isPhotoReviewListLoading } =
         usePhotoReviewList({

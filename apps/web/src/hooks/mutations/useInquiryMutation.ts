@@ -1,3 +1,4 @@
+import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -15,14 +16,15 @@ const useInquiryMutation = () => {
     const { addToast } = useToast();
     const queryClient = useQueryClient();
 
-    const invalidate = () => {
-        queryClient.invalidateQueries({
-            queryKey: inquiryKeys.all,
-            refetchType: 'all',
+    const onMutationSuccess = () => {
+        return queryClient.invalidateQueries({
+            predicate: (query) => {
+                return includes(query.queryKey[0], [...inquiryKeys.all]);
+            },
         });
     };
 
-    const onErrorHandler = (error: Error) => {
+    const onMutationError = (error: Error) => {
         addToast({
             message: t(
                 isAxiosError(error)
@@ -37,10 +39,8 @@ const useInquiryMutation = () => {
         register: useMutation({
             mutationFn: async ({ data }: { data: WriteInquiryData }) =>
                 await inquiry.writeInquiry(data),
-            onSuccess: () => {
-                invalidate();
-            },
-            onError: onErrorHandler,
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
         }),
         update: useMutation({
             mutationFn: async ({
@@ -49,19 +49,15 @@ const useInquiryMutation = () => {
             }: {
                 inquiryNo: number;
                 data: UpdateInquiryData;
-            }) => await inquiry.updateInquiry(inquiryNo, data),
-            onSuccess: () => {
-                invalidate();
-            },
-            onError: onErrorHandler,
+            }) => await inquiry.updatePartOfInquiry(inquiryNo, data),
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
         }),
         delete: useMutation({
             mutationFn: async ({ inquiryNo }: { inquiryNo: number }) =>
                 await inquiry.deleteInquiry(inquiryNo),
-            onSuccess: () => {
-                invalidate();
-            },
-            onError: onErrorHandler,
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
         }),
     };
 };

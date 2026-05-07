@@ -2,6 +2,7 @@ import useMyReviewList from '@/hooks/suspenseQuery/display/review/useMyReviewLis
 import usePhotoReviewList from '@/hooks/suspenseQuery/display/review/usePhotoReviewList';
 import useProductReview from '@/hooks/suspenseQuery/display/review/useProductReview';
 import useProductReviewList from '@/hooks/suspenseQuery/display/review/useProductReviewList';
+import useProductReviewListV2 from '@/hooks/suspenseQuery/display/review/useProductReviewListV2';
 import useReviewableProductList from '@/hooks/suspenseQuery/display/review/useReviewableProductList';
 
 export {
@@ -9,5 +10,6 @@ export {
     usePhotoReviewList,
     useProductReview,
     useProductReviewList,
+    useProductReviewListV2,
     useReviewableProductList,
 };

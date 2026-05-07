@@ -255,7 +255,7 @@ export const inputGroup = style({
 
     '@media': {
         [media.desktop]: {
-            gridTemplateColumns: '120px 1fr',
+            gridTemplateColumns: '1fr',
             gap: '16px',
         },
     },

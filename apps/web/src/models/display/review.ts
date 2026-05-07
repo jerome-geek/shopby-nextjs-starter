@@ -146,8 +146,6 @@ export interface GetProductReviewListParams extends Paging {
     bestReviewYn?: 'Y' | 'N' | null;
     /** 상품 정보 포함 여부 (default: true) */
     hasProductInfo?: boolean;
-    /** 상품평 점수별 리뷰 수 정보 포함 여부 (default: true) */
-    hasReviewSummary?: boolean;
     /** 주문 옵션 정보 포함 여부 (default: false) */
     hasOrderedOption?: boolean;
 }
@@ -206,7 +204,7 @@ export interface GetReviewableOptionResponse {
     reviewable: boolean;
 }
 
-export interface GetReviewListV2Params {
+export interface GetProductReviewListV2Params extends Paging {
     /** 첨부 파일 여부 ( 파일 첨부:Y, 파일 미첨부(default):N, 빈값:ALL ) */
     hasAttachmentFile?: 'Y' | 'N' | 'ALL';
     order?: {
@@ -231,7 +229,7 @@ export interface GetReviewListV2Params {
     hasOrderedOption?: boolean;
 }
 
-export interface GetReviewListV2Response extends ItemList<ProductReviewInfo> {
+export interface GetProductReviewListV2Response extends ItemList<ProductReviewInfo> {
     /** 리뷰 평점 */
     rate: number;
 }
@@ -268,7 +266,7 @@ export interface UpdateProductReviewData {
     content: string;
 }
 
-export interface GetProductReviewCommentsParams extends Paging {}
+export type GetProductReviewCommentsParams = Paging;
 
 export interface GetProductReviewCommentResponse {
     contents: {

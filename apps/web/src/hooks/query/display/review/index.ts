@@ -5,6 +5,7 @@ import usePhotoReviewList from '@/hooks/query/display/review/usePhotoReviewList'
 import useProductReview from '@/hooks/query/display/review/useProductReview';
 import useProductReviewCommentList from '@/hooks/query/display/review/useProductReviewCommentList';
 import useProductReviewList from '@/hooks/query/display/review/useProductReviewList';
+import useProductReviewListV2 from '@/hooks/query/display/review/useProductReviewListV2';
 import useReviewableProductList from '@/hooks/query/display/review/useReviewableProductList';
 
 export {
@@ -15,5 +16,6 @@ export {
     useProductReview,
     useProductReviewCommentList,
     useProductReviewList,
+    useProductReviewListV2,
     useReviewableProductList,
 };

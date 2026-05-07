@@ -3,7 +3,7 @@ import { useEffect, type ReactNode } from 'react';
 
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import { ReviewForm } from '@/components/mypage/review/review-form';
+import { ReviewForm } from '@/components/mypage/review/form';
 import { PATHS } from '@/const/paths';
 
 export default function MypageReviewWritePage() {

@@ -1,8 +1,8 @@
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import * as styles from '@/components/layer-contents/review-report/index.css';
 import { DefaultModalLayoutProps } from '@/components/layout';
-import * as styles from '@/components/modal/report/index.css';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import {
     InputContainer,
@@ -23,6 +23,19 @@ export const REPORT_REASON_OPTIONS = [
     { value: 'COPYRIGHT', label: '저작권 침해' },
     { value: 'SLANDER', label: '비방' },
 ];
+
+const maxLength = 1000;
+
+const ContentLength = () => {
+    const content = useWatch({ name: 'content' });
+    const contentLength = content?.length || 0;
+
+    return (
+        <span className={styles.characterCount}>
+            {contentLength} / {maxLength}
+        </span>
+    );
+};
 
 export const ReviewReport = ({
     productNo,
@@ -46,13 +59,8 @@ export const ReviewReport = ({
         control,
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = methods;
-
-    const content = watch('content');
-    const contentLength = content?.length || 0;
-    const maxLength = 1000;
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -119,12 +127,10 @@ export const ReviewReport = ({
                                 required: t('상세 사유를 입력해 주세요.'),
                             })}
                             maxLength={maxLength}
-                            style={{ height: '120px', paddingBottom: '30px' }}
+                            className={styles.textArea}
                             data-error={!!errors.content}
                         />
-                        <span className={styles.characterCount}>
-                            {contentLength} / {maxLength}
-                        </span>
+                        <ContentLength />
                     </div>
                     <ErrorMessage name='content' />
                 </InputContainer>

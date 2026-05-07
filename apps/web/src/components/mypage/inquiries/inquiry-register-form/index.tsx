@@ -18,8 +18,8 @@ import {
     InputField,
     InputFieldContainer,
     InputLabel,
-    TextArea,
     Select,
+    TextArea,
 } from '@/components/ui/input';
 import { EMAIL_DOMAIN_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';

@@ -23,6 +23,7 @@ export * from '@/components/icons/LockMiniIcon';
 export * from '@/components/icons/MenuIcon';
 export * from '@/components/icons/PeopleIcon';
 export * from '@/components/icons/Plus';
+export * from '@/components/icons/ReviewStartIcon';
 export * from '@/components/icons/Row2';
 export * from '@/components/icons/SearchIcon';
 export * from '@/components/icons/ShareIcon';

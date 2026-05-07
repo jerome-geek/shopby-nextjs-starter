@@ -1,6 +1,5 @@
 import { style } from '@vanilla-extract/css';
 
-import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -37,3 +36,8 @@ export const characterCount = style([
         color: vars.color.gray['60'],
     },
 ]);
+
+export const textArea = style({
+    height: '120px',
+    paddingBottom: '30px',
+});

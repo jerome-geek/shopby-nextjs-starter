@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Seo from '@/components/common/seo';
-import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
 import { PATHS } from '@/const/paths';
 import GuestOrderContent from '@/features/order/components/guest-order-content';
@@ -13,6 +12,7 @@ import { useCustomDialog } from '@/hooks/ui/useCustomDialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/order/complete/index.css';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
 const OrderCompletePage = () => {
     const { t } = useTranslation();
@@ -64,7 +64,7 @@ const OrderCompletePage = () => {
             >
                 <div className={styles.pageWrapper}>
                     {isOrderSuccess ? (
-                        <ShopbyApiErrorBoundary
+                        <ShopbyAsyncBoundary
                             fallback={
                                 <div className={styles.loadingWrapper}>
                                     {t('로딩 중...')}
@@ -83,7 +83,7 @@ const OrderCompletePage = () => {
                             ) : (
                                 <GuestOrderContent orderNo={orderNo} />
                             )}
-                        </ShopbyApiErrorBoundary>
+                        </ShopbyAsyncBoundary>
                     ) : (
                         <OrderFail />
                     )}

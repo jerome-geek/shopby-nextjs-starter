@@ -1,6 +1,5 @@
 import { isEmpty } from '@fxts/core';
 import dayjs from 'dayjs';
-import { Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
@@ -8,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
+import ReviewStartIcon from '@/components/icons/ReviewStartIcon';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import OptionText from '@/components/mypage/common/option-text';
 import * as styles from '@/components/mypage/review/review-list/index.css';
@@ -162,15 +162,9 @@ export const MyReviewListView = () => {
                                             {[1, 2, 3, 4, 5].map((n) => {
                                                 const filled = item.rate >= n;
                                                 return (
-                                                    <Star
+                                                    <ReviewStartIcon
                                                         key={n}
-                                                        width={16}
-                                                        height={16}
-                                                        fill={
-                                                            filled
-                                                                ? 'currentColor'
-                                                                : 'none'
-                                                        }
+                                                        filled={filled}
                                                     />
                                                 );
                                             })}
@@ -218,9 +212,7 @@ export const MyReviewListView = () => {
                         currentPage={pageNumber}
                         totalCount={totalCount}
                         pageSize={PAGE_SIZE}
-                        onPageClick={(page) =>
-                            setQuery({ pageNumber: page })
-                        }
+                        onPageClick={(page) => setQuery({ pageNumber: page })}
                     />
                 </div>
             </LoadingWrapper>

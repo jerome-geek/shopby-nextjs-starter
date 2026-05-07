@@ -1,7 +1,6 @@
 import { isEmpty } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
@@ -9,6 +8,7 @@ import { useEffect, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
+import ReviewStartIcon from '@/components/icons/ReviewStartIcon';
 import { MypageLayout } from '@/components/layout';
 import { ImageDetailModal } from '@/components/modal/image-detail';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
@@ -158,15 +158,9 @@ export default function MypageReviewDetailPage() {
                                                 (productReviewData.rate ?? 0) >=
                                                 n;
                                             return (
-                                                <Star
+                                                <ReviewStartIcon
                                                     key={n}
-                                                    width={16}
-                                                    height={16}
-                                                    fill={
-                                                        filled
-                                                            ? 'currentColor'
-                                                            : 'none'
-                                                    }
+                                                    filled={filled}
                                                 />
                                             );
                                         })}

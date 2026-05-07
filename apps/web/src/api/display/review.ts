@@ -12,6 +12,8 @@ import type {
     GetProductReviewCommentsParams,
     GetProductReviewListParams,
     GetProductReviewListResponse,
+    GetProductReviewListV2Params,
+    GetProductReviewListV2Response,
     GetProductReviewParams,
     GetProductReviewResponse,
     GetReviewBoardConfigResponse,
@@ -19,8 +21,6 @@ import type {
     GetReviewBoardListResponse,
     GetReviewCountByRatingRangeData,
     GetReviewCountByRatingRangeResponse,
-    GetReviewListV2Params,
-    GetReviewListV2Response,
     GetReviewTagsResponse,
     GetReviewableOptionResponse,
     GetReviewableOptionsParams,
@@ -148,10 +148,10 @@ const review = {
      */
     getProductReviewListV2: (
         productNo: number,
-        params: GetReviewListV2Params,
+        params: GetProductReviewListV2Params,
         options?: AxiosRequestConfig,
     ) => {
-        return shopbyRequest<GetReviewListV2Response>({
+        return shopbyRequest<GetProductReviewListV2Response>({
             method: 'GET',
             url: `/products/${productNo}/product-reviews/`,
             params,

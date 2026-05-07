@@ -1,7 +1,6 @@
 import { isEmpty, map, pipe, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -10,9 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import upload from '@/api/storage/image';
 import LoadingWrapper from '@/components/common/loading-wrapper';
+import ReviewStartIcon from '@/components/icons/ReviewStartIcon';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
 import OptionText from '@/components/mypage/common/option-text';
-import * as styles from '@/components/mypage/review/review-form/index.css';
+import * as styles from '@/components/mypage/review/form/index.css';
 import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/ui/file-upload';
 import { ErrorMessage } from '@/components/ui/form';
@@ -372,14 +372,10 @@ export const ReviewForm = ({ reviewNo, orderNo }: ReviewFormProps) => {
                                                 className={styles.starButton}
                                                 onClick={() => onChange(n)}
                                             >
-                                                <Star
+                                                <ReviewStartIcon
                                                     width={22}
                                                     height={22}
-                                                    fill={
-                                                        filled
-                                                            ? 'currentColor'
-                                                            : 'none'
-                                                    }
+                                                    filled={filled}
                                                 />
                                             </button>
                                         );
