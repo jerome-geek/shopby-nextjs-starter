@@ -3,7 +3,6 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 
 import { event, productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
-import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import SectionGroup from '@/components/section/group';
 import TimeSaleSection from '@/components/section/time-sale';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
@@ -19,7 +18,7 @@ import { eventKeys, productSectionKeys, timeSaleKeys } from '@/hooks/queryKeys';
 import type { GetEventsV2Params } from '@/models/display/event';
 import * as styles from '@/pages/shop/[slug]/index.css';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
-
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 const SHOP_TYPES = {
     LIFE: 'life',
     KIDS: 'kids',
@@ -48,18 +47,18 @@ export default function ShopMainPage({
                 <IconBanner type={heroBannerType} />
             </section>
 
-            <ShopbyApiErrorBoundary errorFallback={<></>}>
+            <ShopbyAsyncBoundary errorFallback={<></>}>
                 <TimeSaleSection
                     type={heroBannerType}
                     sectionId={sectionId}
                     title={'오늘만 특가'}
                 />
-            </ShopbyApiErrorBoundary>
+            </ShopbyAsyncBoundary>
 
             {/* 기획전 및 상품진열 그룹 */}
-            <ShopbyApiErrorBoundary errorFallback={<></>}>
+            <ShopbyAsyncBoundary errorFallback={<></>}>
                 <SectionGroup eventSearchParams={eventSearchParams} />
-            </ShopbyApiErrorBoundary>
+            </ShopbyAsyncBoundary>
         </div>
     );
 }
@@ -114,8 +113,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
             // 2. 이벤트 목록 조회 및 첫 번째 이벤트 상세 조회 (순차 의존성 해결 + 배너와는 병렬)
             (async () => {
-                const { data: eventListData } =
-                    await event.getEventsV2(eventSearchParams);
+                const { data: eventListData } = await event.getEventsV2(
+                    eventSearchParams,
+                );
 
                 // 무한 스크롤 캐시 구조 수동 주입 (하이드레이션 미스 방지)
                 queryClient.setQueryData(
@@ -129,8 +129,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 const firstEventNo = eventListData?.contents?.[0]?.eventNo;
 
                 if (firstEventNo) {
-                    const { data: detailData } =
-                        await event.getEvent(firstEventNo);
+                    const { data: detailData } = await event.getEvent(
+                        firstEventNo,
+                    );
 
                     // 이벤트 상세 캐시 주입 (EventSection 스켈레톤 제거)
                     queryClient.setQueryData(

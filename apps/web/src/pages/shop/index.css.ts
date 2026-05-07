@@ -28,4 +28,10 @@ export const heroBannerSection = style({
             gap: '24px',
         },
     },
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
 });

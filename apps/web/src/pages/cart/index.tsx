@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { OrderProductItem } from '@/components/cart/order-product-item';
 import CartSummary from '@/components/cart/summary';
 import FetchBoundary from '@/components/common/FetchBoundary';
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import Seo from '@/components/common/seo';
-import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { CSRLayout } from '@/components/layout';
 import { InputCheckbox, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
@@ -20,6 +20,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import type { UpdateCartData } from '@/models/order/cart';
 import * as styles from '@/pages/cart/index.css';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { useCartStore } from '@/store/useCartStore';
 
 const CartPage = () => {
@@ -29,9 +30,20 @@ const CartPage = () => {
         <>
             <Seo title={t('장바구니')} />
 
-            <ShopbyApiErrorBoundary fallback={<p>Loading...</p>}>
+            <ShopbyAsyncBoundary
+                fallback={
+                    <LoadingWrapper
+                        isLoading
+                        containerStyle={{
+                            height: '50vh',
+                        }}
+                    >
+                        <span />
+                    </LoadingWrapper>
+                }
+            >
                 <CartContent />
-            </ShopbyApiErrorBoundary>
+            </ShopbyAsyncBoundary>
         </>
     );
 };

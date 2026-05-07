@@ -6,12 +6,11 @@ import { useMemo } from 'react';
 
 import { LazyRender } from '@/components/common';
 import { ObserverTarget } from '@/components/common/observer-target';
-import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import EventSection from '@/components/section/event';
 import ProductsSearch from '@/components/section/products/search';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import type { GetEventsV2Params } from '@/models/display/event';
 import { ShopType } from '@/pages/shop/[slug]';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
 const Best = dynamic(() => import('@/components/section/best'), {
     ssr: false,
@@ -28,6 +27,9 @@ const ProductDisplay = dynamic(
         ssr: false,
     },
 );
+const Event = dynamic(() => import('@/components/section/event'), {
+    ssr: false,
+});
 
 const SectionGroup = ({
     eventSearchParams,
@@ -80,16 +82,16 @@ const SectionGroup = ({
 
     return (
         <>
-            <EventSection eventNo={eventNoList?.[0]} />
+            <Event eventNo={eventNoList?.[0]} />
 
             <LazyRender minHeight={500}>
-                <ShopbyApiErrorBoundary errorFallback={<></>}>
+                <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Best type={type === 'kids' ? 'KIDS' : 'LIFE'} />
-                </ShopbyApiErrorBoundary>
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventNo={eventNoList?.[1]} />
+                <Event eventNo={eventNoList?.[1]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -125,7 +127,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventNo={eventNoList?.[2]} />
+                <Event eventNo={eventNoList?.[2]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -164,7 +166,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventNo={eventNoList?.[3]} />
+                <Event eventNo={eventNoList?.[3]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -172,7 +174,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventNo={eventNoList?.[4]} />
+                <Event eventNo={eventNoList?.[4]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -192,7 +194,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventNo={eventNoList?.[5]} />
+                <Event eventNo={eventNoList?.[5]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -200,7 +202,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventNo={eventNoList?.[6]} />
+                <Event eventNo={eventNoList?.[6]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -232,7 +234,7 @@ const SectionGroup = ({
 
             {filteredEventNoList.map((eventNo) => (
                 <LazyRender minHeight={400} key={eventNo}>
-                    <EventSection eventNo={eventNo} />
+                    <Event eventNo={eventNo} />
                 </LazyRender>
             ))}
 
