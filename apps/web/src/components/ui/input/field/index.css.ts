@@ -14,7 +14,8 @@ export const inputField = style([
         backgroundColor: vars.color.white,
         border: `1px solid ${vars.color.gray['50']}`,
         color: vars.color.black,
-        transition: 'all 0.2s ease-in-out', // 모든 인터랙션 부드럽게
+        boxSizing: 'border-box',
+        transition: 'all 0.2s ease-in-out',
 
         '::placeholder': {
             color: vars.color.gray['50'],

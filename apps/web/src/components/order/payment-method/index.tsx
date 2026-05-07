@@ -5,18 +5,12 @@ import { useEffect, useMemo } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Select, InputField } from '@/components/ui/input';
-import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
-import type { PayType, PgType } from '@/models';
-import { PaymentReserveSchemaType } from '@/schema';
-
 import * as styles from '@/components/order/payment-method/index.css';
-
-const CASH_RECEIPT_TYPES = [
-    { label: '소득공제용', value: 'INCOME_TAX_DEDUCTION' },
-    { label: '지출증빙용', value: 'PROOF_EXPENDITURE' },
-    { label: '미발행', value: 'VOLUNTARY' },
-] as const;
+import { InputField, Select } from '@/components/ui/input';
+import { CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP } from '@/const/label';
+import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
+import type { CashReceiptKeyType, PayType, PgType } from '@/models';
+import { PaymentReserveSchemaType } from '@/schema';
 
 export const PaymentMethod = () => {
     const { t } = useTranslation();
@@ -41,10 +35,10 @@ export const PaymentMethod = () => {
         cashReceipt?.cashReceiptIssuePurposeType &&
         cashReceipt?.cashReceiptIssuePurposeType !== 'VOLUNTARY';
 
-    const availablePayTypes = orderSheetData?.availablePayTypes ?? [];
+    const availablePayTypes = orderSheetData.availablePayTypes ?? [];
     const tradeBankAccountInfos = useMemo(
-        () => orderSheetData?.tradeBankAccountInfos ?? [],
-        [orderSheetData?.tradeBankAccountInfos],
+        () => orderSheetData.tradeBankAccountInfos ?? [],
+        [orderSheetData.tradeBankAccountInfos],
     );
 
     useEffect(() => {
@@ -82,7 +76,7 @@ export const PaymentMethod = () => {
     };
 
     const handleCashReceiptTypeChange = (
-        value: (typeof CASH_RECEIPT_TYPES)[number]['value'],
+        value: keyof typeof CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP,
     ) => {
         if (value === 'VOLUNTARY') {
             setValue('applyCashReceipt', false);
@@ -97,17 +91,17 @@ export const PaymentMethod = () => {
 
             setValue('cashReceipt', {
                 cashReceiptIssuePurposeType: purpose,
-                cashReceiptKeyType: keyType as any,
+                cashReceiptKeyType: keyType,
                 cashReceiptKey: '',
             });
         }
     };
 
-    const handleKeyTypeChange = (value: string) => {
+    const handleKeyTypeChange = (value: CashReceiptKeyType) => {
         if (cashReceipt) {
             setValue('cashReceipt', {
                 ...cashReceipt,
-                cashReceiptKeyType: value as any,
+                cashReceiptKeyType: value,
                 cashReceiptKey: '',
             });
         }
@@ -173,6 +167,10 @@ export const PaymentMethod = () => {
                                             className={
                                                 styles.bankTransferContainer
                                             }
+                                            style={{
+                                                width: '100%',
+                                                boxSizing: 'border-box',
+                                            }}
                                         >
                                             <div className={styles.fieldRow}>
                                                 <div
@@ -301,43 +299,35 @@ export const PaymentMethod = () => {
                                                         handleCashReceiptTypeChange
                                                     }
                                                 >
-                                                    {CASH_RECEIPT_TYPES.map(
-                                                        (type) => (
-                                                            <div
-                                                                key={type.value}
+                                                    {Object.entries(
+                                                        CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP,
+                                                    ).map(([value, label]) => (
+                                                        <div
+                                                            key={value}
+                                                            className={
+                                                                styles.cashReceiptRadioItem
+                                                            }
+                                                        >
+                                                            <RadioGroup.Item
+                                                                id={value}
                                                                 className={
-                                                                    styles.cashReceiptRadioItem
+                                                                    styles.radioCircle
                                                                 }
+                                                                value={value}
                                                             >
-                                                                <RadioGroup.Item
-                                                                    id={
-                                                                        type.value
-                                                                    }
+                                                                <RadioGroup.Indicator
                                                                     className={
-                                                                        styles.radioCircle
+                                                                        styles.radioIndicator
                                                                     }
-                                                                    value={
-                                                                        type.value
-                                                                    }
-                                                                >
-                                                                    <RadioGroup.Indicator
-                                                                        className={
-                                                                            styles.radioIndicator
-                                                                        }
-                                                                    />
-                                                                </RadioGroup.Item>
-                                                                <label
-                                                                    htmlFor={
-                                                                        type.value
-                                                                    }
-                                                                >
-                                                                    {t(
-                                                                        type.label,
-                                                                    )}
-                                                                </label>
-                                                            </div>
-                                                        ),
-                                                    )}
+                                                                />
+                                                            </RadioGroup.Item>
+                                                            <label
+                                                                htmlFor={value}
+                                                            >
+                                                                {t(label)}
+                                                            </label>
+                                                        </div>
+                                                    ))}
                                                 </RadioGroup.Root>
 
                                                 {isCashReceiptEnabled && (
@@ -416,28 +406,21 @@ export const PaymentMethod = () => {
                                                                         styles.inputGroup
                                                                     }
                                                                 >
-                                                                    <div
-                                                                        style={{
-                                                                            gridColumn:
-                                                                                'span 2',
-                                                                        }}
-                                                                    >
-                                                                        <InputField
-                                                                            placeholder={
-                                                                                cashReceiptKeyType ===
-                                                                                'MOBILE_NO'
-                                                                                    ? t(
-                                                                                          '휴대폰 번호를 숫자만 입력해 주세요.',
-                                                                                      )
-                                                                                    : t(
-                                                                                          '현금영수증 카드번호를 입력해주세요.',
-                                                                                      )
-                                                                            }
-                                                                            {...register(
-                                                                                'cashReceipt.cashReceiptKey',
-                                                                            )}
-                                                                        />
-                                                                    </div>
+                                                                    <InputField
+                                                                        placeholder={
+                                                                            cashReceiptKeyType ===
+                                                                            'MOBILE_NO'
+                                                                                ? t(
+                                                                                      '휴대폰 번호를 숫자만 입력해 주세요.',
+                                                                                  )
+                                                                                : t(
+                                                                                      '현금영수증 카드번호를 입력해주세요.',
+                                                                                  )
+                                                                        }
+                                                                        {...register(
+                                                                            'cashReceipt.cashReceiptKey',
+                                                                        )}
+                                                                    />
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -446,21 +429,14 @@ export const PaymentMethod = () => {
                                                                     styles.inputGroup
                                                                 }
                                                             >
-                                                                <div
-                                                                    style={{
-                                                                        gridColumn:
-                                                                            'span 2',
-                                                                    }}
-                                                                >
-                                                                    <InputField
-                                                                        placeholder={t(
-                                                                            '사업자 번호를 입력해주세요.',
-                                                                        )}
-                                                                        {...register(
-                                                                            'cashReceipt.cashReceiptKey',
-                                                                        )}
-                                                                    />
-                                                                </div>
+                                                                <InputField
+                                                                    placeholder={t(
+                                                                        '사업자 번호를 입력해주세요.',
+                                                                    )}
+                                                                    {...register(
+                                                                        'cashReceipt.cashReceiptKey',
+                                                                    )}
+                                                                />
                                                             </div>
                                                         )}
                                                     </div>

@@ -3,7 +3,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const tabsContainer = style({
     display: 'flex',
@@ -30,7 +30,7 @@ export const tabsContainer = style({
 });
 
 export const tabButton = style([
-    textStyles.headlineMedium,
+    textStyles.body1Medium,
     {
         flex: 1,
         textAlign: 'center',
@@ -44,16 +44,13 @@ export const tabButton = style([
 
         '@media': {
             [media.desktop]: {
-                fontSize: '1.4rem',
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
+                ...textStyleTokens.headlineMedium,
             },
         },
 
         selectors: {
             '&[aria-selected="true"]': {
                 color: vars.color.black,
-                fontWeight: 600,
             },
         },
     },

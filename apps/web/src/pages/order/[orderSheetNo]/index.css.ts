@@ -70,7 +70,6 @@ export const contentDivider = style({
     backgroundColor: vars.color.gray['20'],
     border: 'none',
     height: '6px',
-    margin: 0,
 
     '@media': {
         [media.desktop]: {

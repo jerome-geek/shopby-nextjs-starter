@@ -9,6 +9,7 @@ export const container = style({
     width: '100%',
     position: 'relative',
     transition: 'all 0.2s',
+    minWidth: 0,
 });
 
 export const control = recipe({
@@ -22,7 +23,9 @@ export const control = recipe({
         height: '44px',
         padding: '12px 12px',
         backgroundColor: vars.color.white,
+        boxSizing: 'border-box',
         cursor: 'pointer',
+        minWidth: 0,
 
         '@media': {
             [media.desktop]: {
@@ -44,6 +47,7 @@ export const valueContainer = style({
     display: 'flex',
     gap: '4px',
     flex: 1,
+    minWidth: 0,
 });
 
 export const menu = style([
@@ -155,6 +159,11 @@ export const singleValue = style([
     textStyles.body1Regular,
     {
         color: vars.color.gray['80'],
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        flex: 1,
+        minWidth: 0,
     },
 ]);
 

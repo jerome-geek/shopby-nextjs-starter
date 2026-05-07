@@ -1,4 +1,6 @@
 import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
 
@@ -6,6 +8,8 @@ export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
+    width: '100%',
+    boxSizing: 'border-box',
 });
 
 export const title = style([
@@ -19,6 +23,9 @@ export const radioGroupRoot = style({
     display: 'grid',
     gridTemplateColumns: 'repeat(1, 1fr)',
     gap: '12px',
+    width: '100%',
+    boxSizing: 'border-box',
+    minWidth: 0, // 자식 요소들이 부모 너비 안에서 줄어들 수 있도록 보장
 });
 
 export const radioGroupItem = style({
@@ -33,6 +40,8 @@ export const radioGroupItem = style({
     backgroundColor: '#fff',
     width: '100%',
     textAlign: 'left',
+    boxSizing: 'border-box',
+    minWidth: 0,
 
     selectors: {
         '&:hover': {
@@ -99,19 +108,41 @@ export const radioIndicator = style({
 export const bankTransferContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
-    padding: '24px 20px',
+    gap: '16px',
+    padding: '24px 16px',
     backgroundColor: vars.color.gray['10'],
     borderRadius: '12px',
-    marginTop: '12px',
+    marginTop: '16px',
+    width: '100%',
+    boxSizing: 'border-box',
     overflow: 'hidden',
+    minWidth: 0,
+
+    '@media': {
+        [media.desktop]: {
+            padding: '24px',
+            gap: '20px',
+        },
+    },
 });
 
 export const fieldRow = style({
     display: 'grid',
-    gridTemplateColumns: '80px 1fr',
-    alignItems: 'center',
-    gap: '16px',
+    gridTemplateColumns: '1fr',
+    alignItems: 'flex-start',
+    gap: '8px',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+    minWidth: 0,
+
+    '@media': {
+        [media.desktop]: {
+            gridTemplateColumns: '80px 1fr',
+            gap: '16px',
+            alignItems: 'center',
+        },
+    },
 });
 
 export const fieldLabel = style([
@@ -142,9 +173,18 @@ export const cashReceiptSection = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
-    paddingTop: '20px',
-    borderTop: `1px solid ${vars.color.black}`,
-    marginTop: '40px',
+    paddingTop: '24px',
+    borderTop: `1px solid ${vars.color.gray['30']}`,
+    marginTop: '32px',
+    width: '100%',
+    boxSizing: 'border-box',
+
+    '@media': {
+        [media.desktop]: {
+            marginTop: '40px',
+            gap: '16px',
+        },
+    },
 });
 
 export const cashReceiptTitle = style([
@@ -159,14 +199,28 @@ export const cashReceiptDescription = style([
     {
         color: vars.color.gray['60'],
         marginBottom: '4px',
+        wordBreak: 'keep-all',
+        width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box',
     },
 ]);
 
 export const cashReceiptRadioGroup = style({
     display: 'flex',
-    gap: '20px',
-    alignItems: 'center',
+    flexDirection: 'column', // 모바일에서는 수직 정렬
+    gap: '12px',
     marginBottom: '8px',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+
+    '@media': {
+        [media.desktop]: {
+            flexDirection: 'row', // 데스크탑에서만 가로 배치
+            gap: '24px',
+        },
+    },
 });
 
 export const cashReceiptRadioItem = style([
@@ -176,6 +230,8 @@ export const cashReceiptRadioItem = style([
         alignItems: 'center',
         gap: '8px',
         cursor: 'pointer',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
     },
 ]);
 
@@ -184,10 +240,23 @@ export const phoneNumberRow = style({
     flexDirection: 'column',
     gap: '12px',
     marginTop: '16px',
+    width: '100%',
+    boxSizing: 'border-box',
 });
 
 export const inputGroup = style({
     display: 'grid',
-    gridTemplateColumns: '120px 1fr',
-    gap: '8px',
+    gridTemplateColumns: '1fr',
+    gap: '12px',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+    minWidth: 0,
+
+    '@media': {
+        [media.desktop]: {
+            gridTemplateColumns: '120px 1fr',
+            gap: '16px',
+        },
+    },
 });

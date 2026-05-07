@@ -1,16 +1,16 @@
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
-import Seo from '@/components/common/seo';
-import EventItem from '@/features/event/list/components/event-item';
-import { EVENT_LIST } from '@/const/event';
-import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
-import { useResponsive } from '@/hooks/utils';
-import type { GetEventsV2Params } from '@/models/display';
 import { keepPreviousData } from '@tanstack/react-query';
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
+import { NoResult } from '@/components/common/no-result';
+import { ObserverTarget } from '@/components/common/observer-target';
+import Seo from '@/components/common/seo';
+import { EVENT_LIST } from '@/const/event';
+import EventItem from '@/features/event/list/components/event-item';
+import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
+import { useResponsive } from '@/hooks/utils';
+import type { GetEventsV2Params } from '@/models/display';
 import * as styles from '@/pages/events/index.css';
 
 const Events = () => {
@@ -50,7 +50,6 @@ const Events = () => {
             [],
         [infiniteEventListData],
     );
-    console.log('🚀 ~ Events ~ eventList:', eventList);
 
     const totalCount = useMemo(
         () => infiniteEventListData?.pages?.[0]?.totalCount ?? 0,

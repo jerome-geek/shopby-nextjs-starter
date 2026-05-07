@@ -70,6 +70,10 @@ const EventProductSectionContent = ({
             toArray,
         );
     }, [products, additionalDiscountByProductNosData]);
+    console.log(
+        '🚀 ~ EventProductSectionContent ~ productListWithAdditionalDiscount:',
+        productListWithAdditionalDiscount,
+    );
 
     if (totalCount === 0) {
         return <NoResult text='진열된 상품이 없습니다.' />;
