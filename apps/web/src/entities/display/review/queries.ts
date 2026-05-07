@@ -2,7 +2,7 @@ import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { review } from '@/api/display';
-import reviewKeys from '@/hooks/queryKeys/reviewKeys';
+import { reviewKeys } from '@/hooks/queryKeys';
 import type {
     GetProductReviewListParams,
     GetProductReviewListResponse,

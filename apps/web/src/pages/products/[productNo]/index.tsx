@@ -19,6 +19,8 @@ import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coup
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import { BookmarkIcon } from '@/components/icons';
+import { TruckIcon } from '@/components/icons/TruckIcon';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import {
     ExtraProductList,
@@ -54,8 +56,6 @@ import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
 
-import { BookmarkIcon } from '@/components/icons';
-import { TruckIcon } from '@/components/icons/TruckIcon';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
