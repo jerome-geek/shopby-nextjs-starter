@@ -177,14 +177,14 @@ export const brand = style([
 ]);
 
 export const productName = style([
-    textStyles.title1Semibold,
+    textStyles.headingSemibold,
     {
         color: vars.color.black,
     },
     {
         '@media': {
-            [media.mobile]: {
-                ...textStyleTokens.headingSemibold,
+            [media.desktop]: {
+                ...textStyleTokens.title1Semibold,
             },
         },
     },
@@ -214,8 +214,7 @@ export const likeCount = style([
 export const priceContainer = style({
     display: 'flex',
     alignItems: 'baseline',
-    gap: '8px',
-    marginTop: '4px',
+    gap: '6px',
 });
 
 export const discountRate = style([
@@ -326,7 +325,6 @@ export const deliveryBox = style({
     padding: '12px',
     borderRadius: '8px',
     display: 'flex',
-    flexDirection: 'column',
     gap: '12px',
 
     '@media': {

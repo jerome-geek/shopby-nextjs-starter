@@ -19,9 +19,9 @@ import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coup
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import {
+    ExtraProductList,
     PhotoReview,
     ProductAdditionalDiscount,
     ProductErrorState,
@@ -42,17 +42,19 @@ import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
-import { useRecentViewProducts } from '@/hooks/product/useRecentViewProduct';
+import { useTrackRecentViewProduct } from '@/hooks/product/useRecentViewProduct';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { productKeys } from '@/hooks/queryKeys';
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
 import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
 
+import { BookmarkIcon } from '@/components/icons';
 import { TruckIcon } from '@/components/icons/TruckIcon';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -79,7 +81,6 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const { discountRate, buyPrice, salePrice } = useProductPrice({
         productNo,
     });
-
     const {
         isDefaultOptionUsed,
         isFlatOptionUsed,
@@ -170,12 +171,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         addOption,
     ]);
 
-    const { addRecentProduct } = useRecentViewProducts();
-
-    useEffect(() => {
-        addRecentProduct(productNo);
-    }, []);
-
+    useTrackRecentViewProduct(productNo);
     useSb({
         product: productDetailData,
     });
@@ -189,14 +185,12 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     </div>
 
                     {!isTablet && (
-                        <div style={{ marginTop: '40px' }}>
-                            <ProductTabs
-                                reviewCount={counter.reviewCnt || 0}
-                                inquiryCount={counter.inquiryCnt || 0}
-                                productContent={productContent}
-                                productDetailData={productDetailData}
-                            />
-                        </div>
+                        <ProductTabs
+                            reviewCount={counter.reviewCnt || 0}
+                            inquiryCount={counter.inquiryCnt || 0}
+                            productContent={productContent}
+                            productDetailData={productDetailData}
+                        />
                     )}
                 </div>
 
@@ -289,16 +283,10 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                         )}
 
                         <div className={styles.deliveryBox}>
-                            <div className={styles.deliveryTitle}>
-                                <TruckIcon />
-                                지금 주문하면 내일 받을 수 있어요
-                            </div>
-                            <div className={styles.badgeList}>
-                                <span className={`${styles.badge}`}>
-                                    무료배송
-                                </span>
-                                <span className={`${styles.badge}`}>
-                                    빠른배송
+                            <TruckIcon size={isMobile ? 20 : 24} />
+                            <div className={styles.deliveryContentContainer}>
+                                <span className={styles.deliveryTitle}>
+                                    지금 주문하면 내일 받을 수 있어요
                                 </span>
 
                                 <div className={styles.badgeList}>
@@ -333,6 +321,10 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                     />
                                 )}
 
+                                <ShopbyAsyncBoundary>
+                                    <ExtraProductList productNo={productNo} />
+                                </ShopbyAsyncBoundary>
+
                                 <SelectedProductOption
                                     productNo={productNo}
                                     isRemovable={!isDefaultOptionUsed}
@@ -361,10 +353,6 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     key={`${router.pathname}-bottom-sticky`}
                     className={styles.bottomSticky}
                     initial={{ transform: 'translateY(0)' }}
-                    animate={{
-                        transform:
-                            'translateY(calc(var(--bottom-nav-active-height, 0px) * -1))',
-                    }}
                     exit={{ transform: 'translateY(0)' }}
                 >
                     {isSaleEnd ? (
@@ -413,20 +401,35 @@ export default function ProductDetailPage({
     return (
         <>
             {seoData && <Seo type='product' {...seoData} />}
-
             <ShopbyApiErrorBoundary
                 fallback={
-                    <LoadingWrapper
-                        isLoading
-                        containerStyle={{
-                            height: '80vh',
-                        }}
+                    // 로딩 상태도 애니메이션을 넣고 싶다면 motion.div로 감쌉니다.
+                    <motion.div
+                        key='product-loading'
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                     >
-                        <span />
-                    </LoadingWrapper>
+                        <LoadingWrapper
+                            isLoading
+                            containerStyle={{ height: '80vh' }}
+                        >
+                            <span />
+                        </LoadingWrapper>
+                    </motion.div>
                 }
             >
-                <ProductDetailView productNo={productNo} />
+                {/* 데이터 로드 후 나타날 컨텐츠 */}
+                <AnimatePresence mode='wait'>
+                    <motion.div
+                        key={`product-detail-${productNo}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                    >
+                        <ProductDetailView productNo={productNo} />
+                    </motion.div>
+                </AnimatePresence>
             </ShopbyApiErrorBoundary>
         </>
     );
