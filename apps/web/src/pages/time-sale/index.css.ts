@@ -89,12 +89,11 @@ export const subTitleContainer = style({
 
 export const imageContainer = style({
     width: 'calc(100% + 40px)',
+    height: 'auto',
     margin: '0 -20px',
     aspectRatio: '1/1',
     backgroundColor: vars.color.gray['10'],
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    overflow: 'hidden',
 
     '@media': {
         [media.desktop]: {
@@ -102,7 +101,6 @@ export const imageContainer = style({
             height: '486px',
             margin: '0',
             borderRadius: '8px',
-            overflow: 'hidden',
         },
     },
 });
