@@ -9,10 +9,12 @@ export const container = style({
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
-    gap: '48px',
+    gap: '36px',
+    paddingTop: '12px',
 
     '@media': {
         [media.desktop]: {
+            gap: '48px',
             padding: '40px 0',
         },
     },
@@ -21,35 +23,62 @@ export const container = style({
 export const banner = style({
     backgroundColor: vars.color.green['20'],
     borderRadius: '8px',
-    padding: '32px 20px',
+    padding: '24px 20px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '16px',
+    gap: '10px',
     width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            padding: '32px 20px',
+            gap: '16px',
+        },
+    },
 });
 
 export const bannerIcon = style({
-    width: '80px',
-    height: '80px',
+    width: '60px',
+    height: '60px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+
+    '@media': {
+        [media.desktop]: {
+            width: '80px',
+            height: '80px',
+        },
+    },
 });
 
 export const bannerTitle = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.black,
         textAlign: 'center',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingSemibold,
+            },
+        },
     },
 ]);
 
-export const bannerDate = style({
-    marginTop: '12px',
-    color: vars.color.gray['60'],
-    fontSize: '14px',
-});
+export const bannerDate = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
+    },
+]);
 
 /* ─── Info Grid ─── */
 export const infoGrid = style({
@@ -61,7 +90,7 @@ export const infoGrid = style({
     '@media': {
         'screen and (max-width: 480px)': {
             flexDirection: 'column',
-            gap: '12px',
+            gap: '8px',
         },
     },
 });
@@ -70,8 +99,14 @@ export const infoColumn = style({
     flex: '1 0 0',
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '8px',
     minWidth: 0,
+
+    '@media': {
+        [media.desktop]: {
+            gap: '12px',
+        },
+    },
 });
 
 export const infoRow = style({
@@ -83,34 +118,54 @@ export const infoRow = style({
 });
 
 export const infoLabel = style([
-    textStyles.headlineSemibold,
+    textStyles.body1Semibold,
     {
         width: '72px',
         flexShrink: 0,
         color: vars.color.gray['90'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineSemibold,
+            },
+        },
     },
 ]);
 
 export const infoValue = style([
-    textStyles.headlineRegular,
+    textStyles.body1Regular,
     {
         flex: 1,
         color: vars.color.gray['90'],
         lineHeight: '1.4',
         minWidth: 0,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineRegular,
+            },
+        },
     },
 ]);
 
 export const bankLimitDate = style({
-    color: '#ff4d4d',
+    color: vars.color.pink['100'],
 });
 
 /* ─── Divider ─── */
 export const divider = style({
-    border: 'none',
-    borderTop: `1px solid ${vars.color.gray['20']}`,
-    width: '100%',
-    margin: 0,
+    width: 'calc(100% + 40px)',
+    height: '6px',
+    margin: '0 -20px',
+    background: vars.color.gray['20'],
+
+    '@media': {
+        [media.desktop]: {
+            width: '100%',
+            height: '1px',
+            margin: '0',
+        },
+    },
 });
 
 /* ─── Product section ─── */
@@ -273,18 +328,24 @@ export const productPriceText = style([
 export const summaryContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '8px',
     width: '100%',
 });
 
 export const summaryRow = style([
-    textStyles.headlineRegular,
+    textStyles.body2Regular,
     {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         color: vars.color.gray['80'],
         width: '100%',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headlineRegular,
+            },
+        },
     },
 ]);
 
@@ -293,38 +354,64 @@ export const totalRow = style({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+    borderTop: `1px solid ${vars.color.gray['20']}`,
+    paddingTop: '10px',
+
+    '@media': {
+        [media.desktop]: {
+            paddingTop: '12px',
+        },
+    },
 });
 
 export const totalLabel = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         color: vars.color.black,
         whiteSpace: 'nowrap',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingSemibold,
+            },
+        },
     },
 ]);
 
 export const totalPriceText = style([
-    textStyles.title1Bold,
+    textStyles.headingBold,
     {
-        color: vars.color.primary,
+        color: vars.color.pink['100'],
         flex: '1 0 0',
         textAlign: 'right',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.title1Bold,
+            },
+        },
     },
 ]);
 
 /* ─── Buttons ─── */
 export const buttonGroup = style({
     display: 'flex',
-    gap: '8px',
+    gap: '6px',
     alignItems: 'center',
     width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            gap: '8px',
+        },
+    },
 });
 
 export const ghostButton = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         flex: '1 0 0',
-        padding: '18px',
+        height: '53px',
         textAlign: 'center',
         borderRadius: '4px',
         border: `1px solid ${vars.color.gray['50']}`,
@@ -338,14 +425,21 @@ export const ghostButton = style([
         ':hover': {
             backgroundColor: vars.color.gray['10'],
         },
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingSemibold,
+                height: '63px',
+            },
+        },
     },
 ]);
 
 export const primaryButton = style([
-    textStyles.headingSemibold,
+    textStyles.headlineSemibold,
     {
         flex: '1 0 0',
-        padding: '18px',
+        height: '53px',
         textAlign: 'center',
         borderRadius: '4px',
         backgroundColor: vars.color.green['100'],
@@ -359,6 +453,13 @@ export const primaryButton = style([
         transition: 'opacity 0.2s',
         ':hover': {
             opacity: 0.9,
+        },
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingSemibold,
+                height: '63px',
+            },
         },
     },
 ]);

@@ -139,7 +139,7 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                 </div>
             </div>
 
-            <hr className={styles.divider} />
+            <div className={styles.divider} />
 
             <div>
                 <h2 className={styles.sectionTitle}>{t('결제 정보')}</h2>
