@@ -22,7 +22,7 @@ const PROTECTED_ROUTES: string[] = [
  *   .ts가 아닌 .tsx 파일로 작성 (.ts는 proxy 파일로 인식되지 않음)
  */
 export function proxy(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+    const { pathname, search } = request.nextUrl;
 
     // [OPTIMIZATION] 정적 자원, API 경로, 또는 확장자가 있는 요청은 미들웨어 로직 스킵
     if (
@@ -58,7 +58,7 @@ export function proxy(request: NextRequest) {
 
     if (isProtectedRoute && !isLoggedIn) {
         const loginUrl = new URL(PATHS.AUTH.LOGIN, request.url);
-        loginUrl.searchParams.set('returnUrl', pathname);
+        loginUrl.searchParams.set('returnUrl', `${pathname}${search}`);
         const response = NextResponse.redirect(loginUrl);
         // 보호된 페이지에서도 로그아웃 후 뒤로가기 시 캐시된 정보가 보이는 것을 방지
         response.headers.set(

@@ -1,15 +1,16 @@
-import { SuspenseQuery } from '@suspensive/react-query';
 import Seo from '@/components/common/seo';
+import { SuspenseQuery } from '@suspensive/react-query';
 import { useRouter } from 'next/router';
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import { CSRLayout } from '@/components/layout';
 import { RecipeForm } from '@/features/recipe/components/recipe-form';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
-import { useResponsive } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/write/index.css';
 
 const RecipeWritePage = () => {
@@ -21,6 +22,10 @@ const RecipeWritePage = () => {
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo || 0;
     const isModify = !!memberNo && !!recipeNo;
+
+    const { openAsyncDialog } = useDialog();
+
+    const isProcessing = useRef(false);
 
     return (
         <>
@@ -36,21 +41,56 @@ const RecipeWritePage = () => {
                 )}
 
                 {isModify ? (
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense
+                        fallback={
+                            <LoadingWrapper
+                                isLoading
+                                containerStyle={{
+                                    height: '50vh',
+                                }}
+                            >
+                                <span />
+                            </LoadingWrapper>
+                        }
+                    >
                         <SuspenseQuery
                             queryKey={recipeKeys.detail(recipeNo, memberNo)}
                             queryFn={async () => {
-                                const { data } =
-                                    await recipe.getRecipeDetail(recipeNo);
+                                const { data } = await recipe.getRecipeDetail(
+                                    recipeNo,
+                                );
 
                                 return data;
                             }}
                             staleTime={1000 * 60 * 5}
                             gcTime={1000 * 60 * 10}
                         >
-                            {({ data }) => (
-                                <RecipeForm isModify recipeDetailData={data} />
-                            )}
+                            {async ({ data }) => {
+                                if (data?.memberNo !== memberNo) {
+                                    if (!isProcessing.current) {
+                                        isProcessing.current = true;
+
+                                        await openAsyncDialog({
+                                            message: t(
+                                                '내가 작성한 레시피만 수정할 수 있습니다.',
+                                            ),
+                                            onConfirmReturnValue: true,
+                                            onCloseReturnValue: false,
+                                        });
+
+                                        router.back();
+                                    }
+
+                                    return null;
+                                }
+
+                                return (
+                                    <RecipeForm
+                                        isModify
+                                        recipeDetailData={data}
+                                    />
+                                );
+                            }}
                         </SuspenseQuery>
                     </Suspense>
                 ) : (
