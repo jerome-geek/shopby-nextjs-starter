@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { ErrorMessage } from '@/components/ui/form';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { EmailField } from '@/features/member/find-id/components/filed/email';
-import { MobileField } from '@/features/member/find-id/components/filed/mobile-field';
+import { MobileField } from '@/features/member/find-id/components/filed/mobile';
 import * as styles from '@/features/member/find-id/components/find-id-form/index.css';
 import { useProfileMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
