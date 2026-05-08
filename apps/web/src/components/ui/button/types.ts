@@ -17,7 +17,8 @@ export type SolidButtonProps = BaseButtonProps & {
         | 'facebook'
         | 'google'
         | 'line'
-        | 'green';
+        | 'green'
+        | 'brick';
     size?: 'large' | 'medium' | 'small';
     // solid 버튼만의 고유 프롭스들...
 };

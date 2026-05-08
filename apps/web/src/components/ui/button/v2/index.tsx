@@ -19,7 +19,8 @@ export type SolidButtonProps = BaseButtonProps & {
         | 'apple'
         | 'facebook'
         | 'google'
-        | 'line';
+        | 'line'
+        | 'brick';
     size?: 'large' | 'medium' | 'small';
 };
 
@@ -35,7 +36,10 @@ export type TextButtonProps = BaseButtonProps & {
     size?: 'large' | 'medium' | 'small';
 };
 
-export type ButtonPropsV2 = SolidButtonProps | OutlinedButtonProps | TextButtonProps;
+export type ButtonPropsV2 =
+    | SolidButtonProps
+    | OutlinedButtonProps
+    | TextButtonProps;
 
 export const ButtonV2 = ({
     children,
@@ -46,7 +50,7 @@ export const ButtonV2 = ({
 }: ButtonPropsV2) => {
     return (
         <button
-            type="button"
+            type='button'
             className={`${buttonRecipe({ frame, variant })} ${className || ''}`}
             {...props}
         >

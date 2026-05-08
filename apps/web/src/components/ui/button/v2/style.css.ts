@@ -1,8 +1,8 @@
 import { recipe, RecipeVariants } from '@vanilla-extract/recipes';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const buttonRecipe = recipe({
     base: {
@@ -91,6 +91,7 @@ export const buttonRecipe = recipe({
             primary: {},
             secondary: {},
             tertiary: {},
+            brick: {},
             kakao: {},
             'kakao-sync': {},
             naver: {},
@@ -123,6 +124,13 @@ export const buttonRecipe = recipe({
             style: {
                 color: vars.color.white,
                 backgroundColor: vars.color.black,
+            },
+        },
+        {
+            variants: { frame: 'solid', variant: 'brick' },
+            style: {
+                color: vars.color.white,
+                backgroundColor: vars.color.brick,
             },
         },
         {

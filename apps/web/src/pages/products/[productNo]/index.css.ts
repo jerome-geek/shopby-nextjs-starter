@@ -207,7 +207,7 @@ export const likeButton = style({
 export const likeCount = style([
     textStyles.body1Medium,
     {
-        color: vars.color.green['100'],
+        color: vars.color.gray['60'],
     },
 ]);
 

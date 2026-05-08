@@ -1,6 +1,6 @@
-import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const container = style({
     display: 'flex',
@@ -73,8 +73,6 @@ export const cartButton = style({
 
 export const buyButton = style({
     flex: 1,
-    backgroundColor: `${vars.color.pink['80']} !important`,
-    color: `${vars.color.white} !important`,
     borderRadius: '4px !important',
     height: '53px !important',
     border: 'none !important',

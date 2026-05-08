@@ -1,7 +1,7 @@
 import { each, map, pipe, prop, take } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
-import { Gift, Star } from 'lucide-react';
+import { Gift, Share2, Star } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
     type GetStaticPaths,
@@ -12,16 +12,20 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 import { product } from '@/api/product';
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
 import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
+import ShareBottomSheet from '@/components/bottom-sheet/share';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { BookmarkIcon } from '@/components/icons';
 import { TruckIcon } from '@/components/icons/TruckIcon';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
+import ShareModal from '@/components/modal/share';
 import {
     ExtraProductList,
     PhotoReview,
@@ -55,9 +59,6 @@ import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
-
-import 'swiper/css';
-import 'swiper/css/pagination';
 
 interface ProductDetailViewProps {
     productNo: number;
@@ -96,6 +97,16 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         });
 
     const { onLikeButtonClick } = useProductLike();
+
+    const onShareButtonClick = () => {
+        overlay.open((props) => {
+            return isMobile ? (
+                <ShareBottomSheet {...props} />
+            ) : (
+                <ShareModal {...props} />
+            );
+        });
+    };
 
     const onCouponDownloadClick = () => {
         overlay.open((props) => {
@@ -230,20 +241,30 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             </div>
                         </div>
 
-                        <button
-                            className={styles.likeButton}
-                            onClick={onLikeButtonClick(productNo, liked)}
-                        >
-                            <BookmarkIcon
-                                width={isMobile ? 24 : 36}
-                                height={isMobile ? 24 : 36}
-                                variant={liked ? 'filled' : 'outline'}
-                            />
+                        {isMobile ? (
+                            <button
+                                type='button'
+                                onClick={onShareButtonClick}
+                                aria-label='공유하기'
+                            >
+                                <Share2 size={22} strokeWidth={1.5} />
+                            </button>
+                        ) : (
+                            <button
+                                className={styles.likeButton}
+                                onClick={onLikeButtonClick(productNo, liked)}
+                            >
+                                <BookmarkIcon
+                                    width={isMobile ? 24 : 36}
+                                    height={isMobile ? 24 : 36}
+                                    variant={liked ? 'filled' : 'outline'}
+                                />
 
-                            <span className={styles.likeCount}>
-                                {counter.likeCnt}
-                            </span>
-                        </button>
+                                <span className={styles.likeCount}>
+                                    {counter.likeCnt}
+                                </span>
+                            </button>
+                        )}
                     </header>
 
                     <div className={styles.priceSection}>
@@ -363,13 +384,23 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                         <>
                             <button
                                 className={styles.giftButton}
+                                onClick={onLikeButtonClick(productNo, liked)}
+                            >
+                                <BookmarkIcon
+                                    width={20}
+                                    height={20}
+                                    variant={liked ? 'filled' : 'outline'}
+                                />
+                            </button>
+                            <button
+                                className={styles.giftButton}
                                 onClick={onGiftButtonClick}
                             >
                                 <Gift size={24} color='#333' />
                             </button>
                             <Button
                                 frame='solid'
-                                variant='primary'
+                                variant='brick'
                                 onClick={onOrderButtonClick}
                             >
                                 {t('구매하기')}

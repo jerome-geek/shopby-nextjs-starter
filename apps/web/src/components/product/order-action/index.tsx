@@ -81,7 +81,7 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
                         </ButtonV2>
                         <ButtonV2
                             frame='solid'
-                            variant='primary'
+                            variant='brick'
                             onClick={onOrderButtonClick}
                         >
                             {t('구매하기')}

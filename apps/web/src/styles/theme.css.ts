@@ -39,6 +39,7 @@ const palette = {
     ivory: {
         '10': '#FFFBF9',
     },
+    brick: '#C75D3E',
 
     // 소셜 로그인 색상
     kakao: '#FEE500',

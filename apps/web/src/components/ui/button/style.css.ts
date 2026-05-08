@@ -56,6 +56,10 @@ export const button = recipe({
                 color: vars.color.white,
                 backgroundColor: vars.color.green['100'],
             },
+            brick: {
+                color: vars.color.white,
+                backgroundColor: vars.color.brick,
+            },
             kakao: {
                 color: vars.color.black,
                 backgroundColor: vars.color.kakao,

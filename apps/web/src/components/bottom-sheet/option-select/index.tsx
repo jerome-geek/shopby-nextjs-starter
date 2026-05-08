@@ -206,7 +206,7 @@ export const OptionSelectBottomSheet = ({
                             key='buy'
                             className={styles.buyButton}
                             frame='solid'
-                            variant='primary'
+                            variant='brick'
                             onClick={onOrderButtonClick}
                         >
                             구매하기
