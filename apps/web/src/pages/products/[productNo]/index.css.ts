@@ -468,10 +468,17 @@ export const additionalInfoContainer = style({
 export const timeSaleContainer = style([
     textStyles.body1Semibold,
     {
+        position: 'absolute',
+        bottom: '0',
+        left: '0',
         display: 'flex',
-        gap: '12px',
-        color: vars.color.gray['90'],
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '44px',
         background: vars.color.pink['20'],
+        opacity: '0.8',
+        zIndex: 1,
     },
 ]);
 

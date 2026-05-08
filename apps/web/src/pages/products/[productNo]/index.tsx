@@ -193,6 +193,21 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                 <div className={styles.leftColumn}>
                     <div className={styles.thumbnailContainer}>
                         <ProductMainImage productNo={productNo} />
+
+                        {isTablet &&
+                            additionalDiscountByProductNosData &&
+                            additionalDiscountByProductNosData.data.length >
+                                0 && (
+                                <div className={styles.timeSaleContainer}>
+                                    <ProductAdditionalDiscount
+                                        type='detail-mobile'
+                                        additionalDiscount={
+                                            additionalDiscountByProductNosData
+                                                .data[0]
+                                        }
+                                    />
+                                </div>
+                            )}
                     </div>
 
                     {!isTablet && (
