@@ -10,7 +10,7 @@ export const dimmed = style({
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     backdropFilter: 'blur(10px)',
     WebkitBackdropFilter: 'blur(10px)',
-    zIndex: 1000,
+    zIndex: 1005,
 });
 
 export const modalContainer = style({
@@ -23,7 +23,7 @@ export const modalContainer = style({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1000,
+    zIndex: 1006,
     borderRadius: '12px',
     maxWidth: '90%',
     maxHeight: '90%',

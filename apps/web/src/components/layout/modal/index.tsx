@@ -55,7 +55,7 @@ export const ModalLayout = ({
     return (
         <AnimatePresence onExitComplete={unmount}>
             {isOpen && (
-                <div key='modal-portal'>
+                <>
                     {/* 오버레이 딤드 */}
                     <motion.div
                         className={styles.dimmed}
@@ -114,7 +114,7 @@ export const ModalLayout = ({
                             </div>
                         )}
                     </motion.div>
-                </div>
+                </>
             )}
         </AnimatePresence>
     );

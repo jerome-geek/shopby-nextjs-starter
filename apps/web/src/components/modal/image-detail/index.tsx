@@ -25,7 +25,7 @@ export const ImageDetailModal = ({
     return (
         <AnimatePresence onExitComplete={unmount}>
             {isOpen && (
-                <div key='modal-portal'>
+                <>
                     <motion.div
                         className={styles.dimmed}
                         initial={{ opacity: 0 }}
@@ -66,7 +66,7 @@ export const ImageDetailModal = ({
                             className={styles.image}
                         />
                     </motion.div>
-                </div>
+                </>
             )}
         </AnimatePresence>
     );
