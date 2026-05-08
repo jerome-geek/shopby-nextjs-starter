@@ -1,6 +1,9 @@
+import { includes } from '@fxts/core';
 import { keepPreviousData, useQueryClient } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
+import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
 import { recipe } from '@/api/shop';
@@ -9,9 +12,10 @@ import * as styles from '@/components/drawer/search/index.css';
 import { RankingSection } from '@/components/drawer/search/ranking-section';
 import { RecommendProductsSection } from '@/components/drawer/search/recommend-products-section';
 import { RecommendProductsSkeleton } from '@/components/drawer/search/recommend-products-section/skeleton';
-import { DefaultModalLayoutProps } from '@/components/layout';
+import { type DefaultModalLayoutProps } from '@/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { Column } from '@/components/ui/layout/flex';
+import { BOTTOM_NAV_INVISIBLE_PATHS } from '@/const/bottomNavigation';
 import { useFavoriteKeywords } from '@/hooks/query/product/product';
 import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 import { recipeKeys } from '@/hooks/queryKeys';
@@ -29,6 +33,8 @@ export const SearchDrawer = ({
     close,
     unmount,
 }: DefaultModalLayoutProps) => {
+    const router = useRouter();
+
     const { isMobile } = useResponsive();
     const queryClient = useQueryClient();
 
@@ -82,6 +88,11 @@ export const SearchDrawer = ({
         size: 30,
     });
 
+    const isBottomNavigationInvisible = !!includes(
+        router.pathname,
+        BOTTOM_NAV_INVISIBLE_PATHS,
+    );
+
     return (
         <AnimatePresence onExitComplete={unmount}>
             {isOpen && (
@@ -96,7 +107,11 @@ export const SearchDrawer = ({
                     />
 
                     <motion.div
-                        className={styles.container}
+                        className={clsx(
+                            styles.container,
+                            isBottomNavigationInvisible &&
+                                styles.bottomNavigationInvisible,
+                        )}
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}

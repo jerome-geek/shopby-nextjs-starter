@@ -186,6 +186,11 @@ export const RankingSection = ({
                                                 query: {
                                                     keyword: item,
                                                     pageNumber: '1',
+                                                    tab: title.includes(
+                                                        '레시피',
+                                                    )
+                                                        ? 'recipe'
+                                                        : 'shopping',
                                                     [RECIPE_PAGE_QUERY_KEY]:
                                                         '1',
                                                     [COLLECTION_PAGE_QUERY_KEY]:

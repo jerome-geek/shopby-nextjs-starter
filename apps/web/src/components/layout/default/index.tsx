@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import type { ReactNode } from 'react';
 
-import BottomNavigation from '@/components/layout/bottom-navigation';
+import { BottomNavigation } from '@/components/layout/bottom-navigation';
 import * as styles from '@/components/layout/default/index.css';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';

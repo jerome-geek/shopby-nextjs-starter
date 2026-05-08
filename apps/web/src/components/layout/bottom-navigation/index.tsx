@@ -14,6 +14,7 @@ import {
     ShoppingIcon,
 } from '@/components/icons/footer';
 import * as styles from '@/components/layout/bottom-navigation/index.css';
+import { BOTTOM_NAV_INVISIBLE_PATHS } from '@/const/bottomNavigation';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/hooks/ui';
@@ -41,7 +42,7 @@ const IDLE_DETECTION_DELAY_MS = 600;
 const ANIMATION_DURATION_SEC = 0.2;
 const ICON_SIZE_PX = 24;
 
-const BottomNavigation = () => {
+export const BottomNavigation = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const { scrollY } = useScroll();
@@ -50,10 +51,7 @@ const BottomNavigation = () => {
     const [hidden, setHidden] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const isInvisible = includes(router.pathname, [
-        PATHS.RECIPES.DETAIL,
-        PATHS.PRODUCTS.DETAIL,
-    ]);
+    const isInvisible = includes(router.pathname, BOTTOM_NAV_INVISIBLE_PATHS);
 
     const handleScroll = (latest: number) => {
         const scrollHeight = document.documentElement.scrollHeight;
@@ -196,5 +194,3 @@ const BottomNavigation = () => {
         </motion.nav>
     );
 };
-
-export default BottomNavigation;

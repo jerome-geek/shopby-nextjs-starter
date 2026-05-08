@@ -38,6 +38,19 @@ export const container = style({
     },
 });
 
+export const bottomNavigationInvisible = style({
+    height: '100dvh',
+
+    '@media': {
+        [media.desktop]: {
+            height: '100vh',
+        },
+        [media.tablet]: {
+            height: '100vh',
+        },
+    },
+});
+
 export const innerContainer = style({
     display: 'flex',
     flexDirection: 'column',
