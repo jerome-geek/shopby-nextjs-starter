@@ -47,6 +47,7 @@ export const RecipeCard = ({ recipe }: RecipeCardProps) => {
         <Link
             href={PATHS.RECIPES.DETAIL.replace('[sno]', recipe.sno.toString())}
             className={styles.recipeCard}
+            prefetch={false}
         >
             <div className={styles.recipeThumbWrapper}>
                 <img

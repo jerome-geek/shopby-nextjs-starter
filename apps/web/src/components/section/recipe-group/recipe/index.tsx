@@ -35,6 +35,7 @@ const RecipeSection = ({ group, groupNo }: RecipeSectionProps) => {
                 <Link
                     href={`${PATHS.RECIPES.MAIN}/groups/${groupNo}/${group.sno}`}
                     className={recipeSectionStyle.detailLink}
+                    prefetch={false}
                 >
                     <span>전체보기</span>
                     <ChevronRight

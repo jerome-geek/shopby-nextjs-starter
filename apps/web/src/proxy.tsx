@@ -9,6 +9,12 @@ const GUEST_ONLY_ROUTES: string[] = [
     PATHS.SIGNUP.TERMS,
 ];
 
+const PROTECTED_ROUTES: string[] = [
+    '/mypage',
+    '/recipes/scrap',
+    '/recipes/write',
+];
+
 /**
  * Edge Runtime에서 실행되는 proxy 함수
  *
@@ -18,11 +24,25 @@ const GUEST_ONLY_ROUTES: string[] = [
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
+    // [OPTIMIZATION] 정적 자원, API 경로, 또는 확장자가 있는 요청은 미들웨어 로직 스킵
+    if (
+        pathname.startsWith('/_next') ||
+        pathname.startsWith('/api') ||
+        pathname.includes('.') ||
+        request.headers.get('next-router-prefetch') ||
+        request.headers.get('purpose') === 'prefetch'
+    ) {
+        return NextResponse.next();
+    }
+
     const accessToken = request.cookies.get(COOKIE_KEYS.ACCESS_TOKEN)?.value;
 
     const isLoggedIn = !!accessToken;
 
     const isGuestOnlyRoute = GUEST_ONLY_ROUTES.includes(pathname);
+    const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
+        pathname.startsWith(route),
+    );
 
     if (isGuestOnlyRoute && isLoggedIn) {
         const response = NextResponse.redirect(
@@ -36,7 +56,7 @@ export function proxy(request: NextRequest) {
         return response;
     }
 
-    if (!isGuestOnlyRoute && !isLoggedIn) {
+    if (isProtectedRoute && !isLoggedIn) {
         const loginUrl = new URL(PATHS.AUTH.LOGIN, request.url);
         loginUrl.searchParams.set('returnUrl', pathname);
         const response = NextResponse.redirect(loginUrl);
@@ -52,17 +72,16 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-    // NOTE : ⚠️ 반드시 문자열 리터럴로만 작성 (import 상수 사용 시 무한 리다이렉트 발생)
-    // NOTE : :path* → 해당 경로의 하위 경로 전체 포함
     matcher: [
-        // [AUTH_ONLY] 로그인 상태에서 접근 불가
+        // [SPECIFIC ROUTES] 미들웨어 로직이 주로 작동하는 경로 (가독성 유지)
         '/login',
         '/signup/register-method',
         '/signup/terms',
-
-        // [PROTECTED] 비로그인 상태에서 접근 불가
         '/mypage/:path*',
         '/recipes/scrap',
         '/recipes/write',
+
+        // [GLOBAL OPTIMIZATION] 모든 경로에서 정적 자원 및 Next.js 내부 경로를 Vercel 레벨에서 차단
+        '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|js|css|woff2?|ico)$).*)',
     ],
 };
