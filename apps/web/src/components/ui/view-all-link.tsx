@@ -40,6 +40,7 @@ export const ViewAllLink = ({
     return (
         <Link
             href={href}
+            prefetch={false}
             {...props}
             className={`${styles.viewAllLink()} ${className || ''}`}
             style={inlineStyle}

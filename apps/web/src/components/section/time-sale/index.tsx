@@ -95,9 +95,7 @@ export const TimeSaleSection = memo(
                         </div>
                         <p className={styles.subtitle}>{subtitle}</p>
                     </div>
-                    <ViewAllLink href={hrefLink} prefetch={false}>
-                        전체보기
-                    </ViewAllLink>
+                    <ViewAllLink href={hrefLink}>전체보기</ViewAllLink>
                 </div>
 
                 <LoadingWrapper

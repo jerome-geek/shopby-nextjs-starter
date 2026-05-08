@@ -219,6 +219,9 @@ export const PATHS = {
         CHECK_ACCOUNT: '/mypage/check-account',
 
         GRADE: '/mypage/grade',
+
+        /** 마이페이지 > 내 레시피 리스트 */
+        RECIPES: '/mypage/recipes',
     },
 
     SUPPORT: {

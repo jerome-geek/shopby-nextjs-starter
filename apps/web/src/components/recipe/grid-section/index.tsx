@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
 
 import { RecipeCard } from '@/components/recipe/card';
 import * as styles from '@/components/recipe/grid-section/index.css';
@@ -14,6 +13,8 @@ import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
 import { useCustomDialog } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import type { SearchRecipesParams } from '@/models/shop/recipe';
+
+import 'swiper/css';
 
 export const RecipeGridSection = () => {
     const { t } = useTranslation();
@@ -45,7 +46,7 @@ export const RecipeGridSection = () => {
             <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>{t('레시피')}</h2>
                 {isRecipeListVisible && (
-                    <ViewAllLink href={PATHS.RECIPES.MAIN}>
+                    <ViewAllLink href={PATHS.MYPAGE.RECIPES}>
                         {t('전체보기')}
                     </ViewAllLink>
                 )}
@@ -98,7 +99,9 @@ export const RecipeGridSection = () => {
                             <p className={styles.emptyDescription}>
                                 {t('아직 등록된 레시피가 없습니다.')}
                                 <br />
-                                {t('나만의 특별한 레시피를 등록하고 관리해보세요!')}
+                                {t(
+                                    '나만의 특별한 레시피를 등록하고 관리해보세요!',
+                                )}
                             </p>
                         </div>
                         <button

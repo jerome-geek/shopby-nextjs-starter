@@ -60,6 +60,10 @@ const MypageMenuProvider = ({ children }: { children: ReactNode }) => {
                         title: t('나의 상품리뷰'),
                         url: PATHS.MYPAGE.REVIEWS.MAIN,
                     },
+                    {
+                        title: t('나의 레시피'),
+                        url: PATHS.MYPAGE.RECIPES,
+                    },
                 ],
             },
             {

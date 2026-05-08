@@ -9,13 +9,13 @@ export const container = style({
     flexDirection: 'column',
     gap: '24px',
     padding: '24px 0',
-    maxWidth: '1200px',
+    width: '100%',
     margin: '0 auto',
 
     '@media': {
         [media.desktop]: {
             gap: '32px',
-            padding: '40px 0',
+            padding: '12px 0 40px',
         },
     },
 });
@@ -24,6 +24,7 @@ export const header = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: '8px',
     '@media': {
         [media.mobile]: {
             justifyContent: 'end',
@@ -43,63 +44,7 @@ export const title = style([
     },
 ]);
 
-export const viewToggle = style({
-    display: 'flex',
-    backgroundColor: '#f2f5f1',
-    padding: '2px',
-    borderRadius: '36px',
-    gap: '2px',
-    position: 'relative',
-    border: '1px solid rgba(0, 0, 0, 0.02)',
-    cursor: 'pointer',
-    width: 'fit-content',
-    outline: 'none',
-    transition: 'all 0.2s ease',
-    selectors: {
-        '&:active': { transform: 'scale(0.96)' },
-    },
-});
-
-export const toggleItem = style({
-    width: '32px',
-    height: '32px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '36px',
-    position: 'relative',
-    zIndex: 1,
-
-    '@media': {
-        [media.desktop]: {
-            width: '36px',
-            height: '36px',
-        },
-    },
-});
-
-export const toggleActiveBg = style({
-    position: 'absolute',
-    top: '2px',
-    left: '2px',
-    width: '32px',
-    height: '32px',
-    borderRadius: '32px',
-    backgroundColor: vars.color.white,
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-    zIndex: 0,
-
-    '@media': {
-        [media.desktop]: {
-            width: '36px',
-            height: '36px',
-        },
-    },
-});
-
-
-
-
+// Recipe Card Styles (Used by Skeleton and potentially other components)
 export const recipeCard = style({
     display: 'flex',
     flexDirection: 'column',
@@ -149,5 +94,3 @@ export const authorName = style([
     textStyles.body2Regular,
     { color: vars.color.gray['60'] },
 ]);
-
-

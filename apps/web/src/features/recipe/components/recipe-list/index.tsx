@@ -5,8 +5,8 @@ import { useDeferredValue } from 'react';
 import { RecipeCard } from '@/components/recipe/card';
 import { RecipeDetailCard } from '@/components/recipe/detail-card';
 import { Paging } from '@/components/ui/paging';
-import * as styles from '@/features/recipe/components/RecipeList.css';
-import { usePublicRecipeSearch } from '@/hooks/suspenseQuery/shop/recipe';
+import * as styles from '@/features/recipe/components/recipe-list/index.css';
+import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
 import type { SearchPublicRecipesParams } from '@/models/shop/recipe';
 
 export interface RecipeQueryParams extends SearchPublicRecipesParams {
@@ -30,17 +30,15 @@ export const RecipeList = ({
     // 실제 값과 지연된 값이 다르면 데이터 로드 중인 것으로 간주 (0.5 opacity 적용)
     const isPending = queryParams !== deferredParams;
 
-    const { data: recipeListData } = usePublicRecipeSearch({
+    const { data: searchMyRecipeListData } = useSearchMyRecipeList({
         searchParams: {
             page: deferredParams.page,
             take: deferredParams.take,
-            sortBy: deferredParams.sortBy,
-            order: deferredParams.order,
         },
     });
 
-    const recipeList = recipeListData.data || [];
-    const totalCount = recipeListData.count || 0;
+    const recipeList = searchMyRecipeListData.data || [];
+    const totalCount = searchMyRecipeListData.count || 0;
 
     return (
         <div

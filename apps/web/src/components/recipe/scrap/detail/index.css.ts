@@ -88,68 +88,8 @@ export const detailMeta = style([
     },
 ]);
 
-export const viewToggleArea = style({
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: 'auto',
-});
 
-export const viewToggle = style({
-    display: 'flex',
-    backgroundColor: '#f2f5f1',
-    padding: '2px',
-    borderRadius: '36px',
-    gap: '2px',
-    position: 'relative',
-    border: '1px solid rgba(0, 0, 0, 0.02)',
-    cursor: 'pointer',
-    width: 'fit-content',
-    outline: 'none',
-    transition: 'all 0.2s ease',
-    selectors: {
-        '&:active': {
-            transform: 'scale(0.96)',
-        },
-    },
-});
 
-export const toggleItem = style({
-    width: '24px',
-    height: '24px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '36px',
-    position: 'relative',
-    zIndex: 1,
-    pointerEvents: 'none',
-
-    '@media': {
-        [media.desktop]: {
-            width: '36px',
-            height: '36px',
-        },
-    },
-});
-
-export const toggleActiveBg = style({
-    position: 'absolute',
-    top: '2px',
-    left: '2px',
-    width: '24px',
-    height: '24px',
-    borderRadius: '24px',
-    backgroundColor: vars.color.white,
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-    zIndex: 0,
-
-    '@media': {
-        [media.desktop]: {
-            width: '36px',
-            height: '36px',
-        },
-    },
-});
 
 export const recipeGrid = style({
     display: 'grid',
@@ -215,21 +155,39 @@ export const emptyIconWrapper = style({
     backdropFilter: 'blur(10px)',
 });
 
-export const headingBold = textStyles.headingBold;
-export const body2Regular = textStyles.body2Regular;
+export const emptyTextContainer = style({
+    textAlign: 'center',
+});
+
+export const emptyTitle = style([
+    textStyles.title2Semibold,
+    {
+        color: vars.color.black,
+    },
+]);
+
+export const emptyDescription = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['40'],
+        marginTop: '12px',
+    },
+]);
 
 export const primaryButton = style([
     textStyles.body1Semibold,
     {
-        width: '100%',
-        padding: '18px',
-        borderRadius: '8px',
+        width: 'auto',
+        padding: '16px 40px',
+        marginTop: '12px',
+        borderRadius: '16px',
         border: 'none',
         backgroundColor: '#f1b3bc',
         color: vars.color.white,
         cursor: 'pointer',
         transition: 'all 0.3s ease',
         textAlign: 'center',
+        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)',
         selectors: {
             '&:hover': {
                 filter: 'brightness(0.95)',

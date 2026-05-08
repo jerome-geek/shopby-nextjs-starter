@@ -1,7 +1,7 @@
 import * as cardStyles from '@/components/recipe/card/index.css';
 import * as detailCardStyles from '@/components/recipe/detail-card/index.css';
-import * as listStyles from '@/features/recipe/components/RecipeList.css';
-import * as styles from '@/pages/recipes/index.css';
+import * as listStyles from '@/features/recipe/components/recipe-list/index.css';
+import * as styles from '@/pages/mypage/recipes/index.css';
 
 interface RecipeSearchSkeletonProps {
     viewMode?: 'grid' | 'details';
