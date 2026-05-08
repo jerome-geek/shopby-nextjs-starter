@@ -1,3 +1,7 @@
+import { overlay } from 'overlay-kit';
+
+import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
+import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
 import { Button } from '@/components/ui/button';
 import { useResponsive } from '@/hooks/utils';
 import useClaim from '@/hooks/utils/useClaim';
@@ -36,20 +40,19 @@ export const NextActionButton = ({
         optionNo,
     });
 
-    // TODO: ClaimDetailBottomSheet/Modal 추후 구현
     const openClaimDetailModal = () => {
         if (isMobile) {
-            // overlay.open((props) => {
-            //     return <ClaimDetailBottomSheet {...props} claimNo={claimNo!} />;
-            // });
-            window.alert('ClaimDetailBottomSheet 준비 중입니다.');
+            overlay.open((props) => {
+                return (
+                    <ClaimDetailBottomSheet {...props} claimNo={claimNo!} />
+                );
+            });
             return;
         }
 
-        // TODO: ClaimDetailModal 추후 구현
-        // overlay.open((props) => {
-        // return <ClaimDetailModal {...props} claimNo={claimNo!} />;
-        // });
+        overlay.open((props) => {
+            return <ClaimDetailModal {...props} claimNo={claimNo!} />;
+        });
     };
 
     if (
