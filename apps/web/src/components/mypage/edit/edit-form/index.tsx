@@ -1,15 +1,17 @@
 import { filter, find, isEmpty, isNull, pipe, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
+import { overlay } from 'overlay-kit';
+import { useContext } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useContext } from 'react';
-import { overlay } from 'overlay-kit';
 
+import { profile } from '@/api/member';
 import upload from '@/api/storage/image';
+import { WithdrawalBottomSheet } from '@/components/bottom-sheet/withdrawal';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import { WithdrawalModal } from '@/components/modal/withdrawal';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { ChangePassword } from '@/components/mypage/edit/edit-form/change-password';
@@ -24,16 +26,21 @@ import {
     SignupFormSex,
     SignupFormTelephone,
 } from '@/components/signup/form';
+import * as signupFormStyles from '@/components/signup/form/index.css';
 import MemberConfig from '@/components/signup/member-config';
 import { Button } from '@/components/ui/button';
 import { InputField } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
+import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useEditInitialize } from '@/hooks/edit';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
+import { useMyApp } from '@/hooks/myapp';
 import { useMemberExtraInfo } from '@/hooks/query/member/memberConfig';
 import { profileKeys } from '@/hooks/queryKeys';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
 import { useToast } from '@/hooks/ui/useToast';
+import useApiError from '@/hooks/useApiError';
+import useSnsLogin from '@/hooks/useSnsLogin';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/edit/index.css';
 import * as memberConfigStyles from '@/pages/signup/register/index.css';
@@ -42,13 +49,6 @@ import {
     UpdateProfileSchemaType,
 } from '@/schema/profile.schema';
 import { accessTokenCookie } from '@/utils/cookie';
-import useSnsLogin from '@/hooks/useSnsLogin';
-import { CertificationCheckContext } from '@/context/certificationCheck';
-import * as signupFormStyles from '@/components/signup/form/index.css';
-import { profile } from '@/api/member';
-import { useMyApp } from '@/hooks/myapp';
-import { WithdrawalModal } from '@/components/modal/withdrawal';
-import { WithdrawalBottomSheet } from '@/components/bottom-sheet/withdrawal';
 
 export const EditForm = ({
     password,
@@ -64,6 +64,8 @@ export const EditForm = ({
 
     const { isMyApp, handleSendPasswordModify } = useMyApp();
 
+    const { handleErrorToast } = useApiError();
+
     const queryClient = useQueryClient();
 
     const value = useContext(CertificationCheckContext);
@@ -74,7 +76,7 @@ export const EditForm = ({
     const { data: profileData } = useProfile();
 
     const { isKorean, isJapan, isEnglish } = useGlobal();
-    const { openDialog, openAsyncDialog } = useDialog();
+    const { openAsyncDialog } = useDialog();
     const { addToast } = useToast();
 
     const { data: memberExtraInfoData } = useMemberExtraInfo();
@@ -97,7 +99,7 @@ export const EditForm = ({
         defaultValues: {
             currentPassword: isSocialLogin ? undefined : password,
             memberName: isKorean
-                ? (profileData.memberName ?? '')
+                ? profileData.memberName ?? ''
                 : `${profileData.firstName} ${profileData.lastName}`,
             firstName: profileData.firstName ?? undefined,
             lastName: profileData.lastName ?? undefined,
@@ -125,10 +127,10 @@ export const EditForm = ({
             countryCd: isJapaneseAddress
                 ? 'JP'
                 : isEnglishAddress
-                  ? 'US'
-                  : profileData.providerType === 'KAKAO_SYNC'
-                    ? 'KR'
-                    : (profileData.countryCd ?? undefined),
+                ? 'US'
+                : profileData.providerType === 'KAKAO_SYNC'
+                ? 'KR'
+                : profileData.countryCd ?? undefined,
             state: profileData.state || '',
             city: profileData.city || '',
             isBirthdayRequired: false,
@@ -303,12 +305,7 @@ export const EditForm = ({
 
             router.replace(PATHS.MYPAGE.MAIN);
         } catch (error) {
-            openDialog({
-                message: isAxiosError(error)
-                    ? (error.response?.data.message ??
-                      t('회원정보 수정에 실패했습니다.'))
-                    : t('회원정보 수정에 실패했습니다.'),
-            });
+            handleErrorToast(error);
         }
     });
 

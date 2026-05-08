@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { env } from '@/configs/env';
-import { countryCodeType, mobileCountryCodeType } from '@/schema/common.schema';
+import { countryCodeType } from '@/schema/common.schema';
 import { regEx } from '@/utils/validation';
 
 const isGlobalMall = env.NEXT_PUBLIC_LOCALE !== 'ko';
@@ -331,3 +331,77 @@ export const createUpdateProfileSchema = ({
 export type UpdateProfileSchemaType = z.infer<
     ReturnType<typeof createUpdateProfileSchema>
 >;
+
+export const findIdSchema = z
+    .object({
+        findMethod: z.enum(['NONE', 'SMS', 'EMAIL', 'MOBILE']),
+        certificationNo: z.string().optional(),
+        memberName: z.string().min(1, { message: '이름을 입력해 주세요.' }),
+        mobileNo: z.string().optional(),
+        email: z.string().optional(),
+        key: z.string().optional(),
+    })
+    .refine(
+        (data) =>
+            data.findMethod === 'SMS'
+                ? regEx.phone.test(data.mobileNo || '')
+                : true,
+        {
+            message: '휴대폰번호를 입력해 주세요.',
+            path: ['mobileNo'],
+        },
+    )
+    .refine(
+        (data) =>
+            data.findMethod === 'EMAIL'
+                ? regEx.email.test(data.email || '')
+                : true,
+        {
+            message: '이메일을 입력해 주세요.',
+            path: ['email'],
+        },
+    );
+
+export type FindIdType = z.infer<typeof findIdSchema>;
+
+export const findPasswordSchema = z.object({
+    findMethod: z.enum(['SMS', 'EMAIL']),
+    memberId: z
+        .string({ error: '아이디를 입력해 주세요.' })
+        .nonempty('아이디를 입력해 주세요.'),
+    memberNo: z.number().optional(),
+});
+
+export type FindPasswordType = z.infer<typeof findPasswordSchema>;
+
+export const checkCertificateNumberSchema = z.object({
+    findMethod: z.enum(['SMS', 'EMAIL']),
+    memberId: z
+        .string({ error: '아이디를 입력해 주세요.' })
+        .nonempty('아이디를 입력해 주세요.'),
+    memberNo: z.number().optional(),
+    certificatedNumber: z
+        .string({ error: '인증번호를 입력해 주세요.' })
+        .nonempty('인증번호를 입력해 주세요.'),
+});
+
+export type CheckCertificateNumberType = z.infer<
+    typeof checkCertificateNumberSchema
+>;
+
+export const passwordChangeSchema = z
+    .object({
+        newPassword: z
+            .string()
+            .nonempty('새 비밀번호를 입력해주세요.')
+            .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
+            .max(20, '비밀번호는 최대 20자까지 가능합니다.')
+            .regex(regEx.password, '비밀번호 형식이 올바르지 않습니다.'),
+        passwordConfirm: z.string().nonempty('비밀번호 확인을 입력해주세요.'),
+    })
+    .refine((data) => data.newPassword === data.passwordConfirm, {
+        message: '비밀번호가 일치하지 않습니다.',
+        path: ['passwordConfirm'],
+    });
+
+export type PasswordChangeType = z.infer<typeof passwordChangeSchema>;

@@ -20,9 +20,9 @@ import * as styles from '@/components/layer-contents/withdrawal/index.css';
 import { type DefaultModalLayoutProps } from '@/components/layout';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import {
-    Select,
     InputContainer,
     InputLabel,
+    Select,
     TextArea,
 } from '@/components/ui/input';
 import { WITHDRAWAL_REASON_MAP } from '@/const/label';
@@ -30,7 +30,6 @@ import { PATHS } from '@/const/paths';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useMyApp } from '@/hooks/myapp';
 import useAccumulationSummary from '@/hooks/query/manage/accumulation/useAccumulationSummary';
-import useApiError from '@/hooks/useApiError';
 import { useDialog } from '@/hooks/utils';
 import { memberCookie } from '@/utils/cookie';
 import { CURRENCY } from '@/utils/currency';
@@ -48,8 +47,6 @@ export const Withdrawal = (props: DefaultModalLayoutProps) => {
 
     const { t } = useTranslation();
     const queryClient = useQueryClient();
-
-    const { handleErrorDialog } = useApiError();
 
     const { isMyApp, handleSendLogout } = useMyApp();
     const { openAsyncDialog } = useDialog();
@@ -124,9 +121,6 @@ export const Withdrawal = (props: DefaultModalLayoutProps) => {
                     queryClient.removeQueries();
 
                     router.replace(PATHS.MAIN);
-                },
-                onError: (error) => {
-                    handleErrorDialog(error);
                 },
             },
         );

@@ -8,13 +8,12 @@ import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import {
-    InputLabel,
     InputField,
     InputFieldContainer,
+    InputLabel,
 } from '@/components/ui/input';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
-import useApiError from '@/hooks/useApiError';
 import useSnsLogin from '@/hooks/useSnsLogin';
 
 const schema = z.object({
@@ -30,8 +29,6 @@ export const CheckAccountForm = ({
 }) => {
     const { t } = useTranslation();
     const router = useRouter();
-
-    const { handleErrorToast } = useApiError();
 
     const { data: profileData } = useProfile();
     const isSocialLogin = Boolean(profileData?.providerType);
@@ -65,9 +62,6 @@ export const CheckAccountForm = ({
             {
                 onSuccess: () => {
                     setPassword(password);
-                },
-                onError: (error) => {
-                    handleErrorToast(error);
                 },
             },
         );

@@ -1,7 +1,7 @@
+import { filter, pipe, reduce } from '@fxts/core';
 import { ErrorMessage as RHFErrorMessage } from '@hookform/error-message';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { filter, pipe, reduce } from '@fxts/core';
 
 import { errorMessage } from '@/components/ui/form/error-message/index.css';
 

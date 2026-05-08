@@ -1,8 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
-import { useDialog } from '@/hooks/utils';
+import useApiError from '@/hooks/useApiError';
 import type {
     CheckPasswordData,
     CreateProfileData,
@@ -15,9 +14,11 @@ import type {
 } from '@/models/member/profile';
 
 const useProfileMutation = () => {
-    const { t } = useTranslation();
+    const { handleErrorToast } = useApiError();
 
-    const { openDialog } = useDialog();
+    const onMutationError = (error: Error) => {
+        handleErrorToast(error);
+    };
 
     return {
         register: useMutation({
@@ -58,26 +59,31 @@ const useProfileMutation = () => {
         delete: useMutation({
             mutationFn: async ({ data }: { data: DeleteProfileParams }) =>
                 await profile.deleteProfile(data),
+            onError: onMutationError,
         }),
 
         passwordDelete: useMutation({
             mutationFn: async ({ data }: { data: WithDrawByPasswordData }) =>
                 await profile.withDrawByPassword(data),
+            onError: onMutationError,
         }),
 
         checkPassword: useMutation({
             mutationFn: async ({ data }: { data: CheckPasswordData }) =>
                 await profile.checkPassword(data),
+            onError: onMutationError,
         }),
 
         nonMaskingProfile: useMutation({
             mutationFn: async ({ data }: { data: GetNonMaskingMemberData }) =>
                 await profile.getNonMaskingMember(data),
+            onError: onMutationError,
         }),
 
         findId: useMutation({
             mutationFn: async ({ data }: { data: FindIdData }) =>
                 await profile.findId(data),
+            onError: onMutationError,
         }),
     };
 };

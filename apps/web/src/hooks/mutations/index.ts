@@ -1,3 +1,4 @@
+import useAuthenticationMutation from '@/hooks/mutations/useAuthenticationMutation';
 import useBoardReplyMutation from '@/hooks/mutations/useBoardReplyMutation';
 import useCartMutation from '@/hooks/mutations/useCartMutation';
 import useCollectionMutation from '@/hooks/mutations/useCollectionMutation';
@@ -19,6 +20,7 @@ import useReviewMutation from '@/hooks/mutations/useReviewMutation';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 
 export {
+    useAuthenticationMutation,
     useBoardReplyMutation,
     useCartMutation,
     useCollectionMutation,

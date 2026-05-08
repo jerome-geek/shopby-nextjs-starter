@@ -77,6 +77,8 @@ export const config = {
         '/login',
         '/signup/register-method',
         '/signup/terms',
+        '/member/find-id',
+        '/member/find-password',
         '/mypage/:path*',
         '/recipes/scrap',
         '/recipes/write',

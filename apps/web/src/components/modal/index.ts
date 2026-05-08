@@ -9,3 +9,4 @@ export * from '@/components/modal/period-range-picker';
 export * from '@/components/modal/collection-form';
 export * from '@/components/modal/recipe-save';
 export * from '@/components/modal/image-detail';
+export * from '@/components/modal/find-id-result';

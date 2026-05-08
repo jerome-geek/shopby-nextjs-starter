@@ -177,4 +177,12 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         pathname: PATHS.AUTH.TERMS.DETAIL,
         title: '약관',
     },
+    {
+        pathname: PATHS.MEMBER.FIND_ID,
+        title: '아이디 찾기',
+    },
+    {
+        pathname: PATHS.MEMBER.FIND_PASSWORD,
+        title: '비밀번호 찾기',
+    },
 ];
