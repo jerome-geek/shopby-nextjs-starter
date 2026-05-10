@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useState } from 'react';
 
-import { CategoryDrawer } from '@/features/drawer/category';
 import { MenuDrawer } from '@/components/layout/header/menu/drawer';
 import * as styles from '@/components/layout/header/menu/index.css';
 import { BANNER_ID } from '@/const/banner';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
+import { CategoryDrawer } from '@/features/drawer/category';
 import { useBannerList } from '@/hooks/query/display/banner';
 import { useResponsive } from '@/hooks/utils/useResponsive';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
@@ -32,12 +32,12 @@ export const MENU_LIST = [
         href: PATHS.SHOP.DISCOVERY,
     },
     {
-        label: '키즈',
-        href: PATHS.SHOP.KIDS,
-    },
-    {
         label: '라이프',
         href: PATHS.SHOP.LIFE,
+    },
+    {
+        label: '키즈',
+        href: PATHS.SHOP.KIDS,
     },
     {
         label: '베스트',
