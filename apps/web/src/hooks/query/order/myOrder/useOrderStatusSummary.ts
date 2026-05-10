@@ -1,40 +1,35 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import myOrder from '@/api/order/myOrder';
-import ordersKeys from '@/hooks/queryKeys/ordersKeys';
+import {
+    orderStatusSummaryOptions,
+    type OrderStatusSummaryOptionsParams,
+} from '@/entities/order/queries';
 import type {
-    GetOrderStatusSummaryParams,
     GetOrderStatusSummaryResponse,
 } from '@/models/order/myOrder';
 
 interface UseOrderStatusSummaryParams<T = GetOrderStatusSummaryResponse> {
     memberNo: number;
-    searchParams?: GetOrderStatusSummaryParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetOrderStatusSummaryResponse,
-            AxiosError<ShopByErrorResponse>,
-            T
-        >,
-        'queryKey' | 'queryFn'
-    >;
+    searchParams?: OrderStatusSummaryOptionsParams<T>['searchParams'];
+    options?: OrderStatusSummaryOptionsParams<T>['options'];
 }
 
 const useOrderStatusSummary = <T = GetOrderStatusSummaryResponse>({
     memberNo,
-    searchParams = {},
+    searchParams,
     options,
 }: UseOrderStatusSummaryParams<T>) => {
-    return useQuery({
-        queryKey: ordersKeys.summary(searchParams),
-        queryFn: async () => {
-            const { data } = await myOrder.getOrderStatusSummary(searchParams);
-            return data;
-        },
-        enabled: memberNo > 0 && (options?.enabled ?? true),
-        ...options,
-    });
+    const { enabled, ...queryOptions } = options ?? {};
+
+    return useQuery(
+        orderStatusSummaryOptions({
+            searchParams,
+            options: {
+                ...queryOptions,
+                enabled: memberNo > 0 && (enabled ?? true),
+            },
+        }),
+    );
 };
 
 export default useOrderStatusSummary;

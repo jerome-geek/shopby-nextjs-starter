@@ -7,13 +7,10 @@ import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
 import { MypageLayout } from '@/components/layout';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
-import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import Paging from '@/components/ui/paging';
-import useProfile from '@/hooks/query/member/profile/useProfile';
 import {
     useInfiniteMyOrderList,
     useMyOrderList,
-    useOrderStatusSummary,
 } from '@/hooks/query/order/myOrder';
 import { useResponsive } from '@/hooks/utils';
 
@@ -21,12 +18,19 @@ import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { OrderOptions } from '@/components/mypage/orders/order-options';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { ordersStatusTabSpec } from '@/entities/mypage/utils/tabs';
+import {
+    OrderStatusFilter,
+    OrderStatusFilterFallback,
+    type OrderStatusFilterValue,
+} from '@/features/mypage/order-status-filter';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
 const PAGE_SIZE = 10;
 
 export default function MypageOrdersPage() {
-    const { isMobile } = useResponsive();
     const { t } = useTranslation();
+
+    const { isMobile } = useResponsive();
 
     const [{ startYmd, endYmd, pageNumber, orderStatus }, setQuery] =
         useMypageListQueryParams(
@@ -35,18 +39,6 @@ export default function MypageOrdersPage() {
             },
             { history: 'push' },
         );
-
-    const { data: profileData } = useProfile();
-    const memberNo = profileData?.memberNo || 0;
-
-    const { data: orderStatusSummaryData } = useOrderStatusSummary({
-        memberNo,
-    });
-
-    const orderTabList = useMemo(
-        () => ordersStatusTabSpec.options(t, orderStatusSummaryData),
-        [orderStatusSummaryData, t],
-    );
 
     const parseOrderStatus = useMemo(() => {
         return ordersStatusTabSpec.resolveRequestTypes(orderStatus);
@@ -106,24 +98,28 @@ export default function MypageOrdersPage() {
         ? isInfiniteMyOrderListLoading
         : isMyOrderListLoading;
 
+    const handleOrderStatusChange = (value: OrderStatusFilterValue) => {
+        setQuery({ orderStatus: value }, { resetPage: true });
+    };
+
     return (
         <div className={card.container}>
             <section className={card.section}>
                 <div className={card.toolbar}>
                     <div className={card.toolbarTop}>
-                        <SegmentedToggle
-                            className={card.toggleGroup}
-                            buttonClassName={card.toggleButton}
-                            value={orderStatus}
-                            defaultValue={ordersStatusTabSpec.defaultValue}
-                            options={orderTabList}
-                            onChange={(value) => {
-                                setQuery(
-                                    { orderStatus: value },
-                                    { resetPage: true },
-                                );
-                            }}
-                        />
+                        <ShopbyAsyncBoundary
+                            fallback={
+                                <OrderStatusFilterFallback
+                                    value={orderStatus}
+                                    onChange={handleOrderStatusChange}
+                                />
+                            }
+                        >
+                            <OrderStatusFilter
+                                value={orderStatus}
+                                onChange={handleOrderStatusChange}
+                            />
+                        </ShopbyAsyncBoundary>
 
                         <PeriodQueryFilter />
                     </div>

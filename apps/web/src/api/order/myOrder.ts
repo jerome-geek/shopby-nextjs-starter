@@ -145,7 +145,7 @@ const myOrder = {
      * - 옵션별로 카운트 합니다.
      */
     getOrderStatusSummary: (
-        params: GetOrderStatusSummaryParams,
+        params?: GetOrderStatusSummaryParams,
         options?: AxiosRequestConfig,
     ) => {
         return shopbyRequest<GetOrderStatusSummaryResponse>({

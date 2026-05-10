@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
+import Skeleton from '@/components/ui/skeleton';
 import { PATHS } from '@/const/paths';
-import useProfile from '@/hooks/query/member/profile/useProfile';
-import { useOrderStatusSummary } from '@/hooks/query/order/myOrder';
-import * as styles from '@/components/mypage/main/order-status-summary/index.css';
+import * as styles from '@/features/mypage/order-status-summary/index.css';
+import { useOrderStatusSummary } from '@/hooks/suspenseQuery/order/myOrder';
 
 type OrderStatusSummaryItem = {
     id: string;
@@ -14,50 +14,43 @@ type OrderStatusSummaryItem = {
     isPrimary?: boolean;
 };
 
-const OrderStatusSummary = () => {
-    const { data: profileData } = useProfile();
-    const memberNo = profileData?.memberNo ?? 0;
-
+export const OrderStatusSummary = () => {
     const { t } = useTranslation();
 
-    const { data } = useOrderStatusSummary({
-        memberNo,
-        searchParams: {},
-        options: { enabled: memberNo > 0 },
-    });
+    const { data: orderStatusSummaryData } = useOrderStatusSummary();
 
     const list: OrderStatusSummaryItem[] = [
         {
             id: 'depositWait',
             title: '입금대기',
-            content: data?.depositWaitCnt ?? 0,
+            content: orderStatusSummaryData.depositWaitCnt ?? 0,
             url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=DEPOSIT_WAIT`,
         },
         {
             id: 'deliveryPrepare',
             title: '출고대기',
             content:
-                (data?.payDoneCnt ?? 0) +
-                (data?.productPrepareCnt ?? 0) +
-                (data?.deliveryPrepareCnt ?? 0),
+                (orderStatusSummaryData.payDoneCnt ?? 0) +
+                (orderStatusSummaryData.productPrepareCnt ?? 0) +
+                (orderStatusSummaryData.deliveryPrepareCnt ?? 0),
             url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=PAY_DONE,PRODUCT_PREPARE,DELIVERY_PREPARE`,
         },
         {
             id: 'deliveryIng',
             title: '배송중',
-            content: data?.deliveryIngCnt ?? 0,
+            content: orderStatusSummaryData.deliveryIngCnt ?? 0,
             url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=DELIVERY_ING`,
         },
         {
             id: 'deliveryDone',
             title: '배송완료',
-            content: data?.deliveryDoneCnt ?? 0,
+            content: orderStatusSummaryData.deliveryDoneCnt ?? 0,
             url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=DELIVERY_DONE`,
         },
         {
             id: 'buyConfirm',
             title: '구매확정',
-            content: data?.buyConfirmCnt ?? 0,
+            content: orderStatusSummaryData.buyConfirmCnt ?? 0,
             url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=BUY_CONFIRM`,
             isPrimary: true,
         },
@@ -89,6 +82,26 @@ const OrderStatusSummary = () => {
                                 {t(item.title)}
                             </span>
                         </Link>
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
+};
+
+export const OrderStatusSummarySkeleton = () => {
+    return (
+        <section className={styles.section} aria-busy='true'>
+            <div className={styles.titleRow}>
+                <Skeleton className={styles.skeletonTitle} />
+                <Skeleton className={styles.skeletonSubtitle} />
+            </div>
+
+            <div className={styles.list}>
+                {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index} className={styles.item}>
+                        <Skeleton className={styles.skeletonCount} circle />
+                        <Skeleton className={styles.skeletonLabel} />
                     </div>
                 ))}
             </div>

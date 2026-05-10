@@ -1,6 +1,9 @@
 import { MypageLayout } from '@/components/layout';
 import MyPageMainMobilePaths from '@/components/mypage/main/mobile-paths';
-import OrderStatusSummary from '@/components/mypage/main/order-status-summary';
+import {
+    OrderStatusSummary,
+    OrderStatusSummarySkeleton,
+} from '@/features/mypage/order-status-summary';
 import OrderSummary from '@/components/mypage/main/order-summary';
 import RecentOrderProducts from '@/components/mypage/main/recent-order-products';
 import Summary from '@/components/mypage/main/summary';
@@ -17,7 +20,7 @@ export default function MypageMainPage() {
                 <Summary />
             </ShopbyAsyncBoundary>
 
-            <ShopbyAsyncBoundary>
+            <ShopbyAsyncBoundary fallback={<OrderStatusSummarySkeleton />}>
                 <OrderStatusSummary />
             </ShopbyAsyncBoundary>
 

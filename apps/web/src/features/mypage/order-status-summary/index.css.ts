@@ -91,3 +91,50 @@ export const label = style([
         },
     },
 ]);
+
+export const skeletonTitle = style({
+    width: '150px',
+    height: '21px',
+
+    '@media': {
+        [media.mobile]: {
+            width: '112px',
+            height: '19px',
+        },
+    },
+});
+
+export const skeletonSubtitle = style({
+    width: '92px',
+    height: '19px',
+
+    '@media': {
+        [media.mobile]: {
+            width: '76px',
+            height: '17px',
+        },
+    },
+});
+
+export const skeletonCount = style({
+    display: 'block',
+    aspectRatio: '1 / 1',
+    maxWidth: '92px',
+    width: '100%',
+    height: 'auto',
+    margin: '0 auto 10px',
+});
+
+export const skeletonLabel = style({
+    display: 'block',
+    width: '56px',
+    height: '18px',
+    margin: '0 auto',
+
+    '@media': {
+        [media.mobile]: {
+            width: '48px',
+            height: '16px',
+        },
+    },
+});
