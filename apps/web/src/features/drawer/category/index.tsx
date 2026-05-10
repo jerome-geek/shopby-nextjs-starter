@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
-import * as styles from '@/components/drawer/category/index.css';
-import { QuickMenuSkeleton } from '@/components/drawer/category/quick-menu-skeleton';
-import { QuickMenuSwiper } from '@/components/drawer/category/quick-menu-swiper';
-import Recipe from '@/components/drawer/category/recipe';
-import Shopping from '@/components/drawer/category/shopping';
+import * as styles from '@/features/drawer/category/index.css';
+import { QuickMenuSkeleton } from '@/features/drawer/category/quick-menu-skeleton';
+import { QuickMenuSwiper } from '@/features/drawer/category/quick-menu-swiper';
+import Recipe from '@/features/drawer/category/recipe';
+import Shopping from '@/features/drawer/category/shopping';
 import { BigCartIcon } from '@/components/icons';
 import { DefaultModalLayoutProps } from '@/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';

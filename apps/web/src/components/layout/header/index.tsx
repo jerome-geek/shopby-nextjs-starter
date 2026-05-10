@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
-import { SearchDrawer } from '@/components/drawer/search';
+import { SearchDrawer } from '@/features/drawer/search';
 import {
     BigCartIcon,
     BookmarkIcon,

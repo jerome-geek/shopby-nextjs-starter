@@ -1,4 +1,4 @@
-import * as styles from '@/components/drawer/category/recipe/index.css';
+import * as styles from '@/features/drawer/category/recipe/index.css';
 import { RecipeCard } from '@/components/recipe/card';
 import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import * as styles from '@/components/drawer/category/quick-menu-swiper.css';
+import * as styles from '@/features/drawer/category/quick-menu-swiper.css';
 import { BANNER_ID } from '@/const/banner';
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 

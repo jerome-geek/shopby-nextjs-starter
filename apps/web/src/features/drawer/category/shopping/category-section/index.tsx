@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import * as styles from '@/components/drawer/category/shopping/category-section/index.css';
+import * as styles from '@/features/drawer/category/shopping/category-section/index.css';
 import { useSuspenseMainCategory } from '@/hooks/useMainCategory';
 import { vars } from '@/styles/theme.css';
 

@@ -1,7 +1,7 @@
 import FetchBoundary from '@/components/common/FetchBoundary';
-import CategorySection from '@/components/drawer/category/shopping/category-section';
-import { RecommendProductsSection } from '@/components/drawer/search/recommend-products-section';
-import { RecommendProductsSkeleton } from '@/components/drawer/search/recommend-products-section/skeleton';
+import CategorySection from '@/features/drawer/category/shopping/category-section';
+import { RecommendProductsSection } from '@/features/drawer/search/recommend-products-section';
+import { RecommendProductsSkeleton } from '@/features/drawer/search/recommend-products-section/skeleton';
 
 const Shopping = () => {
     return (

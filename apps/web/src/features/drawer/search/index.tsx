@@ -8,10 +8,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { recipe } from '@/api/shop';
 import FetchBoundary from '@/components/common/FetchBoundary';
-import * as styles from '@/components/drawer/search/index.css';
-import { RankingSection } from '@/components/drawer/search/ranking-section';
-import { RecommendProductsSection } from '@/components/drawer/search/recommend-products-section';
-import { RecommendProductsSkeleton } from '@/components/drawer/search/recommend-products-section/skeleton';
+import * as styles from '@/features/drawer/search/index.css';
+import { RankingSection } from '@/features/drawer/search/ranking-section';
+import { RecommendProductsSection } from '@/features/drawer/search/recommend-products-section';
+import { RecommendProductsSkeleton } from '@/features/drawer/search/recommend-products-section/skeleton';
 import { type DefaultModalLayoutProps } from '@/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { Column } from '@/components/ui/layout/flex';

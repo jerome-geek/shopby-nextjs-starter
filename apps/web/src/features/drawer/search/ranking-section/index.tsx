@@ -4,8 +4,8 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import * as drawerStyles from '@/components/drawer/search/index.css';
-import * as styles from '@/components/drawer/search/ranking-section/index.css';
+import * as drawerStyles from '@/features/drawer/search/index.css';
+import * as styles from '@/features/drawer/search/ranking-section/index.css';
 import { Column } from '@/components/ui/layout/flex';
 import { PagingV3 } from '@/components/ui/paging-v3';
 import { PATHS } from '@/const/paths';

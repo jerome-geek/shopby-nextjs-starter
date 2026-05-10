@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useState } from 'react';
 
-import { CategoryDrawer } from '@/components/drawer/category';
+import { CategoryDrawer } from '@/features/drawer/category';
 import { MenuDrawer } from '@/components/layout/header/menu/drawer';
 import * as styles from '@/components/layout/header/menu/index.css';
 import { BANNER_ID } from '@/const/banner';
