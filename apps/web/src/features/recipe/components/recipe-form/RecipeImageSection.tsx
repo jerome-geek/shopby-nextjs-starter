@@ -29,6 +29,7 @@ interface RecipeImageSectionProps {
         isMain: boolean;
         sno: number | null | undefined;
     }[];
+    isModifiable: boolean;
     onDragEnd: (event: DragEndEvent) => void;
     onImageClick: (index: number) => void;
     onDeleteImage: (index: number) => void;
@@ -37,6 +38,7 @@ interface RecipeImageSectionProps {
 
 export const RecipeImageSection = ({
     displayImages,
+    isModifiable = true,
     onDragEnd,
     onImageClick,
     onDeleteImage,
@@ -65,6 +67,10 @@ export const RecipeImageSection = ({
     const handleCameraClick = () => {
         fileInputRef.current?.click();
     };
+
+    if (!isModifiable) {
+        return null;
+    }
 
     return (
         <section className={styles.section}>

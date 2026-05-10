@@ -266,6 +266,12 @@ export const removeStepIcon = style([
 export const stepImageGrid = style({
     display: 'flex',
     gap: '8px',
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
 });
 
 export const stepImageSlot = style({

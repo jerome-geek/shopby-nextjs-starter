@@ -34,6 +34,10 @@ export const RecipeForm = ({
 
     const { register } = methods;
 
+    const sourceType = recipeDetailData?.sourceType;
+
+    const isImageModifiable = sourceType === 'MANUAL' && isModify;
+
     return (
         <FormProvider {...methods}>
             <form onSubmit={handlers.onSubmit} className={styles.form}>
@@ -43,6 +47,7 @@ export const RecipeForm = ({
                     onImageClick={handlers.handleImageClick}
                     onDeleteImage={handlers.handleDeleteImage}
                     onFileChange={handlers.handleFileChange}
+                    isModifiable={isImageModifiable}
                 />
 
                 {/* 제목 섹션 */}
@@ -114,7 +119,7 @@ export const RecipeForm = ({
                 />
 
                 <RecipeStepSection
-                    isModify={isModify}
+                    isModifiable={isImageModifiable}
                     stepFields={fields.stepFields}
                     tempImages={state.tempImages}
                     onInsert={actions.insertStep}

@@ -44,8 +44,8 @@ export const useRecipeForm = ({
 
     const { uploadAndRegister } = useRecipeImageUploadMutation();
     const {
-        createManualRecipe: { mutateAsync: createManualRecipeAsync },
-        updateRecipe: { mutateAsync: updateRecipeAsync },
+        createManualRecipe: { mutate: createManualRecipeMutate },
+        updateRecipe: { mutate: updateRecipeMutate },
     } = useRecipeMutation();
 
     const { uploadFileHandler } = useFileUpload({
@@ -124,42 +124,57 @@ export const useRecipeForm = ({
         if (!recipeDetailData) return;
 
         // 폼 리셋
-        reset({
-            title: recipeDetailData.title,
-            description: recipeDetailData.description,
-            cookTimeMinutes: recipeDetailData.durationSeconds,
-            servings: recipeDetailData.servings,
-            caloriesPerServingKcal: recipeDetailData.caloriesPerServingKcal,
-            thumbnailUrl: recipeDetailData.thumbnailUrl,
-            ingredients:
-                recipeDetailData.ingredients.length > 0
-                    ? recipeDetailData.ingredients.map(({ name, amount }) => ({
-                          name,
-                          amount: amount || '',
-                      }))
-                    : [{ name: '', amount: '' }],
-            steps:
-                recipeDetailData.steps.length > 0
-                    ? recipeDetailData.steps.map(
-                          ({ stepNumber, description, stepImageUrl }) => ({
-                              stepNumber,
-                              description: description || '',
-                              stepImageUrl: stepImageUrl,
-                              tempImageSno: null,
-                          }),
-                      )
-                    : [
-                          {
-                              stepNumber: 1,
-                              description: '',
-                              stepImageUrl: null,
-                              tempImageSno: null,
-                          },
-                      ],
-        });
+        reset(
+            {
+                title: recipeDetailData.title,
+                description: recipeDetailData.description,
+                cookTimeMinutes: recipeDetailData.durationSeconds,
+                servings: recipeDetailData.servings,
+                caloriesPerServingKcal: recipeDetailData.caloriesPerServingKcal,
+                thumbnailUrl: recipeDetailData.thumbnailUrl,
+                ingredients:
+                    recipeDetailData.ingredients.length > 0
+                        ? recipeDetailData.ingredients.map(
+                              ({ name, amount }) => ({
+                                  name,
+                                  amount: amount || '',
+                              }),
+                          )
+                        : [{ name: '', amount: '' }],
+                steps:
+                    recipeDetailData.steps.length > 0
+                        ? recipeDetailData.steps.map(
+                              ({ stepNumber, description, stepImageUrl }) => ({
+                                  stepNumber,
+                                  description: description || '',
+                                  stepImageUrl: stepImageUrl,
+                                  tempImageSno: null,
+                              }),
+                          )
+                        : [
+                              {
+                                  stepNumber: 1,
+                                  description: '',
+                                  stepImageUrl: null,
+                                  tempImageSno: null,
+                              },
+                          ],
+            },
+            {
+                keepFieldsRef: true,
+            },
+        );
+
+        const tempImageSnoString = tempImages.map((img) => img.sno).join(',');
+        const recipeDetailDataStepsSnoString = recipeDetailData.steps
+            .map((step) => step.sno)
+            .join(',');
+
+        const isNewSteps =
+            tempImageSnoString !== recipeDetailDataStepsSnoString;
 
         // 수정 모드 시 tempImages 스토어 복원
-        if (isModify && tempImages.length === 0) {
+        if (isModify && isNewSteps) {
             const uniqueImages = pipe(
                 recipeDetailData.steps,
                 filter((step) => !!step.sno),
@@ -368,8 +383,6 @@ export const useRecipeForm = ({
         }
 
         try {
-            const mainImage = currentImages.find((img) => img.sortOrder === 1);
-
             // 최종 전송 페이로드 (불필요 필드 제거)
             const finalSteps = data.steps.map((step) => {
                 return {
@@ -381,34 +394,46 @@ export const useRecipeForm = ({
                 };
             });
 
-            // 생성/수정 공통 필드 구성 (thumbnailUrl은 일단 제외)
-            const { thumbnailUrl, ...baseData } = data;
+            const { ...baseData } = data;
+
             const finalData = {
                 ...baseData,
                 steps: finalSteps,
-                thumbnailTempImageSno:
-                    mainImage?.sno ?? currentImages[0]?.sno ?? null,
+                thumbnailTempImageSno: null,
             };
 
             if (isModify && recipeDetailData) {
-                await updateRecipeAsync({
-                    sno: recipeDetailData.sno,
-                    data: {
-                        ...finalData,
-                        thumbnailUrl: data.thumbnailUrl,
-                    } as UpdateRecipeData,
-                });
-                addToast({ message: t('레시피가 수정되었습니다.') });
-                router.replace(`/recipes/${recipeDetailData.sno}`);
+                updateRecipeMutate(
+                    {
+                        sno: recipeDetailData.sno,
+                        data: finalData as UpdateRecipeData,
+                    },
+                    {
+                        onSuccess: () => {
+                            addToast({
+                                message: t('레시피가 수정되었습니다.'),
+                            });
+                            router.replace(`/recipes/${recipeDetailData.sno}`);
+                            clearTempImages();
+                        },
+                    },
+                );
             } else {
-                const { data: responseData } = await createManualRecipeAsync({
-                    data: finalData as CreateManualRecipeData,
-                });
-                addToast({ message: t('레시피가 등록되었습니다.') });
-                router.replace(`/recipes/${responseData.sno}`);
+                createManualRecipeMutate(
+                    {
+                        data: finalData as CreateManualRecipeData,
+                    },
+                    {
+                        onSuccess: (res) => {
+                            addToast({
+                                message: t('레시피가 등록되었습니다.'),
+                            });
+                            router.replace(`/recipes/${res.data.sno}`);
+                            clearTempImages();
+                        },
+                    },
+                );
             }
-
-            clearTempImages();
         } catch (error) {
             addToast({
                 message: t(

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Plus, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import React from 'react';
@@ -5,22 +6,33 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { RecipePreviewImage } from '@/components/recipe';
-import type { ManualTempImage } from '@/store/useRecipeManualStore';
 import { InputLabel, TextArea } from '@/components/ui/input';
 import * as styles from '@/pages/recipes/write/index.css';
+import type { ManualTempImage } from '@/store/useRecipeManualStore';
 
 interface RecipeStepSectionProps {
-    isModify: boolean;
+    isModifiable: boolean;
     stepFields: Record<'id', string>[];
     tempImages: ManualTempImage[];
-    onInsert: (index: number, item: { stepNumber: number; description: string; tempImageSno: number | null; stepImageUrl: string | null }) => void;
+    onInsert: (
+        index: number,
+        item: {
+            stepNumber: number;
+            description: string;
+            tempImageSno: number | null;
+            stepImageUrl: string | null;
+        },
+    ) => void;
     onRemove: (index: number) => void;
-    onFileChange: (e: React.ChangeEvent<HTMLInputElement>, stepIndex: number) => void;
+    onFileChange: (
+        e: React.ChangeEvent<HTMLInputElement>,
+        stepIndex: number,
+    ) => void;
     onDeleteStepImage: (stepIndex: number) => void;
 }
 
 export const RecipeStepSection = ({
-    isModify,
+    isModifiable = true,
     stepFields,
     tempImages,
     onInsert,
@@ -39,11 +51,18 @@ export const RecipeStepSection = ({
                     {stepFields.map((field, idx: number) => {
                         // watch is needed if we're dynamically updating fields
                         const currentValues = watch(`steps.${idx}`);
-                        const tempImageSno = currentValues?.tempImageSno ?? (field as any).tempImageSno;
-                        const stepImageUrl = currentValues?.stepImageUrl ?? (field as any).stepImageUrl ?? (field as any).imageUrl;
+                        const tempImageSno =
+                            currentValues?.tempImageSno ??
+                            (field as any).tempImageSno;
+                        const stepImageUrl =
+                            currentValues?.stepImageUrl ??
+                            (field as any).stepImageUrl ??
+                            (field as any).imageUrl;
 
                         const stepImage = tempImages.find(
-                            (img) => img.sno === tempImageSno && tempImageSno !== null
+                            (img) =>
+                                img.sno === tempImageSno &&
+                                tempImageSno !== null,
                         );
 
                         return (
@@ -97,34 +116,50 @@ export const RecipeStepSection = ({
                                     }}
                                     {...register(`steps.${idx}.description`)}
                                 />
+
                                 <div className={styles.stepImageGrid}>
                                     {stepImage || stepImageUrl ? (
                                         <div className={styles.stepImageSlot}>
                                             <RecipePreviewImage
-                                                url={stepImage?.imageUrl || stepImageUrl}
-                                                sno={stepImage?.sno || tempImageSno}
-                                                onDeleteButtonClick={() => onDeleteStepImage(idx)}
+                                                url={
+                                                    stepImage?.imageUrl ||
+                                                    stepImageUrl
+                                                }
+                                                sno={
+                                                    stepImage?.sno ||
+                                                    tempImageSno
+                                                }
+                                                onDeleteButtonClick={() =>
+                                                    onDeleteStepImage(idx)
+                                                }
                                             />
                                         </div>
                                     ) : (
-                                        <>
-                                            <label
-                                                htmlFor={`upload-step-${idx}`}
-                                                className={`${styles.imageSlot} ${styles.stepImageSlot}`}
-                                                style={{ cursor: 'pointer' }}
-                                            >
-                                                <Plus size={24} color='#ccc' />
-                                            </label>
-                                            <input
-                                                id={`upload-step-${idx}`}
-                                                type='file'
-                                                accept='image/*'
-                                                style={{ display: 'none' }}
-                                                onChange={(e) =>
-                                                    onFileChange(e, idx)
-                                                }
-                                            />
-                                        </>
+                                        isModifiable && (
+                                            <>
+                                                <label
+                                                    htmlFor={`upload-step-${idx}`}
+                                                    className={`${styles.imageSlot} ${styles.stepImageSlot}`}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                    }}
+                                                >
+                                                    <Plus
+                                                        size={24}
+                                                        color='#ccc'
+                                                    />
+                                                </label>
+                                                <input
+                                                    id={`upload-step-${idx}`}
+                                                    type='file'
+                                                    accept='image/*'
+                                                    style={{ display: 'none' }}
+                                                    onChange={(e) =>
+                                                        onFileChange(e, idx)
+                                                    }
+                                                />
+                                            </>
+                                        )
                                     )}
                                 </div>
                             </motion.div>
