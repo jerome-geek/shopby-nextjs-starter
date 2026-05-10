@@ -258,7 +258,10 @@ export const ReviewForm = ({ reviewNo, orderNo }: ReviewFormProps) => {
                         message: t('리뷰를 등록하였습니다.'),
                     });
 
-                    router.replace(PATHS.MYPAGE.REVIEWS.MAIN);
+                    router.replace({
+                        pathname: PATHS.MYPAGE.REVIEWS.MAIN,
+                        query: { reviewType: 'MY_REVIEW' },
+                    });
                 },
                 onError: (error) => handleErrorDialog(error),
             },

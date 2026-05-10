@@ -10,8 +10,8 @@ const ordersKeys = {
     all: ['orders'] as const,
     write: () => [...ordersKeys.all, 'write'] as const,
 
-    summary: (searchParams?: GetOrderStatusSummaryParams) =>
-        [...ordersKeys.all, 'summary', searchParams] as const,
+    summary: (memberNo?: number, searchParams?: GetOrderStatusSummaryParams) =>
+        [...ordersKeys.all, 'summary', memberNo, searchParams] as const,
 
     config: () => [...ordersKeys.all, 'config'] as const,
 
