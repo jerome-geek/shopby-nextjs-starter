@@ -89,7 +89,7 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
             <div className={styles.imageWrapper}>
                 <Link
                     href={PATHS.EVENTS.DETAIL.replace(
-                        '[eventNo]',
+                        '[eventNoOrId]',
                         event.eventNo.toString(),
                     )}
                     prefetch={false}

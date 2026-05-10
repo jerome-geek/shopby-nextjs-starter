@@ -49,7 +49,14 @@ export const VerticalMoreMenu = ({
             modal={false}
         >
             <DropdownMenu.Trigger asChild>
-                <button className={styles.moreButton} aria-label={t('더보기')}>
+                <button
+                    className={styles.moreButton}
+                    aria-label={t('더보기')}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }}
+                >
                     <EllipsisVertical size={iconSize ?? (isMobile ? 16 : 20)} />
                 </button>
             </DropdownMenu.Trigger>

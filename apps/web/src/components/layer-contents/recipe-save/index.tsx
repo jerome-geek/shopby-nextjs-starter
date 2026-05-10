@@ -2,6 +2,7 @@ import { includes } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { Plus } from 'lucide-react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/recipe-save/index.css';
@@ -37,6 +38,10 @@ export const RecipeSaveContent = ({
     const memberNo = profileData?.memberNo || 0;
 
     const { data = [] } = useCollectionList();
+
+    const collectionList = useMemo(() => {
+        return data.filter((a) => a.memberNo === memberNo);
+    }, [data, memberNo]);
 
     const handleBookmark = async (collectionSno: number, title: string) => {
         if (!recipeSno) {
@@ -79,7 +84,7 @@ export const RecipeSaveContent = ({
             </p>
 
             <ul className={styles.collectionList}>
-                {data.map((collection) => {
+                {collectionList.map((collection) => {
                     return (
                         <li key={collection.sno}>
                             <button

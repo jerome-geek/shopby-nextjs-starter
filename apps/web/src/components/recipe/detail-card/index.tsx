@@ -13,6 +13,7 @@ import * as styles from '@/components/recipe/detail-card/index.css';
 import { Tooltip, VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useRecipeMutation } from '@/hooks/mutations';
+import { useProfile } from '@/hooks/query/member/profile';
 import { useBookmark } from '@/hooks/recipe';
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
@@ -40,6 +41,9 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
         PATHS.SHOP.KIDS,
         PATHS.SHOP.LIFE,
     ].includes(router.pathname);
+
+    const { data: profileData } = useProfile();
+    const memberNo = profileData?.memberNo || 0;
 
     const href = PATHS.RECIPES.DETAIL.replace('[sno]', String(recipe.sno));
 
@@ -142,15 +146,16 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                                     height={18}
                                 />
                             </button>
-                            {!isExcludedPath && (
-                                <VerticalMoreMenu
-                                    id={String(recipe.sno)}
-                                    onEdit={handleEdit}
-                                    onEditText={t('레시피 수정')}
-                                    onDelete={handleDelete}
-                                    onDeleteText={t('레시피 삭제')}
-                                />
-                            )}
+                            {!isExcludedPath &&
+                                memberNo === recipe.memberNo && (
+                                    <VerticalMoreMenu
+                                        id={String(recipe.sno)}
+                                        onEdit={handleEdit}
+                                        onEditText={t('레시피 수정')}
+                                        onDelete={handleDelete}
+                                        onDeleteText={t('레시피 삭제')}
+                                    />
+                                )}
                         </div>
                     </div>
 
