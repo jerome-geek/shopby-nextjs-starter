@@ -4,7 +4,7 @@ import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
 import { Button } from '@/components/ui/button';
 import { useResponsive } from '@/hooks/utils';
-import useClaim from '@/hooks/utils/useClaim';
+import { useClaim } from '@/features/claim';
 import type { NextActionType } from '@/models';
 
 export interface NextActionButtonProps {

@@ -1,4 +1,5 @@
-import { type MutateOptions } from '@tanstack/react-query';
+import { includes } from '@fxts/core';
+import { useQueryClient, type MutateOptions } from '@tanstack/react-query';
 import type { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
@@ -11,12 +12,13 @@ import {
     useMemberClaimMutation,
     useMyOrderMutation,
 } from '@/hooks/mutations';
+import { ordersKeys } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
 import useDialog from '@/hooks/utils/useDialog';
 import type { NextActionType } from '@/models';
 import type { CancelClaimData } from '@/models/claim/guest';
 
-interface useClaimProps {
+interface UseClaimParams {
     nextActionType: NextActionType;
     orderOptionNo: number;
     orderNo: string;
@@ -34,8 +36,10 @@ const useClaim = ({
     optionNo,
     uri,
     claimNo,
-}: useClaimProps) => {
+}: UseClaimParams) => {
     const { t } = useTranslation();
+
+    const queryClient = useQueryClient();
 
     const label = t(NEXT_ACTION_MAP[nextActionType]) ?? '';
 
@@ -72,10 +76,7 @@ const useClaim = ({
     const {
         confirmPurchase: { mutate: confirmPurchaseMutate },
         deliveryDone: { mutate: deliveryDoneMutate },
-    } = useMyOrderMutation({
-        orderNo,
-        orderOptionNo,
-    });
+    } = useMyOrderMutation();
 
     const {
         confirmOrder: { mutate: guestConfirmPurchaseMutate },
@@ -112,14 +113,19 @@ const useClaim = ({
                             { orderNo: string; data: CancelClaimData },
                             unknown
                         > = {
-                            onSuccess: (_, variable) => {
+                            onSuccess: () => {
+                                queryClient.invalidateQueries({
+                                    predicate: (query) => {
+                                        return includes(
+                                            query.queryKey[0],
+                                            ordersKeys.all,
+                                        );
+                                    },
+                                });
+
                                 openDialog({
                                     message: '전체 주문 취소가 완료되었습니다.',
                                 });
-
-                                // sendCancelAllEvent({
-                                //     orderNo: variable.orderNo,
-                                // });
                             },
                         };
 
@@ -275,6 +281,15 @@ const useClaim = ({
 
                     const callback = {
                         onSuccess: () => {
+                            queryClient.invalidateQueries({
+                                predicate: (query) => {
+                                    return includes(
+                                        query.queryKey[0],
+                                        ordersKeys.all,
+                                    );
+                                },
+                            });
+
                             openDialog({
                                 message: t('배송완료 처리되었습니다.'),
                             });
@@ -303,6 +318,15 @@ const useClaim = ({
 
                     const callback = {
                         onSuccess: () => {
+                            queryClient.invalidateQueries({
+                                predicate: (query) => {
+                                    return includes(
+                                        query.queryKey[0],
+                                        ordersKeys.all,
+                                    );
+                                },
+                            });
+
                             openDialog({
                                 message: t('구매확정 처리되었습니다.'),
                             });
