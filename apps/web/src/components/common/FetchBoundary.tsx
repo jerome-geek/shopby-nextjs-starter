@@ -1,4 +1,3 @@
-import { Suspense } from '@suspensive/react';
 import type { ReactNode } from 'react';
 
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
@@ -15,8 +14,8 @@ const FetchBoundary = ({
     errorFallback,
 }: FetchBoundaryProps) => {
     return (
-        <ShopbyAsyncBoundary fallback={errorFallback}>
-            <Suspense fallback={fallback}>{children}</Suspense>
+        <ShopbyAsyncBoundary fallback={fallback} errorFallback={errorFallback}>
+            {children}
         </ShopbyAsyncBoundary>
     );
 };

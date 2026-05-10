@@ -10,6 +10,8 @@ import type { ReactNode } from 'react';
 
 import * as styles from '@/components/error-boundary/shopby/index.css';
 import { Button } from '@/components/ui/button';
+import { RedirectHandler } from '@/shared/components/RedirectHandler';
+import { RedirectError } from '@/shared/errors';
 
 interface ShopbyApiErrorBoundaryProps {
     children: ReactNode;
@@ -101,6 +103,15 @@ const ShopbyApiErrorBoundary = ({
                         onReset?.();
                     }}
                     fallback={(props) => {
+                        // RedirectError 발생 시 즉시 리다이렉트 핸들러 렌더링
+                        const error = props.error;
+                        if (
+                            ['RedirectError', 'InvalidParameterError'].includes(error.name) ||
+                            error instanceof RedirectError
+                        ) {
+                            return <RedirectHandler path={(error as RedirectError).path} />;
+                        }
+
                         // 503 에러(서버 점검)는 무조건 상위로 throw
                         if (isServiceUnavailable(props.error)) {
                             throw props.error;

@@ -8,7 +8,6 @@ import { RecipeSearchSkeleton } from '@/components/recipe/search-skeleton';
 import { ViewToggle } from '@/components/recipe/view-toggle';
 import { RecipeList } from '@/features/recipe/components/recipe-list';
 import * as styles from '@/pages/mypage/recipes/index.css';
-import { vars } from '@/styles/theme.css';
 
 const MyRecipesPage = () => {
     const { t } = useTranslation();
@@ -33,41 +32,46 @@ const MyRecipesPage = () => {
         },
     );
 
-
     const handlePageChange = (page: number) => {
         setQueryParams({ page }, { scroll: true });
     };
 
     return (
-        <div className={styles.container}>
+        <>
             <Seo title={t('나의 레시피')} noindex={true} />
 
-            <header className={styles.header}>
-                <h1 className={styles.title}>{t('나의 레시피')}</h1>
-                <ViewToggle
-                    viewMode={queryParams.viewMode === 'details' ? 'row' : 'grid'}
-                    onToggle={(mode) =>
-                        setQueryParams({ viewMode: mode === 'row' ? 'details' : 'grid' })
-                    }
-                />
-            </header>
-
-            <main>
-                <FetchBoundary
-                    fallback={
-                        <RecipeSearchSkeleton
-                            viewMode={queryParams.viewMode}
-                            count={queryParams.take}
-                        />
-                    }
-                >
-                    <RecipeList
-                        queryParams={queryParams}
-                        onPageChange={handlePageChange}
+            <div className={styles.container}>
+                <header className={styles.header}>
+                    <h1 className={styles.title}>{t('나의 레시피')}</h1>
+                    <ViewToggle
+                        viewMode={
+                            queryParams.viewMode === 'details' ? 'row' : 'grid'
+                        }
+                        onToggle={(mode) =>
+                            setQueryParams({
+                                viewMode: mode === 'row' ? 'details' : 'grid',
+                            })
+                        }
                     />
-                </FetchBoundary>
-            </main>
-        </div>
+                </header>
+
+                <main>
+                    <FetchBoundary
+                        fallback={
+                            <RecipeSearchSkeleton
+                                viewMode={queryParams.viewMode}
+                                count={queryParams.take}
+                            />
+                        }
+                    >
+                        <RecipeList
+                            queryParams={queryParams}
+                            onPageChange={handlePageChange}
+                        />
+                    </FetchBoundary>
+                </main>
+            </div>
+        </>
     );
 };
 

@@ -178,9 +178,7 @@ function ReviewDetailData({ productNo, reviewNo }: ReviewDetailDataProps) {
                                                             styles.imageButton
                                                         }
                                                         onClick={() =>
-                                                            openImageDetail(
-                                                                src,
-                                                            )
+                                                            openImageDetail(src)
                                                         }
                                                     >
                                                         <img
