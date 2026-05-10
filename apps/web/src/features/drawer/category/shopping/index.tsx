@@ -1,16 +1,14 @@
-import FetchBoundary from '@/components/common/FetchBoundary';
 import CategorySection from '@/features/drawer/category/shopping/category-section';
-import { RecommendProductsSection } from '@/features/drawer/search/recommend-products-section';
-import { RecommendProductsSkeleton } from '@/features/drawer/search/recommend-products-section/skeleton';
 
 const Shopping = () => {
     return (
         <>
             <CategorySection />
 
+            {/*  NOTE: 추천 상품 주석 처리
             <FetchBoundary fallback={<RecommendProductsSkeleton />}>
                 <RecommendProductsSection />
-            </FetchBoundary>
+            </FetchBoundary> */}
         </>
     );
 };

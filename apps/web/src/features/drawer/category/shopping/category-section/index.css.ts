@@ -1,12 +1,19 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
+import { globalVars } from '@/styles/global.css';
 import { vars } from '@/styles/theme.css';
 import { textStyles, textStyleTokens } from '@/styles/typography.css';
+
+const CATEGORY_SECTION_HEADER_HEIGHT = '57px';
 
 export const oneDepthCategorySwiperContainer = style({
     width: '100%',
     padding: '12px 0',
     borderBottom: `1px solid ${vars.color.gray['20']}`,
+    position: 'sticky',
+    top: globalVars.header.mobileHeight,
+    backgroundColor: vars.color.white,
+    height: CATEGORY_SECTION_HEADER_HEIGHT,
 });
 
 globalStyle(`${oneDepthCategorySwiperContainer} .swiper`, {
@@ -42,7 +49,7 @@ export const oneDepthCategoryItem = style([
 export const childCategoryContainer = style({
     width: '100%',
     display: 'flex',
-    maxHeight: '500px',
+    backgroundColor: vars.color.gray['20'],
 });
 
 export const twoDepthCategoryList = style({
@@ -51,12 +58,25 @@ export const twoDepthCategoryList = style({
     minWidth: '108px',
     width: '26%',
     backgroundColor: vars.color.gray['20'],
+    position: 'sticky',
+    top: `calc(${globalVars.header.mobileHeight} + ${CATEGORY_SECTION_HEADER_HEIGHT})`,
     overflow: 'auto',
-    maxHeight: '500px',
+    overscrollBehaviorY: 'contain',
+    height: '100%',
+    maxHeight: `calc(100dvh - ${globalVars.header.mobileHeight} - ${CATEGORY_SECTION_HEADER_HEIGHT})`,
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
+
+    selectors: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 });
 
 export const twoDepthCategoryListItem = style({
     height: '44px',
+    minHeight: '44px',
     display: 'flex',
     alignItems: 'center',
 });
@@ -72,7 +92,6 @@ export const twoDepthCategoryButton = style({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     maxWidth: '100%',
-    transition: 'color 0.2s ease, background-color 0.2s ease',
 
     selectors: {
         '&[aria-pressed="true"]': {
@@ -84,12 +103,11 @@ export const twoDepthCategoryButton = style({
 });
 
 export const threeDepthCategoryList = style({
+    backgroundColor: vars.color.white,
     width: '74%',
     display: 'flex',
     flexDirection: 'column',
     padding: '0 20px',
-    overflow: 'auto',
-    maxHeight: '500px',
     height: '100%',
 
     selectors: {

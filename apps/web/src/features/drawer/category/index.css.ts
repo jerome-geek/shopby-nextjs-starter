@@ -170,8 +170,6 @@ export const tabPane = style({
     width: '50%',
     minWidth: '50%',
     height: '100%',
-    overflowX: 'hidden',
-    overflowY: 'auto',
 
     selectors: {
         '&[aria-hidden="true"]': {
