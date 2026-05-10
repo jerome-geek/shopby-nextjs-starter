@@ -98,6 +98,10 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         title: '최근 본 상품',
     },
     {
+        pathname: PATHS.MYPAGE.RECIPES,
+        title: '나의 레시피',
+    },
+    {
         pathname: PATHS.MYPAGE.REVIEWS.MAIN,
         title: '리뷰 내역',
     },

@@ -36,7 +36,7 @@ export const detailList = style({
             rowGap: '60px',
         },
         [media.desktop]: {
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: 'repeat(2, 1fr)',
             gap: '40px',
             rowGap: '60px',
         },

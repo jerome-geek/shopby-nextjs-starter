@@ -42,7 +42,6 @@ const MyRecipesPage = () => {
 
             <div className={styles.container}>
                 <header className={styles.header}>
-                    <h1 className={styles.title}>{t('나의 레시피')}</h1>
                     <ViewToggle
                         viewMode={
                             queryParams.viewMode === 'details' ? 'row' : 'grid'
