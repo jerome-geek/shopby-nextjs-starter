@@ -1,11 +1,15 @@
-import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useCallback, useEffect } from 'react';
+
+import { profile } from '@/api/member';
 
 /**
  * @description 마이앱 환경 여부 정적 상수 (서버 렌더링 시에는 항상 false)
  */
 const IS_MY_APP_CLIENT =
-    typeof window !== 'undefined' ? !!window.myapp?.helpers?.isMyApp?.() : false;
+    typeof window !== 'undefined'
+        ? !!window.myapp?.helpers?.isMyApp?.()
+        : false;
 
 type Key =
     | 'LOGIN'
@@ -14,7 +18,9 @@ type Key =
     | 'PASSWORD_MODIFIED'
     | 'LOGINVIEW'
     | 'REFRESH_TOKEN_EXPIRED'
-    | 'SHOW_SETTING';
+    | 'SHOW_SETTING'
+    | 'SHOW_NOTIFICATION'
+    | 'SIGN_UP_COMPLETED';
 
 export type SnsProvider =
     | 'payco'
@@ -124,11 +130,41 @@ const useMyApp = ({ isMyAppInit }: { isMyAppInit?: boolean } = {}) => {
         sendToMyApp('LOGOUT', action);
     const handleSendInitLoginInfo = () => sendToMyApp('INIT_LOGIN_INFO');
     const handleSendPasswordModify = () => sendToMyApp('PASSWORD_MODIFIED');
-    const handleSendRefreshTokenExpired = () => sendToMyApp('REFRESH_TOKEN_EXPIRED');
+    const handleSendRefreshTokenExpired = () =>
+        sendToMyApp('REFRESH_TOKEN_EXPIRED');
     const handleSendLoginView = (action?: MyAppHandleType<'LOGINVIEW'>) =>
         sendToMyApp('LOGINVIEW', action);
     const handleSendShowSettings = (action?: MyAppHandleType<'SHOW_SETTING'>) =>
         sendToMyApp('SHOW_SETTING', action);
+    const handleSendShowNotification = () => sendToMyApp('SHOW_NOTIFICATION');
+    const handleSendSignUpCompleted = () => sendToMyApp('SIGN_UP_COMPLETED');
+
+    const syncAppLogin = async (accessToken: string, provider?: string) => {
+        if (!isMyApp) return;
+
+        try {
+            const { data: profileData } = await profile.getProfile({
+                headers: {
+                    'Shop-By-Authorization': `Bearer ${accessToken}`,
+                },
+            });
+
+            handleSendLogin({
+                option: {
+                    memberId: profileData.memberId || profileData.email || '',
+                    memberNo: profileData.memberNo,
+                    memberName: profileData.memberName || '',
+                    nickName: profileData.nickname || '',
+                    solutionAuthenticationKey: accessToken,
+                    snsProvider: provider
+                        ? (provider.replace('ncp_', '') as SnsProvider)
+                        : undefined,
+                },
+            });
+        } catch (e) {
+            console.error('Failed to sync login state to MyApp', e);
+        }
+    };
 
     return {
         isMyApp,
@@ -141,6 +177,9 @@ const useMyApp = ({ isMyAppInit }: { isMyAppInit?: boolean } = {}) => {
         handleSendLoginView,
         handleSendRefreshTokenExpired,
         handleSendShowSettings,
+        handleSendShowNotification,
+        handleSendSignUpCompleted,
+        syncAppLogin,
     };
 };
 

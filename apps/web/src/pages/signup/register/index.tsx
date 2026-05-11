@@ -83,7 +83,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
 
     const { countryCd, isKorean, isJapan } = useGlobal();
 
-    const { isMyApp } = useMyApp();
+    const { syncAppLogin } = useMyApp();
 
     const { data: mallData } = useMall();
 
@@ -153,8 +153,8 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 memberName: isKorean
                     ? data.memberName
                     : isJapan
-                    ? `${data.lastName}${data.firstName}`
-                    : `${data.firstName}${data.lastName}`,
+                      ? `${data.lastName}${data.firstName}`
+                      : `${data.firstName}${data.lastName}`,
                 passwordConfirm: isSocialLogin
                     ? undefined
                     : data.passwordConfirm,
@@ -168,13 +168,10 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                     accessToken,
                 });
 
-                if (isMyApp) {
-                    router.replace(PATHS.SIGNUP.COMPLETE);
-                    return;
-                }
-
                 accessTokenCookie.set(accessToken, expiry);
                 refreshTokenCookie.set(refreshToken, refreshTokenExpiresIn);
+
+                await syncAppLogin(accessToken, provider);
 
                 window.location.replace(PATHS.SIGNUP.COMPLETE);
                 return;
@@ -281,11 +278,6 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 },
             });
 
-            if (isMyApp) {
-                router.replace(PATHS.SIGNUP.COMPLETE);
-                return;
-            }
-
             const { data: oauth2Data } = await oauth2.issueAccessToken({
                 memberId,
                 password,
@@ -300,6 +292,8 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
                 oauth2Data.refreshToken || '',
                 oauth2Data.refreshTokenExpiresIn,
             );
+
+            await syncAppLogin(oauth2Data.accessToken || '');
 
             window.location.replace(PATHS.SIGNUP.COMPLETE);
         } catch (error) {
