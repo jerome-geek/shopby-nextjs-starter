@@ -38,7 +38,7 @@ export const RecipeGridSection = () => {
         },
     });
 
-    const recipeList = searchMyRecipeListData?.data ?? [];
+    const recipeList = searchMyRecipeListData.data ?? [];
     const isRecipeListVisible = recipeList.length > 0;
 
     return (
