@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles, textStyleTokens } from '@/styles/typography.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const container = style({
     display: 'flex',
@@ -30,28 +30,16 @@ export const recipeSectionTitleContainer = style({
 });
 
 export const recipeSectionTitle = style([
-    textStyles.headingSemibold,
+    textStyles.title1Bold,
     {
         color: vars.color.black,
-
-        '@media': {
-            [media.desktop]: {
-                ...textStyleTokens.title1Bold,
-            },
-        },
     },
 ]);
 
 export const recipeSectionSubTitle = style([
-    textStyles.caption1Regular,
+    textStyles.headlineRegular,
     {
         color: vars.color.gray['60'],
-
-        '@media': {
-            [media.desktop]: {
-                ...textStyleTokens.headlineRegular,
-            },
-        },
     },
 ]);
 
@@ -62,6 +50,7 @@ export const detailLink = style([
         display: 'flex',
         alignItems: 'center',
         gap: '4px',
+        flexShrink: 0,
 
         '@media': {
             [media.mobile]: {

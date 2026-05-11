@@ -36,7 +36,7 @@ export const titleRow = style({
 });
 
 export const title = style([
-    textStyles.headingSemibold,
+    textStyles.title1Bold,
     {
         color: vars.color.black,
     },
@@ -51,14 +51,14 @@ export const timer = style([
 ]);
 
 export const subtitle = style([
-    textStyles.caption1Regular,
+    textStyles.headlineRegular,
     {
         color: vars.color.gray['60'],
     },
 ]);
 
 export const viewAll = style([
-    textStyles.body1Regular,
+    textStyles.caption1Regular,
     {
         display: 'flex',
         alignItems: 'center',
@@ -66,8 +66,8 @@ export const viewAll = style([
         color: vars.color.gray['60'],
         textDecoration: 'none',
         '@media': {
-            [media.mobile]: {
-                ...textStyleTokens.caption1Regular,
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
             },
         },
     },

@@ -39,14 +39,6 @@ export const collectionSectionTitle = style([
     textStyles.title1Bold,
     {
         color: vars.color.black,
-        '@media': {
-            [media.mobile]: {
-                fontSize: '1.8rem',
-                fontWeight: 600,
-                lineHeight: '1.5',
-                letterSpacing: '-1.3%',
-            },
-        },
     },
 ]);
 
@@ -54,14 +46,6 @@ export const collectionSectionSubTitle = style([
     textStyles.headlineRegular,
     {
         color: vars.color.gray['60'],
-        '@media': {
-            [media.mobile]: {
-                fontSize: '1.2rem',
-                fontWeight: 400,
-                lineHeight: '1.4',
-                letterSpacing: '-2%',
-            },
-        },
     },
 ]);
 
@@ -72,6 +56,7 @@ export const detailLink = style([
         display: 'flex',
         alignItems: 'center',
         gap: '4px',
+        flexShrink: 0,
 
         '@media': {
             [media.mobile]: {

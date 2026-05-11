@@ -401,19 +401,21 @@ export const stepNumber = style([
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
+        marginTop: '3px',
 
         '@media': {
             [media.desktop]: {
                 ...textStyleTokens.caption1Semibold,
                 width: '20px',
                 height: '20px',
+                marginTop: '0',
             },
         },
     },
 ]);
 
 export const stepText = style([
-    textStyles.body2Regular,
+    textStyles.headlineRegular,
     {
         color: vars.color.gray['80'],
         flex: 1,
@@ -424,6 +426,12 @@ export const stepText = style([
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         lineHeight: '1.5',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
     },
 ]);
 

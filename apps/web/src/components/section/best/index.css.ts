@@ -32,14 +32,14 @@ export const titleWrapper = style({
 });
 
 export const title = style([
-    textStyles.headingSemibold,
+    textStyles.title1Bold,
     {
         color: vars.color.black,
     },
 ]);
 
 export const subtitle = style([
-    textStyles.caption1Regular,
+    textStyles.headlineRegular,
     {
         color: vars.color.gray[60],
     },

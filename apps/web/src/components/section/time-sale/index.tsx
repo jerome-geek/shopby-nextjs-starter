@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { memo, useMemo } from 'react';
 import { Grid } from 'swiper/modules';
@@ -7,7 +7,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { CountdownTimer, ProductCard } from '@/components/product';
 import * as styles from '@/components/section/time-sale/index.css';
-import { ViewAllLink } from '@/components/ui/view-all-link';
 import { PATHS } from '@/const/paths';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
@@ -16,6 +15,7 @@ import { useTimeSaleSectionProducts } from '@/hooks/query/shop/timeSale';
 import type { ImageUrlType } from '@/models/product';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import { BREAKPOINTS } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
 
 interface TimeSaleSectionProps {
     sectionId: string;
@@ -95,7 +95,14 @@ export const TimeSaleSection = memo(
                         </div>
                         <p className={styles.subtitle}>{subtitle}</p>
                     </div>
-                    <ViewAllLink href={hrefLink}>전체보기</ViewAllLink>
+                    <Link href={hrefLink} className={styles.viewAll}>
+                        <span>전체보기</span>
+                        <ChevronRight
+                            color={vars.color.gray['60']}
+                            width='16'
+                            height='16'
+                        />
+                    </Link>
                 </div>
 
                 <LoadingWrapper
