@@ -38,6 +38,8 @@ const palette = {
     },
     ivory: {
         '10': '#FFFBF9',
+        '20': '#F5F0E8',
+        '30': '#EDE8E0',
     },
     brick: '#C75D3E',
 

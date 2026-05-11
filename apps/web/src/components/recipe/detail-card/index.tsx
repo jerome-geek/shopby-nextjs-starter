@@ -163,7 +163,7 @@ export const RecipeDetailCard = ({
                                     strokeColor={
                                         recipe.bookmarked
                                             ? vars.color.green['100']
-                                            : vars.color.gray['40']
+                                            : vars.color.black
                                     }
                                     width={13}
                                     height={18}
