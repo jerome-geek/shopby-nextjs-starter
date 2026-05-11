@@ -58,7 +58,7 @@ const InfoSection = ({ title, infoList }: InfoSectionProps) => {
                     >
                         <div
                             style={{
-                                width: '140px',
+                                width: '120px',
                                 color: '#666',
                                 flexShrink: 0,
                             }}
@@ -153,7 +153,7 @@ const PaymentSection = ({
                         style={{
                             flex: '1 1 280px',
                             background: '#f8f8f8',
-                            padding: '24px',
+                            padding: '16px',
                             borderRadius: '8px',
                         }}
                     >

@@ -1,70 +1,82 @@
 import { z } from 'zod';
 
+import { UploadFileBlob } from '@/hooks/useFileUpload';
+import type { ClaimType } from '@/models';
 import {
-    claimReasonType,
-    deliveryCompanyType,
     CountryCdType,
     bankType,
+    claimReasonType,
+    deliveryCompanyType,
     orderStatusType,
 } from '@/schema/common.schema';
-import type { ClaimType } from '@/models';
-import { UploadFileBlob } from '@/hooks/useFileUpload';
 
 const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
 
-const claimCancelSchema = z
-    .object({
-        claimReasonDetail: z
-            .string({ error: '상세 사유를 입력해주세요.' })
-            .nonempty({ message: '상세 사유를 입력해주세요.' }),
-        responsibleObjectType: z.enum(['BUYER', 'SELLER']).optional(),
-        claimType: z.enum(['CANCEL']),
-        claimedProductOptions: z
-            .array(
-                z.object({
-                    isChecked: z.boolean(),
-                    productCnt: z.number(),
-                    orderProductOptionNo: z.number(),
+/** 취소 클레임 스키마 팩토리 — payType은 form 데이터에 포함하지 않고 클로저로 검증에만 사용 */
+const createClaimCancelSchema = (payType?: string) =>
+    z
+        .object({
+            claimReasonDetail: z
+                .string({ error: '상세 사유를 입력해주세요.' })
+                .nonempty({ message: '상세 사유를 입력해주세요.' }),
+            responsibleObjectType: z.enum(['BUYER', 'SELLER']).optional(),
+            claimType: z.enum(['CANCEL']),
+            claimedProductOptions: z
+                .array(
+                    z.object({
+                        isChecked: z.boolean(),
+                        productCnt: z.number(),
+                        orderProductOptionNo: z.number(),
+                    }),
+                )
+                .min(1, '상품을 선택해주세요.')
+                .refine((data) => data.filter((a) => a.isChecked).length > 0, {
+                    message: '상품을 선택해주세요.',
                 }),
-            )
-            .min(1, '상품을 선택해주세요.')
-            .refine((data) => data.filter((a) => a.isChecked).length > 0, {
-                message: '상품을 선택해주세요.',
-            }),
-        saveBankAccountInfo: z.boolean(),
-        bankAccountInfo: z
-            .object({
-                bankAccount: z.string().optional(),
-                bankDepositorName: z.string().optional(),
-                bank: bankType.optional(),
-                bankName: z.string().optional(),
-            })
-            .optional(),
-        claimReasonType,
-        refundsImmediately: z.boolean(),
-    })
-    .superRefine((data, ctx) => {
-        if (data.saveBankAccountInfo) {
-            if (!data.bankAccountInfo?.bankAccount)
-                ctx.addIssue({
-                    path: ['bankAccountInfo', 'bankAccount'],
-                    code: z.ZodIssueCode.custom,
-                    message: '계좌번호를 입력해주세요.',
-                });
-            if (!data.bankAccountInfo?.bankDepositorName)
-                ctx.addIssue({
-                    path: ['bankAccountInfo', 'bankDepositorName'],
-                    code: z.ZodIssueCode.custom,
-                    message: '예금주를 입력해주세요.',
-                });
-            if (!data.bankAccountInfo?.bank)
-                ctx.addIssue({
-                    path: ['bankAccountInfo', 'bank'],
-                    code: z.ZodIssueCode.custom,
-                    message: '은행을 선택해주세요.',
-                });
-        }
-    });
+            /** 환불 계좌 정보 서버 저장 여부 (유저가 선택하는 값) */
+            saveBankAccountInfo: z.boolean(),
+            bankAccountInfo: z
+                .object({
+                    bankAccount: z.string().optional(),
+                    bankDepositorName: z.string().optional(),
+                    bank: bankType.optional(),
+                    bankName: z.string().optional(),
+                })
+                .optional(),
+            claimReasonType,
+            refundsImmediately: z.boolean(),
+        })
+        .superRefine((data, ctx) => {
+            const isCashPayment =
+                payType === 'ACCOUNT' ||
+                payType === 'VIRTUAL_ACCOUNT' ||
+                payType === 'ESCROW_VIRTUAL_ACCOUNT' ||
+                payType === 'ESCROW_REALTIME_ACCOUNT_TRANSFER';
+
+            if (isCashPayment) {
+                if (!data.bankAccountInfo?.bankAccount)
+                    ctx.addIssue({
+                        path: ['bankAccountInfo', 'bankAccount'],
+                        code: z.ZodIssueCode.custom,
+                        message: '계좌번호를 입력해주세요.',
+                    });
+                if (!data.bankAccountInfo?.bankDepositorName)
+                    ctx.addIssue({
+                        path: ['bankAccountInfo', 'bankDepositorName'],
+                        code: z.ZodIssueCode.custom,
+                        message: '예금주를 입력해주세요.',
+                    });
+                if (!data.bankAccountInfo?.bank)
+                    ctx.addIssue({
+                        path: ['bankAccountInfo', 'bank'],
+                        code: z.ZodIssueCode.custom,
+                        message: '은행을 선택해주세요.',
+                    });
+            }
+        });
+
+/** 하위 호환용 — payType 없이 사용할 때 */
+const claimCancelSchema = createClaimCancelSchema();
 
 const claimExchangeSchema = z
     .object({
@@ -241,127 +253,141 @@ const claimExchangeSchema = z
         }
     });
 
-const claimReturnSchema = z
-    .object({
-        claimType: z.enum(['RETURN']),
-        claimReasonDetail: z
-            .string({ error: '상세 사유를 입력해주세요.' })
-            .nonempty({ message: '상세 사유를 입력해주세요.' }),
-        responsibleObjectType: z.enum(['BUYER', 'SELLER']).optional(),
-        claimedProductOptions: z
-            .array(
-                z.object({
-                    isChecked: z.boolean(),
-                    productCnt: z.number(),
-                    orderProductOptionNo: z.number(),
+/** 반품 클레임 스키마 팩토리 — payType은 form 데이터에 포함하지 않고 클로저로 검증에만 사용 */
+const createClaimReturnSchema = (payType?: string) =>
+    z
+        .object({
+            claimType: z.enum(['RETURN']),
+            claimReasonDetail: z
+                .string({ error: '상세 사유를 입력해주세요.' })
+                .nonempty({ message: '상세 사유를 입력해주세요.' }),
+            responsibleObjectType: z.enum(['BUYER', 'SELLER']).optional(),
+            claimedProductOptions: z
+                .array(
+                    z.object({
+                        isChecked: z.boolean(),
+                        productCnt: z.number(),
+                        orderProductOptionNo: z.number(),
+                    }),
+                )
+                .min(1, '상품을 선택해주세요.')
+                .refine((data) => data.filter((a) => a.isChecked).length > 0, {
+                    message: '상품을 선택해주세요.',
                 }),
-            )
-            .min(1, '상품을 선택해주세요.')
-            .refine((data) => data.filter((a) => a.isChecked).length > 0, {
-                message: '상품을 선택해주세요.',
+            /** 환불 계좌 정보 서버 저장 여부 (유저가 선택하는 값) */
+            saveBankAccountInfo: z.boolean(),
+            bankAccountInfo: z
+                .object({
+                    bankAccount: z.string().optional(),
+                    bankDepositorName: z.string().optional(),
+                    bank: bankType.optional(),
+                    bankName: z.string().optional(),
+                })
+                .optional(),
+            claimReasonType,
+            returnWayType: z
+                .enum(['SELLER_COLLECT', 'BUYER_DIRECT_RETURN'])
+                .optional(),
+            deliveryCompanyType: deliveryCompanyType.optional(),
+            claimImageUrls: z.array(z.string()).optional(),
+            uploadImageFiles: z.array(z.custom<UploadFileBlob>()).optional(),
+            invoiceNo: z.string().optional(),
+            returnAddress: z.object({
+                receiverLastName: isGlobalMall
+                    ? z.string({ error: '성을 입력해주세요.' }).nonempty({
+                          message: '성을 입력해주세요.',
+                      })
+                    : z.string().optional(),
+                receiverFirstName: isGlobalMall
+                    ? z.string({ error: '이름을 입력해주세요.' }).nonempty({
+                          message: '이름을 입력해주세요.',
+                      })
+                    : z.string().optional(),
+                receiverName: isGlobalMall
+                    ? z.string().optional()
+                    : z.string({ error: '반품자명 입력해주세요.' }).nonempty({
+                          message: '반품자명 입력해주세요.',
+                      }),
+                receiverJibunAddress: z.string().optional(),
+                customsIdNumber: z.string().optional(),
+                countryCd: CountryCdType.optional(),
+                receiverZipCd: z
+                    .string({ error: '우편번호를 입력해주세요.' })
+                    .nonempty({
+                        message: '우편번호를 입력해주세요.',
+                    }),
+                receiverDetailAddress: z.string().optional(),
+                deliveryMemo: z.string().optional(),
+                receiverCity: z.string().optional(),
+                receiverMobileCountryCd: z.string().optional(),
+                receiverAddress: z
+                    .string({ error: '주소를 입력해주세요.' })
+                    .nonempty({
+                        message: '주소를 입력해주세요.',
+                    }),
+                receiverState: z.string().optional(),
+                receiverContact1: z
+                    .string({ error: '연락체를 입력해주세요.' })
+                    .nonempty({
+                        message: '연락체를 입력해주세요.',
+                    }),
+                receiverContact2: z.string().optional(),
             }),
-        saveBankAccountInfo: z.boolean(),
-        bankAccountInfo: z
-            .object({
-                bankAccount: z.string().optional(),
-                bankDepositorName: z.string().optional(),
-                bank: bankType.optional(),
-                bankName: z.string().optional(),
-            })
-            .optional(),
-        claimReasonType,
-        returnWayType: z
-            .enum(['SELLER_COLLECT', 'BUYER_DIRECT_RETURN'])
-            .optional(),
-        deliveryCompanyType: deliveryCompanyType.optional(),
-        claimImageUrls: z.array(z.string()).optional(),
-        uploadImageFiles: z.array(z.custom<UploadFileBlob>()).optional(),
-        invoiceNo: z.string().optional(),
-        returnAddress: z.object({
-            receiverLastName: isGlobalMall
-                ? z.string({ error: '성을 입력해주세요.' }).nonempty({
-                      message: '성을 입력해주세요.',
-                  })
-                : z.string().optional(),
-            receiverFirstName: isGlobalMall
-                ? z.string({ error: '이름을 입력해주세요.' }).nonempty({
-                      message: '이름을 입력해주세요.',
-                  })
-                : z.string().optional(),
-            receiverName: isGlobalMall
-                ? z.string().optional()
-                : z.string({ error: '반품자명 입력해주세요.' }).nonempty({
-                      message: '반품자명 입력해주세요.',
-                  }),
-            receiverJibunAddress: z.string().optional(),
-            customsIdNumber: z.string().optional(),
-            countryCd: CountryCdType.optional(),
-            receiverZipCd: z
-                .string({ error: '우편번호를 입력해주세요.' })
-                .nonempty({
-                    message: '우편번호를 입력해주세요.',
-                }),
-            receiverDetailAddress: z.string().optional(),
-            deliveryMemo: z.string().optional(),
-            receiverCity: z.string().optional(),
-            receiverMobileCountryCd: z.string().optional(),
-            receiverAddress: z
-                .string({ error: '주소를 입력해주세요.' })
-                .nonempty({
-                    message: '주소를 입력해주세요.',
-                }),
-            receiverState: z.string().optional(),
-            receiverContact1: z
-                .string({ error: '연락처를 입력해주세요.' })
-                .nonempty({
-                    message: '연락처를 입력해주세요.',
-                }),
-            receiverContact2: z.string().optional(),
-        }),
-    })
-    .superRefine((data, ctx) => {
-        if (data.saveBankAccountInfo) {
-            if (!data.bankAccountInfo?.bankAccount)
-                ctx.addIssue({
-                    path: ['bankAccountInfo', 'bankAccount'],
-                    code: z.ZodIssueCode.custom,
-                    message: '계좌번호를 입력해 주세요.',
-                });
-            if (!data.bankAccountInfo?.bankDepositorName)
-                ctx.addIssue({
-                    path: ['bankAccountInfo', 'bankDepositorName'],
-                    code: z.ZodIssueCode.custom,
-                    message: '예금주를 입력해 주세요.',
-                });
-            if (!data.bankAccountInfo?.bank)
-                ctx.addIssue({
-                    path: ['bankAccountInfo', 'bank'],
-                    code: z.ZodIssueCode.custom,
-                    message: '은행을 선택해 주세요.',
-                });
-        }
+        })
+        .superRefine((data, ctx) => {
+            const isCashPayment =
+                payType === 'ACCOUNT' ||
+                payType === 'VIRTUAL_ACCOUNT' ||
+                payType === 'ESCROW_VIRTUAL_ACCOUNT' ||
+                payType === 'ESCROW_REALTIME_ACCOUNT_TRANSFER';
 
-        if (data.returnWayType === 'BUYER_DIRECT_RETURN') {
-            if (!data.deliveryCompanyType) {
-                ctx.addIssue({
-                    path: ['deliveryCompanyType'],
-                    code: z.ZodIssueCode.custom,
-                    message: '택배사를 선택해주세요.',
-                });
+            if (isCashPayment) {
+                if (!data.bankAccountInfo?.bankAccount)
+                    ctx.addIssue({
+                        path: ['bankAccountInfo', 'bankAccount'],
+                        code: z.ZodIssueCode.custom,
+                        message: '계좌번호를 입력해 주세요.',
+                    });
+                if (!data.bankAccountInfo?.bankDepositorName)
+                    ctx.addIssue({
+                        path: ['bankAccountInfo', 'bankDepositorName'],
+                        code: z.ZodIssueCode.custom,
+                        message: '예금주를 입력해 주세요.',
+                    });
+                if (!data.bankAccountInfo?.bank)
+                    ctx.addIssue({
+                        path: ['bankAccountInfo', 'bank'],
+                        code: z.ZodIssueCode.custom,
+                        message: '은행을 선택해 주세요.',
+                    });
             }
-            if (!data.invoiceNo) {
-                ctx.addIssue({
-                    path: ['invoiceNo'],
-                    code: z.ZodIssueCode.custom,
-                    message: '송장번호를 입력해주세요.',
-                });
-            }
-        }
-    });
 
-type ClaimCancelSchemaType = z.infer<typeof claimCancelSchema>;
+            if (data.returnWayType === 'BUYER_DIRECT_RETURN') {
+                if (!data.deliveryCompanyType) {
+                    ctx.addIssue({
+                        path: ['deliveryCompanyType'],
+                        code: z.ZodIssueCode.custom,
+                        message: '택배사를 선택해주세요.',
+                    });
+                }
+                if (!data.invoiceNo) {
+                    ctx.addIssue({
+                        path: ['invoiceNo'],
+                        code: z.ZodIssueCode.custom,
+                        message: '송장번호를 입력해주세요.',
+                    });
+                }
+            }
+        });
+
+/** 하위 호환용 — payType 없이 사용할 때 */
+const claimReturnSchema = createClaimReturnSchema();
+
+
+
+type ClaimCancelSchemaType = z.infer<ReturnType<typeof createClaimCancelSchema>>;
 type ClaimExchangeSchemaType = z.infer<typeof claimExchangeSchema>;
-type ClaimReturnSchemaType = z.infer<typeof claimReturnSchema>;
+type ClaimReturnSchemaType = z.infer<ReturnType<typeof createClaimReturnSchema>>;
 
 type ClaimSchemaMapType = {
     CANCEL: ClaimCancelSchemaType;
@@ -374,9 +400,11 @@ export {
     claimCancelSchema,
     claimExchangeSchema,
     claimReturnSchema,
+    createClaimCancelSchema,
+    createClaimReturnSchema,
     type ClaimCancelSchemaType,
     type ClaimExchangeSchemaType,
+    type ClaimFormData,
     type ClaimReturnSchemaType,
     type ClaimSchemaMapType,
-    type ClaimFormData,
 };

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import storageImage from '@/api/storage/image';
 import LoadingWrapper from '@/components/common/loading-wrapper';
+import ClaimBankInfo from '@/components/mypage/claims/forms/bank-info';
 import ClaimPriceInfo from '@/components/mypage/claims/forms/price-info';
 import ClaimReason from '@/components/mypage/claims/forms/reason';
 import ClaimReturnWay from '@/components/mypage/claims/forms/return-way';
@@ -25,8 +26,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal } from '@/hooks/utils';
 import type { RequestReturnMultipleOptionsData } from '@/models/claim/member';
 import {
-    claimReturnSchema,
     ClaimReturnSchemaType,
+    createClaimReturnSchema,
 } from '@/schema/claim.schema';
 
 const CLAIM_TYPE = 'RETURN' as const;
@@ -40,18 +41,6 @@ export const ClaimReturnForm = () => {
 
     const orderOptionNo = Number(router.query.orderOptionNo) || 0;
     const returnOrderNo = router.query.returnOrderNo as string | undefined;
-
-    const methods = useForm<ClaimReturnSchemaType>({
-        shouldFocusError: true,
-        resolver: zodResolver(claimReturnSchema),
-        defaultValues: {
-            claimType: CLAIM_TYPE,
-            saveBankAccountInfo: false,
-            returnWayType: 'SELLER_COLLECT',
-        },
-    });
-
-    const { handleSubmit, reset, getValues, watch, control } = methods;
 
     const { data: memberData, isFetched: isMemberFetched } =
         useOrderOptionDetailForClaim({
@@ -69,6 +58,24 @@ export const ClaimReturnForm = () => {
 
     const orderOptionData = isLogin ? memberData : guestData;
     const isFetched = isLogin ? isMemberFetched : isGuestFetched;
+
+    /** payType을 클로저로 캡처한 스키마 — form 데이터에는 포함되지 않음 */
+    const claimReturnSchema = useMemo(
+        () => createClaimReturnSchema(orderOptionData?.payType ?? undefined),
+        [orderOptionData?.payType],
+    );
+
+    const methods = useForm<ClaimReturnSchemaType>({
+        shouldFocusError: true,
+        resolver: zodResolver(claimReturnSchema),
+        defaultValues: {
+            claimType: CLAIM_TYPE,
+            saveBankAccountInfo: false,
+            returnWayType: 'SELLER_COLLECT',
+        },
+    });
+
+    const { handleSubmit, reset, getValues, watch, control } = methods;
 
     const claimedProductOptions = useWatch({
         control,
@@ -114,10 +121,6 @@ export const ClaimReturnForm = () => {
 
         reset((prev) => ({
             ...prev,
-            saveBankAccountInfo:
-                orderOptionData.payType === 'ACCOUNT' ||
-                orderOptionData.payType === 'VIRTUAL_ACCOUNT' ||
-                orderOptionData.payType === 'ESCROW_VIRTUAL_ACCOUNT',
             claimedProductOptions: orderOptionList.map((option) => ({
                 isChecked:
                     option.orderOptionNo ===
@@ -297,6 +300,12 @@ export const ClaimReturnForm = () => {
                             claimType={CLAIM_TYPE}
                         />
                     )}
+
+                    <ClaimBankInfo
+                        payType={orderOptionData?.payType}
+                        refundAccount={orderOptionData?.refundAccount}
+                        availableBanks={orderOptionData?.availableBanks || []}
+                    />
 
                     <div style={{ display: 'flex', gap: '12px' }}>
                         <Button

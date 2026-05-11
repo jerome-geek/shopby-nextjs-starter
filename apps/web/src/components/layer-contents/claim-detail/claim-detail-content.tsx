@@ -1,11 +1,10 @@
 import dayjs from 'dayjs';
-import { Loader2 } from 'lucide-react';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import { ImageModal } from '@/components/layer-contents/claim-detail/image-modal';
 import * as styles from '@/components/layer-contents/claim-detail/index.css';
-import LoadingWrapper from '@/components/common/loading-wrapper';
 import { CLAIM_REASON_MAP, CLAIM_TYPE_MAP } from '@/const/label';
 import useGuestClaimDetail from '@/hooks/query/claim/guest/useGuestClaimDetail';
 import useClaimDetail from '@/hooks/query/claim/member/useClaimDetail';
