@@ -14,6 +14,7 @@ import OrderPaymentSummary from '@/components/order/payment-summary';
 import ShippingAddress from '@/components/order/shipping-address';
 import { PATHS } from '@/const/paths';
 import { useOrderSheetInitialize } from '@/entities/order/hooks';
+import { useSb } from '@/hooks/libs/shopby';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
@@ -38,6 +39,9 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
     const { methods, orderSheetData } = useOrderSheetInitialize({
         orderSheetNo,
     });
+
+    useSb({ orderSheet: orderSheetData });
+
     const { handleSubmit } = methods;
 
     const onSubmit = handleSubmit(async (data) => {
