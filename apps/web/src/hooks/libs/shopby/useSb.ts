@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/query/admin/mall';
 import type { GetCategoryResponse } from '@/models/display/category';
-import type { CartList, OrderDetailResponse } from '@/models/order';
+import type { OrderDetailResponse } from '@/models/order';
+import type { GetCartListResponse } from '@/models/order/cart';
+import type { GetCartResponse } from '@/models/order/guestOrder';
 import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
 import type {
     ProductDetailResponse,
@@ -15,7 +17,7 @@ import type {
 interface UseSbProps {
     product?: ProductDetailResponse;
     searchedProduct?: ProductsSearchResponse;
-    cart?: CartList;
+    cart?: GetCartListResponse | GetCartResponse;
     orderSheet?: GetOrderSheetResponse;
     order?: OrderDetailResponse;
     currentCategory?: GetCategoryResponse;

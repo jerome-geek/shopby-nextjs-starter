@@ -1,16 +1,12 @@
 import { flatMap, map, pipe, sum } from '@fxts/core';
-import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { cart } from '@/api/order';
-import { useAuth } from '@/hooks/useAuth';
-import { cartKeys } from '@/hooks/queryKeys';
-import { useCartStore } from '@/store/useCartStore';
-import { useStore } from '@/hooks/utils/useStore';
-import type { GetCartListResponse } from '@/models/order/cart';
 import { useCartCount, useCartList } from '@/hooks/query/order/cart';
 import useGuestCartList from '@/hooks/query/order/guestOrder/useGuestCartList';
+import { useAuth } from '@/hooks/useAuth';
+import { useStore } from '@/hooks/utils/useStore';
 import type { GetCartData } from '@/models/order/guestOrder';
+import { useCartStore } from '@/store/useCartStore';
 
 /**
  * 장바구니 관련 훅

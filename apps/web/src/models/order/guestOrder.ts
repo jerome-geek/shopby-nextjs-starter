@@ -12,6 +12,8 @@ import type {
     DeliveryGroup,
     InvalidProduct,
     OptionInputs,
+    OrderProduct,
+    OrderProductOption,
 } from '@/models/order';
 
 export interface GetCartParams {
@@ -37,9 +39,29 @@ export type GetCartData = {
     productNo: number;
 }[];
 
+/** 비회원용 주문 상품 옵션 (적립금 관련 필드 제외) */
+type GuestOrderProductOption = Omit<
+    OrderProductOption,
+    | 'accumulationAmtWhenBuyConfirm'
+    | 'accumulationRateForMemberWhenBuyConfirm'
+    | 'accumulationAmtForMemberWhenBuyConfirm'
+    | 'accumulationRateForProductWhenBuyConfirm'
+    | 'accumulationAmtForProductWhenBuyConfirm'
+>;
+
+/** 비회원용 주문 상품 */
+interface GuestOrderProduct extends Omit<OrderProduct, 'orderProductOptions'> {
+    orderProductOptions: GuestOrderProductOption[];
+}
+
+/** 비회원용 배송 그룹 */
+interface GuestDeliveryGroup extends Omit<DeliveryGroup, 'orderProducts'> {
+    orderProducts: GuestOrderProduct[];
+}
+
 export interface GetCartResponse {
     /** 배송그룹 */
-    deliveryGroups: DeliveryGroup[];
+    deliveryGroups: GuestDeliveryGroup[];
     /** 가격 정보 */
     price: CartPriceInfo;
     /** 유효하지 않은 상품 */

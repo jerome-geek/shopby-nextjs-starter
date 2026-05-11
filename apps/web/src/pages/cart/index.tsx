@@ -14,6 +14,7 @@ import { InputCheckbox, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import { CartRecommendSection } from '@/features/cart/components/recommend-section';
 import useCart from '@/hooks/cart/useCart';
+import { useSb } from '@/hooks/libs/shopby';
 import { useCartMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
@@ -235,9 +236,13 @@ const CartContent = () => {
         }
     };
 
-    if (isLoading) return <p>Loading cart...</p>;
-
     const isEmpty = deliveryGroups.length === 0;
+
+    useSb({
+        cart: cartInfo,
+    });
+
+    if (isLoading) return <p>Loading cart...</p>;
 
     return (
         <div className={styles.container}>
