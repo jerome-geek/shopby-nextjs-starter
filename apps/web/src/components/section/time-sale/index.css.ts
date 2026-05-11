@@ -20,7 +20,7 @@ export const section = style({
 export const header = style({
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
 });
 
 export const titleWrapper = style({

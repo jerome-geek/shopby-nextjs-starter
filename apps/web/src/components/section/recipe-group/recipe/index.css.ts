@@ -14,7 +14,7 @@ export const container = style({
 export const recipeSectionHeader = style({
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
 });
 
 export const recipeSectionTitleContainer = style({

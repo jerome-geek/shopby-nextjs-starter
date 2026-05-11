@@ -20,7 +20,7 @@ export const container = style({
 export const collectionSectionHeader = style({
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
 });
 
 export const collectionSectionTitleContainer = style({
