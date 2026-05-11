@@ -33,6 +33,7 @@ import {
 } from '@/components/recipe';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import { createRecipeSeoData } from '@/entities/recipe/utils/seo';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { recipeKeys } from '@/hooks/queryKeys';
@@ -54,6 +55,7 @@ const SCROLL_OFFSET_MARGIN = 16;
 
 const RecipeDetailPage = ({
     sno,
+    seoData,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
     const { t } = useTranslation();
 
@@ -184,10 +186,7 @@ const RecipeDetailPage = ({
 
     return (
         <div className={styles.container}>
-            <Seo
-                title={recipeDetailData.title}
-                description={recipeDetailData.description}
-            />
+            {seoData && <Seo type='article' {...seoData} />}
 
             {/* --- HEADER AREA --- */}
             <section className={styles.headerArea}>
@@ -494,8 +493,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         return { notFound: true };
     }
 
+    let seoData = null;
+
     try {
-        await queryClient.fetchQuery({
+        const recipeDetail = await queryClient.fetchQuery({
             queryKey: recipeKeys.detail(sno, 0),
             queryFn: async () => {
                 const { data } = await recipe.getRecipeDetail(sno);
@@ -503,6 +504,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 return data;
             },
         });
+
+        seoData = createRecipeSeoData({ recipeDetail, sno });
     } catch (error) {
         console.error(error);
         return {
@@ -513,6 +516,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
         props: {
             sno,
+            seoData,
             dehydratedState: dehydrate(queryClient),
         },
         revalidate: 60 * 60 * 6, // 6시간마다 데이터 갱신 여부 체크 (ISR)
