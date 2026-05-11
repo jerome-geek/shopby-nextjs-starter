@@ -167,37 +167,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
             <div className={styles.container}>
                 {/* --- Hero Section --- */}
                 <section className={styles.heroSection}>
-                    {/* 컬렉션 대표 이미지 콜라주 */}
-                    <div className={styles.collageWrapper}>
-                        {hasImages ? (
-                            <>
-                                <img
-                                    src={previewImages[0]}
-                                    className={styles.collageMain}
-                                    alt={sharedCollectionData.title}
-                                />
-                                {previewImages[1] && (
-                                    <img
-                                        src={previewImages[1]}
-                                        className={styles.collageSub}
-                                        alt=''
-                                    />
-                                )}
-                                {previewImages[2] && (
-                                    <img
-                                        src={previewImages[2]}
-                                        className={styles.collageSub}
-                                        alt=''
-                                    />
-                                )}
-                            </>
-                        ) : (
-                            <div className={styles.collagePlaceholder}>
-                                <Bookmark size={48} />
-                            </div>
-                        )}
-                    </div>
-
                     {/* 컬렉션 정보 */}
                     <div className={styles.heroInfo}>
                         <span className={styles.badge}>
