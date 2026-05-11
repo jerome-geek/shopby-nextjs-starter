@@ -207,7 +207,7 @@ export const likeButton = style({
 export const likeCount = style([
     textStyles.body1Medium,
     {
-        color: vars.color.gray['60'],
+        color: vars.color.green['100'],
     },
 ]);
 
@@ -508,4 +508,11 @@ export const detailsSection = style({
             padding: '0 20px',
         },
     },
+});
+
+export const topButtonContainer = style({
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '12px',
+    flexShrink: '0',
 });

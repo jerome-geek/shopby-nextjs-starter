@@ -256,30 +256,35 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             </div>
                         </div>
 
-                        {isMobile ? (
+                        <div className={styles.topButtonContainer}>
                             <button
                                 type='button'
                                 onClick={onShareButtonClick}
                                 aria-label='공유하기'
                             >
-                                <Share2 size={22} strokeWidth={1.5} />
+                                <Share2 size={26} strokeWidth={1.5} />
                             </button>
-                        ) : (
-                            <button
-                                className={styles.likeButton}
-                                onClick={onLikeButtonClick(productNo, liked)}
-                            >
-                                <BookmarkIcon
-                                    width={isMobile ? 24 : 36}
-                                    height={isMobile ? 24 : 36}
-                                    variant={liked ? 'filled' : 'outline'}
-                                />
 
-                                <span className={styles.likeCount}>
-                                    {counter.likeCnt}
-                                </span>
-                            </button>
-                        )}
+                            {!isTablet && (
+                                <button
+                                    className={styles.likeButton}
+                                    onClick={onLikeButtonClick(
+                                        productNo,
+                                        liked,
+                                    )}
+                                >
+                                    <BookmarkIcon
+                                        width={20}
+                                        height={28}
+                                        variant={liked ? 'filled' : 'outline'}
+                                    />
+
+                                    <span className={styles.likeCount}>
+                                        {counter.likeCnt}
+                                    </span>
+                                </button>
+                            )}
+                        </div>
                     </header>
 
                     <div className={styles.priceSection}>
