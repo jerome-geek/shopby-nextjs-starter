@@ -284,10 +284,6 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 const CollectionDetailSkeleton = () => (
     <div className={styles.container}>
         <section className={styles.heroSection}>
-            <div
-                className={styles.collageWrapper}
-                style={{ background: '#f0f0f0' }}
-            />
             <div className={styles.heroInfo}>
                 <div
                     className={styles.skeletonBar}

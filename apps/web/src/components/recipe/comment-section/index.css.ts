@@ -17,19 +17,31 @@ export const commentSection = style({
 });
 
 export const commentTitle = style([
-    textStyles.title1Bold,
+    textStyles.title1Semibold,
     {
         color: vars.color.black,
         display: 'flex',
         gap: '6px',
         alignItems: 'center',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.display1Semibold,
+            },
+        },
     },
 ]);
 
 export const commentCount = style([
-    textStyles.title1Bold,
+    textStyles.title1Semibold,
     {
         color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.display1Semibold,
+            },
+        },
     },
 ]);
 
@@ -44,6 +56,12 @@ export const commentList = style({
     '@media': {
         [media.desktop]: {
             gap: '24px',
+        },
+    },
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
         },
     },
 });

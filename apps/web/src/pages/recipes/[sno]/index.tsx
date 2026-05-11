@@ -315,10 +315,6 @@ const RecipeDetailPage = ({
                                 recipeDetailData.memberId
                             }`}
                         </p>
-
-                        <p className={styles.description}>
-                            {recipeDetailData.description}
-                        </p>
                     </div>
 
                     <div className={styles.metaList}>

@@ -261,7 +261,6 @@ export const metaList = style({
     '@media': {
         [media.desktop]: {
             gap: '12px',
-            paddingTop: '12px',
         },
     },
 });

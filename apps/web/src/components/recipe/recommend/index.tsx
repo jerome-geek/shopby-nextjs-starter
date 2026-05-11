@@ -1,22 +1,38 @@
-import { RecipeCard } from '@/components/recipe/card';
-import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
+import { filter, pipe, slice, toArray } from '@fxts/core';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { RecipeCard } from '@/components/recipe/card';
+import { useProfile } from '@/hooks/query/member/profile';
+import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 
 import * as styles from '@/components/recipe/recommend/index.css';
 
 export const RecipeRecommend = () => {
     const { t } = useTranslation();
 
+    const { data: profileData } = useProfile();
+    const memberNo = profileData?.memberNo ?? 0;
+
     const { data: publicRecipeSearchData } = usePublicRecipeSearch({
         searchParams: {
             page: 1,
-            take: 4,
+            take: 20,
             order: 'DESC',
             sortBy: 'LATEST',
         },
     });
 
-    const recipeList = publicRecipeSearchData?.data ?? [];
+    const recipeList = useMemo(() => {
+        const list = publicRecipeSearchData?.data ?? [];
+
+        return pipe(
+            list,
+            filter((recipe) => recipe.memberNo !== memberNo),
+            slice(0, 4),
+            toArray,
+        );
+    }, [publicRecipeSearchData, memberNo]);
 
     return (
         <section className={styles.container}>

@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
 import { media } from '@/styles/media';
-import { textStyles } from '@/styles/typography.css';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const container = style({
     display: 'flex',
@@ -14,9 +14,15 @@ export const container = style({
 });
 
 export const sectionTitle = style([
-    textStyles.title1Bold,
+    textStyles.title1Semibold,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.display1Semibold,
+            },
+        },
     },
 ]);
 
