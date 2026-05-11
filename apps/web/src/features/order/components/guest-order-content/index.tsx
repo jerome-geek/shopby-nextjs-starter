@@ -1,4 +1,5 @@
 import OrderDetailsContent from '@/features/order/components/order-details-content';
+import { useSb } from '@/hooks/libs/shopby';
 import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
 
 /**
@@ -6,6 +7,8 @@ import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuest
  */
 const GuestOrderContent = ({ orderNo }: { orderNo: string }) => {
     const { data: orderInfo } = useGuestOrderDetail({ orderNo });
+
+    useSb({ order: orderInfo });
 
     return <OrderDetailsContent orderInfo={orderInfo} />;
 };
