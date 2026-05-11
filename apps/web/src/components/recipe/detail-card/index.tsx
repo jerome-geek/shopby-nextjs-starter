@@ -10,7 +10,7 @@ import {
     TimerIcon,
 } from '@/components/icons';
 import * as styles from '@/components/recipe/detail-card/index.css';
-import { Tooltip, VerticalMoreMenu } from '@/components/ui';
+import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -195,13 +195,6 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
                             <h5 className={styles.ingredientTitle}>
                                 요리 재료 List
                             </h5>
-                            <Tooltip
-                                content={
-                                    '재료는 최대 6개까지 노출됩니다.\n자세한 사항은 상세 페이지를 참고해주세요.'
-                                }
-                            >
-                                <div className={styles.infoDot}>i</div>
-                            </Tooltip>
                         </div>
 
                         <ul className={styles.ingredientList}>
