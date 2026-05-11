@@ -51,6 +51,7 @@ const useSb = ({
 
         const isSearchPage = router.pathname === PATHS.SEARCH;
         if (isSearchPage && searchedProduct) {
+            console.log('🚀 ~ useSb ~ isSearchPage:', isSearchPage);
             window.ShopbyExternalScript.setGlobalObjectSb({
                 searchedProduct,
             });

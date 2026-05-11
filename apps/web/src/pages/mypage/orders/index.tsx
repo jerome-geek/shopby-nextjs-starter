@@ -6,16 +6,10 @@ import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import { ObserverTarget } from '@/components/common/observer-target';
 import { MypageLayout } from '@/components/layout';
-import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
-import Paging from '@/components/ui/paging';
-import {
-    useInfiniteMyOrderList,
-    useMyOrderList,
-} from '@/hooks/query/order/myOrder';
-import { useResponsive } from '@/hooks/utils';
-
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { OrderOptions } from '@/components/mypage/orders/order-options';
+import Paging from '@/components/ui/paging';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { ordersStatusTabSpec } from '@/entities/mypage/utils/tabs';
 import {
@@ -23,6 +17,11 @@ import {
     OrderStatusFilterFallback,
     type OrderStatusFilterValue,
 } from '@/features/mypage/order-status-filter';
+import {
+    useInfiniteMyOrderList,
+    useMyOrderList,
+} from '@/hooks/query/order/myOrder';
+import { useResponsive } from '@/hooks/utils';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
 const PAGE_SIZE = 10;

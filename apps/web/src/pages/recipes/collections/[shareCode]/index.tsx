@@ -18,7 +18,7 @@ import { PATHS } from '@/const/paths';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { collectionKeys } from '@/hooks/queryKeys';
-import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
+import { useSharedCollection } from '@/hooks/suspenseQuery/shop/collection';
 import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
@@ -39,10 +39,7 @@ const CollectionDetailContent = ({ shareCode }: { shareCode: string }) => {
 
     const { data: sharedCollectionData } = useSharedCollection({
         shareCode,
-        memberNo: profileData?.memberNo,
     });
-
-    console.log(sharedCollectionData);
 
     const {
         bookmarkCollection: { mutate: bookmarkCollectionMutate },

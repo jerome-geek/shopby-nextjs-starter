@@ -16,6 +16,7 @@ import { eventKeys } from '@/hooks/queryKeys';
 import type { GetEventsV2Params } from '@/models/display/event';
 import * as styles from '@/pages/shop/[slug]/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+
 const SHOP_TYPES = {
     LIFE: 'life',
     KIDS: 'kids',
