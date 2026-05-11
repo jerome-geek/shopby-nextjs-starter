@@ -22,9 +22,13 @@ import { vars } from '@/styles/theme.css';
 
 interface RecipeDetailCardProps {
     recipe: GetRecipeDetailResponse;
+    collectionLink?: string;
 }
 
-export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
+export const RecipeDetailCard = ({
+    recipe,
+    collectionLink,
+}: RecipeDetailCardProps) => {
     const router = useRouter();
 
     const { t } = useTranslation();
@@ -54,6 +58,25 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
     const author = recipe.authorName ?? recipe.memberName ?? '';
     const ingredients = recipe.ingredients ?? [];
     const steps = recipe.steps ?? [];
+
+    const stepSectionInner = (
+        <>
+            <h5 className={styles.stepTitle}>따라해봐 How to Cook</h5>
+            <ul className={styles.stepList}>
+                {steps.map((step, i) => (
+                    <li
+                        key={`${recipe.sno}-step-${i}`}
+                        className={styles.stepItem}
+                    >
+                        <div className={styles.stepNumber}>
+                            <span>{i + 1}</span>
+                        </div>
+                        <p className={styles.stepText}>{step.description}</p>
+                    </li>
+                ))}
+            </ul>
+        </>
+    );
 
     const handleEdit = () => {
         router.push(`${PATHS.RECIPES.WRITE}?recipeNo=${recipe.sno}`);
@@ -240,24 +263,17 @@ export const RecipeDetailCard = ({ recipe }: RecipeDetailCardProps) => {
 
             <hr className={styles.divider} />
 
-            <div className={styles.stepSection}>
-                <h5 className={styles.stepTitle}>따라해봐 How to Cook</h5>
-                <ul className={styles.stepList}>
-                    {steps.map((step, i) => (
-                        <li
-                            key={`${recipe.sno}-step-${i}`}
-                            className={styles.stepItem}
-                        >
-                            <div className={styles.stepNumber}>
-                                <span>{i + 1}</span>
-                            </div>
-                            <p className={styles.stepText}>
-                                {step.description}
-                            </p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            {collectionLink ? (
+                <Link
+                    href={collectionLink}
+                    prefetch={false}
+                    className={styles.stepSection}
+                >
+                    {stepSectionInner}
+                </Link>
+            ) : (
+                <div className={styles.stepSection}>{stepSectionInner}</div>
+            )}
         </article>
     );
 };

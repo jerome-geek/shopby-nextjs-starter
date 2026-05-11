@@ -78,7 +78,14 @@ const CollectionSection = ({
                                         height: 'auto',
                                     }}
                                 >
-                                    <RecipeDetailCard recipe={recipe} />
+                                    <RecipeDetailCard
+                                        recipe={recipe}
+                                        collectionLink={`${PATHS.RECIPES.COLLECTIONS.replace(
+                                            '[shareCode]',
+                                            collectionGroup.collection
+                                                .shareCode,
+                                        )}`}
+                                    />
                                 </SwiperSlide>
                             );
                         })}
@@ -92,7 +99,13 @@ const CollectionSection = ({
                                 key={recipe.sno}
                                 className={styles.recipeListItem}
                             >
-                                <RecipeDetailCard recipe={recipe} />
+                                <RecipeDetailCard
+                                    recipe={recipe}
+                                    collectionLink={`${PATHS.RECIPES.COLLECTIONS.replace(
+                                        '[shareCode]',
+                                        collectionGroup.collection.shareCode,
+                                    )}`}
+                                />
                             </li>
                         );
                     })}
