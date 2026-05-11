@@ -21,12 +21,11 @@ export const container = style({
 
 // --- Header Area ---
 export const headerArea = style({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '24px',
+    display: 'contents',
 
     '@media': {
         [media.desktop]: {
+            display: 'flex',
             flexDirection: 'row',
             gap: '40px',
         },
@@ -36,7 +35,22 @@ export const headerArea = style({
 export const imageCarouselContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px',
+    position: 'sticky',
+    top: 0,
+    zIndex: 1000,
+    gap: '8px',
+    marginBottom: '24px',
+    backgroundColor: vars.color.white,
+
+    '@media': {
+        [media.desktop]: {
+            position: 'static',
+            zIndex: 'auto',
+            gap: '16px',
+            marginBottom: 0,
+            backgroundColor: 'transparent',
+        },
+    },
 });
 
 export const imageCarousel = style({
