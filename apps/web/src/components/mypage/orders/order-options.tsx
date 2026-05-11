@@ -2,16 +2,16 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 
 import * as styles from '@/components/mypage/orders/order-options.css';
-import { OrderOptionsItem } from './order-options-item';
 import { PATHS } from '@/const/paths';
-import type { OrderItems } from '@/models/order/myOrder';
 import type { MemberClaim } from '@/models/claim';
+import type { OrderItems } from '@/models/order/myOrder';
+import { OrderOptionsItem } from './order-options-item';
 
-export const OrderOptions = ({
-    optionItems,
-}: {
+interface OrderOptionsProps {
     optionItems: OrderItems[] | MemberClaim[];
-}) => {
+}
+
+export const OrderOptions = ({ optionItems }: OrderOptionsProps) => {
     const isOrderItems = optionItems.every(
         (option) => 'orderOptions' in option,
     );
@@ -35,6 +35,7 @@ export const OrderOptions = ({
                                 options.orderNo,
                             )}
                             className={styles.orderNoLink}
+                            prefetch={false}
                         >
                             {options.orderNo}
                         </Link>

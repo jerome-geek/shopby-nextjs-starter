@@ -10,7 +10,6 @@ import type { GetSharedRecipeCollectionResponse } from '@/models/shop/collection
 
 interface UseSharedCollectionParams<T = GetSharedRecipeCollectionResponse> {
     shareCode: string;
-    memberNo?: number;
     options?: Omit<
         UseSuspenseQueryOptions<
             GetSharedRecipeCollectionResponse,
@@ -24,18 +23,15 @@ interface UseSharedCollectionParams<T = GetSharedRecipeCollectionResponse> {
 
 const useSharedCollection = <T = GetSharedRecipeCollectionResponse>({
     shareCode,
-    memberNo = 0,
     options,
 }: UseSharedCollectionParams<T>) => {
     return useSuspenseQuery({
-        queryKey: collectionKeys.detail(shareCode, memberNo),
+        queryKey: collectionKeys.detail(shareCode),
         queryFn: async () => {
             const { data } = await collection.getShared(shareCode);
-
             return data;
         },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10,
+
         ...options,
     });
 };

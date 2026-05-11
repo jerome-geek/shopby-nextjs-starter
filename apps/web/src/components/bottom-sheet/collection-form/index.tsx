@@ -1,15 +1,20 @@
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useForm, FormProvider } from 'react-hook-form';
 
-import { BottomSheetLayout, DefaultBottomSheetProps } from '@/components/layout';
-import ButtonV2 from '@/components/ui/button/v2';
+import FetchBoundary from '@/components/common/FetchBoundary';
 import {
     CollectionFormContent,
     CollectionFormData,
 } from '@/components/layer-contents/collection-form';
+import { CollectionFormSkeleton } from '@/components/layer-contents/collection-form/skeleton';
+import {
+    BottomSheetLayout,
+    DefaultBottomSheetProps,
+} from '@/components/layout';
+import ButtonV2 from '@/components/ui/button/v2';
 
 interface CollectionFormSheetProps extends DefaultBottomSheetProps {
-    shareCode?: string;
+    shareCode: string;
 }
 
 export const CollectionFormSheet = ({
@@ -57,10 +62,9 @@ export const CollectionFormSheet = ({
             ]}
         >
             <FormProvider {...formMethods}>
-                <CollectionFormContent
-                    shareCode={shareCode}
-                    onSuccess={close}
-                />
+                <FetchBoundary fallback={<CollectionFormSkeleton />}>
+                    <CollectionFormContent shareCode={shareCode} />
+                </FetchBoundary>
             </FormProvider>
         </BottomSheetLayout>
     );

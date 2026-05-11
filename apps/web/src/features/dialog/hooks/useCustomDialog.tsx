@@ -1,4 +1,3 @@
-import recipe from '@/api/shop/recipe';
 import { ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { parseAsString, useQueryStates } from 'nuqs';
@@ -6,6 +5,7 @@ import { overlay } from 'overlay-kit';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { recipe } from '@/api/shop';
 import { CollectionFormSheet } from '@/components/bottom-sheet/collection-form';
 import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
 import { RecipeImageUploadSheet } from '@/components/bottom-sheet/recipe-image-upload';
@@ -211,7 +211,7 @@ export const useCustomDialog = () => {
                     (props) => (
                         <CollectionFormSheet
                             {...props}
-                            shareCode={shareCode}
+                            shareCode={shareCode ?? ''}
                             close={removeModalQuery(props.close)}
                         />
                     ),
@@ -224,7 +224,7 @@ export const useCustomDialog = () => {
                     (props) => (
                         <CollectionFormModal
                             {...props}
-                            shareCode={shareCode}
+                            shareCode={shareCode ?? ''}
                             close={removeModalQuery(props.close)}
                         />
                     ),
@@ -263,9 +263,8 @@ export const useCustomDialog = () => {
                             return;
                         }
 
-                        const { data } = await recipe.getRecipeDetail(
-                            recipeSno,
-                        );
+                        const { data } =
+                            await recipe.getRecipeDetail(recipeSno);
 
                         if (
                             data.recipeStatus === 'COMPLETED' ||

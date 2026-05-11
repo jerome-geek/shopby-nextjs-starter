@@ -10,10 +10,10 @@ import * as styles from '@/components/recipe/scrap/detail/index.css';
 import { ViewToggle } from '@/components/recipe/view-toggle';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import { useCustomDialog } from '@/features/dialog/hooks/useCustomDialog';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useSharedCollection } from '@/hooks/suspenseQuery/shop/recipe';
-import { useCustomDialog } from '@/hooks/ui';
+import { useSharedCollection } from '@/hooks/suspenseQuery/shop/collection';
 import { useDialog } from '@/hooks/utils';
 import { searchSerializer } from '@/shared/utils/search-params';
 import { vars } from '@/styles/theme.css';
@@ -41,7 +41,6 @@ export const RecipeScrapDetail = ({
     const { data: profileData } = useProfile();
     const { data: sharedCollectionData } = useSharedCollection({
         shareCode,
-        memberNo: profileData?.memberNo,
     });
 
     const {

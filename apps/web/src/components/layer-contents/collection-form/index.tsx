@@ -1,20 +1,23 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { parseAsString, useQueryStates } from 'nuqs';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { collection as collectionApi } from '@/api/shop';
 import * as styles from '@/components/layer-contents/collection-form/index.css';
+import { CollectionFormSkeleton } from '@/components/layer-contents/collection-form/skeleton';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
     TextArea,
 } from '@/components/ui/input';
+import { MODAL_QUERY_KEY } from '@/const/modal';
 import { useCollectionMutation } from '@/hooks/mutations';
-import { collectionKeys } from '@/hooks/queryKeys';
+import { useSharedCollection } from '@/hooks/query/shop/collection';
 import { useToast } from '@/hooks/ui';
+import { useResponsive } from '@/hooks/utils';
 
 export interface CollectionFormData {
     title: string;
@@ -22,7 +25,7 @@ export interface CollectionFormData {
 }
 
 interface CollectionFormContentProps {
-    shareCode?: string;
+    shareCode: string;
     onSuccess?: () => void;
     onError?: (error: unknown) => void;
     formId?: string;
@@ -35,22 +38,31 @@ export const CollectionFormContent = ({
     formId = 'collection-form',
 }: CollectionFormContentProps) => {
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
+
     const { addToast } = useToast();
+
+    const { isMobile } = useResponsive();
+
+    const queryClient = useQueryClient();
 
     const { register, handleSubmit, setValue } =
         useFormContext<CollectionFormData>();
 
-    // Fetch data if shareCode is provided (Edit mode)
-    const { data: collectionData } = useQuery({
-        queryKey: collectionKeys.detail(shareCode || ''),
-        queryFn: async () => {
-            const { data } = await collectionApi.getShared(shareCode!);
-            return data;
+    const [, setModalQuery] = useQueryStates(
+        {
+            [MODAL_QUERY_KEY]: parseAsString,
+            recipeSno: parseAsString,
         },
-        enabled: !!shareCode,
-        staleTime: 1000 * 60 * 5,
-    });
+        { history: 'replace', shallow: true },
+    );
+
+    const { data: collectionData, isLoading: isCollectionLoading } =
+        useSharedCollection({
+            shareCode,
+            options: {
+                enabled: !!shareCode,
+            },
+        });
 
     const {
         create: { mutate: createCollection },
@@ -139,7 +151,7 @@ export const CollectionFormContent = ({
     const onMutationError = (error: unknown, fallbackMessage: string) => {
         console.error('Collection mutation error:', error);
         const message = isAxiosError(error)
-            ? error.response?.data.message ?? fallbackMessage
+            ? (error.response?.data.message ?? fallbackMessage)
             : fallbackMessage;
 
         addToast({
@@ -148,6 +160,10 @@ export const CollectionFormContent = ({
         });
     };
 
+    if (shareCode && isCollectionLoading) {
+        return <CollectionFormSkeleton />;
+    }
+
     return (
         <form id={formId} onSubmit={onSubmit} className={styles.container}>
             <InputFieldContainer>
@@ -155,6 +171,7 @@ export const CollectionFormContent = ({
                 <InputField
                     placeholder={t('컬렉션 이름을 입력하세요')}
                     {...register('title', { required: true })}
+                    autoFocus={!isMobile}
                 />
             </InputFieldContainer>
 

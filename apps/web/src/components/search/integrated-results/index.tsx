@@ -60,7 +60,6 @@ export const IntegratedSearchResults = ({
     collectionFetchNextPage,
     collectionHasNextPage,
 }: IntegratedSearchResultsProps) => {
-    console.log('🚀 ~ IntegratedSearchResults ~ productList:', productList);
     const { isTablet } = useResponsive();
 
     const hasMoreShopping = !isEmpty(productList) && shoppingHasNextPage;
