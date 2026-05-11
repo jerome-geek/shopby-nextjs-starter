@@ -5,6 +5,7 @@ import { Plus } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import * as styles from '@/components/layer-contents/recipe-save/index.css';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -15,7 +16,7 @@ import { useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 
 interface RecipeSaveContentProps {
-    close: () => void;
+    close: (isSaved?: boolean) => void;
     recipeSno?: number;
     onAddCollection?: () => void;
 }
@@ -37,7 +38,8 @@ export const RecipeSaveContent = ({
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo || 0;
 
-    const { data = [] } = useCollectionList();
+    const { data = [], isLoading: isCollectionListLoading } =
+        useCollectionList();
 
     const collectionList = useMemo(() => {
         return data.filter((a) => a.memberNo === memberNo);
@@ -68,7 +70,7 @@ export const RecipeSaveContent = ({
                 message: t("'{{title}}' 컬렉션에 저장되었습니다.", { title }),
             });
 
-            close();
+            close(true);
         } catch (error) {
             const errorMessage = isAxiosError(error)
                 ? error.response?.data?.message || error.message
@@ -83,41 +85,53 @@ export const RecipeSaveContent = ({
                 {t('레시피를 저장할 컬렉션을 선택하세요')}
             </p>
 
-            <ul className={styles.collectionList}>
-                {collectionList.map((collection) => {
-                    return (
-                        <li key={collection.sno}>
-                            <button
-                                type='button'
-                                className={styles.collectionItem}
-                                onClick={() =>
-                                    handleBookmark(
-                                        collection.sno,
-                                        collection.title,
-                                    )
-                                }
-                                disabled={bookmarkRecipe.isPending}
-                            >
-                                <div className={styles.collectionInfo}>
-                                    <span className={styles.collectionTitle}>
-                                        {collection.title}
-                                    </span>
-                                    <span className={styles.collectionCount}>
-                                        {collection.recipeCount}개
-                                    </span>
-                                </div>
+            <LoadingWrapper
+                isLoading={isCollectionListLoading}
+                isLoadedAnimation
+                containerStyle={{
+                    height: '100px',
+                }}
+            >
+                <ul className={styles.collectionList}>
+                    {collectionList.map((collection) => {
+                        return (
+                            <li key={collection.sno}>
+                                <button
+                                    type='button'
+                                    className={styles.collectionItem}
+                                    onClick={() =>
+                                        handleBookmark(
+                                            collection.sno,
+                                            collection.title,
+                                        )
+                                    }
+                                    disabled={bookmarkRecipe.isPending}
+                                >
+                                    <div className={styles.collectionInfo}>
+                                        <span
+                                            className={styles.collectionTitle}
+                                        >
+                                            {collection.title}
+                                        </span>
+                                        <span
+                                            className={styles.collectionCount}
+                                        >
+                                            {collection.recipeCount}개
+                                        </span>
+                                    </div>
 
-                                <div className={styles.addButton}>
-                                    <Plus
-                                        size={24}
-                                        color={vars.color.gray['40']}
-                                    />
-                                </div>
-                            </button>
-                        </li>
-                    );
-                })}
-            </ul>
+                                    <div className={styles.addButton}>
+                                        <Plus
+                                            size={24}
+                                            color={vars.color.gray['40']}
+                                        />
+                                    </div>
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </LoadingWrapper>
         </div>
     );
 };

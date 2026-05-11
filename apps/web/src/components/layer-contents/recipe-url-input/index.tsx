@@ -9,7 +9,7 @@ import * as styles from '@/components/layer-contents/recipe-url-input/index.css'
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
-import { useDialog, useResponsive } from '@/hooks/utils';
+import { useDialog } from '@/hooks/utils';
 
 const useRecipeUrlInputLogic = (close: () => void) => {
     const { t } = useTranslation();
@@ -58,7 +58,7 @@ const useRecipeUrlInputLogic = (close: () => void) => {
                     queryKey: recipeKeys.lists(),
                 });
                 overlay.closeAll();
-                openRecipeSave(recipeSno);
+                openRecipeSave(recipeSno, true);
             }
         } catch (error) {
             console.log('🚀 ~ handleSubmit ~ error:', error);
@@ -81,7 +81,6 @@ const useRecipeUrlInputLogic = (close: () => void) => {
 
 export const RecipeUrlInputContent = ({ close }: { close: () => void }) => {
     const { t } = useTranslation();
-    const { isMobile } = useResponsive();
 
     const { url, setUrl, isSubmitEnabled, handleSubmit } =
         useRecipeUrlInputLogic(close);
@@ -98,7 +97,6 @@ export const RecipeUrlInputContent = ({ close }: { close: () => void }) => {
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder={t('https://example.com/recipe')}
                     className={styles.input}
-                    autoFocus={!isMobile}
                 />
             </div>
             <button

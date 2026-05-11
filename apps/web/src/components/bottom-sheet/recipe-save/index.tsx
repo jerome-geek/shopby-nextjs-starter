@@ -7,7 +7,7 @@ import { useResponsive } from '@/hooks/utils';
 
 interface RecipeSaveSheetProps {
     isOpen: boolean;
-    close: () => void;
+    close: (isSaved?: boolean) => void;
     unmount: () => void;
     recipeSno?: number;
     onAddCollection?: () => void;
@@ -25,7 +25,7 @@ export const RecipeSaveSheet = ({
     return (
         <BottomSheetLayout
             isOpen={isOpen}
-            close={close}
+            close={() => close(false)}
             unmount={unmount}
             title={'레시피 저장'}
             isUnmountCondition={false}

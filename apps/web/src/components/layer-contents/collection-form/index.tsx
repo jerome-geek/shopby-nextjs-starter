@@ -139,7 +139,7 @@ export const CollectionFormContent = ({
     const onMutationError = (error: unknown, fallbackMessage: string) => {
         console.error('Collection mutation error:', error);
         const message = isAxiosError(error)
-            ? (error.response?.data.message ?? fallbackMessage)
+            ? error.response?.data.message ?? fallbackMessage
             : fallbackMessage;
 
         addToast({
@@ -155,7 +155,6 @@ export const CollectionFormContent = ({
                 <InputField
                     placeholder={t('컬렉션 이름을 입력하세요')}
                     {...register('title', { required: true })}
-                    autoFocus
                 />
             </InputFieldContainer>
 

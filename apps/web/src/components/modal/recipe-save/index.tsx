@@ -1,13 +1,13 @@
 import { Plus } from 'lucide-react';
 
+import { RecipeSaveContent } from '@/components/layer-contents/recipe-save';
 import * as styles from '@/components/layer-contents/recipe-save/index.css';
 import { ModalLayout } from '@/components/layout';
-import { RecipeSaveContent } from '@/components/layer-contents/recipe-save';
 import { useResponsive } from '@/hooks/utils';
 
 interface RecipeSaveModalProps {
     isOpen: boolean;
-    close: () => void;
+    close: (isSaved?: boolean) => void;
     unmount: () => void;
     recipeSno?: number;
     onAddCollection?: () => void;
@@ -25,7 +25,7 @@ export const RecipeSaveModal = ({
     return (
         <ModalLayout
             isOpen={isOpen}
-            close={close}
+            close={() => close(false)}
             unmount={unmount}
             title={'레시피 저장'}
             size='small'

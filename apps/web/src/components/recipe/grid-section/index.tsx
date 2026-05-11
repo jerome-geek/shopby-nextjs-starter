@@ -53,6 +53,7 @@ export const RecipeGridSection = () => {
             </div>
 
             <div
+                className={styles.recipeListContainer}
                 style={{
                     opacity: isPending ? 0.5 : 1,
                     transition: 'opacity 0.2s',

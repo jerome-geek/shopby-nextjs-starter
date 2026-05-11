@@ -106,9 +106,16 @@ export const RecipeScrapDetail = ({
             <div className={styles.detailHeader}>
                 <div className={styles.detailTitleArea}>
                     <div className={styles.detailTitleContainer}>
-                        <h2 className={styles.detailTitle}>
+                        <Link
+                            className={styles.detailTitle}
+                            href={`${PATHS.RECIPES.COLLECTIONS.replace(
+                                '[shareCode]',
+                                sharedCollectionData?.shareCode,
+                            )}`}
+                            prefetch={false}
+                        >
                             {t(sharedCollectionData?.title || title)}
-                        </h2>
+                        </Link>
                         {isEditable && (
                             <VerticalMoreMenu
                                 id={`recipe-detail-more-menu-${sharedCollectionData?.sno}`}
@@ -182,7 +189,10 @@ export const RecipeScrapDetail = ({
                     </motion.div>
 
                     <Link
-                        href={`${PATHS.SEARCH}${searchSerializer({ keyword: '레시피', tab: 'recipe' })}`}
+                        href={`${PATHS.SEARCH}${searchSerializer({
+                            keyword: '레시피',
+                            tab: 'recipe',
+                        })}`}
                         prefetch={false}
                         className={styles.primaryButton}
                     >

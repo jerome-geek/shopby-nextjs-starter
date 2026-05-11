@@ -1,3 +1,4 @@
+import recipe from '@/api/shop/recipe';
 import { ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { parseAsString, useQueryStates } from 'nuqs';
@@ -24,12 +25,14 @@ import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/dialog/hooks/useCustomDialog.css';
 import { useRequiredAuth } from '@/features/dialog/hooks/useRequiredAuth';
-import { useResponsive } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 
 export const useCustomDialog = () => {
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
+
+    const { openAsyncDialog } = useDialog();
 
     const [{ [MODAL_QUERY_KEY]: modalValue }, setModalQuery] = useQueryStates(
         {
@@ -56,26 +59,28 @@ export const useCustomDialog = () => {
         return await overlay.openAsync<T>(
             (props) => {
                 return (
-                <ConfirmDialog
-                    {...props}
-                    type='confirm'
-                    Title={
-                        <div className={styles.addCartTitle}>
-                            <div className={styles.cartIconBox}>
-                                <ShoppingCart size={32} strokeWidth={1.5} />
+                    <ConfirmDialog
+                        {...props}
+                        type='confirm'
+                        Title={
+                            <div className={styles.addCartTitle}>
+                                <div className={styles.cartIconBox}>
+                                    <ShoppingCart size={32} strokeWidth={1.5} />
+                                </div>
+                                <p className={styles.addCartMessage}>
+                                    {t('장바구니에 상품을 담았습니다.')}
+                                </p>
                             </div>
-                            <p className={styles.addCartMessage}>
-                                {t('장바구니에 상품을 담았습니다.')}
-                            </p>
-                        </div>
-                    }
-                    confirm={() => router.push(PATHS.CART)}
-                    close={() => props.close(false as T)}
-                    confirmText={t('장바구니 이동')}
-                    cancelText={t('쇼핑 계속하기')}
-                />
-            );
-        }, { overlayId: OVERLAY_ID.ADD_TO_CART });
+                        }
+                        confirm={() => router.push(PATHS.CART)}
+                        close={() => props.close(false as T)}
+                        confirmText={t('장바구니 이동')}
+                        cancelText={t('쇼핑 계속하기')}
+                    />
+                );
+            },
+            { overlayId: OVERLAY_ID.ADD_TO_CART },
+        );
     }, [t, router]);
 
     const openLoginDialog = useCallback(
@@ -83,33 +88,35 @@ export const useCustomDialog = () => {
             overlay.open(
                 (props) => {
                     return (
-                    <ConfirmDialog
-                        {...props}
-                        type='confirm'
-                        Title={
-                            <div className={styles.loginTitle}>
-                                <p className={styles.loginTitleText}>
-                                    {t('로그인이 필요합니다')}
-                                </p>
-                                <p className={styles.loginDescription}>
-                                    {t('로그인 페이지로 이동하시겠습니까?')}
-                                </p>
-                            </div>
-                        }
-                        confirm={() => {
-                            overlay.closeAll();
-                            router.push({
-                                pathname: PATHS.AUTH.LOGIN,
-                                query: {
-                                    returnUrl: returnUrl ?? router.asPath,
-                                },
-                            });
-                        }}
-                        confirmText={t('로그인하기')}
-                        cancelText={t('닫기')}
-                    />
-                );
-            }, { overlayId: OVERLAY_ID.LOGIN_DIALOG });
+                        <ConfirmDialog
+                            {...props}
+                            type='confirm'
+                            Title={
+                                <div className={styles.loginTitle}>
+                                    <p className={styles.loginTitleText}>
+                                        {t('로그인이 필요합니다')}
+                                    </p>
+                                    <p className={styles.loginDescription}>
+                                        {t('로그인 페이지로 이동하시겠습니까?')}
+                                    </p>
+                                </div>
+                            }
+                            confirm={() => {
+                                overlay.closeAll();
+                                router.push({
+                                    pathname: PATHS.AUTH.LOGIN,
+                                    query: {
+                                        returnUrl: returnUrl ?? router.asPath,
+                                    },
+                                });
+                            }}
+                            confirmText={t('로그인하기')}
+                            cancelText={t('닫기')}
+                        />
+                    );
+                },
+                { overlayId: OVERLAY_ID.LOGIN_DIALOG },
+            );
         },
         [t, router],
     );
@@ -240,10 +247,53 @@ export const useCustomDialog = () => {
     }, [openCollectionForm]);
 
     const _openRecipeSave = useCallback(
-        (recipeSno?: number) => {
+        (recipeSno?: number, isClosePopup?: boolean) => {
             const sharedProps = {
                 recipeSno,
                 onAddCollection: openCollectionCreate,
+            };
+
+            const closeAfterEvent = async (isSaved: boolean) => {
+                if (!isSaved && isClosePopup && recipeSno) {
+                    try {
+                        const isScrapPage =
+                            router.pathname === PATHS.RECIPES.SCRAP;
+
+                        if (isScrapPage) {
+                            return;
+                        }
+
+                        const { data } = await recipe.getRecipeDetail(
+                            recipeSno,
+                        );
+
+                        if (
+                            data.recipeStatus === 'COMPLETED' ||
+                            data.recipeStatus === 'PROCESSING'
+                        ) {
+                            const result = await openAsyncDialog({
+                                type: 'modal',
+                                message: t(
+                                    data.recipeStatus === 'COMPLETED'
+                                        ? '레시피가 만들어졌어요. 스크랩북 페이지로 이동할까요? ✨'
+                                        : '레시피를 만들고 있어요. 곧 스크랩북에 도착해요 ✨',
+                                ),
+                                confirmText: t('스크랩북 보기'),
+                                onConfirmReturnValue: true,
+                                onCloseReturnValue: false,
+                            });
+
+                            if (!result) {
+                                return;
+                            }
+
+                            router.push(PATHS.RECIPES.SCRAP);
+                            return;
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
             };
 
             if (isMobile) {
@@ -252,7 +302,10 @@ export const useCustomDialog = () => {
                         <RecipeSaveSheet
                             {...props}
                             {...sharedProps}
-                            close={removeModalQuery(props.close)}
+                            close={async (isSaved) => {
+                                await closeAfterEvent(!!isSaved);
+                                removeModalQuery(props.close)();
+                            }}
                         />
                     ),
                     { overlayId: OVERLAY_ID.RECIPE_SAVE },
@@ -263,14 +316,24 @@ export const useCustomDialog = () => {
                         <RecipeSaveModal
                             {...props}
                             {...sharedProps}
-                            close={removeModalQuery(props.close)}
+                            close={async (isSaved) => {
+                                await closeAfterEvent(!!isSaved);
+                                removeModalQuery(props.close)();
+                            }}
                         />
                     ),
                     { overlayId: OVERLAY_ID.RECIPE_SAVE },
                 );
             }
         },
-        [isMobile, removeModalQuery, openCollectionCreate],
+        [
+            isMobile,
+            removeModalQuery,
+            openCollectionCreate,
+            openAsyncDialog,
+            t,
+            router,
+        ],
     );
 
     const openRecipeSave = withRequiredAuth(
@@ -280,9 +343,12 @@ export const useCustomDialog = () => {
 
     const openRecipeRecommendation = useCallback(() => {
         if (isMobile) {
-            overlay.open((props) => <RecipeRecommendationBottomSheet {...props} />, {
-                overlayId: OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION,
-            });
+            overlay.open(
+                (props) => <RecipeRecommendationBottomSheet {...props} />,
+                {
+                    overlayId: OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION,
+                },
+            );
         } else {
             overlay.open((props) => <RecipeRecommendationModal {...props} />, {
                 overlayId: OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION,

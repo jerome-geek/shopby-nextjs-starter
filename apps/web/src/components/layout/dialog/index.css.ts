@@ -9,7 +9,7 @@ export const dimmed = style({
     width: '100%',
     height: '100%',
     backgroundColor: vars.color.black,
-    zIndex: 1003,
+    zIndex: 1004,
 });
 
 export const container = style({

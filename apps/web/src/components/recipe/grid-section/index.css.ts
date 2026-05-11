@@ -1,7 +1,7 @@
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles, textStyleTokens } from '@/styles/typography.css';
-import { keyframes, style } from '@vanilla-extract/css';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 
 const shimmer = keyframes({
     '0%': { backgroundPosition: '-200% 0' },
@@ -21,6 +21,24 @@ export const section = style({
     '@media': {
         [media.desktop]: {
             gap: '24px',
+        },
+    },
+});
+
+export const recipeListContainer = style({
+    '@media': {
+        [media.mobile]: {
+            marginLeft: '-20px',
+            width: 'calc(100% + 40px)',
+        },
+    },
+});
+
+globalStyle(`${recipeListContainer} > .swiper`, {
+    '@media': {
+        [media.mobile]: {
+            padding: '0 20px',
+            marginLeft: '-20px !important',
         },
     },
 });
