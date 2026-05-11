@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import type { ClaimPriceInfo as ClaimPriceInfoType } from '@/models/claim';
 import { CURRENCY } from '@/utils/currency';
-import ClaimBankInfo from '@/components/mypage/claims/forms/bank-info';
 
 interface ClaimPriceInfoProps {
     claimPriceData: ClaimPriceInfoType;
@@ -141,8 +140,6 @@ export const ClaimPriceInfo = ({ claimPriceData }: ClaimPriceInfoProps) => {
                     )}
                 </div>
             </div>
-
-            <ClaimBankInfo payType={claimPriceData.refundPayType} />
         </>
     );
 };

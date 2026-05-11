@@ -1,13 +1,13 @@
-import { useTranslation } from 'react-i18next';
+import { filter, isEmpty, pipe, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { filter, isEmpty, pipe, toArray } from '@fxts/core';
+import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/mypage/orders/order-options-item.css';
 import { NextActionButton } from '@/components/mypage/orders/next-action-button';
+import * as styles from '@/components/mypage/orders/order-options-item.css';
 import { PATHS } from '@/const/paths';
-import type { OrderOption, NextAction } from '@/models/order';
 import { useResponsive } from '@/hooks/utils';
+import type { NextAction, OrderOption } from '@/models/order';
 import { CURRENCY } from '@/utils/currency';
 
 type MypageOrderOptionListItemProps = Omit<
@@ -68,7 +68,6 @@ export const OrderOptionsItem = ({
     const { isMobile } = useResponsive();
 
     const isBuyConfirm = orderStatusType === 'BUY_CONFIRM';
-    const finalPrice = price?.salePrice ?? 0;
 
     const filteredNextActions = useMemo(() => {
         return pipe(
@@ -87,7 +86,6 @@ export const OrderOptionsItem = ({
             toArray,
         );
     }, [nextActions, isFreeGift]);
-    console.log(filteredNextActions);
 
     return (
         <li className={styles.itemContainer}>
@@ -165,7 +163,7 @@ export const OrderOptionsItem = ({
 
                     {!isFreeGift && (
                         <p className={styles.priceText}>
-                            {CURRENCY(finalPrice).format()}
+                            {CURRENCY(price.buyAmt).format()}
                         </p>
                     )}
                 </div>

@@ -5,6 +5,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
+import ClaimBankInfo from '@/components/mypage/claims/forms/bank-info';
 import ClaimPriceInfo from '@/components/mypage/claims/forms/price-info';
 import ClaimReason from '@/components/mypage/claims/forms/reason';
 import ClaimOrderOptions from '@/components/mypage/claims/order-options';
@@ -21,8 +22,8 @@ import useOrderOptionEstimate from '@/hooks/query/claim/member/useOrderOptionEst
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import {
-    claimCancelSchema,
     ClaimCancelSchemaType,
+    createClaimCancelSchema,
 } from '@/schema/claim.schema';
 
 const CLAIM_TYPE = 'CANCEL' as const;
@@ -35,19 +36,6 @@ export const ClaimCancelForm = () => {
 
     const orderOptionNo = Number(router.query.orderOptionNo) || 0;
     const returnOrderNo = router.query.returnOrderNo as string | undefined;
-
-    const methods = useForm<ClaimCancelSchemaType>({
-        shouldFocusError: true,
-        resolver: zodResolver(claimCancelSchema),
-        defaultValues: {
-            claimType: CLAIM_TYPE,
-            refundsImmediately: true,
-            saveBankAccountInfo: false,
-            claimedProductOptions: [],
-        },
-    });
-
-    const { handleSubmit, reset, watch, control } = methods;
 
     const { data: memberData, isFetched: isMemberFetched } =
         useOrderOptionDetailForClaim({
@@ -64,6 +52,25 @@ export const ClaimCancelForm = () => {
         });
 
     const orderOptionData = isLogin ? memberData : guestData;
+
+    const claimCancelSchema = useMemo(
+        () => createClaimCancelSchema(orderOptionData?.payType ?? undefined),
+        [orderOptionData?.payType],
+    );
+
+    const methods = useForm<ClaimCancelSchemaType>({
+        shouldFocusError: true,
+        resolver: zodResolver(claimCancelSchema),
+        defaultValues: {
+            claimType: CLAIM_TYPE,
+            refundsImmediately: true,
+            saveBankAccountInfo: false,
+            claimedProductOptions: [],
+        },
+    });
+
+    const { handleSubmit, reset, watch, control } = methods;
+
     const isFetched = isLogin ? isMemberFetched : isGuestFetched;
 
     const claimedProductOptions = useWatch({
@@ -146,7 +153,9 @@ export const ClaimCancelForm = () => {
             onConfirmReturnValue: true,
         });
 
-        if (!isAgree) return;
+        if (!isAgree) {
+            return;
+        }
 
         const cleaningSubmitData = {
             ...data,
@@ -218,6 +227,12 @@ export const ClaimCancelForm = () => {
                     {estimateData && (
                         <ClaimPriceInfo claimPriceData={estimateData} />
                     )}
+
+                    <ClaimBankInfo
+                        payType={orderOptionData?.payType}
+                        refundAccount={orderOptionData?.refundAccount}
+                        availableBanks={orderOptionData?.availableBanks || []}
+                    />
 
                     <div style={{ display: 'flex', gap: '12px' }}>
                         <Button
