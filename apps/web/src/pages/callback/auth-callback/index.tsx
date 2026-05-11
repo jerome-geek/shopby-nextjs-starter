@@ -6,6 +6,7 @@ import { useLocalStorage } from 'usehooks-ts';
 import { oauth2 } from '@/api/auth';
 import { shopbyRequest } from '@/api/core/request';
 import { PATHS } from '@/const/paths';
+import useMyApp from '@/hooks/myapp/useMyApp';
 import useApiError from '@/hooks/useApiError';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
@@ -17,6 +18,7 @@ export const AuthCallbackPage = () => {
     const router = useRouter();
 
     const isLoggedIn = useAuth();
+    const { isMyApp, syncAppLogin } = useMyApp();
 
     const { openAsyncDialog } = useDialog();
     const { handleErrorDialog } = useApiError();
@@ -155,6 +157,8 @@ export const AuthCallbackPage = () => {
                     return;
                 }
 
+                await syncAppLogin(accessToken, provider);
+
                 returnPage({
                     accessToken,
                     expiry,
@@ -167,7 +171,7 @@ export const AuthCallbackPage = () => {
                 return;
             }
         })();
-    }, [router.isReady]);
+    }, [syncAppLogin, isMyApp, router.isReady]);
 
     return null;
 };

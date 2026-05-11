@@ -48,7 +48,7 @@ export const Withdrawal = (props: DefaultModalLayoutProps) => {
     const { t } = useTranslation();
     const queryClient = useQueryClient();
 
-    const { isMyApp, handleSendLogout } = useMyApp();
+    const { isMyApp, handleSendLogout, handleSendInitLoginInfo } = useMyApp();
     const { openAsyncDialog } = useDialog();
 
     const { data: accumulationSummaryData } = useAccumulationSummary();
@@ -113,6 +113,7 @@ export const Withdrawal = (props: DefaultModalLayoutProps) => {
                                 returnUrl: window.location.origin,
                             },
                         });
+                        handleSendInitLoginInfo();
                         return;
                     }
 

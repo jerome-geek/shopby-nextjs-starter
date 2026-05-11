@@ -17,6 +17,7 @@ import {
     InputLabel,
 } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
 import useApiError from '@/hooks/useApiError';
 import { NextPageWithLayout } from '@/pages/_app';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
@@ -26,6 +27,8 @@ import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
     const router = useRouter();
+    const { isMyApp, syncAppLogin } = useMyApp();
+
     const returnUrl = (router.query.returnUrl as string) || '';
     const isGuestOrder = router.query.type === 'guestOrder';
 
@@ -70,6 +73,8 @@ const LoginPage: NextPageWithLayout = () => {
             if (accessToken && refreshToken) {
                 accessTokenCookie.set(accessToken, accessTokenExpiresIn);
                 refreshTokenCookie.set(refreshToken, refreshTokenExpiresIn);
+
+                await syncAppLogin(accessToken);
 
                 setIsNavigating(true);
                 location.replace(returnUrl || PATHS.MAIN);
