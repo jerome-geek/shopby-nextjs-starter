@@ -12,7 +12,7 @@ const fadeIn = keyframes({
 export const container = style({
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'stretch',
+    alignItems: 'center',
     gap: '24px',
     '@media': {
         [media.mobile]: {
