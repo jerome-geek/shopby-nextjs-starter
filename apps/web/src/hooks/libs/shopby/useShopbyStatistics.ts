@@ -1,17 +1,19 @@
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useScript } from 'usehooks-ts';
-import { useRouter } from 'next/router';
 
 import { useProfile } from '@/hooks/query/member/profile';
-import { isLoggedIn } from '@/utils/auth';
+import { useAuth } from '@/hooks/useAuth';
 
 const useShopbyStatistics = () => {
     const router = useRouter();
     const pathname = router.asPath.split('?')[0];
 
+    const isLogin = useAuth();
+
     const { data: profileData } = useProfile({
         options: {
-            enabled: isLoggedIn(),
+            enabled: !!isLogin,
         },
     });
 
@@ -31,11 +33,11 @@ const useShopbyStatistics = () => {
             if (typeof window.shopbyStatistics === 'function') {
                 window.shopbyStatistics({
                     clientId: process.env.NEXT_PUBLIC_CLIENT_ID,
-                    memberNo: isLoggedIn() ? profileData?.memberNo : '',
+                    memberNo: isLogin ? profileData?.memberNo : '',
                 });
             }
         }
-    }, [isScriptUsable, status, profileData?.memberNo, pathname]);
+    }, [isScriptUsable, status, profileData?.memberNo, pathname, isLogin]);
 };
 
 export default useShopbyStatistics;

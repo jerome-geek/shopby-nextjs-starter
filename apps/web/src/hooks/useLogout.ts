@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { oauth2 } from '@/api/auth';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
+import { dispatchAuthChange } from '@/hooks/useAuth';
 import { memberCookie } from '@/utils/cookie';
 
 interface useLogoutProps {
@@ -31,10 +32,13 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
             await oauth2.deleteAccessToken();
 
             memberCookie.clearAll();
-            queryClient.removeQueries();
             fn?.();
 
-            router.push(PATHS.MAIN);
+            // 로그아웃 버튼을 누른 경우에는 마이페이지 guard보다 의도한 이동을 먼저 완료합니다.
+            await router.replace(PATHS.MAIN);
+
+            queryClient.removeQueries();
+            dispatchAuthChange();
         } catch (error) {
             console.error(error);
         }
