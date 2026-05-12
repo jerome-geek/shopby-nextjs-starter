@@ -124,11 +124,11 @@ export const rankBadge = style([
     {
         position: 'absolute',
         top: '0',
-        left: '0',
+        right: '0',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         color: vars.color.white,
         zIndex: 2,
-        borderTopLeftRadius: '4px',
+        borderTopRightRadius: '4px',
         width: '24px',
         height: '24px',
         display: 'flex',
