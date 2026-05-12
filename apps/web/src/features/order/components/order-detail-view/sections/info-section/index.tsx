@@ -5,22 +5,37 @@ import type { InfoListItem } from '../types';
 interface InfoSectionProps {
     title: string;
     infoList: InfoListItem[];
+    rightContent?: React.ReactNode;
 }
 
-export const InfoSection = ({ title, infoList }: InfoSectionProps) => {
+export const InfoSection = ({
+    title,
+    infoList,
+    rightContent,
+}: InfoSectionProps) => {
     return (
         <section style={{ marginTop: '40px' }}>
-            <h3
+            <div
                 style={{
-                    fontSize: '16px',
-                    fontWeight: 'bold',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                     marginBottom: '16px',
                     paddingBottom: '12px',
                     borderBottom: '1px solid #111',
                 }}
             >
-                {title}
-            </h3>
+                <h3
+                    style={{
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        margin: 0,
+                    }}
+                >
+                    {title}
+                </h3>
+                {rightContent}
+            </div>
             <div
                 style={{
                     display: 'flex',

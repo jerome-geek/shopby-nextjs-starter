@@ -1,10 +1,14 @@
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+import { overlay } from 'overlay-kit';
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ShippingAddressChangeBottomSheet } from '@/components/bottom-sheet/shipping-address-change';
+import { ShippingAddressChangeModal } from '@/components/modal/shipping-address-change';
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
 import { Button } from '@/components/ui';
+import ButtonV2 from '@/components/ui/button/v2';
 import {
     AdditionalPaySection,
     CashReceiptSection,
@@ -14,6 +18,7 @@ import {
     RefundSection,
     ReturnSection,
 } from '@/features/order/components/order-detail-view/sections';
+import { useProfile } from '@/hooks/query/member/profile';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
 import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
@@ -37,6 +42,42 @@ export const OrderDetailView = ({
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
+
+    const { data: profileData } = useProfile();
+    const memberNo = profileData?.memberNo ?? 0;
+
+    const handleShippingAddressChange = () => {
+        const shippingAddress = orderDetailData?.shippingAddress;
+        if (!orderDetailData.orderNo || !shippingAddress) return;
+
+        const data = {
+            receiverName: shippingAddress.receiverName,
+            receiverZipCd: shippingAddress.receiverZipCd,
+            receiverAddress: shippingAddress.receiverAddress,
+            receiverJibunAddress: shippingAddress.receiverJibunAddress,
+            receiverDetailAddress: shippingAddress.receiverDetailAddress,
+            receiverContact1: shippingAddress.receiverContact1,
+            deliveryMemo: shippingAddress.deliveryMemo,
+        };
+
+        overlay.open((props) =>
+            isMobile ? (
+                <ShippingAddressChangeBottomSheet
+                    {...props}
+                    orderNo={orderDetailData.orderNo}
+                    memberNo={memberNo}
+                    initialData={data}
+                />
+            ) : (
+                <ShippingAddressChangeModal
+                    {...props}
+                    orderNo={orderDetailData.orderNo}
+                    memberNo={memberNo}
+                    // initialData={data}
+                />
+            ),
+        );
+    };
 
     const orderOptionsGroupByPartner =
         orderDetailData?.orderOptionsGroupByPartner ?? [];
@@ -368,6 +409,16 @@ export const OrderDetailView = ({
                     <InfoSection
                         title={t('배송지 정보')}
                         infoList={deliveryInfoList}
+                        rightContent={
+                            <ButtonV2
+                                frame='text'
+                                size='small'
+                                variant='primary'
+                                onClick={handleShippingAddressChange}
+                            >
+                                {t('배송지 변경')}
+                            </ButtonV2>
+                        }
                     />
                     <PaymentSection
                         title={t('결제 정보')}
