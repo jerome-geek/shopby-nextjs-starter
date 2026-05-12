@@ -1,25 +1,27 @@
-import { useMutation } from '@tanstack/react-query';
-import { getCookie } from 'cookies-next';
-import { isAxiosError } from 'axios';
 import { includes } from '@fxts/core';
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import { getCookie } from 'cookies-next';
 
 import { orderSheet } from '@/api/order';
 import { orderSheetKeys, ordersKeys } from '@/hooks/queryKeys';
+import { useDialog } from '@/hooks/utils';
 import type {
     CouponApplyData,
     GetAppliedCouponPriceData,
     GetCalculatedOrderSheetData,
     WriteOrderSheetData,
 } from '@/models/order/orderSheet';
-import { useDialog } from '@/hooks/utils';
 // import { checkLogin } from '@/utils/users';
 import { ORDER_ERROR_CODE } from '@/const/errorCode';
 import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 
 const useOrderSheetMutation = () => {
     const isLogin = useAuth();
+    const { isMyApp, handleSendLoginView } = useMyApp();
 
     const { openDialog, openAsyncDialog } = useDialog();
 
@@ -58,10 +60,22 @@ const useOrderSheetMutation = () => {
                             `${PATHS.ORDER.GIFT.MAIN}/${data.orderSheetNo}`,
                         );
                     } else {
+                        const nextPath = `${PATHS.ORDER.GIFT.MAIN}/${data.orderSheetNo}`;
+
+                        if (isMyApp) {
+                            handleSendLoginView({
+                                option: {
+                                    showGuestOrder: true,
+                                    returnUrl: nextPath,
+                                },
+                            });
+                            return;
+                        }
+
                         router.push({
                             pathname: PATHS.AUTH.LOGIN,
                             query: {
-                                returnUrl: `${PATHS.ORDER.GIFT.MAIN}/${data.orderSheetNo}`,
+                                returnUrl: nextPath,
                                 type: 'guestOrder',
                             },
                         });
@@ -72,10 +86,22 @@ const useOrderSheetMutation = () => {
                 if (isLogin) {
                     router.push(`${PATHS.ORDER.MAIN}/${data.orderSheetNo}`);
                 } else {
+                    const nextPath = `${PATHS.ORDER.MAIN}/${data.orderSheetNo}`;
+
+                    if (isMyApp) {
+                        handleSendLoginView({
+                            option: {
+                                showGuestOrder: true,
+                                returnUrl: nextPath,
+                            },
+                        });
+                        return;
+                    }
+
                     router.push({
                         pathname: PATHS.AUTH.LOGIN,
                         query: {
-                            returnUrl: `${PATHS.ORDER.MAIN}/${data.orderSheetNo}`,
+                            returnUrl: nextPath,
                             type: 'guestOrder',
                         },
                     });

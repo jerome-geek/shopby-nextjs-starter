@@ -13,11 +13,24 @@ import type {
     IssuedInfo,
     VerifiedInfo,
 } from '@/features/member/find-password/types';
+import { useMyApp } from '@/hooks/myapp';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/member/find-password/index.css';
 
 const FindPasswordPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
+    const { isMyApp, handleSendLoginView } = useMyApp();
+
+    const handleLoginClick = (e: React.MouseEvent) => {
+        if (isMyApp) {
+            e.preventDefault();
+            handleSendLoginView({
+                option: {
+                    returnUrl: PATHS.MAIN,
+                },
+            });
+        }
+    };
 
     const [step, setStep] = useState<FindPasswordStep>('IDLE');
     const [findMethod, setFindMethod] = useState<FindPasswordMethod>('EMAIL');
@@ -69,6 +82,7 @@ const FindPasswordPage: NextPageWithLayout = () => {
                     prefetch={false}
                     className={styles.link}
                     data-color='muted'
+                    onClick={handleLoginClick}
                 >
                     {t('로그인하기')}
                 </Link>

@@ -12,7 +12,8 @@ import { memberCookie } from '@/utils/cookie';
  */
 export const useHandleSessionExpired = () => {
     const { openAsyncDialog } = useDialog();
-    const { handleSendRefreshTokenExpired, isMyApp } = useMyApp();
+    const { handleSendRefreshTokenExpired, handleSendLoginView, isMyApp } =
+        useMyApp();
 
     const handleSessionExpired = useCallback(async () => {
         // 1. 진행 중이던 모든 fetch 중단
@@ -24,6 +25,11 @@ export const useHandleSessionExpired = () => {
         // 3. 앱(MyApp) 환경일 경우 전용 핸들러 호출
         if (isMyApp) {
             handleSendRefreshTokenExpired();
+            handleSendLoginView({
+                option: {
+                    returnUrl: `${window.location.pathname}${window.location.search}`,
+                },
+            });
             return;
         }
 
@@ -46,7 +52,12 @@ export const useHandleSessionExpired = () => {
         )}`;
 
         window.location.replace(loginUrl);
-    }, [openAsyncDialog, handleSendRefreshTokenExpired, isMyApp]);
+    }, [
+        openAsyncDialog,
+        handleSendRefreshTokenExpired,
+        handleSendLoginView,
+        isMyApp,
+    ]);
 
     return { handleSessionExpired };
 };

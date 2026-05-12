@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
 import * as styles from '@/hooks/utils/useDialog.css';
 
 interface UseDialogProps {
@@ -34,6 +35,7 @@ const useDialog = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
+    const { isMyApp, handleSendLoginView } = useMyApp();
 
     const openDialog = useCallback(
         ({
@@ -156,6 +158,16 @@ const useDialog = () => {
                                 ? `?${searchParams.toString()}`
                                 : ''
                         }`;
+
+                        if (isMyApp) {
+                            handleSendLoginView({
+                                option: {
+                                    returnUrl: currentUrl,
+                                },
+                            });
+                            return;
+                        }
+
                         const params = new URLSearchParams({
                             returnUrl: currentUrl,
                         });
@@ -165,7 +177,7 @@ const useDialog = () => {
                 />
             );
         });
-    }, [pathname, searchParams, router, t]);
+    }, [pathname, searchParams, router, t, isMyApp, handleSendLoginView]);
 
     return { openDialog, openAsyncDialog, openLoginDialog };
 };

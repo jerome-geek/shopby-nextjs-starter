@@ -10,6 +10,7 @@ import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/member/find-password/components/password-step/index.css';
 import type { VerifiedInfo } from '@/features/member/find-password/types';
+import { useMyApp } from '@/hooks/myapp';
 import { useToast } from '@/hooks/ui';
 import useApiError from '@/hooks/useApiError';
 import {
@@ -29,6 +30,7 @@ export const PasswordStep = ({ verifiedInfo }: PasswordStepProps) => {
     const { addToast } = useToast();
 
     const { handleErrorToast } = useApiError();
+    const { isMyApp, handleSendLoginView } = useMyApp();
 
     const methods = useForm<PasswordChangeType>({
         resolver: zodResolver(passwordChangeSchema),
@@ -58,6 +60,11 @@ export const PasswordStep = ({ verifiedInfo }: PasswordStepProps) => {
                 message: t('비밀번호가 변경되었습니다.'),
                 variant: 'success',
             });
+
+            if (isMyApp) {
+                handleSendLoginView();
+                return;
+            }
 
             router.replace(PATHS.AUTH.LOGIN);
         } catch (error) {
