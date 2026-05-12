@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { SingleValue } from 'react-select';
+import { toast } from 'sonner';
 
 import {
     BottomSheetLayout,
@@ -158,6 +159,8 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
             return;
         }
 
+        const prevCartCouponIssueNo = couponsWatch?.cartCouponIssueNo ?? 0;
+
         couponApply.mutate(
             {
                 orderSheetNo,
@@ -171,10 +174,48 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
             {
                 onSuccess: ({ data }) => {
                     if (data.appliedCoupons) {
-                        setValue(
-                            'coupons.cartCouponIssueNo',
-                            data.appliedCoupons.cartCouponIssueNo,
+                        const messages: string[] = [];
+
+                        if (option.couponIssueNo === 0) {
+                            setValue('coupons.cartCouponIssueNo', 0);
+                        } else if (!data.appliedCoupons.cartCouponApplied) {
+                            setValue(
+                                'coupons.cartCouponIssueNo',
+                                prevCartCouponIssueNo,
+                            );
+                            messages.push(t('주문 쿠폰 적용에 실패했습니다.'));
+                        } else {
+                            setValue(
+                                'coupons.cartCouponIssueNo',
+                                data.appliedCoupons.cartCouponIssueNo,
+                            );
+                        }
+
+                        const appliedProducts =
+                            data.appliedCoupons.productCoupons || [];
+                        const prevProducts = couponsWatch?.productCoupons ?? [];
+                        const failedProducts = appliedProducts.filter(
+                            (c) => !c.couponApplied,
                         );
+
+                        if (
+                            failedProducts.length > 0 &&
+                            prevProducts.length > 0
+                        ) {
+                            setValue(
+                                'coupons.productCoupons',
+                                appliedProducts.filter((c) => c.couponApplied),
+                            );
+                            messages.push(
+                                t('일부 상품 쿠폰 적용이 해제되었습니다.'),
+                            );
+                        } else {
+                            setValue('coupons.productCoupons', appliedProducts);
+                        }
+
+                        if (messages.length > 0) {
+                            toast.error(messages.join('\n'));
+                        }
                     }
                     setValue(
                         'subPayAmt',
@@ -219,8 +260,8 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
 
                     openDialog({
                         message: isAxiosError(error)
-                            ? error.response?.data.message ??
-                              t('쿠폰 적용에 실패했습니다.')
+                            ? (error.response?.data.message ??
+                              t('쿠폰 적용에 실패했습니다.'))
                             : t('쿠폰 적용에 실패했습니다.'),
                     });
                 },
@@ -236,8 +277,10 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
             return;
         }
 
+        const prevProductCoupons = couponsWatch?.productCoupons ?? [];
+
         const productCoupons = pipe(
-            couponsWatch?.productCoupons ?? [],
+            prevProductCoupons,
             filter(
                 (a: AppliedProductCoupon) =>
                     a.couponIssueNo !== option.couponIssueNo,
@@ -266,10 +309,51 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
             {
                 onSuccess: ({ data }) => {
                     if (data.appliedCoupons) {
-                        setValue(
-                            'coupons.productCoupons',
-                            data.appliedCoupons.productCoupons || [],
-                        );
+                        const messages: string[] = [];
+
+                        if (
+                            !data.appliedCoupons.cartCouponApplied &&
+                            (couponsWatch?.cartCouponIssueNo ?? 0) !== 0
+                        ) {
+                            setValue('coupons.cartCouponIssueNo', 0);
+                            messages.push(
+                                t('주문 쿠폰 적용이 해제되었습니다.'),
+                            );
+                        }
+
+                        if (option.couponIssueNo === 0) {
+                            setValue(
+                                'coupons.productCoupons',
+                                (
+                                    data.appliedCoupons.productCoupons || []
+                                ).filter((c) => c.couponApplied),
+                            );
+                        } else {
+                            const appliedProducts =
+                                data.appliedCoupons.productCoupons || [];
+                            const failedCoupons = appliedProducts.filter(
+                                (c) => !c.couponApplied,
+                            );
+
+                            if (failedCoupons.length > 0) {
+                                setValue(
+                                    'coupons.productCoupons',
+                                    prevProductCoupons,
+                                );
+                                messages.push(
+                                    t('일부 상품 쿠폰 적용에 실패했습니다.'),
+                                );
+                            } else {
+                                setValue(
+                                    'coupons.productCoupons',
+                                    appliedProducts,
+                                );
+                            }
+                        }
+
+                        if (messages.length > 0) {
+                            toast.error(messages.join('\n'));
+                        }
                     }
                     setValue(
                         'subPayAmt',
@@ -319,8 +403,8 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
 
                     openDialog({
                         message: isAxiosError(error)
-                            ? error.response?.data.message ??
-                              t('쿠폰 적용에 실패했습니다.')
+                            ? (error.response?.data.message ??
+                              t('쿠폰 적용에 실패했습니다.'))
                             : t('쿠폰 적용에 실패했습니다.'),
                     });
                 },
@@ -548,12 +632,7 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
                                 : undefined
                         }
                         options={cartOptionList}
-                        value={
-                            selectCartCoupon ||
-                            (couponsWatch?.cartCouponIssueNo === 0
-                                ? cartOptionList[0]
-                                : null)
-                        }
+                        value={selectCartCoupon || null}
                         placeholder={
                             cartOptionList.length > 0
                                 ? t('쿠폰을 선택해주세요')
@@ -566,10 +645,7 @@ export const CouponApplyOverlay = (props: DefaultModalLayoutProps) => {
                         }
                         isOptionSelected={(o) =>
                             o.couponIssueNo ===
-                            (selectCartCoupon?.couponIssueNo ||
-                                (couponsWatch?.cartCouponIssueNo === 0
-                                    ? cartOptionList[0]?.couponIssueNo
-                                    : null))
+                            (selectCartCoupon?.couponIssueNo ?? null)
                         }
                         onChange={onCartCouponChange}
                         formatOptionLabel={(option) => (
