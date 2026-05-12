@@ -1,8 +1,10 @@
-import LoadingWrapper from '@/components/common/loading-wrapper';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRouter } from 'next/router';
+import { useOverlayData } from 'overlay-kit';
 import { useEffect, useState } from 'react';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
+import { OVERLAY_ID } from '@/const/overlay';
 /**
  * 라우터 전환 시 오버레이 표시
  */
@@ -10,6 +12,10 @@ export const RouteChangeOverlay = () => {
     const router = useRouter();
 
     const [isOpen, setIsOpen] = useState(false);
+
+    const overlayData = useOverlayData();
+
+    const isLoadingOverlayOpen = !!overlayData[OVERLAY_ID.LOADING]?.isOpen;
 
     useEffect(() => {
         const routeChangeOn = (
@@ -40,35 +46,36 @@ export const RouteChangeOverlay = () => {
 
     return (
         <AnimatePresence>
-            {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        zIndex: 10000,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <LoadingWrapper
-                        isLoading
-                        containerStyle={{
-                            height: '30px',
+            {isOpen ||
+                (isLoadingOverlayOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                            zIndex: 10000,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                         }}
                     >
-                        <span />
-                    </LoadingWrapper>
-                </motion.div>
-            )}
+                        <LoadingWrapper
+                            isLoading
+                            containerStyle={{
+                                height: '30px',
+                            }}
+                        >
+                            <span />
+                        </LoadingWrapper>
+                    </motion.div>
+                ))}
         </AnimatePresence>
     );
 };

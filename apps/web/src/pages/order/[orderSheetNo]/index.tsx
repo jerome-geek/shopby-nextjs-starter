@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import { CSRLayout } from '@/components/layout';
 import Accumulation from '@/components/order/accumulation';
@@ -12,6 +13,7 @@ import OrdererInfo from '@/components/order/orderer-info';
 import PaymentMethod from '@/components/order/payment-method';
 import OrderPaymentSummary from '@/components/order/payment-summary';
 import ShippingAddress from '@/components/order/shipping-address';
+import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import { useOrderSheetInitialize } from '@/entities/order/hooks';
 import { useSb } from '@/hooks/libs/shopby';
@@ -20,10 +22,22 @@ import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import payment from '@/utils/order/payment';
+import { overlay } from 'overlay-kit';
 
 const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
     return (
-        <ShopbyAsyncBoundary fallback={<p>Loading...</p>}>
+        <ShopbyAsyncBoundary
+            fallback={
+                <LoadingWrapper
+                    isLoading
+                    containerStyle={{
+                        height: '80vh',
+                    }}
+                >
+                    <span />
+                </LoadingWrapper>
+            }
+        >
             <CSRLayout>
                 <OrderSheetContent orderSheetNo={orderSheetNo} />
             </CSRLayout>
@@ -83,6 +97,7 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
 
             const errorCallback = async (error: ShopByErrorResponse) => {
                 restoreAlert();
+                overlay.close(OVERLAY_ID.LOADING);
 
                 if (error.status === HttpStatusCode.Unauthorized) {
                     return;
@@ -95,6 +110,10 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
                 });
             };
 
+            overlay.open(() => null, {
+                overlayId: OVERLAY_ID.LOADING,
+            });
+
             payment.setConfiguration();
 
             payment.reservation(submitData, successCallback, errorCallback);
@@ -104,6 +123,7 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
             await openAsyncDialog({
                 message: '주문 데이터 처리 중 오류가 발생했습니다.',
             });
+            overlay.close(OVERLAY_ID.LOADING);
         }
     });
 

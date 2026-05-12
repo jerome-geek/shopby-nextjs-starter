@@ -1,6 +1,7 @@
 import { filter, pipe, toArray } from '@fxts/core';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +11,7 @@ import { PATHS } from '@/const/paths';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
+import { guestTokenCookie } from '@/utils/cookie';
 import { CURRENCY } from '@/utils/currency';
 
 import * as styles from '@/features/order/components/order-details-content/index.css';
@@ -25,6 +27,7 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
     const isLogin = useAuth();
+    const router = useRouter();
 
     const {
         orderNo,
@@ -231,6 +234,15 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                                   orderNo,
                               )}`
                     }
+                    onClick={() => {
+                        if (!isLogin) {
+                            const guestToken = router.query
+                                .guestToken as string;
+                            if (guestToken) {
+                                guestTokenCookie.set(guestToken);
+                            }
+                        }
+                    }}
                     className={styles.ghostButton}
                 >
                     {t('주문 상세보기')}

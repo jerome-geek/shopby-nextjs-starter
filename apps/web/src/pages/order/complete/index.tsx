@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import { CSRLayout } from '@/components/layout';
 import { PATHS } from '@/const/paths';
@@ -21,7 +22,11 @@ const OrderCompletePage = () => {
     const { isMobile } = useResponsive();
     const { openRecipeRecommendation } = useCustomDialog();
 
-    const { orderNo, result = 'SUCCESS' } = router.query as {
+    const {
+        orderNo,
+        result = 'SUCCESS',
+        guestToken,
+    } = router.query as {
         orderNo: string;
         result: 'SUCCESS' | 'FAIL';
         guestToken?: string;
@@ -57,18 +62,28 @@ const OrderCompletePage = () => {
 
             <CSRLayout
                 fallback={
-                    <div className={styles.loadingWrapper}>
-                        {t('로딩 중...')}
-                    </div>
+                    <LoadingWrapper
+                        isLoading
+                        containerStyle={{
+                            height: '80vh',
+                        }}
+                    >
+                        <span />
+                    </LoadingWrapper>
                 }
             >
                 <div className={styles.pageWrapper}>
                     {isOrderSuccess ? (
                         <ShopbyAsyncBoundary
                             fallback={
-                                <div className={styles.loadingWrapper}>
-                                    {t('로딩 중...')}
-                                </div>
+                                <LoadingWrapper
+                                    isLoading
+                                    containerStyle={{
+                                        height: '80vh',
+                                    }}
+                                >
+                                    <span />
+                                </LoadingWrapper>
                             }
                             errorFallback={
                                 <div className={styles.loadingWrapper}>
@@ -81,7 +96,10 @@ const OrderCompletePage = () => {
                             {isLogin ? (
                                 <MemberOrderContent orderNo={orderNo} />
                             ) : (
-                                <GuestOrderContent orderNo={orderNo} />
+                                <GuestOrderContent
+                                    orderNo={orderNo}
+                                    guestToken={guestToken}
+                                />
                             )}
                         </ShopbyAsyncBoundary>
                     ) : (

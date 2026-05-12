@@ -36,6 +36,12 @@ export const imageWrapper = style({
     flexShrink: 0,
     maxWidth: '486px',
 
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
+
     '@media': {
         [media.mobile]: {
             width: '100%',

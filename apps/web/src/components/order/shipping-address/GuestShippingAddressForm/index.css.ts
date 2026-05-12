@@ -1,6 +1,6 @@
-import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 export const formContent = style({
     display: 'flex',
@@ -34,7 +34,7 @@ export const ordererInfoRow = style({
 export const postcodeButton = style([
     textStyles.body2Semibold,
     {
-        height: '48px',
+        height: 'stretch',
         padding: '0 20px',
         borderRadius: '6px',
         border: `1px solid ${vars.color.gray['30']}`,

@@ -21,7 +21,9 @@ const payment = {
             // shopbyAuthorization: checkLogin()
             //     ? `Bearer ${accessToken}`
             //     : undefined,
-            shopbyAuthorization: `Bearer ${accessToken}`,
+            shopbyAuthorization: accessToken
+                ? `Bearer ${accessToken}`
+                : undefined,
             language: env.NEXT_PUBLIC_LOCALE,
         });
     },

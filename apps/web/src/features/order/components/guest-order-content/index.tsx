@@ -5,8 +5,14 @@ import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuest
 /**
  * [비회원 주문 내역 렌더러]
  */
-const GuestOrderContent = ({ orderNo }: { orderNo: string }) => {
-    const { data: orderInfo } = useGuestOrderDetail({ orderNo });
+const GuestOrderContent = ({
+    orderNo,
+    guestToken,
+}: {
+    orderNo: string;
+    guestToken?: string;
+}) => {
+    const { data: orderInfo } = useGuestOrderDetail({ orderNo, guestToken });
 
     useSb({ order: orderInfo });
 

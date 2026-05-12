@@ -11,6 +11,7 @@ import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
 interface UseGuestOrderDetailParams<T = OrderDetailResponse> {
     orderNo: string;
+    guestToken?: string;
     params?: GetOrderDetailParams;
     options?: Omit<
         UseSuspenseQueryOptions<
@@ -25,13 +26,18 @@ interface UseGuestOrderDetailParams<T = OrderDetailResponse> {
 
 const useGuestOrderDetail = <T = OrderDetailResponse>({
     orderNo,
+    guestToken,
     params,
     options,
 }: UseGuestOrderDetailParams<T>) => {
     return useSuspenseQuery({
         queryKey: guestOrderKeys.detail(orderNo, params),
         queryFn: async () => {
-            const { data } = await guestOrder.getOrderDetail(orderNo, params);
+            const { data } = await guestOrder.getOrderDetail(orderNo, params, {
+                headers: {
+                    guestToken: guestToken,
+                },
+            });
 
             return data;
         },

@@ -15,22 +15,26 @@ const EventTop = ({ label, imgUrlInfo, promotionText }: EventTopProps) => {
             <div className={styles.topInner}>
                 <div className={styles.imageWrapper}>
                     {/* PC Content */}
-                    <div className={styles.contentWrapper}>
-                        <img
-                            src={imgUrlInfo.pc}
-                            alt={label}
-                            className={styles.htmlContent}
-                        />
-                    </div>
+                    {imgUrlInfo.pc && (
+                        <div className={styles.contentWrapper}>
+                            <img
+                                src={imgUrlInfo.pc}
+                                alt={label}
+                                className={styles.htmlContent}
+                            />
+                        </div>
+                    )}
 
                     {/* Mobile Content */}
-                    <div className={styles.mobileContentWrapper}>
-                        <img
-                            src={imgUrlInfo.mobile}
-                            alt={label}
-                            className={styles.htmlContent}
-                        />
-                    </div>
+                    {imgUrlInfo.mobile && (
+                        <div className={styles.mobileContentWrapper}>
+                            <img
+                                src={imgUrlInfo.mobile}
+                                alt={label}
+                                className={styles.htmlContent}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.topContent}>

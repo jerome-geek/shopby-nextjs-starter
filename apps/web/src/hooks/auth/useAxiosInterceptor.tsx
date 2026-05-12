@@ -35,8 +35,7 @@ export const useAxiosInterceptor = () => {
                 if (isGuestRequest(url, method)) {
                     const guestToken = guestTokenCookie.get();
                     if (guestToken) {
-                        config.headers['Shop-By-Authorization'] =
-                            `Bearer ${guestToken}`;
+                        config.headers['guestToken'] = guestToken;
                     }
                     return config;
                 }
@@ -44,8 +43,9 @@ export const useAxiosInterceptor = () => {
                 // 일반 요청: 액세스 토큰 사용
                 const accessToken = accessTokenCookie.get();
                 if (accessToken) {
-                    config.headers['Shop-By-Authorization'] =
-                        `Bearer ${accessToken}`;
+                    config.headers[
+                        'Shop-By-Authorization'
+                    ] = `Bearer ${accessToken}`;
                 }
 
                 // 토큰 갱신 요청: Refresh-Token 헤더 추가

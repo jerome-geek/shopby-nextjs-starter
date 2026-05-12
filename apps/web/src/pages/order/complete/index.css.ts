@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
+import { style } from '@vanilla-extract/css';
 
 export const pageWrapper = style({
     minHeight: '100vh',
@@ -13,6 +13,14 @@ export const pageWrapper = style({
 export const loadingWrapper = style({
     padding: '100px',
     textAlign: 'center',
+    ...textStyleTokens.headingMedium,
+
+    '@media': {
+        [media.mobile]: {
+            padding: '100px 0',
+            ...textStyleTokens.headlineMedium,
+        },
+    },
 });
 
 export const container = style({
