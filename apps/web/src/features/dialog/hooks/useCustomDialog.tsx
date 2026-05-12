@@ -34,7 +34,7 @@ export const useCustomDialog = () => {
 
     const { openAsyncDialog } = useDialog();
 
-    const [{ [MODAL_QUERY_KEY]: modalValue }, setModalQuery] = useQueryStates(
+    const [_, setModalQuery] = useQueryStates(
         {
             [MODAL_QUERY_KEY]: parseAsString,
             recipeSno: parseAsString,
@@ -44,6 +44,8 @@ export const useCustomDialog = () => {
 
     const removeModalQuery = useCallback(
         (originalClose: () => void) => () => {
+            const modalValue = router.query[MODAL_QUERY_KEY];
+
             if (modalValue) {
                 setModalQuery({
                     [MODAL_QUERY_KEY]: null,
@@ -52,7 +54,7 @@ export const useCustomDialog = () => {
             }
             originalClose();
         },
-        [modalValue, setModalQuery],
+        [router, setModalQuery],
     );
 
     const openAddCartDialog = useCallback(async <T = boolean,>() => {
@@ -263,8 +265,9 @@ export const useCustomDialog = () => {
                             return;
                         }
 
-                        const { data } =
-                            await recipe.getRecipeDetail(recipeSno);
+                        const { data } = await recipe.getRecipeDetail(
+                            recipeSno,
+                        );
 
                         if (
                             data.recipeStatus === 'COMPLETED' ||
