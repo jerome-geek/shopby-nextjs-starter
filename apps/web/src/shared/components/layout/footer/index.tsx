@@ -1,16 +1,11 @@
-import Link from 'next/link';
 import clsx from 'clsx';
-import { useMemo, useState, Suspense } from 'react';
+import Link from 'next/link';
+import { Suspense, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMall } from '@/hooks/suspenseQuery/admin/mall';
 
 import { PATHS } from '@/const/paths';
-
-import { InstagramIcon } from '@/components/icons/footer/InstagramIcon';
-import { YoutubeIcon } from '@/components/icons/footer/YoutubeIcon';
-import { SmallCaretIcon } from '@/components/icons/SmallCaretIcon';
-
-import * as styles from './Footer.css';
+import { useMall } from '@/hooks/suspenseQuery/admin/mall';
+import * as styles from '@/shared/components/layout/footer/index.css';
 import { visuallyHidden } from '@/styles/global.css';
 
 function FooterContent() {
@@ -20,25 +15,25 @@ function FooterContent() {
     const companyInfo = useMemo(
         () => ({
             companyName:
-                mallData?.serviceBasicInfo.companyName ||
-                '(주)제니지니앤로이드',
+                mallData.serviceBasicInfo.companyName ||
+                '(주)레몬트리커뮤니케이션',
             representativeName:
-                mallData?.serviceBasicInfo.representativeName || '홍길동',
+                mallData.serviceBasicInfo.representativeName || '조영훈',
             address:
-                mallData?.serviceBasicInfo.address ||
-                '서울특별시 강남구 테헤란로 123, 4층',
+                mallData.serviceBasicInfo.address ||
+                '서울특별시 마포구 양화로 120(서교동)',
             representPhoneNo:
-                mallData?.serviceBasicInfo.representPhoneNo || '1588-0000',
+                mallData.serviceBasicInfo.representPhoneNo || '1588-0000',
             businessRegistrationNo:
-                mallData?.serviceBasicInfo.businessRegistrationNo ||
+                mallData.serviceBasicInfo.businessRegistrationNo ||
                 '123-45-67890',
             onlineMarketingBusinessDeclarationNo:
-                mallData?.serviceBasicInfo
+                mallData.serviceBasicInfo
                     .onlineMarketingBusinessDeclarationNo ||
                 '2024-서울강남-12345',
             email: 'help@jollypot.com', // Mall data에 이메일이 없을 경우 대비
         }),
-        [mallData?.serviceBasicInfo],
+        [mallData.serviceBasicInfo],
     );
 
     const menuLinks = useMemo(
@@ -134,6 +129,7 @@ function FooterContent() {
                                     ) || undefined
                                 }
                                 target={link.target}
+                                prefetch={false}
                             >
                                 {link.label}
                             </Link>

@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 
 import { BottomNavigation } from '@/components/layout/bottom-navigation';
 import * as styles from '@/components/layout/default/index.css';
-import { Footer } from '@/components/layout/footer';
+import { Footer } from '@/shared/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { RouteChangeOverlay, ScrollToTop } from '@/components/ui';
 import { PATHS } from '@/const/paths';

@@ -1,7 +1,8 @@
+import { style } from '@vanilla-extract/css';
+
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { style } from '@vanilla-extract/css';
 
 export const footerContainer = style({
     width: '100%',
