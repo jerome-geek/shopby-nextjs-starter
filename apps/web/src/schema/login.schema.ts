@@ -15,3 +15,11 @@ type LoginFormSchemaType = z.infer<typeof loginFormSchema>;
 
 export { loginFormSchema, type LoginFormSchemaType };
 
+const guestLoginFormSchema = z.object({
+    orderNo: z.string().min(1, '주문번호를 입력해 주세요.'),
+    password: z.string().min(1, '비밀번호를 입력해 주세요.'),
+});
+
+type GuestLoginFormSchemaType = z.infer<typeof guestLoginFormSchema>;
+
+export { guestLoginFormSchema, type GuestLoginFormSchemaType };

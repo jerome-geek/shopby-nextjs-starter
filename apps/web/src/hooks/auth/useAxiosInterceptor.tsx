@@ -1,7 +1,7 @@
 import axios, { HttpStatusCode } from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
-import { handle401Error } from '@/api/core/authInterceptor';
+import { handle400Error, handle401Error } from '@/api/core/authInterceptor';
 import { shopbyRequest } from '@/api/core/request';
 import {
     isGuestRequest,
@@ -17,9 +17,17 @@ import {
 
 export const useAxiosInterceptor = () => {
     const [isReady, setIsReady] = useState(false);
-    const { handleSessionExpired } = useHandleSessionExpired();
+    const { handleSessionExpired, handleGuestLoginExpired } =
+        useHandleSessionExpired();
+
     const handleSessionExpiredRef = useRef(handleSessionExpired);
-    handleSessionExpiredRef.current = handleSessionExpired;
+    const handleGuestLoginExpiredRef = useRef(handleGuestLoginExpired);
+
+    // NOTE: React 19 DEV: render 중 ref.current 접근/갱신은 경고가 될 수 있어 effect에서 최신 핸들러로 동기화
+    useEffect(() => {
+        handleSessionExpiredRef.current = handleSessionExpired;
+        handleGuestLoginExpiredRef.current = handleGuestLoginExpired;
+    }, [handleSessionExpired, handleGuestLoginExpired]);
 
     useEffect(() => {
         // ─── Request Interceptor ──────────────────────────────────────────────
@@ -85,17 +93,25 @@ export const useAxiosInterceptor = () => {
                     'red',
                 );
 
-                if (status !== HttpStatusCode.Unauthorized) {
-                    return Promise.reject(error);
+                if (status === HttpStatusCode.BadRequest) {
+                    return await handle400Error(error, shopbyRequest, () =>
+                        handleGuestLoginExpiredRef.current(),
+                    );
                 }
 
-                return await handle401Error(error, shopbyRequest, () =>
-                    handleSessionExpiredRef.current(),
-                );
+                if (status === HttpStatusCode.Unauthorized) {
+                    return await handle401Error(error, shopbyRequest, () =>
+                        handleSessionExpiredRef.current(),
+                    );
+                }
+
+                return Promise.reject(error);
             },
         );
 
-        setIsReady(true);
+        setTimeout(() => {
+            setIsReady(true);
+        }, 0);
 
         return () => {
             shopbyRequest.interceptors.request.eject(requestInterceptor);

@@ -1,31 +1,32 @@
 import { useRouter } from 'next/router';
-import React from 'react';
 
-import { MypageLayout } from '@/components/layout';
+import { GuestLayout } from '@/components/layout';
 import { PATHS } from '@/const/paths';
 import { OrderDetailView } from '@/features/order/components/order-detail-view';
-import useOrderDetail from '@/hooks/suspenseQuery/order/myOrder/useOrderDetail';
+import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
 import useOrderConfiguration from '@/hooks/suspenseQuery/order/orderConfiguration/useOrderConfiguration';
-import type { NextPageWithLayout } from '@/pages/_app';
+import { NextPageWithLayout } from '@/pages/_app';
 
-const MypageOrderDetailPage: NextPageWithLayout = () => {
+const GuestOrderPage: NextPageWithLayout = () => {
     const router = useRouter();
     const orderNo = String(router.query.orderNo ?? '');
 
     const { data: orderConfigurationData } = useOrderConfiguration();
-    const { data: orderDetailData } = useOrderDetail({ orderNo });
+    const { data: orderDetailData } = useGuestOrderDetail({
+        orderNo,
+    });
 
     return (
         <OrderDetailView
             orderDetailData={orderDetailData}
             orderConfigurationData={orderConfigurationData}
-            backPath={PATHS.MYPAGE.ORDERS.MAIN}
+            backPath={PATHS.GUEST.LOGIN}
         />
     );
 };
 
-MypageOrderDetailPage.getLayout = (page: React.ReactNode) => {
-    return <MypageLayout>{page}</MypageLayout>;
-};
+GuestOrderPage.getLayout = (page) => (
+    <GuestLayout title='비회원 배송조회'>{page}</GuestLayout>
+);
 
-export default MypageOrderDetailPage;
+export default GuestOrderPage;

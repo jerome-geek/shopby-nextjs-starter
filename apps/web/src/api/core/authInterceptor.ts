@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
 import { isGuestRequest, isUpdateOauth2Request } from '@/api/core/utils';
@@ -9,6 +9,7 @@ type RefreshCallback = (token: string) => void;
 type RetryableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 
 const TOKEN_REFRESH_TIMEOUT = 10_000;
+const GUEST_LOGIN_EXPIRED_CODE = 'O7001';
 
 /**
  * 전역 갱신 상태 관리를 위한 싱글톤 변수
@@ -69,8 +70,9 @@ export const handle401Error = async (
                     return;
                 }
                 // 새 토큰으로 헤더 교체 및 재요청
-                originalRequest.headers['Shop-By-Authorization'] =
-                    `Bearer ${newToken}`;
+                originalRequest.headers[
+                    'Shop-By-Authorization'
+                ] = `Bearer ${newToken}`;
                 resolve(instance(originalRequest));
             });
         });
@@ -99,8 +101,9 @@ export const handle401Error = async (
         notifySuccess(data.accessToken);
 
         // 현재 요청 재실행
-        originalRequest.headers['Shop-By-Authorization'] =
-            `Bearer ${data.accessToken}`;
+        originalRequest.headers[
+            'Shop-By-Authorization'
+        ] = `Bearer ${data.accessToken}`;
 
         return instance(originalRequest);
     } catch (refreshError) {
@@ -110,4 +113,25 @@ export const handle401Error = async (
     } finally {
         isRefreshing = false;
     }
+};
+
+/**
+ * 400 에러 통합 핸들러
+ * @param error AxiosError 객체
+ * @param instance 에러가 발생한 Axios 인스턴스 (재시도용)
+ * @param onSessionExpired 세션 만료 시 실행할 콜백 (UI 처리 등)
+ */
+export const handle400Error = async (
+    error: AxiosError,
+    instance: AxiosInstance,
+    onSessionExpired: () => Promise<void>,
+) => {
+    const response = error.response?.data as ShopByErrorResponse;
+
+    if (response.code === GUEST_LOGIN_EXPIRED_CODE) {
+        await onSessionExpired();
+        return new Promise(() => {});
+    }
+
+    return Promise.reject(error);
 };

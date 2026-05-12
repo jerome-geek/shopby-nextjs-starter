@@ -1,16 +1,19 @@
+import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
 import { controller } from '@/api/core/controller';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
 import { useDialog } from '@/hooks/utils';
-import { memberCookie } from '@/utils/cookie';
+import { guestTokenCookie, memberCookie } from '@/utils/cookie';
 
 /**
  * 401 Unauthorized 발생 시 통합 세션 만료 처리를 위한 훅
  * - 인터셉터에서 호출할 수 있도록 메모이제이션된 함수를 반환합니다.
  */
 export const useHandleSessionExpired = () => {
+    const router = useRouter();
+
     const { openAsyncDialog } = useDialog();
     const { handleSendRefreshTokenExpired, handleSendLoginView, isMyApp } =
         useMyApp();
@@ -59,5 +62,18 @@ export const useHandleSessionExpired = () => {
         isMyApp,
     ]);
 
-    return { handleSessionExpired };
+    const handleGuestLoginExpired = useCallback(async () => {
+        await openAsyncDialog({
+            message: '비회원 주문이 만료되었습니다.',
+            description: '다시 로그인해주세요.',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        await router.replace(PATHS.GUEST.LOGIN);
+
+        guestTokenCookie.clear();
+    }, [openAsyncDialog, router]);
+
+    return { handleSessionExpired, handleGuestLoginExpired };
 };

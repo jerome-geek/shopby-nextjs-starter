@@ -4,5 +4,6 @@ export * from '@/components/layout/bottom-sheet';
 export * from '@/components/layout/csr';
 export * from '@/components/layout/default';
 export * from '@/components/layout/dialog';
+export * from '@/components/layout/guest';
 export * from '@/components/layout/modal';
 export * from '@/components/layout/mypage';
