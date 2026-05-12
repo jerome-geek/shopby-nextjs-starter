@@ -70,7 +70,9 @@ export const productList = style({
 
 export const depth4CategoryList = style({
     display: 'flex',
-    gap: '16px',
+    flexWrap: 'wrap',
+    columnGap: '16px',
+    rowGap: '12px',
     width: '100%',
     padding: '12px 16px',
     borderRadius: '4px',
