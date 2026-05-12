@@ -164,7 +164,7 @@ export const rank = style([
     {
         position: 'absolute',
         top: '0',
-        left: '0',
+        right: '0',
         width: '24px',
         height: '24px',
         display: 'flex',
