@@ -190,7 +190,11 @@ const RecipeDetailPage = ({
 
             {/* --- HEADER AREA --- */}
             <section className={styles.headerArea}>
-                <div className={styles.imageCarouselContainer}>
+                <div
+                    className={styles.imageCarouselContainer({
+                        sticky: recipeDetailData.sourceType === 'YOUTUBE',
+                    })}
+                >
                     <div className={styles.imageCarousel}>
                         <Swiper
                             modules={[Pagination]}

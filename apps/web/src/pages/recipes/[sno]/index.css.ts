@@ -1,4 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
@@ -32,24 +33,40 @@ export const headerArea = style({
     },
 });
 
-export const imageCarouselContainer = style({
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'sticky',
-    top: 0,
-    zIndex: 1000,
-    gap: '8px',
-    marginBottom: '24px',
-    backgroundColor: vars.color.white,
+export const imageCarouselContainer = recipe({
+    base: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        marginBottom: '24px',
+        backgroundColor: vars.color.white,
 
-    '@media': {
-        [media.desktop]: {
-            position: 'static',
-            zIndex: 'auto',
-            gap: '16px',
-            marginBottom: 0,
-            backgroundColor: 'transparent',
+        '@media': {
+            [media.desktop]: {
+                position: 'static',
+                zIndex: 'auto',
+                gap: '16px',
+                marginBottom: 0,
+                backgroundColor: 'transparent',
+            },
         },
+    },
+    variants: {
+        sticky: {
+            true: {
+                position: 'sticky',
+                top: 0,
+                zIndex: 1000,
+            },
+            false: {
+                position: 'relative',
+                top: 'auto',
+                zIndex: 'auto',
+            },
+        },
+    },
+    defaultVariants: {
+        sticky: false,
     },
 });
 
