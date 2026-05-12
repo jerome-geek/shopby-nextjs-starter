@@ -42,6 +42,7 @@ const palette = {
         '30': '#EDE8E0',
     },
     brick: '#C75D3E',
+    yellow: '#FDB813',
 
     // 소셜 로그인 색상
     kakao: '#FEE500',

@@ -30,6 +30,8 @@ interface NavItem {
         currentColor?: string;
     }>;
     onClick?: () => void;
+    hideLabel?: boolean;
+    iconSize?: number;
 }
 
 // UX 설정을 위한 상수값
@@ -41,6 +43,7 @@ const SCROLL_THRESHOLD_PX = {
 const IDLE_DETECTION_DELAY_MS = 600;
 const ANIMATION_DURATION_SEC = 0.2;
 const ICON_SIZE_PX = 24;
+const CREATE_ICON_SIZE_PX = 50;
 
 export const BottomNavigation = () => {
     const { t } = useTranslation();
@@ -127,6 +130,8 @@ export const BottomNavigation = () => {
             href: null,
             icon: CreateIcon,
             onClick: handleCreateClick,
+            hideLabel: true,
+            iconSize: CREATE_ICON_SIZE_PX,
         },
         { label: t('스크랩북'), href: PATHS.RECIPES.SCRAP, icon: ScrapIcon },
         { label: t('마이'), href: PATHS.MYPAGE.MAIN, icon: MyPageIcon },
@@ -149,20 +154,45 @@ export const BottomNavigation = () => {
                 ease: 'easeInOut',
             }}
         >
-            {navItems.map(({ label, href, icon: Icon, onClick }) => {
-                const isActive = onClick
-                    ? isCreateActive
-                    : router.pathname === href;
+            {navItems.map(
+                ({ label, href, icon: Icon, onClick, hideLabel, iconSize }) => {
+                    const isActive = onClick
+                        ? isCreateActive
+                        : router.pathname === href;
 
-                if (onClick) {
+                    if (onClick) {
+                        return (
+                            <button
+                                key={label}
+                                type='button'
+                                className={clsx(styles.navItem, {
+                                    [styles.activeNavItem]: isActive,
+                                })}
+                                onClick={onClick}
+                            >
+                                <Icon
+                                    width={iconSize || ICON_SIZE_PX}
+                                    height={iconSize || ICON_SIZE_PX}
+                                    currentColor={
+                                        isActive ? 'black' : undefined
+                                    }
+                                />
+                                {!hideLabel && (
+                                    <span className={styles.navLabel}>
+                                        {label}
+                                    </span>
+                                )}
+                            </button>
+                        );
+                    }
+
                     return (
-                        <button
+                        <Link
                             key={label}
-                            type='button'
+                            href={href!}
                             className={clsx(styles.navItem, {
                                 [styles.activeNavItem]: isActive,
                             })}
-                            onClick={onClick}
                         >
                             <Icon
                                 width={ICON_SIZE_PX}
@@ -170,27 +200,10 @@ export const BottomNavigation = () => {
                                 currentColor={isActive ? 'black' : undefined}
                             />
                             <span className={styles.navLabel}>{label}</span>
-                        </button>
+                        </Link>
                     );
-                }
-
-                return (
-                    <Link
-                        key={label}
-                        href={href!}
-                        className={clsx(styles.navItem, {
-                            [styles.activeNavItem]: isActive,
-                        })}
-                    >
-                        <Icon
-                            width={ICON_SIZE_PX}
-                            height={ICON_SIZE_PX}
-                            currentColor={isActive ? 'black' : undefined}
-                        />
-                        <span className={styles.navLabel}>{label}</span>
-                    </Link>
-                );
-            })}
+                },
+            )}
         </motion.nav>
     );
 };
