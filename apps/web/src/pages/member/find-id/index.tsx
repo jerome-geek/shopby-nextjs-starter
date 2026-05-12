@@ -4,11 +4,24 @@ import { useTranslation } from 'react-i18next';
 import { AuthLayout } from '@/components/layout';
 import { PATHS } from '@/const/paths';
 import { FindIdForm } from '@/features/member/find-id/components/find-id-form';
+import { useMyApp } from '@/hooks/myapp';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/member/find-id/index.css';
 
 const FindIdPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
+    const { isMyApp, handleSendLoginView } = useMyApp();
+
+    const handleLoginClick = (e: React.MouseEvent) => {
+        if (isMyApp) {
+            e.preventDefault();
+            handleSendLoginView({
+                option: {
+                    returnUrl: PATHS.MAIN,
+                },
+            });
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -27,6 +40,7 @@ const FindIdPage: NextPageWithLayout = () => {
                     prefetch={false}
                     className={styles.link}
                     data-color='muted'
+                    onClick={handleLoginClick}
                 >
                     {t('로그인하기')}
                 </Link>

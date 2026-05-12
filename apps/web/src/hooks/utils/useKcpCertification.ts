@@ -2,15 +2,16 @@
 import { isNull, isUndefined } from '@fxts/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useCallback, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
 
 import { KCPCertification, oauth2 } from '@/api/auth';
 import { profile } from '@/api/member';
-import { PATHS } from '@/const/paths';
-import { useDialog } from '@/hooks/utils';
 import { MEMBER_SIGNUP_STATUS } from '@/const/member';
+import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
+import { useDialog } from '@/hooks/utils';
 import { memberCookie } from '@/utils/cookie';
 
 let currentOnNext: ((...args: any) => void) | null = null;
@@ -34,7 +35,7 @@ const useKcpCertification = ({
     const expiry = (query?.expiry as string) || '';
     const returnUrl = (query?.returnUrl as string) || '';
 
-    // const { isMyApp, handleSendLogout } = useMyApp();
+    const { isMyApp, handleSendLoginView } = useMyApp();
 
     const { openAsyncDialog } = useDialog();
 
@@ -124,6 +125,12 @@ const useKcpCertification = ({
                     });
 
                     overlay.closeAll();
+
+                    if (isMyApp) {
+                        handleSendLoginView();
+                        return;
+                    }
+
                     router.push(PATHS.AUTH.LOGIN);
                     return;
                 }
@@ -166,6 +173,8 @@ const useKcpCertification = ({
             expiry,
             returnUrl,
             openAsyncDialog,
+            isMyApp,
+            handleSendLoginView,
         ],
     );
 

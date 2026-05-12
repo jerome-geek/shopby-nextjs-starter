@@ -27,7 +27,7 @@ import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 const LoginPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
     const router = useRouter();
-    const { isMyApp, syncAppLogin } = useMyApp();
+    const { syncAppLogin } = useMyApp();
 
     const returnUrl = (router.query.returnUrl as string) || '';
     const isGuestOrder = router.query.type === 'guestOrder';

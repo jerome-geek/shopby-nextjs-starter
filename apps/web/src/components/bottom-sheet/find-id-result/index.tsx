@@ -8,6 +8,7 @@ import {
 } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
 import type { FindIdResponse } from '@/models/member/profile';
 
 interface FindIdResultBottomSheetProps extends DefaultBottomSheetProps {
@@ -22,6 +23,7 @@ export const FindIdResultBottomSheet = ({
 }: FindIdResultBottomSheetProps) => {
     const { t } = useTranslation();
     const router = useRouter();
+    const { isMyApp, handleSendLoginView } = useMyApp();
 
     return (
         <BottomSheetLayout
@@ -47,6 +49,12 @@ export const FindIdResultBottomSheet = ({
                     variant='primary'
                     onClick={() => {
                         props.close();
+
+                        if (isMyApp) {
+                            handleSendLoginView();
+                            return;
+                        }
+
                         router.push(PATHS.AUTH.LOGIN);
                     }}
                 >

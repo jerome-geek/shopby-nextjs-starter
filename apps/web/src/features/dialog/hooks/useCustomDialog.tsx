@@ -25,6 +25,7 @@ import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/dialog/hooks/useCustomDialog.css';
 import { useRequiredAuth } from '@/features/dialog/hooks/useRequiredAuth';
+import { useMyApp } from '@/hooks/myapp';
 import { useDialog, useResponsive } from '@/hooks/utils';
 
 export const useCustomDialog = () => {
@@ -33,6 +34,7 @@ export const useCustomDialog = () => {
     const { isMobile } = useResponsive();
 
     const { openAsyncDialog } = useDialog();
+    const { isMyApp, handleSendLoginView } = useMyApp();
 
     const [_, setModalQuery] = useQueryStates(
         {
@@ -105,10 +107,22 @@ export const useCustomDialog = () => {
                             }
                             confirm={() => {
                                 overlay.closeAll();
+
+                                const nextPath = returnUrl ?? router.asPath;
+
+                                if (isMyApp) {
+                                    handleSendLoginView({
+                                        option: {
+                                            returnUrl: nextPath,
+                                        },
+                                    });
+                                    return;
+                                }
+
                                 router.push({
                                     pathname: PATHS.AUTH.LOGIN,
                                     query: {
-                                        returnUrl: returnUrl ?? router.asPath,
+                                        returnUrl: nextPath,
                                     },
                                 });
                             }}
@@ -120,7 +134,7 @@ export const useCustomDialog = () => {
                 { overlayId: OVERLAY_ID.LOGIN_DIALOG },
             );
         },
-        [t, router],
+        [t, router, isMyApp, handleSendLoginView],
     );
 
     const withRequiredAuth = useRequiredAuth(openLoginDialog);

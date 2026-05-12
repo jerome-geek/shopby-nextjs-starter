@@ -5,6 +5,7 @@ import { FindIdResult } from '@/components/layer-contents/find-id-result';
 import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
 import type { FindIdResponse } from '@/models/member/profile';
 
 interface FindIdResultModalProps extends DefaultModalLayoutProps {
@@ -19,6 +20,7 @@ export const FindIdResultModal = ({
 }: FindIdResultModalProps) => {
     const { t } = useTranslation();
     const router = useRouter();
+    const { isMyApp, handleSendLoginView } = useMyApp();
 
     return (
         <ModalLayout
@@ -45,6 +47,12 @@ export const FindIdResultModal = ({
                     variant='primary'
                     onClick={() => {
                         props.close();
+
+                        if (isMyApp) {
+                            handleSendLoginView();
+                            return;
+                        }
+
                         router.push(PATHS.AUTH.LOGIN);
                     }}
                 >
