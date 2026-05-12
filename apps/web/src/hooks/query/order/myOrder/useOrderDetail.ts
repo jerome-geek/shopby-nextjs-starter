@@ -1,47 +1,22 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { myOrder } from '@/api/order';
-import { ordersKeys } from '@/hooks/queryKeys';
-import { useAuth } from '@/hooks/useAuth';
+import {
+    orderDetailOptions,
+    type OrderDetailOptionsParams,
+} from '@/entities/order/queries';
 import type { OrderDetailResponse } from '@/models/order';
-import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
 interface UseOrderDetailParams<T = OrderDetailResponse> {
     orderNo: string;
     memberNo?: number;
-    params?: GetOrderDetailParams;
-    options?: Omit<
-        UseQueryOptions<
-            OrderDetailResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof ordersKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
+    searchParams?: OrderDetailOptionsParams<T>['searchParams'];
+    options?: OrderDetailOptionsParams<T>['options'];
 }
 
-const useOrderDetail = <T = OrderDetailResponse>({
-    orderNo,
-    memberNo = 0,
-    params,
-    options,
-}: UseOrderDetailParams<T>) => {
-    const isLogin = useAuth();
-
-    return useQuery({
-        queryKey: ordersKeys.detail(orderNo, memberNo, params),
-        queryFn: async () => {
-            const { data } = await myOrder.getOrderDetail(orderNo, {
-                ...params,
-            });
-
-            return data;
-        },
-        enabled: !!orderNo && !!isLogin,
-        ...options,
-    });
+const useOrderDetail = <T = OrderDetailResponse>(
+    params: UseOrderDetailParams<T>,
+) => {
+    return useQuery(orderDetailOptions(params));
 };
 
 export default useOrderDetail;

@@ -10,3 +10,4 @@ export * from '@/components/modal/collection-form';
 export * from '@/components/modal/recipe-save';
 export * from '@/components/modal/image-detail';
 export * from '@/components/modal/find-id-result';
+export * from '@/components/modal/shipping-address-change';

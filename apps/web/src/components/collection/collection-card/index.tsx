@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import * as styles from '@/components/collection/collection-card/index.css';
 import { PATHS } from '@/const/paths';
-import { useBookmark } from '@/hooks/recipe';
+import useBookmark from '@/features/recipe/hooks/useBookmark';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 

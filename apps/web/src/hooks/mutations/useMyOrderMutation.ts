@@ -4,7 +4,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { myOrder } from '@/api/order';
 import { ordersKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
-import type { RequestCashReceiptData } from '@/models/order/myOrder';
+import type {
+    RequestCashReceiptData,
+    UpdateDeliveryInformationData,
+    UpdateDeliveryInformationParams,
+} from '@/models/order/myOrder';
 
 export const useMyOrderMutation = () => {
     const queryClient = useQueryClient();
@@ -58,6 +62,25 @@ export const useMyOrderMutation = () => {
                 orderNo: string;
                 data: RequestCashReceiptData;
             }) => await myOrder.modifyCashReceipt(orderNo, data),
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
+        }),
+
+        updateDeliveryInfo: useMutation({
+            mutationFn: async ({
+                orderNo,
+                searchParams,
+                data,
+            }: {
+                orderNo: string;
+                searchParams: UpdateDeliveryInformationParams;
+                data: UpdateDeliveryInformationData;
+            }) =>
+                await myOrder.updateDeliveryInformation(
+                    orderNo,
+                    searchParams,
+                    data,
+                ),
             onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),

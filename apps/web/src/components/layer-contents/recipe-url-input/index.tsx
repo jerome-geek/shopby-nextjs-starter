@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
 import * as styles from '@/components/layer-contents/recipe-url-input/index.css';
+import { useCustomDialog } from '@/features/dialog';
 import { recipeKeys } from '@/hooks/queryKeys';
-import { useCustomDialog } from '@/hooks/ui';
 import { useToast } from '@/hooks/ui/useToast';
 import { useDialog } from '@/hooks/utils';
 
@@ -65,10 +65,10 @@ const useRecipeUrlInputLogic = (close: () => void) => {
             const errorMessage = isAxiosError(error)
                 ? error.response?.data?.message || error.message
                 : error instanceof Error
-                ? error.message
-                : t(
-                      '레시피를 생성하는 중 오류가 발생하였습니다.<br/>관리자에게 문의해주세요.',
-                  );
+                  ? error.message
+                  : t(
+                        '레시피를 생성하는 중 오류가 발생하였습니다.<br/>관리자에게 문의해주세요.',
+                    );
 
             await openAsyncDialog({
                 message: errorMessage,

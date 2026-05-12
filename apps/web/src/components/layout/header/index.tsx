@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
-import { SearchDrawer } from '@/features/drawer/search';
 import {
     BigCartIcon,
     BookmarkIcon,
@@ -19,8 +18,9 @@ import { MobileHeader } from '@/components/layout/header/mobile';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
+import { useCustomDialog } from '@/features/dialog';
+import { SearchDrawer } from '@/features/drawer/search';
 import useCart from '@/hooks/cart/useCart';
-import { useCustomDialog } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils/useResponsive';
 import { vars } from '@/styles/theme.css';

@@ -7,14 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { BookmarkIcon } from '@/components/icons';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import { useCustomDialog } from '@/features/dialog';
+import useBookmark from '@/features/recipe/hooks/useBookmark';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useBookmark } from '@/hooks/recipe';
 import { useCollectionList } from '@/hooks/suspenseQuery/shop/collection';
-import { useCustomDialog } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
-
 import * as styles from '@/features/recipe/components/scrap-collection-section/index.css';
 
 export const ScrapCollectionSection = () => {

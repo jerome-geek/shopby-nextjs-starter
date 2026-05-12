@@ -58,6 +58,48 @@ export type RegisterShippingAddressSchemaType = z.infer<
     ReturnType<typeof getRegisterShippingAddressSchema>
 >;
 
+export const getChangeShippingAddressSchema = ({
+    isGlobalMall,
+}: {
+    isGlobalMall?: boolean;
+} = {}) => {
+    return z.object({
+        receiverLastName: isGlobalMall
+            ? z.string().nonempty('성을 입력해주세요.')
+            : z.string().nullish(),
+        receiverJibunAddress: isGlobalMall
+            ? z.string().nullish()
+            : z.string().nonempty('지번을 입력해주세요.'),
+        receiverName: z.string().nonempty('받으시는 분 이름을 입력해주세요.'),
+        customsIdNumber: z.string().nullish(),
+        countryCd: CountryCdType.nullish(),
+        receiverZipCd: z
+            .string({
+                error: '우편번호를 입력해주세요.',
+            })
+            .nonempty('우편번호를 입력해주세요.'),
+        receiverDetailAddress: z.string().nonempty('상세 주소를 입력해주세요.'),
+        deliveryMemo: z.string().nullish(),
+        receiverCity: z.string().nullish(),
+        receiverMobileCountryCd: z.string().nullish(),
+        receiverAddress: z.string().nonempty('주소를 입력해주세요.'),
+        receiverState: z.string().nullish(),
+        receiverFirstName: isGlobalMall
+            ? z.string().nonempty('이름을 입력해주세요.')
+            : z.string().nullish(),
+        receiverContact1: z.object({
+            prefix: z.string().nonempty('연락처를 입력해주세요.'),
+            middle: z.string().nonempty('연락처를 입력해주세요.'),
+            suffix: z.string().nonempty('연락처를 입력해주세요.'),
+        }),
+        receiverContact2: z.string().nullish(),
+    });
+};
+
+export type ChangeShippingAddressSchemaType = z.infer<
+    ReturnType<typeof getChangeShippingAddressSchema>
+>;
+
 const isGlobalMall = false;
 export const shippingAddressSchema = z.object({
     addressType: z.enum([

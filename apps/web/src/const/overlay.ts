@@ -23,4 +23,5 @@ export const OVERLAY_ID = {
     IMAGE_DETAIL: 'image-detail',
     RECIPE_CREATE_SELECTION: 'recipe-create-selection',
     RECIPE_SAVE: 'recipe-save',
+    SHIPPING_ADDRESS_CHANGE: 'shipping-address-change',
 } as const;

@@ -211,8 +211,9 @@ const myOrder = {
 
     /**
      * 주문단위 배송정보 수정하기
-     * - 주문번호에 속한 배송정보를 일괄 수정하는 API 입니다.
-     * - 지역별 배송비가 변경되는 주소로는 배송정보를 변경할 수 없습니다. 지역별 배송비는 receiverJibunAddress로 입력되는 지번주소를 기준으로 판단합니다.
+     *  - 주문번호에 속한 배송정보를 일괄 수정하는 API 입니다.
+     *  - 지역별 배송비가 변경되는 주소로는 배송정보를 변경할 수 없습니다.
+     *  - 지역별 배송비는 receiverJibunAddress로 입력되는 지번주소를 기준으로 판단합니다.
      */
     updateDeliveryInformation: (
         orderNo: string,

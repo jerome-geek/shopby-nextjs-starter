@@ -9,7 +9,7 @@ import * as styles from '@/components/recipe/card/index.css';
 import { FailedCard } from '@/components/recipe/grid-section/failed-card';
 import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
 import { PATHS } from '@/const/paths';
-import { useBookmark } from '@/hooks/recipe';
+import useBookmark from '@/features/recipe/hooks/useBookmark';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 
 interface RecipeCardProps {

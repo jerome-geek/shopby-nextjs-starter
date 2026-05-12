@@ -68,6 +68,8 @@ export const buttonRecipe = recipe({
             text: {
                 background: 'none',
                 border: 'none',
+                width: 'fit-content',
+                height: 'auto',
                 gap: '2px',
                 padding: 0,
                 color: 'inherit',
@@ -81,6 +83,12 @@ export const buttonRecipe = recipe({
                 selectors: {
                     '&:hover:not(:disabled)': {
                         opacity: 0.6,
+                    },
+                },
+
+                '@media': {
+                    [media.desktop]: {
+                        height: 'auto',
                     },
                 },
             },

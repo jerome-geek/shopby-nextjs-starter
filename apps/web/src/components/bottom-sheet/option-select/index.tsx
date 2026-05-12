@@ -15,11 +15,12 @@ import {
 } from '@/components/product-option';
 import { Button } from '@/components/ui/button';
 import { CHANNEL_TYPES } from '@/const/product';
+import { useCustomDialog } from '@/features/dialog';
 import { toOrderSheetOption } from '@/helpers/product';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { cartKeys } from '@/hooks/queryKeys';
-import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import { useCartStore } from '@/store/useCartStore';

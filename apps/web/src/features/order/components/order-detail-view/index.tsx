@@ -1,14 +1,12 @@
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { overlay } from 'overlay-kit';
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ShippingAddressChangeBottomSheet } from '@/components/bottom-sheet/shipping-address-change';
-import { ShippingAddressChangeModal } from '@/components/modal/shipping-address-change';
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
 import { Button } from '@/components/ui';
 import ButtonV2 from '@/components/ui/button/v2';
+import { useCustomDialog } from '@/features/dialog/hooks/useCustomDialog';
 import {
     AdditionalPaySection,
     CashReceiptSection,
@@ -27,6 +25,7 @@ import { CURRENCY } from '@/utils/currency';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import * as orderStyles from '@/components/mypage/orders/order-options.css';
 import * as styles from '@/features/order/components/order-detail-view/index.css';
+import { includes } from '@fxts/core';
 
 interface OrderDetailViewProps {
     orderDetailData: OrderDetailResponse;
@@ -39,44 +38,20 @@ export const OrderDetailView = ({
     orderConfigurationData,
     backPath,
 }: OrderDetailViewProps) => {
+    console.log('🚀 ~ OrderDetailView ~ orderDetailData:', orderDetailData);
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
+    const { openShippingAddressChangeDialog } = useCustomDialog();
 
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo ?? 0;
 
     const handleShippingAddressChange = () => {
-        const shippingAddress = orderDetailData?.shippingAddress;
-        if (!orderDetailData.orderNo || !shippingAddress) return;
-
-        const data = {
-            receiverName: shippingAddress.receiverName,
-            receiverZipCd: shippingAddress.receiverZipCd,
-            receiverAddress: shippingAddress.receiverAddress,
-            receiverJibunAddress: shippingAddress.receiverJibunAddress,
-            receiverDetailAddress: shippingAddress.receiverDetailAddress,
-            receiverContact1: shippingAddress.receiverContact1,
-            deliveryMemo: shippingAddress.deliveryMemo,
-        };
-
-        overlay.open((props) =>
-            isMobile ? (
-                <ShippingAddressChangeBottomSheet
-                    {...props}
-                    orderNo={orderDetailData.orderNo}
-                    memberNo={memberNo}
-                    initialData={data}
-                />
-            ) : (
-                <ShippingAddressChangeModal
-                    {...props}
-                    orderNo={orderDetailData.orderNo}
-                    memberNo={memberNo}
-                    // initialData={data}
-                />
-            ),
-        );
+        openShippingAddressChangeDialog({
+            orderNo: orderDetailData.orderNo,
+            memberNo,
+        });
     };
 
     const orderOptionsGroupByPartner =
@@ -410,14 +385,19 @@ export const OrderDetailView = ({
                         title={t('배송지 정보')}
                         infoList={deliveryInfoList}
                         rightContent={
-                            <ButtonV2
-                                frame='text'
-                                size='small'
-                                variant='primary'
-                                onClick={handleShippingAddressChange}
-                            >
-                                {t('배송지 변경')}
-                            </ButtonV2>
+                            includes(orderDetailData.defaultOrderStatusType, [
+                                'DEPOSIT_WAIT',
+                                'PAY_DONE',
+                            ]) && (
+                                <ButtonV2
+                                    frame='text'
+                                    size='small'
+                                    variant='primary'
+                                    onClick={handleShippingAddressChange}
+                                >
+                                    {t('배송지 변경')}
+                                </ButtonV2>
+                            )
                         }
                     />
                     <PaymentSection

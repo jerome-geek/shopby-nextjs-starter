@@ -34,12 +34,13 @@ import {
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { createRecipeSeoData } from '@/entities/recipe/utils/seo';
+import { useCustomDialog } from '@/features/dialog';
+import useBookmark from '@/features/recipe/hooks/useBookmark';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { recipeKeys } from '@/hooks/queryKeys';
-import { useBookmark } from '@/hooks/recipe';
 import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
-import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';

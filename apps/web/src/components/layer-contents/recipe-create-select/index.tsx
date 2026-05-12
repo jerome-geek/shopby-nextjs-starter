@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/recipe-create-select/index.css';
+import { useCustomDialog } from '@/features/dialog';
 import { useRecipeMutation } from '@/hooks/mutations';
-import { useCustomDialog } from '@/hooks/ui';
 
 const useRecipeCreateSelectionHandlers = (close: () => void) => {
     const { openRecipeUrlInput, openRecipeImageUpload } = useCustomDialog();
@@ -36,7 +36,8 @@ export const RecipeCreateSelectionContent = ({
     close: () => void;
 }) => {
     const { t } = useTranslation();
-    const { onAiClick, onManualClick } = useRecipeCreateSelectionHandlers(close);
+    const { onAiClick, onManualClick } =
+        useRecipeCreateSelectionHandlers(close);
 
     return (
         <div className={styles.container}>

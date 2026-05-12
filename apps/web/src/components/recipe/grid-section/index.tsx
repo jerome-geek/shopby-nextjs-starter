@@ -9,8 +9,8 @@ import * as styles from '@/components/recipe/grid-section/index.css';
 import { ViewAllLink } from '@/components/ui';
 import PagingV2 from '@/components/ui/paging-v2';
 import { PATHS } from '@/const/paths';
+import { useCustomDialog } from '@/features/dialog';
 import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';
-import { useCustomDialog } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import type { SearchRecipesParams } from '@/models/shop/recipe';
 

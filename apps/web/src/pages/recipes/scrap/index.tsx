@@ -9,8 +9,8 @@ import Seo from '@/components/common/seo';
 import { CSRLayout } from '@/components/layout';
 import { RecipeScrapDetail } from '@/components/recipe/scrap/detail';
 import RecipeScrapSummary from '@/components/recipe/scrap/summary';
+import { useCustomDialog } from '@/features/dialog';
 import { useCollectionList } from '@/hooks/query/shop/collection';
-import { useCustomDialog } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/scrap/index.css';
 

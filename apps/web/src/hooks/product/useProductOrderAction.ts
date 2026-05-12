@@ -5,11 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 import { CHANNEL_TYPES } from '@/const/product';
 import { useProductInfo } from '@/entities/product/hooks';
+import { useCustomDialog } from '@/features/dialog';
 import { toOrderSheetOption } from '@/helpers/product';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption } from '@/hooks/product';
 import { cartKeys } from '@/hooks/queryKeys';
-import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useCartStore } from '@/store/useCartStore';
 import { useProductOptionStore } from '@/store/useProductOptionStore';

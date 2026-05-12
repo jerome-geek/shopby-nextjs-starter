@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/comment-section/index.css';
 import { RecipePreviewImage } from '@/components/recipe/preview-image';
+import { useCustomDialog } from '@/features/dialog';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useCustomDialog } from '@/hooks/ui';
 import type { CommentResponse } from '@/models/shop/comment';
 
 interface CommentItemProps {

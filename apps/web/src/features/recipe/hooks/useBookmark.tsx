@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
+import { useCustomDialog } from '@/features/dialog';
 import { useCollectionMutation, useRecipeMutation } from '@/hooks/mutations';
-import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useToast } from '@/hooks/ui';
 
 const useBookmark = () => {
     const { t } = useTranslation();

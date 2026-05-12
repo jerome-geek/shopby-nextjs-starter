@@ -12,9 +12,9 @@ import {
 import * as styles from '@/components/recipe/detail-card/index.css';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import useBookmark from '@/features/recipe/hooks/useBookmark';
 import { useRecipeMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useBookmark } from '@/hooks/recipe';
 import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';

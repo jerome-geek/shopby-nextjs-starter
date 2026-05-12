@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
-import { useCustomDialog } from '@/hooks/ui';
+import { useCustomDialog } from '@/features/dialog';
 
 export const useModalWatcher = () => {
     const { query } = useRouter();

@@ -20,12 +20,13 @@ import Comments from '@/components/product/product-tabs/review/comments';
 import * as styles from '@/components/product/product-tabs/review/index.css';
 import PagingV2 from '@/components/ui/paging-v2';
 import { PATHS } from '@/const/paths';
+import { useCustomDialog } from '@/features/dialog';
 import { useReviewMutation } from '@/hooks/mutations';
 import {
     usePhotoReviewList,
     useProductReviewList,
 } from '@/hooks/query/display/review';
-import { useCustomDialog, useToast } from '@/hooks/ui';
+import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
 

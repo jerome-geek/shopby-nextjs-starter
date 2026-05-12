@@ -17,7 +17,7 @@ import * as styles from '@/components/layout/bottom-navigation/index.css';
 import { BOTTOM_NAV_INVISIBLE_PATHS } from '@/const/bottomNavigation';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { PATHS } from '@/const/paths';
-import { useCustomDialog } from '@/hooks/ui';
+import { useCustomDialog } from '@/features/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { globalVars } from '@/styles/global.css';
 

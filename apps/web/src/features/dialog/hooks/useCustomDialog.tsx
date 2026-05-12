@@ -12,6 +12,7 @@ import { RecipeImageUploadSheet } from '@/components/bottom-sheet/recipe-image-u
 import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
 import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
 import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
+import { ShippingAddressChangeBottomSheet } from '@/components/bottom-sheet/shipping-address-change';
 import { ImageDetailModal } from '@/components/modal';
 import { CollectionFormModal } from '@/components/modal/collection-form';
 import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
@@ -19,6 +20,7 @@ import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
 import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendation';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
+import { ShippingAddressChangeModal } from '@/components/modal/shipping-address-change';
 import ConfirmDialog from '@/components/ui/dialog/confirm';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
@@ -279,9 +281,8 @@ export const useCustomDialog = () => {
                             return;
                         }
 
-                        const { data } = await recipe.getRecipeDetail(
-                            recipeSno,
-                        );
+                        const { data } =
+                            await recipe.getRecipeDetail(recipeSno);
 
                         if (
                             data.recipeStatus === 'COMPLETED' ||
@@ -367,6 +368,35 @@ export const useCustomDialog = () => {
         }
     }, [isMobile]);
 
+    const openShippingAddressChangeDialog = useCallback(
+        ({ orderNo, memberNo }: { orderNo: string; memberNo: number }) => {
+            if (isMobile) {
+                overlay.open(
+                    (props) => (
+                        <ShippingAddressChangeBottomSheet
+                            {...props}
+                            orderNo={orderNo}
+                            memberNo={memberNo}
+                        />
+                    ),
+                    { overlayId: OVERLAY_ID.SHIPPING_ADDRESS_CHANGE },
+                );
+            } else {
+                overlay.open(
+                    (props) => (
+                        <ShippingAddressChangeModal
+                            {...props}
+                            orderNo={orderNo}
+                            memberNo={memberNo}
+                        />
+                    ),
+                    { overlayId: OVERLAY_ID.SHIPPING_ADDRESS_CHANGE },
+                );
+            }
+        },
+        [isMobile],
+    );
+
     return {
         openAddCartDialog,
         openLoginDialog,
@@ -378,6 +408,7 @@ export const useCustomDialog = () => {
         openCollectionForm,
         openImageDetail,
         openRecipeRecommendation,
+        openShippingAddressChangeDialog,
         withRequiredAuth,
     };
 };
