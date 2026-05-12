@@ -359,16 +359,11 @@ export const useCustomDialog = () => {
 
     const openRecipeRecommendation = useCallback(() => {
         if (isMobile) {
-            overlay.open(
-                (props) => <RecipeRecommendationBottomSheet {...props} />,
-                {
-                    overlayId: OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION,
-                },
-            );
+            overlay.open((props) => (
+                <RecipeRecommendationBottomSheet {...props} />
+            ));
         } else {
-            overlay.open((props) => <RecipeRecommendationModal {...props} />, {
-                overlayId: OVERLAY_ID.ORDER_COMPLETE_RECIPE_RECOMMENDATION,
-            });
+            overlay.open((props) => <RecipeRecommendationModal {...props} />);
         }
     }, [isMobile]);
 

@@ -26,6 +26,7 @@ export const modalContainer = recipe({
         overflow: 'hidden',
         zIndex: 1000,
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+        maxWidth: '100vw',
     },
     variants: {
         size: {

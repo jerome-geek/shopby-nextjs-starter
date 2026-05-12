@@ -29,8 +29,11 @@ export const RecipeRecommendationLayerContentSkeleton = () => {
                                 {/* Recipe Card Skeleton */}
                                 <Skeleton
                                     width='100%'
-                                    height='240px'
-                                    style={{ borderRadius: '8px' }}
+                                    height='fit-content'
+                                    style={{
+                                        borderRadius: '8px',
+                                        aspectRatio: '3/4',
+                                    }}
                                 />
                                 <div className={styles.skeletonCardInfo}>
                                     <Skeleton width='90%' height='20px' />
@@ -55,23 +58,8 @@ export const RecipeRecommendationLayerContentSkeleton = () => {
                     ))}
                 </ul>
 
-                <div className={styles.paginationWrapper}>
-                    <Skeleton width='80px' height='24px' />
-                </div>
+                <div className={styles.paginationWrapper} />
             </div>
-
-            <footer className={styles.footerButtonGroup}>
-                <Skeleton
-                    width='100%'
-                    height='60px'
-                    style={{ borderRadius: '4px', flex: 1 }}
-                />
-                <Skeleton
-                    width='100%'
-                    height='60px'
-                    style={{ borderRadius: '4px', flex: 1 }}
-                />
-            </footer>
         </section>
     );
 };

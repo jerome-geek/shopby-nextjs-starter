@@ -5,14 +5,14 @@ import { vars } from '@/styles/theme.css';
 import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const container = style({
-    padding: '24px 0 0',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    padding: '40px 0 0',
 
     '@media': {
-        [media.desktop]: {
-            padding: '40px 0 0',
+        [media.mobile]: {
+            padding: '24px 0 0',
         },
     },
 });
@@ -24,28 +24,30 @@ export const titleGroup = style({
 });
 
 export const title = style([
-    textStyles.headingSemibold,
+    textStyles.title2Semibold,
     {
         color: vars.color.black,
 
         '@media': {
-            [media.desktop]: {
-                ...textStyleTokens.title2Semibold,
+            [media.mobile]: {
+                ...textStyleTokens.headingSemibold,
             },
         },
     },
 ]);
 
 export const recipeArea = style({
-    width: '100%',
-    padding: '0',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    padding: '0 24px',
+    marginLeft: '0',
+    width: '100%',
 
     '@media': {
-        [media.desktop]: {
-            padding: '0 24px',
+        [media.mobile]: {
+            padding: '0',
+            width: 'calc(100vw - 4px)',
         },
     },
 });
@@ -53,13 +55,13 @@ export const recipeArea = style({
 export const swiperContainer = style({
     width: '100%',
     overflow: 'hidden',
-    paddingLeft: '20px',
-    marginBottom: '0',
+    marginBottom: '24px',
+    padding: '0',
 
     '@media': {
-        [media.desktop]: {
-            paddingLeft: '0',
-            marginBottom: '24px',
+        [media.mobile]: {
+            marginBottom: '0',
+            padding: '0 20px !important',
         },
     },
 });
@@ -75,14 +77,15 @@ export const recipeCardWrapper = style({
 });
 
 export const paginationWrapper = style({
-    display: 'none',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '12px',
+    display: 'flex',
+    height: '24px',
 
     '@media': {
-        [media.desktop]: {
-            display: 'flex',
+        [media.mobile]: {
+            display: 'none',
         },
     },
 });
@@ -137,90 +140,31 @@ export const paginationButton = style({
     },
 });
 
-export const footerButtonGroup = style({
-    display: 'flex',
-    width: '100%',
-    padding: '0 20px 40px',
-    marginTop: '32px',
-    gap: '6px',
-
-    '@media': {
-        [media.desktop]: {
-            padding: '0 24px 40px',
-            marginTop: '48px',
-            gap: '8px',
-        },
-    },
-});
-
-export const footerButton = style({
-    flex: 1,
-    borderRadius: '4px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-});
-
-export const closeButton = style([
-    footerButton,
-    textStyles.headlineSemibold,
-    {
-        height: '53px',
-        backgroundColor: vars.color.white,
-        border: `1px solid ${vars.color.gray['50']}`,
-        color: vars.color.black,
-
-        '@media': {
-            [media.desktop]: {
-                ...textStyleTokens.headingSemibold,
-                height: '60px',
-            },
-        },
-    },
-]);
-
-export const moreButton = style([
-    footerButton,
-    textStyles.headlineSemibold,
-    {
-        height: '53px',
-        backgroundColor: vars.color.green['100'],
-        color: vars.color.white,
-        border: 'none',
-
-        '@media': {
-            [media.desktop]: {
-                ...textStyleTokens.headingSemibold,
-                height: '60px',
-            },
-        },
-    },
-]);
-
 export const skeletonList = style({
-    display: 'flex',
-    gap: '16px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
     width: '100%',
-    overflow: 'hidden',
-    padding: '0 20px',
     listStyle: 'none',
+    padding: '0',
+    gap: '24px',
 
     '@media': {
-        [media.desktop]: {
-            padding: '0',
-            gap: '24px',
+        [media.mobile]: {
+            display: 'flex',
+            overflow: 'hidden',
+            padding: '0 20px',
+            gap: '16px',
         },
     },
 });
 
 export const skeletonItem = style({
     flexShrink: 0,
-    width: '144px',
+    width: '100%',
 
     '@media': {
-        [media.desktop]: {
-            width: '240px',
+        [media.mobile]: {
+            width: '144px',
         },
     },
 });

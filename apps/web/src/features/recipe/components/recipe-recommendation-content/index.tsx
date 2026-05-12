@@ -1,15 +1,14 @@
 'use client';
 
-import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SmallCaretIcon } from '@/components/icons';
 import { RecipeCard } from '@/components/recipe/card';
-import { PATHS } from '@/const/paths';
 import * as styles from '@/features/recipe/components/recipe-recommendation-content/index.css';
 import usePublicRecipeSearch from '@/hooks/suspenseQuery/shop/recipe/usePublicRecipeSearch';
+import { BREAKPOINTS } from '@/styles/media';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -23,7 +22,6 @@ export const RecipeRecommendationLayerContent = ({
     close,
 }: RecipeRecommendationLayerContentProps) => {
     const { t } = useTranslation();
-    const router = useRouter();
 
     const { data: publicRecipeSearchData } = usePublicRecipeSearch({
         searchParams: {
@@ -36,12 +34,9 @@ export const RecipeRecommendationLayerContent = ({
 
     const recipes = publicRecipeSearchData?.data ?? [];
 
-    const handleMoreClick = () => {
-        router.push(PATHS.RECIPES.MAIN);
-        close();
-    };
-
-    if (recipes.length === 0) return null;
+    if (recipes.length === 0) {
+        return null;
+    }
 
     return (
         <section className={styles.container}>
@@ -63,12 +58,6 @@ export const RecipeRecommendationLayerContent = ({
                     spaceBetween={16}
                     slidesPerView={2.2}
                     modules={[Navigation, Pagination]}
-                    breakpoints={{
-                        1024: {
-                            slidesPerView: 3,
-                            spaceBetween: 24,
-                        },
-                    }}
                     navigation={{
                         prevEl: '.recipe-recommend-prev',
                         nextEl: '.recipe-recommend-next',
@@ -82,6 +71,12 @@ export const RecipeRecommendationLayerContent = ({
                                 `<span class="${styles.paginationDivider}">/</span>` +
                                 `<span class="${totalClass} ${styles.paginationTotal}"></span>`
                             );
+                        },
+                    }}
+                    breakpoints={{
+                        [BREAKPOINTS.SM]: {
+                            slidesPerView: 3,
+                            spaceBetween: 24,
                         },
                     }}
                 >
@@ -131,23 +126,6 @@ export const RecipeRecommendationLayerContent = ({
                     </div>
                 )}
             </div>
-
-            <footer className={styles.footerButtonGroup}>
-                <button
-                    className={styles.closeButton}
-                    onClick={close}
-                    type='button'
-                >
-                    {t('닫기')}
-                </button>
-                <button
-                    className={styles.moreButton}
-                    onClick={handleMoreClick}
-                    type='button'
-                >
-                    {t('레시피 더 보러가기')}
-                </button>
-            </footer>
         </section>
     );
 };
