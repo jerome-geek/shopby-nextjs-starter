@@ -13,6 +13,10 @@ import type {
     OrderProduct,
     OrderProductOption,
 } from '@/models/order';
+import type {
+    GuestOrderProduct,
+    GuestOrderProductOption,
+} from '@/models/order/guestOrder';
 import { CURRENCY } from '@/utils/currency';
 import { useTranslation } from 'react-i18next';
 
@@ -22,8 +26,8 @@ type OrderInvalidProduct = Omit<
 >;
 
 interface OrderProductItemData {
-    product: OrderProduct | OrderInvalidProduct;
-    option: OrderProductOption;
+    product: OrderProduct | OrderInvalidProduct | GuestOrderProduct;
+    option: OrderProductOption | GuestOrderProductOption;
 }
 
 interface OrderProductItemProps {

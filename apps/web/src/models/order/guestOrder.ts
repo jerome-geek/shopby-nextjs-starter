@@ -40,7 +40,7 @@ export type GetCartData = {
 }[];
 
 /** 비회원용 주문 상품 옵션 (적립금 관련 필드 제외) */
-type GuestOrderProductOption = Omit<
+export type GuestOrderProductOption = Omit<
     OrderProductOption,
     | 'accumulationAmtWhenBuyConfirm'
     | 'accumulationRateForMemberWhenBuyConfirm'
@@ -50,12 +50,12 @@ type GuestOrderProductOption = Omit<
 >;
 
 /** 비회원용 주문 상품 */
-interface GuestOrderProduct extends Omit<OrderProduct, 'orderProductOptions'> {
+export interface GuestOrderProduct extends Omit<OrderProduct, 'orderProductOptions'> {
     orderProductOptions: GuestOrderProductOption[];
 }
 
 /** 비회원용 배송 그룹 */
-interface GuestDeliveryGroup extends Omit<DeliveryGroup, 'orderProducts'> {
+export interface GuestDeliveryGroup extends Omit<DeliveryGroup, 'orderProducts'> {
     orderProducts: GuestOrderProduct[];
 }
 
