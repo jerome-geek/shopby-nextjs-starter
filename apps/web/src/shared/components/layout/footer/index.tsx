@@ -99,11 +99,21 @@ function FooterContent() {
                         <dl className={styles.infoList}>
                             <div className={styles.infoItem}>
                                 <dt>{t('전화')}:</dt>
-                                <dd>{companyInfo.representPhoneNo}</dd>
+                                <dd>
+                                    <a
+                                        href={`tel:${companyInfo.representPhoneNo}`}
+                                    >
+                                        {companyInfo.representPhoneNo}
+                                    </a>
+                                </dd>
                             </div>
                             <div className={styles.infoItem}>
                                 <dt>{t('이메일')}:</dt>
-                                <dd>{companyInfo.email}</dd>
+                                <dd>
+                                    <a href={`mailto:${companyInfo.email}`}>
+                                        {companyInfo.email}
+                                    </a>
+                                </dd>
                             </div>
                             <div className={styles.infoItem}>
                                 <dt>{t('운영시간')}:</dt>
