@@ -2,11 +2,11 @@ import { recipe } from '@vanilla-extract/recipes';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const button = recipe({
     base: [
-        textStyles.headingSemibold,
+        textStyles.headlineSemibold,
         {
             display: 'flex',
             justifyContent: 'center',
@@ -34,6 +34,7 @@ export const button = recipe({
             '@media': {
                 [media.desktop]: {
                     height: '63px',
+                    ...textStyleTokens.headingSemibold,
                 },
             },
         },
@@ -95,7 +96,7 @@ export const button = recipe({
 
 export const outlinedButton = recipe({
     base: [
-        textStyles.headingSemibold,
+        textStyles.headlineSemibold,
         {
             display: 'flex',
             justifyContent: 'center',
@@ -124,6 +125,7 @@ export const outlinedButton = recipe({
             '@media': {
                 [media.desktop]: {
                     height: '63px',
+                    ...textStyleTokens.headingSemibold,
                 },
             },
         },

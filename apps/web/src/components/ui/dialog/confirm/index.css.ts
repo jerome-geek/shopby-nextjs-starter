@@ -1,8 +1,8 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { media } from '@/styles/media';
 
 export const contentContainer = style({
     display: 'flex',
@@ -63,7 +63,6 @@ globalStyle(`${dialogFooter} button`, {
     height: '100%',
     minWidth: '0',
     border: `1px solid ${vars.color.black}`,
-    fontSize: '1.6rem',
 });
 
 globalStyle(`${dialogFooter} button:last-child`, {

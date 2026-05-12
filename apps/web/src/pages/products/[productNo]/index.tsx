@@ -41,7 +41,6 @@ import {
     SelectedProductOption,
 } from '@/components/product-option';
 import { Button } from '@/components/ui/button';
-import { ButtonV2 } from '@/components/ui/button/v2';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useProductInfo, useProductPrice } from '@/entities/product/hooks';
 import { toSelectedOption } from '@/helpers/product';
@@ -397,9 +396,9 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     exit={{ transform: 'translateY(0)' }}
                 >
                     {isSaleEnd ? (
-                        <ButtonV2 frame='solid' variant='secondary' disabled>
+                        <Button frame='solid' variant='secondary' disabled>
                             {t('판매가 종료된 상품입니다.')}
-                        </ButtonV2>
+                        </Button>
                     ) : (
                         <>
                             <button
