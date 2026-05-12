@@ -4,11 +4,6 @@ export default function Document() {
     return (
         <Html lang='ko'>
             <Head>
-                {/** NOTE: ios에서 input 포커스 시 화면 확대 방지 */}
-                <meta
-                    name='viewport'
-                    content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
-                />
                 <link
                     rel='stylesheet'
                     as='style'

@@ -11,14 +11,12 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import ReactLenis from 'lenis/react';
 import { motion } from 'motion/react';
 import type { NextPage } from 'next';
-import { generateDefaultSeo } from 'next-seo/pages';
 import type { AppProps } from 'next/app';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { type ReactElement, type ReactNode, useMemo, useState } from 'react';
 import { Toaster } from 'sonner';
 
-import { ExternalScripts } from '@/components/common';
+import { ExternalScripts, GlobalHead } from '@/components/common';
 import { DefaultLayout } from '@/components/layout';
 import { env } from '@/configs/env';
 import { AppProviders } from '@/providers';
@@ -87,13 +85,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     // 부모 레이아웃(Layout)은 무조건 적용하고, 페이지별 중첩 레이아웃은 선택적으로 적용
     const getLayout = Component.getLayout ?? ((page) => page);
 
-    const defaultSeo = generateDefaultSeo({
-        titleTemplate: '%s | JollyPot',
-        defaultTitle: 'JollyPot',
-        noindex: true,
-        nofollow: true,
-    });
-
     const pathnameKey = useMemo(() => {
         // NOTE: 동적 라우트에서 router.isReady 전에는 asPath가 템플릿(/foo/[id])으로 잡힐 수 있음.
         // 브라우저의 실제 location을 우선 사용해 key가 한 번만 바뀌도록 고정한다.
@@ -112,7 +103,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                 <QueryClientProvider client={queryClient}>
                     <HydrationBoundary state={pageProps.dehydratedState}>
                         <AppProviders>
-                            <Head>{defaultSeo}</Head>
+                            <GlobalHead />
                             <DefaultLayout>
                                 {getLayout(
                                     <motion.div
