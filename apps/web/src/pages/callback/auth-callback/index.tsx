@@ -171,7 +171,7 @@ export const AuthCallbackPage = () => {
                 return;
             }
         })();
-    }, [syncAppLogin, isMyApp, router.isReady]);
+    }, [isMyApp, router.isReady]);
 
     return null;
 };
