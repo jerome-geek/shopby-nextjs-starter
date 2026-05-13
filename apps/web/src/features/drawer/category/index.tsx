@@ -1,17 +1,18 @@
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
+import { BigCartIcon } from '@/components/icons';
+import { DefaultModalLayoutProps } from '@/components/layout';
+import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { PATHS } from '@/const/paths';
 import * as styles from '@/features/drawer/category/index.css';
 import { QuickMenuSkeleton } from '@/features/drawer/category/quick-menu-skeleton';
 import { QuickMenuSwiper } from '@/features/drawer/category/quick-menu-swiper';
 import Recipe from '@/features/drawer/category/recipe';
 import Shopping from '@/features/drawer/category/shopping';
-import { BigCartIcon } from '@/components/icons';
-import { DefaultModalLayoutProps } from '@/components/layout';
-import { ProductListSearchInput } from '@/components/product-list/search-input';
-import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
 import { useResponsive } from '@/hooks/utils';
 
@@ -59,29 +60,40 @@ export const CategoryDrawer = ({
                         data-lenis-prevent
                     >
                         <div className={styles.searchRow}>
-                            <div className={styles.searchRowInner}>
+                            {/* isMobile 조건 없이 드로어에서 직접 렌더링 → SSR 문제 없음 */}
+                            <button
+                                type='button'
+                                className={styles.backButton}
+                                onClick={close}
+                                aria-label='뒤로가기'
+                            >
+                                <ArrowLeft size={24} strokeWidth={1.5} />
+                            </button>
+
+                            {/* wrapper div로 감싸서 cart 침범 방지: flex:1이 wrapper를 제한하며
+                                내부 searchKeywordFormContainer의 width:100%는 wrapper 내부에서만 동작 */}
+                            <div className={styles.searchInputOverride}>
                                 <ProductListSearchInput
-                                    onBack={close}
                                     searchAfterAction={close}
                                     autoFocus={false}
-                                    className={styles.searchInputOverride}
                                 />
-                                <Link
-                                    href={PATHS.CART}
-                                    className={styles.cartButton}
-                                    onClick={close}
-                                    aria-label='장바구니'
-                                >
-                                    <BigCartIcon width={24} height={24} />
-                                    {totalCount > 0 && (
-                                        <span className={styles.cartBadge}>
-                                            {totalCount > 99
-                                                ? '99+'
-                                                : totalCount}
-                                        </span>
-                                    )}
-                                </Link>
                             </div>
+
+                            <Link
+                                href={PATHS.CART}
+                                className={styles.cartButton}
+                                onClick={close}
+                                aria-label='장바구니'
+                            >
+                                <BigCartIcon width={24} height={24} />
+                                {totalCount > 0 && (
+                                    <span className={styles.cartBadge}>
+                                        {totalCount > 99
+                                            ? '99+'
+                                            : totalCount}
+                                    </span>
+                                )}
+                            </Link>
                         </div>
 
                         <FetchBoundary fallback={<QuickMenuSkeleton />}>

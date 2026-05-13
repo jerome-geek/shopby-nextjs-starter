@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { globalVars } from '@/styles/global.css';
 import { vars } from '@/styles/theme.css';
@@ -37,37 +37,54 @@ export const drawer = style({
 
 export const searchRow = style({
     display: 'flex',
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
     flexShrink: 0,
     gap: '12px',
     height: globalVars.header.mobileHeight,
-    padding: '0 20px 8px',
+    padding: '0 20px',
     position: 'sticky',
     top: 0,
     backgroundColor: vars.color.white,
     zIndex: 1003,
 });
 
-export const searchRowInner = style({
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-});
-
-export const searchInputOverride = style({
-    flex: 1,
-    width: 'auto',
-    flexShrink: 1,
-    padding: 0,
-});
-
-export const cartButton = style({
-    position: 'relative',
+export const backButton = style({
+    flexShrink: 0,
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    color: vars.color.black,
+});
+
+// wrapper div용 - flex:1+minWidth:0+overflow:hidden으로 내부 searchKeywordFormContainer가
+// width:100%/padding이 있어도 이 wrapper를 넘어 cart 영역을 침범하지 못하도록 강제
+export const searchInputOverride = style({
+    flex: 1,
+    minWidth: 0,
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+});
+
+// searchKeywordFormContainer의 padding:22px을 드로어 컨텍스트에서 제거
+// → 세로 중앙 정렬이 올바르게 동작하도록
+globalStyle(`${searchInputOverride} > *`, {
+    padding: 0,
+    width: '100%',
+    flexShrink: 1,
+});
+
+export const cartButton = style({
     flexShrink: 0,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    position: 'relative',
     color: vars.color.black,
 });
 
