@@ -19,10 +19,16 @@ export const container = style({
     },
 });
 
+export const bannerImage = style({
+    aspectRatio: '384/220',
+    width: '100%',
+    maxWidth: '384px',
+    height: 'auto',
+});
+
 export const description = style([
     textStyles.title2Semibold,
     {
         textAlign: 'center',
-        color: vars.color.gray['80'],
     },
 ]);
