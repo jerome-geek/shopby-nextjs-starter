@@ -1,8 +1,10 @@
+import { Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/mypage/main/summary/index.css';
 import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
 import useAccumulationSummary from '@/hooks/query/manage/accumulation/useAccumulationSummary';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import useLikeProductCount from '@/hooks/query/product/profile/useLikeProductCount';
@@ -19,6 +21,8 @@ const Summary = () => {
     const memberNo = profileData?.memberNo ?? 0;
 
     const { logout } = useLogout();
+
+    const { isMyApp, handleSendShowSettings } = useMyApp();
 
     const { data: couponSummaryData } = useCouponSummary({
         memberNo,
@@ -83,13 +87,25 @@ const Summary = () => {
                     <b>{profileData?.memberName ?? t('회원')}</b> {t('님')}
                 </p>
 
-                <button
-                    type='button'
-                    className={styles.logoutButton}
-                    onClick={logout}
-                >
-                    {t('로그아웃')}
-                </button>
+                <div className={styles.headerButtons}>
+                    {isMyApp && (
+                        <button
+                            type='button'
+                            className={styles.settingsButton}
+                            onClick={() => handleSendShowSettings()}
+                        >
+                            <Settings size={14} />
+                            {t('설정')}
+                        </button>
+                    )}
+                    <button
+                        type='button'
+                        className={styles.logoutButton}
+                        onClick={logout}
+                    >
+                        {t('로그아웃')}
+                    </button>
+                </div>
             </div>
 
             <ul className={styles.list}>

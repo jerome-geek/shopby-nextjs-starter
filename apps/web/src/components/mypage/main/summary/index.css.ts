@@ -13,7 +13,7 @@ export const section = style({
 export const header = style({
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     backgroundColor: vars.color.black,
     color: vars.color.white,
     padding: '20px',
@@ -50,6 +50,26 @@ export const badge = style([
         },
     },
 ]);
+
+export const headerButtons = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+});
+
+export const settingsButton = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px',
+    padding: '6px 14px',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: '999px',
+    color: vars.color.white,
+    fontSize: '12px',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    border: 'none',
+});
 
 export const logoutButton = style([
     textStyles.caption1Semibold,

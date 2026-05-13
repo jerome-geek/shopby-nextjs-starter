@@ -27,9 +27,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
             <OverlayProvider>
                 <InterceptorSetup>
                     <CertificationCheckProvider>
-                        <TooltipProvider>
-                            {children}
-                        </TooltipProvider>
+                        <TooltipProvider>{children}</TooltipProvider>
                     </CertificationCheckProvider>
                 </InterceptorSetup>
             </OverlayProvider>

@@ -10,9 +10,18 @@ import Summary from '@/components/mypage/main/summary';
 import useResponsive from '@/hooks/utils/useResponsive';
 import * as styles from '@/pages/mypage/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { useEffect } from 'react';
+import useMyApp from '@/hooks/myapp/useMyApp';
 
 export default function MypageMainPage() {
     const { isMobile } = useResponsive();
+    const { isMyApp } = useMyApp({ isMyAppInit: true });
+
+    useEffect(() => {
+        if (isMyApp) {
+            alert('인앱 브라우저 테스트');
+        }
+    }, [isMyApp]);
 
     return (
         <div className={styles.container}>

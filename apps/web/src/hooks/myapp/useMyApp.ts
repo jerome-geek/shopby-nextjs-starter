@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { profile } from '@/api/member';
 
@@ -80,7 +80,12 @@ interface MyAppHandleType<T extends Key> {
 const useMyApp = ({ isMyAppInit }: { isMyAppInit?: boolean } = {}) => {
     const router = useRouter();
 
-    const isMyApp = IS_MY_APP_CLIENT;
+    const [isMyApp, _] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return !!window?.myapp?.helpers?.isMyApp?.();
+        }
+        return IS_MY_APP_CLIENT; // 서버 사이드 기본값
+    });
 
     const isInAppBrowser = useCallback(() => {
         return typeof window !== 'undefined'
@@ -124,23 +129,29 @@ const useMyApp = ({ isMyAppInit }: { isMyAppInit?: boolean } = {}) => {
         [isMyApp, isInAppBrowser],
     );
 
-    const handleSendLogin = (action: MyAppHandleType<'LOGIN'>) =>
+    const handleSendLogin = (action: MyAppHandleType<'LOGIN'>) => {
+        alert('MYAPP_BRIDGE_CALL_LOGIN');
         sendToMyApp('LOGIN', action);
+    };
     const handleSendLogout = (action: MyAppHandleType<'LOGOUT'>) =>
         sendToMyApp('LOGOUT', action);
     const handleSendInitLoginInfo = () => sendToMyApp('INIT_LOGIN_INFO');
     const handleSendPasswordModify = () => sendToMyApp('PASSWORD_MODIFIED');
     const handleSendRefreshTokenExpired = () =>
         sendToMyApp('REFRESH_TOKEN_EXPIRED');
-    const handleSendLoginView = (action?: MyAppHandleType<'LOGINVIEW'>) =>
+    const handleSendLoginView = (action?: MyAppHandleType<'LOGINVIEW'>) => {
+        alert('MYAPP_BRIDGE_CALL_LOGINVIEW');
         sendToMyApp('LOGINVIEW', action);
+    };
     const handleSendShowSettings = (action?: MyAppHandleType<'SHOW_SETTING'>) =>
         sendToMyApp('SHOW_SETTING', action);
     const handleSendShowNotification = () => sendToMyApp('SHOW_NOTIFICATION');
     const handleSendSignUpCompleted = () => sendToMyApp('SIGN_UP_COMPLETED');
 
     const syncAppLogin = async (accessToken: string, provider?: string) => {
-        if (!isMyApp) return;
+        if (!isMyApp) {
+            return;
+        }
 
         try {
             const { data: profileData } = await profile.getProfile({
