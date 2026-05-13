@@ -1,7 +1,7 @@
 'use client';
 
-import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { DialogLayout, type DefaultDialogProps } from '@/components/layout';
 import * as styles from '@/components/ui/dialog/term/index.css';
@@ -25,11 +25,14 @@ const TermDialog = ({ title, contents, ...props }: TermDialogProps) => {
             </button>
 
             <div className={styles.titleContainer}>
-                <h2 id='dialog-title'>{t(title)}</h2>
+                <h2 id='dialog-title' className={styles.title}>
+                    {t(title)}
+                </h2>
             </div>
 
             <div
                 className={styles.contentContainer}
+                data-lenis-prevent
                 dangerouslySetInnerHTML={{ __html: contents }}
             />
         </DialogLayout>
