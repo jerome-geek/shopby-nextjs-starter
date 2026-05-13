@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/input';
 import { BANK_MAP } from '@/const/label';
 import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import { isLoggedIn } from '@/utils/auth';
 
 type ClaimBankInfoProps = Pick<
     GetOrderOptionDetailForClaimResponse,
@@ -65,19 +66,21 @@ export const ClaimBankInfo = ({
         <div className={styles.container}>
             <h3 className={styles.title}>{t('환불 정보')}</h3>
 
-            <label className={styles.checkboxLabel}>
-                <Controller
-                    name='saveBankAccountInfo'
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                        <InputCheckbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                        />
-                    )}
-                />
-                {t('환불 계좌 정보 저장')}
-            </label>
+            {isLoggedIn() && (
+                <label className={styles.checkboxLabel}>
+                    <Controller
+                        name='saveBankAccountInfo'
+                        control={control}
+                        render={({ field: { value, onChange } }) => (
+                            <InputCheckbox
+                                checked={value}
+                                onCheckedChange={onChange}
+                            />
+                        )}
+                    />
+                    {t('환불 계좌 정보 저장')}
+                </label>
+            )}
 
             <div className={styles.fieldGroup}>
                 <InputFieldContainer>

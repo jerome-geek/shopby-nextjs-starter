@@ -7,3 +7,4 @@ export * from '@/components/ui/route-change-overlay';
 export * from '@/components/ui/scroll-to-top';
 export * from '@/components/ui/vertical-more-menu';
 export * from '@/components/ui/tooltip';
+export * from '@/components/ui/quantity-controller';

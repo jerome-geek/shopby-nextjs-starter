@@ -3,9 +3,9 @@ import type { AxiosError } from 'axios';
 
 import { memberClaim } from '@/api/claim';
 import { claimsKeys } from '@/hooks/queryKeys';
+import { useAuth } from '@/hooks/useAuth';
 import type { ClaimPriceInfo } from '@/models/claim';
 import type { GetClaimOptionPriceParams } from '@/models/claim/guest';
-import { useAuth } from '@/hooks/useAuth';
 
 interface UseOrderOptionDetailForClaimProps<T = ClaimPriceInfo> {
     orderOptionNo: number;
@@ -15,7 +15,7 @@ interface UseOrderOptionDetailForClaimProps<T = ClaimPriceInfo> {
             ClaimPriceInfo,
             AxiosError<ShopByErrorResponse>,
             T,
-            ReturnType<(typeof claimsKeys)['estimate']>
+            ReturnType<(typeof claimsKeys)['orderOptionEstimate']>
         >,
         'queryKey' | 'queryFn'
     >;
@@ -29,7 +29,7 @@ const useOrderOptionEstimate = <T = ClaimPriceInfo>({
     const isLogin = useAuth();
 
     return useQuery({
-        queryKey: claimsKeys.estimate(orderOptionNo, searchParams),
+        queryKey: claimsKeys.orderOptionEstimate(orderOptionNo, searchParams),
         queryFn: async () => {
             const { data } = await memberClaim.getClaimOptionPrice(
                 Number(orderOptionNo),

@@ -358,3 +358,9 @@ export const WITHDRAWAL_REASON_MAP = {
     PRIVACY_CONCERN: '개인정보 유출이 염려된다',
     ETC: '기타',
 } as const;
+
+export const CLAIM_ERROR_MESSAGE_MAP = {
+    EXISTS_SAME_SHIPPING_NO_CLAIM: '동일 배송지로 클레임 신청 불가능합니다.',
+    EXISTS_AFTER_CLAIM_WITH_CART_COUPON:
+        '장바구니 쿠폰이 적용된 경우 클레임 신청 불가능합니다.',
+};

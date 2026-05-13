@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import addressApi from '@/api/manage/address';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
+import { Button } from '@/components/ui';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import {
     InputField,
@@ -21,6 +22,7 @@ import {
     STATE_LIST,
 } from '@/const/form';
 import { RETURN_WAY_MAP } from '@/const/label';
+import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import useMall from '@/hooks/query/admin/mall/useMall';
 import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
 import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
@@ -41,11 +43,7 @@ export const ClaimReturnWay = ({
     const { t } = useTranslation();
     const isLogin = useAuth();
     const { openDialog } = useDialog();
-    const {
-        isKorean,
-        countryCd: defaultCountryCd,
-        defaultMobileCountryCode,
-    } = useGlobal();
+    const { isKorean, countryCd: defaultCountryCd } = useGlobal();
     const { isMobile } = useResponsive();
 
     const {
@@ -111,7 +109,9 @@ export const ClaimReturnWay = ({
         ) {
             setValue(
                 'returnAddress.receiverName',
-                `${returnAddressReceiverLastName ?? ''}${returnAddressReceiverFirstName ?? ''}`,
+                `${returnAddressReceiverLastName ?? ''}${
+                    returnAddressReceiverFirstName ?? ''
+                }`,
                 { shouldValidate: true },
             );
         }
@@ -378,21 +378,21 @@ export const ClaimReturnWay = ({
                                             backgroundColor: '#f5f5f5',
                                         }}
                                     />
-                                    <button
+                                    <Button
+                                        frame='solid'
+                                        variant='apple'
                                         type='button'
                                         onClick={handleAddressSearch}
                                         style={{
-                                            padding: '0 16px',
-                                            border: '1px solid #333',
-                                            borderRadius: '6px',
-                                            backgroundColor: '#fff',
                                             fontSize: '14px',
                                             cursor: 'pointer',
                                             whiteSpace: 'nowrap',
+                                            width: '120px',
+                                            height: isMobile ? '44px' : '52px',
                                         }}
                                     >
                                         {t('우편번호 찾기')}
-                                    </button>
+                                    </Button>
                                 </div>
                                 <InputField
                                     placeholder={t('주소')}
@@ -429,21 +429,21 @@ export const ClaimReturnWay = ({
                                         )}
                                         style={{ flex: 1 }}
                                     />
-                                    <button
+                                    <Button
+                                        frame='solid'
+                                        variant='apple'
                                         type='button'
                                         onClick={handleJpAddressSearch}
                                         style={{
-                                            padding: '0 16px',
-                                            border: '1px solid #333',
-                                            borderRadius: '6px',
-                                            backgroundColor: '#fff',
                                             fontSize: '14px',
                                             cursor: 'pointer',
                                             whiteSpace: 'nowrap',
+                                            width: '120px',
+                                            height: isMobile ? '44px' : '52px',
                                         }}
                                     >
                                         {t('우편번호 찾기')}
-                                    </button>
+                                    </Button>
                                 </div>
                                 <InputField
                                     placeholder='Address'
@@ -608,6 +608,11 @@ export const ClaimReturnWay = ({
                             />
                         </InputFieldContainer>
                     )}
+
+                    <CustomsIdNumberField
+                        register={register}
+                        name='returnAddress.customsIdNumber'
+                    />
 
                     <InputFieldContainer>
                         <InputLabel>{t('수거시 참고사항')}</InputLabel>

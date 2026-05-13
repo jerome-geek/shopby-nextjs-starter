@@ -1,8 +1,10 @@
+import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useFormContext, Controller } from 'react-hook-form';
+
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
-import { InputCheckbox } from '@/components/ui/input/checkbox';
 import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { InputCheckbox } from '@/components/ui/input/checkbox';
+import { QuantityController } from '@/components/ui/quantity-controller';
 import type { ClaimableOption } from '@/models/claim';
 
 interface ClaimOrderOptionsProps {
@@ -31,6 +33,7 @@ export const ClaimOrderOptions = ({
                 }}
             >
                 {orderOptionList.map((option, index) => (
+                    // `claimedProductOptions`는 상위 폼에서 `orderOptionList` 기반으로 reset 되며 인덱스가 매칭된다고 가정합니다.
                     <li
                         key={option.orderOptionNo}
                         style={{
@@ -40,8 +43,13 @@ export const ClaimOrderOptions = ({
                             padding: '16px',
                             border: '1px solid #eee',
                             borderRadius: '8px',
+                            flexWrap: 'wrap',
                         }}
                     >
+                        {/**
+                         * 복수 옵션일 때만 체크박스 노출
+                         * 단일 옵션일 경우 상위에서 기본값이 체크(true)로 세팅됩니다.
+                         */}
                         {orderOptionList.length > 1 && (
                             <Controller
                                 name={`claimedProductOptions.${index}.isChecked`}
@@ -54,7 +62,7 @@ export const ClaimOrderOptions = ({
                                 )}
                             />
                         )}
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: '1 1 300px', minWidth: 0 }}>
                             <OrderOptionsItem
                                 {...option}
                                 optionTitle={
@@ -63,6 +71,27 @@ export const ClaimOrderOptions = ({
                                 nextActions={[]}
                             />
                         </div>
+
+                        <Controller
+                            name={`claimedProductOptions.${index}.productCnt`}
+                            control={control}
+                            render={({ field: { value, onChange } }) => {
+                                const currentCnt = value ?? 1;
+                                const minCnt = 1;
+                                const maxCnt = option.orderCnt;
+
+                                return (
+                                    <div style={{ marginLeft: 'auto' }}>
+                                        <QuantityController
+                                            value={currentCnt}
+                                            min={minCnt}
+                                            max={maxCnt}
+                                            onChange={onChange}
+                                        />
+                                    </div>
+                                );
+                            }}
+                        />
                     </li>
                 ))}
             </ul>

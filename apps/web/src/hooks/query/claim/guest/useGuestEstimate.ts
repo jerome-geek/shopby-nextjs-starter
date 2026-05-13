@@ -1,52 +1,49 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { isEmpty } from '@fxts/core';
+import {
+    keepPreviousData,
+    useQuery,
+    type UseQueryOptions,
+} from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
 import { guestClaim } from '@/api/claim';
 import { claimsKeys } from '@/hooks/queryKeys';
 import { useAuth } from '@/hooks/useAuth';
-import type { ClaimPriceInfo } from '@/models/claim';
-import type { GetClaimOptionPriceParams } from '@/models/claim/guest';
+import type { ClaimPriceInfo, EstimatedRefundPriceData } from '@/models/claim';
 
 interface UseOrderOptionDetailForClaimProps<T = ClaimPriceInfo> {
-    orderOptionNo: number;
-    searchParams: GetClaimOptionPriceParams;
+    data: EstimatedRefundPriceData;
     options?: Omit<
         UseQueryOptions<
             ClaimPriceInfo,
             AxiosError<ShopByErrorResponse>,
             T,
-            ReturnType<(typeof claimsKeys)['guestOrderOptionEstimate']>
+            ReturnType<(typeof claimsKeys)['guestEstimate']>
         >,
         'queryKey' | 'queryFn'
     >;
 }
 
 const useGuestOrderOptionEstimate = <T = ClaimPriceInfo>({
-    orderOptionNo,
-    searchParams,
+    data,
     options,
 }: UseOrderOptionDetailForClaimProps<T>) => {
     const isLogin = useAuth();
 
     return useQuery({
-        queryKey: claimsKeys.guestOrderOptionEstimate(
-            orderOptionNo,
-            searchParams,
-        ),
+        queryKey: claimsKeys.guestEstimate(data),
         queryFn: async () => {
-            const { data } = await guestClaim.getClaimOptionPrice(
-                orderOptionNo,
-                searchParams,
-            );
+            const response = await guestClaim.getRefundPrice(data);
 
-            return data;
+            return response.data;
         },
+        placeholderData: keepPreviousData,
         ...options,
         enabled:
             (options?.enabled ?? true) &&
-            !!orderOptionNo &&
             !isLogin &&
-            !!searchParams?.claimReasonType,
+            !!data?.claimReasonType &&
+            !isEmpty(data?.claimedProductOptions),
     });
 };
 

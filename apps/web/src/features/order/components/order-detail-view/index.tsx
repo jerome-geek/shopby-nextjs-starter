@@ -110,6 +110,11 @@ export const OrderDetailView = ({
                 }`,
             },
             {
+                label: t('개인통관고유부호'),
+                content:
+                    orderDetailData?.shippingAddress?.customsIdNumber ?? '',
+            },
+            {
                 label: t('배송메모'),
                 content: orderDetailData?.deliveryMemo ?? '',
             },

@@ -1,4 +1,6 @@
 import { style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 
 export const itemContainer = style({
@@ -149,15 +151,21 @@ export const statusContainer = style({
 export const actionsContainer = style({
     display: 'flex',
     gap: '8px',
-    marginTop: '16px',
+    width: '30%',
+    marginTop: '0',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: '20px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            width: '30%',
-            marginTop: '0',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingLeft: '20px',
+        [media.mobile]: {
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+            gap: '8px',
+            marginTop: '16px',
+            padding: '0',
         },
     },
 });

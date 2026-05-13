@@ -4,7 +4,7 @@ import type { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import { NEXT_ACTION_MAP } from '@/const/label';
+import { CLAIM_ERROR_MESSAGE_MAP, NEXT_ACTION_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import {
     useGuestClaimMutation,
@@ -13,6 +13,7 @@ import {
     useMyOrderMutation,
 } from '@/hooks/mutations';
 import { ordersKeys } from '@/hooks/queryKeys';
+import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import useDialog from '@/hooks/utils/useDialog';
 import type { NextActionType } from '@/models';
@@ -45,7 +46,9 @@ const useClaim = ({
 
     const router = useRouter();
 
-    const { openDialog, openAsyncDialog } = useDialog();
+    const { openAsyncDialog } = useDialog();
+
+    const { addToast } = useToast();
 
     const isLogin = useAuth();
 
@@ -123,8 +126,9 @@ const useClaim = ({
                                     },
                                 });
 
-                                openDialog({
+                                addToast({
                                     message: '전체 주문 취소가 완료되었습니다.',
+                                    variant: 'success',
                                 });
                             },
                         };
@@ -222,8 +226,12 @@ const useClaim = ({
                     })();
 
                     if (data.validationType !== 'WITHDRAWABLE') {
-                        openDialog({
-                            message: t('클레임 신청이 불가능합니다.'),
+                        addToast({
+                            message: t(
+                                CLAIM_ERROR_MESSAGE_MAP[data.validationType] ||
+                                    '클레임 신청이 불가능합니다.',
+                            ),
+                            variant: 'error',
                         });
                         return;
                     }
@@ -231,8 +239,9 @@ const useClaim = ({
                     // TODO: 성공일 경우 response.status === 204
                     const successCallback = {
                         onSuccess: () => {
-                            openDialog({
+                            addToast({
                                 message: t('클레임 신청이 철회되었습니다.'),
+                                variant: 'success',
                             });
                         },
                     };
@@ -290,8 +299,9 @@ const useClaim = ({
                                 },
                             });
 
-                            openDialog({
+                            addToast({
                                 message: t('배송완료 처리되었습니다.'),
+                                variant: 'success',
                             });
                         },
                     };
@@ -327,8 +337,9 @@ const useClaim = ({
                                 },
                             });
 
-                            openDialog({
+                            addToast({
                                 message: t('구매확정 처리되었습니다.'),
+                                variant: 'success',
                             });
                         },
                     };

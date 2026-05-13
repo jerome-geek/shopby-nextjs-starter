@@ -9,7 +9,7 @@ type RefreshCallback = (token: string) => void;
 type RetryableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 
 const TOKEN_REFRESH_TIMEOUT = 10_000;
-const GUEST_LOGIN_EXPIRED_CODE = 'O7001';
+const GUEST_LOGIN_EXPIRED_CODE = ['O7001', 'E1011'];
 
 /**
  * 전역 갱신 상태 관리를 위한 싱글톤 변수
@@ -128,7 +128,7 @@ export const handle400Error = async (
 ) => {
     const response = error.response?.data as ShopByErrorResponse;
 
-    if (response.code === GUEST_LOGIN_EXPIRED_CODE) {
+    if (GUEST_LOGIN_EXPIRED_CODE.includes(response.code)) {
         await onSessionExpired();
         return new Promise(() => {});
     }

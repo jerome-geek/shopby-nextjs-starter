@@ -7,12 +7,7 @@ import { ShippingAddressListBottomSheet } from '@/components/bottom-sheet/shippi
 import { ShippingAddressListModal } from '@/components/modal';
 import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
 import * as styles from '@/components/order/shipping-address/index.css';
-import { ErrorMessage } from '@/components/ui/form';
-import {
-    InputField,
-    InputFieldContainer,
-    InputLabel,
-} from '@/components/ui/input';
+import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
@@ -117,30 +112,12 @@ const ShippingAddress = ({ orderSheetNo }: ShippingAddressProps) => {
                     </div>
                 )}
 
-            {orderSheetData.requireCustomsIdNumber && (
-                <>
-                    <InputFieldContainer>
-                        <InputLabel isRequired htmlFor='customsIdNumber'>
-                            {t('개인통관고유부호')}
-                        </InputLabel>
-                        <InputField
-                            id='customsIdNumber'
-                            placeholder={t('P로 시작하는 13자리')}
-                            {...register('shippingAddress.customsIdNumber')}
-                        />
-                        <a
-                            href='https://unipass.customs.go.kr/csp/persIndex.do'
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className={styles.selectAddressButton}
-                        >
-                            <span>{t('개인통관고유부호 발급 바로가기')}</span>
-                            <ChevronRightIcon width='16px' />
-                        </a>
-                    </InputFieldContainer>
-                    <ErrorMessage name='shippingAddress.customsIdNumber' />
-                </>
-            )}
+            <CustomsIdNumberField
+                register={register}
+                name='shippingAddress.customsIdNumber'
+                isRequired={orderSheetData.requireCustomsIdNumber}
+                isVisible={orderSheetData.requireCustomsIdNumber}
+            />
         </section>
     );
 };

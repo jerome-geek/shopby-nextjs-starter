@@ -71,3 +71,13 @@ export const relativeMenu = style({
     overflow: 'hidden',
     animation: `${expandDown} 0.3s ease-out forwards`,
 });
+
+export const selectAddressButton = style([
+    textStyles.body1Semibold,
+    {
+        color: vars.color.gray['60'],
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+    },
+]);

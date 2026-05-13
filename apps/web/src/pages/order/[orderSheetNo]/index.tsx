@@ -1,5 +1,6 @@
 import { HttpStatusCode } from 'axios';
 import { GetServerSideProps } from 'next';
+import { overlay } from 'overlay-kit';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -21,8 +22,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import * as styles from '@/pages/order/[orderSheetNo]/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { guestTokenCookie } from '@/utils/cookie';
 import payment from '@/utils/order/payment';
-import { overlay } from 'overlay-kit';
 
 const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
     return (
@@ -93,6 +94,7 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
 
             const successCallback = () => {
                 restoreAlert();
+                guestTokenCookie.clear();
             };
 
             const errorCallback = async (error: ShopByErrorResponse) => {

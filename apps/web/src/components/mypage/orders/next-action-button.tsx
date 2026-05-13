@@ -3,9 +3,10 @@ import { overlay } from 'overlay-kit';
 import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
 import { Button } from '@/components/ui/button';
-import { useResponsive } from '@/hooks/utils';
 import { useClaim } from '@/features/claim';
+import { useResponsive } from '@/hooks/utils';
 import type { NextActionType } from '@/models';
+import { isLoggedIn } from '@/utils/auth';
 
 export interface NextActionButtonProps {
     nextActionType: NextActionType;
@@ -43,9 +44,7 @@ export const NextActionButton = ({
     const openClaimDetailModal = () => {
         if (isMobile) {
             overlay.open((props) => {
-                return (
-                    <ClaimDetailBottomSheet {...props} claimNo={claimNo!} />
-                );
+                return <ClaimDetailBottomSheet {...props} claimNo={claimNo!} />;
             });
             return;
         }
@@ -59,6 +58,10 @@ export const NextActionButton = ({
         isFreeGift &&
         (nextActionType === 'EXCHANGE' || nextActionType === 'WRITE_REVIEW')
     ) {
+        return null;
+    }
+
+    if (!isLoggedIn() && nextActionType === 'WRITE_REVIEW') {
         return null;
     }
 

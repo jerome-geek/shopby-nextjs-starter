@@ -164,8 +164,6 @@ export const ClaimExchangeForm = () => {
                           orderOptionData.returnAddress.receiverContact1 || '',
                       receiverContact2:
                           orderOptionData.returnAddress.receiverContact2 || '',
-                      deliveryMemo:
-                          orderOptionData.returnAddress.deliveryMemo ?? '',
                       receiverCity:
                           orderOptionData.returnAddress.receiverCity || '',
                       receiverState:
@@ -281,16 +279,26 @@ export const ClaimExchangeForm = () => {
                 ? {
                       ...submitData.returnAddress,
                       receiverName: isKorean
-                          ? (submitData.returnAddress.receiverName ?? '')
-                          : `${submitData.returnAddress.receiverLastName ?? ''}${submitData.returnAddress.receiverFirstName ?? ''}`,
+                          ? submitData.returnAddress.receiverName ?? ''
+                          : `${
+                                submitData.returnAddress.receiverLastName ?? ''
+                            }${
+                                submitData.returnAddress.receiverFirstName ?? ''
+                            }`,
                   }
                 : null,
             exchangeAddress: submitData.exchangeAddress
                 ? {
                       ...submitData.exchangeAddress,
                       receiverName: isKorean
-                          ? (submitData.exchangeAddress.receiverName ?? '')
-                          : `${submitData.exchangeAddress.receiverLastName ?? ''}${submitData.exchangeAddress.receiverFirstName ?? ''}`,
+                          ? submitData.exchangeAddress.receiverName ?? ''
+                          : `${
+                                submitData.exchangeAddress.receiverLastName ??
+                                ''
+                            }${
+                                submitData.exchangeAddress.receiverFirstName ??
+                                ''
+                            }`,
                   }
                 : null,
             exchangeOption: {

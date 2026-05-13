@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/input';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { OVERLAY_ID } from '@/const/overlay';
+import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import { useGuestOrderMutation, useMyOrderMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
@@ -84,6 +85,7 @@ export const ShippingAddressChangeContent = ({
             receiverJibunAddress: data?.receiverJibunAddress ?? '',
             receiverDetailAddress: data?.receiverDetailAddress ?? '',
             deliveryMemo: data?.deliveryMemo ?? '',
+            customsIdNumber: data?.customsIdNumber ?? '',
             receiverContact1: getDefaultReceiverContact1(
                 data?.receiverContact1,
             ),
@@ -162,6 +164,7 @@ export const ShippingAddressChangeContent = ({
                 deliveryMemo: values.deliveryMemo ?? '',
                 receiverContact1: `${values.receiverContact1.prefix}-${values.receiverContact1.middle}-${values.receiverContact1.suffix}`,
                 receiverContact2: data.receiverContact2 ?? '',
+                customsIdNumber: values.customsIdNumber ?? '',
             },
         };
 
@@ -270,6 +273,11 @@ export const ShippingAddressChangeContent = ({
                     <ErrorMessage name='receiverContact1.middle' />
                     <ErrorMessage name='receiverContact1.suffix' />
                 </InputFieldContainer>
+
+                <CustomsIdNumberField
+                    register={register}
+                    name='customsIdNumber'
+                />
 
                 <InputFieldContainer>
                     <InputLabel>{t('배송메모')}</InputLabel>

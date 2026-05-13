@@ -8,18 +8,20 @@ import address from '@/api/manage/address';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressRegister } from '@/components/layer-contents/address-search';
 import { AddressSearchModal } from '@/components/modal';
+import { Button } from '@/components/ui';
+import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
     Select,
 } from '@/components/ui/input';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
 import {
     COUNTRY_CODE_LIST,
     MOBILE_COUNTRY_CODE_LIST,
     STATE_LIST,
 } from '@/const/form';
+import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
 import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
 import { useAuth } from '@/hooks/useAuth';
@@ -291,22 +293,21 @@ export const ClaimExchangeAddress = ({
                                         backgroundColor: '#f8f8f8',
                                     }}
                                 />
-                                <button
+                                <Button
+                                    frame='solid'
+                                    variant='apple'
                                     type='button'
                                     onClick={onOpenAddressSearchModal}
                                     style={{
-                                        flex: 1,
-                                        padding: '0 16px',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '4px',
-                                        backgroundColor: '#fff',
                                         fontSize: '14px',
                                         cursor: 'pointer',
                                         whiteSpace: 'nowrap',
+                                        width: '120px',
+                                        height: isMobile ? '44px' : '52px',
                                     }}
                                 >
                                     {t('우편번호 찾기')}
-                                </button>
+                                </Button>
                             </div>
                             <InputField
                                 placeholder={t('주소')}
@@ -341,22 +342,21 @@ export const ClaimExchangeAddress = ({
                                     )}
                                     style={{ flex: 2 }}
                                 />
-                                <button
+                                <Button
+                                    frame='solid'
+                                    variant='apple'
                                     type='button'
                                     onClick={searchJapanAddress}
                                     style={{
-                                        flex: 1,
-                                        padding: '0 16px',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '4px',
-                                        backgroundColor: '#fff',
                                         fontSize: '14px',
                                         cursor: 'pointer',
                                         whiteSpace: 'nowrap',
+                                        width: '120px',
+                                        height: isMobile ? '44px' : '52px',
                                     }}
                                 >
                                     {t('우편번호 찾기')}
-                                </button>
+                                </Button>
                             </div>
                             <InputField
                                 placeholder='Address'
@@ -510,6 +510,12 @@ export const ClaimExchangeAddress = ({
                         />
                     </InputFieldContainer>
                 )}
+
+                {/* 개인통관고유부호 */}
+                <CustomsIdNumberField
+                    register={register}
+                    name='exchangeAddress.customsIdNumber'
+                />
 
                 {/* 배송메모 */}
                 <InputFieldContainer>

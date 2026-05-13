@@ -1,3 +1,4 @@
+import { filter, isEmpty, map, pipe, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
@@ -15,10 +16,10 @@ import {
     useGuestClaimMutation,
     useMemberClaimMutation,
 } from '@/hooks/mutations';
+import useGuestEstimate from '@/hooks/query/claim/guest/useGuestEstimate';
 import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
-import useGuestOrderOptionEstimate from '@/hooks/query/claim/guest/useGuestOrderOptionEstimate';
+import useEstimate from '@/hooks/query/claim/member/useEstimate';
 import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
-import useOrderOptionEstimate from '@/hooks/query/claim/member/useOrderOptionEstimate';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import {
@@ -78,25 +79,41 @@ export const ClaimCancelForm = () => {
         name: 'claimedProductOptions',
     });
 
-    const estimateSearchParams = {
+    const filteredClaimedProductOptions = useMemo(() => {
+        return pipe(
+            claimedProductOptions ?? [],
+            filter((option) => option.isChecked),
+            toArray,
+        );
+    }, [claimedProductOptions]);
+
+    const estimateRequestData = {
         claimType: CLAIM_TYPE,
         claimReasonType: watch('claimReasonType'),
         responsibleObjectType: watch('responsibleObjectType'),
-        productCnt: claimedProductOptions?.[0]?.productCnt?.toString() ?? '1',
+        productCnt: filteredClaimedProductOptions?.reduce(
+            (acc, option) => acc + option.productCnt,
+            0,
+        ),
+        claimedProductOptions: pipe(
+            filteredClaimedProductOptions ?? [],
+            map((option) => ({
+                productCnt: option.productCnt,
+                orderProductOptionNo: option.orderProductOptionNo,
+            })),
+            toArray,
+        ),
     };
 
-    const { data: memberEstimateData } = useOrderOptionEstimate({
-        orderOptionNo,
-        searchParams: estimateSearchParams,
+    const { data: memberEstimateData } = useEstimate({
+        data: estimateRequestData,
         options: { enabled: isFetched && !!isLogin },
     });
 
-    const { data: guestEstimateData } = useGuestOrderOptionEstimate({
-        orderOptionNo,
-        searchParams: estimateSearchParams,
+    const { data: guestEstimateData } = useGuestEstimate({
+        data: estimateRequestData,
         options: { enabled: isFetched && !isLogin },
     });
-
     const estimateData = isLogin ? memberEstimateData : guestEstimateData;
 
     const orderOptionList = useMemo(() => {
@@ -224,9 +241,10 @@ export const ClaimCancelForm = () => {
                         claimType={CLAIM_TYPE}
                     />
 
-                    {estimateData && (
-                        <ClaimPriceInfo claimPriceData={estimateData} />
-                    )}
+                    {estimateData &&
+                        !isEmpty(filteredClaimedProductOptions) && (
+                            <ClaimPriceInfo claimPriceData={estimateData} />
+                        )}
 
                     <ClaimBankInfo
                         payType={orderOptionData?.payType}
