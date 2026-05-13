@@ -114,7 +114,6 @@ export const Withdrawal = (props: DefaultModalLayoutProps) => {
                             },
                         });
                         handleSendInitLoginInfo();
-                        return;
                     }
 
                     props.close();

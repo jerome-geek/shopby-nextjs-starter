@@ -1,15 +1,16 @@
+import { MypageMenuProvider, useMypageMenu } from '@/context/mypageMenu';
 import { clsx } from 'clsx';
 import { useRouter } from 'next/router';
-import { MypageMenuProvider, useMypageMenu } from '@/context/mypageMenu';
 import { memo, type ReactNode, useEffect } from 'react';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { CSRLayout } from '@/components/layout/csr';
-import { PATHS } from '@/const/paths';
-import { useAuth } from '@/hooks/useAuth';
 import * as styles from '@/components/layout/mypage/index.css';
 import { MypageSideNavigation } from '@/components/mypage/side-navigation';
+import { PATHS } from '@/const/paths';
+import { useMyApp } from '@/hooks/myapp';
+import { useAuth } from '@/hooks/useAuth';
 import useResponsive from '@/hooks/utils/useResponsive';
 import { getPathTitle } from '@/utils/path';
 
@@ -27,6 +28,7 @@ const MypageLayoutContent = memo(function MypageLayoutContent({
     const { isMobile } = useResponsive();
     const menuList = useMypageMenu();
 
+    const { isMyApp, handleSendLoginView } = useMyApp();
     const pageName = getPathTitle(router.pathname);
 
     useEffect(() => {
@@ -35,11 +37,21 @@ const MypageLayoutContent = memo(function MypageLayoutContent({
         }
 
         const returnUrl = router.asPath;
+
+        if (isMyApp) {
+            handleSendLoginView({
+                option: {
+                    returnUrl: returnUrl,
+                },
+            });
+            return;
+        }
+
         void router.replace({
             pathname: PATHS.AUTH.LOGIN,
             query: { returnUrl },
         });
-    }, [isLogin, router]);
+    }, [isLogin, router, isMyApp, handleSendLoginView]);
 
     // 클라이언트 라우팅으로 proxy를 거치지 않은 경우에도 마이페이지 화면을 노출하지 않습니다.
     if (isLogin !== true) {
