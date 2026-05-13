@@ -54,7 +54,10 @@ export const CollectionFormModal = (props: CollectionFormModalProps) => {
         >
             <FormProvider {...formMethods}>
                 <FetchBoundary fallback={<CollectionFormSkeleton />}>
-                    <CollectionFormContent shareCode={shareCode} />
+                    <CollectionFormContent
+                        shareCode={shareCode}
+                        onSuccess={props.close}
+                    />
                 </FetchBoundary>
             </FormProvider>
         </ModalLayout>

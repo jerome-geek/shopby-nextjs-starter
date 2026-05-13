@@ -99,7 +99,7 @@ export const CollectionFormContent = ({
 
                         queryClient.invalidateQueries({
                             predicate: (query) =>
-                                query.queryKey[0] === 'collections' ||
+                                query.queryKey[0] === 'collection' ||
                                 query.queryKey[0] === 'recipe',
                         });
 

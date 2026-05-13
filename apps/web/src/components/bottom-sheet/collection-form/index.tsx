@@ -63,7 +63,10 @@ export const CollectionFormSheet = ({
         >
             <FormProvider {...formMethods}>
                 <FetchBoundary fallback={<CollectionFormSkeleton />}>
-                    <CollectionFormContent shareCode={shareCode} />
+                    <CollectionFormContent
+                        shareCode={shareCode}
+                        onSuccess={close}
+                    />
                 </FetchBoundary>
             </FormProvider>
         </BottomSheetLayout>
