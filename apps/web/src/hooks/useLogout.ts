@@ -26,7 +26,6 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
                         returnUrl: window.location.origin,
                     },
                 });
-                return;
             }
 
             await oauth2.deleteAccessToken();

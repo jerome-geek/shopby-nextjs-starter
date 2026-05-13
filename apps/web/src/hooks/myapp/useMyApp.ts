@@ -139,10 +139,8 @@ const useMyApp = ({ isMyAppInit }: { isMyAppInit?: boolean } = {}) => {
     const handleSendPasswordModify = () => sendToMyApp('PASSWORD_MODIFIED');
     const handleSendRefreshTokenExpired = () =>
         sendToMyApp('REFRESH_TOKEN_EXPIRED');
-    const handleSendLoginView = (action?: MyAppHandleType<'LOGINVIEW'>) => {
-        alert('MYAPP_BRIDGE_CALL_LOGINVIEW');
+    const handleSendLoginView = (action?: MyAppHandleType<'LOGINVIEW'>) =>
         sendToMyApp('LOGINVIEW', action);
-    };
     const handleSendShowSettings = (action?: MyAppHandleType<'SHOW_SETTING'>) =>
         sendToMyApp('SHOW_SETTING', action);
     const handleSendShowNotification = () => sendToMyApp('SHOW_NOTIFICATION');
