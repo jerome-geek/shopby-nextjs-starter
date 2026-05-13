@@ -5,7 +5,7 @@ import { vars } from '@/styles/theme.css';
 
 export const container = style({
     position: 'fixed',
-    bottom: '200px',
+    bottom: '90px',
     right: '20px',
     display: 'flex',
     flexDirection: 'column',
@@ -14,7 +14,7 @@ export const container = style({
 
     '@media': {
         [media.mobile]: {
-            bottom: '150px',
+            bottom: '80px',
         },
     },
 });
