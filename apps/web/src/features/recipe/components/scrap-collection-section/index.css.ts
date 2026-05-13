@@ -84,26 +84,27 @@ export const collectionCard = style({
 export const collageGrid = style({
     display: 'flex',
     width: '100%',
-    height: '110px',
+    height: '116px',
     backgroundColor: vars.color.gray['10'],
-    '@media': {
-        [media.desktop]: {
-            height: '130px',
-        },
-    },
 });
 
 export const collageImage = style({
-    flex: 1,
+    position: 'relative',
+    flex: '1',
+    minWidth: 0,
     height: '100%',
+});
+
+export const imageListItemOverlap = style({
+    marginLeft: '-12px',
+    boxShadow: '-8px 0 14px -4px rgba(30, 35, 31, 0.35)',
+});
+
+export const image = style({
+    display: 'block',
     width: '100%',
+    height: '100%',
     objectFit: 'cover',
-    borderRight: `1px solid ${vars.color.white}`,
-    selectors: {
-        '&:last-child': {
-            borderRight: 'none',
-        },
-    },
 });
 
 export const collagePlaceholder = style({
@@ -156,13 +157,21 @@ export const collectionTitle = style([
 ]);
 
 export const collectionDesc = style([
-    textStyles.body1Regular,
+    textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         width: '100%',
+        minHeight: 'calc(1.3rem * 1.3)',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Regular,
+                minHeight: 'calc(1.4rem * 1.4)',
+            },
+        },
     },
 ]);
 

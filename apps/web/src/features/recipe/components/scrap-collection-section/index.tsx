@@ -1,4 +1,5 @@
 import { pipe, take, toArray } from '@fxts/core';
+import clsx from 'clsx';
 import { Plus } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
@@ -8,13 +9,13 @@ import { BookmarkIcon } from '@/components/icons';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog';
+import * as styles from '@/features/recipe/components/scrap-collection-section/index.css';
 import useBookmark from '@/features/recipe/hooks/useBookmark';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useCollectionList } from '@/hooks/suspenseQuery/shop/collection';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
-import * as styles from '@/features/recipe/components/scrap-collection-section/index.css';
 
 export const ScrapCollectionSection = () => {
     const { t } = useTranslation();
@@ -86,14 +87,23 @@ export const ScrapCollectionSection = () => {
                                         {collection.recipeImageUrls
                                             .slice(0, 5)
                                             .map((url, idx) => (
-                                                <img
+                                                <div
                                                     key={idx}
-                                                    src={url}
-                                                    className={
-                                                        styles.collageImage
-                                                    }
-                                                    alt={`${collection.title} ${idx}`}
-                                                />
+                                                    className={clsx(
+                                                        styles.collageImage,
+                                                        idx > 0 &&
+                                                            styles.imageListItemOverlap,
+                                                    )}
+                                                    style={{
+                                                        zIndex: idx + 1,
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={url}
+                                                        className={styles.image}
+                                                        alt={`${collection.title} ${idx}`}
+                                                    />
+                                                </div>
                                             ))}
                                     </div>
                                 ) : (
