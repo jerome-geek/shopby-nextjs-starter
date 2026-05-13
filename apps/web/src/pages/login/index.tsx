@@ -35,7 +35,7 @@ const LoginPage: NextPageWithLayout = () => {
     const links = [
         { href: PATHS.MEMBER.FIND_ID, label: '아이디 찾기' },
         { href: PATHS.MEMBER.FIND_PASSWORD, label: '비밀번호 찾기' },
-        { href: PATHS.GUEST.LOGIN, label: '비회원 배송조회' },
+        { href: PATHS.GUEST.LOGIN, label: '비회원 주문조회' },
     ] as const;
 
     const { handleErrorDialog } = useApiError();

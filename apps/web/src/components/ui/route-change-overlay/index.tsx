@@ -46,36 +46,35 @@ export const RouteChangeOverlay = () => {
 
     return (
         <AnimatePresence>
-            {isOpen ||
-                (isLoadingOverlayOpen && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        style={{
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                            zIndex: 10000,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+            {(isOpen || isLoadingOverlayOpen) && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                        zIndex: 10000,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <LoadingWrapper
+                        isLoading
+                        containerStyle={{
+                            height: '30px',
                         }}
                     >
-                        <LoadingWrapper
-                            isLoading
-                            containerStyle={{
-                                height: '30px',
-                            }}
-                        >
-                            <span />
-                        </LoadingWrapper>
-                    </motion.div>
-                ))}
+                        <span />
+                    </LoadingWrapper>
+                </motion.div>
+            )}
         </AnimatePresence>
     );
 };

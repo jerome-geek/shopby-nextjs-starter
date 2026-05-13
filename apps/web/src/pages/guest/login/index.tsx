@@ -125,7 +125,7 @@ const GuestLoginPage: NextPageWithLayout = () => {
 };
 
 GuestLoginPage.getLayout = (page) => (
-    <AuthLayout title='비회원 배송조회'>{page}</AuthLayout>
+    <AuthLayout title='비회원 주문조회'>{page}</AuthLayout>
 );
 
 export default GuestLoginPage;

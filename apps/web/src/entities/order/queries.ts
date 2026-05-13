@@ -1,8 +1,8 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { myOrder } from '@/api/order';
-import { ordersKeys } from '@/hooks/queryKeys';
+import { guestOrder, myOrder } from '@/api/order';
+import { guestOrderKeys, ordersKeys } from '@/hooks/queryKeys';
 import type { OrderDetailResponse } from '@/models/order';
 import type {
     GetOrderDetailParams,
@@ -67,6 +67,39 @@ export const orderDetailOptions = <T = OrderDetailResponse>({
         queryKey: ordersKeys.detail(orderNo, memberNo, searchParams),
         queryFn: async () => {
             const { data } = await myOrder.getOrderDetail(
+                orderNo,
+                searchParams,
+            );
+
+            return data;
+        },
+        ...options,
+    });
+};
+
+export interface GuestOrderDetailOptionsParams<T = OrderDetailResponse> {
+    orderNo: string;
+    searchParams?: GetOrderDetailParams;
+    options?: Omit<
+        UseQueryOptions<
+            OrderDetailResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof guestOrderKeys)['detail']>
+        >,
+        'queryKey' | 'queryFn'
+    >;
+}
+
+export const guestOrderDetailOptions = <T = OrderDetailResponse>({
+    orderNo,
+    searchParams,
+    options,
+}: GuestOrderDetailOptionsParams<T>) => {
+    return queryOptions({
+        queryKey: guestOrderKeys.detail(orderNo, searchParams),
+        queryFn: async () => {
+            const { data } = await guestOrder.getOrderDetail(
                 orderNo,
                 searchParams,
             );

@@ -1,40 +1,62 @@
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import { useTranslation } from 'react-i18next';
+import { includes } from '@fxts/core';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { guestOrder } from '@/api/order';
-import { useDialog } from '@/hooks/utils';
+import { guestOrderKeys } from '@/hooks/queryKeys';
+import useApiError from '@/hooks/useApiError';
+import type {
+    UpdateDeliveryInfoData,
+    UpdateDeliveryInfoParams,
+} from '@/models/order/guestOrder';
 
 const useGuestOrderMutation = () => {
-    const { t } = useTranslation();
+    const queryClient = useQueryClient();
 
-    const { openDialog } = useDialog();
+    const { handleErrorToast } = useApiError();
 
-    const onErrorHandler = (error: Error) => {
-        openDialog({
-            message: t(
-                isAxiosError(error)
-                    ? error.response?.data.message
-                    : '알 수 없는 오류가 발생했습니다.',
-            ),
+    const onMutationSuccess = () => {
+        return queryClient.invalidateQueries({
+            predicate: (query) => {
+                return includes(query.queryKey[0], [...guestOrderKeys.all]);
+            },
         });
+    };
+
+    const onMutationError = (error: Error) => {
+        handleErrorToast(error);
     };
 
     return {
         confirmOrder: useMutation({
             mutationFn: async ({ orderOptionNo }: { orderOptionNo: number }) =>
                 await guestOrder.confirmOrder(orderOptionNo),
-            onError: (error) => {
-                onErrorHandler(error);
-            },
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
         }),
 
         confirmDeliveryCompletion: useMutation({
             mutationFn: async ({ orderOptionNo }: { orderOptionNo: number }) =>
                 await guestOrder.confirmDeliveryCompletion(orderOptionNo),
-            onError: (error) => {
-                onErrorHandler(error);
-            },
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
+        }),
+        updateDeliveryInfo: useMutation({
+            mutationFn: async ({
+                orderNo,
+                searchParams,
+                data,
+            }: {
+                orderNo: string;
+                searchParams: UpdateDeliveryInfoParams;
+                data: UpdateDeliveryInfoData;
+            }) =>
+                await guestOrder.updateDeliveryInfo(
+                    orderNo,
+                    searchParams,
+                    data,
+                ),
+            onSuccess: onMutationSuccess,
+            onError: onMutationError,
         }),
     };
 };

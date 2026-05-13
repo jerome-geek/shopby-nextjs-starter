@@ -1,6 +1,8 @@
+import { keyframes, style } from '@vanilla-extract/css';
+
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { keyframes, style } from '@vanilla-extract/css';
 
 export const formContent = style({
     display: 'flex',
@@ -11,14 +13,14 @@ export const formContent = style({
 
 export const fieldRow = style({
     display: 'flex',
-    gap: '8px',
+    gap: '16px',
     alignItems: 'flex-start',
 });
 
 export const postcodeButton = style([
     textStyles.body2Semibold,
     {
-        height: '48px',
+        height: '44px',
         padding: '0 16px',
         borderRadius: '4px',
         border: `1px solid ${vars.color.gray['30']}`,
@@ -27,6 +29,12 @@ export const postcodeButton = style([
         flexShrink: 0,
         ':hover': {
             backgroundColor: vars.color.gray['10'],
+        },
+
+        '@media': {
+            [media.desktop]: {
+                height: '52px',
+            },
         },
     },
 ]);
@@ -39,7 +47,7 @@ export const phoneInputGroup = style({
 });
 
 export const separator = style({
-    color: vars.color.gray['30'],
+    color: vars.color.gray['70'],
     fontSize: '14px',
 });
 

@@ -26,7 +26,7 @@ const GuestOrderPage: NextPageWithLayout = () => {
 };
 
 GuestOrderPage.getLayout = (page) => (
-    <GuestLayout title='비회원 배송조회'>{page}</GuestLayout>
+    <GuestLayout title='비회원 주문조회'>{page}</GuestLayout>
 );
 
 export default GuestOrderPage;

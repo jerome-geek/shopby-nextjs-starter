@@ -1,9 +1,11 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
 import { controller } from '@/api/core/controller';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
+import { guestOrderKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
 import { guestTokenCookie, memberCookie } from '@/utils/cookie';
 
@@ -13,6 +15,8 @@ import { guestTokenCookie, memberCookie } from '@/utils/cookie';
  */
 export const useHandleSessionExpired = () => {
     const router = useRouter();
+
+    const queryClient = useQueryClient();
 
     const { openAsyncDialog } = useDialog();
     const { handleSendRefreshTokenExpired, handleSendLoginView, isMyApp } =
@@ -72,8 +76,12 @@ export const useHandleSessionExpired = () => {
 
         await router.replace(PATHS.GUEST.LOGIN);
 
+        queryClient.removeQueries({
+            queryKey: guestOrderKeys.all,
+            type: 'all',
+        });
         guestTokenCookie.clear();
-    }, [openAsyncDialog, router]);
+    }, [openAsyncDialog, router, queryClient]);
 
     return { handleSessionExpired, handleGuestLoginExpired };
 };

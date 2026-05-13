@@ -1,4 +1,6 @@
 import { SuspenseQuery } from '@suspensive/react-query';
+import type { UseSuspenseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -10,9 +12,15 @@ import {
     DefaultModalLayoutProps,
 } from '@/components/layout';
 import { Button } from '@/components/ui';
-import { orderDetailOptions } from '@/entities/order/queries';
+import {
+    guestOrderDetailOptions,
+    orderDetailOptions,
+} from '@/entities/order/queries';
+import { useAuth } from '@/hooks/useAuth';
+import type { OrderDetailResponse } from '@/models/order';
 
-interface ShippingAddressChangeBottomSheetProps extends DefaultModalLayoutProps {
+interface ShippingAddressChangeBottomSheetProps
+    extends DefaultModalLayoutProps {
     orderNo: string;
     memberNo: number;
 }
@@ -25,6 +33,22 @@ export const ShippingAddressChangeBottomSheet = ({
     memberNo,
 }: ShippingAddressChangeBottomSheetProps) => {
     const { t } = useTranslation();
+
+    const isLogin = useAuth();
+
+    const orderQueryOptions = (
+        isLogin
+            ? orderDetailOptions({ orderNo, memberNo })
+            : guestOrderDetailOptions({
+                  orderNo,
+                  searchParams: { orderRequestType: 'ALL' },
+              })
+    ) as UseSuspenseQueryOptions<
+        OrderDetailResponse,
+        AxiosError<ShopByErrorResponse>,
+        OrderDetailResponse,
+        readonly unknown[]
+    >;
 
     return (
         <BottomSheetLayout
@@ -53,12 +77,7 @@ export const ShippingAddressChangeBottomSheet = ({
                 </Button>,
             ]}
         >
-            <SuspenseQuery
-                {...orderDetailOptions({
-                    orderNo,
-                    memberNo,
-                })}
-            >
+            <SuspenseQuery {...orderQueryOptions}>
                 {({ data }) => (
                     <ShippingAddressChangeContent
                         orderNo={orderNo}

@@ -1,5 +1,9 @@
 import { SuspenseQuery } from '@suspensive/react-query';
+import { type UseSuspenseQueryOptions } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
+
+import type { OrderDetailResponse } from '@/models/order';
 
 import {
     SHIPPING_ADDRESS_CHANGE_FORM_ID,
@@ -7,7 +11,11 @@ import {
 } from '@/components/layer-contents/shipping-address-change';
 import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
 import { Button } from '@/components/ui';
-import { orderDetailOptions } from '@/entities/order/queries';
+import {
+    guestOrderDetailOptions,
+    orderDetailOptions,
+} from '@/entities/order/queries';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ShippingAddressChangeModalProps extends DefaultModalLayoutProps {
     orderNo: string;
@@ -22,6 +30,22 @@ export const ShippingAddressChangeModal = ({
     orderNo,
 }: ShippingAddressChangeModalProps) => {
     const { t } = useTranslation();
+
+    const isLogin = useAuth();
+
+    const orderQueryOptions = (
+        isLogin
+            ? orderDetailOptions({ orderNo, memberNo })
+            : guestOrderDetailOptions({
+                  orderNo,
+                  searchParams: { orderRequestType: 'ALL' },
+              })
+    ) as UseSuspenseQueryOptions<
+        OrderDetailResponse,
+        AxiosError<ShopByErrorResponse>,
+        OrderDetailResponse,
+        readonly unknown[]
+    >;
 
     return (
         <ModalLayout
@@ -50,12 +74,7 @@ export const ShippingAddressChangeModal = ({
                 </Button>,
             ]}
         >
-            <SuspenseQuery
-                {...orderDetailOptions({
-                    orderNo,
-                    memberNo,
-                })}
-            >
+            <SuspenseQuery {...orderQueryOptions}>
                 {({ data }) => (
                     <ShippingAddressChangeContent
                         orderNo={orderNo}

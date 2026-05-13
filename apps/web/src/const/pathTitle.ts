@@ -190,7 +190,11 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         title: '비밀번호 찾기',
     },
     {
+        pathname: PATHS.GUEST.LOGIN,
+        title: '비회원 주문조회',
+    },
+    {
         pathname: PATHS.GUEST.ORDER.DETAIL,
-        title: '비회원 배송조회',
+        title: '비회원 주문조회',
     },
 ];

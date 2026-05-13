@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { motion } from 'motion/react';
 import { overlay } from 'overlay-kit';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +16,9 @@ import {
 } from '@/components/ui/input';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { OVERLAY_ID } from '@/const/overlay';
-import { useMyOrderMutation } from '@/hooks/mutations';
+import { useGuestOrderMutation, useMyOrderMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui/useToast';
+import { useAuth } from '@/hooks/useAuth';
 import { useGlobal, useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
 import {
@@ -61,6 +61,8 @@ export const ShippingAddressChangeContent = ({
     data,
 }: ShippingAddressChangeContentProps) => {
     const { t } = useTranslation();
+
+    const isLogin = useAuth();
 
     const { addToast } = useToast();
 
@@ -138,38 +140,50 @@ export const ShippingAddressChangeContent = ({
         updateDeliveryInfo: { mutate: updateDeliveryInfoMutate },
     } = useMyOrderMutation();
 
+    const {
+        updateDeliveryInfo: { mutate: updateGuestDeliveryInfoMutate },
+    } = useGuestOrderMutation();
+
     const onSubmit = handleSubmit((values) => {
         if (!isDirty) {
             overlay.close(OVERLAY_ID.SHIPPING_ADDRESS_CHANGE);
             return;
         }
 
+        const updateData = {
+            orderNo,
+            searchParams: { add: false },
+            data: {
+                receiverName: values.receiverName,
+                receiverZipCd: values.receiverZipCd,
+                receiverAddress: values.receiverAddress,
+                receiverJibunAddress: values.receiverJibunAddress,
+                receiverDetailAddress: values.receiverDetailAddress,
+                deliveryMemo: values.deliveryMemo ?? '',
+                receiverContact1: `${values.receiverContact1.prefix}-${values.receiverContact1.middle}-${values.receiverContact1.suffix}`,
+                receiverContact2: data.receiverContact2 ?? '',
+            },
+        };
+
+        const onSuccess = () => {
+            addToast({
+                message: t('배송지 정보가 변경되었습니다.'),
+                variant: 'success',
+            });
+            overlay.close(OVERLAY_ID.SHIPPING_ADDRESS_CHANGE);
+        };
+
         // TODO: 추가배송비 붙는 경우에는 업데이트되면 안되는데 따로 에러가 떨어지지 않음
-        updateDeliveryInfoMutate(
-            {
-                orderNo,
-                searchParams: { add: false },
-                data: {
-                    receiverName: values.receiverName,
-                    receiverZipCd: values.receiverZipCd,
-                    receiverAddress: values.receiverAddress,
-                    receiverJibunAddress: values.receiverJibunAddress,
-                    receiverDetailAddress: values.receiverDetailAddress,
-                    deliveryMemo: values.deliveryMemo ?? '',
-                    receiverContact1: `${values.receiverContact1.prefix}-${values.receiverContact1.middle}-${values.receiverContact1.suffix}`,
-                    receiverContact2: data.receiverContact2 ?? '',
-                },
-            },
-            {
-                onSuccess: () => {
-                    addToast({
-                        message: t('배송지 정보가 변경되었습니다.'),
-                        variant: 'success',
-                    });
-                    overlay.close(OVERLAY_ID.SHIPPING_ADDRESS_CHANGE);
-                },
-            },
-        );
+        if (isLogin) {
+            updateDeliveryInfoMutate(updateData, {
+                onSuccess,
+            });
+            return;
+        }
+
+        updateGuestDeliveryInfoMutate(updateData, {
+            onSuccess,
+        });
     });
 
     return (
@@ -202,7 +216,7 @@ export const ShippingAddressChangeContent = ({
                             className={styles.postcodeButton}
                             onClick={handleAddressSearch}
                         >
-                            {t('변경')}
+                            {t('우편번호 찾기')}
                         </button>
                     </div>
                     <InputField
@@ -257,50 +271,41 @@ export const ShippingAddressChangeContent = ({
                     <ErrorMessage name='receiverContact1.suffix' />
                 </InputFieldContainer>
 
-                <motion.div layout>
-                    <InputFieldContainer>
-                        <InputLabel>{t('배송메모')}</InputLabel>
-                        <Select
-                            placeholder={t('선택해주세요')}
-                            options={[
-                                ...ADDRESS_MEMO_LIST,
-                                ...ADDRESS_MEMO_LIST,
-                                ...ADDRESS_MEMO_LIST,
-                            ]}
-                            menuPlacement='bottom'
-                            classNames={{
-                                menu: () => styles.relativeMenu,
-                            }}
-                            getOptionLabel={(option) => t(option.label)}
-                            getOptionValue={(option) => option.value}
-                            value={findDeliveryMemoOption(
-                                deliveryMemoWatch ?? '',
-                            )}
-                            onChange={(opt) => {
-                                const deliveryMemo =
-                                    opt?.value === '직접 입력'
-                                        ? ''
-                                        : (opt?.value ?? '');
+                <InputFieldContainer>
+                    <InputLabel>{t('배송메모')}</InputLabel>
+                    <Select
+                        placeholder={t('선택해주세요')}
+                        options={ADDRESS_MEMO_LIST}
+                        menuPlacement='top'
+                        menuPosition='fixed'
+                        menuPortalTarget={document.body}
+                        getOptionLabel={(option) => t(option.label)}
+                        getOptionValue={(option) => option.value}
+                        value={findDeliveryMemoOption(deliveryMemoWatch ?? '')}
+                        onChange={(opt) => {
+                            const deliveryMemo =
+                                opt?.value === '직접 입력'
+                                    ? ''
+                                    : opt?.value ?? '';
 
-                                setValue('deliveryMemo', deliveryMemo, {
-                                    shouldDirty: true,
-                                    shouldValidate: true,
-                                });
-                            }}
+                            setValue('deliveryMemo', deliveryMemo, {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                            });
+                        }}
+                    />
+                    {(!deliveryMemoWatch ||
+                        !ADDRESS_MEMO_LIST.find(
+                            (item) => item.value === deliveryMemoWatch,
+                        )) && (
+                        <InputField
+                            placeholder={t('배송지 메모')}
+                            style={{ marginTop: '8px' }}
+                            {...register('deliveryMemo')}
                         />
-                        {(!deliveryMemoWatch ||
-                            !ADDRESS_MEMO_LIST.find(
-                                (item) => item.value === deliveryMemoWatch,
-                            )) && (
-                            <InputField
-                                placeholder={t('배송지 메모')}
-                                style={{ marginTop: '8px' }}
-                                {...register('deliveryMemo')}
-                            />
-                        )}
-                        <ErrorMessage name='deliveryMemo' />
-                    </InputFieldContainer>
-                </motion.div>
+                    )}
+                    <ErrorMessage name='deliveryMemo' />
+                </InputFieldContainer>
             </form>
         </FormProvider>
     );
