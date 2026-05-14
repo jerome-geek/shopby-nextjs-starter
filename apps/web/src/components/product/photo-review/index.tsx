@@ -1,133 +1,120 @@
-import { isEmpty } from '@fxts/core';
+import { SuspenseQuery } from '@suspensive/react-query';
 import { useRouter } from 'next/router';
-import { overlay } from 'overlay-kit';
+import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { PhotoReviewListBottomSheet } from '@/components/bottom-sheet/photo-review-list';
-import LoadingWrapper from '@/components/common/loading-wrapper';
 import { StarIcon } from '@/components/icons';
-import { PhotoReviewListModal } from '@/components/modal/photo-review-list';
 import * as styles from '@/components/product/photo-review/index.css';
 import { PHOTO_PAGE_SIZE } from '@/components/product/product-tabs/review';
-import { usePhotoReviewList } from '@/hooks/query/display/review';
-import { useResponsive } from '@/hooks/utils';
+import { productReviewListV2Options } from '@/entities/display/review/queries';
+import { useCustomDialog } from '@/features/dialog/hooks/useCustomDialog';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
 import { BREAKPOINTS } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 
 import 'swiper/css';
 
 export const PhotoReview = () => {
+    const { t } = useTranslation();
+
     const router = useRouter();
     const productNo = Number(router.query.productNo) || 0;
 
-    const { isMobile } = useResponsive();
-
-    // const { data } = useProductReviewListV2({
-    //     productNo,
-    //     searchParams: {
-    //         hasAttachmentFile: 'Y',
-    //         order: {
-    //             by: 'RATING',
-    //             direction: 'DESC',
-    //         },
-    //         pageNumber: 1,
-    //         pageSize: PHOTO_PAGE_SIZE,
-    //         hasTotalCount: true,
-    //     },
-    // });
-
-    const { data: photoReviewListData, isLoading: isPhotoReviewListLoading } =
-        usePhotoReviewList({
-            productNo,
-            searchParams: {
-                pageNumber: 1,
-                pageSize: PHOTO_PAGE_SIZE,
-                hasTotalCount: true,
-            },
-        });
-
-    const photoReviews = (photoReviewListData?.contents ?? []).slice(0, 5);
+    const { openPhotoReviewList } = useCustomDialog();
 
     const handleImageClick = (reviewNo: number) => {
-        overlay.open((props) =>
-            isMobile ? (
-                <PhotoReviewListBottomSheet
-                    productNo={productNo}
-                    reviewNo={reviewNo}
-                    {...props}
-                />
-            ) : (
-                <PhotoReviewListModal
-                    productNo={productNo}
-                    reviewNo={reviewNo}
-                    {...props}
-                />
-            ),
-        );
+        openPhotoReviewList({ productNo, reviewNo });
     };
 
     return (
-        <LoadingWrapper
-            isLoading={isPhotoReviewListLoading}
-            isLoadedAnimation
-            containerStyle={{
-                height: '0',
-                visibility: 'hidden',
-                opacity: 0,
-                display: 'none',
-            }}
-        >
-            {isEmpty(photoReviews) ? null : (
-                <div className={styles.photoReviewSection}>
-                    <h2 className={styles.photoReviewTitle}>사진 리뷰</h2>
-                    <div className={styles.photoReviewList}>
-                        <Swiper
-                            slidesPerView={3.2}
-                            spaceBetween={12}
-                            breakpoints={{
-                                [BREAKPOINTS.SM]: {
-                                    slidesPerView: 4.2,
-                                },
-                                [BREAKPOINTS.MD]: {
-                                    slidesPerView: 5,
-                                },
-                            }}
-                        >
-                            {photoReviews.map((review) => (
-                                <SwiperSlide
-                                    key={review.reviewNo}
-                                    className={styles.photoReviewItem}
-                                >
-                                    <button
-                                        type='button'
-                                        className={
-                                            styles.photoReviewImageButton
-                                        }
-                                        onClick={() =>
-                                            handleImageClick(review.reviewNo)
-                                        }
-                                    >
-                                        <img
-                                            src={review.urls?.[0] || ''}
-                                            alt='리뷰 이미지'
-                                            className={styles.photoReviewImage}
-                                        />
-                                    </button>
+        <ShopbyAsyncBoundary>
+            <SuspenseQuery
+                {...productReviewListV2Options({
+                    productNo,
+                    searchParams: {
+                        hasAttachmentFile: true,
+                        order: {
+                            by: 'RATING',
+                            direction: 'DESC',
+                        },
+                        pageNumber: 1,
+                        pageSize: PHOTO_PAGE_SIZE,
+                        hasTotalCount: true,
+                    },
+                })}
+            >
+                {({ data }) => {
+                    if (!data.items.length) return null;
 
-                                    <div className={styles.photoReviewRating}>
-                                        <StarIcon
-                                            baseColor={vars.color.pink['80']}
-                                        />
-                                        <span>
-                                            {Number(review.recommendCnt) || 0}
-                                        </span>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
-                </div>
-            )}
-        </LoadingWrapper>
+                    return (
+                        <div className={styles.photoReviewSection}>
+                            <h2 className={styles.photoReviewTitle}>
+                                {t('사진 리뷰')}
+                            </h2>
+
+                            <div className={styles.photoReviewList}>
+                                <Swiper
+                                    slidesPerView={3.2}
+                                    spaceBetween={12}
+                                    breakpoints={{
+                                        [BREAKPOINTS.SM]: {
+                                            slidesPerView: 4.2,
+                                        },
+                                        [BREAKPOINTS.MD]: {
+                                            slidesPerView: 5,
+                                        },
+                                    }}
+                                >
+                                    {data.items.map((review) => (
+                                        <SwiperSlide
+                                            key={review.reviewNo}
+                                            className={styles.photoReviewItem}
+                                        >
+                                            <button
+                                                type='button'
+                                                className={
+                                                    styles.photoReviewImageButton
+                                                }
+                                                onClick={() =>
+                                                    handleImageClick(
+                                                        review.reviewNo,
+                                                    )
+                                                }
+                                            >
+                                                <img
+                                                    src={getShopbyResizeImageUrl(
+                                                        review.fileUrls?.[0] ||
+                                                            '',
+                                                        176,
+                                                    )}
+                                                    alt='리뷰 이미지'
+                                                    className={
+                                                        styles.photoReviewImage
+                                                    }
+                                                />
+                                            </button>
+
+                                            <div
+                                                className={
+                                                    styles.photoReviewRating
+                                                }
+                                            >
+                                                <StarIcon
+                                                    baseColor={
+                                                        vars.color.pink['80']
+                                                    }
+                                                />
+                                                <span>{review.rate}</span>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </div>
+                        </div>
+                    );
+                }}
+            </SuspenseQuery>
+        </ShopbyAsyncBoundary>
     );
 };
