@@ -125,7 +125,7 @@ const LoginPage: NextPageWithLayout = () => {
                     </SuspenseQuery>
                 </ShopbyAsyncBoundary>
 
-                <SocialLoginList />
+                <SocialLoginList isOnlySocialLoginListVisible={false} />
 
                 {isGuestOrder && (
                     <div className={styles.buttonContainer}>
@@ -141,7 +141,7 @@ const LoginPage: NextPageWithLayout = () => {
                 )}
 
                 <div className={styles.loginFormSection}>
-                    {!isDev && (
+                    {isDev && (
                         <form className={styles.form} onSubmit={onSubmit}>
                             <div className={styles.inputGroupContainer}>
                                 {/* 아이디 입력 */}

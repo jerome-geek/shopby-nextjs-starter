@@ -26,26 +26,13 @@ export default function SocialLoginList({
 
     return (
         <ul className={styles.socialLoginList}>
-            {!isOnlySocialLoginListVisible && (
-                <li>
-                    <Button
-                        type="button"
-                        frame="solid"
-                        variant="primary"
-                        onClick={onSignupButtonClick}
-                    >
-                        <span>회원가입</span>
-                    </Button>
-                </li>
-            )}
-
             {availableSocialLoginList.map(
                 ({ label, provider, onClick, Icon }) => {
                     return (
                         <li key={`social-login-button-${provider}`}>
                             <Button
-                                type="button"
-                                frame="solid"
+                                type='button'
+                                frame='solid'
                                 variant={provider}
                                 onClick={() => onClick({ returnUrl })}
                             >
@@ -55,6 +42,19 @@ export default function SocialLoginList({
                         </li>
                     );
                 },
+            )}
+
+            {!isOnlySocialLoginListVisible && (
+                <li>
+                    <Button
+                        type='button'
+                        frame='solid'
+                        variant='primary'
+                        onClick={onSignupButtonClick}
+                    >
+                        <span>회원가입</span>
+                    </Button>
+                </li>
             )}
         </ul>
     );
