@@ -90,6 +90,18 @@ export const getInitialOrderFormValues = ({
         receiverMobileCountryCd: '',
     };
 
+    // NOTE: 현금성 결제(무통장 입금 등)인 경우에만 현금영수증(cashReceipt) 초기값 설정
+    const isAccountPayment = payType === 'ACCOUNT';
+    const applyCashReceipt = isAccountPayment
+        ? (orderSheetData?.applyCashReceiptForAccount ?? true)
+        : false;
+    const cashReceipt = isAccountPayment
+        ? {
+              cashReceiptIssuePurposeType: 'INCOME_TAX_DEDUCTION' as const,
+              cashReceiptKeyType: 'MOBILE_NO' as const,
+          }
+        : undefined;
+
     return {
         orderSheetNo,
         inAppYn: isMyApp ? 'Y' : 'N',
@@ -101,11 +113,8 @@ export const getInitialOrderFormValues = ({
         savesLastPayType: true,
         customTermsAgrees: [],
         saveAddressBook: false,
-        applyCashReceipt: orderSheetData?.applyCashReceiptForAccount ?? true,
-        cashReceipt: {
-            cashReceiptIssuePurposeType: 'INCOME_TAX_DEDUCTION',
-            cashReceiptKeyType: 'MOBILE_NO',
-        },
+        applyCashReceipt,
+        cashReceipt,
         orderer,
         shippingAddress,
         // 약관 동의
