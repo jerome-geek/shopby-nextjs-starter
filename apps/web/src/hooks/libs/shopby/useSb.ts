@@ -45,7 +45,7 @@ const useSb = ({
 
         const isProductDetailPage = router.pathname === PATHS.PRODUCTS.DETAIL;
         if (isProductDetailPage && product) {
-            window.ShopbyExternalScript.setGlobalObjectSb({
+            window.ShopbyExternalScript?.setGlobalObjectSb({
                 product,
             });
             return;
@@ -53,8 +53,7 @@ const useSb = ({
 
         const isSearchPage = router.pathname === PATHS.SEARCH;
         if (isSearchPage && searchedProduct) {
-            console.log('🚀 ~ useSb ~ isSearchPage:', isSearchPage);
-            window.ShopbyExternalScript.setGlobalObjectSb({
+            window.ShopbyExternalScript?.setGlobalObjectSb({
                 searchedProduct,
             });
             return;
@@ -62,7 +61,7 @@ const useSb = ({
 
         const isProductListPage = router.pathname === PATHS.PRODUCTS.LIST;
         if (isProductListPage && searchedProduct && currentCategory) {
-            window.ShopbyExternalScript.setGlobalObjectSb({
+            window.ShopbyExternalScript?.setGlobalObjectSb({
                 searchedProduct,
                 currentCategory,
             });
@@ -71,7 +70,7 @@ const useSb = ({
 
         const isCartPage = router.pathname === PATHS.CART;
         if (isCartPage && cart) {
-            window.ShopbyExternalScript.setGlobalObjectSb({
+            window.ShopbyExternalScript?.setGlobalObjectSb({
                 cart,
             });
             return;
@@ -86,7 +85,7 @@ const useSb = ({
             ],
         );
         if (isOrderPage && orderSheet) {
-            window.ShopbyExternalScript.setGlobalObjectSb({
+            window.ShopbyExternalScript?.setGlobalObjectSb({
                 orderSheet,
             });
             return;
@@ -94,7 +93,7 @@ const useSb = ({
 
         const isOrderCompletePage = router.pathname === PATHS.ORDER.COMPLETE;
         if (isOrderCompletePage && order) {
-            window.ShopbyExternalScript.setGlobalObjectSb({
+            window.ShopbyExternalScript?.setGlobalObjectSb({
                 order,
             });
             return;

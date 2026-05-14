@@ -12,8 +12,6 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import 'swiper/css';
-import 'swiper/css/pagination';
 
 import { product } from '@/api/product';
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
@@ -59,6 +57,9 @@ import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 interface ProductDetailViewProps {
     productNo: number;
