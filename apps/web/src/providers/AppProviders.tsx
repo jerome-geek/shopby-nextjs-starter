@@ -10,13 +10,9 @@ import { useSilentRefresh } from '@/hooks/auth/useSilentRefresh';
 
 function InterceptorSetup({ children }: { children: ReactNode }) {
     useGeekInterceptor();
-    const { isReady: isAxiosReady } = useAxiosInterceptor();
+    useAxiosInterceptor();
 
     useSilentRefresh();
-
-    if (typeof window !== 'undefined' && !isAxiosReady) {
-        return null;
-    }
 
     return children;
 }

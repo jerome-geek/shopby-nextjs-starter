@@ -1,6 +1,5 @@
 import { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
-import { shopbyRequest } from '@/api/core/request';
 import { isGuestRequest, isUpdateOauth2Request } from '@/api/core/utils';
 import type { UpdateAccessTokenResponse } from '@/models/auth/oauth2';
 import { accessTokenCookie } from '@/utils/cookie';
@@ -84,7 +83,7 @@ export const handle401Error = async (
 
     try {
         const { data } = await Promise.race([
-            shopbyRequest.request<UpdateAccessTokenResponse>({
+            instance.request<UpdateAccessTokenResponse>({
                 method: 'PUT',
                 url: '/oauth2',
             }),
@@ -123,7 +122,6 @@ export const handle401Error = async (
  */
 export const handle400Error = async (
     error: AxiosError,
-    instance: AxiosInstance,
     onSessionExpired: () => Promise<void>,
 ) => {
     const response = error.response?.data as ShopByErrorResponse;
