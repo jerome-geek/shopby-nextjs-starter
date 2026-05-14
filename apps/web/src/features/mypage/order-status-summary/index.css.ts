@@ -52,11 +52,29 @@ export const list = style({
     alignItems: 'center',
     gap: '12px',
     flexWrap: 'wrap',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+
+    '@media': {
+        [media.mobile]: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '20px 8px',
+        },
+    },
 });
 
 export const item = style({
     flex: '1 1 0',
     textAlign: 'center',
+
+    '@media': {
+        [media.mobile]: {
+            flex: 'none',
+            width: '100%',
+        },
+    },
 });
 
 export const count = style([
@@ -72,6 +90,14 @@ export const count = style([
         backgroundColor: vars.color.gray['10'],
         border: `1px solid ${vars.color.gray['30']}`,
         color: vars.color.black,
+
+        '@media': {
+            [media.mobile]: {
+                maxWidth: '64px', // 모바일에서는 원 크기를 줄임
+                fontSize: '1.2rem',
+                margin: '0 auto 6px',
+            },
+        },
     },
 ]);
 

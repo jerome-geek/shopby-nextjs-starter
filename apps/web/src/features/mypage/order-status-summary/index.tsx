@@ -27,10 +27,15 @@ export const OrderStatusSummary = () => {
             url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=DEPOSIT_WAIT`,
         },
         {
+            id: 'payDone',
+            title: '결제완료',
+            content: orderStatusSummaryData.payDoneCnt ?? 0,
+            url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=PAY_DONE`,
+        },
+        {
             id: 'deliveryPrepare',
-            title: '출고대기',
+            title: '배송준비중',
             content:
-                (orderStatusSummaryData.payDoneCnt ?? 0) +
                 (orderStatusSummaryData.productPrepareCnt ?? 0) +
                 (orderStatusSummaryData.deliveryPrepareCnt ?? 0),
             url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=PAY_DONE,PRODUCT_PREPARE,DELIVERY_PREPARE`,
@@ -65,11 +70,11 @@ export const OrderStatusSummary = () => {
                 </span>
             </div>
 
-            <div className={styles.list}>
+            <ul className={styles.list}>
                 {list.map((item) => (
-                    <div key={item.id} className={styles.item}>
+                    <li key={item.id} className={styles.item}>
                         <Link href={item.url}>
-                            <div
+                            <strong
                                 className={`${styles.count}${
                                     item?.isPrimary
                                         ? ` ${styles.countPrimary}`
@@ -77,14 +82,14 @@ export const OrderStatusSummary = () => {
                                 }`}
                             >
                                 {item.content}
-                            </div>
+                            </strong>
                             <span className={styles.label}>
                                 {t(item.title)}
                             </span>
                         </Link>
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </section>
     );
 };
