@@ -15,6 +15,7 @@ import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import ImageWrapper from '@/components/ui/image';
 import * as styles from '@/features/banner/components/hero-banner/index.css';
+import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { BREAKPOINTS } from '@/styles/media';
 import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 import {
@@ -22,7 +23,6 @@ import {
     normalizeImageUrl,
 } from '@/utils/shopby';
 
-import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
@@ -188,6 +188,7 @@ const HeroBannerContent = ({ type }: { type: HeroBannerType }) => {
                                             ? 'noopener noreferrer'
                                             : undefined
                                     }
+                                    prefetch={false}
                                     className={styles.card}
                                 >
                                     <ImageWrapper
