@@ -17,6 +17,7 @@ import {
 import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/query/admin/mall';
 import useDialog from '@/hooks/utils/useDialog';
+import { useIsClient } from '@/shared/hooks/useIsClient';
 import type { NcpOpenIdProviderType, OpenIdJoinProvider } from '@/models';
 
 const useSnsLogin = () => {
@@ -31,18 +32,19 @@ const useSnsLogin = () => {
         [mallData],
     );
 
+    const isClient = useIsClient();
+
     const searchParams = useSearchParams();
     const returnUrl = searchParams.get('returnUrl') || '';
 
-    const [, setOpenReturnUrl] = useLocalStorage(
-        'openReturnUrl',
-        window.location.origin,
-    );
+    const [, setOpenReturnUrl] = useLocalStorage('openReturnUrl', '');
 
     const openLoginTab = (loginUrl: string, snsReturnUrl?: string) => {
-        setOpenReturnUrl(snsReturnUrl || returnUrl);
+        setOpenReturnUrl(snsReturnUrl || returnUrl || (isClient ? window.location.origin : ''));
 
-        window.location.href = loginUrl;
+        if (isClient) {
+            window.location.href = loginUrl;
+        }
     };
 
     const { mutateAsync } = useMutation({
@@ -53,9 +55,10 @@ const useSnsLogin = () => {
             provider: NcpOpenIdProviderType;
             isLoginDisplay?: boolean;
         }) => {
+            const currentOrigin = isClient ? window.location.origin : '';
             const response = await authentication.getOpenIdLoginUrl({
                 provider,
-                redirectUri: `${window.location.origin}${
+                redirectUri: `${currentOrigin}${
                     PATHS.CALLBACK.AUTH
                 }?provider=${provider}&prompt=${isLoginDisplay ? 'login' : ''}`,
             });

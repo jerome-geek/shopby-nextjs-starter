@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/input';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
-import useSnsLogin from '@/hooks/useSnsLogin';
+import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 
 const schema = z.object({
     password: z.string().min(1, '비밀번호를 입력해 주세요.'),

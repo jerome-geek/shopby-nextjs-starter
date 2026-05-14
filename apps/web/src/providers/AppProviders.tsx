@@ -14,7 +14,7 @@ function InterceptorSetup({ children }: { children: ReactNode }) {
 
     useSilentRefresh();
 
-    if (!isAxiosReady) {
+    if (typeof window !== 'undefined' && !isAxiosReady) {
         return null;
     }
 

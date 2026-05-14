@@ -40,7 +40,7 @@ import { profileKeys } from '@/hooks/queryKeys';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
 import { useToast } from '@/hooks/ui/useToast';
 import useApiError from '@/hooks/useApiError';
-import useSnsLogin from '@/hooks/useSnsLogin';
+import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/edit/index.css';
 import * as memberConfigStyles from '@/pages/signup/register/index.css';

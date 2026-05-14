@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import * as styles from '@/components/auth/social-login-list/index.css';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
-import useSnsLogin from '@/hooks/useSnsLogin';
+import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 
 export default function SocialLoginList({
     isOnlySocialLoginListVisible = true,

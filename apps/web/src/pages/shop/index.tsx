@@ -38,7 +38,6 @@ export default function ShopMainPage() {
                 <HeroBanner type='SHOP' />
                 <IconBanner type='SHOP' />
             </section>
-
             {/* 라이프 타임특가 */}
             <ShopbyAsyncBoundary errorFallback={<></>}>
                 <TimeSale
@@ -47,10 +46,8 @@ export default function ShopMainPage() {
                     title='라이프 타임특가'
                 />
             </ShopbyAsyncBoundary>
-
             {/* 영상(기획전) */}
             <Event index={1} />
-
             {/* 키즈 타임특가 */}
             <LazyRender minHeight={400}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>
@@ -61,35 +58,30 @@ export default function ShopMainPage() {
                     />
                 </ShopbyAsyncBoundary>
             </LazyRender>
-
             {/* 영상(기획전) */}
             <LazyRender minHeight={400}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Event index={2} />
                 </ShopbyAsyncBoundary>
             </LazyRender>
-
             {/* 라이프 베스트 */}
             <LazyRender minHeight={500}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Best type='LIFE' />
                 </ShopbyAsyncBoundary>
             </LazyRender>
-
             {/* 영상(기획전) */}
             <LazyRender minHeight={400}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Event index={3} />
                 </ShopbyAsyncBoundary>
             </LazyRender>
-
             {/* 키즈 베스트 */}
             <LazyRender minHeight={500}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Best type='KIDS' />
                 </ShopbyAsyncBoundary>
             </LazyRender>
-
             {/* 영상(기획전) */}
             <LazyRender minHeight={400}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>

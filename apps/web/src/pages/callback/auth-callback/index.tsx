@@ -14,7 +14,10 @@ import { NcpOpenIdProviderType } from '@/models';
 import { GetProfileResponse } from '@/models/member/profile';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 
+import { useIsClient } from '@/shared/hooks/useIsClient';
+
 export const AuthCallbackPage = () => {
+    const isClient = useIsClient();
     const router = useRouter();
 
     const isLoggedIn = useAuth();
@@ -25,7 +28,7 @@ export const AuthCallbackPage = () => {
 
     const [openReturnUrl, setOpenReturnUrl] = useLocalStorage(
         'openReturnUrl',
-        window.location.origin,
+        isClient ? window.location.origin : '',
     );
 
     const returnPage = ({

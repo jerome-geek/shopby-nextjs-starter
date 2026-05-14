@@ -21,7 +21,7 @@ import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useTermList } from '@/hooks/query/manage/terms';
-import useSnsLogin from '@/hooks/useSnsLogin';
+import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import { useKcpCertification } from '@/hooks/utils';
 import useDialog from '@/hooks/utils/useDialog';
 import { NextPageWithLayout } from '@/pages/_app';

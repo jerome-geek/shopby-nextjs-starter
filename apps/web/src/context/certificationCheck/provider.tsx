@@ -10,7 +10,7 @@ import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useAuth } from '@/hooks/useAuth';
-import useSnsLogin from '@/hooks/useSnsLogin';
+import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import { useKcpCertification, useLocale } from '@/hooks/utils';
 import useUpdateProfile from '@/hooks/utils/useUpdateProfile';
 
