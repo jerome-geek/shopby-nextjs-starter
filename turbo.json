@@ -6,6 +6,9 @@
       "outputs": [".next/**", "dist/**"]
     },
     "lint": {},
+    "test:run": {
+      "cache": true
+    },
     "dev": {
       "cache": false,
       "persistent": true
