@@ -59,10 +59,19 @@ export const swiperSlide = style({
     height: 'auto',
 });
 
-export const emptyState = style({
-    padding: '40px 0',
-    textAlign: 'center',
-    color: vars.color.gray['40'],
-    backgroundColor: vars.color.gray['10'],
-    borderRadius: '16px',
-});
+export const emptyState = style([
+    textStyles.caption1Regular,
+    {
+        padding: '40px 0',
+        textAlign: 'center',
+        color: vars.color.gray['80'],
+        backgroundColor: vars.color.gray['10'],
+        borderRadius: '16px',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
+    },
+]);
