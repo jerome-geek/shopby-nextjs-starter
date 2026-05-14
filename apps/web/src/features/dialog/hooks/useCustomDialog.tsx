@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
 import { CollectionFormSheet } from '@/components/bottom-sheet/collection-form';
+import { PhotoReviewListBottomSheet } from '@/components/bottom-sheet/photo-review-list';
 import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
 import { RecipeImageUploadSheet } from '@/components/bottom-sheet/recipe-image-upload';
 import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
@@ -15,6 +16,7 @@ import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input'
 import { ShippingAddressChangeBottomSheet } from '@/components/bottom-sheet/shipping-address-change';
 import { ImageDetailModal } from '@/components/modal';
 import { CollectionFormModal } from '@/components/modal/collection-form';
+import { PhotoReviewListModal } from '@/components/modal/photo-review-list';
 import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
 import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
 import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendation';
@@ -38,7 +40,7 @@ export const useCustomDialog = () => {
     const { openAsyncDialog } = useDialog();
     const { isMyApp, handleSendLoginView } = useMyApp();
 
-    const [_, setModalQuery] = useQueryStates(
+    const [, setModalQuery] = useQueryStates(
         {
             [MODAL_QUERY_KEY]: parseAsString,
             recipeSno: parseAsString,
@@ -192,6 +194,27 @@ export const useCustomDialog = () => {
             overlayId: OVERLAY_ID.IMAGE_DETAIL,
         });
     }, []);
+
+    const openPhotoReviewList = useCallback(
+        ({ productNo, reviewNo }: { productNo: number; reviewNo: number }) => {
+            overlay.open((props) =>
+                isMobile ? (
+                    <PhotoReviewListBottomSheet
+                        productNo={productNo}
+                        reviewNo={reviewNo}
+                        {...props}
+                    />
+                ) : (
+                    <PhotoReviewListModal
+                        productNo={productNo}
+                        reviewNo={reviewNo}
+                        {...props}
+                    />
+                ),
+            );
+        },
+        [isMobile],
+    );
 
     const _openRecipeCreateSelection = useCallback(() => {
         if (isMobile) {
@@ -407,6 +430,7 @@ export const useCustomDialog = () => {
         openCollectionCreate,
         openCollectionForm,
         openImageDetail,
+        openPhotoReviewList,
         openRecipeRecommendation,
         openShippingAddressChangeDialog,
         withRequiredAuth,
