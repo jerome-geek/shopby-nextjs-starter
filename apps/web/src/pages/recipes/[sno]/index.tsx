@@ -42,10 +42,11 @@ const HEADER_HEIGHT = 90;
 const HEADER_HEIGHT_MOBILE = 70;
 const SCROLL_OFFSET_MARGIN = 16;
 
-const RecipeDetailPage = ({
-    sno,
-    seoData,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+interface RecipeDetailContentProps {
+    sno: number;
+}
+
+const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
     const { t } = useTranslation();
 
     const { isMobile } = useResponsive();
@@ -208,8 +209,6 @@ const RecipeDetailPage = ({
 
     return (
         <div className={styles.container}>
-            {seoData && <Seo type='article' {...seoData} />}
-
             {/* --- HEADER AREA --- */}
             <section className={styles.headerArea}>
                 <div
@@ -467,6 +466,20 @@ const RecipeDetailPage = ({
                 />
             </FetchBoundary>
         </div>
+    );
+};
+
+const RecipeDetailPage = ({
+    sno,
+    seoData,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
+    return (
+        <>
+            {seoData && <Seo type='article' {...seoData} />}
+            <FetchBoundary>
+                <RecipeDetailContent sno={sno} />
+            </FetchBoundary>
+        </>
     );
 };
 
