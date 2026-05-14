@@ -11,7 +11,6 @@ export function ExternalScripts() {
                 name='google-site-verification'
                 content='tltrrMHJ9cWS78-F9Mv0zbl8c0rjNuKBr60rmXdOPJI'
             />
-
             {/* 샵바이 관련 */}
             <Script
                 id='myapp-script'

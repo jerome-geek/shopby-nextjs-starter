@@ -16,7 +16,7 @@ import EventErrorState from '@/features/event/detail/components/event-error-stat
 import EventProductSection from '@/features/event/detail/components/event-product-section';
 import EventSectionTab from '@/features/event/detail/components/event-section-tab';
 import EventTop from '@/features/event/detail/components/event-top';
-import { ONE_HOUR_IN_SECONDS, ONE_MINUTE_IN_SECONDS } from '@/const/time';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { eventKeys } from '@/hooks/queryKeys';
 import { useEvent } from '@/hooks/suspenseQuery/display/event';
 
@@ -240,7 +240,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                             error.response?.data?.message ||
                             '기획전을 불러올 수 없습니다.',
                     },
-                    revalidate: ONE_MINUTE_IN_SECONDS,
+                    revalidate: ONE_HOUR_IN_SECONDS,
                 };
             }
         }

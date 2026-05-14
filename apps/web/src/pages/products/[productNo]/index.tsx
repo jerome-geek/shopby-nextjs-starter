@@ -42,6 +42,7 @@ import {
 } from '@/components/product-option';
 import { Button } from '@/components/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { useProductInfo, useProductPrice } from '@/entities/product/hooks';
 import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
@@ -598,7 +599,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                             error.response?.data?.message ||
                             '상품을 불러올 수 없습니다.',
                     },
-                    revalidate: 10,
+                    revalidate: ONE_HOUR_IN_SECONDS,
                 };
             }
         }
@@ -611,6 +612,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             seoData,
             dehydratedState: dehydrate(queryClient),
         },
-        revalidate: 60 * 60, // 1시간
+        revalidate: ONE_HOUR_IN_SECONDS,
     };
 };

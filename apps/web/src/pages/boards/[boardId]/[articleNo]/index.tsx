@@ -18,6 +18,7 @@ import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { PasswordCheckModal } from '@/components/modal/password-check';
 import { ReportModal } from '@/components/modal/report';
 import { Column, Row } from '@/components/ui/layout/flex';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import { useBoardPost } from '@/hooks/query/manage/board';
 import { useProfile } from '@/hooks/query/member/profile';
@@ -592,7 +593,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                         errorMessage: error.response?.data?.message || '게시글을 불러올 수 없습니다.',
                         errorCode: error.response?.data?.code || '',
                     },
-                    revalidate: 10,
+                    revalidate: ONE_HOUR_IN_SECONDS,
                 };
             }
         }
@@ -606,6 +607,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             seoData,
             dehydratedState: dehydrate(queryClient),
         },
-        revalidate: 60 * 60, // 1시간
+        revalidate: ONE_HOUR_IN_SECONDS,
     };
 };
