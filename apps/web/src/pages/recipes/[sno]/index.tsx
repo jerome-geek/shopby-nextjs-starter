@@ -3,13 +3,7 @@ import { filter, pipe, toArray, uniq } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useLenis } from 'lenis/react';
-import {
-    Bookmark,
-    ChevronLeft,
-    ChevronRight,
-    Heart,
-    ShoppingCart,
-} from 'lucide-react';
+import { Bookmark, Heart, ShoppingCart } from 'lucide-react';
 import type {
     GetStaticPaths,
     GetStaticProps,
@@ -18,9 +12,6 @@ import type {
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Swiper as SwiperType } from 'swiper';
-import { Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { recipe } from '@/api/shop';
 import FetchBoundary from '@/components/common/FetchBoundary';
@@ -33,6 +24,7 @@ import {
 } from '@/components/recipe';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import { SIX_HOUR_IN_SECONDS } from '@/const/time';
 import { createRecipeSeoData } from '@/entities/recipe/utils/seo';
 import { useCustomDialog } from '@/features/dialog';
 import useBookmark from '@/features/recipe/hooks/useBookmark';
@@ -45,10 +37,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
 import { vars } from '@/styles/theme.css';
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 const HEADER_HEIGHT = 90;
 const HEADER_HEIGHT_MOBILE = 70;
@@ -137,7 +125,7 @@ const RecipeDetailPage = ({
         toArray,
     );
 
-    const swiperRef = useRef<SwiperType | null>(null);
+    const youtubeIframeRef = useRef<HTMLIFrameElement | null>(null);
 
     const onLikeToggle = () => {
         if (!isLogin) {
@@ -183,7 +171,40 @@ const RecipeDetailPage = ({
         }
     };
 
-    const isSwiperEnabled = imageList.length > 1;
+    const isYoutube = recipeDetailData.sourceType === 'YOUTUBE';
+    const isYoutubeShorts = isYoutube && sourceUrl.includes('/shorts/');
+    const isYoutubeLongForm = isYoutube && !isYoutubeShorts;
+    const youtubeEmbedUrl =
+        isYoutube && recipeDetailData.sourceId
+            ? `https://www.youtube.com/embed/${recipeDetailData.sourceId}?enablejsapi=1&rel=0&playsinline=1`
+            : null;
+    const thumbnailUrl = recipeDetailData.thumbnailUrl || imageList[0];
+
+    const seekYoutubeTo = (seconds: number) => {
+        const contentWindow = youtubeIframeRef.current?.contentWindow;
+
+        if (!contentWindow) {
+            return;
+        }
+
+        contentWindow.postMessage(
+            JSON.stringify({
+                event: 'command',
+                func: 'seekTo',
+                args: [seconds, true],
+            }),
+            'https://www.youtube.com',
+        );
+
+        contentWindow.postMessage(
+            JSON.stringify({
+                event: 'command',
+                func: 'playVideo',
+                args: [],
+            }),
+            'https://www.youtube.com',
+        );
+    };
 
     return (
         <div className={styles.container}>
@@ -193,71 +214,33 @@ const RecipeDetailPage = ({
             <section className={styles.headerArea}>
                 <div
                     className={styles.imageCarouselContainer({
-                        sticky: recipeDetailData.sourceType === 'YOUTUBE',
+                        sticky: isYoutubeLongForm,
                     })}
                 >
-                    <div className={styles.imageCarousel}>
-                        <Swiper
-                            modules={[Pagination]}
-                            enabled={isSwiperEnabled}
-                            pagination={{
-                                clickable: true,
-                                el: '.recipe-thumbnail-pagination',
-                            }}
-                            onSwiper={(swiper) => {
-                                swiperRef.current = swiper;
-                            }}
-                            style={{ height: '100%', width: '100%' }}
-                        >
-                            {imageList.map((img, idx) => {
-                                return (
-                                    <SwiperSlide key={idx}>
-                                        <a
-                                            href={sourceUrl}
-                                            target='_blank'
-                                            rel='noopener noreferrer'
-                                            style={{
-                                                display: 'block',
-                                                width: '100%',
-                                                height: '100%',
-                                            }}
-                                        >
-                                            <img
-                                                src={img}
-                                                alt={`recipe image ${idx}`}
-                                                className={styles.carouselImage}
-                                            />
-                                        </a>
-                                    </SwiperSlide>
-                                );
-                            })}
-                        </Swiper>
-                        {isSwiperEnabled && (
-                            <>
-                                <button
-                                    className={`${styles.carouselNavButton} ${styles.carouselNavPrev}`}
-                                    onClick={() =>
-                                        swiperRef.current?.slidePrev()
-                                    }
-                                    aria-label='이전 이미지'
-                                >
-                                    <ChevronLeft size={24} strokeWidth={2} />
-                                </button>
-                                <button
-                                    className={`${styles.carouselNavButton} ${styles.carouselNavNext}`}
-                                    onClick={() =>
-                                        swiperRef.current?.slideNext()
-                                    }
-                                    aria-label='다음 이미지'
-                                >
-                                    <ChevronRight size={24} strokeWidth={2} />
-                                </button>
-                            </>
+                    <div
+                        className={styles.imageCarousel({
+                            ratio: isYoutubeLongForm ? 'wide' : 'square',
+                        })}
+                    >
+                        {youtubeEmbedUrl ? (
+                            <iframe
+                                ref={youtubeIframeRef}
+                                src={youtubeEmbedUrl}
+                                title={recipeDetailData.title}
+                                className={styles.carouselVideo}
+                                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                                allowFullScreen
+                            />
+                        ) : (
+                            thumbnailUrl && (
+                                <img
+                                    src={thumbnailUrl}
+                                    alt={recipeDetailData.title}
+                                    className={styles.carouselImage}
+                                />
+                            )
                         )}
                     </div>
-                    {isSwiperEnabled && (
-                        <div className='recipe-thumbnail-pagination' />
-                    )}
                 </div>
 
                 <div className={styles.headerInfo}>
@@ -417,28 +400,36 @@ const RecipeDetailPage = ({
                             <div className={styles.stepContent}>
                                 <p className={styles.stepDescription}>
                                     {step.description}
-                                    {step.timestampSeconds && (
-                                        <a
-                                            href={
-                                                recipeDetailData.sourceType ===
-                                                'YOUTUBE'
-                                                    ? `https://www.youtube.com/watch?v=${recipeDetailData.sourceId}&t=${step.timestampSeconds}s`
-                                                    : recipeDetailData.sourceUrl ||
-                                                      '#'
-                                            }
-                                            target='_blank'
-                                            rel='noopener noreferrer'
-                                            className={styles.stepTime}
-                                        >
-                                            {dayjs()
-                                                .startOf('day')
-                                                .add(
-                                                    step.timestampSeconds,
-                                                    'second',
-                                                )
-                                                .format('mm:ss')}
-                                        </a>
-                                    )}
+                                    {isYoutube &&
+                                        step.timestampSeconds != null && (
+                                            <button
+                                                type='button'
+                                                onClick={() =>
+                                                    seekYoutubeTo(
+                                                        step.timestampSeconds ??
+                                                            0,
+                                                    )
+                                                }
+                                                className={styles.stepTime}
+                                                aria-label={`영상 ${dayjs()
+                                                    .startOf('day')
+                                                    .add(
+                                                        step.timestampSeconds,
+                                                        'second',
+                                                    )
+                                                    .format(
+                                                        'mm:ss',
+                                                    )} 구간으로 이동`}
+                                            >
+                                                {dayjs()
+                                                    .startOf('day')
+                                                    .add(
+                                                        step.timestampSeconds,
+                                                        'second',
+                                                    )
+                                                    .format('mm:ss')}
+                                            </button>
+                                        )}
                                 </p>
                             </div>
                         </li>
@@ -520,7 +511,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             seoData,
             dehydratedState: dehydrate(queryClient),
         },
-        revalidate: 60 * 60 * 6, // 6시간마다 데이터 갱신 여부 체크 (ISR)
+        revalidate: SIX_HOUR_IN_SECONDS,
     };
 };
 
