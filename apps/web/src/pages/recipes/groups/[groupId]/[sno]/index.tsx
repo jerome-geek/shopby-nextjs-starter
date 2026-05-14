@@ -1,3 +1,4 @@
+import Seo from '@/components/common/seo';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { ChefHat, Share2 } from 'lucide-react';
 import type {
@@ -5,7 +6,6 @@ import type {
     GetStaticProps,
     InferGetStaticPropsType,
 } from 'next';
-import Seo from '@/components/common/seo';
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -229,8 +229,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         await queryClient.fetchQuery({
             queryKey: recipeKeys.exposureGroup(formattedGroupId),
             queryFn: async () => {
-                const { data } =
-                    await recipe.getRecipeExposureGroup(formattedGroupId);
+                const { data } = await recipe.getRecipeExposureGroup(
+                    formattedGroupId,
+                );
 
                 return data;
             },

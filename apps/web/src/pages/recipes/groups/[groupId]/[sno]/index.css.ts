@@ -3,7 +3,7 @@ import { style } from '@vanilla-extract/css';
 import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 // --- Layout ---
 export const container = style({
@@ -42,8 +42,16 @@ export const stickyWrapper = style({
             top: globalVars.header.height,
             height: `calc(100vh - ${globalVars.header.height})`,
             overflowY: 'auto',
-            paddingBottom: '60px',
-            paddingTop: '20px',
+            paddingBottom: '20px',
+            paddingRight: '8px',
+
+            '::-webkit-scrollbar': {
+                width: '4px',
+            },
+            '::-webkit-scrollbar-thumb': {
+                backgroundColor: vars.color.gray['30'],
+                borderRadius: '10px',
+            },
         },
     },
 });
@@ -140,16 +148,28 @@ export const badge = style([
 ]);
 
 export const groupTitle = style([
-    textStyles.display1Semibold,
+    textStyles.title1Bold,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.display1Semibold,
+            },
+        },
     },
 ]);
 
 export const groupDescription = style([
-    textStyles.headingMedium,
+    textStyles.headlineRegular,
     {
         color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingMedium,
+            },
+        },
     },
 ]);
 
