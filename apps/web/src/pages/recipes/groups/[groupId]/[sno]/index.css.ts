@@ -111,22 +111,16 @@ export const groupThumbnailPlaceholder = style({
     },
 });
 
-
-
-
-
-
 // --- Group Info ---
 export const groupInfo = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '14px',
-    padding: '16px',
+    padding: '24px 0 0',
 
     '@media': {
         [media.desktop]: {
             gap: '12px',
-            padding: '24px',
         },
     },
 });

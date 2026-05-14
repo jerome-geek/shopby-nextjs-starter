@@ -23,17 +23,17 @@ export const container = style({
 
 // --- Hero Section ---
 export const heroSection = style({
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: '48px',
+    paddingTop: '0',
     display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-    paddingTop: '32px',
 
     '@media': {
-        [media.desktop]: {
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            gap: '48px',
-            paddingTop: '48px',
+        [media.mobile]: {
+            flexDirection: 'column',
+            gap: '20px',
+            paddingTop: '24px',
         },
     },
 });
@@ -180,10 +180,11 @@ export const dropdownItem = style([
             '&[data-variant="danger"]': {
                 color: '#ff4d4d',
             },
-            '&[data-variant="danger"]:hover, &[data-variant="danger"][data-highlighted]': {
-                backgroundColor: 'rgba(255, 77, 77, 0.08)',
-                color: '#ff4d4d',
-            },
+            '&[data-variant="danger"]:hover, &[data-variant="danger"][data-highlighted]':
+                {
+                    backgroundColor: 'rgba(255, 77, 77, 0.08)',
+                    color: '#ff4d4d',
+                },
         },
     },
 ]);

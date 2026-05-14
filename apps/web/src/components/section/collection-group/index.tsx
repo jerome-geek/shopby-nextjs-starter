@@ -1,4 +1,4 @@
-import { head, isEmpty } from '@fxts/core';
+import { isEmpty } from '@fxts/core';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
 import CollectionSection from '@/components/section/collection-group/collection';
@@ -19,23 +19,32 @@ const CollectionGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
         groupId,
     });
 
-    const collectionGroup = head(collectionExposureGroupData?.groups ?? []);
+    const collectionGroups = collectionExposureGroupData?.groups ?? [];
 
-    const recipes = collectionGroup?.collection?.recipes ?? [];
-
-    if (!collectionGroup || isEmpty(recipes)) {
+    if (isEmpty(collectionGroups)) {
         return null;
     }
 
     const groupNo = Number(groupId.split('_')?.[2]) || 0;
 
     return (
-        <section>
-            <CollectionSection
-                collectionGroup={collectionGroup}
-                groupNo={groupNo}
-            />
-        </section>
+        <>
+            {collectionGroups.map((collectionGroup) => {
+                const recipes = collectionGroup?.collection?.recipes ?? [];
+
+                if (isEmpty(recipes)) {
+                    return null;
+                }
+
+                return (
+                    <CollectionSection
+                        key={collectionGroup.sno}
+                        collectionGroup={collectionGroup}
+                        groupNo={groupNo}
+                    />
+                );
+            })}
+        </>
     );
 };
 

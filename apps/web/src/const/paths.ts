@@ -254,5 +254,6 @@ export const PATHS = {
         DETAIL: '/recipes/[sno]',
         SCRAP: '/recipes/scrap',
         COLLECTIONS: '/recipes/collections/[shareCode]',
+        GROUPS: '/recipes/groups/[groupId]/[sno]',
     },
 };

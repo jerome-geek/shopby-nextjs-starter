@@ -70,6 +70,7 @@ export const getIconListType = (pathname: string) => {
         PATHS.PRODUCTS.NEW,
         PATHS.EVENTS.DETAIL,
         PATHS.BOARDS.DETAIL,
+        PATHS.RECIPES.GROUPS,
     ];
 
     const isSearchCartTypePaths = [
