@@ -8,8 +8,8 @@ export const headerInner = style({
     height: globalVars.header.mobileHeight,
     width: '100%',
     display: 'flex',
-    alignItems: 'end',
-    padding: '0 20px 8px',
+    alignItems: 'center',
+    padding: '0 20px',
 });
 
 export const container = style({
@@ -20,7 +20,7 @@ export const container = style({
     alignItems: 'center',
     display: 'grid',
     gridTemplateColumns: '1fr auto 1fr',
-    padding: '0 0 8px',
+    padding: '0',
 });
 
 export const logo = style({

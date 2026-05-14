@@ -1,7 +1,9 @@
+import { style } from '@vanilla-extract/css';
+
+import { globalVars } from '@/styles/global.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
-import { style } from '@vanilla-extract/css';
 
 export const searchKeywordFormContainer = style({
     display: 'flex',
@@ -9,8 +11,9 @@ export const searchKeywordFormContainer = style({
     gap: '12px',
     flexShrink: 0,
     width: '100%',
-    padding: '22px 20px 8px',
+    padding: '0 20px',
     boxSizing: 'border-box',
+    height: globalVars.header.mobileHeight,
 
     '@media': {
         [media.desktop]: {
@@ -18,6 +21,11 @@ export const searchKeywordFormContainer = style({
             gap: '12px',
             padding: '0',
             maxWidth: '588px',
+            height: 'auto',
+        },
+        [media.tablet]: {
+            padding: '22px 20px 8px',
+            height: 'auto',
         },
     },
 });

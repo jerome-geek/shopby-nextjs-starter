@@ -210,10 +210,12 @@ export const ingredientContainer = style({
     flexDirection: 'column',
     flex: 1,
     gap: '10px',
+    width: 'calc(100% - 122px)',
 
     '@media': {
         [media.desktop]: {
             gap: '12px',
+            width: 'calc(100% - 149px)',
         },
     },
 });
@@ -273,6 +275,7 @@ export const ingredientListItem = style([
     textStyles.body2Regular,
     {
         color: vars.color.gray['80'],
+        overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
         gap: '4px',
@@ -342,6 +345,10 @@ export const ingredientSeparator = style({
 export const ingredientAmount = style({
     flexShrink: 0,
     color: vars.color.gray['80'],
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    maxWidth: '100%',
 });
 
 /** ───────────────────────────────────────────────────────
