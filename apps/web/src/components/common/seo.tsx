@@ -56,29 +56,55 @@ export default function Seo({
         <Head>
             {/* ── 기본 메타 태그 ── */}
             <title>{fullTitle}</title>
-            {description && <meta name='description' content={description} />}
-            {keywords && <meta name='keywords' content={keywords} />}
-            {author && <meta name='author' content={author} />}
+            {description && (
+                <meta
+                    key='description'
+                    name='description'
+                    content={description}
+                />
+            )}
+            {keywords && (
+                <meta key='keywords' name='keywords' content={keywords} />
+            )}
+            {author && <meta key='author' name='author' content={author} />}
 
             {/* ── 크롤링 및 인덱싱 제어 ── */}
-            {noindex && <meta name='robots' content='noindex, nofollow' />}
+            {noindex && (
+                <meta
+                    key='robots'
+                    name='robots'
+                    content='noindex, nofollow'
+                />
+            )}
             {/* Canonical: URL 파라미터로 인한 중복 페이지 방지 */}
-            {url && <link rel='canonical' href={url} />}
+            {url && <link key='canonical' rel='canonical' href={url} />}
 
             {/* ── Open Graph (카카오톡 · 페이스북 · 네이버 등) ── */}
-            {type && <meta property='og:type' content={type} />}
-            <meta property='og:title' content={fullTitle} />
+            {type && <meta key='og:type' property='og:type' content={type} />}
+            <meta key='og:title' property='og:title' content={fullTitle} />
             {description && (
-                <meta property='og:description' content={description} />
+                <meta
+                    key='og:description'
+                    property='og:description'
+                    content={description}
+                />
             )}
             {image && (
                 <>
-                    <meta property='og:image' content={image} />
-                    <meta property='og:image:alt' content={title || ''} />
+                    <meta
+                        key='og:image'
+                        property='og:image'
+                        content={image}
+                    />
+                    <meta
+                        key='og:image:alt'
+                        property='og:image:alt'
+                        content={title || ''}
+                    />
                 </>
             )}
-            <meta property='og:locale' content='ko_KR' />
-            {url && <meta property='og:url' content={url} />}
+            <meta key='og:locale' property='og:locale' content='ko_KR' />
+            {url && <meta key='og:url' property='og:url' content={url} />}
 
             {/* ── 쇼핑몰 특화 (페이스북 · 인스타그램 다이나믹 광고 등) ── */}
             {type === 'product' && (
@@ -102,12 +128,26 @@ export default function Seo({
             )}
 
             {/* ── Twitter · 슬랙 · 디스코드 ── */}
-            <meta name='twitter:card' content='summary_large_image' />
-            <meta name='twitter:title' content={fullTitle} />
+            <meta
+                key='twitter:card'
+                name='twitter:card'
+                content='summary_large_image'
+            />
+            <meta
+                key='twitter:title'
+                name='twitter:title'
+                content={fullTitle}
+            />
             {description && (
-                <meta name='twitter:description' content={description} />
+                <meta
+                    key='twitter:description'
+                    name='twitter:description'
+                    content={description}
+                />
             )}
-            {image && <meta name='twitter:image' content={image} />}
+            {image && (
+                <meta key='twitter:image' name='twitter:image' content={image} />
+            )}
 
             {/* ── JSON-LD 구조화 데이터 (구글 리치 검색결과) ── */}
             {jsonLd && (
