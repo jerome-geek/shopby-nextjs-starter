@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 // --- Layout ---
 export const container = style({
@@ -11,11 +11,11 @@ export const container = style({
     padding: '0 0 120px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '40px',
+    gap: '24px',
 
     '@media': {
         [media.desktop]: {
-            gap: '60px',
+            gap: '40px',
             padding: '0 24px 80px',
         },
     },
@@ -111,10 +111,16 @@ export const titleWrapper = style({
 });
 
 export const collectionTitle = style([
-    textStyles.display1Semibold,
+    textStyles.title1Bold,
     {
         color: vars.color.black,
         flexShrink: 1,
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.display1Semibold,
+            },
+        },
     },
 ]);
 
@@ -190,9 +196,15 @@ export const dropdownItem = style([
 ]);
 
 export const collectionDescription = style([
-    textStyles.headingMedium,
+    textStyles.headlineRegular,
     {
         color: vars.color.gray['80'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.headingMedium,
+            },
+        },
     },
 ]);
 
