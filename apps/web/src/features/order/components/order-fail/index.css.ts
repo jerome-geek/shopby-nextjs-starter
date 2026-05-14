@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';
+import { media } from '@/styles/media';
 
 export const failContainer = style({
     textAlign: 'center',
@@ -52,6 +53,14 @@ export const ghostButton = style([
             backgroundColor: vars.color.gray['10'],
         },
     },
+    {
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+                padding: '8px 24px',
+            },
+        },
+    },
 ]);
 
 export const primaryButton = style([
@@ -70,6 +79,14 @@ export const primaryButton = style([
         transition: 'opacity 0.2s',
         ':hover': {
             opacity: 0.9,
+        },
+    },
+    {
+        '@media': {
+            [media.mobile]: {
+                fontSize: '1.4rem',
+                padding: '10px 24px',
+            },
         },
     },
 ]);
