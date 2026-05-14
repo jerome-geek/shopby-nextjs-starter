@@ -20,21 +20,21 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
 
     const logout = async () => {
         try {
-            if (isMyApp) {
-                handleSendLogout({
-                    option: {
-                        returnUrl: window.location.origin,
-                    },
-                });
-            }
-
             await oauth2.deleteAccessToken();
 
             memberCookie.clearAll();
             fn?.();
 
             // 로그아웃 버튼을 누른 경우에는 마이페이지 guard보다 의도한 이동을 먼저 완료합니다.
-            await router.replace(PATHS.MAIN);
+            if (isMyApp) {
+                await handleSendLogout({
+                    option: {
+                        returnUrl: window.location.origin,
+                    },
+                });
+            } else {
+                await router.replace(PATHS.MAIN);
+            }
 
             queryClient.removeQueries();
             dispatchAuthChange();

@@ -130,11 +130,13 @@ const useMyApp = ({ isMyAppInit }: { isMyAppInit?: boolean } = {}) => {
     );
 
     const handleSendLogin = (action: MyAppHandleType<'LOGIN'>) => {
-        alert('MYAPP_BRIDGE_CALL_LOGIN');
         sendToMyApp('LOGIN', action);
     };
     const handleSendLogout = (action: MyAppHandleType<'LOGOUT'>) =>
-        sendToMyApp('LOGOUT', action);
+        new Promise((resolve) => {
+            sendToMyApp('LOGOUT', action);
+            resolve(true);
+        });
     const handleSendInitLoginInfo = () => sendToMyApp('INIT_LOGIN_INFO');
     const handleSendPasswordModify = () => sendToMyApp('PASSWORD_MODIFIED');
     const handleSendRefreshTokenExpired = () =>
