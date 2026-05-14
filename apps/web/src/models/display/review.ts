@@ -205,8 +205,8 @@ export interface GetReviewableOptionResponse {
 }
 
 export interface GetProductReviewListV2Params extends Paging {
-    /** 첨부 파일 여부 ( 파일 첨부:Y, 파일 미첨부(default):N, 빈값:ALL ) */
-    hasAttachmentFile?: 'Y' | 'N' | 'ALL';
+    /** 첨부 파일 여부 (NOTE: 문서 수정 예정) */
+    hasAttachmentFile?: boolean;
     order?: {
         /** 정렬 기준 (추천순: RECOMMEND, 등록일순: REGISTER_YMDT, 평점순: RATING, 베스트리뷰순: BEST_REVIEW) */
         by: ReviewOrderByType;
