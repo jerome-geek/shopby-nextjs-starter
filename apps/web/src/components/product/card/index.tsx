@@ -10,7 +10,7 @@ import type { StickerInfo } from '@/models/display';
 import type { ImageUrlType } from '@/models/product';
 import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
 import { CURRENCY } from '@/utils/currency';
-import { normalizeImageUrl } from '@/utils/shopby';
+import { normalizeImageUrl } from '@/shared/utils/shopby';
 
 export interface ProductCardProps {
     productNo: number;

@@ -12,7 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/complete/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
-import { extractBannerContentsByAccountIndex } from '@/utils/shopby';
+import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
 const SignupCompleteSkeleton = () => (
     <>

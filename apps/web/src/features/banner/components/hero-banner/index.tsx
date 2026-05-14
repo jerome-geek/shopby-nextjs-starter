@@ -21,7 +21,7 @@ import { getLandingUrl, getLinkTarget } from '@/utils/banner';
 import {
     extractBannerContentsByAccountIndex,
     normalizeImageUrl,
-} from '@/utils/shopby';
+} from '@/shared/utils/shopby';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';

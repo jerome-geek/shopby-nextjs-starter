@@ -10,7 +10,7 @@ import { bannerKeys } from '@/hooks/queryKeys';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/register-method/index.css';
-import { extractBannerContents } from '@/utils/shopby';
+import { extractBannerContents } from '@/shared/utils/shopby';
 import ImageWrapper from '@/components/ui/image';
 
 const BANNER_LIST = [BANNER_ID.REGISTER_METHOD];

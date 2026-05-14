@@ -26,7 +26,7 @@ import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import * as styles from '@/styles/pages/login.css';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
-import { extractBannerContentsByAccountIndex } from '@/utils/shopby';
+import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
 const LoginPage: NextPageWithLayout = () => {
     const isDev = process.env.NEXT_PUBLIC_MODE === 'development';

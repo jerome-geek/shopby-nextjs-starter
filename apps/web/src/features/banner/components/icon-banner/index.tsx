@@ -10,7 +10,7 @@ import Skeleton from '@/components/ui/skeleton';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import type { Banner } from '@/models/display/banner';
 import { getLandingUrl } from '@/utils/banner';
-import { extractBannerContentsByAccountIndex } from '@/utils/shopby';
+import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';

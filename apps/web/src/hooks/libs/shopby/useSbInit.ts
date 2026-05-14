@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useIsClient } from '@/shared/hooks/useIsClient';
-import { determinePageScriptType } from '@/utils/shopby';
+import { determinePageScriptType } from '@/shared/utils/shopby';
 
 export const useSbInit = () => {
     const isClient = useIsClient();

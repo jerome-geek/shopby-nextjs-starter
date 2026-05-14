@@ -6,7 +6,6 @@ import Link from 'next/link';
 import * as styles from '@/components/cart/order-product-item/index.css';
 import { InputCheckbox } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
-import { PRODUCT_IMAGE_RESIZE } from '@/const/product';
 import { useResponsive } from '@/hooks/utils';
 import type {
     InvalidProduct,
@@ -18,6 +17,7 @@ import type {
     GuestOrderProductOption,
 } from '@/models/order/guestOrder';
 import { CURRENCY } from '@/utils/currency';
+import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
 import { useTranslation } from 'react-i18next';
 
 type OrderInvalidProduct = Omit<
@@ -50,9 +50,7 @@ export const OrderProductItem = ({
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
 
-    const imageSize = isMobile
-        ? PRODUCT_IMAGE_RESIZE.MOBILE
-        : PRODUCT_IMAGE_RESIZE.DESKTOP;
+    const imageSize = isMobile ? 144 : 256;
 
     const { product, option } = item;
 
@@ -103,7 +101,7 @@ export const OrderProductItem = ({
                     href={`${PATHS.PRODUCTS.MAIN}/${product.productNo}`}
                 >
                     <img
-                        src={`${option.imageUrl || product.imageUrl}?${imageSize}`}
+                        src={getShopbyResizeImageUrl(option.imageUrl || product.imageUrl, imageSize)}
                         alt={product.productName}
                         className={styles.itemImage}
                     />

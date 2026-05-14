@@ -8,7 +8,7 @@ import * as styles from '@/components/product/card-row/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
 import { CURRENCY } from '@/utils/currency';
-import { normalizeImageUrl } from '@/utils/shopby';
+import { normalizeImageUrl } from '@/shared/utils/shopby';
 
 import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 

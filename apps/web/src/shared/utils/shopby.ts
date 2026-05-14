@@ -112,3 +112,29 @@ export const determinePageScriptType = (pathname: string) => {
         (b) => (b ? PATH_MAP[b as keyof typeof PATH_MAP] : null),
     );
 };
+
+/**
+ * 샵바이 CDN 이미지 리사이징 URL 생성
+ * - 형식: {url}?{width}x{height}
+ *
+ * @param url 원본 이미지 URL
+ * @param width 가로 크기 (px)
+ * @param height 세로 크기 (px, 생략 시 width와 동일하게 설정)
+ * @returns 리사이징 파라미터가 포함된 URL
+ */
+export const getShopbyResizeImageUrl = (
+    url: string | undefined,
+    width: number,
+    height?: number,
+): string => {
+    const normalizedUrl = normalizeImageUrl(url);
+
+    if (!normalizedUrl) return '';
+
+    const targetHeight = height ?? width;
+
+    // 이미 쿼리 파라미터가 있는 경우 처리 (일반적으로 샵바이 CDN은 ? 형식을 사용)
+    const separator = normalizedUrl.includes('?') ? '&' : '?';
+
+    return `${normalizedUrl}${separator}${width}x${targetHeight}`;
+};

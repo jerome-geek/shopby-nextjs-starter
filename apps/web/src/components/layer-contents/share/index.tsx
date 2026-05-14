@@ -6,7 +6,7 @@ import ShareSkeleton from '@/components/layer-contents/share/skeleton';
 import { useShare } from '@/features/share';
 import { bannerListOptions } from '@/hooks/suspenseQuery/display/banner';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
-import { extractBannerContentsByAccountIndex } from '@/utils/shopby';
+import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
 const ShareContent = () => {
     const { handleShare } = useShare();

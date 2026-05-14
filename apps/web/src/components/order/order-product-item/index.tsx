@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/order-product-item/index.css';
-import { PRODUCT_IMAGE_RESIZE } from '@/const/product';
 import { useResponsive } from '@/hooks/utils';
 import { CURRENCY } from '@/utils/currency';
+import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
 
 interface OrderProductItemProps {
     imageUrl: string;
@@ -30,14 +30,12 @@ export const OrderProductItem = ({
 }: OrderProductItemProps) => {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
-    const imageSize = isMobile
-        ? PRODUCT_IMAGE_RESIZE.MOBILE
-        : PRODUCT_IMAGE_RESIZE.DESKTOP;
+    const imageSize = isMobile ? 144 : 256;
 
     return (
         <article className={`${styles.productItem} ${className ?? ''}`}>
             <img
-                src={`${imageUrl}?${imageSize}`}
+                src={getShopbyResizeImageUrl(imageUrl, imageSize)}
                 alt={productName}
                 className={styles.thumbnail}
             />
