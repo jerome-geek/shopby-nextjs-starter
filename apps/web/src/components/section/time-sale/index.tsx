@@ -58,7 +58,6 @@ export const TimeSaleSection = memo(
             },
             options: { enabled: sectionNo > 0 },
         });
-        console.log('🚀 ~ todayOpenData:', todayOpenData);
 
         const isLoading =
             isProductSectionByIdLoading || isTimeSaleSectionProductsLoading;

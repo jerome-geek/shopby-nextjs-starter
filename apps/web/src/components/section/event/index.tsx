@@ -1,46 +1,56 @@
-import { SuspenseQuery } from '@suspensive/react-query';
+import { SuspenseQueries } from '@suspensive/react-query';
 
-import { event } from '@/api/display';
-import FetchBoundary from '@/components/common/FetchBoundary';
 import EventCard from '@/components/section/event/card';
 import EventSectionSkeleton from '@/components/section/event/skeleton';
-import { eventKeys } from '@/hooks/queryKeys';
-import type { GetEventResponse } from '@/models/display/event';
+import { bannerListOptions } from '@/entities/banner/queries';
+import { eventDetailOptions } from '@/entities/event/queries';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
-const EventCardContent = ({ event }: { event: GetEventResponse }) => {
-    if (!event) {
-        return null;
-    }
+interface EventSectionProps {
+    index?: number;
+    eventNo?: number;
+}
 
-    return <EventCard event={event} />;
-};
-
-const Event = ({ index, eventNo }: { index?: number; eventNo?: number }) => {
-    const eventKey = (index ? `SHOP_MAIN_${index}` : eventNo) || 0;
+const EventSection = ({ index, eventNo }: EventSectionProps) => {
+    const eventKey = (index ? `SHOP_MAIN_${index}` : eventNo) || '';
 
     if (!eventKey) {
         return null;
     }
 
     return (
-        <FetchBoundary
+        <ShopbyAsyncBoundary
             fallback={<EventSectionSkeleton />}
             errorFallback={<></>}
         >
-            <SuspenseQuery
-                queryKey={eventKeys.detail(eventKey)}
-                queryFn={async () => {
-                    const { data } = await event.getEvent(eventKey);
-
-                    return data;
-                }}
+            <SuspenseQueries
+                queries={[
+                    eventDetailOptions({ eventKey }),
+                    bannerListOptions({
+                        type: 'id',
+                        banners: [eventKey.toString()],
+                        // options: {
+                        //     select: (data) => {
+                        //         return extractBannerContentsByAccountIndex(
+                        //             data,
+                        //             0,
+                        //         );
+                        //     },
+                        // },
+                    }),
+                ]}
             >
-                {({ data }) => {
-                    return <EventCardContent event={data} />;
+                {([{ data: eventDetailData }, { data: bannersData }]) => {
+                    return (
+                        <EventCard
+                            event={eventDetailData}
+                            bannerData={bannersData}
+                        />
+                    );
                 }}
-            </SuspenseQuery>
-        </FetchBoundary>
+            </SuspenseQueries>
+        </ShopbyAsyncBoundary>
     );
 };
 
-export default Event;
+export default EventSection;

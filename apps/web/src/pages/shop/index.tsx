@@ -2,19 +2,21 @@ import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
-import { event, productSection } from '@/api/display';
+import { productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
 import { LazyRender } from '@/components/common';
+import Seo from '@/components/common/seo';
+import EventSection from '@/components/section/event';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
 import { bannerListOptions } from '@/entities/banner/queries';
+import { eventDetailOptions } from '@/entities/event/queries';
 import {
     BANNER_ID_PREFIX,
     HeroBanner,
 } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
 import { productSectionKeys, timeSaleKeys } from '@/hooks/queryKeys';
-import eventKeys from '@/hooks/queryKeys/eventKeys';
 import * as styles from '@/pages/shop/index.css';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
@@ -25,70 +27,73 @@ const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
 const Best = dynamic(() => import('@/components/section/best'), {
     ssr: false,
 });
-const Event = dynamic(() => import('@/components/section/event'), {
-    ssr: false,
-});
 
 // 쇼핑몰 기본 홈은 발견
 export default function ShopMainPage() {
     return (
-        <div className={styles.main}>
-            {/* Full-width HeroBanner */}
-            <section className={styles.heroBannerSection}>
-                <HeroBanner type='SHOP' />
-                <IconBanner type='SHOP' />
-            </section>
-            {/* 라이프 타임특가 */}
-            <ShopbyAsyncBoundary errorFallback={<></>}>
-                <TimeSale
-                    type='LIFE'
-                    sectionId='TIMESALE_LIFE'
-                    title='라이프 타임특가'
-                />
-            </ShopbyAsyncBoundary>
-            {/* 영상(기획전) */}
-            <Event index={1} />
-            {/* 키즈 타임특가 */}
-            <LazyRender minHeight={400}>
+        <>
+            <Seo title={'발견'} />
+
+            <div className={styles.main}>
+                {/* Full-width HeroBanner */}
+                <section className={styles.heroBannerSection}>
+                    <HeroBanner type='SHOP' />
+                    <IconBanner type='SHOP' />
+                </section>
+
+                {/* 라이프 타임특가 */}
                 <ShopbyAsyncBoundary errorFallback={<></>}>
                     <TimeSale
-                        type='KIDS'
-                        sectionId='TIMESALE_KIDS'
-                        title='키즈 타임특가'
+                        type='LIFE'
+                        sectionId='TIMESALE_LIFE'
+                        title='라이프 타임특가'
                     />
                 </ShopbyAsyncBoundary>
-            </LazyRender>
-            {/* 영상(기획전) */}
-            <LazyRender minHeight={400}>
-                <ShopbyAsyncBoundary errorFallback={<></>}>
-                    <Event index={2} />
-                </ShopbyAsyncBoundary>
-            </LazyRender>
-            {/* 라이프 베스트 */}
-            <LazyRender minHeight={500}>
-                <ShopbyAsyncBoundary errorFallback={<></>}>
-                    <Best type='LIFE' />
-                </ShopbyAsyncBoundary>
-            </LazyRender>
-            {/* 영상(기획전) */}
-            <LazyRender minHeight={400}>
-                <ShopbyAsyncBoundary errorFallback={<></>}>
-                    <Event index={3} />
-                </ShopbyAsyncBoundary>
-            </LazyRender>
-            {/* 키즈 베스트 */}
-            <LazyRender minHeight={500}>
-                <ShopbyAsyncBoundary errorFallback={<></>}>
-                    <Best type='KIDS' />
-                </ShopbyAsyncBoundary>
-            </LazyRender>
-            {/* 영상(기획전) */}
-            <LazyRender minHeight={400}>
-                <ShopbyAsyncBoundary errorFallback={<></>}>
-                    <Event index={4} />
-                </ShopbyAsyncBoundary>
-            </LazyRender>
-        </div>
+
+                {/* 영상(기획전) */}
+                <EventSection index={1} />
+
+                {/* 키즈 타임특가 */}
+                <LazyRender minHeight={400}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <TimeSale
+                            type='KIDS'
+                            sectionId='TIMESALE_KIDS'
+                            title='키즈 타임특가'
+                        />
+                    </ShopbyAsyncBoundary>
+                </LazyRender>
+
+                {/* 영상(기획전) */}
+                <LazyRender minHeight={400}>
+                    <EventSection index={2} />
+                </LazyRender>
+
+                {/* 라이프 베스트 */}
+                <LazyRender minHeight={500}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <Best type='LIFE' />
+                    </ShopbyAsyncBoundary>
+                </LazyRender>
+
+                {/* 영상(기획전) */}
+                <LazyRender minHeight={400}>
+                    <EventSection index={3} />
+                </LazyRender>
+
+                {/* 키즈 베스트 */}
+                <LazyRender minHeight={500}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <Best type='KIDS' />
+                    </ShopbyAsyncBoundary>
+                </LazyRender>
+
+                {/* 영상(기획전) */}
+                <LazyRender minHeight={400}>
+                    <EventSection index={4} />
+                </LazyRender>
+            </div>
+        </>
     );
 }
 
@@ -111,12 +116,8 @@ export const getStaticProps: GetStaticProps = async () => {
             (async () => {
                 const eventKey = 'SHOP_MAIN_1';
 
-                const { data: detailData } = await event.getEvent(eventKey);
-
-                // 이벤트 상세 캐시 주입 (EventSection 스켈레톤 제거)
-                queryClient.setQueryData(
-                    eventKeys.detail(eventKey),
-                    detailData,
+                await queryClient.prefetchQuery(
+                    eventDetailOptions({ eventKey }),
                 );
             })(),
 

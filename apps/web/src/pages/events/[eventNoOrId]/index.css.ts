@@ -19,18 +19,6 @@ export const contentWrapper = style({
     margin: '0 auto',
 });
 
-export const topSection = style({
-    marginBottom: '48px',
-    width: 'calc(100% + 40px)',
-    marginLeft: '-20px',
-    '@media': {
-        'screen and (min-width: 768px)': {
-            width: '100%',
-            marginLeft: '0',
-        },
-    },
-});
-
 export const divisor = style({
     height: '1px',
     backgroundColor: vars.color.gray[20],
