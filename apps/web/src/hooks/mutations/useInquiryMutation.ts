@@ -7,7 +7,7 @@ import { inquiry } from '@/api/manage';
 import { inquiryKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui';
 import type {
-    UpdateInquiryData,
+    PartialUpdateInquiryData,
     WriteInquiryData,
 } from '@/models/manage/inquiry';
 
@@ -48,8 +48,8 @@ const useInquiryMutation = () => {
                 data,
             }: {
                 inquiryNo: number;
-                data: UpdateInquiryData;
-            }) => await inquiry.updatePartOfInquiry(inquiryNo, data),
+                data: PartialUpdateInquiryData;
+            }) => await inquiry.partialUpdateInquiry(inquiryNo, data),
             onSuccess: onMutationSuccess,
             onError: onMutationError,
         }),

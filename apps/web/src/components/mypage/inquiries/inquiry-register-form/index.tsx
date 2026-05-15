@@ -29,7 +29,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog, useGlobal } from '@/hooks/utils';
 import type { UploadFileBlob } from '@/hooks/utils/useFileUpload';
-import type { UpdateInquiryData } from '@/models/manage/inquiry';
+import type { PartialUpdateInquiryData } from '@/models/manage/inquiry';
 import {
     registerInquirySchema,
     type RegisterInquirySchemaType,
@@ -222,13 +222,13 @@ export const InquiryRegisterForm = ({
         });
 
         if (isModify) {
-            const patchData: UpdateInquiryData = {
+            const patchData: PartialUpdateInquiryData = {
                 inquiryTitle: data.inquiryTitle,
                 inquiryContent: data.inquiryContent,
                 answerEmailSendYn: data.answerEmailSendYn,
                 answerSmsSendYn: data.answerSmsSendYn,
-                originalFileName,
-                uploadedFileName: uploadedImageList,
+                originalFileNames: originalFileName,
+                uploadedFileNames: uploadedImageList,
             };
 
             // TODO: (patch) api 사용해도 첨부파일 삭제 안 되는 현상 있음 샵바이 확인 후 로직 수정 필요

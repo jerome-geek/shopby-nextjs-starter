@@ -88,6 +88,7 @@ const FileUpload = ({
                     <input
                         ref={inputRef}
                         type='file'
+                        multiple
                         onChange={(e) => {
                             const result = uploadFileHandler(e);
 

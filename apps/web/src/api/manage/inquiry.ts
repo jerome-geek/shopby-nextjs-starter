@@ -1,18 +1,14 @@
 import type { AxiosRequestConfig } from 'axios';
-import qs from 'qs';
 
 import { shopbyRequest } from '@/api/core/request';
 import type {
     DownloadInquiryFileParams,
     GetInquiriesParams,
-    GetInquiryResponse,
+    GetInquiriesResponse,
     GetInquiryTypesParams,
+    PartialUpdateInquiryData,
     UpdateInquiryData,
     WriteInquiryData,
-    GetInquiryConfigResponse,
-    GetInquiriesResponse,
-    GetInquiryTypesResponse,
-    WriteInquiryResponse,
 } from '@/models/manage/inquiry';
 
 const inquiry = {
@@ -128,9 +124,9 @@ const inquiry = {
      *  - originalFileNames, uploadedFileNames 이 빈 리스트일 경우 첨부파일은 모두 삭제 됩니다.
      *   - ex) { "originalFileNames" : [], "uploadedFileNames" : [] }
      */
-    updatePartOfInquiry: (
+    partialUpdateInquiry: (
         inquiryNo: number,
-        data: UpdateInquiryData,
+        data: PartialUpdateInquiryData,
         options?: AxiosRequestConfig,
     ) => {
         return shopbyRequest({

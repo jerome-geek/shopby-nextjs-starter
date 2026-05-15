@@ -1,10 +1,10 @@
 import type {
-    InquiryStatusType,
-    InquirySearchType,
-    ImageDisplayType,
     BoardDisplayType,
+    ImageDisplayType,
+    InquirySearchType,
+    InquiryStatusType,
 } from '@/models';
-import type { InquiryAnswer, File, InquiryInfo } from '@/models/manage';
+import type { InquiryAnswer, InquiryInfo } from '@/models/manage';
 
 export type InquiryDirection = 'ADMIN' | 'CREATED_ASC' | 'CREATED_DESC';
 
@@ -131,6 +131,21 @@ export interface UpdateInquiryData {
     uploadedFileName: Nullable<string[]>;
     /** 답변 등록시 SMS 수신여부 (false: 수신 안함, true: 수신함) (nullable) */
     answerSmsSendYn: boolean;
+    /** 1:1 문의 내용 (최대길이 : 16,700,000) */
+    inquiryContent: string;
+}
+
+export interface PartialUpdateInquiryData {
+    /** 1:1 문의 제목 (최대길이 : 400) */
+    inquiryTitle: string;
+    /** 답변 등록시 메일 수신여부 (false: 수신 안함, true: 수신함) */
+    answerEmailSendYn: boolean;
+    /** 업로드 된 파일명 */
+    uploadedFileNames: string[];
+    /** 답변 등록시 SMS 수신여부 (false: 수신 안함, true: 수신함) */
+    answerSmsSendYn: boolean;
+    /** 원본 파일명 */
+    originalFileNames: string[];
     /** 1:1 문의 내용 (최대길이 : 16,700,000) */
     inquiryContent: string;
 }
