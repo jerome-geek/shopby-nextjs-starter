@@ -6,6 +6,7 @@ import ShareModal from '@/components/modal/share';
 import * as styles from '@/components/recipe/detail-sticky-footer/index.css';
 import { useRecipeCommentList } from '@/hooks/suspenseQuery/shop/comment';
 import { useResponsive } from '@/hooks/utils';
+import { vars } from '@/styles/theme.css';
 
 export { RecipeDetailStickyFooterSkeleton } from '@/components/recipe/detail-sticky-footer/skeleton';
 
@@ -58,7 +59,11 @@ export const RecipeDetailStickyFooter = ({
                     data-active={liked}
                     data-type='like'
                 >
-                    <Heart size={24} fill={liked ? 'currentColor' : 'none'} />
+                    <Heart
+                        size={24}
+                        fill={liked ? 'currentColor' : 'none'}
+                        color={liked ? 'none' : vars.color.gray['60']}
+                    />
                     <span>{likeCount.toLocaleString()}</span>
                 </button>
 
@@ -66,7 +71,7 @@ export const RecipeDetailStickyFooter = ({
                     className={styles.actionButton}
                     onClick={onCommentClick}
                 >
-                    <MessageCircle size={24} />
+                    <MessageCircle size={24} color={vars.color.gray['60']} />
                     <span>{recipeCommentListData.count.toLocaleString()}</span>
                 </button>
             </div>
@@ -76,8 +81,9 @@ export const RecipeDetailStickyFooter = ({
                     type='button'
                     onClick={handleShareButtonClick}
                     aria-label='공유하기'
+                    className={styles.actionButton}
                 >
-                    <Share2 size={24} strokeWidth={1.5} />
+                    <Share2 size={22} color={vars.color.gray['60']} />
                 </button>
 
                 <button
@@ -89,6 +95,7 @@ export const RecipeDetailStickyFooter = ({
                     <Bookmark
                         size={24}
                         fill={bookmarked ? 'currentColor' : 'none'}
+                        color={bookmarked ? 'none' : vars.color.gray['60']}
                     />
                     <span>{bookmarkCount.toLocaleString()}</span>
                 </button>
