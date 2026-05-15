@@ -21,8 +21,8 @@ import {
     type TimeSaleStatus,
     type TimeSaleType,
 } from '@/const/timeSale';
+import { useProductSectionById } from '@/hooks/query/display/productSection';
 import { useTimeSaleSectionProducts } from '@/hooks/query/shop/timeSale';
-import { useProductSectionById } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
 import { ImageUrlType } from '@/models/product';
 import type { TimeSaleSectionProductsResponse } from '@/models/shop/timeSale';
@@ -39,6 +39,21 @@ export const TIME_SALE_LIST_BASE_PARAMS = {
 const isTimeSaleType = (value: string): value is TimeSaleType =>
     TIME_SALE_TYPES.includes(value as TimeSaleType);
 
+const TIME_SALE_SEARCH_PARAMS = {
+    'today-open': {
+        ...TIME_SALE_LIST_BASE_PARAMS,
+        sortingType: SORTING_TYPE_BY_STATUS['today-open'],
+    },
+    best: {
+        ...TIME_SALE_LIST_BASE_PARAMS,
+        sortingType: SORTING_TYPE_BY_STATUS['best'],
+    },
+    'closing-soon': {
+        ...TIME_SALE_LIST_BASE_PARAMS,
+        sortingType: SORTING_TYPE_BY_STATUS['closing-soon'],
+    },
+} as const;
+
 const mapTimeSaleResponseToProducts = (
     data: TimeSaleSectionProductsResponse | undefined,
 ) =>
@@ -46,6 +61,7 @@ const mapTimeSaleResponseToProducts = (
         data?.products ?? [],
         map((product) => ({
             ...product,
+            additionalDiscount: product.additionalDiscounts,
             imageUrlInfo:
                 product.imageUrlInfo &&
                 pipe(
@@ -101,28 +117,19 @@ const TimeSale = () => {
 
     const { data: todayOpenData } = useTimeSaleSectionProducts({
         sectionNo,
-        searchParams: {
-            ...TIME_SALE_LIST_BASE_PARAMS,
-            sortingType: SORTING_TYPE_BY_STATUS['today-open'],
-        },
+        searchParams: TIME_SALE_SEARCH_PARAMS['today-open'],
         options: { enabled: sectionNo > 0 },
     });
 
     const { data: bestData } = useTimeSaleSectionProducts({
         sectionNo,
-        searchParams: {
-            ...TIME_SALE_LIST_BASE_PARAMS,
-            sortingType: SORTING_TYPE_BY_STATUS['best'],
-        },
+        searchParams: TIME_SALE_SEARCH_PARAMS['best'],
         options: { enabled: sectionNo > 0 },
     });
 
     const { data: closingSoonData } = useTimeSaleSectionProducts({
         sectionNo,
-        searchParams: {
-            ...TIME_SALE_LIST_BASE_PARAMS,
-            sortingType: SORTING_TYPE_BY_STATUS['closing-soon'],
-        },
+        searchParams: TIME_SALE_SEARCH_PARAMS['closing-soon'],
         options: { enabled: sectionNo > 0 },
     });
 
