@@ -116,7 +116,10 @@ export const cardContent = style({
     gap: '6px',
 
     '@media': {
-        '(min-width: 768px)': {
+        [media.tablet]: {
+            padding: '48px 28px',
+        },
+        [media.desktop]: {
             padding: '48px 28px',
         },
     },
@@ -265,7 +268,11 @@ export const skeletonWrapper = style({
     perspective: '1000px',
 
     '@media': {
-        '(min-width: 768px)': {
+        [media.tablet]: {
+            gap: '24px',
+            perspective: 'none',
+        },
+        [media.desktop]: {
             gap: '24px',
             perspective: 'none',
         },

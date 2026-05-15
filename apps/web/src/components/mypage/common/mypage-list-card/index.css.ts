@@ -170,7 +170,7 @@ export const list = style({
 
     '@media': {
         [media.mobile]: {
-            marginTop: '0',
+            marginTop: '20px',
         },
     },
 });

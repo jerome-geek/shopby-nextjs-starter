@@ -10,11 +10,11 @@ import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import { OrderOptions } from '@/components/mypage/orders/order-options';
+import { ORDER_OPTIONS_DESKTOP_GRID_TEMPLATE } from '@/components/mypage/orders/order-options-item.css';
 import Paging from '@/components/ui/paging';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
-import {
-    claimsTabSpec,
-} from '@/entities/mypage/utils/tabs';
+
+import { claimsTabSpec } from '@/entities/mypage/utils/tabs';
 import {
     useInfiniteMemberClaimList,
     useMemberClaimList,
@@ -141,7 +141,14 @@ export default function MypageClaimsPage() {
 
                 <div className={card.list}>
                     {!isMobile && (
-                        <div className={styles.listHeader}>
+                        <div
+                            className={card.headerRow}
+                            style={{
+                                gridTemplateColumns:
+                                    ORDER_OPTIONS_DESKTOP_GRID_TEMPLATE,
+                                gap: 0,
+                            }}
+                        >
                             <div className={styles.headerCellMain}>
                                 <span>{t('주문번호/주문일자/상품정보')}</span>
                             </div>

@@ -1,35 +1,39 @@
 import { style } from '@vanilla-extract/css';
 
+import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 
 export const wrapper = style({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'stretch',
-    gap: '12px',
     textDecoration: 'none',
     color: 'inherit',
+    flexDirection: 'column',
+    gap: '20px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            flexDirection: 'column',
-            gap: '20px',
+        [media.mobile]: {
+            flexDirection: 'row',
+            gap: '12px',
         },
     },
 });
 
 export const thumbnail = style({
-    minWidth: '120px',
     aspectRatio: '1 / 1',
-    borderRadius: '4px',
     overflow: 'hidden',
     flexShrink: 0,
     position: 'relative',
     backgroundColor: vars.color.gray[20],
+    width: '100%',
+    borderRadius: '16px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            width: '100%',
-            minWidth: 'unset',
-            borderRadius: '16px',
+        [media.mobile]: {
+            maxWidth: '120px',
+            minWidth: '120px',
+            borderRadius: '4px',
         },
     },
 });
@@ -48,11 +52,13 @@ export const infoBox = style({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    padding: '4px 0',
+    padding: '0',
+    gap: '16px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            padding: '0',
-            gap: '16px',
+        [media.mobile]: {
+            padding: '4px 0',
+            gap: '0',
         },
     },
 });
@@ -64,56 +70,59 @@ export const info = style({
 });
 
 export const label = style({
-    fontSize: '15px',
     fontWeight: '600',
-    letterSpacing: '-0.013em',
-    lineHeight: '1.3',
     color: vars.color.gray[90],
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     WebkitLineClamp: 1,
     WebkitBoxOrient: 'vertical',
+    fontSize: '22px',
+    letterSpacing: '-0.02em',
+    lineHeight: '1.32',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '22px',
-            letterSpacing: '-0.02em',
-            lineHeight: '1.32',
+        [media.mobile]: {
+            fontSize: '15px',
+            letterSpacing: '-0.013em',
+            lineHeight: '1.3',
         },
     },
 });
 
 export const promotionText = style({
-    fontSize: '13px',
     fontWeight: '400',
-    letterSpacing: '-0.013em',
-    lineHeight: '1.3',
     color: vars.color.gray[80],
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     display: '-webkit-box',
     WebkitLineClamp: 2,
     WebkitBoxOrient: 'vertical',
+    fontSize: '15px',
+    letterSpacing: '-0.002em',
+    lineHeight: '1.4',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '15px',
-            letterSpacing: '-0.002em',
-            lineHeight: '1.4',
+        [media.mobile]: {
+            fontSize: '13px',
+            letterSpacing: '-0.013em',
+            lineHeight: '1.3',
         },
     },
 });
 
 export const date = style({
-    fontSize: '12px',
     fontWeight: '400',
-    letterSpacing: '-0.02em',
-    lineHeight: '1.4',
     color: vars.color.gray[60],
+    fontSize: '13px',
+    letterSpacing: '-0.013em',
+    lineHeight: '1.3',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '13px',
-            letterSpacing: '-0.013em',
-            lineHeight: '1.3',
+        [media.mobile]: {
+            fontSize: '12px',
+            letterSpacing: '-0.02em',
+            lineHeight: '1.4',
         },
     },
 });

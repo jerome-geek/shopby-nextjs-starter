@@ -3,34 +3,42 @@ import { style } from '@vanilla-extract/css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 
+/** 데스크톱 3열 — `productInfoContainer` / `statusContainer` / `actionsContainer` 너비와 동일하게 유지 */
+export const ORDER_OPTIONS_DESKTOP_GRID_TEMPLATE =
+    'minmax(0, 55%) minmax(0, 15%) minmax(0, 30%)';
+
 export const itemContainer = style({
     display: 'flex',
-    flexDirection: 'column',
-    padding: '16px 0',
     borderTop: `1px solid ${vars.color.gray[20]}`,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: '24px 0',
+
     selectors: {
         '&:first-child': {
             borderTop: 'none',
         },
     },
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: '24px 0',
+        [media.mobile]: {
+            alignItems: 'flex-start',
+            flexDirection: 'column',
+            padding: '16px 0',
         },
     },
 });
 
 export const productInfoContainer = style({
     display: 'flex',
-    gap: '12px',
     flex: '1',
-    width: '100%',
+    width: '55%',
+    gap: '16px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            width: '55%',
-            gap: '16px',
+        [media.mobile]: {
+            width: '100%',
+            gap: '12px',
         },
     },
 });
@@ -40,16 +48,17 @@ export const imageLink = style({
 });
 
 export const thumbnail = style({
-    width: '80px',
-    height: '80px',
     objectFit: 'cover',
     borderRadius: '4px',
     border: `1px solid ${vars.color.gray[20]}`,
     backgroundColor: vars.color.gray[10],
+    width: '90px',
+    height: '90px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            width: '90px',
-            height: '90px',
+        [media.mobile]: {
+            width: '80px',
+            height: '80px',
         },
     },
 });
@@ -63,15 +72,17 @@ export const productContentContainer = style({
 });
 
 export const statusText = style({
-    fontSize: '12px',
     fontWeight: '700',
     color: vars.color.gray[80],
-    marginBottom: '4px',
+    fontSize: '14px',
+    marginBottom: '0',
+    textAlign: 'center',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '14px',
-            marginBottom: '0',
-            textAlign: 'center',
+        [media.mobile]: {
+            textAlign: 'left',
+            marginBottom: '4px',
+            fontSize: '12px',
         },
     },
 });
@@ -85,17 +96,17 @@ export const productBadge = style({
 });
 
 export const baseProductName = style({
-    fontSize: '13px',
+    fontSize: '14px',
     color: vars.color.gray[80],
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '14px',
+        [media.mobile]: {
+            fontSize: '13px',
         },
     },
 });
 
 export const productName = style({
-    fontSize: '14px',
+    fontSize: '15px',
     fontWeight: '500',
     color: vars.color.black,
     lineHeight: '1.4',
@@ -105,45 +116,48 @@ export const productName = style({
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden',
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '15px',
+        [media.mobile]: {
+            fontSize: '14px',
         },
     },
 });
 
 export const optionText = style({
-    fontSize: '12px',
     color: vars.color.gray[60],
-    marginTop: '2px',
+    fontSize: '13px',
+    marginTop: '4px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '13px',
-            marginTop: '4px',
+        [media.mobile]: {
+            fontSize: '12px',
+            marginTop: '2px',
         },
     },
 });
 
 export const priceText = style({
-    fontSize: '14px',
+    fontSize: '16px',
     fontWeight: '700',
     color: vars.color.black,
     marginTop: '4px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '16px',
+        [media.mobile]: {
+            fontSize: '14px',
         },
     },
 });
 
 export const statusContainer = style({
-    display: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '15%',
+    padding: '0 10px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '15%',
-            padding: '0 10px',
+        [media.mobile]: {
+            display: 'none',
         },
     },
 });
@@ -166,6 +180,12 @@ export const actionsContainer = style({
             gap: '8px',
             marginTop: '16px',
             padding: '0',
+
+            selectors: {
+                '&:empty': {
+                    display: 'none',
+                },
+            },
         },
     },
 });
@@ -183,9 +203,11 @@ export const actionButton = style({
     border: `1px solid ${vars.color.gray[40]}`,
     borderRadius: '4px',
     cursor: 'pointer',
+    maxWidth: '120px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            maxWidth: '120px',
+        [media.mobile]: {
+            maxWidth: 'none',
         },
     },
 });

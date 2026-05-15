@@ -28,10 +28,11 @@ export const orderTitleContainer = style({
 
 export const orderDate = style({
     color: vars.color.gray[80],
-    fontSize: '12px',
+    fontSize: '14px',
+
     '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '14px',
+        [media.mobile]: {
+            fontSize: '12px',
         },
     },
 });
@@ -39,9 +40,4 @@ export const orderDate = style({
 export const orderNo = style({
     fontSize: '14px',
     fontWeight: '500',
-    '@media': {
-        'screen and (min-width: 769px)': {
-            fontSize: '14px',
-        },
-    },
 });

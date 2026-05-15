@@ -59,13 +59,11 @@ export const orderNo = style([
     },
 ]);
 
-export const detailButton = style([
-    textStyles.body2Semibold,
-    {
-        whiteSpace: 'nowrap',
-        height: '32px',
-    },
-]);
+export const detailButton = style({
+    whiteSpace: 'nowrap',
+    height: '32px',
+    fontSize: '1.2rem',
+});
 
 export const starRow = style({
     display: 'flex',

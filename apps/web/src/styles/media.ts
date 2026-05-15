@@ -17,6 +17,6 @@ export const BREAKPOINTS = {
 
 export const media = {
     mobile: 'screen and (max-width: 768px)',
-    tablet: 'screen and (min-width: 769px) and (max-width: 1024px)',
-    desktop: 'screen and (min-width: 1025px)',
+    tablet: 'screen and (min-width: 768.1px) and (max-width: 1024px)',
+    desktop: 'screen and (min-width: 1024.1px)',
 };

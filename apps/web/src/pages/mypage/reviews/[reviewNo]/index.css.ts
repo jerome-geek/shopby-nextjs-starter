@@ -170,4 +170,5 @@ export const backRow = style({
 
 export const backButton = style({
     maxWidth: '320px',
+    margin: '0 auto',
 });

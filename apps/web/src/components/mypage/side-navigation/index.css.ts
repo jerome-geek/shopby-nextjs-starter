@@ -30,7 +30,7 @@ export const nav = style({
 
 export const menuButtonContainer = style({
     position: 'absolute',
-    top: `calc(var(--header-height) + 20px)`,
+    top: `calc(var(--header-height) + 30px)`,
     right: '-60px',
     zIndex: 1000,
     width: '40px',

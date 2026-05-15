@@ -199,9 +199,7 @@ export const ReviewableListView = () => {
                         currentPage={pageNumber}
                         totalCount={totalCount}
                         pageSize={PAGE_SIZE}
-                        onPageClick={(page) =>
-                            setQuery({ pageNumber: page })
-                        }
+                        onPageClick={(page) => setQuery({ pageNumber: page })}
                     />
                 </div>
             </LoadingWrapper>

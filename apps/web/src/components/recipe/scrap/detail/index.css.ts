@@ -88,9 +88,6 @@ export const detailMeta = style([
     },
 ]);
 
-
-
-
 export const recipeGrid = style({
     display: 'grid',
     listStyle: 'none',
@@ -111,17 +108,17 @@ export const recipeDetailGrid = style({
     listStyle: 'none',
     padding: 0,
     margin: 0,
-    gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
-    gap: '48px 24px',
+    gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+    gap: '24px',
 
     '@media': {
-        'screen and (min-width: 769px)': {
+        [media.tablet]: {
             gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
             gap: '24px',
         },
-        [media.desktop]: {
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-            gap: '24px',
+        [media.mobile]: {
+            gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+            gap: '48px 24px',
         },
     },
 });

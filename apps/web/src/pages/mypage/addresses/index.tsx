@@ -124,7 +124,7 @@ export default function MypageAddressesPage() {
                         <span
                             className={card.count}
                             dangerouslySetInnerHTML={{
-                                __html: t('총 <b>{{totalCount}}</b>개', {
+                                __html: t('총 {{totalCount}}개', {
                                     totalCount,
                                 }),
                             }}

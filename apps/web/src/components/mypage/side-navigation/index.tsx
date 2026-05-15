@@ -2,12 +2,12 @@ import { clsx } from 'clsx';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ArrowIcon } from '@/components/icons/ArrowIcon';
 import * as styles from '@/components/mypage/side-navigation/index.css';
 import { PATHS } from '@/const/paths';
-import { useResponsive } from '@/hooks/utils';
+import { useResponsive, useRouteChange } from '@/hooks/utils';
 
 export type MypageMenuList = {
     title: string;
@@ -28,12 +28,35 @@ export function MypageSideNavigation({
     const currentPath = router.asPath.split('?')[0].replace(/\/$/, '') || '/';
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navRef = useRef<HTMLElement | null>(null);
 
     const handleMenuButtonClick = () => {
         setIsMenuOpen((prev) => !prev);
     };
 
     const { isTablet } = useResponsive();
+
+    useEffect(() => {
+        if (!isTablet || !isMenuOpen) {
+            return;
+        }
+
+        const handlePointerDown = (event: PointerEvent) => {
+            const target = event.target as Node | null;
+            if (!navRef.current || !target) {
+                return;
+            }
+            if (navRef.current.contains(target)) {
+                return;
+            }
+            setIsMenuOpen(false);
+        };
+
+        document.addEventListener('pointerdown', handlePointerDown);
+        return () => {
+            document.removeEventListener('pointerdown', handlePointerDown);
+        };
+    }, [isTablet, isMenuOpen]);
 
     const isNavActive = (currentPath: string, href: string) => {
         if (currentPath === href) {
@@ -47,8 +70,13 @@ export function MypageSideNavigation({
         return false;
     };
 
+    useRouteChange(() => {
+        setIsMenuOpen(false);
+    });
+
     return (
         <motion.nav
+            ref={navRef}
             className={styles.nav}
             aria-label='마이페이지 메뉴'
             initial={{ x: -200 }}
@@ -105,6 +133,7 @@ export function MypageSideNavigation({
                                                 styles.link,
                                                 active && styles.linkActive,
                                             )}
+                                            onClick={() => setIsMenuOpen(false)}
                                         >
                                             {item.title}
                                         </Link>

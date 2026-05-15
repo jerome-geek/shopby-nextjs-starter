@@ -41,7 +41,13 @@ export const sectionContainer = style({
     },
 });
 
-export const titleContainer = style({});
+export const titleContainer = style({
+    '@media': {
+        [media.tablet]: {
+            margin: '0 auto',
+        },
+    },
+});
 
 export const title = style([
     textStyles.headingBold,

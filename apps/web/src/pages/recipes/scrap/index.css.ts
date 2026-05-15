@@ -23,6 +23,12 @@ export const title = style([
     textStyles.display1Semibold,
     {
         color: vars.color.black,
+
+        '@media': {
+            [media.tablet]: {
+                padding: '0 20px',
+            },
+        },
     },
 ]);
 
@@ -52,6 +58,9 @@ export const titleArea = style({
 
     '@media': {
         [media.desktop]: {
+            gap: '32px',
+        },
+        [media.tablet]: {
             gap: '32px',
         },
     },

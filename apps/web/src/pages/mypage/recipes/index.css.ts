@@ -8,14 +8,14 @@ export const container = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
-    padding: '24px 0',
+    padding: '0',
     width: '100%',
     margin: '0 auto',
 
     '@media': {
         [media.desktop]: {
             gap: '32px',
-            padding: '12px 0 40px',
+            padding: '0 0 40px',
         },
     },
 });
@@ -24,7 +24,7 @@ export const header = style({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '8px',
+    marginBottom: '0',
     '@media': {
         [media.mobile]: {
             justifyContent: 'end',

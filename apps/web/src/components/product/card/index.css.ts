@@ -51,12 +51,13 @@ export const productInfoContainer = style({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
-    gap: '4px',
-    minHeight: '100px',
+    gap: '6px',
+    minHeight: '110px',
+
     '@media': {
-        'screen and (min-width: 768px)': {
-            gap: '6px',
-            minHeight: '110px',
+        [media.mobile]: {
+            gap: '4px',
+            minHeight: '100px',
         },
     },
 });

@@ -92,10 +92,8 @@ export const actionRow = style({
     },
 });
 
-export const writeButton = style([
-    textStyles.body2Semibold,
-    {
-        whiteSpace: 'nowrap',
-        height: '32px',
-    },
-]);
+export const writeButton = style({
+    whiteSpace: 'nowrap',
+    height: '32px',
+    fontSize: '1.2rem',
+});

@@ -1,4 +1,4 @@
-import { filter, isEmpty, pipe, toArray } from '@fxts/core';
+import { filter, pipe, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -130,7 +130,9 @@ export const OrderOptionsItem = ({
                             <p
                                 className={styles.productName}
                                 dangerouslySetInnerHTML={{
-                                    __html: `<span class="${styles.productBadge}">${t('추가상품')}</span> ${productName}`,
+                                    __html: `<span class="${
+                                        styles.productBadge
+                                    }">${t('추가상품')}</span> ${productName}`,
                                 }}
                             />
                         </>
@@ -140,7 +142,9 @@ export const OrderOptionsItem = ({
                             dangerouslySetInnerHTML={{
                                 __html: `${
                                     isFreeGift
-                                        ? `<span class="${styles.productBadge}">[${t('사은품')}]</span> `
+                                        ? `<span class="${
+                                              styles.productBadge
+                                          }">[${t('사은품')}]</span> `
                                         : ''
                                 } ${productName}`,
                             }}
@@ -176,28 +180,26 @@ export const OrderOptionsItem = ({
                             isBuyConfirm ? styles.statusTextPrimary : ''
                         }`}
                     >
-                        {claimStatusTypeLabel || orderStatusTypeLabel}
+                        1 {claimStatusTypeLabel || orderStatusTypeLabel}
                     </span>
                 </div>
             )}
 
-            {!isEmpty(filteredNextActions) && (
-                <div className={styles.actionsContainer}>
-                    {filteredNextActions.map((action) => (
-                        <NextActionButton
-                            key={action.nextActionType}
-                            nextActionType={action.nextActionType}
-                            productNo={productNo}
-                            optionNo={optionNo}
-                            orderOptionNo={orderOptionNo}
-                            orderNo={orderNo}
-                            uri={action.uri}
-                            isFreeGift={isFreeGift}
-                            claimNo={claimNo || null}
-                        />
-                    ))}
-                </div>
-            )}
+            <div className={styles.actionsContainer}>
+                {filteredNextActions.map((action) => (
+                    <NextActionButton
+                        key={action.nextActionType}
+                        nextActionType={action.nextActionType}
+                        productNo={productNo}
+                        optionNo={optionNo}
+                        orderOptionNo={orderOptionNo}
+                        orderNo={orderNo}
+                        uri={action.uri}
+                        isFreeGift={isFreeGift}
+                        claimNo={claimNo || null}
+                    />
+                ))}
+            </div>
         </li>
     );
 };
