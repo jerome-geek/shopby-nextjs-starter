@@ -31,12 +31,19 @@ export const footerButton = style({
 });
 
 globalStyle(`.${calendarWrapper} .rdp-root`, {
+    width: '100%',
+    containerType: 'inline-size',
     '--rdp-accent-color': vars.color.black,
     '--rdp-accent-background-color': vars.color.black,
+    '--rdp-day-width': 'calc(100cqw / 7)',
+    '--rdp-day-height': 'calc(100cqw / 7)',
+    '--rdp-day_button-width': '100%',
+    '--rdp-day_button-height': '100%',
 } as unknown as Record<string, string>);
 
 globalStyle(`.${calendarWrapper} .rdp-months`, {
     width: '100%',
+    maxWidth: '100%',
 });
 
 globalStyle(`.${calendarWrapper} .rdp-month`, {
@@ -44,12 +51,26 @@ globalStyle(`.${calendarWrapper} .rdp-month`, {
 });
 
 globalStyle(`.${calendarWrapper} .rdp-month_grid`, {
-    margin: '20px auto 0',
+    width: '100%',
+    tableLayout: 'fixed',
+    margin: '20px 0 0',
+});
+
+globalStyle(`.${calendarWrapper} .rdp-day`, {
+    verticalAlign: 'middle',
 });
 
 globalStyle(`.${calendarWrapper} .rdp-day_button`, {
     borderRadius: '999px',
     fontSize: '14px',
+    width: '100%',
+    height: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+});
+
+globalStyle(`.${calendarWrapper} .rdp-selected`, {
+    fontSize: 'inherit',
 });
 
 globalStyle(`.${calendarWrapper} .rdp-weekday`, {
