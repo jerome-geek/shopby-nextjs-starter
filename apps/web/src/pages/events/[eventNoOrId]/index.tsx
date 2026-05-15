@@ -16,7 +16,7 @@ import EventContents from '@/features/event/detail/components/event-contents';
 import EventErrorState from '@/features/event/detail/components/event-error-state';
 import EventProductSection from '@/features/event/detail/components/event-product-section';
 import EventSectionTab from '@/features/event/detail/components/event-section-tab';
-import EventTop from '@/features/event/detail/components/event-top';
+import { EventDetailHero } from '@/features/event/detail/components/event-detail-hero';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { useEvent } from '@/hooks/suspenseQuery/display/event';
 import * as styles from '@/pages/events/[eventNoOrId]/index.css';
@@ -56,19 +56,13 @@ const EventDetailView = ({ eventKey, searchParams }: EventDetailViewProps) => {
 
     return (
         <div className={styles.pageContainer}>
-            {/* 상단 이미지 + 제목 영역 */}
-            <div className={styles.topSection}>
-                <div className={styles.contentWrapper}>
-                    <EventTop
-                        label={eventData.label}
-                        imgUrlInfo={{
-                            pc: eventData.pcImageUrl,
-                            mobile: eventData.mobileimageUrl,
-                        }}
-                        promotionText={eventData.promotionText}
-                    />
-                </div>
-            </div>
+            <EventDetailHero
+                eventKey={eventKey}
+                label={eventData.label}
+                promotionText={eventData.promotionText}
+                pcImageUrl={eventData.pcImageUrl}
+                mobileImageUrl={eventData.mobileimageUrl}
+            />
 
             {eventData.orders.map((order, index) => {
                 const key = `${order}-${index}`;
