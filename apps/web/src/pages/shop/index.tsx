@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
 import { LazyRender } from '@/components/common';
+import Seo from '@/components/common/seo';
 import EventSection from '@/components/section/event';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
@@ -30,61 +31,69 @@ const Best = dynamic(() => import('@/components/section/best'), {
 // 쇼핑몰 기본 홈은 발견
 export default function ShopMainPage() {
     return (
-        <div className={styles.main}>
-            {/* Full-width HeroBanner */}
-            <section className={styles.heroBannerSection}>
-                <HeroBanner type='SHOP' />
-                <IconBanner type='SHOP' />
-            </section>
+        <>
+            <Seo title={'발견'} />
 
-            {/* 라이프 타임특가 */}
-            <ShopbyAsyncBoundary errorFallback={<></>}>
-                <TimeSale
-                    type='LIFE'
-                    sectionId='TIMESALE_LIFE'
-                    title='라이프 타임특가'
-                />
-            </ShopbyAsyncBoundary>
+            <div className={styles.main}>
+                {/* Full-width HeroBanner */}
+                <section className={styles.heroBannerSection}>
+                    <HeroBanner type='SHOP' />
+                    <IconBanner type='SHOP' />
+                </section>
 
-            {/* 영상(기획전) */}
-            <EventSection index={1} />
-
-            {/* 키즈 타임특가 */}
-            <LazyRender minHeight={400}>
+                {/* 라이프 타임특가 */}
                 <ShopbyAsyncBoundary errorFallback={<></>}>
                     <TimeSale
-                        type='KIDS'
-                        sectionId='TIMESALE_KIDS'
-                        title='키즈 타임특가'
+                        type='LIFE'
+                        sectionId='TIMESALE_LIFE'
+                        title='라이프 타임특가'
                     />
                 </ShopbyAsyncBoundary>
-            </LazyRender>
 
-            {/* 영상(기획전) */}
-            <LazyRender minHeight={400}>
-                <EventSection index={2} />
-            </LazyRender>
-            {/* 라이프 베스트 */}
-            <LazyRender minHeight={500}>
-                <ShopbyAsyncBoundary errorFallback={<></>}>
-                    <Best type='LIFE' />
-                </ShopbyAsyncBoundary>
-            </LazyRender>
-            {/* 영상(기획전) */}
-            <LazyRender minHeight={400}>
-                <EventSection index={3} />
-            </LazyRender>
-            {/* 키즈 베스트 */}
-            <LazyRender minHeight={500}>
-                <ShopbyAsyncBoundary errorFallback={<></>}>
-                    <Best type='KIDS' />
-                </ShopbyAsyncBoundary>
-            </LazyRender>
-            {/* 영상(기획전) */}
-            <LazyRender minHeight={400}>
-                <EventSection index={4} />
-            </LazyRender>
-        </div>
+                {/* 영상(기획전) */}
+                <EventSection index={1} />
+
+                {/* 키즈 타임특가 */}
+                <LazyRender minHeight={400}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <TimeSale
+                            type='KIDS'
+                            sectionId='TIMESALE_KIDS'
+                            title='키즈 타임특가'
+                        />
+                    </ShopbyAsyncBoundary>
+                </LazyRender>
+
+                {/* 영상(기획전) */}
+                <LazyRender minHeight={400}>
+                    <EventSection index={2} />
+                </LazyRender>
+
+                {/* 라이프 베스트 */}
+                <LazyRender minHeight={500}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <Best type='LIFE' />
+                    </ShopbyAsyncBoundary>
+                </LazyRender>
+
+                {/* 영상(기획전) */}
+                <LazyRender minHeight={400}>
+                    <EventSection index={3} />
+                </LazyRender>
+
+                {/* 키즈 베스트 */}
+                <LazyRender minHeight={500}>
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <Best type='KIDS' />
+                    </ShopbyAsyncBoundary>
+                </LazyRender>
+
+                {/* 영상(기획전) */}
+                <LazyRender minHeight={400}>
+                    <EventSection index={4} />
+                </LazyRender>
+            </div>
+        </>
     );
 }
 
