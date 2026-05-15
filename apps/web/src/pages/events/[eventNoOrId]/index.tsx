@@ -1,4 +1,5 @@
 import { isEmpty } from '@fxts/core';
+import { SuspenseQuery } from '@suspensive/react-query';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HttpStatusCode, isAxiosError } from 'axios';
 import type {
@@ -11,15 +12,18 @@ import { Fragment, useCallback, useMemo, useState } from 'react';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
+import { bannerListOptions } from '@/entities/banner/queries';
 import { eventDetailOptions } from '@/entities/event/queries';
 import EventContents from '@/features/event/detail/components/event-contents';
+import { EventDetailHero } from '@/features/event/detail/components/event-detail-hero';
+import { EventDetailHeroSkeleton } from '@/features/event/detail/components/event-detail-hero/skeleton';
 import EventErrorState from '@/features/event/detail/components/event-error-state';
 import EventProductSection from '@/features/event/detail/components/event-product-section';
 import EventSectionTab from '@/features/event/detail/components/event-section-tab';
-import { EventDetailHero } from '@/features/event/detail/components/event-detail-hero';
-import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { useEvent } from '@/hooks/suspenseQuery/display/event';
 import * as styles from '@/pages/events/[eventNoOrId]/index.css';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
 interface EventDetailViewProps {
     eventKey: string | number;
@@ -56,13 +60,26 @@ const EventDetailView = ({ eventKey, searchParams }: EventDetailViewProps) => {
 
     return (
         <div className={styles.pageContainer}>
-            <EventDetailHero
-                eventKey={eventKey}
-                label={eventData.label}
-                promotionText={eventData.promotionText}
-                pcImageUrl={eventData.pcImageUrl}
-                mobileImageUrl={eventData.mobileimageUrl}
-            />
+            <ShopbyAsyncBoundary fallback={<EventDetailHeroSkeleton />}>
+                <SuspenseQuery
+                    {...bannerListOptions({
+                        type: 'id',
+                        banners: [eventKey.toString()],
+                    })}
+                >
+                    {({ data: bannerData }) => {
+                        return (
+                            <EventDetailHero
+                                bannerData={bannerData}
+                                label={eventData.label}
+                                promotionText={eventData.promotionText}
+                                pcImageUrl={eventData.pcImageUrl}
+                                mobileImageUrl={eventData.mobileimageUrl}
+                            />
+                        );
+                    }}
+                </SuspenseQuery>
+            </ShopbyAsyncBoundary>
 
             {eventData.orders.map((order, index) => {
                 const key = `${order}-${index}`;

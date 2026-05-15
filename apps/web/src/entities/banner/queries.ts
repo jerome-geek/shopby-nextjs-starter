@@ -33,7 +33,7 @@ const createQueryFn = (type: 'code' | 'id', banners: string[]) => {
     };
 };
 
-export const bannerListOptions = <T>({
+export const bannerListOptions = <T = GetBannersResponse>({
     type = 'id',
     banners,
     options,

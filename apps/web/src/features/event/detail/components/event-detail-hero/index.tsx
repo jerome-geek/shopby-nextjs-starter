@@ -1,37 +1,32 @@
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { bannerListOptions } from '@/entities/banner/queries';
+import * as styles from '@/features/event/detail/components/event-detail-hero/index.css';
+import { GetBannersResponse } from '@/models/display/banner';
 import {
     extractBannerContentsByAccountIndex,
     normalizeImageUrl,
 } from '@/shared/utils/shopby';
-import * as styles from '@/features/event/detail/components/event-detail-hero/index.css';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 
 interface EventDetailHeroProps {
-    eventKey: string | number;
-    label: string;
+    bannerData: GetBannersResponse;
+    label?: string;
     promotionText?: string;
-    pcImageUrl: string;
-    mobileImageUrl: string;
+    pcImageUrl?: string;
+    mobileImageUrl?: string;
 }
 
 export const EventDetailHero = ({
-    eventKey,
+    bannerData,
     label,
     promotionText,
     pcImageUrl,
     mobileImageUrl,
 }: EventDetailHeroProps) => {
-    const { data: bannerData } = useQuery(
-        bannerListOptions({ type: 'id', banners: [eventKey.toString()] }),
-    );
-
     const banners = useMemo(
         () =>
             bannerData
