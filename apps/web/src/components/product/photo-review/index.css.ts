@@ -66,12 +66,12 @@ export const photoReviewItem = style({
 });
 
 export const photoReviewImageButton = style({
-    width: '100%',
     aspectRatio: '1 / 1',
     height: 'fit-content',
     objectFit: 'cover',
     borderRadius: '4px',
     overflow: 'hidden',
+    width: '88px',
 });
 
 export const photoReviewImage = style({

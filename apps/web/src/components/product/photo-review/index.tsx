@@ -86,7 +86,7 @@ export const PhotoReview = () => {
                                                     src={getShopbyResizeImageUrl(
                                                         review.fileUrls?.[0] ||
                                                             '',
-                                                        176,
+                                                        88 * 2,
                                                     )}
                                                     alt='리뷰 이미지'
                                                     className={

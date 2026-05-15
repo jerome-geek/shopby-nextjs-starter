@@ -3,9 +3,8 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Props, SingleValue } from 'react-select';
 
-import * as bottomSheetStyles from '@/components/bottom-sheet/option-select/index.css';
 import * as styles from '@/components/product-option/multi/index.css';
-import { Select } from '@/components/ui/input';
+import { InputLabel, Select } from '@/components/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useResponsive } from '@/hooks/utils';
 import type { MultiLevelOption } from '@/models/product/productOption';
@@ -96,51 +95,49 @@ export const MultiProductOption = ({
     }
 
     return (
-        <div
-            role='group'
-            aria-label={t('분리형 옵션')}
-            className={styles.container}
-        >
-            {productOptionListData.labels.map((label, index) => (
-                <div key={`${label}-${index}`}>
-                    <p className={bottomSheetStyles.optionLabel}>
-                        {label}{' '}
-                        <span className={bottomSheetStyles.required}>*</span>
-                    </p>
-                    <Select
-                        placeholder={t('옵션을 선택하세요')}
-                        options={optionLists[index] || []}
-                        value={selectedValueList[index]}
-                        getOptionLabel={getMultiLevelOptionLabel}
-                        getOptionValue={(option) =>
-                            (option as MultiLevelOption).value
-                        }
-                        onChange={(v) =>
-                            onOptionChange(v as MultiLevelOption, index)
-                        }
-                        isOptionDisabled={
-                            // 마지막 단계만 외부 disabled 체크 적용, 나머지는 항상 활성
-                            index === productOptionListData.labels.length - 1
-                                ? (checkOptionDisabled ?? isOptionDisabled)
-                                : () => false
-                        }
-                        noOptionsMessage={() => (
-                            <span>
-                                {index > 0
-                                    ? t('{{label}}을(를) 먼저 선택해 주세요.', {
-                                          label: productOptionListData.labels[
-                                              index - 1
-                                          ],
-                                      })
-                                    : t('옵션 정보가 없습니다.')}
-                            </span>
-                        )}
-                        menuPlacement={isMobile ? 'bottom' : 'auto'}
-                        maxMenuHeight={200}
-                        classNames={classNames}
-                    />
-                </div>
-            ))}
-        </div>
+        <ul role='group' aria-label={t('분리형 옵션')} className={styles.list}>
+            {productOptionListData.labels.map((label, index) => {
+                return (
+                    <li key={`${label}-${index}`} className={styles.listItem}>
+                        <InputLabel isRequired>{label}</InputLabel>
+                        <Select
+                            placeholder={t('옵션을 선택하세요')}
+                            options={optionLists[index] || []}
+                            value={selectedValueList[index]}
+                            getOptionLabel={getMultiLevelOptionLabel}
+                            getOptionValue={(option) =>
+                                (option as MultiLevelOption).value
+                            }
+                            onChange={(v) =>
+                                onOptionChange(v as MultiLevelOption, index)
+                            }
+                            isOptionDisabled={
+                                // 마지막 단계만 외부 disabled 체크 적용, 나머지는 항상 활성
+                                index ===
+                                productOptionListData.labels.length - 1
+                                    ? (checkOptionDisabled ?? isOptionDisabled)
+                                    : () => false
+                            }
+                            noOptionsMessage={() => (
+                                <span>
+                                    {index > 0
+                                        ? t(
+                                              '{{label}}을(를) 먼저 선택해 주세요.',
+                                              {
+                                                  label: productOptionListData
+                                                      .labels[index - 1],
+                                              },
+                                          )
+                                        : t('옵션 정보가 없습니다.')}
+                                </span>
+                            )}
+                            menuPlacement={isMobile ? 'bottom' : 'auto'}
+                            maxMenuHeight={200}
+                            classNames={classNames}
+                        />
+                    </li>
+                );
+            })}
+        </ul>
     );
 };
