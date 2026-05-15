@@ -12,8 +12,8 @@ import {
     Select,
 } from '@/components/ui/input';
 import { BANK_MAP } from '@/const/label';
+import { useAuth } from '@/hooks/useAuth';
 import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
-import { isLoggedIn } from '@/utils/auth';
 
 type ClaimBankInfoProps = Pick<
     GetOrderOptionDetailForClaimResponse,
@@ -26,6 +26,9 @@ export const ClaimBankInfo = ({
     refundAccount,
 }: ClaimBankInfoProps) => {
     const { t } = useTranslation();
+
+    const isLogin = useAuth();
+
     const { register, control, setValue } = useFormContext();
 
     const isBankInfoVisible = useMemo(() => {
@@ -66,7 +69,7 @@ export const ClaimBankInfo = ({
         <div className={styles.container}>
             <h3 className={styles.title}>{t('환불 정보')}</h3>
 
-            {isLoggedIn() && (
+            {isLogin && (
                 <label className={styles.checkboxLabel}>
                     <Controller
                         name='saveBankAccountInfo'

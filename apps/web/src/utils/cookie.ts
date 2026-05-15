@@ -23,6 +23,7 @@ import {
 import type { GetServerSidePropsContext } from 'next';
 
 import { COOKIE_KEYS } from '@/const/cookieKeys';
+import { dispatchAuthChange } from '@/utils/auth';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -128,6 +129,7 @@ export const accessTokenCookie = {
             expires + COOKIE_EXPIRY_BUFFER_SECONDS,
             opts,
         );
+        dispatchAuthChange();
     },
 
     /**
@@ -142,10 +144,13 @@ export const accessTokenCookie = {
             token,
             1800 + COOKIE_EXPIRY_BUFFER_SECONDS,
         );
+        dispatchAuthChange();
     },
 
-    clear: (opts?: CookieClearOptions) =>
-        remove(COOKIE_KEYS.ACCESS_TOKEN, opts),
+    clear: (opts?: CookieClearOptions) => {
+        remove(COOKIE_KEYS.ACCESS_TOKEN, opts);
+        dispatchAuthChange();
+    },
 } as const;
 
 /**

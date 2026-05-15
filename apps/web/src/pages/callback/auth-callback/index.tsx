@@ -20,7 +20,7 @@ export const AuthCallbackPage = () => {
     const isClient = useIsClient();
     const router = useRouter();
 
-    const isLoggedIn = useAuth();
+    const isLogin = useAuth();
     const { isMyApp, syncAppLogin } = useMyApp();
 
     const { openAsyncDialog } = useDialog();
@@ -73,7 +73,7 @@ export const AuthCallbackPage = () => {
             }
 
             // NOTE : 회원 정보 수정일 때
-            if (isLoggedIn) {
+            if (isLogin) {
                 try {
                     // NOTE : 로그인 상태일 경우 회원 재인증 로직 타도록 로직 추가
                     const accessToken = accessTokenCookie.get();

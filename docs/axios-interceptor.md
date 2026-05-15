@@ -122,7 +122,7 @@ refreshQueue.current.push((newToken) => {
 ```ts
 // useAxiosInterceptor 하단에 있는 코드
 useRouteChange(() => {
-    if (isLoggedIn()) {
+    if (isLogin) {
         accessTokenCookie.update(); // 페이지 이동마다 액세스토큰 30분 연장
     }
 });
@@ -157,13 +157,13 @@ shopbyRequest와 달리 토큰 갱신 로직 없이 단순 헤더 주입과 로�
 
 ### 요청 헤더 주입 규칙
 
-| 헤더 | 조건 | 값 |
-|------|------|----|
-| `appToken` | 항상 | `Bearer {NEXT_PUBLIC_GEEK_APP_TOKEN}` |
-| `clientId` | 로그인 상태 | `NEXT_PUBLIC_CLIENT_ID` |
-| `Shop-By-Authorization` | 로그인 상태 | `Bearer {accessToken}` |
-| `shopApiUrl` | 로그인 상태 | `/profile` (고정) |
-| `apiMethod` | 로그인 상태 | `GET` (고정) |
+| 헤더                    | 조건        | 값                                    |
+| ----------------------- | ----------- | ------------------------------------- |
+| `appToken`              | 항상        | `Bearer {NEXT_PUBLIC_GEEK_APP_TOKEN}` |
+| `clientId`              | 로그인 상태 | `NEXT_PUBLIC_CLIENT_ID`               |
+| `Shop-By-Authorization` | 로그인 상태 | `Bearer {accessToken}`                |
+| `shopApiUrl`            | 로그인 상태 | `/profile` (고정)                     |
+| `apiMethod`             | 로그인 상태 | `GET` (고정)                          |
 
 ---
 
@@ -183,44 +183,44 @@ vi.mock                  cookie, hook 의존성 mock
 
 ```ts
 describe('Request Interceptor', () => {
-    it('게스트 엔드포인트: guestToken을 Shop-By-Authorization 헤더에 주입')
-    it('게스트 엔드포인트: guestToken 없으면 헤더 미주입')
-    it('일반 요청 + 로그인 상태: accessToken을 헤더에 주입')
-    it('일반 요청 + 비로그인: 인증 헤더 없음')
-    it('oauth2 PUT 요청: Refresh-Token 헤더 추가')
-})
+    it('게스트 엔드포인트: guestToken을 Shop-By-Authorization 헤더에 주입');
+    it('게스트 엔드포인트: guestToken 없으면 헤더 미주입');
+    it('일반 요청 + 로그인 상태: accessToken을 헤더에 주입');
+    it('일반 요청 + 비로그인: 인증 헤더 없음');
+    it('oauth2 PUT 요청: Refresh-Token 헤더 추가');
+});
 ```
 
 #### Response Interceptor
 
 ```ts
 describe('Response Interceptor', () => {
-    it('200 응답: 그대로 반환')
-    it('non-401 에러: 갱신 시도 없이 reject')
+    it('200 응답: 그대로 반환');
+    it('non-401 에러: 갱신 시도 없이 reject');
 
     describe('401 처리', () => {
-        it('oauth2 PUT 401: handleSessionExpired 즉시 호출')
-        it('게스트 요청 401: 갱신 시도 없이 reject')
-        it('_retry=true 401: handleSessionExpired 호출')
+        it('oauth2 PUT 401: handleSessionExpired 즉시 호출');
+        it('게스트 요청 401: 갱신 시도 없이 reject');
+        it('_retry=true 401: handleSessionExpired 호출');
 
-        it('첫 401: 토큰 갱신 성공 → 원래 요청 새 토큰으로 재시도')
-        it('첫 401: 토큰 갱신 실패 → handleSessionExpired 호출')
-        it('첫 401: 토큰 갱신 타임아웃(10s) → handleSessionExpired 호출')
+        it('첫 401: 토큰 갱신 성공 → 원래 요청 새 토큰으로 재시도');
+        it('첫 401: 토큰 갱신 실패 → handleSessionExpired 호출');
+        it('첫 401: 토큰 갱신 타임아웃(10s) → handleSessionExpired 호출');
 
-        it('갱신 중 동시 401: queue 대기 후 새 토큰으로 일괄 재시도')
-        it('갱신 중 동시 401: 갱신 실패 시 queue의 모든 요청 reject')
-    })
-})
+        it('갱신 중 동시 401: queue 대기 후 새 토큰으로 일괄 재시도');
+        it('갱신 중 동시 401: 갱신 실패 시 queue의 모든 요청 reject');
+    });
+});
 ```
 
 #### Cleanup
 
 ```ts
 describe('Cleanup', () => {
-    it('hook unmount 시 request interceptor eject')
-    it('hook unmount 시 response interceptor eject')
-    it('eject 후 인터셉터가 동작하지 않음')
-})
+    it('hook unmount 시 request interceptor eject');
+    it('hook unmount 시 response interceptor eject');
+    it('eject 후 인터셉터가 동작하지 않음');
+});
 ```
 
 ### 핵심 테스트 케이스 구현 예시
@@ -270,12 +270,14 @@ it('토큰 갱신 10초 초과 시 handleSessionExpired 호출', async () => {
 
 ```ts
 describe('useGeekInterceptor', () => {
-    it('모든 요청에 appToken 헤더 주입')
-    it('로그인 상태: clientId, Shop-By-Authorization, shopApiUrl, apiMethod 주입')
-    it('비로그인 상태: appToken만 주입, 나머지 헤더 없음')
-    it('에러 응답: isAxiosError 여부와 관계없이 reject')
-    it('hook unmount 시 interceptor eject')
-})
+    it('모든 요청에 appToken 헤더 주입');
+    it(
+        '로그인 상태: clientId, Shop-By-Authorization, shopApiUrl, apiMethod 주입',
+    );
+    it('비로그인 상태: appToken만 주입, 나머지 헤더 없음');
+    it('에러 응답: isAxiosError 여부와 관계없이 reject');
+    it('hook unmount 시 interceptor eject');
+});
 ```
 
 ### Mock 설정 예시

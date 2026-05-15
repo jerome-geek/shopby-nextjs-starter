@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { oauth2 } from '@/api/auth';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
-import { dispatchAuthChange } from '@/hooks/useAuth';
+import { dispatchAuthChange } from '@/utils/auth';
 import { memberCookie } from '@/utils/cookie';
 
 interface useLogoutProps {
@@ -37,7 +37,7 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
             }
 
             queryClient.removeQueries();
-            dispatchAuthChange();
+            // Note: memberCookie.clearAll() calls accessTokenCookie.clear() which already dispatches auth change.
         } catch (error) {
             console.error(error);
         }

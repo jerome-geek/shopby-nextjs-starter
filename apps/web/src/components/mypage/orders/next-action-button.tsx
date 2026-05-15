@@ -4,9 +4,9 @@ import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
 import { Button } from '@/components/ui/button';
 import { useClaim } from '@/features/claim';
+import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import type { NextActionType } from '@/models';
-import { isLoggedIn } from '@/utils/auth';
 
 export interface NextActionButtonProps {
     nextActionType: NextActionType;
@@ -30,6 +30,8 @@ export const NextActionButton = ({
     isFreeGift,
 }: NextActionButtonProps) => {
     const { isMobile } = useResponsive();
+
+    const isLogin = useAuth();
 
     const { label, nextAction } = useClaim({
         nextActionType,
@@ -61,7 +63,7 @@ export const NextActionButton = ({
         return null;
     }
 
-    if (!isLoggedIn() && nextActionType === 'WRITE_REVIEW') {
+    if (!isLogin && nextActionType === 'WRITE_REVIEW') {
         return null;
     }
 

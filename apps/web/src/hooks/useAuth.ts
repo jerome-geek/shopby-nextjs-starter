@@ -1,11 +1,5 @@
 import { useSyncExternalStore, useCallback } from 'react';
-import { isLoggedIn } from '@/utils/auth';
-
-/**
- * 쿠키 변경을 감지하기 위한 커스텀 이벤트 이름
- * (쿠키 세팅 로직에서 이벤트를 발생시키면 실시간 동기화 가능)
- */
-export const AUTH_CHANGE_EVENT = 'shopby:auth-change';
+import { isLoggedIn, AUTH_CHANGE_EVENT } from '@/utils/auth';
 
 /** 외부 스토어 구독 함수 */
 const subscribe = (callback: () => void) => {
@@ -44,16 +38,4 @@ export function useAuth() {
     );
 
     return isLogin;
-}
-
-/**
- * 훅 밖에서 강제로 auth 상태를 업데이트하고 싶을 때 호출하는 헬퍼 함수
- * @example
- * accessTokenCookie.set(token);
- * dispatchAuthChange(); // -> useAuth 상태가 즉시 리렌더링 (깜빡임 없이)
- */
-export function dispatchAuthChange() {
-    if (typeof window !== 'undefined') {
-        window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
-    }
 }
