@@ -9,6 +9,12 @@ const PC = 'screen and (min-width: 768px)';
 export const container = style({
     width: '100%',
     marginBottom: '48px',
+    '@media': {
+        [media.mobile]: {
+            width: 'calc(100% + 40px)',
+            marginLeft: '-20px',
+        },
+    },
 });
 
 export const topRow = style({
