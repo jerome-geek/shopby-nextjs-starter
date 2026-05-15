@@ -67,7 +67,7 @@ export const EventDetailHero = ({
                                     <img
                                         src={
                                             normalizeImageUrl(
-                                                banner.imageUrl || '',
+                                                banner.imageUrl,
                                             ) || ''
                                         }
                                         alt={banner.name || '배너 이미지'}
