@@ -1,51 +1,32 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { parseAsBoolean, useQueryState } from 'nuqs';
+
 import {
-    UseQueryOptions,
-    keepPreviousData,
-    useQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-import { useSearchParams } from 'next/navigation';
-
-import { event } from '@/api/display';
-import { eventKeys } from '@/hooks/queryKeys';
-import type { GetEventParams, GetEventResponse } from '@/models/display/event';
-
-interface UseEventParams<T = GetEventResponse> {
-    eventKey: string | number;
-    searchParams?: GetEventParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetEventResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof eventKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    eventDetailOptions,
+    type EventDetailParams,
+} from '@/entities/event/queries';
+import type { GetEventResponse } from '@/models/display/event';
 
 const useEvent = <T = GetEventResponse>({
     eventKey,
     searchParams,
     options,
-}: UseEventParams<T>) => {
-    const query = useSearchParams();
-    const preview = query.get('preview') === 'true';
-    const defaultSearchParams = { ...searchParams, preview };
+}: EventDetailParams<T>) => {
+    const [preview] = useQueryState(
+        'preview',
+        parseAsBoolean.withDefault(false),
+    );
 
-    return useQuery({
-        queryKey: eventKeys.detail(eventKey, defaultSearchParams),
-        queryFn: async () => {
-            const { data } = await event.getEvent(
-                eventKey,
-                defaultSearchParams,
-            );
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-    });
+    return useQuery(
+        eventDetailOptions({
+            eventKey,
+            searchParams: { ...searchParams, preview },
+            options: {
+                placeholderData: keepPreviousData,
+                ...options,
+            },
+        }),
+    );
 };
 
 export default useEvent;

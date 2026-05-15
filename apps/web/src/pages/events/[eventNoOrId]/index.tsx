@@ -8,19 +8,17 @@ import type {
 } from 'next';
 import { Fragment, useCallback, useMemo, useState } from 'react';
 
-import { event } from '@/api/display';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
+import { eventDetailOptions } from '@/entities/event/queries';
+import EventContents from '@/features/event/detail/components/event-contents';
 import EventErrorState from '@/features/event/detail/components/event-error-state';
 import EventProductSection from '@/features/event/detail/components/event-product-section';
 import EventSectionTab from '@/features/event/detail/components/event-section-tab';
 import EventTop from '@/features/event/detail/components/event-top';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
-import { eventKeys } from '@/hooks/queryKeys';
 import { useEvent } from '@/hooks/suspenseQuery/display/event';
-
-import EventContents from '@/features/event/detail/components/event-contents';
 import * as styles from '@/pages/events/[eventNoOrId]/index.css';
 
 interface EventDetailViewProps {
@@ -187,21 +185,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     let seoData = null;
 
     try {
-        const eventData = await queryClient.fetchQuery({
-            queryKey: eventKeys.detail(eventKey, searchParams),
-            queryFn: async () => {
-                if (typeof eventKey === 'string') {
-                    const { data } = await event.getEventById(
-                        eventKey,
-                        searchParams,
-                    );
-                    return data;
-                }
-                const { data } = await event.getEvent(eventKey, searchParams);
-
-                return data;
-            },
-        });
+        const eventData = await queryClient.fetchQuery(
+            eventDetailOptions({ eventKey, searchParams }),
+        );
 
         // ── SEO 데이터 추출 ──
         if (eventData?.label) {

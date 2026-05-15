@@ -12,6 +12,7 @@ import {
     HeroBanner,
 } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
+import { eventDetailOptions } from '@/entities/event/queries';
 import { eventKeys } from '@/hooks/queryKeys';
 import type { GetEventsV2Params } from '@/models/display/event';
 import * as styles from '@/pages/shop/[slug]/index.css';
@@ -126,13 +127,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 const firstEventNo = eventListData?.contents?.[0]?.eventNo;
 
                 if (firstEventNo) {
-                    const { data: detailData } =
-                        await event.getEvent(firstEventNo);
-
-                    // 이벤트 상세 캐시 주입 (EventSection 스켈레톤 제거)
-                    queryClient.setQueryData(
-                        eventKeys.detail(firstEventNo),
-                        detailData,
+                    await queryClient.prefetchQuery(
+                        eventDetailOptions({ eventKey: firstEventNo }),
                     );
                 }
             })(),

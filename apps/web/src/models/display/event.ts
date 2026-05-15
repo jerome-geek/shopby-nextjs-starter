@@ -127,7 +127,7 @@ export type GetSectionsByEventNosResponse = {
 
 export type GetEventsByProductNoResponse = EventContent[];
 
-export interface GetEventParams extends Preview {
+export interface GetEventParams {
     /** 비로그인 고객의 상품 내 발급가능 쿠폰노출(default: false) */
     includeNonMemberCoupon?: boolean;
     /** 기획전 미리보기 여부(default: false) */

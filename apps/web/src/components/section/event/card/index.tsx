@@ -1,6 +1,8 @@
 import { head, isEmpty, pipe, prop, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { NoResult } from '@/components/common/no-result';
 import ProductCardRow from '@/components/product/card-row';
@@ -10,9 +12,22 @@ import { PATHS } from '@/const/paths';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useEventProductSection } from '@/hooks/query/display/event';
 import { useResponsive } from '@/hooks/utils';
+import type { GetBannersResponse } from '@/models/display/banner';
 import type { GetEventResponse } from '@/models/display/event';
+import {
+    extractBannerContentsByAccountIndex,
+    normalizeImageUrl,
+} from '@/shared/utils/shopby';
 
-const EventCard = ({ event }: { event: GetEventResponse }) => {
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+interface EventCardProps {
+    event: GetEventResponse;
+    bannerData?: GetBannersResponse;
+}
+
+const EventCard = ({ event, bannerData }: EventCardProps) => {
     const { isMobile } = useResponsive();
 
     const parseThumbnail = useMemo(() => {
@@ -36,6 +51,14 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
             mo: getSrc(mobile),
         };
     }, [event]);
+
+    const banners = useMemo(
+        () =>
+            bannerData
+                ? extractBannerContentsByAccountIndex(bannerData, 0)
+                : [],
+        [bannerData],
+    );
 
     const firstSectionNo = head(event.section)?.sectionNo || 0;
 
@@ -66,14 +89,16 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
     const { productsWithDiscounts } =
         useProductsWithAdditionalDiscounts(products);
 
+    const eventDetailHref = PATHS.EVENTS.DETAIL.replace(
+        '[eventNoOrId]',
+        event.id,
+    );
+
     const textRender = () => {
         return (
             <div className={styles.textWrapper}>
                 <Link
-                    href={PATHS.EVENTS.DETAIL.replace(
-                        '[eventNo]',
-                        event.eventNo.toString(),
-                    )}
+                    href={PATHS.EVENTS.DETAIL.replace('[eventNo]', event.id)}
                     prefetch={false}
                 >
                     <p className={styles.title}>{event.label}</p>
@@ -87,19 +112,59 @@ const EventCard = ({ event }: { event: GetEventResponse }) => {
     return (
         <div className={styles.container}>
             <div className={styles.imageWrapper}>
-                <Link
-                    href={PATHS.EVENTS.DETAIL.replace(
-                        '[eventNoOrId]',
-                        event.eventNo.toString(),
-                    )}
-                    prefetch={false}
-                >
-                    <img
-                        src={isMobile ? parseThumbnail.mo : parseThumbnail.pc}
-                        alt={'기획전 썸네일 이미지'}
-                        className={styles.image}
-                    />
-                </Link>
+                {banners.length > 0 ? (
+                    <Swiper
+                        modules={[Navigation]}
+                        navigation
+                        grabCursor
+                        loop={banners.length > 1}
+                        slidesPerView={1}
+                        style={
+                            {
+                                width: '100%',
+                                height: '100%',
+                                '--swiper-navigation-color': '#fff',
+                                '--swiper-navigation-size': '24px',
+                            } as React.CSSProperties
+                        }
+                    >
+                        {banners.map((banner, index) => (
+                            <SwiperSlide key={banner.bannerNo || index}>
+                                <Link
+                                    href={eventDetailHref}
+                                    prefetch={false}
+                                    style={{
+                                        display: 'block',
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <img
+                                        src={
+                                            normalizeImageUrl(
+                                                banner.imageUrl || '',
+                                            ) || ''
+                                        }
+                                        alt={banner.name || '배너 이미지'}
+                                        className={styles.image}
+                                    />
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <Link href={eventDetailHref} prefetch={false}>
+                        <img
+                            src={
+                                isMobile
+                                    ? parseThumbnail.mo
+                                    : parseThumbnail.pc
+                            }
+                            alt={'기획전 썸네일 이미지'}
+                            className={styles.image}
+                        />
+                    </Link>
+                )}
 
                 {isMobile ? (
                     <div className={styles.fadeWrapper}>{textRender()}</div>

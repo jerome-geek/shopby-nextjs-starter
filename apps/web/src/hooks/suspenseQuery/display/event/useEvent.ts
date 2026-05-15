@@ -1,54 +1,29 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { parseAsBoolean, useQueryState } from 'nuqs';
+
 import {
-    type UseSuspenseQueryOptions,
-    useSuspenseQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-import { useSearchParams } from 'next/navigation';
-
-import { event } from '@/api/display';
-import { eventKeys } from '@/hooks/queryKeys';
-import type { GetEventParams } from '@/models/display';
+    eventDetailOptions,
+    type EventDetailParams,
+} from '@/entities/event/queries';
 import type { GetEventResponse } from '@/models/display/event';
-
-interface UseEventParams<T = GetEventResponse> {
-    eventKey: string | number;
-    searchParams?: GetEventParams;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetEventResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof eventKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
 
 const useEvent = <T = GetEventResponse>({
     eventKey,
     searchParams,
     options,
-}: UseEventParams<T>) => {
-    const searchParamsFromURL = useSearchParams();
-    const preview = searchParamsFromURL.get('preview') === 'true';
-    const defaultSearchParams = { ...searchParams, preview };
+}: EventDetailParams<T>) => {
+    const [preview] = useQueryState(
+        'preview',
+        parseAsBoolean.withDefault(false),
+    );
 
-    return useSuspenseQuery({
-        queryKey: eventKeys.detail(eventKey, defaultSearchParams),
-        queryFn: async () => {
-            if (typeof eventKey === 'string') {
-                const { data } = await event.getEventById(
-                    eventKey,
-                    defaultSearchParams,
-                );
-                return data;
-            }
-            const { data } = await event.getEvent(eventKey, defaultSearchParams);
-
-            return data;
-        },
-        ...options,
-    });
+    return useSuspenseQuery(
+        eventDetailOptions({
+            eventKey,
+            searchParams: { ...searchParams, preview },
+            options,
+        }),
+    );
 };
 
 export default useEvent;
