@@ -364,7 +364,11 @@ export const emptyState = style({
     textAlign: 'center',
     backgroundColor: vars.color.gray['10'],
     borderRadius: '24px',
-    margin: '12px 0',
+    margin: '12px 20px',
+
+    '@media': {
+        [media.desktop]: { margin: '12px 0' },
+    },
 });
 
 export const emptyIconArea = style({
