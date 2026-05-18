@@ -1,4 +1,5 @@
 import type { ClientPlatformType, PlatformType } from '@/models';
+import type { GetProfileResponse } from '@/models/member/profile';
 import type { CartList, OrderDetailResponse } from '@/models/order';
 import type { ProductDetailResponse } from '@/models/product';
 import type { KakaoSDK } from '@/types/kakao';
@@ -28,7 +29,7 @@ declare global {
         sb: {
             getPlatform?: () => PlatformType;
             /** 회원정보 조회 API */
-            profile?: any;
+            profile?: GetProfileResponse;
             /** 상품 상세 조회 API */
             product?: ProductDetailResponse;
             /** 상품 검색 API */
