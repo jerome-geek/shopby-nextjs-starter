@@ -8,8 +8,16 @@ const usePage = () => {
         router.pathname === PATHS.SHOP.DISCOVERY ||
         router.pathname === '/shop/[slug]';
 
+    const isCallbackPage =
+        router.pathname === PATHS.CALLBACK.AUTH ||
+        router.pathname === PATHS.CALLBACK.KCP_AUTH;
+
+    const isMyAppBridgePage = router.pathname === '/app/auth.html';
+
     return {
         isShopMainPage,
+        isCallbackPage,
+        isMyAppBridgePage,
     };
 };
 

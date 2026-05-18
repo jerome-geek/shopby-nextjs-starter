@@ -41,12 +41,16 @@ export const DefaultLayout = ({ children, className }: LayoutProps) => {
         }
     });
 
-    const { isShopMainPage } = usePage();
+    const { isShopMainPage, isCallbackPage, isMyAppBridgePage } = usePage();
 
     const router = useRouter();
     const isBottomNavigationVisible = !includes(router.pathname, [
         PATHS.ORDER.SHEET,
     ]);
+
+    if (isCallbackPage || isMyAppBridgePage) {
+        return <>{children}</>;
+    }
 
     return (
         <div className={clsx(styles.layout, className)}>
