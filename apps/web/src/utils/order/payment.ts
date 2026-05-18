@@ -46,6 +46,7 @@ const payment = {
                 console.log('🚀 ~ error:', error);
                 errorCallback?.(error);
             },
+            false,
         );
     },
     naverPayOrder: (items: NaverPayOrderSheetItem[]) => {

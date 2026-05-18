@@ -81,6 +81,8 @@ declare global {
                 paymentData: any,
                 callback?: (response: any) => void,
                 errorCallback?: (error: ShopByErrorResponse) => void,
+                isAlertUsable?: boolean,
+                additionalPgParam?: any,
             ) => void;
             requestNaverPayOrder: (
                 paymentData: any,
