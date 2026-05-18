@@ -7,6 +7,7 @@ import { useInfiniteProductList } from '@/hooks/infiniteQuery/product/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useProductList } from '@/hooks/query/product/product';
+import { useAuth } from '@/hooks/useAuth';
 import { useMainCategory } from '@/hooks/useMainCategory';
 import { useProductFilter } from '@/hooks/useProductFilter';
 import { useResponsive } from '@/hooks/utils';
@@ -22,8 +23,14 @@ export const useShoppingSearch = ({
     const { mainCategoryNo } = useMainCategory();
     const [searchParams] = useProductSearchParams();
 
-    const { data: profileData } = useProfile();
-    const memberNo = profileData?.memberNo;
+    const isLogin = useAuth();
+
+    const { data: profileData } = useProfile({
+        options: {
+            enabled: !!isLogin,
+        },
+    });
+    const memberNo = profileData?.memberNo || 0;
 
     const { appliedSearchParams } = useProductFilter({
         categoryNo: mainCategoryNo,

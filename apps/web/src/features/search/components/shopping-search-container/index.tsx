@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { useShoppingSearch } from '../../hooks/useShoppingSearch';
+import { useShoppingSearch } from '@/features/search/hooks/useShoppingSearch';
 
 interface ShoppingSearchContainerProps {
     isIntegrated?: boolean;
