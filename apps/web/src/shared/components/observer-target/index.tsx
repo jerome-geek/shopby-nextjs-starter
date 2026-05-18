@@ -2,18 +2,16 @@
 
 import { useEffect, useRef } from 'react';
 
-import * as styles from '@/components/common/observer-target/index.css';
+import * as styles from '@/shared/components/observer-target/index.css';
 
 interface ObserverTargetProps {
     hasNextPage?: boolean;
-    totalCount?: number;
     onIntersect: () => void;
     rootMargin?: string;
 }
 
 export const ObserverTarget = ({
     hasNextPage,
-    totalCount,
     onIntersect,
     rootMargin = '200px',
 }: ObserverTargetProps) => {

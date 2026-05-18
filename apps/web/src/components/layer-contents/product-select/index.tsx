@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/layer-contents/product-select/index.css';
 import { type DefaultModalLayoutProps } from '@/components/layout';
 import { Button } from '@/components/ui/button';
@@ -333,7 +333,6 @@ export const ProductSelect = ({
 
                         <ObserverTarget
                             hasNextPage={hasNextPage}
-                            totalCount={totalCount}
                             onIntersect={() => {
                                 if (hasNextPage) {
                                     fetchNextPage();

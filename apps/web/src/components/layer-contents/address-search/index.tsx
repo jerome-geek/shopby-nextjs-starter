@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/layer-contents/address-search/index.css';
 import { InputField, InputFieldContainer } from '@/components/ui/input';
 import { useInfiniteAddressList } from '@/hooks/query/manage/address';
@@ -156,7 +156,6 @@ export const AddressSearch = ({ close, onSelect }: AddressSearchProps) => {
                                     }
                                 }}
                                 hasNextPage={hasNextPage || false}
-                                totalCount={totalCount}
                             />
                         </div>
                     </>

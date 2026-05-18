@@ -3,7 +3,7 @@ import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
 
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/search/recipe-results/index.css';
 import PagingV2 from '@/components/ui/paging-v2';
 import { RECIPE_PAGE_QUERY_KEY } from '@/const/search';
@@ -63,7 +63,6 @@ export const RecipeSearchResults = ({
                         }
                     }}
                     hasNextPage={hasNextPage}
-                    totalCount={totalCount}
                 />
             ) : (
                 <PagingV2

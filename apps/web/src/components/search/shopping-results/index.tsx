@@ -2,7 +2,7 @@ import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
 
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import { ProductCard } from '@/components/product';
 import PagingV2 from '@/components/ui/paging-v2';
 import * as styles from '@/components/search/shopping-results/index.css';
@@ -57,7 +57,6 @@ export const ShoppingSearchResults = ({
                         }
                     }}
                     hasNextPage={hasNextProductPage}
-                    totalCount={productTotalCount}
                 />
             ) : (
                 <PagingV2

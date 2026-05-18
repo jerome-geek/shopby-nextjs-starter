@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { CollectionCard } from '@/components/collection/collection-card';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/search/collection-results/index.css';
 import PagingV2 from '@/components/ui/paging-v2';
 import { COLLECTION_PAGE_QUERY_KEY } from '@/const/search';
@@ -61,7 +61,6 @@ export const CollectionSearchResults = ({
                         }
                     }}
                     hasNextPage={hasNextPage}
-                    totalCount={totalCount}
                 />
             ) : (
                 <PagingV2

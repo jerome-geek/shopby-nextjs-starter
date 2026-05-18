@@ -20,7 +20,7 @@ import { Error } from '@/components/common/error';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import { Column, Row } from '@/components/ui/layout/flex';
 import Paging from '@/components/ui/paging';
 import {
@@ -796,7 +796,6 @@ const BoardsContent = () => {
                                 {isMobile ? (
                                     <ObserverTarget
                                         hasNextPage={hasNextPage}
-                                        totalCount={totalCount}
                                         onIntersect={() => {
                                             if (hasNextPage) {
                                                 fetchNextPage();

@@ -1,7 +1,7 @@
 import { isEmpty } from '@fxts/core';
 
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';
@@ -105,7 +105,6 @@ const NewProductsPage = () => {
                                             }
                                         }}
                                         hasNextPage={hasNextPage || false}
-                                        totalCount={totalCount}
                                     />
                                 ) : (
                                     <PagingV2

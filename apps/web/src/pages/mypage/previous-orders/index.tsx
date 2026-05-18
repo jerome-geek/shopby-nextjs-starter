@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
@@ -228,7 +228,6 @@ export default function MypagePreviousOrdersPage() {
                                     }
                                 }}
                                 hasNextPage={hasNextPage || false}
-                                totalCount={totalCount}
                             />
                         ) : (
                             <div className={card.paging}>

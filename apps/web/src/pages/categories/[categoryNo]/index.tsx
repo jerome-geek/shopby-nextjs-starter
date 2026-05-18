@@ -18,7 +18,7 @@ import { category } from '@/api/display';
 import { product } from '@/api/product';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import Seo from '@/components/common/seo';
 import { ProductCard } from '@/components/product';
 import { ProductListCategory } from '@/components/product-list/category';
@@ -479,7 +479,6 @@ export default function CategoryPage({
                                             }
                                         }}
                                         hasNextPage={hasNextPage}
-                                        totalCount={totalCount}
                                     />
                                 ) : (
                                     <Paging

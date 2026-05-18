@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 import { LazyRender } from '@/components/common';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import EventSection from '@/components/section/event';
 import ProductsSearch from '@/components/section/products/search';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
@@ -239,7 +239,6 @@ const SectionGroup = ({
                     }
                 }}
                 hasNextPage={hasNextPage || false}
-                totalCount={totalCount}
             />
         </>
     );

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/components/common/observer-target';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import Seo from '@/components/common/seo';
 import { EVENT_LIST } from '@/const/event';
 import EventItem from '@/features/event/list/components/event-item';
@@ -92,7 +92,6 @@ const Events = () => {
                                 }
                             }}
                             hasNextPage={hasNextPage || false}
-                            totalCount={totalCount}
                         />
                     </Fragment>
                 ) : (

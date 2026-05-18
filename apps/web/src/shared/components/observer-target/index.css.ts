@@ -16,4 +16,3 @@ export const endMessage = style([
         textAlign: 'center',
     },
 ]);
-
