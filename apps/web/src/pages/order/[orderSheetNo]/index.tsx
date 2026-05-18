@@ -17,6 +17,7 @@ import ShippingAddress from '@/components/order/shipping-address';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import { useOrderSheetInitialize } from '@/entities/order/hooks';
+import { useOrderPostMessage } from '@/features/order/hooks';
 import { useSb } from '@/hooks/libs/shopby';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
@@ -54,6 +55,7 @@ const OrderSheetContent = ({ orderSheetNo }: { orderSheetNo: string }) => {
     const { methods, orderSheetData } = useOrderSheetInitialize({
         orderSheetNo,
     });
+    useOrderPostMessage();
 
     useSb({ orderSheet: orderSheetData });
 
