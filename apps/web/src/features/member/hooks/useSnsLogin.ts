@@ -17,7 +17,7 @@ import {
 import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/query/admin/mall';
 import useDialog from '@/hooks/utils/useDialog';
-import { useIsClient } from '@/shared/hooks/useIsClient';
+import { useIsClient } from '@suspensive/react';
 import type { NcpOpenIdProviderType, OpenIdJoinProvider } from '@/models';
 
 const useSnsLogin = () => {

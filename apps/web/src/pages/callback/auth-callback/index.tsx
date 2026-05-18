@@ -14,7 +14,7 @@ import { NcpOpenIdProviderType } from '@/models';
 import { GetProfileResponse } from '@/models/member/profile';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
 
-import { useIsClient } from '@/shared/hooks/useIsClient';
+import { useIsClient } from '@suspensive/react';
 
 export const AuthCallbackPage = () => {
     const isClient = useIsClient();
