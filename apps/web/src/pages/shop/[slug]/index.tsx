@@ -2,17 +2,18 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 
 import { event } from '@/api/display';
+import Seo from '@/components/common/seo';
 import SectionGroup from '@/components/section/group';
 import TimeSaleSection from '@/components/section/time-sale';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';
+import { eventDetailOptions } from '@/entities/event/queries';
 import {
     BANNER_ID_PREFIX,
     HeroBanner,
 } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
-import { eventDetailOptions } from '@/entities/event/queries';
 import { eventKeys } from '@/hooks/queryKeys';
 import type { GetEventsV2Params } from '@/models/display/event';
 import * as styles from '@/pages/shop/[slug]/index.css';
@@ -39,26 +40,30 @@ export default function ShopMainPage({
     const heroBannerType = type === 'kids' ? 'KIDS' : 'LIFE';
 
     return (
-        <div className={styles.main}>
-            {/* Full-width HeroBanner */}
-            <section className={styles.heroBannerSection}>
-                <HeroBanner type={heroBannerType} />
-                <IconBanner type={heroBannerType} />
-            </section>
+        <>
+            <Seo title={heroBannerType === 'KIDS' ? '발견' : '라이프'} />
 
-            <ShopbyAsyncBoundary errorFallback={<></>}>
-                <TimeSaleSection
-                    type={heroBannerType}
-                    sectionId={sectionId}
-                    title={'오늘만 특가'}
-                />
-            </ShopbyAsyncBoundary>
+            <div className={styles.main}>
+                {/* Full-width HeroBanner */}
+                <section className={styles.heroBannerSection}>
+                    <HeroBanner type={heroBannerType} />
+                    <IconBanner type={heroBannerType} />
+                </section>
 
-            {/* 기획전 및 상품진열 그룹 */}
-            <ShopbyAsyncBoundary errorFallback={<></>}>
-                <SectionGroup eventSearchParams={eventSearchParams} />
-            </ShopbyAsyncBoundary>
-        </div>
+                <ShopbyAsyncBoundary errorFallback={<></>}>
+                    <TimeSaleSection
+                        type={heroBannerType}
+                        sectionId={sectionId}
+                        title={'오늘만 특가'}
+                    />
+                </ShopbyAsyncBoundary>
+
+                {/* 기획전 및 상품진열 그룹 */}
+                <ShopbyAsyncBoundary errorFallback={<></>}>
+                    <SectionGroup eventSearchParams={eventSearchParams} />
+                </ShopbyAsyncBoundary>
+            </div>
+        </>
     );
 }
 
