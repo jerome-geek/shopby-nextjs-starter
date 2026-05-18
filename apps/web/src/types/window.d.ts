@@ -18,6 +18,10 @@ declare global {
                     profile: 'real';
                     platform: ClientPlatformType;
                 };
+                forceReload?: {
+                    COMMON_HEAD: boolean;
+                    COMMON_FOOTER: boolean;
+                };
             }) => void;
             clearGlobalObjectSb: () => void;
         };

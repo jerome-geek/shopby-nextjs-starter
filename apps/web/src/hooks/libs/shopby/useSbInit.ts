@@ -1,21 +1,25 @@
+import { useIsClient } from '@suspensive/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 import { getPlatform } from '@/api/core/utils';
-import { useAuth } from '@/hooks/useAuth';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useProfile } from '@/hooks/query/member/profile';
-import { useIsClient } from '@/shared/hooks/useIsClient';
+import { useAuth } from '@/hooks/useAuth';
 import { determinePageScriptType } from '@/shared/utils/shopby';
 
 export const useSbInit = () => {
     const isClient = useIsClient();
-    const { data: mallData } = useMall();
-    const isExternalScriptUsable =
-        isClient && !!mallData?.externalServiceConfig.useScript;
 
     const router = useRouter();
+
     const isLogin = useAuth();
+
+    const { data: mallData } = useMall({
+        options: {
+            enabled: isClient,
+        },
+    });
 
     // TODO: 쿼리 파라미터가 변경됐을때도 새 페이지 이동이라고 간주해야되는지 체크, router.asPath로 체크하면 쿼리 파라미터가 바뀔때도 페이지 이동으로 간주
     const { data: profileData } = useProfile({
@@ -24,8 +28,11 @@ export const useSbInit = () => {
         },
     });
 
+    const isScriptEnable =
+        isClient && !!mallData?.externalServiceConfig.useScript;
+
     useEffect(() => {
-        if (!isExternalScriptUsable) {
+        if (!isScriptEnable) {
             return;
         }
 
@@ -35,11 +42,15 @@ export const useSbInit = () => {
                 profile: 'real',
                 platform: getPlatform(),
             },
+            forceReload: {
+                COMMON_HEAD: false,
+                COMMON_FOOTER: true,
+            },
         });
-    }, [isExternalScriptUsable]);
+    }, [isScriptEnable]);
 
     useEffect(() => {
-        if (!isExternalScriptUsable) {
+        if (!isScriptEnable) {
             return;
         }
 
@@ -59,10 +70,10 @@ export const useSbInit = () => {
                 );
             }
         };
-    }, [isExternalScriptUsable, router.pathname]);
+    }, [isScriptEnable, router.pathname]);
 
     useEffect(() => {
-        if (!isExternalScriptUsable) {
+        if (!isScriptEnable) {
             return;
         }
 
@@ -74,5 +85,5 @@ export const useSbInit = () => {
             profile: profileData || null,
             getPlatform,
         });
-    }, [isExternalScriptUsable, profileData, router.pathname, isLogin]);
+    }, [isScriptEnable, profileData, router.pathname, isLogin]);
 };
