@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 
 import { LazyRender } from '@/components/common';
 import { ObserverTarget } from '@/components/common/observer-target';
+import EventSection from '@/components/section/event';
 import ProductsSearch from '@/components/section/products/search';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import type { GetEventsV2Params } from '@/models/display/event';
@@ -27,9 +28,6 @@ const ProductDisplay = dynamic(
         ssr: false,
     },
 );
-const Event = dynamic(() => import('@/components/section/event'), {
-    ssr: false,
-});
 
 const SectionGroup = ({
     eventSearchParams,
@@ -47,12 +45,8 @@ const SectionGroup = ({
     } = useInfiniteEventList({
         searchParams: eventSearchParams,
     });
-    console.log(
-        '🚀 ~ SectionGroup ~ infiniteEventListData:',
-        infiniteEventListData,
-    );
 
-    const eventNoList = useMemo(() => {
+    const eventIdList = useMemo(() => {
         if (!infiniteEventListData) {
             return [];
         }
@@ -62,7 +56,7 @@ const SectionGroup = ({
                 infiniteEventListData,
                 prop('pages'),
                 flatMap((a) => a.contents),
-                map((b) => b.eventNo),
+                map((b) => b.id),
                 toArray,
             );
         } catch (error) {
@@ -71,9 +65,9 @@ const SectionGroup = ({
         }
     }, [infiniteEventListData]);
 
-    const filteredEventNoList = useMemo(() => {
-        return eventNoList.slice(7);
-    }, [eventNoList]);
+    const filteredEventIdList = useMemo(() => {
+        return eventIdList.slice(7);
+    }, [eventIdList]);
 
     const totalCount = useMemo(
         () => infiniteEventListData?.pages?.[0]?.totalCount ?? 0,
@@ -82,7 +76,7 @@ const SectionGroup = ({
 
     return (
         <>
-            <Event eventNo={eventNoList?.[0]} />
+            <EventSection eventKey={eventIdList?.[0]} />
 
             <LazyRender minHeight={500}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>
@@ -91,7 +85,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[1]} />
+                <EventSection eventKey={eventIdList?.[1]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -127,7 +121,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[2]} />
+                <EventSection eventKey={eventIdList?.[2]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -166,7 +160,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[3]} />
+                <EventSection eventKey={eventIdList?.[3]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -174,7 +168,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[4]} />
+                <EventSection eventKey={eventIdList?.[4]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -194,7 +188,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[5]} />
+                <EventSection eventKey={eventIdList?.[5]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -202,7 +196,7 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <Event eventNo={eventNoList?.[6]} />
+                <EventSection eventKey={eventIdList?.[6]} />
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -232,9 +226,9 @@ const SectionGroup = ({
                 />
             </LazyRender>
 
-            {filteredEventNoList.map((eventNo) => (
-                <LazyRender minHeight={400} key={eventNo}>
-                    <Event eventNo={eventNo} />
+            {filteredEventIdList.map((eventKey) => (
+                <LazyRender minHeight={400} key={eventKey}>
+                    <EventSection eventKey={eventKey} />
                 </LazyRender>
             ))}
 

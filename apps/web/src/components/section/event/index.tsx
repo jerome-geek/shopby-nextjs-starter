@@ -9,11 +9,11 @@ import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 interface EventSectionProps {
     index?: number;
     eventNo?: number;
+    eventKey?: string;
 }
 
-const EventSection = ({ index, eventNo }: EventSectionProps) => {
-    const eventKey = (index ? `SHOP_MAIN_${index}` : eventNo) || '';
-
+const EventSection = ({ eventKey }: EventSectionProps) => {
+    console.log('🚀 ~ EventSection ~ eventKey:', eventKey);
     if (!eventKey) {
         return null;
     }

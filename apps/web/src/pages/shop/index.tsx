@@ -28,7 +28,7 @@ const Best = dynamic(() => import('@/components/section/best'), {
     ssr: false,
 });
 
-// 쇼핑몰 기본 홈은 발견
+// TODO: 쇼핑몰 기본 홈은 발견
 export default function ShopMainPage() {
     return (
         <>
@@ -51,7 +51,7 @@ export default function ShopMainPage() {
                 </ShopbyAsyncBoundary>
 
                 {/* 영상(기획전) */}
-                <EventSection index={1} />
+                <EventSection eventKey={'SHOP_MAIN_1'} />
 
                 {/* 키즈 타임특가 */}
                 <LazyRender minHeight={400}>
@@ -66,7 +66,7 @@ export default function ShopMainPage() {
 
                 {/* 영상(기획전) */}
                 <LazyRender minHeight={400}>
-                    <EventSection index={2} />
+                    <EventSection eventKey={'SHOP_MAIN_2'} />
                 </LazyRender>
 
                 {/* 라이프 베스트 */}
@@ -78,7 +78,7 @@ export default function ShopMainPage() {
 
                 {/* 영상(기획전) */}
                 <LazyRender minHeight={400}>
-                    <EventSection index={3} />
+                    <EventSection eventKey={'SHOP_MAIN_3'} />
                 </LazyRender>
 
                 {/* 키즈 베스트 */}
@@ -90,7 +90,7 @@ export default function ShopMainPage() {
 
                 {/* 영상(기획전) */}
                 <LazyRender minHeight={400}>
-                    <EventSection index={4} />
+                    <EventSection eventKey={'SHOP_MAIN_4'} />
                 </LazyRender>
             </div>
         </>
