@@ -9,21 +9,27 @@ export const container = style({
     right: '20px',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     gap: '12px',
     zIndex: 999,
+    /** height = 버튼 2개 쌓이는 높이 + 12px(gap) */
+    height: '108px',
 
     '@media': {
         [media.mobile]: {
-            bottom: '80px',
+            /** height = 버튼 2개 쌓이는 높이 + 12px(gap) */
+            height: '96px',
         },
     },
 });
 
 export const button = style({
+    position: 'relative',
     width: '48px',
     height: '48px',
     borderRadius: '50%',
-    backgroundColor: vars.color.green['80'], // Replace with precise theme color if needed
+    backgroundColor: vars.color.green['80'],
     color: vars.color.white,
     display: 'flex',
     justifyContent: 'center',
@@ -43,19 +49,4 @@ export const button = style({
             height: '42px',
         },
     },
-});
-
-export const writeButton = style({
-    width: '48px',
-    height: '48px',
-    borderRadius: '50%',
-    backgroundColor: vars.color.primary,
-    color: vars.color.white,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    border: 'none',
-    cursor: 'pointer',
-    boxShadow: '0px 6px 10px 0px #0000001A',
-    transition: 'background-color 0.2s',
 });
