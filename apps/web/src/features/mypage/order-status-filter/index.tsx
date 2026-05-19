@@ -22,10 +22,16 @@ export const OrderStatusFilter = ({
     const { t } = useTranslation();
     const { data: orderStatusSummaryData } = useOrderStatusSummary();
 
-    const orderStatusOptions = useMemo(
-        () => ordersStatusTabSpec.options(t, orderStatusSummaryData),
-        [orderStatusSummaryData, t],
-    );
+    const orderStatusOptions = useMemo(() => {
+        const rawOptions = ordersStatusTabSpec.options(orderStatusSummaryData);
+        return rawOptions.map((option) => ({
+            value: option.value,
+            label:
+                option.count !== undefined
+                    ? `${t(option.label)} ${option.count}`
+                    : t(option.label),
+        }));
+    }, [orderStatusSummaryData, t]);
 
     return (
         <SegmentedToggle
@@ -45,10 +51,16 @@ export const OrderStatusFilterFallback = ({
 }: OrderStatusFilterProps) => {
     const { t } = useTranslation();
 
-    const orderStatusOptions = useMemo(
-        () => ordersStatusTabSpec.options(t),
-        [t],
-    );
+    const orderStatusOptions = useMemo(() => {
+        const rawOptions = ordersStatusTabSpec.options();
+        return rawOptions.map((option) => ({
+            value: option.value,
+            label:
+                option.count !== undefined
+                    ? `${t(option.label)} ${option.count}`
+                    : t(option.label),
+        }));
+    }, [t]);
 
     return (
         <SegmentedToggle
