@@ -1,4 +1,5 @@
 import { pipe, some, values } from '@fxts/core';
+import { useIsClient } from '@suspensive/react';
 import { CirclePlusIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -22,7 +23,7 @@ import { useCustomDialog } from '@/features/dialog';
 import { SearchDrawer } from '@/features/drawer/search';
 import useCart from '@/hooks/cart/useCart';
 import { useAuth } from '@/hooks/useAuth';
-import { useResponsive } from '@/hooks/utils/useResponsive';
+import { Only } from '@/shared/components/only';
 import { vars } from '@/styles/theme.css';
 
 import logoImage from '@/assets/logo.png';
@@ -30,10 +31,9 @@ import logoImage from '@/assets/logo.png';
 export function Header() {
     const { t } = useTranslation();
     const router = useRouter();
+    const isClient = useIsClient();
 
     const isLogin = useAuth();
-
-    const { isMobile } = useResponsive();
 
     const { totalCount } = useCart();
     const { openLoginDialog } = useCustomDialog();
@@ -86,9 +86,11 @@ export function Header() {
 
     return (
         <header id='header' className={styles.header}>
-            {isMobile ? (
+            <Only.Mobile>
                 <MobileHeader handleSearchClick={handleSearchClick} />
-            ) : (
+            </Only.Mobile>
+
+            <Only.Desktop>
                 <div className={styles.headerInner}>
                     <Menu />
 
@@ -133,7 +135,7 @@ export function Header() {
                                     className={styles.iconWrapper}
                                 >
                                     <BigCartIcon />
-                                    {totalCount > 0 && (
+                                    {isClient && totalCount > 0 && (
                                         <span className={styles.cartBadge}>
                                             {totalCount > 99
                                                 ? '99+'
@@ -153,7 +155,7 @@ export function Header() {
                         </ul>
                     </div>
                 </div>
-            )}
+            </Only.Desktop>
         </header>
     );
 }

@@ -12,12 +12,12 @@
         "test:ui": "vitest --ui"
     },
     "dependencies": {
-        "@geek/utils": "workspace:*",
         "@dnd-kit/core": "^6.3.1",
         "@dnd-kit/modifiers": "^9.0.0",
         "@dnd-kit/sortable": "^10.0.0",
         "@dnd-kit/utilities": "^3.2.2",
         "@fxts/core": "^1.25.0",
+        "@geek/utils": "workspace:*",
         "@hookform/error-message": "^2.0.1",
         "@hookform/resolvers": "^5.2.2",
         "@radix-ui/react-accordion": "^1.2.12",
@@ -54,7 +54,6 @@
         "radix-ui": "^1.4.3",
         "react": "19.2.3",
         "react-day-picker": "^9.14.0",
-        "react-device-detect": "^2.2.3",
         "react-dom": "19.2.3",
         "react-hook-form": "^7.71.1",
         "react-i18next": "^16.5.4",
