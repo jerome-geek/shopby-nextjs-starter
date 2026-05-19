@@ -4,7 +4,11 @@ import { media } from '@/styles/media';
 
 export const responsiveRecipe = recipe({
     base: {
-        width: '100%',
+        selectors: {
+            '&:empty': {
+                display: 'none',
+            },
+        },
     },
     variants: {
         view: {
@@ -12,12 +16,12 @@ export const responsiveRecipe = recipe({
                 display: 'none',
                 '@media': {
                     [media.mobile]: {
-                        display: 'block',
+                        display: 'contents',
                     },
                 },
             },
             desktop: {
-                display: 'block',
+                display: 'contents',
                 '@media': {
                     [media.mobile]: {
                         display: 'none',
