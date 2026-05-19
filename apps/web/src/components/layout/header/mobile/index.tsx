@@ -150,7 +150,7 @@ export const MobileHeader = ({
                     ),
                     right: null,
                 };
-            case 'SCRAP':
+            case 'COLLECTION':
                 return {
                     wrapperClassName: styles.container,
                     left: <h1 className={styles.title}>{pathTitle}</h1>,
