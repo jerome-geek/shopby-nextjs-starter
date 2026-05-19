@@ -25,8 +25,6 @@ const CollectionGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
         return null;
     }
 
-    const groupNo = Number(groupId.split('_')?.[2]) || 0;
-
     return (
         <>
             {collectionGroups.map((collectionGroup) => {
@@ -40,7 +38,6 @@ const CollectionGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
                     <CollectionSection
                         key={collectionGroup.sno}
                         collectionGroup={collectionGroup}
-                        groupNo={groupNo}
                     />
                 );
             })}

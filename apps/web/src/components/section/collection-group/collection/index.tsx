@@ -14,13 +14,9 @@ import 'swiper/css';
 
 interface CollectionSectionProps {
     collectionGroup: CollectionExposureGroupItem;
-    groupNo: number;
 }
 
-const CollectionSection = ({
-    collectionGroup,
-    groupNo,
-}: CollectionSectionProps) => {
+const CollectionSection = ({ collectionGroup }: CollectionSectionProps) => {
     const { isMobile, isTablet } = useResponsive();
 
     const filteredRecipes = useMemo(
