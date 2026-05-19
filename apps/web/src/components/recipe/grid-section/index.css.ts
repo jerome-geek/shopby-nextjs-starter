@@ -53,6 +53,9 @@ export const sectionTitle = style([
     textStyles.headingSemibold,
     {
         color: vars.color.black,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
 
         '@media': {
             [media.desktop]: {
@@ -204,6 +207,26 @@ export const processingThumbnail = style({
     justifyContent: 'center',
 });
 
+export const processingRefreshButton = style({
+    position: 'absolute',
+    bottom: '14px',
+    right: '14px',
+});
+
+export const processingDetailThumbnail = style({
+    width: '100%',
+    position: 'relative',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    backgroundColor: vars.color.ivory['20'],
+    border: `1px solid ${vars.color.ivory['30']}`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    aspectRatio: '3 / 4',
+});
+
 export const failedThumbnail = style({
     width: '100%',
     aspectRatio: '3 / 4',
@@ -276,6 +299,7 @@ export const processingTitle = style([
 
 export const statusCard = style({
     cursor: 'default',
+    height: '100%',
 });
 
 export const processingStatusText = style([

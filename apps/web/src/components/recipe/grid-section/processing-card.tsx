@@ -3,16 +3,42 @@ import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/grid-section/index.css';
+import { RecipeRefreshButton } from '@/features/recipe/components/refresh-button';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 
 interface ProcessingCardProps {
     recipe: Pick<GetRecipeDetailResponse, 'sno' | 'title'>;
+    isDetailCard?: boolean;
 }
 
-export const ProcessingCard = ({ recipe }: ProcessingCardProps) => {
+export const ProcessingCard = ({
+    recipe,
+    isDetailCard,
+}: ProcessingCardProps) => {
     const { t } = useTranslation();
 
-    return (
+    return isDetailCard ? (
+        <motion.article
+            className={styles.statusCard}
+            aria-busy='true'
+            aria-label={t('레시피 생성 중')}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+        >
+            <div className={styles.processingDetailThumbnail}>
+                <div className={styles.loadingIconArea}>
+                    <ChefHat size={32} className={styles.spinner} />
+                    <span className={styles.processingStatusText}>
+                        {t('레시피 생성 중')}
+                    </span>
+
+                    <RecipeRefreshButton
+                        className={styles.processingRefreshButton}
+                    />
+                </div>
+            </div>
+        </motion.article>
+    ) : (
         <motion.article
             className={styles.statusCard}
             aria-busy='true'
@@ -27,6 +53,9 @@ export const ProcessingCard = ({ recipe }: ProcessingCardProps) => {
                         <span className={styles.processingStatusText}>
                             {t('생성 중')}
                         </span>
+                        <RecipeRefreshButton
+                            className={styles.processingRefreshButton}
+                        />
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import {
     TimerIcon,
 } from '@/components/icons';
 import * as styles from '@/components/recipe/detail-card/index.css';
+import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
 import { VerticalMoreMenu } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import useBookmark from '@/features/recipe/hooks/useBookmark';
@@ -119,6 +120,10 @@ export const RecipeDetailCard = ({
             bookmarked: recipe.bookmarked,
         });
     };
+
+    if (recipe.recipeStatus === 'PROCESSING') {
+        return <ProcessingCard recipe={recipe} isDetailCard />;
+    }
 
     return (
         <article className={styles.recipeLink}>
