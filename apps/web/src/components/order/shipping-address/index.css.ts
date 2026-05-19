@@ -38,7 +38,7 @@ export const shippingAddressContainer = style({
     borderRadius: '4px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px',
+    gap: '20px',
 });
 
 export const addressNameContainer = style({

@@ -1,10 +1,11 @@
 import { overlay } from 'overlay-kit';
 import { useState } from 'react';
-import { Controller, Path, useFormContext, useWatch } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
+import { DeliveryRequestForm } from '@/components/order/shipping-address/DeliveryRequestForm';
 import * as styles from '@/components/order/shipping-address/GuestShippingAddressForm/index.css';
 import {
     InputCheckbox,
@@ -17,8 +18,6 @@ import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';
 
-const DELIVERY_REQUEST_DIRECT = 'DIRECT';
-
 const GuestShippingAddressForm = () => {
     const { t } = useTranslation();
 
@@ -26,11 +25,6 @@ const GuestShippingAddressForm = () => {
 
     const { register, setValue, watch, control } =
         useFormContext<PaymentReserveSchemaType>();
-
-    // UI 전용 상태: 배송 요청사항 셀렉트 선택값
-    const [deliveryRequest, setDeliveryRequest] = useState(
-        DELIVERY_REQUEST_DIRECT,
-    );
 
     const ordererName = useWatch({ control, name: 'orderer.ordererName' });
     const ordererContact1Prefix = useWatch({
@@ -57,19 +51,6 @@ const GuestShippingAddressForm = () => {
     });
 
     const [isSameAsOrderer, setIsSameAsOrderer] = useState(false);
-
-    const deliveryRequestOptions = [
-        { value: DELIVERY_REQUEST_DIRECT, label: t('직접 입력') },
-        { value: 'DOOR', label: t('문 앞에 놓아주세요') },
-        { value: 'SECURITY', label: t('경비실에 맡겨주세요') },
-        { value: 'BOX', label: t('택배함에 넣어주세요') },
-    ];
-
-    const setAddressMemo = (memo: string) =>
-        setValue(
-            'shippingAddress.addressMemo' as Path<PaymentReserveSchemaType>,
-            memo,
-        );
 
     const handleSameAsOrderer = () => {
         if (isSameAsOrderer) {
@@ -138,20 +119,6 @@ const GuestShippingAddressForm = () => {
                 />
             ),
         );
-    };
-
-    const handleDeliveryRequestChange = (
-        option: (typeof deliveryRequestOptions)[number] | null,
-    ) => {
-        if (!option) return;
-
-        const { value } = option;
-        setDeliveryRequest(value);
-        if (value !== DELIVERY_REQUEST_DIRECT) {
-            setAddressMemo(option.label);
-        } else {
-            setAddressMemo('');
-        }
     };
 
     return (
@@ -248,21 +215,7 @@ const GuestShippingAddressForm = () => {
                 />
             </InputFieldContainer>
 
-            <InputFieldContainer>
-                <InputLabel>{t('배송 요청사항')}</InputLabel>
-                <Select
-                    options={deliveryRequestOptions}
-                    defaultValue={deliveryRequestOptions[0]}
-                    onChange={handleDeliveryRequestChange}
-                />
-                {deliveryRequest === DELIVERY_REQUEST_DIRECT && (
-                    <InputField
-                        placeholder={t('배송지 메모를 입력해주세요')}
-                        style={{ marginTop: '8px' }}
-                        onChange={(e) => setAddressMemo(e.target.value)}
-                    />
-                )}
-            </InputFieldContainer>
+            <DeliveryRequestForm />
         </div>
     );
 };

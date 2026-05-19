@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ShippingAddressListBottomSheet } from '@/components/bottom-sheet/shipping-address-list';
 import { ShippingAddressListModal } from '@/components/modal';
+import { DeliveryRequestForm } from '@/components/order/shipping-address/DeliveryRequestForm';
 import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
 import * as styles from '@/components/order/shipping-address/index.css';
 import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
@@ -109,6 +110,8 @@ const ShippingAddress = ({ orderSheetNo }: ShippingAddressProps) => {
                                 )
                             </p>
                         </div>
+
+                        <DeliveryRequestForm />
                     </div>
                 )}
 
