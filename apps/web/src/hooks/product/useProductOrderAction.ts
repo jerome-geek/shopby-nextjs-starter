@@ -12,6 +12,7 @@ import { useProductOption } from '@/hooks/product';
 import { cartKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsive } from '@/hooks/utils';
 import { useCartStore } from '@/store/useCartStore';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 
@@ -31,6 +32,7 @@ export const useProductOrderAction = (
         isOptionBottomSheetOpen,
     }: UseProductOrderActionOptions,
 ) => {
+    const { isTablet } = useResponsive();
     const { t } = useTranslation();
     const [{ channelType }] = useQueryStates(productSearchParamsSchema);
     const isLogin = useAuth();
@@ -68,10 +70,7 @@ export const useProductOrderAction = (
         sum,
     );
 
-    const hasOptions = isMultiLevelOptionUsed || isFlatOptionUsed;
-
-    const needsBottomSheet =
-        !isOptionBottomSheetOpen && hasOptions && filteredOptions.length === 0;
+    const needsBottomSheet = isTablet && !isOptionBottomSheetOpen;
 
     const onGiftButtonClick = () => {
         if (needsBottomSheet) {

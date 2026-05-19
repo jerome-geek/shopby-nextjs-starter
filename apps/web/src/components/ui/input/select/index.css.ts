@@ -66,6 +66,12 @@ export const menu = style([
 export const menuBottom = style({
     borderRadius: '0 0 4px 4px',
     marginTop: '-3px',
+
+    '@media': {
+        [media.mobile]: {
+            marginTop: '-3px',
+        },
+    },
 });
 
 export const menuTop = style({
