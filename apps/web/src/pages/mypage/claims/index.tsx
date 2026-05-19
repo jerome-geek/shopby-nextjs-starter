@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/shared/components/observer-target';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
@@ -13,6 +12,7 @@ import { OrderOptions } from '@/components/mypage/orders/order-options';
 import { ORDER_OPTIONS_DESKTOP_GRID_TEMPLATE } from '@/components/mypage/orders/order-options-item.css';
 import Paging from '@/components/ui/paging';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
+import { ObserverTarget } from '@/shared/components/observer-target';
 
 import { claimsTabSpec } from '@/entities/mypage/utils/tabs';
 import {
@@ -22,6 +22,7 @@ import {
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/claims/index.css';
+import { Only } from '@/shared/components/only';
 
 export default function MypageClaimsPage() {
     const { isMobile } = useResponsive();
@@ -140,7 +141,7 @@ export default function MypageClaimsPage() {
                 </div>
 
                 <div className={card.list}>
-                    {!isMobile && (
+                    <Only.Desktop>
                         <div
                             className={card.headerRow}
                             style={{
@@ -159,7 +160,7 @@ export default function MypageClaimsPage() {
                                 <span>{t('선택')}</span>
                             </div>
                         </div>
-                    )}
+                    </Only.Desktop>
 
                     <LoadingWrapper isLoading={isLoading}>
                         {!isEmpty(myClaimList) ? (
@@ -170,7 +171,7 @@ export default function MypageClaimsPage() {
                             />
                         )}
 
-                        {isMobile ? (
+                        <Only.Mobile>
                             <ObserverTarget
                                 onIntersect={() => {
                                     if (hasNextPage) {
@@ -179,7 +180,9 @@ export default function MypageClaimsPage() {
                                 }}
                                 hasNextPage={hasNextPage || false}
                             />
-                        ) : (
+                        </Only.Mobile>
+
+                        <Only.Desktop>
                             <div className={card.paging}>
                                 <Paging
                                     totalCount={totalCount}
@@ -190,7 +193,7 @@ export default function MypageClaimsPage() {
                                     }}
                                 />
                             </div>
-                        )}
+                        </Only.Desktop>
                     </LoadingWrapper>
                 </div>
             </section>

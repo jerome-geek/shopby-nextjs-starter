@@ -23,6 +23,7 @@ import { useResponsive } from '@/hooks/utils';
 import { useCoupons } from '@/hooks/utils/useCoupons';
 import type { Coupon } from '@/models/promotion';
 import * as styles from '@/pages/mypage/coupons/index.css';
+import { Only } from '@/shared/components/only';
 
 const PAGE_SIZE = 10;
 
@@ -173,7 +174,7 @@ export default function MypageCouponsPage() {
                 </div>
 
                 <div className={card.list}>
-                    {!isMobile && (
+                    <Only.Desktop>
                         <div className={card.headerRow}>
                             <div className={card.headerCell}>{t('쿠폰명')}</div>
                             <div className={card.headerCell}>
@@ -185,7 +186,7 @@ export default function MypageCouponsPage() {
                             <div className={card.headerCell}>{t('발급일')}</div>
                             <div className={card.headerCell}>{t('만료일')}</div>
                         </div>
-                    )}
+                    </Only.Desktop>
 
                     <LoadingWrapper isLoading={isLoading}>
                         {isEmpty(couponList) ? (

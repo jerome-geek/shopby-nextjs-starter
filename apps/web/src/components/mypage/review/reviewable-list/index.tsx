@@ -16,6 +16,7 @@ import { PATHS } from '@/const/paths';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { useReviewableProductList } from '@/hooks/query/display/review';
 import { useResponsive } from '@/hooks/utils';
+import { Only } from '@/shared/components/only';
 
 const PAGE_SIZE = 12;
 
@@ -54,7 +55,7 @@ export const ReviewableListView = () => {
 
     return (
         <>
-            {!isMobile && (
+            <Only.Desktop>
                 <div
                     className={card.headerRow}
                     style={{ gridTemplateColumns: '1.6fr 0.8fr 0.8fr' }}
@@ -63,7 +64,7 @@ export const ReviewableListView = () => {
                     <div className={card.headerCell}>{t('주문상태')}</div>
                     <div className={card.headerCell}>{t('선택')}</div>
                 </div>
-            )}
+            </Only.Desktop>
 
             <LoadingWrapper isLoading={isReviewableProductListLoading}>
                 {isEmpty(reviewableProductList) ? (
@@ -101,7 +102,7 @@ export const ReviewableListView = () => {
                                                 }`}
                                             </p>
 
-                                            {isMobile && (
+                                            <Only.Mobile>
                                                 <div className={card.cell}>
                                                     <span
                                                         className={
@@ -119,7 +120,7 @@ export const ReviewableListView = () => {
                                                         )}
                                                     </span>
                                                 </div>
-                                            )}
+                                            </Only.Mobile>
 
                                             <p className={styles.productName}>
                                                 {item.productName}
@@ -136,7 +137,7 @@ export const ReviewableListView = () => {
                                     </div>
                                 </div>
 
-                                {!isMobile && (
+                                <Only.Desktop>
                                     <div className={card.cell}>
                                         <span
                                             className={
@@ -153,7 +154,7 @@ export const ReviewableListView = () => {
                                             )}
                                         </span>
                                     </div>
-                                )}
+                                </Only.Desktop>
 
                                 <div className={card.cell}>
                                     <div className={styles.actionRow}>

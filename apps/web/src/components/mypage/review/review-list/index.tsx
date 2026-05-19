@@ -16,6 +16,7 @@ import Paging from '@/components/ui/paging';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { useMyReviewList } from '@/hooks/query/display/review';
 import { useResponsive } from '@/hooks/utils';
+import { Only } from '@/shared/components/only';
 
 const PAGE_SIZE = 12;
 
@@ -52,7 +53,7 @@ export const MyReviewListView = () => {
 
     return (
         <>
-            {!isMobile && (
+            <Only.Desktop>
                 <div
                     className={card.headerRow}
                     style={{ gridTemplateColumns: '1.6fr 0.6fr 0.8fr 0.7fr' }}
@@ -62,7 +63,7 @@ export const MyReviewListView = () => {
                     <div className={card.headerCell}>{t('등록일')}</div>
                     <div className={card.headerCell}>{t('선택')}</div>
                 </div>
-            )}
+            </Only.Desktop>
 
             <LoadingWrapper isLoading={isMyReviewListLoading}>
                 {isEmpty(myReviewList) ? (
@@ -120,7 +121,7 @@ export const MyReviewListView = () => {
                                                 }
                                             />
 
-                                            {isMobile && (
+                                            <Only.Mobile>
                                                 <div
                                                     className={
                                                         styles.mobileMeta
@@ -151,12 +152,12 @@ export const MyReviewListView = () => {
                                                         )} / 5.0`}
                                                     </span>
                                                 </div>
-                                            )}
+                                            </Only.Mobile>
                                         </div>
                                     </div>
                                 </div>
 
-                                {!isMobile && (
+                                <Only.Desktop>
                                     <div className={card.cell}>
                                         <div className={styles.starRow}>
                                             {[1, 2, 3, 4, 5].map((n) => {
@@ -170,9 +171,7 @@ export const MyReviewListView = () => {
                                             })}
                                         </div>
                                     </div>
-                                )}
 
-                                {!isMobile && (
                                     <div className={card.cell}>
                                         <span className={card.listCaption}>
                                             {dayjs(item.registerYmdt).format(
@@ -180,7 +179,7 @@ export const MyReviewListView = () => {
                                             )}
                                         </span>
                                     </div>
-                                )}
+                                </Only.Desktop>
 
                                 <div className={card.cell}>
                                     <Button

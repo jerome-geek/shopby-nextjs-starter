@@ -7,13 +7,11 @@ import {
     OrderStatusSummary,
     OrderStatusSummarySkeleton,
 } from '@/features/mypage/order-status-summary';
-import useResponsive from '@/hooks/utils/useResponsive';
 import * as styles from '@/pages/mypage/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { Only } from '@/shared/components/only';
 
 export default function MypageMainPage() {
-    const { isMobile } = useResponsive();
-
     return (
         <div className={styles.container}>
             <ShopbyAsyncBoundary>
@@ -32,7 +30,9 @@ export default function MypageMainPage() {
                 <RecentOrderProducts />
             </ShopbyAsyncBoundary>
 
-            {isMobile && <MyPageMainMobilePaths />}
+            <Only.Mobile>
+                <MyPageMainMobilePaths />
+            </Only.Mobile>
         </div>
     );
 }

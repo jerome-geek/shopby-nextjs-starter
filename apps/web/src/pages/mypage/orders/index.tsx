@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/shared/components/observer-target';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
@@ -24,6 +23,8 @@ import {
 } from '@/hooks/query/order/myOrder';
 import { useResponsive } from '@/hooks/utils';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { ObserverTarget } from '@/shared/components/observer-target';
+import { Only } from '@/shared/components/only';
 
 const PAGE_SIZE = 10;
 
@@ -148,7 +149,7 @@ export default function MypageOrdersPage() {
                 </div>
 
                 <div className={card.list}>
-                    {!isMobile && (
+                    <Only.Desktop>
                         <div
                             className={card.headerRow}
                             style={{
@@ -165,7 +166,7 @@ export default function MypageOrdersPage() {
                             </div>
                             <div className={card.headerCell}>{t('선택')}</div>
                         </div>
-                    )}
+                    </Only.Desktop>
 
                     <LoadingWrapper isLoading={isLoading}>
                         {!isEmpty(myOrderList) ? (
@@ -174,7 +175,7 @@ export default function MypageOrdersPage() {
                             <NoResult text={t('주문 내역이 없습니다.')} />
                         )}
 
-                        {isMobile ? (
+                        <Only.Mobile>
                             <ObserverTarget
                                 onIntersect={() => {
                                     if (hasNextPage) {
@@ -183,7 +184,8 @@ export default function MypageOrdersPage() {
                                 }}
                                 hasNextPage={hasNextPage || false}
                             />
-                        ) : (
+                        </Only.Mobile>
+                        <Only.Desktop>
                             <div className={card.paging}>
                                 <Paging
                                     currentPage={pageNumber}
@@ -194,7 +196,7 @@ export default function MypageOrdersPage() {
                                     }}
                                 />
                             </div>
-                        )}
+                        </Only.Desktop>
                     </LoadingWrapper>
                 </div>
             </section>

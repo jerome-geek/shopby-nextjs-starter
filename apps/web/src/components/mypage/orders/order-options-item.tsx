@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { NextActionButton } from '@/components/mypage/orders/next-action-button';
 import * as styles from '@/components/mypage/orders/order-options-item.css';
 import { PATHS } from '@/const/paths';
-import { useResponsive } from '@/hooks/utils';
 import type { NextAction, OrderOption } from '@/models/order';
+import { Only } from '@/shared/components/only';
 import { CURRENCY } from '@/utils/currency';
 
 type MypageOrderOptionListItemProps = Omit<
@@ -65,7 +65,6 @@ export const OrderOptionsItem = ({
     inputs,
 }: MypageOrderOptionListItemProps) => {
     const { t } = useTranslation();
-    const { isMobile } = useResponsive();
 
     const isBuyConfirm = orderStatusType === 'BUY_CONFIRM';
 
@@ -109,7 +108,7 @@ export const OrderOptionsItem = ({
                 </Link>
 
                 <div className={styles.productContentContainer}>
-                    {isMobile && (
+                    <Only.Mobile>
                         <span
                             className={`${styles.statusText} ${
                                 isBuyConfirm ? styles.statusTextPrimary : ''
@@ -117,7 +116,7 @@ export const OrderOptionsItem = ({
                         >
                             {claimStatusTypeLabel || orderStatusTypeLabel}
                         </span>
-                    )}
+                    </Only.Mobile>
 
                     {isExtraProduct ? (
                         <>
@@ -173,7 +172,7 @@ export const OrderOptionsItem = ({
                 </div>
             </div>
 
-            {!isMobile && (
+            <Only.Desktop>
                 <div className={styles.statusContainer}>
                     <span
                         className={`${styles.statusText} ${
@@ -183,7 +182,7 @@ export const OrderOptionsItem = ({
                         1 {claimStatusTypeLabel || orderStatusTypeLabel}
                     </span>
                 </div>
-            )}
+            </Only.Desktop>
 
             <div className={styles.actionsContainer}>
                 {filteredNextActions.map((action) => (

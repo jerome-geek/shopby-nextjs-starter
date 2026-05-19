@@ -12,15 +12,14 @@ import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import { CustomAccordion } from '@/components/ui/accordion';
 import Paging from '@/components/ui/paging';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
-import {
-    accumulationsReasonTabSpec,
-} from '@/entities/mypage/utils/tabs';
+import { accumulationsReasonTabSpec } from '@/entities/mypage/utils/tabs';
 import useAccumulationList from '@/hooks/query/manage/accumulation/useAccumulationList';
 import useAccumulationSummary from '@/hooks/query/manage/accumulation/useAccumulationSummary';
 import useWaitingAccumulation from '@/hooks/query/manage/accumulation/useWaitingAccumulation';
 import { useResponsive } from '@/hooks/utils';
 import type { AccumulationReasonType } from '@/models';
 import * as styles from '@/pages/mypage/accumulations/index.css';
+import { Only } from '@/shared/components/only';
 import { POINT } from '@/utils/currency';
 
 const PAGE_SIZE = 10;
@@ -29,7 +28,10 @@ export default function MypageAccumulationPage() {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
 
-    const tabOptions = useMemo(() => accumulationsReasonTabSpec.options(t), [t]);
+    const tabOptions = useMemo(
+        () => accumulationsReasonTabSpec.options(t),
+        [t],
+    );
 
     const [{ startYmd, endYmd, pageNumber, accumulationReason }, setQuery] =
         useMypageListQueryParams(
@@ -179,7 +181,7 @@ export default function MypageAccumulationPage() {
                 </div>
 
                 <div className={card.list}>
-                    {!isMobile && (
+                    <Only.Desktop>
                         <div className={card.headerRow}>
                             <div className={card.headerCell}>{t('일시')}</div>
                             <div className={card.headerCell}>{t('내용')}</div>
@@ -189,35 +191,140 @@ export default function MypageAccumulationPage() {
                                 {t('유효기간')}
                             </div>
                         </div>
-                    )}
+                    </Only.Desktop>
 
                     <LoadingWrapper isLoading={isLoading}>
                         {isEmpty(accumulationList) ? (
                             <NoResult text={t('적립금 내역이 없습니다.')} />
-                        ) : isMobile ? (
-                            <div className={styles.accordionContainer}>
-                                <CustomAccordion
-                                    items={accumulationList.map(
-                                        (accumulation) => ({
-                                            value: String(
-                                                accumulation.accumulationNo,
-                                            ),
-                                            header: (
-                                                <div
-                                                    className={
-                                                        styles.accordionHeader
-                                                    }
-                                                >
-                                                    <div>
-                                                        <p
+                        ) : (
+                            <>
+                                <Only.Mobile>
+                                    <div className={styles.accordionContainer}>
+                                        <CustomAccordion
+                                            items={accumulationList.map(
+                                                (accumulation) => ({
+                                                    value: String(
+                                                        accumulation.accumulationNo,
+                                                    ),
+                                                    header: (
+                                                        <div
                                                             className={
-                                                                styles.accordionTitle
+                                                                styles.accordionHeader
                                                             }
                                                         >
-                                                            {
-                                                                accumulation.accumulationReserveReasonDisplay
+                                                            <div>
+                                                                <p
+                                                                    className={
+                                                                        styles.accordionTitle
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        accumulation.accumulationReserveReasonDisplay
+                                                                    }
+                                                                </p>
+                                                                <p
+                                                                    className={
+                                                                        card.listCaption
+                                                                    }
+                                                                >
+                                                                    {dayjs(
+                                                                        accumulation.registerYmdt,
+                                                                    ).format(
+                                                                        'YYYY-MM-DD',
+                                                                    )}{' '}
+                                                                    {dayjs(
+                                                                        accumulation.registerYmdt,
+                                                                    ).format(
+                                                                        'HH:mm:ss',
+                                                                    )}
+                                                                </p>
+                                                            </div>
+
+                                                            <p
+                                                                className={
+                                                                    accumulation.accumulationStatusGroupType ===
+                                                                    'PAYMENT'
+                                                                        ? styles.positive
+                                                                        : styles.muted
+                                                                }
+                                                            >
+                                                                {accumulation.accumulationStatusGroupType ===
+                                                                'PAYMENT'
+                                                                    ? `${POINT(
+                                                                          accumulation.accumulationAmt,
+                                                                      ).format({
+                                                                          pattern: `+#! (${t(
+                                                                              '지급',
+                                                                          )})`,
+                                                                      })}`
+                                                                    : POINT(
+                                                                          accumulation.accumulationAmt,
+                                                                      )
+                                                                          .multiply(
+                                                                              -1,
+                                                                          )
+                                                                          .format(
+                                                                              {
+                                                                                  negativePattern: `-#! (${t(
+                                                                                      '차감',
+                                                                                  )})`,
+                                                                              },
+                                                                          )}
+                                                            </p>
+                                                        </div>
+                                                    ),
+                                                    content: (
+                                                        <div
+                                                            className={
+                                                                styles.accordionContent
                                                             }
-                                                        </p>
+                                                        >
+                                                            <p>
+                                                                {
+                                                                    accumulation.reasonDetail
+                                                                }
+                                                            </p>
+                                                            {accumulation.accumulationStatusGroupType ===
+                                                                'PAYMENT' && (
+                                                                <p
+                                                                    className={
+                                                                        card.listCaption
+                                                                    }
+                                                                >
+                                                                    {t(
+                                                                        '유효기간 : {{date}}',
+                                                                        {
+                                                                            date: getExpireYmdt(
+                                                                                {
+                                                                                    registerYmdt:
+                                                                                        accumulation.registerYmdt,
+                                                                                    expireYmdt:
+                                                                                        accumulation.expireYmdt,
+                                                                                },
+                                                                            ),
+                                                                        },
+                                                                    )}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    ),
+                                                }),
+                                            )}
+                                        />
+                                    </div>
+                                </Only.Mobile>
+
+                                <Only.Desktop>
+                                    <ul>
+                                        {accumulationList.map(
+                                            (accumulation) => (
+                                                <li
+                                                    key={
+                                                        accumulation.accumulationNo
+                                                    }
+                                                    className={card.listItem}
+                                                >
+                                                    <div className={card.cell}>
                                                         <p
                                                             className={
                                                                 card.listCaption
@@ -227,7 +334,13 @@ export default function MypageAccumulationPage() {
                                                                 accumulation.registerYmdt,
                                                             ).format(
                                                                 'YYYY-MM-DD',
-                                                            )}{' '}
+                                                            )}
+                                                        </p>
+                                                        <p
+                                                            className={
+                                                                card.listCaption
+                                                            }
+                                                        >
                                                             {dayjs(
                                                                 accumulation.registerYmdt,
                                                             ).format(
@@ -236,153 +349,96 @@ export default function MypageAccumulationPage() {
                                                         </p>
                                                     </div>
 
-                                                    <p
+                                                    <div
                                                         className={
-                                                            accumulation.accumulationStatusGroupType ===
-                                                            'PAYMENT'
-                                                                ? styles.positive
-                                                                : styles.muted
+                                                            card.cellAlignStart
                                                         }
                                                     >
-                                                        {accumulation.accumulationStatusGroupType ===
-                                                        'PAYMENT'
-                                                            ? `${POINT(
-                                                                  accumulation.accumulationAmt,
-                                                              ).format({
-                                                                  pattern: `+#! (${t(
-                                                                      '지급',
-                                                                  )})`,
-                                                              })}`
-                                                            : POINT(
-                                                                  accumulation.accumulationAmt,
-                                                              )
-                                                                  .multiply(-1)
-                                                                  .format({
-                                                                      negativePattern: `-#! (${t(
-                                                                          '차감',
+                                                        <span
+                                                            className={
+                                                                styles.reasonLine
+                                                            }
+                                                        >
+                                                            {
+                                                                accumulation.accumulationReserveReasonDisplay
+                                                            }
+                                                        </span>
+                                                        <span
+                                                            className={
+                                                                styles.content
+                                                            }
+                                                        >
+                                                            {
+                                                                accumulation.reasonDetail
+                                                            }
+                                                        </span>
+                                                    </div>
+
+                                                    <div className={card.cell}>
+                                                        <span
+                                                            className={
+                                                                styles.positive
+                                                            }
+                                                        >
+                                                            {accumulation.accumulationStatusGroupType ===
+                                                            'PAYMENT'
+                                                                ? POINT(
+                                                                      accumulation.accumulationAmt,
+                                                                  ).format({
+                                                                      pattern: `+#! (${t(
+                                                                          '지급',
                                                                       )})`,
-                                                                  })}
-                                                    </p>
-                                                </div>
-                                            ),
-                                            content: (
-                                                <div
-                                                    className={
-                                                        styles.accordionContent
-                                                    }
-                                                >
-                                                    <p>
-                                                        {
-                                                            accumulation.reasonDetail
-                                                        }
-                                                    </p>
-                                                    {accumulation.accumulationStatusGroupType ===
-                                                        'PAYMENT' && (
-                                                        <p
+                                                                  })
+                                                                : '-'}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className={card.cell}>
+                                                        <span
+                                                            className={
+                                                                styles.muted
+                                                            }
+                                                        >
+                                                            {accumulation.accumulationStatusGroupType ===
+                                                            'DEDUCTION'
+                                                                ? POINT(
+                                                                      accumulation.accumulationAmt,
+                                                                  )
+                                                                      .multiply(
+                                                                          -1,
+                                                                      )
+                                                                      .format({
+                                                                          negativePattern: `-#! (${t(
+                                                                              '차감',
+                                                                          )})`,
+                                                                      })
+                                                                : '-'}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className={card.cell}>
+                                                        <span
                                                             className={
                                                                 card.listCaption
                                                             }
-                                                        >
-                                                            {t(
-                                                                '유효기간 : {{date}}',
-                                                                {
-                                                                    date: getExpireYmdt(
-                                                                        {
-                                                                            registerYmdt:
-                                                                                accumulation.registerYmdt,
-                                                                            expireYmdt:
-                                                                                accumulation.expireYmdt,
-                                                                        },
-                                                                    ),
-                                                                },
-                                                            )}
-                                                        </p>
-                                                    )}
-                                                </div>
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: getExpireYmdt(
+                                                                    {
+                                                                        registerYmdt:
+                                                                            accumulation.registerYmdt,
+                                                                        expireYmdt:
+                                                                            accumulation.expireYmdt,
+                                                                    },
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </li>
                                             ),
-                                        }),
-                                    )}
-                                />
-                            </div>
-                        ) : (
-                            <ul>
-                                {accumulationList.map((accumulation) => (
-                                    <li
-                                        key={accumulation.accumulationNo}
-                                        className={card.listItem}
-                                    >
-                                        <div className={card.cell}>
-                                            <p className={card.listCaption}>
-                                                {dayjs(
-                                                    accumulation.registerYmdt,
-                                                ).format('YYYY-MM-DD')}
-                                            </p>
-                                            <p className={card.listCaption}>
-                                                {dayjs(
-                                                    accumulation.registerYmdt,
-                                                ).format('HH:mm:ss')}
-                                            </p>
-                                        </div>
-
-                                        <div className={card.cellAlignStart}>
-                                            <span className={styles.reasonLine}>
-                                                {
-                                                    accumulation.accumulationReserveReasonDisplay
-                                                }
-                                            </span>
-                                            <span className={styles.content}>
-                                                {accumulation.reasonDetail}
-                                            </span>
-                                        </div>
-
-                                        <div className={card.cell}>
-                                            <span className={styles.positive}>
-                                                {accumulation.accumulationStatusGroupType ===
-                                                'PAYMENT'
-                                                    ? POINT(
-                                                          accumulation.accumulationAmt,
-                                                      ).format({
-                                                          pattern: `+#! (${t(
-                                                              '지급',
-                                                          )})`,
-                                                      })
-                                                    : '-'}
-                                            </span>
-                                        </div>
-
-                                        <div className={card.cell}>
-                                            <span className={styles.muted}>
-                                                {accumulation.accumulationStatusGroupType ===
-                                                'DEDUCTION'
-                                                    ? POINT(
-                                                          accumulation.accumulationAmt,
-                                                      )
-                                                          .multiply(-1)
-                                                          .format({
-                                                              negativePattern: `-#! (${t(
-                                                                  '차감',
-                                                              )})`,
-                                                          })
-                                                    : '-'}
-                                            </span>
-                                        </div>
-
-                                        <div className={card.cell}>
-                                            <span
-                                                className={card.listCaption}
-                                                dangerouslySetInnerHTML={{
-                                                    __html: getExpireYmdt({
-                                                        registerYmdt:
-                                                            accumulation.registerYmdt,
-                                                        expireYmdt:
-                                                            accumulation.expireYmdt,
-                                                    }),
-                                                }}
-                                            />
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+                                        )}
+                                    </ul>
+                                </Only.Desktop>
+                            </>
                         )}
                     </LoadingWrapper>
                 </div>

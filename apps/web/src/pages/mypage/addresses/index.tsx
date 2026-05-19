@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import type { Address } from '@/models/order/shippingAddress';
 import * as styles from '@/pages/mypage/addresses/index.css';
+import { Only } from '@/shared/components/only';
 
 export default function MypageAddressesPage() {
     const { t } = useTranslation();
@@ -147,7 +148,7 @@ export default function MypageAddressesPage() {
                 </div>
 
                 <div className={card.list}>
-                    {!isMobile && (
+                    <Only.Desktop>
                         <div
                             className={card.headerRow}
                             style={{
@@ -163,7 +164,7 @@ export default function MypageAddressesPage() {
                             </div>
                             <div className={card.headerCell}>{t('선택')}</div>
                         </div>
-                    )}
+                    </Only.Desktop>
 
                     <LoadingWrapper isLoading={isLoading}>
                         {isEmpty(addressList) ? (

@@ -30,6 +30,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/mypage/product-inquiries/index.css';
+import { Only } from '@/shared/components/only';
 
 const PAGE_SIZE = 10;
 
@@ -216,7 +217,7 @@ export default function MypageProductInquiriesPage() {
                 </div>
 
                 <div className={card.list}>
-                    {!isMobile && (
+                    <Only.Desktop>
                         <div
                             className={card.headerRow}
                             style={{
@@ -236,7 +237,7 @@ export default function MypageProductInquiriesPage() {
                             </div>
                             <div className={card.headerCell}>{t('등록일')}</div>
                         </div>
-                    )}
+                    </Only.Desktop>
 
                     <LoadingWrapper isLoading={isLoading}>
                         {isEmpty(inquiryList) ? (
