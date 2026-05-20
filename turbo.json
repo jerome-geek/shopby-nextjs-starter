@@ -3,7 +3,13 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**"]
+      "outputs": [".next/**", "dist/**"],
+      "env": [
+        "REVALIDATE_SECRET",
+        "VITE_ADMIN_API_BASE_URL",
+        "VITE_WEB_BASE_URL",
+        "VITE_REVALIDATE_TOKEN"
+      ]
     },
     "lint": {},
     "test:run": {
