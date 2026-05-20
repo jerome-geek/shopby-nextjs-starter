@@ -68,8 +68,10 @@ const SignupFormEmail = ({
                                     value={emailId}
                                     ref={ref}
                                     onChange={(e) => {
+                                        const [id, domain] =
+                                            e.target.value.split('@');
                                         onChange(
-                                            `${e.target.value}@${emailDomain}`,
+                                            `${id}@${domain || emailDomain}`,
                                         );
                                         setIsDuplicated(true);
                                     }}
