@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { CouponRegisterBottomSheet } from '@/components/bottom-sheet/coupon-register';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import { CouponRegisterModal } from '@/components/modal/coupon-register';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
@@ -117,7 +118,9 @@ export default function MypageCouponsPage() {
     };
 
     return (
-        <div className={card.container}>
+        <>
+            <Seo title={t('쿠폰')} noindex={true} />
+            <div className={card.container}>
             <section className={card.section}>
                 <div className={card.toolbar}>
                     <div className={card.toolbarTop}>
@@ -350,6 +353,7 @@ export default function MypageCouponsPage() {
                 </div>
             </section>
         </div>
+        </>
     );
 }
 

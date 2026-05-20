@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import { ClaimCancelForm } from '@/components/mypage/claims/forms/cancel';
 import { ClaimExchangeForm } from '@/components/mypage/claims/forms/exchange';
@@ -40,8 +41,16 @@ export default function MypageClaimRequestPage() {
         return null;
     }
 
+    const claimTitle =
+        claimType === 'CANCEL'
+            ? t('취소 신청')
+            : claimType === 'RETURN'
+            ? t('반품 신청')
+            : t('교환 신청');
+
     return (
         <>
+            <Seo title={claimTitle} noindex={true} />
             {claimType === 'CANCEL' && <ClaimCancelForm />}
             {claimType === 'RETURN' && <ClaimReturnForm />}
             {claimType === 'EXCHANGE' && <ClaimExchangeForm />}

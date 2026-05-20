@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { MypageKeywordSearchQueryFilter } from '@/components/mypage/filters/keyword-search-query-filter';
@@ -147,7 +148,9 @@ export default function MypageProductInquiriesPage() {
     );
 
     return (
-        <div className={card.container}>
+        <>
+            <Seo title={t('상품 문의')} noindex={true} />
+            <div className={card.container}>
             <section className={card.section}>
                 <div className={card.toolbar}>
                     <div className={card.toolbarTop}>
@@ -305,6 +308,7 @@ export default function MypageProductInquiriesPage() {
                 </div>
             </section>
         </div>
+        </>
     );
 }
 

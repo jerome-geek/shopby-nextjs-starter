@@ -2,6 +2,7 @@ import { isNull } from '@fxts/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState, type ReactNode } from 'react';
 
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import { CheckAccountForm } from '@/components/mypage/edit/check-account-form';
 import { EditForm } from '@/components/mypage/edit/edit-form';
@@ -29,10 +30,18 @@ export default function MypageEditPage() {
         }
     }, [router]);
 
-    return !isNull(password) ? (
-        <EditForm password={password} setPassword={(p) => setPassword(p)} />
-    ) : (
-        <CheckAccountForm setPassword={(p) => setPassword(p)} />
+    return (
+        <>
+            <Seo title='회원정보 수정' noindex={true} />
+            {!isNull(password) ? (
+                <EditForm
+                    password={password}
+                    setPassword={(p) => setPassword(p)}
+                />
+            ) : (
+                <CheckAccountForm setPassword={(p) => setPassword(p)} />
+            )}
+        </>
     );
 }
 

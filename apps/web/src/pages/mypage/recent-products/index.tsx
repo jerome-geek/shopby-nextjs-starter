@@ -3,6 +3,7 @@ import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { MypageWishSkeleton } from '@/components/mypage/wish/skeleton';
@@ -238,9 +239,12 @@ export const MypageRecentProductsContent = () => {
 
 export default function MypageRecentProductsPage() {
     return (
-        <ShopbyAsyncBoundary fallback={<MypageWishSkeleton />}>
-            <MypageRecentProductsContent />
-        </ShopbyAsyncBoundary>
+        <>
+            <Seo title='최근 본 상품' noindex={true} />
+            <ShopbyAsyncBoundary fallback={<MypageWishSkeleton />}>
+                <MypageRecentProductsContent />
+            </ShopbyAsyncBoundary>
+        </>
     );
 }
 

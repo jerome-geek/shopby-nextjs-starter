@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { MypageWishSkeleton } from '@/components/mypage/wish/skeleton';
@@ -280,9 +281,12 @@ const MypageWishContent = () => {
 
 export default function MypageWishPage() {
     return (
-        <FetchBoundary fallback={<MypageWishSkeleton />}>
-            <MypageWishContent />
-        </FetchBoundary>
+        <>
+            <Seo title='찜한 상품' noindex={true} />
+            <FetchBoundary fallback={<MypageWishSkeleton />}>
+                <MypageWishContent />
+            </FetchBoundary>
+        </>
     );
 }
 

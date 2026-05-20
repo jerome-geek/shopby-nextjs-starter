@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { InfoSection } from '@/components/mypage/previous-orders/info-section';
@@ -149,12 +150,12 @@ export default function MypagePreviousOrderDetailPage() {
     };
 
     return (
-        <LoadingWrapper
-            isLoading={!isPreviousOrderDetailFetched}
-            containerStyle={{
-                height: '50vh',
-            }}
-        >
+        <>
+            <Seo title={t('이전 주문 상세')} noindex={true} />
+            <LoadingWrapper
+                isLoading={!isPreviousOrderDetailFetched}
+                containerStyle={{ height: '50vh' }}
+            >
             <div className={card.container}>
                 <section className={card.section}>
                     <div className={card.toolbar}>
@@ -240,7 +241,8 @@ export default function MypagePreviousOrderDetailPage() {
                     </button>
                 </div>
             </div>
-        </LoadingWrapper>
+            </LoadingWrapper>
+        </>
     );
 }
 

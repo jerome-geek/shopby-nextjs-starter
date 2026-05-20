@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import ReviewStartIcon from '@/components/icons/ReviewStartIcon';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import OptionText from '@/components/mypage/common/option-text';
@@ -281,9 +282,12 @@ function ReviewDetailContent() {
 
 export default function MypageReviewDetailPage() {
     return (
-        <ShopbyAsyncBoundary>
-            <ReviewDetailContent />
-        </ShopbyAsyncBoundary>
+        <>
+            <Seo title='리뷰 상세' noindex={true} />
+            <ShopbyAsyncBoundary>
+                <ReviewDetailContent />
+            </ShopbyAsyncBoundary>
+        </>
     );
 }
 

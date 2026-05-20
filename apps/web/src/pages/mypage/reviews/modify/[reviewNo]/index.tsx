@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, type ReactNode } from 'react';
 
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { ReviewForm } from '@/components/mypage/review/form';
@@ -18,11 +19,14 @@ export default function MypageReviewModifyPage() {
     }, [router.isReady]);
 
     return (
-        <div className={card.container}>
+        <>
+            <Seo title='리뷰 수정' noindex={true} />
+            <div className={card.container}>
             <section className={card.section} data-type='form'>
                 <ReviewForm reviewNo={reviewNo} />
             </section>
         </div>
+        </>
     );
 }
 

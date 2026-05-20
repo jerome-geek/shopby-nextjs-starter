@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
@@ -104,7 +105,9 @@ export default function MypageOrdersPage() {
     };
 
     return (
-        <div className={card.container}>
+        <>
+            <Seo title={t('주문/배송 내역')} noindex={true} />
+            <div className={card.container}>
             <section className={card.section}>
                 <div className={card.toolbar}>
                     <div className={card.toolbarTop}>
@@ -201,6 +204,7 @@ export default function MypageOrdersPage() {
                 </div>
             </section>
         </div>
+        </>
     );
 }
 

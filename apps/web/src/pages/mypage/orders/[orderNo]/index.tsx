@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import { PATHS } from '@/const/paths';
 import { OrderDetailView } from '@/features/order/components/order-detail-view';
@@ -16,11 +17,14 @@ const MypageOrderDetailPage: NextPageWithLayout = () => {
     const { data: orderDetailData } = useOrderDetail({ orderNo });
 
     return (
-        <OrderDetailView
-            orderDetailData={orderDetailData}
-            orderConfigurationData={orderConfigurationData}
-            backPath={PATHS.MYPAGE.ORDERS.MAIN}
-        />
+        <>
+            <Seo title='주문 상세' noindex={true} />
+            <OrderDetailView
+                orderDetailData={orderDetailData}
+                orderConfigurationData={orderConfigurationData}
+                backPath={PATHS.MYPAGE.ORDERS.MAIN}
+            />
+        </>
     );
 };
 

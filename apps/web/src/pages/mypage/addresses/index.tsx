@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
@@ -113,7 +114,9 @@ export default function MypageAddressesPage() {
         PATHS.MYPAGE.ADDRESSES.MODIFY.replace('[addressNo]', String(addressNo));
 
     return (
-        <div className={card.container}>
+        <>
+            <Seo title={t('배송지 관리')} noindex={true} />
+            <div className={card.container}>
             <section className={card.section}>
                 <div
                     className={card.metaRow}
@@ -300,6 +303,7 @@ export default function MypageAddressesPage() {
                 </div>
             </section>
         </div>
+        </>
     );
 }
 

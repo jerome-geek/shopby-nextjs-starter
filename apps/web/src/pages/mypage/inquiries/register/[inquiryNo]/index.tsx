@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 
+import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import { InquiryRegisterForm } from '@/components/mypage/inquiries/inquiry-register-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
@@ -11,11 +12,14 @@ export default function MypageInquiryEditPage() {
     const inquiryNo = Number(router.query.inquiryNo) || 0;
 
     return (
-        <div className={card.container}>
+        <>
+            <Seo title='1:1 문의 수정' noindex={true} />
+            <div className={card.container}>
             <section className={card.section} data-type='form'>
                 <InquiryRegisterForm inquiryNo={inquiryNo} />
             </section>
         </div>
+        </>
     );
 }
 
