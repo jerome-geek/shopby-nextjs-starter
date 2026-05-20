@@ -7,13 +7,17 @@ import { useServerApiByPass } from '@/hooks/query/shopby';
 import { useToast } from '@/hooks/utils';
 import useApiError from '@/hooks/useApiError';
 import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
+import { CloseLineIcon } from '@/icons';
+
+interface ProductItem {
+    productNo: number;
+    productName: string;
+    listImageUrls: string[];
+}
 
 interface ProductSearchResponse {
     totalCount: number;
-    items: {
-        productNo: number;
-        productName: string;
-    }[];
+    items: ProductItem[];
 }
 
 const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
@@ -22,7 +26,9 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
 
     const [keywordInput, setKeywordInput] = useState('');
     const [debouncedKeyword] = useDebounceValue(keywordInput.trim(), 300);
-    const [selectedNos, setSelectedNos] = useState<Set<number>>(new Set());
+    const [selectedProducts, setSelectedProducts] = useState<
+        Map<number, ProductItem>
+    >(new Map());
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const searchParam = useMemo(
@@ -41,19 +47,38 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
     });
 
     const products = data?.items ?? [];
+    const selectedNos = new Set(selectedProducts.keys());
 
     const toggleAll = () => {
-        if (selectedNos.size === products.length && products.length > 0) {
-            setSelectedNos(new Set());
+        if (products.every((p) => selectedNos.has(p.productNo))) {
+            setSelectedProducts((prev) => {
+                const next = new Map(prev);
+                products.forEach((p) => next.delete(p.productNo));
+                return next;
+            });
         } else {
-            setSelectedNos(new Set(products.map((p) => p.productNo)));
+            setSelectedProducts((prev) => {
+                const next = new Map(prev);
+                products.forEach((p) => next.set(p.productNo, p));
+                return next;
+            });
         }
     };
 
-    const toggle = (productNo: number) => {
-        setSelectedNos((prev) => {
-            const next = new Set(prev);
-            next.has(productNo) ? next.delete(productNo) : next.add(productNo);
+    const toggle = (product: ProductItem) => {
+        setSelectedProducts((prev) => {
+            const next = new Map(prev);
+            next.has(product.productNo)
+                ? next.delete(product.productNo)
+                : next.set(product.productNo, product);
+            return next;
+        });
+    };
+
+    const remove = (productNo: number) => {
+        setSelectedProducts((prev) => {
+            const next = new Map(prev);
+            next.delete(productNo);
             return next;
         });
     };
@@ -89,7 +114,9 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
     };
 
     const isAllSelected =
-        products.length > 0 && selectedNos.size === products.length;
+        products.length > 0 && products.every((p) => selectedNos.has(p.productNo));
+
+    const selectedList = Array.from(selectedProducts.values());
 
     return (
         <ModalLayout
@@ -116,7 +143,7 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
                 </>
             }
         >
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-3'>
                 <input
                     type='text'
                     placeholder='상품명으로 검색...'
@@ -125,8 +152,37 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
                     className='h-10 w-full rounded-lg border border-[#e5e7eb] px-3 text-sm outline-none focus:border-[#ff6900]'
                 />
 
+                {selectedList.length > 0 && (
+                    <div className='flex flex-wrap gap-2 rounded-lg border border-[#e5e7eb] bg-[#f9fafb] p-3'>
+                        {selectedList.map((product) => (
+                            <div
+                                key={product.productNo}
+                                className='flex items-center gap-1.5 rounded-full border border-[#e5e7eb] bg-white py-1 pl-1.5 pr-2 text-xs text-[#364153]'
+                            >
+                                {product.listImageUrls[0] && (
+                                    <img
+                                        src={product.listImageUrls[0]}
+                                        alt={product.productName}
+                                        className='size-5 rounded-full object-cover'
+                                    />
+                                )}
+                                <span className='max-w-[120px] truncate'>
+                                    {product.productName}
+                                </span>
+                                <button
+                                    type='button'
+                                    onClick={() => remove(product.productNo)}
+                                    className='flex items-center text-[#9ca3af] hover:text-[#364153]'
+                                >
+                                    <CloseLineIcon className='size-3' />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
                 <LoadingWrapper isLoading={isLoading}>
-                    <div className='max-h-[320px] overflow-y-auto rounded-lg border border-[#e5e7eb]'>
+                    <div className='max-h-[280px] overflow-y-auto rounded-lg border border-[#e5e7eb]'>
                         {products.length === 0 ? (
                             <div className='flex h-20 items-center justify-center text-sm text-[#6a7282]'>
                                 {debouncedKeyword
@@ -157,9 +213,16 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
                                                         product.productNo,
                                                     )}
                                                     onChange={() =>
-                                                        toggle(product.productNo)
+                                                        toggle(product)
                                                     }
                                                     className='size-4 accent-[#ff6900]'
+                                                />
+                                                <img
+                                                    src={
+                                                        product.listImageUrls[0]
+                                                    }
+                                                    alt={product.productName}
+                                                    className='size-10 shrink-0 rounded-md border border-[#e5e7eb] object-cover'
                                                 />
                                                 <div className='min-w-0'>
                                                     <div className='truncate text-sm text-[#101828]'>
