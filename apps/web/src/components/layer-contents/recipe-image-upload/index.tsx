@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import * as styles from '@/components/layer-contents/recipe-image-upload/index.css';
 import { PATHS } from '@/const/paths';
 import useRecipeImageUploadMutation from '@/hooks/mutations/useRecipeImageUploadMutation';
+import { useRecipeManualStore } from '@/store/useRecipeManualStore';
 import { vars } from '@/styles/theme.css';
 
 const itemVariants: Variants = {
@@ -118,6 +119,10 @@ export const RecipeImageUpload = ({
     const [images, setImages] = useState<string[]>([]);
     const { uploadAndRegister } = useRecipeImageUploadMutation();
 
+    const clearTempImages = useRecipeManualStore(
+        ({ clearTempImages }) => clearTempImages,
+    );
+
     const isLoading = uploadAndRegister.isPending;
 
     const imagesRef = useRef<string[]>([]);
@@ -184,12 +189,15 @@ export const RecipeImageUpload = ({
             : t('이미지를 드래그하여 순서를 변경하세요');
 
     const onNext = () => {
+        clearTempImages();
+
         uploadAndRegister.mutate(
             { blobUrls: images },
             {
                 onSuccess: () => {
                     handleClose();
                     onSuccess?.();
+
                     if (!router.pathname.includes(PATHS.RECIPES.WRITE)) {
                         router.push(PATHS.RECIPES.WRITE);
                     }

@@ -74,16 +74,14 @@ export const labelHint = style([
 ]);
 
 export const imageUploadGrid = style({
-    display: 'grid',
-    gridTemplateColumns: 'repeat(5, 1fr)',
-    gap: '12px',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '16px',
 
     '@media': {
-        [media.desktop]: {
-            // 데스크탑에서 한 줄에 8개로 변경
-            gridTemplateColumns: 'repeat(8, 1fr)',
-        },
         [media.mobile]: {
+            display: 'grid',
+            gap: '12px',
             gridTemplateColumns: 'repeat(3, 1fr)',
         },
     },

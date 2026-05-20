@@ -118,25 +118,27 @@ export const RecipeStepSection = ({
                                     {...register(`steps.${idx}.description`)}
                                 />
 
-                                <div className={styles.stepImageGrid}>
-                                    {stepImage || stepImageUrl ? (
-                                        <div className={styles.stepImageSlot}>
-                                            <RecipePreviewImage
-                                                url={
-                                                    stepImage?.imageUrl ||
-                                                    stepImageUrl
-                                                }
-                                                sno={
-                                                    stepImage?.sno ||
-                                                    tempImageSno
-                                                }
-                                                onDeleteButtonClick={() =>
-                                                    onDeleteStepImage(idx)
-                                                }
-                                            />
-                                        </div>
-                                    ) : (
-                                        isModifiable && (
+                                {isModifiable && (
+                                    <div className={styles.stepImageGrid}>
+                                        {stepImage || stepImageUrl ? (
+                                            <div
+                                                className={styles.stepImageSlot}
+                                            >
+                                                <RecipePreviewImage
+                                                    url={
+                                                        stepImage?.imageUrl ||
+                                                        stepImageUrl
+                                                    }
+                                                    sno={
+                                                        stepImage?.sno ||
+                                                        tempImageSno
+                                                    }
+                                                    onDeleteButtonClick={() =>
+                                                        onDeleteStepImage(idx)
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
                                             <>
                                                 <label
                                                     htmlFor={`upload-step-${idx}`}
@@ -160,9 +162,9 @@ export const RecipeStepSection = ({
                                                     }
                                                 />
                                             </>
-                                        )
-                                    )}
-                                </div>
+                                        )}
+                                    </div>
+                                )}
                             </motion.div>
                         );
                     })}

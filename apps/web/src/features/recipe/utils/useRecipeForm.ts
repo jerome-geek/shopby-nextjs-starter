@@ -15,7 +15,6 @@ import {
 import { useToast } from '@/hooks/ui';
 import { useFileUpload } from '@/hooks/utils';
 import type {
-    CreateManualRecipeData,
     GetRecipeDetailResponse,
     UpdateRecipeData,
 } from '@/models/shop/recipe';
@@ -421,7 +420,16 @@ export const useRecipeForm = ({
             } else {
                 createManualRecipeMutate(
                     {
-                        data: finalData as CreateManualRecipeData,
+                        data: {
+                            ...finalData,
+                            thumbnailUrl: undefined,
+                            thumbnailTempImageSno:
+                                data?.steps?.find(
+                                    (step) =>
+                                        step?.stepImageUrl ===
+                                        finalData.thumbnailUrl,
+                                )?.tempImageSno || null,
+                        },
                     },
                     {
                         onSuccess: (res) => {

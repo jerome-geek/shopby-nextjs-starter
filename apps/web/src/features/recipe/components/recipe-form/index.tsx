@@ -31,7 +31,7 @@ export const RecipeForm = ({
 
     const sourceType = recipeDetailData?.sourceType;
 
-    const isImageModifiable = sourceType === 'MANUAL' && isModify;
+    const isImageModifiable = sourceType === 'MANUAL' || !isModify;
 
     return (
         <FormProvider {...methods}>
