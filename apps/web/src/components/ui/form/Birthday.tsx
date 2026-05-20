@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { Select } from '@/components/ui/input';
 import { DAY_LIST, MONTH_LIST, YEAR_LIST } from '@/const/date';
 import * as styles from '@/components/ui/form/Birthday.css';

@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import * as styles from '@/components/common/error/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { InputField } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import { BOARD_GUEST_SECRET_PASSWORD_ERROR_CODE } from '@/const/board';

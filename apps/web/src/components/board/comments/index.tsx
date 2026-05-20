@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/index.css';
 import CommentItem from '@/components/board/comments/item';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { TextArea } from '@/components/ui/input';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';

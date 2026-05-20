@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,

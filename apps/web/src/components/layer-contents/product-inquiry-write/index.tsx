@@ -9,7 +9,7 @@ import { NoResult } from '@/components/common/no-result';
 import * as styles from '@/components/layer-contents/product-inquiry-write/index.css';
 import type { DefaultModalLayoutProps } from '@/components/layout';
 import * as inquiryFormStyles from '@/components/mypage/product-inquiries/product-inquiry-register-form/index.css';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,

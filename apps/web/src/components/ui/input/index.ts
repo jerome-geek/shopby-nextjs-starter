@@ -6,3 +6,4 @@ export * from '@/components/ui/input/label';
 export * from '@/components/ui/input/textarea';
 export * from '@/components/ui/input/radio';
 export * from '@/components/ui/input/select';
+export * from '@/components/ui/input/error-message';

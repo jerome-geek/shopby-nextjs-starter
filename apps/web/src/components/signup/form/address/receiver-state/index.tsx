@@ -10,7 +10,7 @@ import {
 import { CANADA_STATE_LIST, STATE_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
 import { Select, InputField, InputFieldContainer } from '@/components/ui/input';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 
 type ReceiverStateProps =
     | {

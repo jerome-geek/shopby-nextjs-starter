@@ -8,7 +8,7 @@ import {
 import { REPORT_REASON_OPTIONS } from '@/components/modal/report';
 import * as styles from '@/components/modal/report/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputContainer,
     InputLabel,

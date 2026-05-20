@@ -53,6 +53,7 @@ export const ClaimCancelForm = () => {
         });
 
     const orderOptionData = isLogin ? memberData : guestData;
+    console.log(orderOptionData);
 
     const claimCancelSchema = useMemo(
         () => createClaimCancelSchema(orderOptionData?.payType ?? undefined),
@@ -67,6 +68,12 @@ export const ClaimCancelForm = () => {
             refundsImmediately: true,
             saveBankAccountInfo: false,
             claimedProductOptions: [],
+            bankAccountInfo: {
+                bank: undefined,
+                bankAccount: '',
+                bankDepositorName: '',
+                bankName: '',
+            },
         },
     });
 
@@ -222,55 +229,46 @@ export const ClaimCancelForm = () => {
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '40px',
+                    gap: '60px',
                 }}
             >
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '60px',
-                    }}
-                >
-                    <LoadingWrapper isLoading={!isFetched} isLoadedAnimation>
-                        <ClaimOrderOptions orderOptionList={orderOptionList} />
-                    </LoadingWrapper>
+                <LoadingWrapper isLoading={!isFetched} isLoadedAnimation>
+                    <ClaimOrderOptions orderOptionList={orderOptionList} />
+                </LoadingWrapper>
 
-                    <ClaimReason
-                        orderOptionNo={orderOptionNo}
-                        claimType={CLAIM_TYPE}
-                    />
+                <ClaimReason
+                    orderOptionNo={orderOptionNo}
+                    claimType={CLAIM_TYPE}
+                />
 
-                    {estimateData &&
-                        !isEmpty(filteredClaimedProductOptions) && (
-                            <ClaimPriceInfo claimPriceData={estimateData} />
-                        )}
+                {estimateData && !isEmpty(filteredClaimedProductOptions) && (
+                    <ClaimPriceInfo claimPriceData={estimateData} />
+                )}
 
-                    <ClaimBankInfo
-                        payType={orderOptionData?.payType}
-                        refundAccount={orderOptionData?.refundAccount}
-                        availableBanks={orderOptionData?.availableBanks || []}
-                    />
+                <ClaimBankInfo
+                    payType={orderOptionData?.payType}
+                    refundAccount={orderOptionData?.refundAccount}
+                    availableBanks={orderOptionData?.availableBanks || []}
+                />
 
-                    <div style={{ display: 'flex', gap: '12px' }}>
-                        <Button
-                            frame='outlined'
-                            type='button'
-                            onClick={() => router.back()}
-                            style={{ flex: 1 }}
-                        >
-                            {t('돌아가기')}
-                        </Button>
-                        <Button
-                            type='submit'
-                            frame='solid'
-                            variant='primary'
-                            disabled={isPending}
-                            style={{ flex: 1 }}
-                        >
-                            {t('취소신청')}
-                        </Button>
-                    </div>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <Button
+                        frame='outlined'
+                        type='button'
+                        onClick={() => router.back()}
+                        style={{ flex: 1 }}
+                    >
+                        {t('돌아가기')}
+                    </Button>
+                    <Button
+                        type='submit'
+                        frame='solid'
+                        variant='primary'
+                        disabled={isPending}
+                        style={{ flex: 1 }}
+                    >
+                        {t('취소신청')}
+                    </Button>
                 </div>
             </form>
         </FormProvider>

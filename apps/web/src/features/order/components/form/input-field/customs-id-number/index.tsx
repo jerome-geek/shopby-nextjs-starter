@@ -7,7 +7,7 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { InputField } from '@/components/ui/input/field';
 import { InputFieldContainer } from '@/components/ui/input/field-container';
 import { InputLabel } from '@/components/ui/input/label';

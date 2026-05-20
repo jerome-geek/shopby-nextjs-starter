@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { guestOrder } from '@/api/order';
 import { AuthLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import useApiError from '@/hooks/useApiError';

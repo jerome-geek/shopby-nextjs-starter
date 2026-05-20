@@ -9,7 +9,7 @@ import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-sear
 import { AddressRegister } from '@/components/layer-contents/address-search';
 import { AddressSearchModal } from '@/components/modal';
 import { Button } from '@/components/ui';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,

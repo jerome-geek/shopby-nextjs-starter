@@ -10,7 +10,7 @@ import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
 import { AuthLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,

@@ -11,7 +11,7 @@ import * as styles from '@/components/mypage/inquiries/inquiry-register-form/ind
 import { InquiryTypeList } from '@/components/mypage/inquiries/inquiry-type-list';
 import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,

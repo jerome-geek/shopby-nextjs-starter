@@ -72,6 +72,12 @@ export const ClaimReturnForm = () => {
             claimType: CLAIM_TYPE,
             saveBankAccountInfo: false,
             returnWayType: 'SELLER_COLLECT',
+            bankAccountInfo: {
+                bank: undefined,
+                bankAccount: '',
+                bankDepositorName: '',
+                bankName: '',
+            },
         },
     });
 
@@ -235,7 +241,7 @@ export const ClaimReturnForm = () => {
                 ? {
                       ...submitData.returnAddress,
                       receiverName: isKorean
-                          ? submitData.returnAddress.receiverName ?? ''
+                          ? (submitData.returnAddress.receiverName ?? '')
                           : `${
                                 submitData.returnAddress.receiverLastName ?? ''
                             }${

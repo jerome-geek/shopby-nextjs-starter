@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,

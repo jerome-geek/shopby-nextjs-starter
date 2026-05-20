@@ -3,9 +3,9 @@ import { ErrorMessage as RHFErrorMessage } from '@hookform/error-message';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { errorMessage } from '@/components/ui/form/error-message/index.css';
+import { errorMessage } from '@/components/ui/input/error-message.css';
 
-const ErrorMessage = ({ name }: { name: string }) => {
+export const ErrorMessage = ({ name }: { name: string }) => {
     const { t } = useTranslation();
     const { control } = useFormContext();
     const { errors } = useFormState({ control });
@@ -38,5 +38,3 @@ const ErrorMessage = ({ name }: { name: string }) => {
         />
     );
 };
-
-export default ErrorMessage;

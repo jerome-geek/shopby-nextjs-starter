@@ -3,7 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { InputFieldContainer, Select } from '@/components/ui/input';
 import { DAY_LIST, MONTH_LIST, YEAR_LIST } from '@/const/date';
 

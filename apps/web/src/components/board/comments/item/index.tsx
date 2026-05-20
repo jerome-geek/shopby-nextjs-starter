@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/item/index.css';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { TextArea } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import { BOARD_REPLY_MAX_LENGTH } from '@/const/board';

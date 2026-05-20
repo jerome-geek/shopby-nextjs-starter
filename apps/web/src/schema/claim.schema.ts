@@ -37,12 +37,12 @@ const createClaimCancelSchema = (payType?: string) =>
             saveBankAccountInfo: z.boolean(),
             bankAccountInfo: z
                 .object({
-                    bankAccount: z.string().optional(),
-                    bankDepositorName: z.string().optional(),
-                    bank: bankType.optional(),
-                    bankName: z.string().optional(),
+                    bankAccount: z.string().nullish(),
+                    bankDepositorName: z.string().nullish(),
+                    bank: bankType.nullish(),
+                    bankName: z.string().nullish(),
                 })
-                .optional(),
+                .nullish(),
             claimReasonType,
             refundsImmediately: z.boolean(),
         })
@@ -52,6 +52,7 @@ const createClaimCancelSchema = (payType?: string) =>
                 payType === 'VIRTUAL_ACCOUNT' ||
                 payType === 'ESCROW_VIRTUAL_ACCOUNT' ||
                 payType === 'ESCROW_REALTIME_ACCOUNT_TRANSFER';
+            console.log('isCachPayment', payType, isCashPayment);
 
             if (isCashPayment) {
                 if (!data.bankAccountInfo?.bankAccount)
@@ -278,12 +279,12 @@ const createClaimReturnSchema = (payType?: string) =>
             saveBankAccountInfo: z.boolean(),
             bankAccountInfo: z
                 .object({
-                    bankAccount: z.string().optional(),
-                    bankDepositorName: z.string().optional(),
-                    bank: bankType.optional(),
-                    bankName: z.string().optional(),
+                    bankAccount: z.string().nullish(),
+                    bankDepositorName: z.string().nullish(),
+                    bank: bankType.nullish(),
+                    bankName: z.string().nullish(),
                 })
-                .optional(),
+                .nullish(),
             claimReasonType,
             returnWayType: z
                 .enum(['SELLER_COLLECT', 'BUYER_DIRECT_RETURN'])
@@ -383,11 +384,13 @@ const createClaimReturnSchema = (payType?: string) =>
 /** 하위 호환용 — payType 없이 사용할 때 */
 const claimReturnSchema = createClaimReturnSchema();
 
-
-
-type ClaimCancelSchemaType = z.infer<ReturnType<typeof createClaimCancelSchema>>;
+type ClaimCancelSchemaType = z.infer<
+    ReturnType<typeof createClaimCancelSchema>
+>;
 type ClaimExchangeSchemaType = z.infer<typeof claimExchangeSchema>;
-type ClaimReturnSchemaType = z.infer<ReturnType<typeof createClaimReturnSchema>>;
+type ClaimReturnSchemaType = z.infer<
+    ReturnType<typeof createClaimReturnSchema>
+>;
 
 type ClaimSchemaMapType = {
     CANCEL: ClaimCancelSchemaType;

@@ -18,7 +18,7 @@ import { z } from 'zod';
 
 import * as styles from '@/components/layer-contents/withdrawal/index.css';
 import { type DefaultModalLayoutProps } from '@/components/layout';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputContainer,
     InputLabel,

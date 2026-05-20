@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/review-report/index.css';
 import { DefaultModalLayoutProps } from '@/components/layout';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputContainer,
     InputLabel,

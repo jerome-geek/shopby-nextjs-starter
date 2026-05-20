@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import upload from '@/api/storage/image';
 import { Button } from '@/components/ui';
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,

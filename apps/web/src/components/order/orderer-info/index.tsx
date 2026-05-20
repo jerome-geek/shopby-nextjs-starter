@@ -1,20 +1,19 @@
-import { useTranslation } from 'react-i18next';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/orderer-info/index.css';
-import { errorMessage } from '@/components/ui/form/error-message/index.css';
+import { errorMessage } from '@/components/ui/input/error-message.css';
 import {
+    ErrorMessage,
     InputField,
     InputFieldContainer,
     InputLabel,
     Select,
 } from '@/components/ui/input';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
+import { useAuth } from '@/hooks/useAuth';
 import { PaymentReserveSchemaType } from '@/schema';
 import { PhonePrefixType } from '@/schema/common.schema';
-
-import { useAuth } from '@/hooks/useAuth';
-import { ErrorMessage } from '@/components/ui/form';
 
 const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
 

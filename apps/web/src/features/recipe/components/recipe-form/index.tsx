@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputContainer,
     InputField,

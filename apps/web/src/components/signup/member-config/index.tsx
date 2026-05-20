@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { SingleValue } from 'react-select';
 
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputRadio,
     InputLabel,

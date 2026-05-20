@@ -6,7 +6,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputField,

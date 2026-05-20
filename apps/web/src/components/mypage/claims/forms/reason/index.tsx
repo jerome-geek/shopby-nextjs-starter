@@ -4,7 +4,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import FileUpload from '@/components/ui/file-upload';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputFieldContainer,
     InputLabel,

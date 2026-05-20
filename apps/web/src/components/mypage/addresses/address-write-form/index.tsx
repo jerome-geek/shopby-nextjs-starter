@@ -12,7 +12,7 @@ import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-sear
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/mypage/common/mypage-form/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputContainer,
     InputField,

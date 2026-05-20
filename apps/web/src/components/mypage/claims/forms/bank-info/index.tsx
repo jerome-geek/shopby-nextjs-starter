@@ -3,7 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/mypage/claims/forms/bank-info/index.css';
-import ErrorMessage from '@/components/ui/form/ErrorMessage';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputField,

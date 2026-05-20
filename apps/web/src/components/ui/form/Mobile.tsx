@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import * as styles from '@/components/ui/form/Mobile.css';
 import { InputField } from '@/components/ui/input';
 

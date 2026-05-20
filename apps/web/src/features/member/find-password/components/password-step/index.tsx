@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/member/find-password/components/password-step/index.css';

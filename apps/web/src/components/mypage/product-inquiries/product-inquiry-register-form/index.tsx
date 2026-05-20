@@ -12,7 +12,7 @@ import { ProductSelectModal } from '@/components/modal/product-select';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
 import * as styles from '@/components/mypage/product-inquiries/product-inquiry-register-form/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,

@@ -10,7 +10,7 @@ import { BottomSheetLayout, ModalLayout } from '@/components/layout';
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
 import { Button } from '@/components/ui';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputField,

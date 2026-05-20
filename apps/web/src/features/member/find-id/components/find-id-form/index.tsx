@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { FindIdResultBottomSheet } from '@/components/bottom-sheet/find-id-result';
 import { FindIdResultModal } from '@/components/modal/find-id-result';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/form';
+import { ErrorMessage } from '@/components/ui/input';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { EmailField } from '@/features/member/find-id/components/filed/email';
 import { MobileField } from '@/features/member/find-id/components/filed/mobile';
