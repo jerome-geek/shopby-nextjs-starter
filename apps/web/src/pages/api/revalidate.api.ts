@@ -20,10 +20,28 @@ import type { NextApiRequest, NextApiResponse } from 'next';
  * })
  */
 
+function setCorsHeaders(req: NextApiRequest, res: NextApiResponse) {
+    const origin = req.headers.origin;
+    const isVercel = origin && /^https:\/\/[^.]+\.vercel\.app$/.test(origin);
+
+    if (isVercel) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'x-revalidate-token');
+    }
+}
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
+    setCorsHeaders(req, res);
+
+    // OPTIONS preflight
+    if (req.method === 'OPTIONS') {
+        return res.status(204).end();
+    }
+
     // 1. 보안 검증 (Header 방식 우선 체크)
     const secret = req.headers['x-revalidate-token'] || req.query.secret;
 
