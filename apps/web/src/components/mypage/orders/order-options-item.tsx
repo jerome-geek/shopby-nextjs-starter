@@ -179,7 +179,7 @@ export const OrderOptionsItem = ({
                             isBuyConfirm ? styles.statusTextPrimary : ''
                         }`}
                     >
-                        1 {claimStatusTypeLabel || orderStatusTypeLabel}
+                        {claimStatusTypeLabel || orderStatusTypeLabel}
                     </span>
                 </div>
             </Only.Desktop>
