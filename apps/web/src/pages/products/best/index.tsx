@@ -1,7 +1,6 @@
 import { isEmpty } from '@fxts/core';
 
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/shared/components/observer-target';
 import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';
@@ -9,9 +8,11 @@ import { useBestProductParams } from '@/entities/products/best/hooks/useBestProd
 import { BestCategoryFilter } from '@/features/products/best/components/category-filter';
 import { ProductCardSkeleton } from '@/features/products/best/components/product-card-skeleton';
 import { BestProductListContainer } from '@/features/products/best/components/product-list-container';
-import { useCategoryAll } from '@/hooks/suspenseQuery/display/category';
+import { useCategoryAll } from '@/hooks/query/display/category';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/best/index.css';
+import { ObserverTarget } from '@/shared/components/observer-target';
+import { Only } from '@/shared/components/only';
 
 const BestProductsPage = () => {
     const { isMobile } = useResponsive();
@@ -29,7 +30,9 @@ const BestProductsPage = () => {
         <div className={styles.container}>
             <Column>
                 <Column style={{ gap: isMobile ? '20px' : '32px' }}>
-                    {!isMobile && <h1 className={styles.title}>베스트 랭킹</h1>}
+                    <Only.Desktop>
+                        <h1 className={styles.title}>베스트 랭킹</h1>
+                    </Only.Desktop>
 
                     <BestCategoryFilter
                         selectedCategory={selectedCategory}
@@ -43,95 +46,109 @@ const BestProductsPage = () => {
                 <div className={styles.border} />
             </Column>
 
-            <BestProductListContainer
-                selectedCategory={selectedCategory}
-                renderSkeleton={() => (
-                    <div className={styles.productGrid}>
-                        {Array.from({ length: queryParams.pageSize }).map(
-                            (_, i) => (
-                                <ProductCardSkeleton key={i} />
-                            ),
-                        )}
-                    </div>
-                )}
-            >
-                {({
-                    products,
-                    totalCount,
-                    hasNextPage,
-                    fetchNextPage,
-                    pageNumber,
-                }) => (
-                    <>
-                        {isEmpty(products) ? (
-                            <NoResult title={'등록된 상품이 없습니다.'} />
-                        ) : (
-                            <Column style={{ gap: isMobile ? '0' : '60px' }}>
-                                <div className={styles.productGrid}>
-                                    {products.map((product, index) => (
-                                        <ProductCard
-                                            key={product.productNo}
-                                            productNo={product.productNo}
-                                            productName={product.productName}
-                                            imageUrlInfo={product.imageUrlInfo}
-                                            brandNo={product.brandNo}
-                                            brandName={product.brandName}
-                                            stickerInfos={product.stickerInfos}
-                                            likeCount={product.likeCount}
-                                            liked={product.liked}
-                                            reviewRating={product.reviewRating}
-                                            totalReviewCount={
-                                                product.totalReviewCount
-                                            }
-                                            salePrice={product.salePrice}
-                                            immediateDiscountAmt={
-                                                product.immediateDiscountAmt
-                                            }
-                                            additionDiscountAmt={
-                                                product.additionDiscountAmt
-                                            }
-                                            additionalDiscount={
-                                                product.additionalDiscount
-                                            }
-                                            rank={
-                                                isMobile
-                                                    ? index + 1
-                                                    : (pageNumber - 1) *
-                                                          queryParams.pageSize +
-                                                      index +
-                                                      1
+            {!!categoryData && (
+                <BestProductListContainer
+                    selectedCategory={selectedCategory}
+                    renderSkeleton={() => (
+                        <div className={styles.productGrid}>
+                            {Array.from({ length: queryParams.pageSize }).map(
+                                (_, i) => (
+                                    <ProductCardSkeleton key={i} />
+                                ),
+                            )}
+                        </div>
+                    )}
+                >
+                    {({
+                        products,
+                        totalCount,
+                        hasNextPage,
+                        fetchNextPage,
+                        pageNumber,
+                    }) => (
+                        <>
+                            {isEmpty(products) ? (
+                                <NoResult title={'등록된 상품이 없습니다.'} />
+                            ) : (
+                                <Column
+                                    style={{ gap: isMobile ? '0' : '60px' }}
+                                >
+                                    <div className={styles.productGrid}>
+                                        {products.map((product, index) => (
+                                            <ProductCard
+                                                key={product.productNo}
+                                                productNo={product.productNo}
+                                                productName={
+                                                    product.productName
+                                                }
+                                                imageUrlInfo={
+                                                    product.imageUrlInfo
+                                                }
+                                                brandNo={product.brandNo}
+                                                brandName={product.brandName}
+                                                stickerInfos={
+                                                    product.stickerInfos
+                                                }
+                                                likeCount={product.likeCount}
+                                                liked={product.liked}
+                                                reviewRating={
+                                                    product.reviewRating
+                                                }
+                                                totalReviewCount={
+                                                    product.totalReviewCount
+                                                }
+                                                salePrice={product.salePrice}
+                                                immediateDiscountAmt={
+                                                    product.immediateDiscountAmt
+                                                }
+                                                additionDiscountAmt={
+                                                    product.additionDiscountAmt
+                                                }
+                                                additionalDiscount={
+                                                    product.additionalDiscount
+                                                }
+                                                rank={
+                                                    isMobile
+                                                        ? index + 1
+                                                        : (pageNumber - 1) *
+                                                              queryParams.pageSize +
+                                                          index +
+                                                          1
+                                                }
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <Only.Mobile>
+                                        <ObserverTarget
+                                            onIntersect={() => {
+                                                if (hasNextPage) {
+                                                    fetchNextPage?.();
+                                                }
+                                            }}
+                                            hasNextPage={hasNextPage || false}
+                                        />
+                                    </Only.Mobile>
+
+                                    <Only.Desktop>
+                                        <PagingV2
+                                            currentPage={pageNumber}
+                                            totalCount={totalCount}
+                                            pageSize={queryParams.pageSize}
+                                            onPageClick={(page) =>
+                                                setQueryParams(
+                                                    { pageNumber: page },
+                                                    { scroll: true },
+                                                )
                                             }
                                         />
-                                    ))}
-                                </div>
-
-                                {isMobile ? (
-                                    <ObserverTarget
-                                        onIntersect={() => {
-                                            if (hasNextPage) {
-                                                fetchNextPage?.();
-                                            }
-                                        }}
-                                        hasNextPage={hasNextPage || false}
-                                    />
-                                ) : (
-                                    <PagingV2
-                                        currentPage={pageNumber}
-                                        totalCount={totalCount}
-                                        pageSize={queryParams.pageSize}
-                                        onPageClick={(page) =>
-                                            setQueryParams(
-                                                { pageNumber: page },
-                                                { scroll: true },
-                                            )
-                                        }
-                                    />
-                                )}
-                            </Column>
-                        )}
-                    </>
-                )}
-            </BestProductListContainer>
+                                    </Only.Desktop>
+                                </Column>
+                            )}
+                        </>
+                    )}
+                </BestProductListContainer>
+            )}
         </div>
     );
 };
