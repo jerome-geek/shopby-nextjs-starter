@@ -10,15 +10,24 @@ import { CloseLineIcon } from '@/icons';
 import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
 
 interface ProductItem {
+    /** 몰상품번호 */
     mallProductNo: number;
+    /** 상품명 */
     productName: string;
+    /** 리스트 이미지 URL */
+    listImageUrls: string[];
 }
 
 interface ProductSearchResponse {
+    /** 페이지 수 */
+    pageCount: number;
+    /** 검색 기준 값 */
+    lastId: string;
+    /** 재고 노출 여부 (false:재고 미노출 / true:재고 노출) */
+    displayableStock: boolean;
+    /** 전체 상품 수 */
     totalCount: number;
-    elements: ProductItem[];
-    totalPage: number;
-    lastId: number;
+    items: ProductItem[];
 }
 
 const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
@@ -42,12 +51,13 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
     );
 
     const { data, isLoading } = useServerApiByPass<ProductSearchResponse>({
-        url: '/products/search',
+        url: '/products/search/engine/',
         param: searchParam,
+        version: '2.0',
         options: { staleTime: 30_000 },
     });
 
-    const products = data?.elements ?? [];
+    const products = data?.items ?? [];
     const selectedNos = new Set(selectedProducts.keys());
 
     const toggleAll = () => {
@@ -159,14 +169,23 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
                         {selectedList.map((product) => (
                             <div
                                 key={product.mallProductNo}
-                                className='flex items-center gap-1.5 rounded-full border border-[#e5e7eb] bg-white px-2 py-1 text-xs text-[#364153]'
+                                className='flex items-center gap-1.5 rounded-full border border-[#e5e7eb] bg-white py-1 pl-1.5 pr-2 text-xs text-[#364153]'
                             >
+                                {product.listImageUrls[0] && (
+                                    <img
+                                        src={product.listImageUrls[0]}
+                                        alt={product.productName}
+                                        className='size-5 rounded-full object-cover'
+                                    />
+                                )}
                                 <span className='max-w-[120px] truncate'>
                                     {product.productName}
                                 </span>
                                 <button
                                     type='button'
-                                    onClick={() => remove(product.mallProductNo)}
+                                    onClick={() =>
+                                        remove(product.mallProductNo)
+                                    }
                                     className='flex items-center text-[#9ca3af] hover:text-[#364153]'
                                 >
                                     <CloseLineIcon className='size-3' />
@@ -212,12 +231,18 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
                                                     }
                                                     className='size-4 accent-[#ff6900]'
                                                 />
+                                                <img
+                                                    src={product.listImageUrls[0]}
+                                                    alt={product.productName}
+                                                    className='size-10 shrink-0 rounded-md border border-[#e5e7eb] object-cover'
+                                                />
                                                 <div className='min-w-0'>
                                                     <div className='truncate text-sm text-[#101828]'>
                                                         {product.productName}
                                                     </div>
                                                     <div className='text-xs text-[#6a7282]'>
-                                                        No. {product.mallProductNo}
+                                                        No.{' '}
+                                                        {product.mallProductNo}
                                                     </div>
                                                 </div>
                                             </label>
