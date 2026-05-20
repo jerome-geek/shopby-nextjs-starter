@@ -1,7 +1,6 @@
 import { isEmpty } from '@fxts/core';
 
 import { NoResult } from '@/components/common/no-result';
-import { ObserverTarget } from '@/shared/components/observer-target';
 import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';
@@ -9,9 +8,11 @@ import { useNewProductParams } from '@/entities/products/new/hooks/useNewProduct
 import { ProductCardSkeleton } from '@/features/products/best/components/product-card-skeleton';
 import { NewCategoryFilter } from '@/features/products/new/components/category-filter';
 import { NewProductListContainer } from '@/features/products/new/components/product-list-container';
-import { useCategoryAll } from '@/hooks/suspenseQuery/display/category';
+import { useCategoryAll } from '@/hooks/query/display/category';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/new/index.css';
+import { ObserverTarget } from '@/shared/components/observer-target';
+import { Only } from '@/shared/components/only';
 
 const NewProductsPage = () => {
     const { isMobile } = useResponsive();
@@ -29,7 +30,9 @@ const NewProductsPage = () => {
         <div className={styles.container}>
             <Column>
                 <Column style={{ gap: isMobile ? '20px' : '32px' }}>
-                    {!isMobile && <h1 className={styles.title}>신상품</h1>}
+                    <Only.Desktop>
+                        <h1 className={styles.title}>신상품</h1>
+                    </Only.Desktop>
 
                     <NewCategoryFilter
                         selectedCategory={selectedCategory}
@@ -43,87 +46,101 @@ const NewProductsPage = () => {
                 <div className={styles.border} />
             </Column>
 
-            <NewProductListContainer
-                selectedCategory={selectedCategory}
-                renderSkeleton={() => (
-                    <div className={styles.productGrid}>
-                        {Array.from({ length: queryParams.pageSize }).map(
-                            (_, i) => (
-                                <ProductCardSkeleton key={i} />
-                            ),
-                        )}
-                    </div>
-                )}
-            >
-                {({
-                    products,
-                    totalCount,
-                    hasNextPage,
-                    fetchNextPage,
-                    pageNumber,
-                }) => (
-                    <>
-                        {isEmpty(products) ? (
-                            <NoResult title={'등록된 상품이 없습니다.'} />
-                        ) : (
-                            <Column style={{ gap: isMobile ? '0' : '60px' }}>
-                                <div className={styles.productGrid}>
-                                    {products.map((product) => (
-                                        <ProductCard
-                                            key={product.productNo}
-                                            productNo={product.productNo}
-                                            productName={product.productName}
-                                            imageUrlInfo={product.imageUrlInfo}
-                                            brandNo={product.brandNo}
-                                            brandName={product.brandName}
-                                            stickerInfos={product.stickerInfos}
-                                            likeCount={product.likeCount}
-                                            liked={product.liked}
-                                            reviewRating={product.reviewRating}
-                                            totalReviewCount={
-                                                product.totalReviewCount
-                                            }
-                                            salePrice={product.salePrice}
-                                            immediateDiscountAmt={
-                                                product.immediateDiscountAmt
-                                            }
-                                            additionDiscountAmt={
-                                                product.additionDiscountAmt
-                                            }
-                                            additionalDiscount={
-                                                product.additionalDiscount
+            {!!categoryData && (
+                <NewProductListContainer
+                    selectedCategory={selectedCategory}
+                    renderSkeleton={() => (
+                        <div className={styles.productGrid}>
+                            {Array.from({ length: queryParams.pageSize }).map(
+                                (_, i) => (
+                                    <ProductCardSkeleton key={i} />
+                                ),
+                            )}
+                        </div>
+                    )}
+                >
+                    {({
+                        products,
+                        totalCount,
+                        hasNextPage,
+                        fetchNextPage,
+                        pageNumber,
+                    }) => (
+                        <>
+                            {isEmpty(products) ? (
+                                <NoResult title={'등록된 상품이 없습니다.'} />
+                            ) : (
+                                <Column
+                                    style={{ gap: isMobile ? '0' : '60px' }}
+                                >
+                                    <div className={styles.productGrid}>
+                                        {products.map((product) => (
+                                            <ProductCard
+                                                key={product.productNo}
+                                                productNo={product.productNo}
+                                                productName={
+                                                    product.productName
+                                                }
+                                                imageUrlInfo={
+                                                    product.imageUrlInfo
+                                                }
+                                                brandNo={product.brandNo}
+                                                brandName={product.brandName}
+                                                stickerInfos={
+                                                    product.stickerInfos
+                                                }
+                                                likeCount={product.likeCount}
+                                                liked={product.liked}
+                                                reviewRating={
+                                                    product.reviewRating
+                                                }
+                                                totalReviewCount={
+                                                    product.totalReviewCount
+                                                }
+                                                salePrice={product.salePrice}
+                                                immediateDiscountAmt={
+                                                    product.immediateDiscountAmt
+                                                }
+                                                additionDiscountAmt={
+                                                    product.additionDiscountAmt
+                                                }
+                                                additionalDiscount={
+                                                    product.additionalDiscount
+                                                }
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <Only.Mobile>
+                                        <ObserverTarget
+                                            onIntersect={() => {
+                                                if (hasNextPage) {
+                                                    fetchNextPage?.();
+                                                }
+                                            }}
+                                            hasNextPage={hasNextPage || false}
+                                        />
+                                    </Only.Mobile>
+
+                                    <Only.Desktop>
+                                        <PagingV2
+                                            currentPage={pageNumber}
+                                            totalCount={totalCount}
+                                            pageSize={queryParams.pageSize}
+                                            onPageClick={(page) =>
+                                                setQueryParams(
+                                                    { pageNumber: page },
+                                                    { scroll: true },
+                                                )
                                             }
                                         />
-                                    ))}
-                                </div>
-
-                                {isMobile ? (
-                                    <ObserverTarget
-                                        onIntersect={() => {
-                                            if (hasNextPage) {
-                                                fetchNextPage?.();
-                                            }
-                                        }}
-                                        hasNextPage={hasNextPage || false}
-                                    />
-                                ) : (
-                                    <PagingV2
-                                        currentPage={pageNumber}
-                                        totalCount={totalCount}
-                                        pageSize={queryParams.pageSize}
-                                        onPageClick={(page) =>
-                                            setQueryParams(
-                                                { pageNumber: page },
-                                                { scroll: true },
-                                            )
-                                        }
-                                    />
-                                )}
-                            </Column>
-                        )}
-                    </>
-                )}
-            </NewProductListContainer>
+                                    </Only.Desktop>
+                                </Column>
+                            )}
+                        </>
+                    )}
+                </NewProductListContainer>
+            )}
         </div>
     );
 };
