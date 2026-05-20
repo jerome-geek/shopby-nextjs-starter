@@ -5,7 +5,7 @@ type OrdersStatusTab =
     | 'ALL'
     | 'DEPOSIT_WAIT'
     | 'PAY_DONE'
-    | 'PAY_DONE,PRODUCT_PREPARE,DELIVERY_PREPARE'
+    | 'PRODUCT_PREPARE,DELIVERY_PREPARE'
     | 'DELIVERY_ING'
     | 'DELIVERY_DONE'
     | 'BUY_CONFIRM';
@@ -14,7 +14,7 @@ const ordersStatusTabParser = parseAsEnum<OrdersStatusTab>([
     'ALL',
     'DEPOSIT_WAIT',
     'PAY_DONE',
-    'PAY_DONE,PRODUCT_PREPARE,DELIVERY_PREPARE',
+    'PRODUCT_PREPARE,DELIVERY_PREPARE',
     'DELIVERY_ING',
     'DELIVERY_DONE',
     'BUY_CONFIRM',
@@ -69,10 +69,9 @@ const ordersStatusTabOptions = (
         count: summary?.payDoneCnt ?? 0,
     },
     {
-        value: 'PAY_DONE,PRODUCT_PREPARE,DELIVERY_PREPARE',
+        value: 'PRODUCT_PREPARE,DELIVERY_PREPARE',
         label: '배송준비중',
         count:
-            (summary?.payDoneCnt ?? 0) +
             (summary?.productPrepareCnt ?? 0) +
             (summary?.deliveryPrepareCnt ?? 0),
     },

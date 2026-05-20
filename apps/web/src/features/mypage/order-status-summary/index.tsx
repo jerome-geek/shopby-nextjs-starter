@@ -38,7 +38,7 @@ export const OrderStatusSummary = () => {
             content:
                 (orderStatusSummaryData.productPrepareCnt ?? 0) +
                 (orderStatusSummaryData.deliveryPrepareCnt ?? 0),
-            url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=PAY_DONE,PRODUCT_PREPARE,DELIVERY_PREPARE`,
+            url: `${PATHS.MYPAGE.ORDERS.MAIN}?orderStatus=PRODUCT_PREPARE,DELIVERY_PREPARE`,
         },
         {
             id: 'deliveryIng',
