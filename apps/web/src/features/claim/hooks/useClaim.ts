@@ -86,8 +86,6 @@ const useClaim = ({
         confirmDeliveryCompletion: { mutate: guestDeliveryDoneMutate },
     } = useGuestOrderMutation();
 
-    // const { sendCancelAllEvent } = useAirbridgeEvent();
-
     const nextAction = () => {
         switch (nextActionType) {
             case 'CANCEL_ALL': {

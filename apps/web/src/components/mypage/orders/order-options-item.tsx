@@ -1,10 +1,12 @@
-import { filter, pipe, toArray } from '@fxts/core';
+import { filter, includes, pipe, toArray } from '@fxts/core';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NextActionButton } from '@/components/mypage/orders/next-action-button';
 import * as styles from '@/components/mypage/orders/order-options-item.css';
+import { Button } from '@/components/ui';
 import { PATHS } from '@/const/paths';
 import type { NextAction, OrderOption } from '@/models/order';
 import { Only } from '@/shared/components/only';
@@ -66,7 +68,15 @@ export const OrderOptionsItem = ({
 }: MypageOrderOptionListItemProps) => {
     const { t } = useTranslation();
 
+    const router = useRouter();
+
     const isBuyConfirm = orderStatusType === 'BUY_CONFIRM';
+
+    const isExchangeDisabled = includes(orderStatusType, [
+        'PAY_DONE',
+        'PRODUCT_PREPARE',
+        'DELIVERY_PREPARE',
+    ]);
 
     const filteredNextActions = useMemo(() => {
         return pipe(
@@ -80,11 +90,15 @@ export const OrderOptionsItem = ({
                     return false;
                 }
 
+                if (nextActionType === 'EXCHANGE' && isExchangeDisabled) {
+                    return false;
+                }
+
                 return true;
             }),
             toArray,
         );
-    }, [nextActions, isFreeGift]);
+    }, [nextActions, isFreeGift, isExchangeDisabled]);
 
     return (
         <li className={styles.itemContainer}>
@@ -153,13 +167,13 @@ export const OrderOptionsItem = ({
                     <div className={styles.optionText}>
                         {optionTitle && (
                             <p>
-                                {optionTitle} | {orderCnt}
-                                {t('개')}
+                                {optionTitle} |{' '}
+                                {t('{{count}}개', { count: orderCnt })}
                             </p>
                         )}
                         {inputs?.map((input) => (
                             <p key={input.inputNo}>
-                                {input.inputLabel} : {input.inputValue}
+                                {`${input.inputLabel} ${input.inputValue}`}
                             </p>
                         ))}
                     </div>
@@ -198,6 +212,20 @@ export const OrderOptionsItem = ({
                         claimNo={claimNo || null}
                     />
                 ))}
+
+                {isExchangeDisabled && (
+                    <Button
+                        frame='solid'
+                        variant='primary'
+                        size='small'
+                        onClick={() =>
+                            router.push(PATHS.MYPAGE.PRODUCT_INQUIRIES.MAIN)
+                        }
+                        style={{ height: '32px', fontSize: '12px' }}
+                    >
+                        문의하기
+                    </Button>
+                )}
             </div>
         </li>
     );
