@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { flatMap, filter, pipe, toArray } from '@fxts/core';
 
 import { useMypageMenu } from '@/context/mypageMenu';
-import * as styles from '@/components/mypage/main/mobile-paths/index.css';
+import * as styles from '@/features/mypage/mypage-shortcuts/index.css';
 
-const MyPageMainMobilePaths = () => {
+export const MypageShortcuts = () => {
     const menuList = useMypageMenu();
 
     const { t } = useTranslation();
@@ -36,5 +36,3 @@ const MyPageMainMobilePaths = () => {
         </section>
     );
 };
-
-export default MyPageMainMobilePaths;

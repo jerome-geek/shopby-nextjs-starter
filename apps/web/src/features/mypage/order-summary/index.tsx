@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { PATHS } from '@/const/paths';
 import useProfile from '@/hooks/query/member/profile/useProfile';
 import { useOrderSummary } from '@/hooks/query/order/myOrder';
-import * as styles from '@/components/mypage/main/order-summary/index.css';
+import * as styles from '@/features/mypage/order-summary/index.css';
 import { CURRENCY } from '@/utils/currency';
 
-const OrderSummary = () => {
+export const OrderSummary = () => {
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo ?? 0;
 
@@ -43,5 +43,3 @@ const OrderSummary = () => {
         </section>
     );
 };
-
-export default OrderSummary;

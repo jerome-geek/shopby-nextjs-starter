@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { isEmpty } from '@fxts/core';
 
 import { NoResult } from '@/components/common/no-result';
-import * as styles from '@/components/mypage/main/recent-order-products/index.css';
+import * as styles from '@/features/mypage/recent-order-products/index.css';
 import { PATHS } from '@/const/paths';
 import { useMyOrderList } from '@/hooks/query/order/myOrder';
 import ImageWrapper from '@/components/ui/image';
 
-const RecentOrderProducts = () => {
+export const RecentOrderProducts = () => {
     const { t } = useTranslation();
 
     const { data: myOrderListData } = useMyOrderList({
@@ -112,5 +112,3 @@ const RecentOrderProducts = () => {
         </section>
     );
 };
-
-export default RecentOrderProducts;
