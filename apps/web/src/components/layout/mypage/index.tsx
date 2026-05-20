@@ -3,16 +3,19 @@ import { clsx } from 'clsx';
 import { useRouter } from 'next/router';
 import { memo, type ReactNode, useEffect } from 'react';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
 import LoadingWrapper from '@/components/common/loading-wrapper';
 import { CSRLayout } from '@/components/layout/csr';
 import * as styles from '@/components/layout/mypage/index.css';
 import { MypageSideNavigation } from '@/components/mypage/side-navigation';
 import { PATHS } from '@/const/paths';
+import { profileQueryOptions } from '@/entities/member/profile/queries';
 import { useMyApp } from '@/hooks/myapp';
 import { useAuth } from '@/hooks/useAuth';
 import useResponsive from '@/hooks/utils/useResponsive';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { Only } from '@/shared/components/only';
 import { getPathTitle } from '@/utils/path';
+import { SuspenseQuery } from '@suspensive/react-query';
 
 interface MypageLayoutProps {
     children: ReactNode;
@@ -65,21 +68,29 @@ const MypageLayoutContent = memo(function MypageLayoutContent({
             )}
 
             <section className={styles.sectionContainer}>
-                {pageName && !isMobile && (
-                    <div className={styles.titleContainer}>
-                        <h2 className={styles.title}>{pageName}</h2>
-                    </div>
+                {pageName && (
+                    <Only.Desktop>
+                        <div className={styles.titleContainer}>
+                            <h2 className={styles.title}>{pageName}</h2>
+                        </div>
+                    </Only.Desktop>
                 )}
 
-                <FetchBoundary
+                <ShopbyAsyncBoundary
                     fallback={
-                        <LoadingWrapper isLoading={true}>
+                        <LoadingWrapper isLoading>
                             <span />
                         </LoadingWrapper>
                     }
                 >
-                    <div className={styles.content}>{children}</div>
-                </FetchBoundary>
+                    <SuspenseQuery {...profileQueryOptions()}>
+                        {({ data }) => {
+                            return (
+                                <div className={styles.content}>{children}</div>
+                            );
+                        }}
+                    </SuspenseQuery>
+                </ShopbyAsyncBoundary>
             </section>
         </div>
     );

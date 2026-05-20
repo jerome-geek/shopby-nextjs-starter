@@ -1,38 +1,15 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError, RawAxiosRequestHeaders } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { profile } from '@/api/member';
-import { profileKeys } from '@/hooks/queryKeys';
+import {
+    profileQueryOptions,
+    type UseProfileParams,
+} from '@/entities/member/profile/queries';
 import type { GetProfileResponse } from '@/models/member/profile';
 
-interface UseProfileParams<T = GetProfileResponse> {
-    headers?: RawAxiosRequestHeaders;
-    options?: Omit<
-        UseQueryOptions<
-            GetProfileResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof profileKeys)['getProfile']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useProfile = <T = GetProfileResponse>({
-    headers,
-    options,
-}: UseProfileParams<T> = {}) => {
-    return useQuery({
-        queryKey: profileKeys.getProfile(headers),
-        queryFn: async () => {
-            const { data } = await profile.getProfile({ headers });
-
-            return data;
-        },
-        staleTime: 1000 * 60 * 60,
-        gcTime: 1000 * 60 * 60,
-        ...options,
-    });
+const useProfile = <T = GetProfileResponse>(
+    params: UseProfileParams<T> = {},
+) => {
+    return useQuery(profileQueryOptions(params));
 };
 
 export default useProfile;

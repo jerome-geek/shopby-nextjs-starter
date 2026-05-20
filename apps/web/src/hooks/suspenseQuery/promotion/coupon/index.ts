@@ -1,7 +1,7 @@
-import useCouponList from '@/hooks/query/promotion/coupon/useCouponList';
-import useCouponListByProductNo from '@/hooks/query/promotion/coupon/useCouponListByProductNo';
-import useCouponSummary from '@/hooks/query/promotion/coupon/useCouponSummary';
-import useUserCoupons from '@/hooks/query/promotion/coupon/useUserCoupons';
+import useCouponList from '@/hooks/suspenseQuery/promotion/coupon/useCouponList';
+import useCouponListByProductNo from '@/hooks/suspenseQuery/promotion/coupon/useCouponListByProductNo';
+import useCouponSummary from '@/hooks/suspenseQuery/promotion/coupon/useCouponSummary';
+import useUserCoupons from '@/hooks/suspenseQuery/promotion/coupon/useUserCoupons';
 
 export {
     useCouponList,

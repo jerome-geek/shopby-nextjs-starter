@@ -2,42 +2,37 @@ import { Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/mypage/main/summary/index.css';
+import * as styles from '@/features/mypage/summary/index.css';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
+import { useReviewableProductList } from '@/hooks/query/display/review';
 import useAccumulationSummary from '@/hooks/query/manage/accumulation/useAccumulationSummary';
-import useProfile from '@/hooks/query/member/profile/useProfile';
 import useLikeProductCount from '@/hooks/query/product/profile/useLikeProductCount';
-import { useCouponSummary } from '@/hooks/query/promotion/coupon';
+import { useProfile } from '@/hooks/suspenseQuery/member/profile';
+import { useCouponSummary } from '@/hooks/suspenseQuery/promotion/coupon';
 import useLogout from '@/hooks/useLogout';
 import { POINT } from '@/utils/currency';
-import { useReviewableProductList } from '@/hooks/query/display/review';
 
-const Summary = () => {
+export const MypageSummary = () => {
     const { t } = useTranslation();
-
-    const { data: profileData } = useProfile();
-
-    const memberNo = profileData?.memberNo ?? 0;
 
     const { logout } = useLogout();
 
     const { isMyApp, handleSendShowSettings } = useMyApp();
 
+    const { data: profileData } = useProfile();
+    const memberNo = profileData.memberNo;
+
     const { data: couponSummaryData } = useCouponSummary({
         memberNo,
         params: { expireDay: 90 },
-        options: { enabled: memberNo > 0 },
     });
 
     const { data: likeProductCountData } = useLikeProductCount({
         memberNo,
-        options: { enabled: memberNo > 0 },
     });
 
-    const { data: accumulationSummaryData } = useAccumulationSummary({
-        options: { enabled: memberNo > 0 },
-    });
+    const { data: accumulationSummaryData } = useAccumulationSummary({});
 
     const { data: reviewableProductListData } = useReviewableProductList({
         searchParams: {
@@ -45,7 +40,6 @@ const Summary = () => {
             pageSize: 5,
             hasTotalCount: true,
         },
-        options: { enabled: memberNo > 0 },
     });
 
     const summaryList = [
@@ -122,4 +116,4 @@ const Summary = () => {
     );
 };
 
-export default Summary;
+export default MypageSummary;
