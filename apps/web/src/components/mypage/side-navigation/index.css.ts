@@ -38,6 +38,12 @@ export const menuButtonContainer = style({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+
+    '@media': {
+        [media.desktop]: {
+            display: 'none',
+        },
+    },
 });
 
 export const menuButton = style({

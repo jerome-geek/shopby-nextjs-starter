@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowIcon } from '@/components/icons/ArrowIcon';
 import * as styles from '@/components/mypage/side-navigation/index.css';
 import { PATHS } from '@/const/paths';
-import { useResponsive, useRouteChange } from '@/hooks/utils';
+import { useRouteChange } from '@/hooks/utils';
 
 export type MypageMenuList = {
     title: string;
@@ -34,10 +34,8 @@ export function MypageSideNavigation({
         setIsMenuOpen((prev) => !prev);
     };
 
-    const { isTablet } = useResponsive();
-
     useEffect(() => {
-        if (!isTablet || !isMenuOpen) {
+        if (!isMenuOpen) {
             return;
         }
 
@@ -56,7 +54,7 @@ export function MypageSideNavigation({
         return () => {
             document.removeEventListener('pointerdown', handlePointerDown);
         };
-    }, [isTablet, isMenuOpen]);
+    }, [isMenuOpen]);
 
     const isNavActive = (currentPath: string, href: string) => {
         if (currentPath === href) {
@@ -80,21 +78,17 @@ export function MypageSideNavigation({
             className={styles.nav}
             aria-label='마이페이지 메뉴'
             initial={{ x: -200 }}
-            animate={isTablet ? { x: isMenuOpen ? 0 : -200 } : {}}
-            transition={
-                isTablet ? { damping: 50, stiffness: 500, type: 'spring' } : {}
-            }
+            animate={{ x: isMenuOpen ? 0 : -200 }}
+            transition={{ damping: 50, stiffness: 500, type: 'spring' }}
         >
-            {isTablet && (
-                <div className={styles.menuButtonContainer}>
-                    <button
-                        className={styles.menuButton}
-                        onClick={handleMenuButtonClick}
-                    >
-                        <ArrowIcon direction={isMenuOpen ? 'left' : 'right'} />
-                    </button>
-                </div>
-            )}
+            <div className={styles.menuButtonContainer}>
+                <button
+                    className={styles.menuButton}
+                    onClick={handleMenuButtonClick}
+                >
+                    <ArrowIcon direction={isMenuOpen ? 'left' : 'right'} />
+                </button>
+            </div>
 
             {menuList.map((group) => (
                 <div key={group.title} className={styles.group}>
@@ -134,6 +128,7 @@ export function MypageSideNavigation({
                                                 active && styles.linkActive,
                                             )}
                                             onClick={() => setIsMenuOpen(false)}
+                                            prefetch={false}
                                         >
                                             {item.title}
                                         </Link>
