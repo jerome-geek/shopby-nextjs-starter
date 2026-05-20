@@ -1,23 +1,24 @@
-import { useDebounceValue } from 'usehooks-ts';
 import { useMemo, useState } from 'react';
+import { useDebounceValue } from 'usehooks-ts';
 
-import LoadingWrapper from '@/components/ui/loading-wrapper';
 import { revalidatePath } from '@/api/revalidate';
+import LoadingWrapper from '@/components/ui/loading-wrapper';
 import { useServerApiByPass } from '@/hooks/query/shopby';
-import { useToast } from '@/hooks/utils';
 import useApiError from '@/hooks/useApiError';
-import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
+import { useToast } from '@/hooks/utils';
 import { CloseLineIcon } from '@/icons';
+import { DefaultModalLayoutProps, ModalLayout } from '@/layout/modal';
 
 interface ProductItem {
-    productNo: number;
+    mallProductNo: number;
     productName: string;
-    listImageUrls: string[];
 }
 
 interface ProductSearchResponse {
     totalCount: number;
-    items: ProductItem[];
+    elements: ProductItem[];
+    totalPage: number;
+    lastId: number;
 }
 
 const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
@@ -46,20 +47,20 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
         options: { staleTime: 30_000 },
     });
 
-    const products = data?.items ?? [];
+    const products = data?.elements ?? [];
     const selectedNos = new Set(selectedProducts.keys());
 
     const toggleAll = () => {
-        if (products.every((p) => selectedNos.has(p.productNo))) {
+        if (products.every((p) => selectedNos.has(p.mallProductNo))) {
             setSelectedProducts((prev) => {
                 const next = new Map(prev);
-                products.forEach((p) => next.delete(p.productNo));
+                products.forEach((p) => next.delete(p.mallProductNo));
                 return next;
             });
         } else {
             setSelectedProducts((prev) => {
                 const next = new Map(prev);
-                products.forEach((p) => next.set(p.productNo, p));
+                products.forEach((p) => next.set(p.mallProductNo, p));
                 return next;
             });
         }
@@ -68,9 +69,9 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
     const toggle = (product: ProductItem) => {
         setSelectedProducts((prev) => {
             const next = new Map(prev);
-            next.has(product.productNo)
-                ? next.delete(product.productNo)
-                : next.set(product.productNo, product);
+            next.has(product.mallProductNo)
+                ? next.delete(product.mallProductNo)
+                : next.set(product.mallProductNo, product);
             return next;
         });
     };
@@ -114,7 +115,8 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
     };
 
     const isAllSelected =
-        products.length > 0 && products.every((p) => selectedNos.has(p.productNo));
+        products.length > 0 &&
+        products.every((p) => selectedNos.has(p.mallProductNo));
 
     const selectedList = Array.from(selectedProducts.values());
 
@@ -156,22 +158,15 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
                     <div className='flex flex-wrap gap-2 rounded-lg border border-[#e5e7eb] bg-[#f9fafb] p-3'>
                         {selectedList.map((product) => (
                             <div
-                                key={product.productNo}
-                                className='flex items-center gap-1.5 rounded-full border border-[#e5e7eb] bg-white py-1 pl-1.5 pr-2 text-xs text-[#364153]'
+                                key={product.mallProductNo}
+                                className='flex items-center gap-1.5 rounded-full border border-[#e5e7eb] bg-white px-2 py-1 text-xs text-[#364153]'
                             >
-                                {product.listImageUrls[0] && (
-                                    <img
-                                        src={product.listImageUrls[0]}
-                                        alt={product.productName}
-                                        className='size-5 rounded-full object-cover'
-                                    />
-                                )}
                                 <span className='max-w-[120px] truncate'>
                                     {product.productName}
                                 </span>
                                 <button
                                     type='button'
-                                    onClick={() => remove(product.productNo)}
+                                    onClick={() => remove(product.mallProductNo)}
                                     className='flex items-center text-[#9ca3af] hover:text-[#364153]'
                                 >
                                     <CloseLineIcon className='size-3' />
@@ -203,33 +198,26 @@ const SelectProductModal = ({ ...props }: DefaultModalLayoutProps) => {
                                 <ul>
                                     {products.map((product) => (
                                         <li
-                                            key={product.productNo}
+                                            key={product.mallProductNo}
                                             className='border-b border-[#e5e7eb] last:border-0'
                                         >
                                             <label className='flex cursor-pointer items-center gap-3 px-4 py-3 hover:bg-[#f9fafb]'>
                                                 <input
                                                     type='checkbox'
                                                     checked={selectedNos.has(
-                                                        product.productNo,
+                                                        product.mallProductNo,
                                                     )}
                                                     onChange={() =>
                                                         toggle(product)
                                                     }
                                                     className='size-4 accent-[#ff6900]'
                                                 />
-                                                <img
-                                                    src={
-                                                        product.listImageUrls[0]
-                                                    }
-                                                    alt={product.productName}
-                                                    className='size-10 shrink-0 rounded-md border border-[#e5e7eb] object-cover'
-                                                />
                                                 <div className='min-w-0'>
                                                     <div className='truncate text-sm text-[#101828]'>
                                                         {product.productName}
                                                     </div>
                                                     <div className='text-xs text-[#6a7282]'>
-                                                        No. {product.productNo}
+                                                        No. {product.mallProductNo}
                                                     </div>
                                                 </div>
                                             </label>
