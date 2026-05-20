@@ -26,5 +26,6 @@ export const PATHS = {
             BLACKLIST: '/comments/blacklist',
         },
         RECIPE_SETTINGS: '/recipe-settings',
+        CACHE_MANAGEMENT: '/cache-management',
     },
 };

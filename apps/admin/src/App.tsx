@@ -24,6 +24,7 @@ import NotFound from '@/pages/OtherPage/NotFound';
 import RecipeGroupDetail from '@/pages/RecipeGroup/RecipeGroupDetail';
 import RecipeGroupList from '@/pages/RecipeGroup/RecipeGroupList';
 import RecipeSettings from '@/pages/RecipeSettings/RecipeSettings';
+import CacheManagement from '@/pages/CacheManagement';
 import CommentList from '@/pages/Comment/CommentList';
 import CommentBlacklist from '@/pages/Comment/CommentBlacklist';
 import UserCollectionDetail from '@/pages/UserCollection/UserCollectionDetail';
@@ -126,6 +127,10 @@ export default function App() {
                                 <Route
                                     path={PATHS.APP.COMMENT.BLACKLIST}
                                     element={<CommentBlacklist />}
+                                />
+                                <Route
+                                    path={PATHS.APP.CACHE_MANAGEMENT}
+                                    element={<CacheManagement />}
                                 />
 
                                 {/* Fallback Route */}

@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router';
 import { PATHS } from '@/const/paths';
 import { useSidebar } from '@/context/SidebarContext';
 import {
+    BoltIcon,
     ChatIcon,
     ChefHatIcon,
     ChevronDownIcon,
@@ -27,6 +28,11 @@ const settingsItems: NavItem[] = [
         icon: <SettingsIcon />,
         name: '레시피 설정',
         path: PATHS.APP.RECIPE_SETTINGS,
+    },
+    {
+        icon: <BoltIcon />,
+        name: 'ISR 캐시 관리',
+        path: PATHS.APP.CACHE_MANAGEMENT,
     },
 ];
 
