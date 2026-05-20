@@ -12,14 +12,13 @@ import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-sear
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/mypage/common/mypage-form/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import {
+    InputCheckbox,
     InputContainer,
     InputField,
     InputFieldContainer,
     InputLabel,
     Select,
-    InputCheckbox,
 } from '@/components/ui/input';
 import {
     ADDRESS_MEMO_LIST,
@@ -41,6 +40,7 @@ import {
     shippingAddressSchema,
     ShippingAddressSchemaType,
 } from '@/schema/shippingAddress.schema';
+import { ErrorMessage } from '@/shared/components/form';
 import { parseKrPhoneParts } from '@/utils/phone';
 
 export interface AddressWriteFormProps {

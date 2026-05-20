@@ -8,19 +8,19 @@ import {
 import { useTranslation } from 'react-i18next';
 import { SingleValue } from 'react-select';
 
+import * as styles from '@/components/signup/member-config/index.css';
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/input';
 import {
-    InputRadio,
-    InputLabel,
+    InputCheckbox,
     InputContainer,
     InputField,
-    InputCheckbox,
+    InputLabel,
+    InputRadio,
     Select,
 } from '@/components/ui/input';
 import type { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 import { SignupFormSchemaType } from '@/schema';
-import * as styles from '@/components/signup/member-config/index.css';
+import { ErrorMessage } from '@/shared/components/form';
 
 type MemberConfigProps =
     GetMemberExtraInfoResponse['extraInfoContents'][number] & {

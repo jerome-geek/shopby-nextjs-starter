@@ -11,13 +11,13 @@ import {
     InputField,
     InputFieldContainer,
     InputLabel,
-    TextArea,
 } from '@/components/ui/input';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useSharedCollection } from '@/hooks/query/shop/collection';
 import { useToast } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
+import { TextArea } from '@/shared/components/form';
 
 export interface CollectionFormData {
     title: string;

@@ -2,8 +2,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputRadio } from '@/components/ui/input';
+import { ErrorMessage } from '@/shared/components/form';
 
 const SignupFormSex = ({ disabled }: { disabled?: boolean }) => {
     const { t } = useTranslation();

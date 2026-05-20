@@ -3,10 +3,10 @@ import { Controller, useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
-import { ErrorMessage } from '@/components/ui/input';
-import { Select, InputField, InputFieldContainer } from '@/components/ui/input';
+import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
 import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
 import { useGlobal } from '@/hooks/utils';
+import { ErrorMessage } from '@/shared/components/form';
 
 const SignupFormMobile = ({ disabled }: { disabled?: boolean }) => {
     const { t } = useTranslation();

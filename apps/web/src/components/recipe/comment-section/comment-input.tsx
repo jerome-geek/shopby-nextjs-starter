@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/recipe/comment-section/index.css';
 import { RecipePreviewImage } from '@/components/recipe/preview-image';
-import { TextArea } from '@/components/ui/input';
 import { useCustomDialog } from '@/features/dialog';
 import { useCommonMutation, useRecipeCommentMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import useFileUpload from '@/hooks/utils/useFileUpload';
+import { TextArea } from '@/shared/components/form';
 
 interface CommentInputProps {
     recipeSno: number;

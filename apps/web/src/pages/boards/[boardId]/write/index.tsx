@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import upload from '@/api/storage/image';
 import { Button } from '@/components/ui';
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,
@@ -16,7 +15,6 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-    TextArea,
 } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
@@ -38,6 +36,7 @@ import {
     articleWriteSchema,
     ArticleWriteSchemaType,
 } from '@/schema/article.schema';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface CategoryOption {
     label: string;
@@ -150,8 +149,8 @@ const ArticleWritePage = () => {
 
         return {
             writerName: isLogin
-                ? profileData?.memberName ?? articleData.registerName ?? ''
-                : articleData.registerName ?? '',
+                ? (profileData?.memberName ?? articleData.registerName ?? '')
+                : (articleData.registerName ?? ''),
             password: '',
             boardCategoryNo: articleData.categoryNo ?? undefined,
             articleTitle: articleData.title ?? '',

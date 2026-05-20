@@ -9,7 +9,6 @@ import { NoResult } from '@/components/common/no-result';
 import * as styles from '@/components/layer-contents/product-inquiry-write/index.css';
 import type { DefaultModalLayoutProps } from '@/components/layout';
 import * as inquiryFormStyles from '@/components/mypage/product-inquiries/product-inquiry-register-form/index.css';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,
@@ -17,7 +16,6 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-    TextArea,
 } from '@/components/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 import { useProductInquiryMutation } from '@/hooks/mutations';
@@ -38,6 +36,7 @@ import {
     productInquiryFormSchema,
     type ProductInquiryFormSchemaType,
 } from '@/schema/product-inquiry.schema';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ProductInquiryWriteProps extends DefaultModalLayoutProps {
     productNo: number;
@@ -432,9 +431,7 @@ export const ProductInquiryWrite = ({
                                                         if (!item) {
                                                             return;
                                                         }
-                                                        if (
-                                                            item.value === ''
-                                                        ) {
+                                                        if (item.value === '') {
                                                             emailDomainRef.current?.focus();
                                                         }
                                                         onChange(

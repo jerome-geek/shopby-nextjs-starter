@@ -4,18 +4,13 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/input';
-import {
-    InputFieldContainer,
-    InputLabel,
-    Select,
-    TextArea,
-} from '@/components/ui/input';
+import { InputFieldContainer, InputLabel, Select } from '@/components/ui/input';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
 import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
 import { useAuth } from '@/hooks/useAuth';
 import type { ClaimType } from '@/models';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ClaimReasonProps {
     orderOptionNo: number;

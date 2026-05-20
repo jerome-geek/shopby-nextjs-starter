@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import * as styles from '@/features/member/find-password/components/account-step/index.css';
 import type {
@@ -17,6 +16,7 @@ import { useAuthenticationMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';
 import { useDialog } from '@/hooks/utils';
 import { findPasswordSchema, FindPasswordType } from '@/schema/profile.schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 interface AccountStepProps {
     findMethod: FindPasswordMethod;

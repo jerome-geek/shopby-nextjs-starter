@@ -5,10 +5,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/coupon-register/index.css';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputContainer, InputField } from '@/components/ui/input';
 import { useCouponMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
+import { ErrorMessage } from '@/shared/components/form';
 
 export const CouponRegister = () => {
     const { t } = useTranslation();

@@ -4,16 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { type DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
 import * as styles from '@/components/modal/report/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
-import {
-    InputContainer,
-    InputLabel,
-    Select,
-    TextArea,
-} from '@/components/ui/input';
+import { InputContainer, InputLabel, Select } from '@/components/ui/input';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import { useToast } from '@/hooks/ui';
 import { ReportArticleData } from '@/models/manage/board';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ReportModalProps extends DefaultModalLayoutProps {
     boardNo: string;

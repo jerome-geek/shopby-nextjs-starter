@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/member/find-password/components/password-step/index.css';
@@ -17,6 +16,7 @@ import {
     passwordChangeSchema,
     PasswordChangeType,
 } from '@/schema/profile.schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 interface PasswordStepProps {
     verifiedInfo: VerifiedInfo;

@@ -9,9 +9,9 @@ import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import EmailAuthentication from '@/components/signup/form/email/email-authentication';
-import { ErrorMessage } from '@/components/ui/input';
-import { Select, InputField, InputFieldContainer } from '@/components/ui/input';
+import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
+import { ErrorMessage } from '@/shared/components/form';
 
 const SignupFormEmail = ({
     disabled,

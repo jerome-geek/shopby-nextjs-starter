@@ -2,10 +2,10 @@ import { useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/input';
 import * as styles from '@/components/ui/form/Email.css';
-import { Select, InputField } from '@/components/ui/input';
+import { InputField, Select } from '@/components/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
+import { ErrorMessage } from '@/shared/components/form';
 
 export default function Email() {
     const { t } = useTranslation();

@@ -17,10 +17,10 @@ import { AddressSearchModal } from '@/components/modal/address-search';
 import ReceiverState from '@/components/signup/form/address/receiver-state';
 import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
 import { MOBILE_COUNTRY_CODE_LIST } from '@/const/form';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
+import { ErrorMessage } from '@/shared/components/form';
 
 const SignupFormAddress = () => {
     const { t } = useTranslation();

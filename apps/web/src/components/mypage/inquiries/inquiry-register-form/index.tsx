@@ -11,7 +11,6 @@ import * as styles from '@/components/mypage/inquiries/inquiry-register-form/ind
 import { InquiryTypeList } from '@/components/mypage/inquiries/inquiry-type-list';
 import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,
@@ -19,7 +18,6 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-    TextArea,
 } from '@/components/ui/input';
 import { EMAIL_DOMAIN_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';
@@ -34,6 +32,7 @@ import {
     registerInquirySchema,
     type RegisterInquirySchemaType,
 } from '@/schema/inquiry.schema';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 export interface InquiryRegisterFormProps {
     inquiryNo?: number;

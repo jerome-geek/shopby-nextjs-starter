@@ -8,16 +8,11 @@ import {
 import { REPORT_REASON_OPTIONS } from '@/components/modal/report';
 import * as styles from '@/components/modal/report/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
-import {
-    InputContainer,
-    InputLabel,
-    Select,
-    TextArea,
-} from '@/components/ui/input';
+import { InputContainer, InputLabel, Select } from '@/components/ui/input';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import { useToast } from '@/hooks/ui';
 import { ReportArticleData } from '@/models/manage/board';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ReportBottomSheetProps extends DefaultModalLayoutProps {
     boardNo: string;

@@ -4,8 +4,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/item/index.css';
-import { ErrorMessage } from '@/components/ui/input';
-import { TextArea } from '@/components/ui/input';
 import { Column, Row } from '@/components/ui/layout/flex';
 import { BOARD_REPLY_MAX_LENGTH } from '@/const/board';
 import { useBoardReplyMutation } from '@/hooks/mutations';
@@ -15,6 +13,7 @@ import { useToast } from '@/hooks/ui';
 import { useDialog } from '@/hooks/utils';
 import type { AuthorityConfigType } from '@/models';
 import type { ReplyList, UpdateArticleData } from '@/models/manage/board';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 const CommentItem = ({
     reply,

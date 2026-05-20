@@ -1,10 +1,10 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/input';
+import * as styles from '@/components/ui/form/Birthday.css';
 import { Select } from '@/components/ui/input';
 import { DAY_LIST, MONTH_LIST, YEAR_LIST } from '@/const/date';
-import * as styles from '@/components/ui/form/Birthday.css';
+import { ErrorMessage } from '@/shared/components/form';
 
 export default function Birthday() {
     const { t } = useTranslation();

@@ -1,17 +1,17 @@
 'use client';
 
-import { overlay } from 'overlay-kit';
 import Link from 'next/link';
+import { overlay } from 'overlay-kit';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { DefaultDialogProps, DialogLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
+import * as styles from '@/components/ui/dialog/product-inquiry/index.css';
 import {
     InputCheckbox,
     InputField,
     InputLabel,
-    TextArea,
     Select,
 } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
@@ -20,8 +20,7 @@ import useApiError from '@/hooks/useApiError';
 import useDialog from '@/hooks/utils/useDialog';
 import type { GetMallResponse } from '@/models/admin/mall';
 import type { WriteProductInquiryData } from '@/models/display/productInquiry';
-import * as styles from '@/components/ui/dialog/product-inquiry/index.css';
-import { DialogLayout, DefaultDialogProps } from '@/components/layout';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ProductInquiryDialogProps extends DefaultDialogProps {
     title?: string;

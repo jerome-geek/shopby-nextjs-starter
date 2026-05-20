@@ -3,7 +3,6 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/mypage/claims/forms/bank-info/index.css';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputField,
@@ -14,6 +13,7 @@ import {
 import { BANK_MAP } from '@/const/label';
 import { useAuth } from '@/hooks/useAuth';
 import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import { ErrorMessage } from '@/shared/components/form';
 
 type ClaimBankInfoProps = Pick<
     GetOrderOptionDetailForClaimResponse,

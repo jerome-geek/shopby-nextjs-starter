@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputContainer,
     InputField,
@@ -13,6 +12,7 @@ import {
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 import * as styles from '@/features/member/find-id/components/filed/email/index.css';
 import { FindIdType } from '@/schema/profile.schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 export const EmailField = () => {
     const { t } = useTranslation();

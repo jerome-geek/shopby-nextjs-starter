@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/index.css';
 import CommentItem from '@/components/board/comments/item';
-import { ErrorMessage } from '@/components/ui/input';
-import { TextArea } from '@/components/ui/input';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';
 import { BOARD_PAGINATION, BOARD_REPLY_MAX_LENGTH } from '@/const/board';
@@ -14,6 +12,7 @@ import { useBoardReplyList } from '@/hooks/query/manage/board';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface CommentsProps {
     boardNo: string;

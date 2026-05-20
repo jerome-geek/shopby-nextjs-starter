@@ -15,8 +15,7 @@ import OptionText from '@/components/mypage/common/option-text';
 import * as styles from '@/components/mypage/review/form/index.css';
 import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/ui/file-upload';
-import { ErrorMessage } from '@/components/ui/input';
-import { InputContainer, InputLabel, TextArea } from '@/components/ui/input';
+import { InputContainer, InputLabel } from '@/components/ui/input';
 import { ORDER_STATUS_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { useReviewMutation } from '@/hooks/mutations';
@@ -35,6 +34,7 @@ import {
     type RegisterReviewSchemaType,
     type UpdateReviewSchemaType,
 } from '@/schema/review.schema';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ReviewFormProps {
     reviewNo?: number;

@@ -7,7 +7,6 @@ import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-sear
 import type { AddressRegister } from '@/components/layer-contents/address-search';
 import * as styles from '@/components/layer-contents/shipping-address-change/index.css';
 import { AddressSearchModal } from '@/components/modal/address-search';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,
@@ -26,6 +25,7 @@ import {
     getChangeShippingAddressSchema,
     type ChangeShippingAddressSchemaType,
 } from '@/schema/shippingAddress.schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 export const SHIPPING_ADDRESS_CHANGE_FORM_ID = 'shipping-address-change-form';
 
@@ -294,7 +294,7 @@ export const ShippingAddressChangeContent = ({
                             const deliveryMemo =
                                 opt?.value === '직접 입력'
                                     ? ''
-                                    : opt?.value ?? '';
+                                    : (opt?.value ?? '');
 
                             setValue('deliveryMemo', deliveryMemo, {
                                 shouldDirty: true,

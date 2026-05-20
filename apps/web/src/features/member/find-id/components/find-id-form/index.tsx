@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { FindIdResultBottomSheet } from '@/components/bottom-sheet/find-id-result';
 import { FindIdResultModal } from '@/components/modal/find-id-result';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { EmailField } from '@/features/member/find-id/components/filed/email';
 import { MobileField } from '@/features/member/find-id/components/filed/mobile';
@@ -19,6 +18,7 @@ import { useToast } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import type { AuthType } from '@/models';
 import { findIdSchema, FindIdType } from '@/schema/profile.schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 const FIND_ID_METHODS = [
     { label: '이메일로 찾기', value: 'EMAIL' },

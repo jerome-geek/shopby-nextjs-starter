@@ -8,7 +8,6 @@ import addressApi from '@/api/manage/address';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
 import { Button } from '@/components/ui';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,
@@ -30,6 +29,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import type { ClaimType } from '@/models';
 import type { ClaimSchemaMapType } from '@/schema/claim.schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 interface ClaimReturnWayProps {
     orderOptionNo: number;

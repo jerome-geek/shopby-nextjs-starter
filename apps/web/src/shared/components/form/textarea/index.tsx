@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as styles from '@/components/ui/input/textarea/index.css';
+import * as styles from '@/shared/components/form/textarea/index.css';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     ref?: React.Ref<HTMLTextAreaElement>;

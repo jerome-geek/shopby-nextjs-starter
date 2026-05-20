@@ -8,10 +8,10 @@ import { profile } from '@/api/member';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
 import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputField, InputFieldContainer } from '@/components/ui/input';
 import { useToast } from '@/hooks/ui';
 import { signupDuplicateCheckMemberIdSchema } from '@/schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 const SignupFormId = () => {
     const { t } = useTranslation();

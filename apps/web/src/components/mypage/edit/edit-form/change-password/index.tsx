@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
 } from '@/components/ui/input';
 import { useResponsive } from '@/hooks/utils';
+import { ErrorMessage } from '@/shared/components/form';
 
 export const ChangePassword = () => {
     const { t } = useTranslation();

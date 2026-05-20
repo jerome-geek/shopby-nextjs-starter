@@ -2,10 +2,10 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputCheckbox } from '@/components/ui/input/checkbox';
 import { QuantityController } from '@/components/ui/quantity-controller';
 import type { ClaimableOption } from '@/models/claim';
+import { ErrorMessage } from '@/shared/components/form';
 
 interface ClaimOrderOptionsProps {
     orderOptionList: ClaimableOption[];

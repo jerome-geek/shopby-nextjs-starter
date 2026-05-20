@@ -9,7 +9,6 @@ import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-sear
 import { AddressRegister } from '@/components/layer-contents/address-search';
 import { AddressSearchModal } from '@/components/modal';
 import { Button } from '@/components/ui';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,
@@ -27,6 +26,7 @@ import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOpt
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import type { ClaimType } from '@/models';
+import { ErrorMessage } from '@/shared/components/form';
 
 interface ClaimExchangeAddressProps {
     orderOptionNo: number;

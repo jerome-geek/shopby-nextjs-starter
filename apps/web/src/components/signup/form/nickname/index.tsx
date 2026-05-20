@@ -1,16 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
 
 import { profile } from '@/api/member';
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import { InputField, InputFieldContainer } from '@/components/ui/input';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useToast } from '@/hooks/ui';
-import * as styles from '@/components/signup/form/index.css';
+import { ErrorMessage } from '@/shared/components/form';
 
 const SignupFormNickname = ({
     isDefaultDuplicated = true,

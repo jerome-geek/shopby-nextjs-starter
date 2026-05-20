@@ -6,15 +6,15 @@ import { z } from 'zod';
 
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
 } from '@/components/ui/input';
+import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
-import useSnsLogin from '@/features/member/hooks/useSnsLogin';
+import { ErrorMessage } from '@/shared/components/form';
 
 const schema = z.object({
     password: z.string().min(1, '비밀번호를 입력해 주세요.'),

@@ -12,14 +12,12 @@ import { ProductSelectModal } from '@/components/modal/product-select';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
 import * as styles from '@/components/mypage/product-inquiries/product-inquiry-register-form/index.css';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,
     InputField,
     InputFieldContainer,
     InputLabel,
-    TextArea,
     Select,
 } from '@/components/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
@@ -42,6 +40,7 @@ import {
     productInquiryFormSchema,
     type ProductInquiryFormSchemaType,
 } from '@/schema/product-inquiry.schema';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 export interface ProductInquiryRegisterFormProps {
     inquiryNo?: number;

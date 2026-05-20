@@ -10,7 +10,6 @@ import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
 import { AuthLayout } from '@/components/layout';
 import { Button } from '@/components/ui/button';
-import { ErrorMessage } from '@/components/ui/input';
 import {
     InputCheckbox,
     InputContainer,
@@ -24,9 +23,10 @@ import useApiError from '@/hooks/useApiError';
 import { NextPageWithLayout } from '@/pages/_app';
 import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { ErrorMessage } from '@/shared/components/form';
+import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 import * as styles from '@/styles/pages/login.css';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
-import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
 const LoginPage: NextPageWithLayout = () => {
     const isDev = process.env.NEXT_PUBLIC_MODE === 'development';

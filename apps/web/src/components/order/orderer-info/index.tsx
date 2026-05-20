@@ -2,9 +2,7 @@ import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/orderer-info/index.css';
-import { errorMessage } from '@/components/ui/input/error-message.css';
 import {
-    ErrorMessage,
     InputField,
     InputFieldContainer,
     InputLabel,
@@ -14,6 +12,8 @@ import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { useAuth } from '@/hooks/useAuth';
 import { PaymentReserveSchemaType } from '@/schema';
 import { PhonePrefixType } from '@/schema/common.schema';
+import { ErrorMessage } from '@/shared/components/form';
+import * as errorMessageStyles from '@/shared/components/form/error-message/index.css';
 
 const isGlobalMall = process.env.NEXT_PUBLIC_LOCALE !== 'ko';
 
@@ -112,7 +112,7 @@ const OrdererInfo = () => {
                         errors.orderer?.ordererContact1?.middle?.message ||
                         errors.orderer?.ordererContact1?.suffix?.message
                     ) && (
-                        <p className={errorMessage}>
+                        <p className={errorMessageStyles.errorMessage}>
                             {t('휴대폰 번호를 입력해주세요.')}
                         </p>
                     )}

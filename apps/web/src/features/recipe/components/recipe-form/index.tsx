@@ -2,19 +2,14 @@ import { motion } from 'motion/react';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ErrorMessage } from '@/components/ui/input';
-import {
-    InputContainer,
-    InputField,
-    InputLabel,
-    TextArea,
-} from '@/components/ui/input';
+import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
 import { RecipeImageSection } from '@/features/recipe/components/recipe-form/RecipeImageSection';
 import { RecipeIngredientSection } from '@/features/recipe/components/recipe-form/RecipeIngredientSection';
 import { RecipeStepSection } from '@/features/recipe/components/recipe-form/RecipeStepSection';
 import { useRecipeForm } from '@/features/recipe/utils/useRecipeForm';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 import * as styles from '@/pages/recipes/write/index.css';
+import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface RecipeFormProps {
     isModify?: boolean;

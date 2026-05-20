@@ -3,7 +3,7 @@ import { ErrorMessage as RHFErrorMessage } from '@hookform/error-message';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { errorMessage } from '@/components/ui/input/error-message.css';
+import * as styles from '@/shared/components/form/error-message/index.css';
 
 export const ErrorMessage = ({ name }: { name: string }) => {
     const { t } = useTranslation();
@@ -33,7 +33,7 @@ export const ErrorMessage = ({ name }: { name: string }) => {
             errors={errors}
             name={name}
             render={({ message }) => (
-                <p className={errorMessage}>{t(message)}</p>
+                <p className={styles.errorMessage}>{t(message)}</p>
             )}
         />
     );
