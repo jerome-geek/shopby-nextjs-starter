@@ -38,7 +38,6 @@ export const OrderDetailView = ({
     orderConfigurationData,
     backPath,
 }: OrderDetailViewProps) => {
-    console.log('🚀 ~ OrderDetailView ~ orderDetailData:', orderDetailData);
     const { t } = useTranslation();
     const router = useRouter();
     const { isMobile } = useResponsive();
@@ -309,20 +308,25 @@ export const OrderDetailView = ({
                                                     }
                                                 >
                                                     {delivery.orderOptions.map(
-                                                        (option) => (
-                                                            <OrderOptionsItem
-                                                                key={
-                                                                    option.orderOptionNo
-                                                                }
-                                                                {...option}
-                                                                inputs={
-                                                                    option.inputs
-                                                                }
-                                                                orderNo={
-                                                                    orderDetailData.orderNo
-                                                                }
-                                                            />
-                                                        ),
+                                                        (option) => {
+                                                            return (
+                                                                <li
+                                                                    key={
+                                                                        option.orderOptionNo
+                                                                    }
+                                                                >
+                                                                    <OrderOptionsItem
+                                                                        {...option}
+                                                                        inputs={
+                                                                            option.inputs
+                                                                        }
+                                                                        orderNo={
+                                                                            orderDetailData.orderNo
+                                                                        }
+                                                                    />
+                                                                </li>
+                                                            );
+                                                        },
                                                     )}
                                                 </ul>
                                                 <div

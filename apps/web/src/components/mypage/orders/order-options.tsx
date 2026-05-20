@@ -46,14 +46,17 @@ export const OrderOptions = ({ optionItems }: OrderOptionsProps) => {
                     </div>
 
                     <ul className={styles.orderOptionList}>
-                        {itemList(options).map((option) => (
-                            <OrderOptionsItem
-                                key={option.orderOptionNo}
-                                {...option}
-                                inputs={option.inputs}
-                                orderNo={options.orderNo}
-                            />
-                        ))}
+                        {itemList(options).map((option) => {
+                            return (
+                                <li key={option.orderOptionNo}>
+                                    <OrderOptionsItem
+                                        {...option}
+                                        inputs={option.inputs}
+                                        orderNo={options.orderNo}
+                                    />
+                                </li>
+                            );
+                        })}
                     </ul>
                 </li>
             ))}

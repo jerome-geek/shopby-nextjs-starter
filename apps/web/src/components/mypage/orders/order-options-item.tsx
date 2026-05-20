@@ -101,7 +101,7 @@ export const OrderOptionsItem = ({
     }, [nextActions, isFreeGift, isExchangeDisabled]);
 
     return (
-        <li className={styles.itemContainer}>
+        <div className={styles.itemContainer}>
             <div className={styles.productInfoContainer}>
                 <Link
                     href={
@@ -227,6 +227,6 @@ export const OrderOptionsItem = ({
                     </Button>
                 )}
             </div>
-        </li>
+        </div>
     );
 };
