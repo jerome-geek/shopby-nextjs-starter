@@ -1,6 +1,7 @@
 import { isEmpty } from '@fxts/core';
 
 import { NoResult } from '@/components/common/no-result';
+import Seo from '@/components/common/seo';
 import { ProductCard } from '@/components/product';
 import { Column } from '@/components/ui/layout/flex';
 import PagingV2 from '@/components/ui/paging-v2';
@@ -28,6 +29,7 @@ const BestProductsPage = () => {
 
     return (
         <div className={styles.container}>
+            <Seo title='베스트 랭킹' />
             <Column>
                 <Column style={{ gap: isMobile ? '20px' : '32px' }}>
                     <Only.Desktop>

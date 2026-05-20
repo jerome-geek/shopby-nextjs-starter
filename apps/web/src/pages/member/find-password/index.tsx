@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AuthLayout } from '@/components/layout';
+import Seo from '@/components/common/seo';
 import { PATHS } from '@/const/paths';
 import { AccountStep } from '@/features/member/find-password/components/account-step';
 import { CertificationStep } from '@/features/member/find-password/components/certification-step';
@@ -39,6 +40,7 @@ const FindPasswordPage: NextPageWithLayout = () => {
 
     return (
         <div className={styles.container}>
+            <Seo title='비밀번호 찾기' noindex />
             {step === 'IDLE' && (
                 <AccountStep
                     findMethod={findMethod}

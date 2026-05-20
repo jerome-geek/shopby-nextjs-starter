@@ -9,6 +9,7 @@ import {
     prop,
     toArray,
 } from '@fxts/core';
+import Seo from '@/components/common/seo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
 import type { GetServerSideProps } from 'next';
@@ -331,6 +332,7 @@ const SignupRegister: NextPageWithLayout<SignupRegisterProps> = ({
 
     return (
         <FormProvider {...methods}>
+            <Seo title='회원 정보 입력' noindex />
             <form onSubmit={onSubmit} className={styles.form}>
                 {!isSocialLogin && (
                     <>

@@ -1,4 +1,5 @@
 import { GuestLayout } from '@/components/layout';
+import Seo from '@/components/common/seo';
 import { ClaimCancelForm } from '@/components/mypage/claims/forms/cancel';
 import { ClaimExchangeForm } from '@/components/mypage/claims/forms/exchange';
 import { ClaimReturnForm } from '@/components/mypage/claims/forms/return';
@@ -42,6 +43,7 @@ const GuestClaimRequestPage: NextPageWithLayout = () => {
 
     return (
         <>
+            <Seo title='비회원 클레임 신청' noindex />
             {claimType === 'CANCEL' && <ClaimCancelForm />}
             {claimType === 'RETURN' && <ClaimReturnForm />}
             {claimType === 'EXCHANGE' && <ClaimExchangeForm />}

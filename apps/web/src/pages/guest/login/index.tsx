@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
+import Seo from '@/components/common/seo';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -70,6 +71,7 @@ const GuestLoginPage: NextPageWithLayout = () => {
         <FormProvider {...methods}>
             {/* 주문 조회 폼 */}
             <div className={styles.container}>
+                <Seo title='비회원 주문조회' noindex />
                 <div className={styles.loginFormSection}>
                     <form className={styles.form} onSubmit={onSubmit}>
                         <div className={styles.inputGroupContainer}>

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 
 import { GuestLayout } from '@/components/layout';
+import Seo from '@/components/common/seo';
 import { PATHS } from '@/const/paths';
 import { OrderDetailView } from '@/features/order/components/order-detail-view';
 import useGuestOrderDetail from '@/hooks/suspenseQuery/order/guestOrder/useGuestOrderDetail';
@@ -17,11 +18,14 @@ const GuestOrderPage: NextPageWithLayout = () => {
     });
 
     return (
-        <OrderDetailView
-            orderDetailData={orderDetailData}
-            orderConfigurationData={orderConfigurationData}
-            backPath={PATHS.GUEST.LOGIN}
-        />
+        <>
+            <Seo title='비회원 주문조회' noindex />
+            <OrderDetailView
+                orderDetailData={orderDetailData}
+                orderConfigurationData={orderConfigurationData}
+                backPath={PATHS.GUEST.LOGIN}
+            />
+        </>
     );
 };
 

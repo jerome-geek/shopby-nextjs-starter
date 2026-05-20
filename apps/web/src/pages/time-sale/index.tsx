@@ -1,4 +1,5 @@
 import { isEmpty, map, pipe, toArray } from '@fxts/core';
+import Seo from '@/components/common/seo';
 import { useLenis } from 'lenis/react';
 import { ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -220,6 +221,7 @@ const TimeSale = () => {
 
     return (
         <div className={styles.container}>
+            <Seo title='타임특가' />
             <div className={styles.topContainer}>
                 <div className={styles.imageContainer}>
                     <img

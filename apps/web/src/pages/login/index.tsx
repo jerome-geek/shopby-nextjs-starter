@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SuspenseQuery } from '@suspensive/react-query';
+import Seo from '@/components/common/seo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -99,6 +100,7 @@ const LoginPage: NextPageWithLayout = () => {
     return (
         <FormProvider {...methods}>
             <div className={styles.container}>
+                <Seo title='로그인' noindex />
                 <ShopbyAsyncBoundary>
                     <SuspenseQuery
                         {...bannerListOptions({

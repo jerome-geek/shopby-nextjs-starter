@@ -1,4 +1,5 @@
 import { ProductListSearchInput } from '@/components/product-list/search-input';
+import Seo from '@/components/common/seo';
 import { Column } from '@/components/ui/layout/flex';
 import { SearchBodyContainer } from '@/features/search/components/search-body-container';
 import { useResponsive } from '@/hooks/utils';
@@ -9,6 +10,7 @@ const Search = () => {
 
     return (
         <Column style={{ gap: '90px', paddingTop: isTablet ? '0' : '66px' }}>
+            <Seo title='검색' />
             {!isTablet && (
                 <div className={styles.searchInputContainer}>
                     <ProductListSearchInput syncKeywordFromUrl />

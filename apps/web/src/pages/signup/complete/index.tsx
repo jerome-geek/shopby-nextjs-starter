@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { AuthLayout } from '@/components/layout';
+import Seo from '@/components/common/seo';
 import { Skeleton } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
@@ -48,6 +49,7 @@ const SignupComplete: NextPageWithLayout = () => {
 
     return (
         <div className={styles.container}>
+            <Seo title='회원가입 완료' noindex />
             <ShopbyAsyncBoundary fallback={<SignupCompleteSkeleton />}>
                 <SuspenseQuery
                     {...bannerListOptions({

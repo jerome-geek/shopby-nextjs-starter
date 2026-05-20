@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import { AuthLayout } from '@/components/layout';
+import Seo from '@/components/common/seo';
 import { PATHS } from '@/const/paths';
 import { FindIdForm } from '@/features/member/find-id/components/find-id-form';
 import { useMyApp } from '@/hooks/myapp';
@@ -25,6 +26,7 @@ const FindIdPage: NextPageWithLayout = () => {
 
     return (
         <div className={styles.container}>
+            <Seo title='아이디 찾기' noindex />
             <FindIdForm />
 
             <div className={styles.linkContainer}>

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
+import Seo from '@/components/common/seo';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -323,6 +324,7 @@ const ArticleWritePage = () => {
 
     return (
         <FormProvider {...methods}>
+            <Seo title={isModify ? '게시글 수정' : '게시글 작성'} noindex />
             <Column gap='lg' className={styles.page}>
                 {!isMobile && (
                     <h1 className={styles.pageTitle}>

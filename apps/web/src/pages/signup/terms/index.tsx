@@ -7,6 +7,7 @@ import {
     pipe,
     toArray,
 } from '@fxts/core';
+import Seo from '@/components/common/seo';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { type ReactElement, useContext, useMemo, useState } from 'react';
@@ -256,6 +257,7 @@ const SignupTerms: NextPageWithLayout = () => {
 
     return (
         <div className={styles.container}>
+            <Seo title='약관동의' noindex />
             <div className={styles.titleContainer}>
                 <div className={styles.contentsContainer}>
                     {/* 전체 동의 섹션 */}

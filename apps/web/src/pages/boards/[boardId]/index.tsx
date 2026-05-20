@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import Seo from '@/components/common/seo';
 import { ArrowUpDown, LockKeyhole, Paperclip } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -329,9 +330,12 @@ const BoardsContent = () => {
         );
     });
 
-    return !currentBoardConfig ? (
-        <Error errorMessage='존재하지 않는 게시판입니다.' />
-    ) : (
+    return (
+        <>
+            <Seo title={currentBoardConfig?.name ?? '게시판'} />
+            {!currentBoardConfig ? (
+                <Error errorMessage='존재하지 않는 게시판입니다.' />
+            ) : (
         <Column gap={isMobile ? 'lg' : 'xl'} className={styles.boardPageMobile}>
             {!isMobile && (
                 <h1 className={styles.title}>
@@ -856,6 +860,8 @@ const BoardsContent = () => {
                 )}
             </Column>
         </Column>
+            )}
+        </>
     );
 };
 

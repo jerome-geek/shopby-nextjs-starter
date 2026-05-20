@@ -2,6 +2,7 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticProps } from 'next';
 
 import { banner } from '@/api/display';
+import Seo from '@/components/common/seo';
 import SocialLoginList from '@/components/auth/social-login-list';
 import FetchBoundary from '@/components/common/FetchBoundary';
 import { AuthLayout } from '@/components/layout';
@@ -18,6 +19,7 @@ const BANNER_LIST = [BANNER_ID.REGISTER_METHOD];
 const SignupRegisterMethod: NextPageWithLayout = () => {
     return (
         <div className={styles.container}>
+            <Seo title='회원가입' noindex />
             <div className={styles.titleContainer}>
                 <p className={styles.description}>
                     회원가입하면 특별한 혜택을 받을 수 있어요.
