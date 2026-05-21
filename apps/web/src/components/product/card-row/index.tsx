@@ -7,8 +7,8 @@ import {
 import * as styles from '@/components/product/card-row/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
-import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/shared/utils/shopby';
+import { CURRENCY } from '@/utils/currency';
 
 import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
 
@@ -59,14 +59,21 @@ const ProductCardRow = ({
             )}
 
             <div className={styles.productInfoContainer}>
+                {brandName && (
+                    <Link
+                        href={`${PATHS.SEARCH}?tab=shopping&pageNumber=1&brandNos=${brandNo}`}
+                        prefetch={false}
+                        className={styles.brandInfoWrapper}
+                    >
+                        <span className={styles.brand}>{brandName}</span>
+                    </Link>
+                )}
+
                 <Link
                     href={`${PATHS.PRODUCTS.MAIN}/${productNo}`}
-                    prefetch={false}
-                    className={styles.brandInfoWrapper}
+                    className={styles.productName}
                 >
-                    {!!brandName && <span>{brandName}</span>}
-
-                    <h3 className={styles.productName}>{productName}</h3>
+                    {productName}
                 </Link>
 
                 <div className={styles.priceWrapper}>

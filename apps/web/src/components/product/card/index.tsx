@@ -9,8 +9,8 @@ import type { DeliveryConditionType } from '@/models';
 import type { StickerInfo } from '@/models/display';
 import type { ImageUrlType } from '@/models/product';
 import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
-import { CURRENCY } from '@/utils/currency';
 import { normalizeImageUrl } from '@/shared/utils/shopby';
+import { CURRENCY } from '@/utils/currency';
 
 export interface ProductCardProps {
     productNo: number;
@@ -93,7 +93,7 @@ export const ProductCard = ({
                     {brandName && (
                         <Link
                             prefetch={false}
-                            href={`${PATHS.BRANDS.MAIN}/${brandNo}`}
+                            href={`${PATHS.SEARCH}?tab=shopping&pageNumber=1&brandNos=${brandNo}`}
                             className={styles.brand}
                         >
                             <span>{brandName}</span>
