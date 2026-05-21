@@ -80,9 +80,10 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
 
     const { isSaleEnd, productContent } = useProductInfo(productNo);
 
-    const { discountRate, buyPrice, salePrice } = useProductPrice({
-        productNo,
-    });
+    const { discountRate, buyPrice, salePrice, couponDiscountAmt } =
+        useProductPrice({
+            productNo,
+        });
     const {
         isDefaultOptionUsed,
         isFlatOptionUsed,
@@ -96,6 +97,8 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
         useAdditionalDiscountByProductNos({
             searchParams: { productNos: [productNo] },
         });
+
+    const isCouponDownloadable = couponDiscountAmt > 0;
 
     const { onLikeButtonClick } = useProductLike();
 
@@ -306,12 +309,14 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                 </span>
                             </div>
                         </div>
-                        <button
-                            className={styles.couponButton}
-                            onClick={onCouponDownloadClick}
-                        >
-                            {t('쿠폰 받기')}
-                        </button>
+                        {isCouponDownloadable && (
+                            <button
+                                className={styles.couponButton}
+                                onClick={onCouponDownloadClick}
+                            >
+                                {t('쿠폰 받기')}
+                            </button>
+                        )}
                     </div>
 
                     <div className={styles.additionalInfoContainer}>
