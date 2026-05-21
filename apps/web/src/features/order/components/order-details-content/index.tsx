@@ -180,7 +180,7 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                                 orderCnt={option.orderCnt}
                                 buyAmt={option.price.buyAmt}
                                 isExtraProduct={option.isExtraProduct}
-                                baseProductName={option.baseProductName}
+                                baseProductName={option.baseProductName ?? ''}
                             />
                         );
                     })}

@@ -59,7 +59,9 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                                         optionLabels={optionLabels}
                                         orderCnt={option.orderCnt}
                                         buyAmt={option.price.buyAmt}
-                                        baseProductName={option.baseProductName}
+                                        baseProductName={
+                                            option.baseProductName ?? ''
+                                        }
                                     />
                                 </li>
                             );
