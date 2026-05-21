@@ -1,8 +1,4 @@
-import {
-    queryOptions,
-    type UseQueryOptions,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
+import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError, RawAxiosRequestHeaders } from 'axios';
 
 import { profile } from '@/api/member';
@@ -12,18 +8,12 @@ import type { GetProfileResponse } from '@/models/member/profile';
 export interface UseProfileParams<T = GetProfileResponse> {
     headers?: RawAxiosRequestHeaders;
     options?: Omit<
-        | UseQueryOptions<
-              GetProfileResponse,
-              AxiosError<ShopByErrorResponse>,
-              T,
-              ReturnType<(typeof profileKeys)['getProfile']>
-          >
-        | UseSuspenseQueryOptions<
-              GetProfileResponse,
-              AxiosError<ShopByErrorResponse>,
-              T,
-              ReturnType<(typeof profileKeys)['getProfile']>
-          >,
+        UseQueryOptions<
+            GetProfileResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof profileKeys)['getProfile']>
+        >,
         'queryKey' | 'queryFn'
     >;
 }

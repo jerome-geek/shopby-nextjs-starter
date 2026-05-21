@@ -1,10 +1,10 @@
 import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
 import {
+    MypageShortcuts,
+    MypageSummary,
     OrderStatusSummary,
     OrderStatusSummarySkeleton,
-    MypageSummary,
-    MypageShortcuts,
     OrderSummary,
     RecentOrderProducts,
 } from '@/features/mypage';
@@ -16,27 +16,28 @@ export default function MypageMainPage() {
     return (
         <>
             <Seo title='마이페이지' noindex={true} />
+
             <div className={styles.container}>
-            <ShopbyAsyncBoundary>
-                <MypageSummary />
-            </ShopbyAsyncBoundary>
+                <ShopbyAsyncBoundary>
+                    <MypageSummary />
+                </ShopbyAsyncBoundary>
 
-            <ShopbyAsyncBoundary fallback={<OrderStatusSummarySkeleton />}>
-                <OrderStatusSummary />
-            </ShopbyAsyncBoundary>
+                <ShopbyAsyncBoundary fallback={<OrderStatusSummarySkeleton />}>
+                    <OrderStatusSummary />
+                </ShopbyAsyncBoundary>
 
-            <ShopbyAsyncBoundary>
-                <OrderSummary />
-            </ShopbyAsyncBoundary>
+                <ShopbyAsyncBoundary>
+                    <OrderSummary />
+                </ShopbyAsyncBoundary>
 
-            <ShopbyAsyncBoundary>
-                <RecentOrderProducts />
-            </ShopbyAsyncBoundary>
+                <ShopbyAsyncBoundary>
+                    <RecentOrderProducts />
+                </ShopbyAsyncBoundary>
 
-            <Only.Mobile>
-                <MypageShortcuts />
-            </Only.Mobile>
-        </div>
+                <Only.Mobile>
+                    <MypageShortcuts />
+                </Only.Mobile>
+            </div>
         </>
     );
 }
