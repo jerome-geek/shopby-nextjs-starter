@@ -2,17 +2,19 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/order-product-item/index.css';
 import { useResponsive } from '@/hooks/utils';
-import { CURRENCY } from '@/utils/currency';
 import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
+import { CURRENCY } from '@/utils/currency';
 
 interface OrderProductItemProps {
     imageUrl: string;
     productName: string;
     brandName?: string;
+    isExtraProduct?: boolean;
     optionLabels: { label: string; value: string }[];
     orderCnt: number;
     buyAmt: number;
     className?: string;
+    baseProductName?: string;
 }
 
 /**
@@ -23,10 +25,12 @@ export const OrderProductItem = ({
     imageUrl,
     productName,
     brandName,
+    isExtraProduct = false,
     optionLabels,
     orderCnt,
     buyAmt,
     className,
+    baseProductName,
 }: OrderProductItemProps) => {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
@@ -44,7 +48,19 @@ export const OrderProductItem = ({
                     {brandName && (
                         <p className={styles.brandName}>{brandName}</p>
                     )}
-                    <h4 className={styles.productName}>{productName}</h4>
+                    {baseProductName && (
+                        <span className={styles.baseProductName}>
+                            <strong>[본상품]</strong> {baseProductName}
+                        </span>
+                    )}
+                    <h4 className={styles.productName}>
+                        {isExtraProduct && (
+                            <span className={styles.itemExtraProductBadge}>
+                                {t('추가상품')}
+                            </span>
+                        )}
+                        {productName}
+                    </h4>
                     <dl className={styles.optionList}>
                         {optionLabels.map(({ label, value }, index) => (
                             <div key={index} className={styles.optionItem}>

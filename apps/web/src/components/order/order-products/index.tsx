@@ -55,9 +55,11 @@ const OrderProducts = ({ deliveryGroups }: OrderProductsProps) => {
                                         }
                                         productName={product.productName}
                                         brandName={product.brandName ?? ''}
+                                        isExtraProduct={option.isExtraProduct}
                                         optionLabels={optionLabels}
                                         orderCnt={option.orderCnt}
                                         buyAmt={option.price.buyAmt}
+                                        baseProductName={option.baseProductName}
                                     />
                                 </li>
                             );

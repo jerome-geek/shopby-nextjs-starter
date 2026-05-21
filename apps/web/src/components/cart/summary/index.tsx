@@ -53,6 +53,7 @@ const CartSummary = ({ checkedCartNoList }: CartSummaryProps) => {
                         inputLabel: input.inputLabel,
                         inputValue: input.inputValue,
                     })),
+                    baseProductNo: c.baseProductNo,
                 })),
                 toArray,
             );

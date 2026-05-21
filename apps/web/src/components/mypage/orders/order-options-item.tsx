@@ -135,9 +135,7 @@ export const OrderOptionsItem = ({
                     {isExtraProduct ? (
                         <>
                             <p className={styles.baseProductName}>
-                                <span className={styles.productBadge}>
-                                    [{t('본상품')}]
-                                </span>
+                                <strong>[{t('본상품')}]</strong>{' '}
                                 {baseProductName}
                             </p>
                             <p

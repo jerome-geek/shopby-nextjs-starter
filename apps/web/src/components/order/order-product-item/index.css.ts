@@ -62,6 +62,37 @@ export const brandName = style([
     },
 ]);
 
+export const baseProductName = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
+    },
+]);
+
+export const itemExtraProductBadge = style([
+    textStyles.caption1Regular,
+    {
+        width: 'fit-content',
+        padding: '2px 6px',
+        color: vars.color.white,
+        backgroundColor: vars.color.black,
+        marginRight: '4px',
+
+        '@media': {
+            [media.desktop]: {
+                padding: '2px 8px',
+                ...textStyleTokens.body1Medium,
+            },
+        },
+    },
+]);
+
 export const productName = style([
     textStyles.body1Medium,
     {

@@ -16,8 +16,8 @@ import type {
     GuestOrderProduct,
     GuestOrderProductOption,
 } from '@/models/order/guestOrder';
-import { CURRENCY } from '@/utils/currency';
 import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
+import { CURRENCY } from '@/utils/currency';
 import { useTranslation } from 'react-i18next';
 
 type OrderInvalidProduct = Omit<
@@ -57,14 +57,21 @@ export const OrderProductItem = ({
     const optionLabels = pipe(
         option.optionInputs ?? [],
         sort((a, b) => (a.inputNo ?? 0) - (b.inputNo ?? 0)),
-        map((c) => t('{{label}}: {{value}}', { label: c.inputLabel, value: c.inputValue })),
+        map((c) =>
+            t('{{label}}: {{value}}', {
+                label: c.inputLabel,
+                value: c.inputValue,
+            }),
+        ),
         concat(
             option.optionType === 'PRODUCT_ONLY'
                 ? []
                 : pipe(
                       option.optionValue.split('|'),
                       zip(option.optionName.split('|')),
-                      map(([value, name]) => t('{{name}}: {{value}}', { name, value })),
+                      map(([value, name]) =>
+                          t('{{name}}: {{value}}', { name, value }),
+                      ),
                   ),
         ),
         toArray,
@@ -78,6 +85,8 @@ export const OrderProductItem = ({
     const isSoldOut = option.validInfo.errorCode === 'OUT_OF_STOCK';
 
     const invalidMessage = isSoldOut ? t('품절') : option.validInfo.message;
+
+    console.log('🚀 ~ OrderProductItem ~ item:', item);
 
     return (
         <li
@@ -101,7 +110,10 @@ export const OrderProductItem = ({
                     href={`${PATHS.PRODUCTS.MAIN}/${product.productNo}`}
                 >
                     <img
-                        src={getShopbyResizeImageUrl(option.imageUrl || product.imageUrl, imageSize)}
+                        src={getShopbyResizeImageUrl(
+                            option.imageUrl || product.imageUrl,
+                            imageSize,
+                        )}
                         alt={product.productName}
                         className={styles.itemImage}
                     />
@@ -120,7 +132,18 @@ export const OrderProductItem = ({
                                 {product.brandName}
                             </span>
                         )}
+                        {option.baseProductName && (
+                            <span className={styles.baseProductName}>
+                                <strong>[본상품]</strong>{' '}
+                                {option.baseProductName}
+                            </span>
+                        )}
                         <span className={styles.itemName}>
+                            {option.isExtraProduct && (
+                                <span className={styles.itemExtraProductBadge}>
+                                    {t('추가상품')}
+                                </span>
+                            )}
                             {product.productName}
                         </span>
                         <div className={styles.itemOptionList}>

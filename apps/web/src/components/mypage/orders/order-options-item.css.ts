@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 /** 데스크톱 3열 — `productInfoContainer` / `statusContainer` / `actionsContainer` 너비와 동일하게 유지 */
 export const ORDER_OPTIONS_DESKTOP_GRID_TEMPLATE =
@@ -91,19 +92,36 @@ export const statusTextPrimary = style({
     color: vars.color.primary,
 });
 
-export const productBadge = style({
-    fontWeight: '700',
-});
+export const productBadge = style([
+    textStyles.caption1Regular,
+    {
+        width: 'fit-content',
+        padding: '2px 6px',
+        color: vars.color.white,
+        backgroundColor: vars.color.black,
+        marginRight: '4px',
 
-export const baseProductName = style({
-    fontSize: '14px',
-    color: vars.color.gray[80],
-    '@media': {
-        [media.mobile]: {
-            fontSize: '13px',
+        '@media': {
+            [media.desktop]: {
+                padding: '2px 8px',
+                ...textStyleTokens.body1Medium,
+            },
         },
     },
-});
+]);
+
+export const baseProductName = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body1Regular,
+            },
+        },
+    },
+]);
 
 export const productName = style({
     fontSize: '15px',

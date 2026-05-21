@@ -179,6 +179,8 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                                 optionLabels={optionLabels}
                                 orderCnt={option.orderCnt}
                                 buyAmt={option.price.buyAmt}
+                                isExtraProduct={option.isExtraProduct}
+                                baseProductName={option.baseProductName}
                             />
                         );
                     })}
