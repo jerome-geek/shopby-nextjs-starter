@@ -1,5 +1,5 @@
 import { includes, isEmpty } from '@fxts/core';
-import { Plus, X } from 'lucide-react';
+import { Loader2, Plus, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import * as styles from '@/components/ui/file-upload/index.css';
@@ -23,10 +23,11 @@ const FileUpload = ({
     setFileList: setFileListProps,
     maxLength = 3,
 }: FileUploadProps) => {
-    const { uploadFileHandler, deleteUploadFileImage } = useFileUpload({
-        maxSize: 12 * 1024 * 1024,
-        maxLength,
-    });
+    const { uploadFileHandler, deleteUploadFileImage, convertingCount } =
+        useFileUpload({
+            maxSize: 12 * 1024 * 1024,
+            maxLength,
+        });
 
     const [fileList, setFileList] = useState<(string | UploadFileBlob)[]>(
         () => {
@@ -89,8 +90,8 @@ const FileUpload = ({
                         ref={inputRef}
                         type='file'
                         multiple
-                        onChange={(e) => {
-                            const result = uploadFileHandler(e);
+                        onChange={async (e) => {
+                            const result = await uploadFileHandler(e);
 
                             if (result && !isEmpty(result)) {
                                 setFileList((prev) => [...prev, ...result]);
@@ -111,7 +112,7 @@ const FileUpload = ({
                 </button>
             )}
 
-            {!isEmpty(fileList) && (
+            {(!isEmpty(fileList) || convertingCount > 0) && (
                 <ul className={styles.imageList}>
                     {fileList.map((image, index) => {
                         return (
@@ -175,6 +176,18 @@ const FileUpload = ({
                             </li>
                         );
                     })}
+
+                    {Array.from({ length: convertingCount }, (_, i) => (
+                        <li
+                            key={`converting-${i}`}
+                            className={styles.convertingPlaceholder}
+                        >
+                            <Loader2
+                                size={24}
+                                className={styles.spinner}
+                            />
+                        </li>
+                    ))}
                 </ul>
             )}
 

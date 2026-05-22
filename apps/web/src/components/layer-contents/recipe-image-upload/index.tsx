@@ -26,8 +26,10 @@ import { useTranslation } from 'react-i18next';
 import * as styles from '@/components/layer-contents/recipe-image-upload/index.css';
 import { PATHS } from '@/const/paths';
 import useRecipeImageUploadMutation from '@/hooks/mutations/useRecipeImageUploadMutation';
+import { useToast } from '@/hooks/ui';
 import { useRecipeManualStore } from '@/store/useRecipeManualStore';
 import { vars } from '@/styles/theme.css';
+import { convertHeicFiles } from '@/utils/heic';
 
 const itemVariants: Variants = {
     hidden: { opacity: 0, scale: 0.8, y: 20 },
@@ -117,7 +119,9 @@ export const RecipeImageUpload = ({
     const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
     const [images, setImages] = useState<string[]>([]);
+    const [convertingCount, setConvertingCount] = useState(0);
     const { uploadAndRegister } = useRecipeImageUploadMutation();
+    const { addToast } = useToast();
 
     const clearTempImages = useRecipeManualStore(
         ({ clearTempImages }) => clearTempImages,
@@ -154,10 +158,26 @@ export const RecipeImageUpload = ({
         }),
     );
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files ?? []);
-        const urls = files.map((f) => URL.createObjectURL(f));
-        setImages((prev) => [...prev, ...urls]);
+        setConvertingCount(files.length);
+
+        try {
+            const convertedFiles = await convertHeicFiles(files);
+            const urls = convertedFiles.map((f) => URL.createObjectURL(f));
+            setImages((prev) => [...prev, ...urls]);
+        } catch (error) {
+            console.error('Image conversion error:', error);
+            addToast({
+                message: t(
+                    '이미지를 변환할 수 없습니다. 파일이 손상되었거나 지원하지 않는 형식입니다.',
+                ),
+                variant: 'error',
+            });
+        } finally {
+            setConvertingCount(0);
+        }
+
         e.target.value = '';
     };
 
@@ -263,6 +283,20 @@ export const RecipeImageUpload = ({
                                 ))}
                             </AnimatePresence>
                         </SortableContext>
+
+                        {Array.from({ length: convertingCount }, (_, i) => (
+                            <li
+                                key={`converting-${i}`}
+                                className={styles.imageItem}
+                            >
+                                <div className={styles.convertingPlaceholder}>
+                                    <Loader2
+                                        size={24}
+                                        className={styles.spinner}
+                                    />
+                                </div>
+                            </li>
+                        ))}
                     </ul>
                 </DndContext>
             </div>

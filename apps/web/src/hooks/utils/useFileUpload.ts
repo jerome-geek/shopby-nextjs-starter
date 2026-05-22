@@ -13,6 +13,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useDialog } from '@/hooks/utils';
+import { convertHeicFiles, isHeicFile } from '@/utils/heic';
 
 export interface UploadFileBlob extends Blob {
     name?: string;
@@ -39,6 +40,7 @@ const useFileUpload = (
     const { openDialog } = useDialog();
 
     const [uploadFile, setUploadFile] = useState<UploadFileBlob[]>([]);
+    const [convertingCount, setConvertingCount] = useState(0);
     const availableExtensions = useMemo(
         () => [
             'image/bmp',
@@ -54,12 +56,16 @@ const useFileUpload = (
             'image/jng',
             'image/mng',
             'image/png',
+            'image/heic',
+            'image/heif',
         ],
         [],
     );
 
     // TODO: maxLength가 1일때 기존 파일을 지우고 새로운 파일이 업데이트 될 수 있도록 한다
-    const uploadFileHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadFileHandler = async (
+        e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const fileList = e.target.files;
 
         if (!fileList) {
@@ -90,7 +96,7 @@ const useFileUpload = (
 
         const isExtensionAvailable = pipe(
             fileList,
-            some((b) => includes(b.type, availableExtensions)),
+            some((b) => includes(b.type, availableExtensions) || isHeicFile(b)),
         );
 
         if (!isExtensionAvailable && fileList.length > 0) {
@@ -114,16 +120,25 @@ const useFileUpload = (
         }, 1);
 
         if (fileList.length > 0) {
-            setUploadFile((prev) =>
-                pipe(
-                    prev,
-                    concat(fileList),
-                    uniqBy((a) => a.name),
-                    toArray,
-                ),
-            );
+            const files = Array.from(fileList);
+            setConvertingCount(files.length);
 
-            return pipe(fileList, toArray);
+            try {
+                const convertedFiles = await convertHeicFiles(files);
+
+                setUploadFile((prev) =>
+                    pipe(
+                        prev,
+                        concat(convertedFiles),
+                        uniqBy((a) => a.name),
+                        toArray,
+                    ),
+                );
+
+                return convertedFiles;
+            } finally {
+                setConvertingCount(0);
+            }
         }
 
         return;
@@ -144,6 +159,7 @@ const useFileUpload = (
         setUploadFile,
         uploadFileHandler,
         deleteUploadFileImage,
+        convertingCount,
     };
 };
 

@@ -52,7 +52,6 @@ export const useRecipeForm = ({
         maxLength: 10,
     });
 
-    // Zustand store
     const tempImages = useRecipeManualStore(({ tempImages }) => tempImages);
     const setTempImages = useRecipeManualStore(
         ({ setTempImages }) => setTempImages,
@@ -61,7 +60,6 @@ export const useRecipeForm = ({
         ({ clearTempImages }) => clearTempImages,
     );
 
-    // React Hook Form
     const methods = useForm<RecipeFormInput>({
         resolver: zodResolver(
             isModify ? recipeUpdateSchema : recipeCreateSchema,
@@ -104,7 +102,6 @@ export const useRecipeForm = ({
         name: 'steps',
     });
 
-    // Helpers
     const updateThumbnailFromImages = useCallback(
         (images: ManualTempImage[]) => {
             const sortedImages = [...images].sort(
@@ -118,11 +115,9 @@ export const useRecipeForm = ({
         [setValue],
     );
 
-    // 1. 초기 데이터 페칭 후 폼과 스토어 초기화
     useEffect(() => {
         if (!recipeDetailData) return;
 
-        // 폼 리셋
         reset(
             {
                 title: recipeDetailData.title,
@@ -172,7 +167,6 @@ export const useRecipeForm = ({
         const isNewSteps =
             tempImageSnoString !== recipeDetailDataStepsSnoString;
 
-        // 수정 모드 시 tempImages 스토어 복원
         if (isModify && isNewSteps) {
             const uniqueImages = pipe(
                 recipeDetailData.steps,
@@ -190,12 +184,10 @@ export const useRecipeForm = ({
             );
             setTempImages(uniqueImages);
         }
-    }, [tempImages.length, recipeDetailData, reset, isModify, setTempImages]); // tempImages는 제외 (최초 1회만 실행되도록)
+    }, [tempImages.length, recipeDetailData, reset, isModify, setTempImages]);
 
-    // 1. 페이지 이탈 시에만 스토어 초기화 (명시적 경로 감시)
     useEffect(() => {
         const handleRouteChange = (url: string) => {
-            // 작성 페이지 영역(/recipes/write)을 완전히 벗어나는 경우에만 클리어
             if (!url.includes('/recipes/write')) {
                 clearTempImages();
             }
@@ -207,18 +199,14 @@ export const useRecipeForm = ({
         };
     }, [router, clearTempImages]);
 
-    // 2. 스토어 이미지 변경 시 폼 썸네일 및 조리 단계 동기화 (Strict Sync)
     useEffect(() => {
         const currentThumb = getValues('thumbnailUrl');
         const currentSteps = getValues('steps');
 
-        // 썸네일 동기화
         if (tempImages.length > 0 && !currentThumb) {
             updateThumbnailFromImages(tempImages);
         }
 
-        // 조리 단계(Steps) 동기화: 스토어의 모든 이미지를 단계에 반영
-        // 이미지가 없으면 기본 빈 단계 1개 유지, 이미지가 있으면 이미지 개수만큼 단계 생성
         const nextSteps =
             tempImages.length > 0
                 ? tempImages.map((img, index) => {
@@ -239,7 +227,6 @@ export const useRecipeForm = ({
                       },
                   ];
 
-        // 상태가 실제로 다를 때만 업데이트 (개수, 순서, 매칭된 URL 기준)
         const isDifferent =
             nextSteps.length !== currentSteps.length ||
             nextSteps.some(
@@ -252,17 +239,17 @@ export const useRecipeForm = ({
         }
     }, [tempImages, getValues, updateThumbnailFromImages, replaceStep]);
 
-    // Handlers
     const handleFileChange = async (
         e: React.ChangeEvent<HTMLInputElement>,
         targetStepIndex?: number,
     ) => {
-        const files = uploadFileHandler(e);
-        if (!files || files.length === 0) return;
-
         try {
+            const files = await uploadFileHandler(e);
+            if (!files || files.length === 0) {
+                return;
+            }
+
             const blobUrls = files.map((file) => URL.createObjectURL(file));
-            // 최신 상태를 참조하기 위해 스토어에서 직접 가져오기 권장, 하지만 클로저의 tempImages 사용
             const currentTempImages =
                 useRecipeManualStore.getState().tempImages;
 
@@ -271,7 +258,6 @@ export const useRecipeForm = ({
                 startOrder: currentTempImages.length + 1,
             });
 
-            // 개별 단계 업로드인 경우 폼 필드 바로 업데이트
             if (targetStepIndex !== undefined) {
                 const newUploaded = response.data.tempImages;
                 if (newUploaded && newUploaded.length > 0) {
@@ -293,10 +279,9 @@ export const useRecipeForm = ({
                 message: t('이미지 업로드 중 오류가 발생했습니다.'),
                 variant: 'error',
             });
+        } finally {
+            e.target.value = '';
         }
-
-        // input value 초기화 (같은 파일 다시 올릴 수 있도록)
-        e.target.value = '';
     };
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -322,7 +307,6 @@ export const useRecipeForm = ({
                 }));
                 setTempImages(newTempImages);
 
-                // 대표 이미지가 변경되었을 수 있으므로 업데이트
                 updateThumbnailFromImages(newTempImages);
             }
         }
@@ -353,7 +337,6 @@ export const useRecipeForm = ({
         setTempImages(newImages);
         updateThumbnailFromImages(newImages);
 
-        // 삭제된 이미지가 steps에 참조되어 있다면 제거
         if (deletedImage && deletedImage.imageUrl) {
             const currentSteps = getValues('steps');
             const stepIndex = currentSteps.findIndex(
@@ -382,7 +365,6 @@ export const useRecipeForm = ({
         }
 
         try {
-            // 최종 전송 페이로드 (불필요 필드 제거)
             const finalSteps = data.steps.map((step) => {
                 return {
                     stepNumber: step.stepNumber,

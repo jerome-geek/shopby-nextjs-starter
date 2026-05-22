@@ -1,6 +1,7 @@
+import { keyframes, style } from '@vanilla-extract/css';
+
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { style } from '@vanilla-extract/css';
 
 export const imageContainer = style({
     position: 'relative',
@@ -112,4 +113,31 @@ export const uploadButtonText = style({
     fontWeight: '500',
     color: vars.color.gray['70'],
     whiteSpace: 'nowrap',
+});
+
+const spin = keyframes({
+    to: { transform: 'rotate(360deg)' },
+});
+
+export const convertingPlaceholder = style({
+    width: '88px',
+    height: '88px',
+    borderRadius: '4px',
+    backgroundColor: vars.color.gray['10'],
+    border: `1px solid ${vars.color.gray['30']}`,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    '@media': {
+        [media.desktop]: {
+            width: '130px',
+            height: '130px',
+        },
+    },
+});
+
+export const spinner = style({
+    animation: `${spin} 1s linear infinite`,
+    color: vars.color.gray['50'],
 });

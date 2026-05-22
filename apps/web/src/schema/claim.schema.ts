@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { UploadFileBlob } from '@/hooks/useFileUpload';
+import { UploadFileBlob } from '@/hooks/utils/useFileUpload';
 import type { ClaimType } from '@/models';
 import {
     CountryCdType,

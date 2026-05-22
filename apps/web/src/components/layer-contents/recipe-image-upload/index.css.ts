@@ -206,3 +206,14 @@ export const spinner = style({
     display: 'block',
     animation: `${spin} 1s linear infinite`,
 });
+
+export const convertingPlaceholder = style({
+    width: '100%',
+    height: '100%',
+    borderRadius: '4px',
+    backgroundColor: vars.color.gray['10'],
+    border: `1px solid ${vars.color.gray['30']}`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+});
