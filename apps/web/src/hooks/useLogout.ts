@@ -5,6 +5,10 @@ import { oauth2 } from '@/api/auth';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
 import { useToast } from '@/hooks/ui';
+import {
+    clearLogoutNavigationInProgress,
+    markLogoutNavigationInProgress,
+} from '@/utils/auth';
 import { memberCookie } from '@/utils/cookie';
 
 interface useLogoutProps {
@@ -21,6 +25,7 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
 
     const logout = async () => {
         try {
+            markLogoutNavigationInProgress();
             await oauth2.deleteAccessToken();
 
             memberCookie.clearAll();
@@ -43,6 +48,8 @@ const useLogout = ({ fn }: useLogoutProps = {}) => {
             // Note: memberCookie.clearAll() calls accessTokenCookie.clear() which already dispatches auth change.
         } catch (error) {
             console.error(error);
+        } finally {
+            clearLogoutNavigationInProgress();
         }
     };
 

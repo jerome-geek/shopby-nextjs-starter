@@ -16,6 +16,7 @@ import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { Only } from '@/shared/components/only';
 import { getPathTitle } from '@/utils/path';
 import { SuspenseQuery } from '@suspensive/react-query';
+import { isLogoutNavigationInProgress } from '@/utils/auth';
 
 interface MypageLayoutProps {
     children: ReactNode;
@@ -39,6 +40,10 @@ const MypageLayoutContent = memo(function MypageLayoutContent({
             return;
         }
 
+        if (isLogoutNavigationInProgress()) {
+            return;
+        }
+
         const returnUrl = router.asPath;
 
         if (isMyApp) {
@@ -56,7 +61,8 @@ const MypageLayoutContent = memo(function MypageLayoutContent({
         });
     }, [isLogin, router, isMyApp, handleSendLoginView]);
 
-    // 클라이언트 라우팅으로 proxy를 거치지 않은 경우에도 마이페이지 화면을 노출하지 않습니다.
+    // 클라이언트 상태 변경(useAuth)으로 로그아웃된 경우에는 proxy가 개입할 수 없어서
+    // 화면 노출 차단은 여전히 layout 레벨에서 한 번 더 보장합니다.
     if (isLogin !== true) {
         return null;
     }

@@ -3,6 +3,9 @@ import { accessTokenCookie } from '@/utils/cookie';
 
 /** 쿠키 변경을 감지하기 위한 커스텀 이벤트 이름 */
 export const AUTH_CHANGE_EVENT = 'shopby:auth-change';
+// TODO: 로그아웃 전용 intent 대신 공통 auth navigation state로 정리해서
+// 로그인/세션만료/명시적 로그아웃 흐름을 한 곳에서 제어할 수 있게 개선.
+const AUTH_NAVIGATION_INTENT_KEY = 'shopby:auth-navigation-intent';
 
 /**
  * 로그인 여부를 쿠키 기반으로 판단합니다.
@@ -29,4 +32,35 @@ export function dispatchAuthChange() {
     if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
     }
+}
+
+function setAuthNavigationIntent(intent: 'logout' | null) {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    if (intent) {
+        window.sessionStorage.setItem(AUTH_NAVIGATION_INTENT_KEY, intent);
+        return;
+    }
+
+    window.sessionStorage.removeItem(AUTH_NAVIGATION_INTENT_KEY);
+}
+
+export function markLogoutNavigationInProgress() {
+    setAuthNavigationIntent('logout');
+}
+
+export function clearLogoutNavigationInProgress() {
+    setAuthNavigationIntent(null);
+}
+
+export function isLogoutNavigationInProgress() {
+    if (typeof window === 'undefined') {
+        return false;
+    }
+
+    return (
+        window.sessionStorage.getItem(AUTH_NAVIGATION_INTENT_KEY) === 'logout'
+    );
 }
