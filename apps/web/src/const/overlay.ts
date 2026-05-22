@@ -11,6 +11,7 @@ export const OVERLAY_ID = {
     CALENDAR_BOTTOM_SHEET: 'calendar-list-bottom-sheet',
     PI_RESTOCK_NOTICE_MODAL: 'pi-restock-notice-modal',
     TOAST: 'toast',
+    POPUP_OVERLAY: 'popup-overlay',
     LOADING: 'loading',
     COLLECTION_FORM: 'collection-form',
     ORDER_COMPLETE_RECIPE_RECOMMENDATION:

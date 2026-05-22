@@ -16,6 +16,7 @@ const useScrollLock = () => {
         overlayData,
         values,
         filter((item) => item.id !== OVERLAY_ID.TOAST),
+        filter((item) => !item.id.includes(OVERLAY_ID.POPUP_OVERLAY)),
         some((item) => item.isOpen),
     );
 

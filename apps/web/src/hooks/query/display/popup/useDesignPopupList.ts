@@ -10,7 +10,7 @@ import type {
 
 interface UseDesignPopupListParams<T = GetDesignPopupResponse> {
     data: DesignPopupData;
-    platform: string;
+    platform?: string;
     options?: Omit<
         UseQueryOptions<
             GetDesignPopupResponse,

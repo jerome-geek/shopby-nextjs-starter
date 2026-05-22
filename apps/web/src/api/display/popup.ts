@@ -1,5 +1,4 @@
 import type { AxiosRequestConfig } from 'axios';
-import qs from 'qs';
 
 import { shopbyRequest } from '@/api/core/request';
 import type {
@@ -18,7 +17,7 @@ const popup = {
      */
     getDesignPopups: (
         data: DesignPopupData,
-        platform: string,
+        platform?: string,
         options?: AxiosRequestConfig,
     ) => {
         return shopbyRequest<GetDesignPopupResponse>({
@@ -26,7 +25,7 @@ const popup = {
             url: '/design-popups',
             data,
             headers: {
-                platform,
+                ...(platform ? { platform } : {}),
                 ...options?.headers,
             },
             ...options,
@@ -48,7 +47,7 @@ const popup = {
             url: '/display/popups',
             params,
             headers: {
-                platform,
+                ...(platform ? { platform } : {}),
                 ...options?.headers,
             },
             ...options,

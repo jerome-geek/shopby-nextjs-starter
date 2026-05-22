@@ -9,6 +9,7 @@ import * as styles from '@/components/layout/default/index.css';
 import { Header } from '@/components/layout/header';
 import { RouteChangeOverlay, ScrollToTop } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import { Popup } from '@/features/popup/components';
 import { useRouteScroll } from '@/features/scroll';
 import { useModalWatcher } from '@/hooks/common/useModalWatcher';
 import { useSbInit, useShopbyStatistics } from '@/hooks/libs/shopby';
@@ -61,8 +62,11 @@ export const DefaultLayout = ({ children, className }: LayoutProps) => {
             </main>
 
             <Footer />
+
             <ScrollToTop />
             <RouteChangeOverlay />
+            <Popup />
+
             {isBottomNavigationVisible && <BottomNavigation />}
         </div>
     );
