@@ -54,7 +54,7 @@ const RecipeWritePage = () => {
                         }
                     >
                         <SuspenseQuery
-                            queryKey={recipeKeys.detail(recipeNo, memberNo)}
+                            queryKey={recipeKeys.detail(recipeNo)}
                             queryFn={async () => {
                                 const { data } = await recipe.getRecipeDetail(
                                     recipeNo,

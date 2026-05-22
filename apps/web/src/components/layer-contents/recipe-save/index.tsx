@@ -59,7 +59,7 @@ export const RecipeSaveContent = ({
             queryClient.invalidateQueries({
                 predicate: (query) => {
                     return includes(query.queryKey[0], [
-                        ...recipeKeys.detail(recipeSno, memberNo),
+                        ...recipeKeys.detail(recipeSno),
                         ...recipeKeys.publicSearches(),
                     ]);
                 },

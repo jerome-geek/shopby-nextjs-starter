@@ -9,6 +9,7 @@ import usePage from '@/hooks/utils/usePage';
 import useResponsive from '@/hooks/utils/useResponsive';
 import useRouteChange from '@/hooks/utils/useRouteChange';
 import useScrollLock from '@/hooks/utils/useScrollLock';
+import { useInvalidateOnAuthChange } from '@/hooks/utils/useInvalidateOnAuthChange';
 
 export {
     useDialog,
@@ -22,4 +23,6 @@ export {
     useResponsive,
     useRouteChange,
     useScrollLock,
+    useInvalidateOnAuthChange,
 };
+

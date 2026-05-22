@@ -18,8 +18,8 @@ const recipeKeys = {
         [...recipeKeys.publicSearches(), 'infinite', params] as const,
 
     details: () => [...recipeKeys.all, 'detail'] as const,
-    detail: (sno: number, memberNo: number | string) =>
-        [...recipeKeys.details(), sno, memberNo] as const,
+    detail: (sno: number) =>
+        [...recipeKeys.details(), sno] as const,
 
     collections: () => [...recipeKeys.all, 'collections'] as const,
 

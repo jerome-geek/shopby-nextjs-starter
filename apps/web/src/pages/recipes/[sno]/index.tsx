@@ -33,7 +33,7 @@ import { recipeKeys } from '@/hooks/queryKeys';
 import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useDialog, useResponsive } from '@/hooks/utils';
+import { useDialog, useResponsive, useInvalidateOnAuthChange } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
 import { useYoutubePlayer } from '@/shared/hooks/useYoutubePlayer';
 import { vars } from '@/styles/theme.css';
@@ -64,7 +64,9 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo || 0;
 
-    const { data: recipeDetailData } = useRecipeDetail({ sno, memberNo });
+    const { data: recipeDetailData } = useRecipeDetail({ sno });
+
+    useInvalidateOnAuthChange([recipeKeys.detail(sno)]);
 
     const isEditable = memberNo === recipeDetailData.memberNo;
 

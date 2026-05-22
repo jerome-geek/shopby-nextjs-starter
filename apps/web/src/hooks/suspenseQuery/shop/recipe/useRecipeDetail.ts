@@ -10,7 +10,6 @@ import type { GetRecipeDetailResponse } from '@/models/shop/recipe';
 
 interface UseRecipeDetailParams<T = GetRecipeDetailResponse> {
     sno: number;
-    memberNo: number;
     options?: Omit<
         UseSuspenseQueryOptions<
             GetRecipeDetailResponse,
@@ -24,11 +23,10 @@ interface UseRecipeDetailParams<T = GetRecipeDetailResponse> {
 
 const useRecipeDetail = <T = GetRecipeDetailResponse>({
     sno,
-    memberNo,
     options,
 }: UseRecipeDetailParams<T>) => {
     return useSuspenseQuery({
-        queryKey: recipeKeys.detail(sno, memberNo),
+        queryKey: recipeKeys.detail(sno),
         queryFn: async () => {
             const { data } = await recipe.getRecipeDetail(sno);
 
