@@ -1,11 +1,13 @@
-import { useResponsive } from '@/hooks/utils';
+import * as bannerStyles from '@/features/event/section/components/event-section-banner/index.css';
+import * as contentStyles from '@/features/event/section/components/event-section-content/index.css';
 import * as productRowStyles from '@/components/product/card-row/index.css';
-import * as eventCardStyles from '@/components/section/event/card/index.css';
+import * as sectionStyles from '@/components/section/event/index.css';
 import Skeleton from '@/components/ui/skeleton';
+import { useResponsive } from '@/hooks/utils';
 
 export const EventProductsSkeleton = () => {
     return (
-        <ul className={eventCardStyles.productList}>
+        <ul className={contentStyles.productList}>
             {Array.from({ length: 2 }).map((_, i) => (
                 <li key={`event-skeleton-product-${i}`}>
                     <div className={productRowStyles.container}>
@@ -34,25 +36,35 @@ export const EventProductsSkeleton = () => {
     );
 };
 
-const EventSectionSkeleton = () => {
+export const EventBannerSkeleton = () => {
+    return (
+        <div className={bannerStyles.imageWrapper}>
+            <Skeleton width='100%' height='100%' />
+        </div>
+    );
+};
+
+export const EventContentSkeleton = () => {
     const { isMobile } = useResponsive();
 
     return (
-        <div className={eventCardStyles.container} aria-hidden='true'>
-            <div className={eventCardStyles.imageWrapper}>
-                <Skeleton width='100%' height='100%' />
-            </div>
+        <div className={contentStyles.contentWrapper}>
+            {!isMobile && (
+                <div className={contentStyles.textWrapper}>
+                    <Skeleton width='60%' height={28} />
+                    <Skeleton width='82%' height={18} />
+                </div>
+            )}
+            <EventProductsSkeleton />
+        </div>
+    );
+};
 
-            <div className={eventCardStyles.contentWrapper}>
-                {!isMobile && (
-                    <div className={eventCardStyles.textWrapper}>
-                        <Skeleton width='60%' height={28} />
-                        <Skeleton width='82%' height={18} />
-                    </div>
-                )}
-
-                <EventProductsSkeleton />
-            </div>
+const EventSectionSkeleton = () => {
+    return (
+        <div className={sectionStyles.container} aria-hidden='true'>
+            <EventBannerSkeleton />
+            <EventContentSkeleton />
         </div>
     );
 };

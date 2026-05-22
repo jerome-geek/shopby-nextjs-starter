@@ -1,8 +1,12 @@
-import { SuspenseQueries } from '@suspensive/react-query';
+import { EventSectionBanner } from '@/features/event/section/components/event-section-banner';
+import { EventSectionContent } from '@/features/event/section/components/event-section-content';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
-import EventCard from '@/components/section/event/card';
-import { bannerListOptions } from '@/entities/banner/queries';
-import { eventDetailOptions } from '@/entities/event/queries';
+import {
+    EventBannerSkeleton,
+    EventContentSkeleton,
+} from '@/components/section/event/skeleton';
+import * as styles from '@/components/section/event/index.css';
 
 interface EventSectionProps {
     index?: number;
@@ -16,32 +20,21 @@ const EventSection = ({ eventKey }: EventSectionProps) => {
     }
 
     return (
-        <SuspenseQueries
-            queries={[
-                eventDetailOptions({ eventKey }),
-                bannerListOptions({
-                    type: 'id',
-                    banners: [eventKey.toString()],
-                    // options: {
-                    //     select: (data) => {
-                    //         return extractBannerContentsByAccountIndex(
-                    //             data,
-                    //             0,
-                    //         );
-                    //     },
-                    // },
-                }),
-            ]}
-        >
-            {([{ data: eventDetailData }, { data: bannersData }]) => {
-                return (
-                    <EventCard
-                        event={eventDetailData}
-                        bannerData={bannersData}
-                    />
-                );
-            }}
-        </SuspenseQueries>
+        <div className={styles.container}>
+            <ShopbyAsyncBoundary
+                fallback={<EventBannerSkeleton />}
+                errorFallback={null}
+            >
+                <EventSectionBanner eventKey={eventKey} />
+            </ShopbyAsyncBoundary>
+
+            <ShopbyAsyncBoundary
+                fallback={<EventContentSkeleton />}
+                errorFallback={<></>}
+            >
+                <EventSectionContent eventKey={eventKey} />
+            </ShopbyAsyncBoundary>
+        </div>
     );
 };
 
