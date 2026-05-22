@@ -4,11 +4,13 @@ import { overlay } from 'overlay-kit';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { getPlatform } from '@/api/core/utils';
+import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import {
     isPopupHiddenToday,
     mapDesignPopupToPopupInfo,
 } from '@/features/popup/utils';
+import useEvent from '@/hooks/query/display/event/useEvent';
 import useAllPopupList from '@/hooks/query/display/popup/useAllPopupList';
 import useDesignPopupList from '@/hooks/query/display/popup/useDesignPopupList';
 import type { PopupInfo } from '@/models/display/popup';
@@ -18,7 +20,7 @@ interface UsePopupOverlaysParams {
 }
 
 export const usePopupOverlays = ({ openPopup }: UsePopupOverlaysParams) => {
-    const openedPopupIdsRef = useRef<Set<number>>(new Set());
+    const openedPopupNosRef = useRef<Set<number>>(new Set());
     const router = useRouter();
 
     const pageType = useMemo(() => {
@@ -37,16 +39,26 @@ export const usePopupOverlays = ({ openPopup }: UsePopupOverlaysParams) => {
         return undefined;
     }, [router.pathname]);
 
+    const eventNo = Number(router.query.eventNoOrId) || 0;
+    const eventKey = router.query.eventNoOrId as string;
+
+    const { data: eventData } = useEvent({
+        eventKey,
+        options: {
+            enabled: !!eventKey && pageType === 'EVENT',
+        },
+    });
+
     const targetNo = useMemo(() => {
         if (pageType === 'PRODUCT') {
-            return Number(router.query.productNo) || 0;
+            return Number(router.query.productNo) || undefined;
         }
 
         if (pageType === 'EVENT') {
-            return Number(router.query.eventNoOrId) || 0;
+            return eventNo || eventData?.eventNo || undefined;
         }
         return undefined;
-    }, [pageType, router.query.productNo, router.query.eventNoOrId]);
+    }, [pageType, router.query.productNo, eventNo, eventData]);
 
     const designPopupData = useMemo(
         () => getDesignPopupData(router.asPath),
@@ -59,6 +71,9 @@ export const usePopupOverlays = ({ openPopup }: UsePopupOverlaysParams) => {
             targetNo,
         },
         platform: getPlatform(),
+        options: {
+            enabled: !!pageType,
+        },
     });
 
     const { data: designPopups = [] } = useDesignPopupList({
@@ -86,15 +101,17 @@ export const usePopupOverlays = ({ openPopup }: UsePopupOverlaysParams) => {
         );
     }, [popupList]);
 
+    const pathname = router.asPath.split('?')?.[0];
+
     useEffect(
         function openPopupEffect() {
             pipe(
                 displayPopups,
                 filter(
-                    (popup) => !openedPopupIdsRef.current.has(popup.popupNo),
+                    (popup) => !openedPopupNosRef.current.has(popup.popupNo),
                 ),
                 map((popup) => {
-                    openedPopupIdsRef.current.add(popup.popupNo);
+                    openedPopupNosRef.current.add(popup.popupNo);
                     openPopup(popup);
                 }),
                 toArray,
@@ -103,17 +120,23 @@ export const usePopupOverlays = ({ openPopup }: UsePopupOverlaysParams) => {
         [displayPopups, openPopup],
     );
 
-    useEffect(function closePopupEffect() {
-        const openedPopupIds = openedPopupIdsRef.current;
+    useEffect(
+        function closePopupEffect() {
+            const openedPopupNos = openedPopupNosRef.current;
 
-        return () => {
-            pipe(
-                openedPopupIds,
-                map((popupNo) => overlay.close(getOverlayId(popupNo))),
-                toArray,
-            );
-        };
-    }, []);
+            return () => {
+                pipe(
+                    openedPopupNos,
+                    map((popupNo) => {
+                        overlay.close(getOverlayId(popupNo));
+                        openedPopupNos.delete(popupNo);
+                    }),
+                    toArray,
+                );
+            };
+        },
+        [pathname],
+    );
 
     return {
         getOverlayId,
@@ -121,7 +144,7 @@ export const usePopupOverlays = ({ openPopup }: UsePopupOverlaysParams) => {
 };
 
 const getOverlayId = (popupNo: number) => {
-    return `popup-overlay-${popupNo}`;
+    return `${OVERLAY_ID.POPUP_OVERLAY}-${popupNo}`;
 };
 
 const getDesignPopupData = (asPath: string) => {
