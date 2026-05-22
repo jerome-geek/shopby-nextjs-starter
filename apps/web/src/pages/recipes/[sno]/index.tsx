@@ -10,7 +10,6 @@ import type {
     InferGetStaticPropsType,
 } from 'next';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
@@ -36,6 +35,7 @@ import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
+import { useYoutubePlayer } from '@/shared/hooks/useYoutubePlayer';
 import { vars } from '@/styles/theme.css';
 
 const HEADER_HEIGHT = 90;
@@ -126,8 +126,6 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
         toArray,
     );
 
-    const youtubeIframeRef = useRef<HTMLIFrameElement | null>(null);
-
     const onLikeToggle = () => {
         if (!isLogin) {
             openLoginDialog();
@@ -173,6 +171,7 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
     };
 
     const isYoutube = recipeDetailData.sourceType === 'YOUTUBE';
+    const { iframeRef, seekAndPause } = useYoutubePlayer();
     const isYoutubeShorts = isYoutube && sourceUrl.includes('/shorts/');
     const isYoutubeLongForm = isYoutube && !isYoutubeShorts;
     const youtubeEmbedUrl =
@@ -180,32 +179,6 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
             ? `https://www.youtube.com/embed/${recipeDetailData.sourceId}?enablejsapi=1&rel=0&playsinline=1`
             : null;
     const thumbnailUrl = recipeDetailData.thumbnailUrl || imageList[0];
-
-    const seekYoutubeTo = (seconds: number) => {
-        const contentWindow = youtubeIframeRef.current?.contentWindow;
-
-        if (!contentWindow) {
-            return;
-        }
-
-        contentWindow.postMessage(
-            JSON.stringify({
-                event: 'command',
-                func: 'seekTo',
-                args: [seconds, true],
-            }),
-            'https://www.youtube.com',
-        );
-
-        contentWindow.postMessage(
-            JSON.stringify({
-                event: 'command',
-                func: 'playVideo',
-                args: [],
-            }),
-            'https://www.youtube.com',
-        );
-    };
 
     return (
         <div className={styles.container}>
@@ -223,7 +196,7 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                     >
                         {youtubeEmbedUrl ? (
                             <iframe
-                                ref={youtubeIframeRef}
+                                ref={iframeRef}
                                 src={youtubeEmbedUrl}
                                 title={recipeDetailData.title}
                                 className={styles.carouselVideo}
@@ -410,7 +383,7 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                                             <button
                                                 type='button'
                                                 onClick={() =>
-                                                    seekYoutubeTo(
+                                                    seekAndPause(
                                                         step.timestampSeconds ??
                                                             0,
                                                     )
