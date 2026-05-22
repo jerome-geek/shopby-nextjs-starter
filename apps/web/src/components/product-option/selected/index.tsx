@@ -1,14 +1,15 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import * as styles from '@/components/product-option/selected/index.css';
+import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { useProductOption } from '@/hooks/product';
+import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { CURRENCY } from '@/utils/currency';
 
 import { CloseIcon } from '@/components/icons/Close';
 import { MinusIcon } from '@/components/icons/Minus';
 import { PlusIcon } from '@/components/icons/Plus';
-import * as styles from '@/components/product-option/selected/index.css';
-import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
-
-import { useProductOption } from '@/hooks/product';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
-import { CURRENCY } from '@/utils/currency';
 
 interface SelectedProductOptionProps {
     productNo: number;
@@ -32,10 +33,16 @@ export const SelectedProductOption = ({
         updateTextOptionValue,
     } = useProductOptionStore();
 
+    const filteredSelectedOptionList = useMemo(() => {
+        return selectedOptionList.filter(
+            (option) => option.productNo === productNo,
+        );
+    }, [selectedOptionList, productNo]);
+
     const getInputOptionDefaultValue = (inputNo: number, optionNo?: number) => {
         const findOption = optionNo
-            ? selectedOptionList.find((a) => a.optionNo === optionNo)
-            : selectedOptionList[0];
+            ? filteredSelectedOptionList.find((a) => a.optionNo === optionNo)
+            : filteredSelectedOptionList[0];
 
         return (
             findOption?.optionInputs?.find((a) => a.inputNo === inputNo)
@@ -67,18 +74,19 @@ export const SelectedProductOption = ({
     const isMainProductOption = (currentProductNo: number) =>
         currentProductNo === productNo;
 
-    if (selectedOptionList.length === 0) {
+    if (filteredSelectedOptionList.length === 0) {
         return null;
     }
 
     return (
         <ul className={styles.optionList}>
-            {selectedOptionList.map((option) => (
+            {filteredSelectedOptionList.map((option) => (
                 <li key={option.optionNo} className={styles.optionListItem}>
                     <div className={styles.optionHeader}>
                         <span className={styles.optionLabel}>
                             {option.label}
-                            {option.value && ` [${option.value.replace(/\|/g, ' / ')}]`}
+                            {option.value &&
+                                ` [${option.value.replace(/\|/g, ' / ')}]`}
                         </span>
                         {isRemovable && (
                             <button
@@ -96,7 +104,7 @@ export const SelectedProductOption = ({
                             <div className={styles.textOptionList}>
                                 {textOptionInputs['OPTION'].map((input) => (
                                     <InputContainer key={input.inputNo}>
-                                        <InputLabel>
+                                        <InputLabel isRequired={input.required}>
                                             {input.inputLabel}
                                         </InputLabel>
                                         <InputField
@@ -161,7 +169,9 @@ export const SelectedProductOption = ({
                 </li>
             ))}
 
-            {selectedOptionList.some((opt) => isMainProductOption(opt.productNo)) &&
+            {filteredSelectedOptionList.some((opt) =>
+                isMainProductOption(opt.productNo),
+            ) &&
                 textOptionInputs['PRODUCT']?.map(
                     ({ inputNo, inputLabel, required, inputValue }) => (
                         <InputContainer key={inputNo}>

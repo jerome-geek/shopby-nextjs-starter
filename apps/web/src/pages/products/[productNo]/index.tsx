@@ -58,6 +58,7 @@ import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
 
+import { RequiredProductOption } from '@/components/product-option/required';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -87,6 +88,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const {
         isDefaultOptionUsed,
         isFlatOptionUsed,
+        isRequiredOptionUsed,
         isMultiLevelOptionUsed,
         productOptionListData,
     } = useProductOption({
@@ -354,10 +356,19 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             <hr className={styles.optionDivider} />
 
                             <div className={styles.optionContainer}>
+                                {isRequiredOptionUsed && (
+                                    <RequiredProductOption
+                                        productNo={productNo}
+                                        onChange={onMultiOptionChange}
+                                        menuPortalTarget={null}
+                                    />
+                                )}
+
                                 {isFlatOptionUsed && (
                                     <FlatProductOption
                                         productNo={productNo}
                                         onChange={onFlatOptionChange}
+                                        menuPortalTarget={null}
                                     />
                                 )}
 
@@ -365,17 +376,18 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                     <MultiProductOption
                                         productNo={productNo}
                                         onChange={onMultiOptionChange}
+                                        menuPortalTarget={null}
                                     />
                                 )}
-
-                                <ShopbyAsyncBoundary>
-                                    <ExtraProductList productNo={productNo} />
-                                </ShopbyAsyncBoundary>
 
                                 <SelectedProductOption
                                     productNo={productNo}
                                     isRemovable={!isDefaultOptionUsed}
                                 />
+
+                                <ShopbyAsyncBoundary>
+                                    <ExtraProductList productNo={productNo} />
+                                </ShopbyAsyncBoundary>
                             </div>
 
                             <ProductOrderAction productNo={productNo} />

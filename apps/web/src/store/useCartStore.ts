@@ -1,10 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import { OptionInputs } from '@/models/order';
+
 export interface GuestCartItem {
     productNo: number;
     optionNo: number;
     orderCnt: number;
+    baseProductNo?: number;
+    optionInputs?: OptionInputs[];
 }
 
 interface CartStore {
@@ -22,7 +26,9 @@ export const useCartStore = create<CartStore>()(
             addItem: (item) =>
                 set((state) => {
                     const existingItemIndex = state.cartItems.findIndex(
-                        (i) => i.productNo === item.productNo && i.optionNo === item.optionNo
+                        (i) =>
+                            i.productNo === item.productNo &&
+                            i.optionNo === item.optionNo,
                     );
                     if (existingItemIndex > -1) {
                         const newItems = [...state.cartItems];
@@ -34,7 +40,11 @@ export const useCartStore = create<CartStore>()(
             removeItem: (productNo, optionNo) =>
                 set((state) => ({
                     cartItems: state.cartItems.filter(
-                        (i) => !(i.productNo === productNo && i.optionNo === optionNo)
+                        (i) =>
+                            !(
+                                i.productNo === productNo &&
+                                i.optionNo === optionNo
+                            ),
                     ),
                 })),
             updateItem: (productNo, optionNo, orderCnt) =>
@@ -42,13 +52,13 @@ export const useCartStore = create<CartStore>()(
                     cartItems: state.cartItems.map((i) =>
                         i.productNo === productNo && i.optionNo === optionNo
                             ? { ...i, orderCnt }
-                            : i
+                            : i,
                     ),
                 })),
             clearCart: () => set({ cartItems: [] }),
         }),
         {
             name: 'shopby-guest-cart',
-        }
-    )
+        },
+    ),
 );

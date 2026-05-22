@@ -28,7 +28,7 @@ const useCart = () => {
     );
 
     // ── 비회원: API 상세 리스트 조회 ───────────────────────────
-    const isGuestCartEnabled = !isLogin && guestCartItems.length > 0;
+    const isGuestCartEnabled = !isLogin;
     const mappedGuestCartData = useMemo(() => {
         return guestCartItems.map((item, idx) => ({
             ...item,

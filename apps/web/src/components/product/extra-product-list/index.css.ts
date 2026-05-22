@@ -24,6 +24,12 @@ export const list = style({
 
 export const item = style({
     display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+});
+
+export const productContainer = style({
+    display: 'flex',
     gap: '16px',
     alignItems: 'flex-start',
 });
@@ -68,4 +74,14 @@ export const price = style([
 
 export const selectWrapper = style({
     width: '100%',
+});
+
+export const optionWrapper = style({
+    width: '100%',
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
 });

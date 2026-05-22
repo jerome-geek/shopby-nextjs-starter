@@ -13,6 +13,7 @@ interface FlatProductOptionProps {
     onChange: (option: SingleValue<FlatOption>) => void;
     checkOptionDisabled?: (option: FlatOption) => boolean;
     classNames?: Props<FlatOption>['classNames'];
+    menuPortalTarget?: HTMLElement | null;
     isExtraProduct?: boolean;
 }
 
@@ -21,6 +22,7 @@ export const FlatProductOption = ({
     onChange,
     checkOptionDisabled,
     classNames,
+    menuPortalTarget = typeof window !== 'undefined' ? document.body : null,
     isExtraProduct = false,
 }: FlatProductOptionProps) => {
     const { t } = useTranslation();
@@ -69,14 +71,16 @@ export const FlatProductOption = ({
                 value={selected}
                 options={options}
                 placeholder={t('옵션을 선택해 주세요.')}
-                getOptionLabel={getFlatOptionLabel}
+                getOptionLabel={(option) => {
+                    return `${
+                        option.isRequiredOption ? '(필수)' : ''
+                    } ${getFlatOptionLabel(option)}`;
+                }}
                 getOptionValue={(option) => option.value}
                 isOptionDisabled={checkOptionDisabled ?? isOptionDisabled}
                 onChange={(v) => onOptionChange(v as SingleValue<FlatOption>)}
                 // menuPlacement={isMobile ? 'bottom' : 'auto'}
-                menuPortalTarget={
-                    typeof window !== 'undefined' ? document.body : null
-                }
+                menuPortalTarget={menuPortalTarget}
                 maxMenuHeight={200}
                 classNames={classNames}
             />

@@ -183,5 +183,53 @@ describe('useProductOptionStore', () => {
             expect(input).toBeDefined();
             expect(input?.inputValue).toBe('Product Level Message');
         });
+
+        it('addOption 시 동일 productNo에 PRODUCT 텍스트 옵션이 있으면 새 옵션에 함께 추가되어야 한다', () => {
+            const store = useProductOptionStore.getState();
+            store.addOption(createMockOption(1));
+
+            store.updateTextOptionValue({
+                productNo: 1000,
+                inputNo: 999,
+                inputValue: '공통 메시지',
+                required: true,
+                inputLabel: 'Gift Message',
+                inputMatchingType: 'PRODUCT',
+            });
+
+            store.addOption(createMockOption(2));
+
+            const state = useProductOptionStore.getState();
+            const newOption = state.selectedOptionList.find(
+                (item) => item.optionNo === 2,
+            );
+            const input = newOption?.optionInputs?.find((i) => i.inputNo === 999);
+
+            expect(input).toBeDefined();
+            expect(input?.inputValue).toBe('공통 메시지');
+            expect(input?.inputMatchingType).toBe('PRODUCT');
+        });
+
+        it('PRODUCT 타입일 때 선택된 모든 옵션에 동일한 텍스트 옵션이 반영되어야 한다', () => {
+            const store = useProductOptionStore.getState();
+            store.addOption(createMockOption(1));
+            store.addOption(createMockOption(2));
+
+            store.updateTextOptionValue({
+                productNo: 1000,
+                inputNo: 999,
+                inputValue: '공통 메시지',
+                required: true,
+                inputLabel: 'Gift Message',
+                inputMatchingType: 'PRODUCT',
+            });
+
+            const state = useProductOptionStore.getState();
+
+            state.selectedOptionList.forEach((option) => {
+                const input = option.optionInputs?.find((i) => i.inputNo === 999);
+                expect(input?.inputValue).toBe('공통 메시지');
+            });
+        });
     });
 });

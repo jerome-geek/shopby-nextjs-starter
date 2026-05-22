@@ -1,11 +1,21 @@
-import { append, filter, find, map, pipe, some, toArray } from '@fxts/core';
+import {
+    append,
+    filter,
+    find,
+    flatMap,
+    isEmpty,
+    map,
+    pipe,
+    some,
+    toArray,
+    uniqBy,
+} from '@fxts/core';
 import { createStore } from './utils';
 
 import { toSelectedOption } from '@/helpers/product';
 import { TextOptionInput } from '@/models/product/productOption';
 
 export type SelectedOption = ReturnType<typeof toSelectedOption>;
-
 interface ProductOptionState {
     selectedOptionList: SelectedOption[];
     addOption: (option: SelectedOption) => void;
@@ -22,25 +32,62 @@ export const useProductOptionStore = createStore<ProductOptionState>(
         selectedOptionList: [],
 
         addOption: (option) =>
-            set((state) => ({
-                selectedOptionList: pipe(
+            set((state) => {
+                if (
+                    some(
+                        (item) => item.optionNo === option.optionNo,
+                        state.selectedOptionList,
+                    )
+                ) {
+                    return {
+                        selectedOptionList: pipe(
+                            state.selectedOptionList,
+                            map((item) =>
+                                item.optionNo === option.optionNo
+                                    ? {
+                                          ...item,
+                                          orderCnt: item.orderCnt + 1,
+                                      }
+                                    : item,
+                            ),
+                            toArray,
+                        ),
+                    };
+                }
+
+                const existingInputNos = new Set(
+                    (option.optionInputs ?? []).map((input) => input.inputNo),
+                );
+
+                const productInputsToMerge = pipe(
                     state.selectedOptionList,
-                    (list) =>
-                        some((item) => item.optionNo === option.optionNo, list)
-                            ? map(
-                                  (item) =>
-                                      item.optionNo === option.optionNo
-                                          ? {
-                                                ...item,
-                                                orderCnt: item.orderCnt + 1,
-                                            }
-                                          : item,
-                                  list,
-                              )
-                            : append(option, list),
+                    filter((item) => item.productNo === option.productNo),
+                    flatMap((item) => item.optionInputs ?? []),
+                    filter((input) => input.inputMatchingType === 'PRODUCT'),
+                    uniqBy((input) => input.inputNo),
+                    filter((input) => !existingInputNos.has(input.inputNo)),
                     toArray,
-                ),
-            })),
+                );
+
+                const optionToAdd =
+                    productInputsToMerge.length === 0
+                        ? option
+                        : {
+                              ...option,
+                              optionInputs: [
+                                  ...(option.optionInputs ?? []),
+                                  ...productInputsToMerge,
+                              ],
+                          };
+
+                return {
+                    selectedOptionList: pipe(
+                        state.selectedOptionList,
+                        append(optionToAdd),
+                        toArray,
+                    ),
+                };
+            }),
 
         removeOption: (optionNo) =>
             set((state) => {
@@ -49,17 +96,14 @@ export const useProductOptionStore = createStore<ProductOptionState>(
                     filter((item) => item.optionNo !== optionNo),
                     toArray,
                 );
-                
-                // 변경 사항이 없으면 기존 상태 반환
+
                 if (nextList.length === state.selectedOptionList.length) {
                     return state;
                 }
                 return { selectedOptionList: nextList };
             }),
-
         updateOptionCnt: (optionNo, orderCnt) =>
             set((state) => {
-                // 대상 옵션을 먼저 찾아 실제 변경이 필요한지 확인
                 const target = find(
                     (item) => item.optionNo === optionNo,
                     state.selectedOptionList,
@@ -79,45 +123,69 @@ export const useProductOptionStore = createStore<ProductOptionState>(
                     ),
                 };
             }),
-
         updateTextOptionValue: (
             params: TextOptionInput & { productNo: number; optionNo?: number },
         ) =>
             set((state) => {
-                // 변경할 대상 옵션을 찾음
-                const targetOption = find(
-                    (item) =>
-                        item.productNo === params.productNo &&
-                        (params.optionNo === undefined ||
-                            item.optionNo === params.optionNo),
-                    state.selectedOptionList,
-                );
+                const targetOptions =
+                    params.inputMatchingType === 'PRODUCT'
+                        ? state.selectedOptionList.filter(
+                              (item) => item.productNo === params.productNo,
+                          )
+                        : pipe(
+                              state.selectedOptionList,
+                              filter(
+                                  (item) =>
+                                      item.productNo === params.productNo &&
+                                      (params.optionNo === undefined ||
+                                          item.optionNo === params.optionNo),
+                              ),
 
-                if (!targetOption) return state;
+                              toArray,
+                          );
 
-                // 해당 옵션 안에서 변경할 텍스트 입력항목을 찾음
-                const targetInput = find(
-                    (input) => input.inputNo === params.inputNo,
-                    targetOption.optionInputs ?? [],
-                );
-
-                // 기존 값과 동일하다면 업데이트를 건너뜀 (리렌더링 방지)
-                if (
-                    targetInput &&
-                    targetInput.inputValue === params.inputValue
-                ) {
+                if (isEmpty(targetOptions)) {
                     return state;
                 }
 
-                // 변경이 확인되면 fxts 파이프라인으로 배열 재구성
+                const hasChanges = pipe(
+                    targetOptions,
+
+                    some((option) => {
+                        const targetInput = find(
+                            (input) => input.inputNo === params.inputNo,
+
+                            option.optionInputs ?? [],
+                        );
+
+                        return (
+                            !targetInput ||
+                            targetInput.inputValue !== params.inputValue
+                        );
+                    }),
+                );
+
+                if (!hasChanges) {
+                    return state;
+                }
+
+                const targetOptionNos = new Set(
+                    targetOptions.map((option) => option.optionNo),
+                );
+
                 return {
                     selectedOptionList: pipe(
                         state.selectedOptionList,
                         map((item) => {
-                            if (item !== targetOption) return item;
-
+                            if (!targetOptionNos.has(item.optionNo)) {
+                                return item;
+                            }
                             const optionInputs = item.optionInputs ?? [];
+                            const targetInput = find(
+                                (input) => input.inputNo === params.inputNo,
 
+                                optionInputs,
+                            );
                             return {
                                 ...item,
                                 optionInputs: targetInput
@@ -127,6 +195,7 @@ export const useProductOptionStore = createStore<ProductOptionState>(
                                               input.inputNo === params.inputNo
                                                   ? {
                                                         ...input,
+
                                                         inputValue:
                                                             params.inputValue,
                                                     }
@@ -141,7 +210,8 @@ export const useProductOptionStore = createStore<ProductOptionState>(
                                               inputValue: params.inputValue,
                                               required: params.required,
                                               inputLabel: params.inputLabel,
-                                              inputMatchingType: params.inputMatchingType,
+                                              inputMatchingType:
+                                                  params.inputMatchingType,
                                           }),
                                           toArray,
                                       ),
@@ -154,5 +224,6 @@ export const useProductOptionStore = createStore<ProductOptionState>(
 
         clearOptions: () => set({ selectedOptionList: [] }),
     }),
+
     'ProductOptionStore',
 );

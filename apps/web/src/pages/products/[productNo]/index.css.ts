@@ -126,6 +126,8 @@ export const content = style({
             paddingRight: '20px',
             marginRight: '-20px',
             marginLeft: '0px',
+            scrollBehavior: 'smooth',
+            overscrollBehavior: 'contain',
 
             selectors: {
                 '&::-webkit-scrollbar': {

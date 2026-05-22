@@ -1,7 +1,5 @@
-import { includes, map, pipe, sum, toArray } from '@fxts/core';
-import { useQueryClient } from '@tanstack/react-query';
+import { map, pipe, sum } from '@fxts/core';
 import { Gift } from 'lucide-react';
-import { parseAsStringLiteral, useQueryStates } from 'nuqs';
 
 import * as styles from '@/components/bottom-sheet/option-select/index.css';
 import {
@@ -13,17 +11,13 @@ import {
     MultiProductOption,
     SelectedProductOption,
 } from '@/components/product-option';
+import { RequiredProductOption } from '@/components/product-option/required';
+import { ExtraProductList } from '@/components/product/extra-product-list';
 import { Button } from '@/components/ui/button';
-import { CHANNEL_TYPES } from '@/const/product';
-import { useCustomDialog } from '@/features/dialog';
-import { toOrderSheetOption } from '@/helpers/product';
-import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
-import { cartKeys } from '@/hooks/queryKeys';
-import { useToast } from '@/hooks/ui';
-import { useAuth } from '@/hooks/useAuth';
+import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
 import { useResponsive } from '@/hooks/utils';
-import { useCartStore } from '@/store/useCartStore';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
@@ -31,147 +25,40 @@ export interface OptionSelectBottomSheetProps extends DefaultModalLayoutProps {
     productNo: number;
 }
 
-const productSearchParamsSchema = {
-    channelType: parseAsStringLiteral(CHANNEL_TYPES),
-};
-
 export const OptionSelectBottomSheet = ({
     productNo,
     isOpen,
     close,
     unmount,
 }: OptionSelectBottomSheetProps) => {
-    const [{ channelType }] = useQueryStates(productSearchParamsSchema);
-    const isLogin = useAuth();
-    const queryClient = useQueryClient();
-    const { openAddCartDialog } = useCustomDialog();
-
     const { isDesktop } = useResponsive();
 
-    const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
-        useProductOption({
-            productNo,
+    const {
+        isDefaultOptionUsed,
+        isFlatOptionUsed,
+        isMultiLevelOptionUsed,
+        isRequiredOptionUsed,
+    } = useProductOption({
+        productNo,
+    });
+
+    const { onGiftButtonClick, onCartButtonClick, onOrderButtonClick } =
+        useProductOrderAction(productNo, {
+            isOptionBottomSheetOpen: isOpen,
+            closeOptionBottomSheet: close,
         });
 
     const { onFlatOptionChange, onMultiOptionChange } = useProductOptionChange({
         productNo,
     });
 
-    const addGuestCartItem = useCartStore((state) => state.addItem);
-    const { selectedOptionList, clearOptions } = useProductOptionStore();
+    const { selectedOptionList } = useProductOptionStore();
 
     const totalPrice = pipe(
         selectedOptionList,
         map((option) => option.buyPrice * option.orderCnt),
         sum,
     );
-
-    const {
-        register: { mutate: registerCartMutate },
-    } = useCartMutation();
-
-    const onCartButtonClick = () => {
-        if (isLogin) {
-            registerCartMutate(
-                {
-                    data: pipe(
-                        selectedOptionList,
-                        map((a) => toOrderSheetOption(a, channelType)),
-                        toArray,
-                    ),
-                },
-                {
-                    onSuccess: () => {
-                        close();
-                        openAddCartDialog();
-
-                        queryClient.invalidateQueries({
-                            predicate: (query) => {
-                                return includes(query.queryKey[0], [
-                                    ...cartKeys.all,
-                                ]);
-                            },
-                        });
-
-                        if (!isDefaultOptionUsed) {
-                            clearOptions();
-                        }
-                    },
-                },
-            );
-        } else {
-            selectedOptionList.forEach((option) => {
-                addGuestCartItem({
-                    productNo: option.productNo,
-                    optionNo: option.optionNo,
-                    orderCnt: option.orderCnt,
-                });
-            });
-
-            close();
-            openAddCartDialog();
-
-            if (!isDefaultOptionUsed) {
-                clearOptions();
-            }
-        }
-    };
-
-    const {
-        write: { mutate: writeOrderSheetMutate },
-    } = useOrderSheetMutation();
-
-    const { addToast } = useToast();
-    const onOrderButtonClick = () => {
-        if (selectedOptionList.length === 0) {
-            addToast({ message: '옵션을 선택해 주세요.' });
-            return;
-        }
-
-        writeOrderSheetMutate(
-            {
-                data: {
-                    products: pipe(
-                        selectedOptionList,
-                        map((a) => toOrderSheetOption(a, channelType)),
-                        toArray,
-                    ),
-                    productCoupons: [],
-                },
-            },
-            {
-                onSuccess: () => {
-                    close();
-                },
-            },
-        );
-    };
-
-    const onGiftButtonClick = () => {
-        if (selectedOptionList.length === 0) {
-            addToast({ message: '옵션을 선택해 주세요.' });
-            return;
-        }
-
-        writeOrderSheetMutate(
-            {
-                data: {
-                    products: pipe(
-                        selectedOptionList,
-                        map((a) => toOrderSheetOption(a, channelType)),
-                        toArray,
-                    ),
-                    productCoupons: [],
-                },
-                type: 'gift',
-            },
-            {
-                onSuccess: () => {
-                    close();
-                },
-            },
-        );
-    };
 
     return (
         <BottomSheetLayout
@@ -218,13 +105,19 @@ export const OptionSelectBottomSheet = ({
         >
             <div className={styles.container}>
                 <div className={styles.optionContainer} data-lenis-prevent>
+                    {isRequiredOptionUsed && (
+                        <RequiredProductOption
+                            productNo={productNo}
+                            onChange={onMultiOptionChange}
+                            menuPortalTarget={null}
+                        />
+                    )}
+
                     {isFlatOptionUsed && (
                         <FlatProductOption
                             productNo={productNo}
                             onChange={onFlatOptionChange}
-                            classNames={{
-                                menu: () => styles.relativeMenu,
-                            }}
+                            menuPortalTarget={null}
                         />
                     )}
 
@@ -232,9 +125,7 @@ export const OptionSelectBottomSheet = ({
                         <MultiProductOption
                             productNo={productNo}
                             onChange={onMultiOptionChange}
-                            classNames={{
-                                menu: () => styles.relativeMenu,
-                            }}
+                            menuPortalTarget={null}
                         />
                     )}
 
@@ -242,6 +133,10 @@ export const OptionSelectBottomSheet = ({
                         productNo={productNo}
                         isRemovable={!isDefaultOptionUsed}
                     />
+
+                    <ShopbyAsyncBoundary>
+                        <ExtraProductList productNo={productNo} />
+                    </ShopbyAsyncBoundary>
                 </div>
             </div>
         </BottomSheetLayout>

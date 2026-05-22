@@ -43,6 +43,7 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
             enabled: !!isLogin,
         },
     });
+
     const {
         data: productOptionListData,
         isFetched: isProductOptionListFetched,
@@ -88,6 +89,39 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [isProductOptionListFetched, queryClient],
     );
+
+    const getActiveTextOptionRequiredInfoList = useCallback(() => {
+        return pipe(
+            queryClient.getQueryCache().findAll({
+                queryKey: productKeys.options(),
+            }),
+            filter((query) => query.getObserversCount() > 0),
+            map((query) => {
+                const queryKey = query.queryKey as [string, string, number];
+                const data = query.state.data as
+                    | ProductOptionResponse
+                    | undefined;
+
+                if (!data) {
+                    return undefined;
+                }
+
+                return { queryKey, data };
+            }),
+            compact,
+            map(({ queryKey, data }) => {
+                return {
+                    productNo: queryKey[2],
+                    requiredInputs: pipe(
+                        data?.inputs ?? [],
+                        filter((input) => input.required),
+                        toArray,
+                    ),
+                };
+            }),
+            toArray,
+        );
+    }, [queryClient]);
 
     const { selectedOptionList } = useProductOptionStore();
 
@@ -286,6 +320,7 @@ const useProductOption = ({ productNo }: UseOptionProps) => {
         isTextOptionUsed,
         isTextOptionRequired,
         textOptionRequiredInfoList,
+        getActiveTextOptionRequiredInfoList,
         isSomeOptionSoldOut,
         getSelectedOptionValue,
         isOptionDisabled,

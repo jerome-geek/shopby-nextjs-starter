@@ -1,4 +1,5 @@
 import { flatMap, map, pipe, prop, toArray } from '@fxts/core';
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -167,6 +168,8 @@ const CartContent = () => {
         }
     };
 
+    const queryClient = useQueryClient();
+
     const onDeleteButtonClick = async (cartNos: number[]) => {
         if (cartNos.length === 0) {
             openDialog({
@@ -228,6 +231,10 @@ const CartContent = () => {
                 .forEach((item) => {
                     removeGuestCartItem(item.productNo, item.optionNo);
                 });
+
+            await queryClient.invalidateQueries({
+                queryKey: ['guestCartList'],
+            });
 
             addToast({
                 message: '장바구니에서 삭제되었습니다.',

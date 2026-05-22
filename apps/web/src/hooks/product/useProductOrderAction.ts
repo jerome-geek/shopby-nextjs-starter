@@ -4,7 +4,10 @@ import { parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
 import { CHANNEL_TYPES } from '@/const/product';
-import { useProductInfo } from '@/entities/product/hooks';
+import {
+    useOrderActionValidation,
+    useProductInfo,
+} from '@/entities/product/hooks';
 import { useCustomDialog } from '@/features/dialog';
 import { toOrderSheetOption } from '@/helpers/product';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
@@ -21,7 +24,8 @@ const productSearchParamsSchema = {
 };
 
 interface UseProductOrderActionOptions {
-    openOptionBottomSheet: () => void;
+    openOptionBottomSheet?: () => void;
+    closeOptionBottomSheet?: () => void;
     isOptionBottomSheetOpen: boolean;
 }
 
@@ -29,6 +33,7 @@ export const useProductOrderAction = (
     productNo: number,
     {
         openOptionBottomSheet,
+        closeOptionBottomSheet,
         isOptionBottomSheetOpen,
     }: UseProductOrderActionOptions,
 ) => {
@@ -45,6 +50,10 @@ export const useProductOrderAction = (
     const { isDefaultOptionUsed, isFlatOptionUsed, isMultiLevelOptionUsed } =
         useProductOption({ productNo });
 
+    const { ensureAddToCart, ensureOrder } = useOrderActionValidation({
+        productNo,
+    });
+
     const { selectedOptionList, clearOptions } = useProductOptionStore();
 
     const addGuestCartItem = useCartStore((state) => state.addItem);
@@ -55,6 +64,8 @@ export const useProductOrderAction = (
     const {
         write: { mutate: writeOrderSheetMutate },
     } = useOrderSheetMutation();
+
+    console.log('selectedOptionList', selectedOptionList);
 
     const filteredOptions = pipe(
         selectedOptionList,
@@ -74,36 +85,41 @@ export const useProductOrderAction = (
 
     const onGiftButtonClick = () => {
         if (needsBottomSheet) {
-            openOptionBottomSheet();
+            openOptionBottomSheet?.();
             return;
         }
 
-        if (filteredOptions.length === 0) {
-            addToast({ message: t('옵션을 선택해 주세요.') });
+        if (!ensureOrder()) {
             return;
         }
 
-        writeOrderSheetMutate({
-            data: {
-                products: pipe(
-                    filteredOptions,
-                    map((a) => toOrderSheetOption(a, channelType)),
-                    toArray,
-                ),
-                productCoupons: [],
+        writeOrderSheetMutate(
+            {
+                data: {
+                    products: pipe(
+                        filteredOptions,
+                        map((a) => toOrderSheetOption(a, channelType)),
+                        toArray,
+                    ),
+                    productCoupons: [],
+                },
+                type: 'gift',
             },
-            type: 'gift',
-        });
+            {
+                onSuccess: () => {
+                    closeOptionBottomSheet?.();
+                },
+            },
+        );
     };
 
     const onCartButtonClick = () => {
         if (needsBottomSheet) {
-            openOptionBottomSheet();
+            openOptionBottomSheet?.();
             return;
         }
 
-        if (filteredOptions.length === 0) {
-            addToast({ message: t('옵션을 선택해 주세요.') });
+        if (!ensureAddToCart()) {
             return;
         }
 
@@ -118,7 +134,9 @@ export const useProductOrderAction = (
                 },
                 {
                     onSuccess: () => {
+                        closeOptionBottomSheet?.();
                         openAddCartDialog();
+
                         queryClient.invalidateQueries({
                             predicate: (query) =>
                                 includes(query.queryKey[0] as string, [
@@ -134,12 +152,17 @@ export const useProductOrderAction = (
         } else {
             filteredOptions.forEach((option) => {
                 addGuestCartItem({
+                    baseProductNo: option?.baseProductNo,
                     productNo: option.productNo,
                     optionNo: option.optionNo,
                     orderCnt: option.orderCnt,
+                    optionInputs: option?.optionInputs ?? [],
                 });
             });
+
+            closeOptionBottomSheet?.();
             openAddCartDialog();
+
             if (!isDefaultOptionUsed) {
                 clearOptions();
             }
@@ -148,25 +171,31 @@ export const useProductOrderAction = (
 
     const onOrderButtonClick = () => {
         if (needsBottomSheet) {
-            openOptionBottomSheet();
+            openOptionBottomSheet?.();
             return;
         }
 
-        if (filteredOptions.length === 0) {
-            addToast({ message: t('옵션을 선택해 주세요.') });
+        if (!ensureOrder()) {
             return;
         }
 
-        writeOrderSheetMutate({
-            data: {
-                products: pipe(
-                    filteredOptions,
-                    map((a) => toOrderSheetOption(a, channelType)),
-                    toArray,
-                ),
-                productCoupons: [],
+        writeOrderSheetMutate(
+            {
+                data: {
+                    products: pipe(
+                        filteredOptions,
+                        map((a) => toOrderSheetOption(a, channelType)),
+                        toArray,
+                    ),
+                    productCoupons: [],
+                },
             },
-        });
+            {
+                onSuccess: () => {
+                    closeOptionBottomSheet?.();
+                },
+            },
+        );
     };
 
     return {

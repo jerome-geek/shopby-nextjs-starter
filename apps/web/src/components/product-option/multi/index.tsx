@@ -14,6 +14,7 @@ interface MultiProductOptionProps {
     onChange: (option: SingleValue<MultiLevelOption>) => void;
     checkOptionDisabled?: (option: MultiLevelOption) => boolean;
     classNames?: Props<MultiLevelOption>['classNames'];
+    menuPortalTarget?: HTMLElement | null;
 }
 
 export const MultiProductOption = ({
@@ -21,6 +22,7 @@ export const MultiProductOption = ({
     onChange,
     checkOptionDisabled,
     classNames,
+    menuPortalTarget = typeof window !== 'undefined' ? document.body : null,
 }: MultiProductOptionProps) => {
     const { t } = useTranslation();
     const { isMobile } = useResponsive();
@@ -115,7 +117,7 @@ export const MultiProductOption = ({
                                 // 마지막 단계만 외부 disabled 체크 적용, 나머지는 항상 활성
                                 index ===
                                 productOptionListData.labels.length - 1
-                                    ? (checkOptionDisabled ?? isOptionDisabled)
+                                    ? checkOptionDisabled ?? isOptionDisabled
                                     : () => false
                             }
                             noOptionsMessage={() => (
@@ -132,6 +134,7 @@ export const MultiProductOption = ({
                                 </span>
                             )}
                             menuPlacement={isMobile ? 'bottom' : 'auto'}
+                            menuPortalTarget={menuPortalTarget}
                             maxMenuHeight={200}
                             classNames={classNames}
                         />
