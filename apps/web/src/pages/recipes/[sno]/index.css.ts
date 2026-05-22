@@ -308,7 +308,30 @@ export const sectionTitle = style([
     },
 ]);
 
+export const sectionHeader = style({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px',
+    '@media': {
+        [media.desktop]: {
+            gap: '8px',
+        },
+    },
+});
+
 // --- Ingredients ---
+export const partnersDisclaimer = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['60'],
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Regular,
+            },
+        },
+    },
+]);
+
 export const ingredientsGrid = style({
     display: 'grid',
     listStyle: 'none',

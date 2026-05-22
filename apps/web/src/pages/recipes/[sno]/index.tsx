@@ -327,7 +327,13 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
 
             {/* --- INGREDIENTS AREA --- */}
             <section className={styles.sectionContainer}>
-                <h2 className={styles.sectionTitle}>요리 재료 List</h2>
+                <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>요리 재료 List</h2>
+                    <p className={styles.partnersDisclaimer}>
+                        이 게시물은 쿠팡파트너스 활동의 일환으로, 이에 따른
+                        일정액의 수수료를 제공받습니다.
+                    </p>
+                </div>
 
                 <ul className={styles.ingredientsGrid}>
                     {ingredients.map(
