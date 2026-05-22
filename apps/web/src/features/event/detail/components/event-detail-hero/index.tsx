@@ -30,7 +30,7 @@ export const EventDetailHero = ({
     const banners = useMemo(
         () =>
             bannerData
-                ? extractBannerContentsByAccountIndex(bannerData, 0)
+                ? extractBannerContentsByAccountIndex(bannerData, 1)
                 : [],
         [bannerData],
     );

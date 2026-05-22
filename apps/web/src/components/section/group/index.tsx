@@ -5,13 +5,14 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 import { LazyRender } from '@/components/common';
-import { ObserverTarget } from '@/shared/components/observer-target';
 import EventSection from '@/components/section/event';
+import EventSectionSkeleton from '@/components/section/event/skeleton';
 import ProductsSearch from '@/components/section/products/search';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import type { GetEventsV2Params } from '@/models/display/event';
 import { ShopType } from '@/pages/shop/[slug]';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { ObserverTarget } from '@/shared/components/observer-target';
 
 const Best = dynamic(() => import('@/components/section/best'), {
     ssr: false,
@@ -76,8 +77,6 @@ const SectionGroup = ({
 
     return (
         <>
-            <EventSection eventKey={eventIdList?.[0]} />
-
             <LazyRender minHeight={500}>
                 <ShopbyAsyncBoundary errorFallback={<></>}>
                     <Best type={type === 'kids' ? 'KIDS' : 'LIFE'} />
@@ -85,7 +84,12 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventKey={eventIdList?.[1]} />
+                <ShopbyAsyncBoundary
+                    fallback={<EventSectionSkeleton />}
+                    errorFallback={<></>}
+                >
+                    <EventSection eventKey={eventIdList?.[1]} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -121,7 +125,12 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventKey={eventIdList?.[2]} />
+                <ShopbyAsyncBoundary
+                    fallback={<EventSectionSkeleton />}
+                    errorFallback={<></>}
+                >
+                    <EventSection eventKey={eventIdList?.[2]} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -160,7 +169,12 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventKey={eventIdList?.[3]} />
+                <ShopbyAsyncBoundary
+                    fallback={<EventSectionSkeleton />}
+                    errorFallback={<></>}
+                >
+                    <EventSection eventKey={eventIdList?.[3]} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -168,7 +182,12 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventKey={eventIdList?.[4]} />
+                <ShopbyAsyncBoundary
+                    fallback={<EventSectionSkeleton />}
+                    errorFallback={<></>}
+                >
+                    <EventSection eventKey={eventIdList?.[4]} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -188,7 +207,12 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventKey={eventIdList?.[5]} />
+                <ShopbyAsyncBoundary
+                    fallback={<EventSectionSkeleton />}
+                    errorFallback={<></>}
+                >
+                    <EventSection eventKey={eventIdList?.[5]} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -196,7 +220,12 @@ const SectionGroup = ({
             </LazyRender>
 
             <LazyRender minHeight={400}>
-                <EventSection eventKey={eventIdList?.[6]} />
+                <ShopbyAsyncBoundary
+                    fallback={<EventSectionSkeleton />}
+                    errorFallback={<></>}
+                >
+                    <EventSection eventKey={eventIdList?.[6]} />
+                </ShopbyAsyncBoundary>
             </LazyRender>
 
             <LazyRender minHeight={400}>
@@ -228,7 +257,12 @@ const SectionGroup = ({
 
             {filteredEventIdList.map((eventKey) => (
                 <LazyRender minHeight={400} key={eventKey}>
-                    <EventSection eventKey={eventKey} />
+                    <ShopbyAsyncBoundary
+                        fallback={<EventSectionSkeleton />}
+                        errorFallback={<></>}
+                    >
+                        <EventSection eventKey={eventKey} />
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
             ))}
 

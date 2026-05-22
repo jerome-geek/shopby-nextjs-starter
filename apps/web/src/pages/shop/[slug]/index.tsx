@@ -3,6 +3,8 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 
 import { event } from '@/api/display';
 import Seo from '@/components/common/seo';
+import EventSection from '@/components/section/event';
+import EventSectionSkeleton from '@/components/section/event/skeleton';
 import SectionGroup from '@/components/section/group';
 import TimeSaleSection from '@/components/section/time-sale';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
@@ -39,9 +41,11 @@ export default function ShopMainPage({
 }: ShopMainPageProps) {
     const heroBannerType = type === 'kids' ? 'KIDS' : 'LIFE';
 
+    const topEventSectionId = `SHOP_${type.toUpperCase()}_TOP`;
+
     return (
         <>
-            <Seo title={heroBannerType === 'KIDS' ? '발견' : '라이프'} />
+            <Seo title={heroBannerType === 'KIDS' ? '키즈' : '라이프'} />
 
             <div className={styles.main}>
                 {/* Full-width HeroBanner */}
@@ -56,6 +60,13 @@ export default function ShopMainPage({
                         sectionId={sectionId}
                         title={'오늘만 특가'}
                     />
+                </ShopbyAsyncBoundary>
+
+                <ShopbyAsyncBoundary
+                    fallback={<EventSectionSkeleton />}
+                    errorFallback={<></>}
+                >
+                    <EventSection eventKey={topEventSectionId} />
                 </ShopbyAsyncBoundary>
 
                 {/* 기획전 및 상품진열 그룹 */}

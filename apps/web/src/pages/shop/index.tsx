@@ -7,16 +7,18 @@ import { timeSale } from '@/api/shop';
 import { LazyRender } from '@/components/common';
 import Seo from '@/components/common/seo';
 import EventSection from '@/components/section/event';
+import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
 import { bannerListOptions } from '@/entities/banner/queries';
-import { eventDetailOptions } from '@/entities/event/queries';
 import {
     BANNER_ID_PREFIX,
     HeroBanner,
 } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
+import { useEventList } from '@/hooks/query/display/event';
 import { productSectionKeys, timeSaleKeys } from '@/hooks/queryKeys';
+import { GetEventsV2Params } from '@/models/display';
 import * as styles from '@/pages/shop/index.css';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
@@ -30,6 +32,25 @@ const Best = dynamic(() => import('@/components/section/best'), {
 
 // TODO: 쇼핑몰 기본 홈은 발견
 export default function ShopMainPage() {
+    const searchParams: GetEventsV2Params = {
+        page: {
+            number: 1,
+            size: 7,
+        },
+        order: {
+            by: 'REGISTER_DATE',
+            direction: 'DESC',
+        },
+        categoryNos: [
+            EVENT_DISPLAY_CATEGORY_NO['KIDS'],
+            EVENT_DISPLAY_CATEGORY_NO['LIFE'],
+        ],
+    };
+
+    const { data: eventListData } = useEventList({
+        searchParams,
+    });
+
     return (
         <>
             <Seo title={'발견'} />
@@ -51,7 +72,9 @@ export default function ShopMainPage() {
                 </ShopbyAsyncBoundary>
 
                 {/* 영상(기획전) */}
-                <EventSection eventKey={'SHOP_MAIN_1'} />
+                <ShopbyAsyncBoundary errorFallback={<></>}>
+                    <EventSection eventKey={'SHOP_DISCOVERY_TOP'} />
+                </ShopbyAsyncBoundary>
 
                 {/* 키즈 타임특가 */}
                 <LazyRender minHeight={400}>
@@ -66,7 +89,11 @@ export default function ShopMainPage() {
 
                 {/* 영상(기획전) */}
                 <LazyRender minHeight={400}>
-                    <EventSection eventKey={'SHOP_MAIN_2'} />
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <EventSection
+                            eventKey={eventListData?.contents?.[0]?.id}
+                        />
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
 
                 {/* 라이프 베스트 */}
@@ -78,7 +105,11 @@ export default function ShopMainPage() {
 
                 {/* 영상(기획전) */}
                 <LazyRender minHeight={400}>
-                    <EventSection eventKey={'SHOP_MAIN_3'} />
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <EventSection
+                            eventKey={eventListData?.contents?.[1]?.id}
+                        />
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
 
                 {/* 키즈 베스트 */}
@@ -90,7 +121,11 @@ export default function ShopMainPage() {
 
                 {/* 영상(기획전) */}
                 <LazyRender minHeight={400}>
-                    <EventSection eventKey={'SHOP_MAIN_4'} />
+                    <ShopbyAsyncBoundary errorFallback={<></>}>
+                        <EventSection
+                            eventKey={eventListData?.contents?.[2]?.id}
+                        />
+                    </ShopbyAsyncBoundary>
                 </LazyRender>
             </div>
         </>
@@ -106,20 +141,20 @@ export const getStaticProps: GetStaticProps = async () => {
     try {
         // 1. 배너 프리페칭 (목록 조회와 무관하게 병렬 실행)
         await Promise.all([
-            queryClient.prefetchQuery(
+            queryClient.fetchQuery(
                 bannerListOptions({
                     banners: [HOME_BANNER_ID],
                 }),
             ),
 
             // 2. SHOP_MAIN_1 이벤트 상세 조회 (배너와는 병렬)
-            (async () => {
-                const eventKey = 'SHOP_MAIN_1';
+            // (async () => {
+            //     const eventKey = 'SHOP_MAIN_1';
 
-                await queryClient.prefetchQuery(
-                    eventDetailOptions({ eventKey }),
-                );
-            })(),
+            //     await queryClient.prefetchQuery(
+            //         eventDetailOptions({ eventKey }),
+            //     );
+            // })(),
 
             // 3. 타임세일 섹션 및 상품 조회 (순차 의존성 해결)
             (async () => {

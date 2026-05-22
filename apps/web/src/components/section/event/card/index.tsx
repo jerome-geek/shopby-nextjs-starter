@@ -1,4 +1,4 @@
-import { head, isEmpty, pipe, prop, toArray } from '@fxts/core';
+import { head, includes, isEmpty, pipe, prop, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { Navigation } from 'swiper/modules';
@@ -94,6 +94,12 @@ const EventCard = ({ event, bannerData }: EventCardProps) => {
         event.id,
     );
 
+    const isPrefetch = includes(event.id, [
+        'SHOP_DISCOVERY_TOP',
+        'SHOP_LIFE_TOP',
+        'SHOP_KIDS_TOP',
+    ]);
+
     const textRender = () => {
         return (
             <div className={styles.textWrapper}>
@@ -132,7 +138,7 @@ const EventCard = ({ event, bannerData }: EventCardProps) => {
                             <SwiperSlide key={banner.bannerNo || index}>
                                 <Link
                                     href={eventDetailHref}
-                                    prefetch={false}
+                                    prefetch={isPrefetch}
                                     style={{
                                         display: 'block',
                                         width: '100%',
@@ -153,12 +159,10 @@ const EventCard = ({ event, bannerData }: EventCardProps) => {
                         ))}
                     </Swiper>
                 ) : (
-                    <Link href={eventDetailHref} prefetch={false}>
+                    <Link href={eventDetailHref} prefetch={isPrefetch}>
                         <img
                             src={
-                                isMobile
-                                    ? parseThumbnail.mo
-                                    : parseThumbnail.pc
+                                isMobile ? parseThumbnail.mo : parseThumbnail.pc
                             }
                             alt={'기획전 썸네일 이미지'}
                             className={styles.image}
