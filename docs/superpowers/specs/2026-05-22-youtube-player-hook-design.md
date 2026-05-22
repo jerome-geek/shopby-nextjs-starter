@@ -16,7 +16,7 @@
 
 ## 설계
 
-### 훅: `src/hooks/utils/useYoutubePlayer.ts`
+### 훅: `src/shared/hooks/useYoutubePlayer.ts`
 
 ```ts
 interface UseYoutubePlayerOptions {
@@ -70,7 +70,7 @@ return () => {
 
 | 파일 | 변경 내용 |
 |------|----------|
-| `hooks/utils/useYoutubePlayer.ts` | 신규 생성 |
+| `shared/hooks/useYoutubePlayer.ts` | 신규 생성 |
 | `pages/recipes/[sno]/index.tsx` | `youtubeIframeRef` / `seekYoutubeTo` 제거 → 훅으로 교체 |
 | `package.json` (devDeps) | `@types/youtube` 추가 |
 
