@@ -16,6 +16,7 @@ import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';
 import { eventDetailOptions } from '@/entities/event/queries';
 import EventContents from '@/features/event/detail/components/event-contents';
+import { EventCoupons } from '@/features/event/detail/components/event-coupons';
 import { EventDetailHero } from '@/features/event/detail/components/event-detail-hero';
 import { EventDetailHeroSkeleton } from '@/features/event/detail/components/event-detail-hero/skeleton';
 import EventErrorState from '@/features/event/detail/components/event-error-state';
@@ -89,8 +90,7 @@ const EventDetailView = ({ eventKey, searchParams }: EventDetailViewProps) => {
                         return <EventContents key={key} top={eventData.top} />;
 
                     case 'COUPONS':
-                        // TODO: 기획전 쿠폰 영역 구현 필요
-                        return null;
+                        return <EventCoupons key={key} eventKey={eventKey} />;
 
                     case 'SECTIONS':
                         if (isEmpty(eventData.section) || !visibleSection) {
@@ -206,7 +206,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             const description = promotionText || `${label} 기획전`;
             const image =
                 eventData.pcImageUrl || eventData.mobileimageUrl || '';
-            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/events/${eventData.eventNo}`;
+            const url = `${process.env.NEXT_PUBLIC_BASE_URL || ''}/events/${
+                eventData.eventNo
+            }`;
 
             seoData = {
                 title: label,

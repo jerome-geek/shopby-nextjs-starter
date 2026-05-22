@@ -25,6 +25,7 @@ export const toastWrapper = styleVariants({
 export const toastMessage = style({
     flex: 1,
     textAlign: 'center',
+    whiteSpace: 'pre-line',
 });
 
 export const toastMessageWithLink = style([
