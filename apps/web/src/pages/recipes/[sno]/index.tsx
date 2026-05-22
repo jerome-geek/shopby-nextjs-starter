@@ -33,7 +33,11 @@ import { recipeKeys } from '@/hooks/queryKeys';
 import { useRecipeDetail } from '@/hooks/suspenseQuery/shop/recipe';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
-import { useDialog, useResponsive, useInvalidateOnAuthChange } from '@/hooks/utils';
+import {
+    useDialog,
+    useInvalidateOnAuthChange,
+    useResponsive,
+} from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
 import { useYoutubePlayer } from '@/shared/hooks/useYoutubePlayer';
 import { vars } from '@/styles/theme.css';
@@ -483,7 +487,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     try {
         const recipeDetail = await queryClient.fetchQuery({
-            queryKey: recipeKeys.detail(sno, 0),
+            queryKey: recipeKeys.detail(sno),
             queryFn: async () => {
                 const { data } = await recipe.getRecipeDetail(sno);
 
