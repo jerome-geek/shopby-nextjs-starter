@@ -3,7 +3,12 @@ import type { AxiosError } from 'axios';
 
 import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
-import type { GetEventParams, GetEventResponse } from '@/models/display/event';
+import type {
+    GetEventParams,
+    GetEventResponse,
+    GetEventsResponse,
+    GetEventsV2Params,
+} from '@/models/display/event';
 
 export interface EventDetailParams<T = GetEventResponse> {
     eventKey: string | number;
@@ -28,6 +33,33 @@ export const eventDetailOptions = <T = GetEventResponse>({
         queryKey: eventKeys.detail(eventKey, searchParams),
         queryFn: async () => {
             const { data } = await event.getEvent(eventKey, searchParams);
+
+            return data;
+        },
+        ...options,
+    });
+
+export interface EventListParams<T = GetEventsResponse> {
+    searchParams: GetEventsV2Params;
+    options?: Omit<
+        UseQueryOptions<
+            GetEventsResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof eventKeys)['list']>
+        >,
+        'queryKey' | 'queryFn'
+    >;
+}
+
+export const eventListOptions = <T = GetEventsResponse>({
+    searchParams,
+    options,
+}: EventListParams<T>) =>
+    queryOptions({
+        queryKey: eventKeys.list(searchParams),
+        queryFn: async () => {
+            const { data } = await event.getEventsV2(searchParams);
 
             return data;
         },

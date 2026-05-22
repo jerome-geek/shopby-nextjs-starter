@@ -11,5 +11,3 @@ const useBannerList = <T = GetBannersResponse>(params: BannerListParams<T>) => {
 };
 
 export default useBannerList;
-
-
