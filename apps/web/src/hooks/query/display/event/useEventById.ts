@@ -1,43 +1,26 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+
 import {
-    UseQueryOptions,
-    keepPreviousData,
-    useQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { event } from '@/api/display';
-import { eventKeys } from '@/hooks/queryKeys';
-import type { GetEventByIdParams, GetEventResponse } from '@/models/display/event';
-
-interface UseEventParams<T = GetEventResponse> {
-    eventId: string;
-    params?: GetEventByIdParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetEventResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof eventKeys)['detailById']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    eventByIdOptions,
+    type EventByIdParams,
+} from '@/entities/event/queries';
+import type { GetEventResponse } from '@/models/display/event';
 
 const useEventById = <T = GetEventResponse>({
     eventId,
     params,
     options,
-}: UseEventParams<T>) => {
-    return useQuery({
-        queryKey: eventKeys.detailById(eventId, params),
-        queryFn: async () => {
-            const { data } = await event.getEventById(eventId, params);
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-    });
+}: EventByIdParams<T>) => {
+    return useQuery(
+        eventByIdOptions({
+            eventId,
+            params,
+            options: {
+                placeholderData: keepPreviousData,
+                ...options,
+            },
+        }),
+    );
 };
 
 export default useEventById;

@@ -1,52 +1,15 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    eventProductSectionOptions,
+    type EventProductSectionParams,
+} from '@/entities/event/queries';
+import type { GetEventProductDisplaySectionResponse } from '@/models/display/event';
 
-import { event } from '@/api/display';
-import { eventKeys } from '@/hooks/queryKeys';
-import type {
-    GetEventProductDisplaySectionParams,
-    GetEventProductDisplaySectionResponse,
-} from '@/models/display/event';
-
-interface UseEventProductSectionParams<
-    T = GetEventProductDisplaySectionResponse,
-> {
-    eventNo: number;
-    sectionNo: number;
-    searchParams: GetEventProductDisplaySectionParams;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetEventProductDisplaySectionResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof eventKeys)['productSection']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useEventProductSection = <T = GetEventProductDisplaySectionResponse>({
-    eventNo,
-    sectionNo,
-    searchParams,
-    options,
-}: UseEventProductSectionParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: eventKeys.productSection(eventNo, sectionNo, searchParams),
-        queryFn: async () => {
-            const { data } = await event.getEventProductDisplaySection(
-                eventNo,
-                sectionNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
-    });
+const useEventProductSection = <T = GetEventProductDisplaySectionResponse>(
+    params: EventProductSectionParams<T>,
+) => {
+    return useSuspenseQuery(eventProductSectionOptions(params));
 };
 
 export default useEventProductSection;

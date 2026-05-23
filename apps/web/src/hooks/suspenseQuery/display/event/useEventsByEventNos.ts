@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import {
     eventsByEventNosOptions,
@@ -9,7 +9,7 @@ import type { SearchEventsByEventNosResponse } from '@/models/display/event';
 const useEventsByEventNos = <T = SearchEventsByEventNosResponse>(
     params: EventsByEventNosParams<T>,
 ) => {
-    return useQuery(eventsByEventNosOptions(params));
+    return useSuspenseQuery(eventsByEventNosOptions(params));
 };
 
 export default useEventsByEventNos;
