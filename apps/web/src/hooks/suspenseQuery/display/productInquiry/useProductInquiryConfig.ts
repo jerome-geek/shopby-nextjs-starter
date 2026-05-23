@@ -1,39 +1,15 @@
-import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { productInquiry } from '@/api/display';
-import { productInquiryKeys } from '@/hooks/queryKeys';
+import {
+    productInquiryConfigOptions,
+    type ProductInquiryConfigParams,
+} from '@/entities/productInquiry/queries';
 import type { GetProductInquiryConfigResponse } from '@/models/display/productInquiry';
 
-interface UseProductInquiryConfigParams<T = GetProductInquiryConfigResponse> {
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetProductInquiryConfigResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productInquiryKeys)['config']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useProductInquiryConfig = <T = GetProductInquiryConfigResponse>({
-    options,
-}: UseProductInquiryConfigParams<T> = {}) => {
-    return useSuspenseQuery({
-        queryKey: productInquiryKeys.config(),
-        queryFn: async () => {
-            const { data } = await productInquiry.getConfig();
-
-            return data;
-        },
-        staleTime: 60 * 60 * 1000,
-        gcTime: 2 * 60 * 60 * 1000,
-        ...options,
-    });
+const useProductInquiryConfig = <T = GetProductInquiryConfigResponse>(
+    params: ProductInquiryConfigParams<T> = {},
+) => {
+    return useSuspenseQuery(productInquiryConfigOptions(params));
 };
 
 export default useProductInquiryConfig;
