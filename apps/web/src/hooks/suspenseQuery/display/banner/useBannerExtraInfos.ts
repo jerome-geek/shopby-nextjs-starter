@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import {
     bannerExtraInfosOptions,
@@ -9,7 +9,7 @@ import type { GetBannerExtraInfosResponse } from '@/models/display/banner';
 const useBannerExtraInfos = <T = GetBannerExtraInfosResponse>(
     params: BannerExtraInfosParams<T>,
 ) => {
-    return useQuery(bannerExtraInfosOptions(params));
+    return useSuspenseQuery(bannerExtraInfosOptions(params));
 };
 
 export default useBannerExtraInfos;

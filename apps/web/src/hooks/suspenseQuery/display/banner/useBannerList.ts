@@ -10,7 +10,4 @@ const useBannerList = <T = GetBannersResponse>(params: BannerListParams<T>) => {
     return useSuspenseQuery(bannerListOptions(params));
 };
 
-export { bannerListOptions };
 export default useBannerList;
-
-

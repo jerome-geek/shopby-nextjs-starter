@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
 import { useProfile } from '@/hooks/query/member/profile';
-import { bannerListOptions } from '@/hooks/suspenseQuery/display/banner';
+import { bannerListOptions } from '@/entities/banner/queries';
 import { useAuth } from '@/hooks/useAuth';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/complete/index.css';

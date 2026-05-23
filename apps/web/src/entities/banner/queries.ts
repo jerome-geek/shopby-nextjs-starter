@@ -3,7 +3,11 @@ import type { AxiosError } from 'axios';
 
 import { banner } from '@/api/display';
 import { bannerKeys } from '@/hooks/queryKeys';
-import type { GetBannersResponse } from '@/models/display/banner';
+import type {
+    GetBannerExtraInfosParams,
+    GetBannerExtraInfosResponse,
+    GetBannersResponse,
+} from '@/models/display/banner';
 
 export interface BannerListParams<T = GetBannersResponse> {
     type?: 'code' | 'id';
@@ -43,5 +47,32 @@ export const bannerListOptions = <T = GetBannersResponse>({
         queryFn: createQueryFn(type, banners),
         staleTime: 1000 * 60 * 60,
         gcTime: 1000 * 60 * 60,
+        ...options,
+    });
+
+export interface BannerExtraInfosParams<T = GetBannerExtraInfosResponse> {
+    params: GetBannerExtraInfosParams;
+    options?: Omit<
+        UseQueryOptions<
+            GetBannerExtraInfosResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof bannerKeys)['extraInfos']>
+        >,
+        'queryKey' | 'queryFn'
+    >;
+}
+
+export const bannerExtraInfosOptions = <T = GetBannerExtraInfosResponse>({
+    params,
+    options,
+}: BannerExtraInfosParams<T>) =>
+    queryOptions({
+        queryKey: bannerKeys.extraInfos(params),
+        queryFn: async () => {
+            const { data } = await banner.getBannerExtraInfos(params);
+
+            return data;
+        },
         ...options,
     });

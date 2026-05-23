@@ -4,7 +4,7 @@ import Script from 'next/script';
 import * as styles from '@/components/layer-contents/share/index.css';
 import ShareSkeleton from '@/components/layer-contents/share/skeleton';
 import { useShare } from '@/features/share';
-import { bannerListOptions } from '@/hooks/suspenseQuery/display/banner';
+import { bannerListOptions } from '@/entities/banner/queries';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
