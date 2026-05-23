@@ -1,50 +1,27 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { category } from '@/api/display';
-import { categoryKeys } from '@/hooks/queryKeys';
-import type {
-    GetCategoryParams,
-    GetCategoryResponse,
-} from '@/models/display/category';
-
-interface UseCategoryParams<T = GetCategoryResponse> {
-    categoryNo: number;
-    searchParams?: GetCategoryParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetCategoryResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof categoryKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    categoryDetailOptions,
+    type CategoryDetailParams,
+} from '@/entities/category/queries';
+import type { GetCategoryResponse } from '@/models/display/category';
 
 const useCategory = <T = GetCategoryResponse>({
     categoryNo,
     searchParams,
     options,
-}: UseCategoryParams<T>) => {
-    return useQuery({
-        queryKey: categoryKeys.detail(categoryNo, searchParams),
-        queryFn: async () => {
-            const { data } = await category.getCategory(
-                categoryNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        enabled: !!categoryNo,
-        placeholderData: keepPreviousData,
-        ...options,
-    });
+}: CategoryDetailParams<T>) => {
+    return useQuery(
+        categoryDetailOptions({
+            categoryNo,
+            searchParams,
+            options: {
+                enabled: !!categoryNo,
+                placeholderData: keepPreviousData,
+                ...options,
+            },
+        }),
+    );
 };
 
 export default useCategory;

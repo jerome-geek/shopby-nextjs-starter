@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import {
     newProductCategoryListOptions,
@@ -9,7 +9,7 @@ import type { GetNewProductCategoriesResponse } from '@/models/display/category'
 const useNewProductCategoryList = <T = GetNewProductCategoriesResponse>(
     params: NewProductCategoryListParams<T> = {},
 ) => {
-    return useSuspenseQuery(newProductCategoryListOptions(params));
+    return useQuery(newProductCategoryListOptions(params));
 };
 
 export default useNewProductCategoryList;

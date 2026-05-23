@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { CATEGORY_CODE } from '@/const/category';
 import { useCategoryAll } from '@/hooks/query/display/category';
-import type { UseCategoryAllParams } from '@/hooks/query/display/category/useCategoryAll';
+import type { CategoryAllParams as UseCategoryAllParams } from '@/entities/category/queries';
 import { useCategoryAll as useSuspenseCategoryAll } from '@/hooks/suspenseQuery/display/category';
 import type { GetCategoriesResponse } from '@/models/display/category';
 
