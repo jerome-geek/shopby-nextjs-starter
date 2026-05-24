@@ -34,6 +34,8 @@ const ShippingAddress = ({ orderSheetNo }: ShippingAddressProps) => {
         orderSheetNo,
         searchParams: { includeMemberAddress: true },
     });
+    const hasInitialMainAddress = !!orderSheetData.orderSheetAddress?.mainAddress
+        ?.receiverAddress;
 
     const handleSelectAddress = () => {
         if (isMobile) {
@@ -84,10 +86,10 @@ const ShippingAddress = ({ orderSheetNo }: ShippingAddressProps) => {
             {isLogin === false && <GuestShippingAddressForm />}
 
             {isLogin === true &&
-                shippingAddress &&
-                !shippingAddress.receiverAddress && <MemberShippingAddressForm />}
+                !hasInitialMainAddress && <MemberShippingAddressForm />}
 
             {isLogin === true &&
+                hasInitialMainAddress &&
                 shippingAddress &&
                 shippingAddress.receiverAddress && (
                     <div className={styles.shippingAddressContainer}>

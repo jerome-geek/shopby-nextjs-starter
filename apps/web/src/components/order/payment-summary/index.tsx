@@ -9,6 +9,7 @@ import { InputCheckbox } from '@/components/ui/input';
 import { useOrderSheetCalculate } from '@/hooks/order';
 import type { OrderTermsType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';
+import { ErrorMessage } from '@/shared/components/form';
 import { CURRENCY } from '@/utils/currency';
 
 const OrderPaymentSummary = ({ orderSheetNo }: { orderSheetNo: string }) => {
@@ -245,6 +246,7 @@ const OrderPaymentSummary = ({ orderSheetNo }: { orderSheetNo: string }) => {
                             },
                         )}
                     </ul>
+                    <ErrorMessage name='agreementTermsAgrees' />
                 </div>
             </div>
 

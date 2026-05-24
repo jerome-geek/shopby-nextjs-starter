@@ -17,13 +17,14 @@ import {
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 const GuestShippingAddressForm = () => {
     const { t } = useTranslation();
 
     const { isMobile } = useResponsive();
 
-    const { register, setValue, watch, control } =
+    const { register, setValue, control } =
         useFormContext<PaymentReserveSchemaType>();
 
     const ordererName = useWatch({ control, name: 'orderer.ordererName' });
@@ -145,6 +146,7 @@ const GuestShippingAddressForm = () => {
                     placeholder={t('이름을 입력해주세요')}
                     {...register('shippingAddress.receiverName')}
                 />
+                <ErrorMessage name='shippingAddress.receiverName' />
             </InputFieldContainer>
 
             <InputFieldContainer>
@@ -183,6 +185,7 @@ const GuestShippingAddressForm = () => {
                         {...register('shippingAddress.receiverContact1.suffix')}
                     />
                 </div>
+                <ErrorMessage name='shippingAddress.receiverContact1' />
             </InputFieldContainer>
 
             <InputFieldContainer>
@@ -213,6 +216,8 @@ const GuestShippingAddressForm = () => {
                     style={{ marginTop: '8px' }}
                     {...register('shippingAddress.receiverDetailAddress')}
                 />
+                <ErrorMessage name='shippingAddress.receiverZipCd' />
+                <ErrorMessage name='shippingAddress.receiverDetailAddress' />
             </InputFieldContainer>
 
             <DeliveryRequestForm />

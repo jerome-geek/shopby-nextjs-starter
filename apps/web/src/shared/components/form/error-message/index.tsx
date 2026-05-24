@@ -1,9 +1,44 @@
 import { filter, pipe, reduce } from '@fxts/core';
-import { ErrorMessage as RHFErrorMessage } from '@hookform/error-message';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/shared/components/form/error-message/index.css';
+
+const getErrorMessage = (error: unknown): string | undefined => {
+    if (!error) {
+        return undefined;
+    }
+
+    if (typeof error === 'object' && 'message' in error) {
+        const message = (error as { message?: unknown }).message;
+
+        if (typeof message === 'string') {
+            return message;
+        }
+    }
+
+    if (Array.isArray(error)) {
+        for (const entry of error) {
+            const message = getErrorMessage(entry);
+
+            if (message) {
+                return message;
+            }
+        }
+    }
+
+    if (typeof error === 'object') {
+        for (const value of Object.values(error as Record<string, unknown>)) {
+            const message = getErrorMessage(value);
+
+            if (message) {
+                return message;
+            }
+        }
+    }
+
+    return undefined;
+};
 
 export const ErrorMessage = ({ name }: { name: string }) => {
     const { t } = useTranslation();
@@ -22,19 +57,11 @@ export const ErrorMessage = ({ name }: { name: string }) => {
             ),
     );
 
-    const isError = !!error;
+    const errorMessage = getErrorMessage(error);
 
-    if (!isError) {
+    if (!errorMessage) {
         return null;
     }
 
-    return (
-        <RHFErrorMessage
-            errors={errors}
-            name={name}
-            render={({ message }) => (
-                <p className={styles.errorMessage}>{t(message)}</p>
-            )}
-        />
-    );
+    return <p className={styles.errorMessage}>{t(errorMessage)}</p>;
 };

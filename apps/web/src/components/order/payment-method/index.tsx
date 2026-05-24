@@ -11,6 +11,7 @@ import { CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP } from '@/const/label';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import type { CashReceiptKeyType, PayType, PgType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 export const PaymentMethod = () => {
     const { t } = useTranslation();
@@ -191,6 +192,7 @@ export const PaymentMethod = () => {
                                                     )}
                                                     {...register('remitter')}
                                                 />
+                                                <ErrorMessage name='remitter' />
                                             </div>
 
                                             <div className={styles.divider} />
@@ -263,6 +265,7 @@ export const PaymentMethod = () => {
                                                         />
                                                     )}
                                                 />
+                                                <ErrorMessage name='bankAccountToDeposit.bankAccount' />
                                             </div>
 
                                             <div
@@ -421,6 +424,7 @@ export const PaymentMethod = () => {
                                                                             'cashReceipt.cashReceiptKey',
                                                                         )}
                                                                     />
+                                                                    <ErrorMessage name='cashReceipt.cashReceiptKey' />
                                                                 </div>
                                                             </>
                                                         ) : (
@@ -437,6 +441,7 @@ export const PaymentMethod = () => {
                                                                         'cashReceipt.cashReceiptKey',
                                                                     )}
                                                                 />
+                                                                <ErrorMessage name='cashReceipt.cashReceiptKey' />
                                                             </div>
                                                         )}
                                                     </div>
@@ -449,6 +454,7 @@ export const PaymentMethod = () => {
                     );
                 })}
             </div>
+            <ErrorMessage name='pgType' />
         </section>
     );
 };

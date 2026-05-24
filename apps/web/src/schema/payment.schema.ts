@@ -18,7 +18,7 @@ const createOrderShippingAddressSchema = (isGlobalMall?: boolean) => {
         requestShippingDate: z.date().nullish(),
         orderAdditionalInfo: z.string().nullish(),
         usesShippingInfoLaterInput: z.boolean().nullish(),
-        receiverName: z.string(),
+        receiverName: z.string().nonempty('받으시는 분을 입력해주세요.'),
         customsIdNumber: z.string().nullish(),
         countryCd: CountryCdType,
         receiverZipCd: z.string().nonempty('우편번호를 입력해주세요.'),

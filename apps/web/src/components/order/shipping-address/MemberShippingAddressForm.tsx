@@ -17,6 +17,7 @@ import {
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';
+import { ErrorMessage } from '@/shared/components/form';
 
 const MemberShippingAddressForm = () => {
     const { t } = useTranslation();
@@ -145,6 +146,7 @@ const MemberShippingAddressForm = () => {
                     placeholder={t('이름을 입력해주세요')}
                     {...register('shippingAddress.receiverName')}
                 />
+                <ErrorMessage name='shippingAddress.receiverName' />
             </InputFieldContainer>
 
             <InputFieldContainer>
@@ -183,6 +185,7 @@ const MemberShippingAddressForm = () => {
                         {...register('shippingAddress.receiverContact1.suffix')}
                     />
                 </div>
+                <ErrorMessage name='shippingAddress.receiverContact1' />
             </InputFieldContainer>
 
             <InputFieldContainer>
@@ -213,6 +216,8 @@ const MemberShippingAddressForm = () => {
                     style={{ marginTop: '8px' }}
                     {...register('shippingAddress.receiverDetailAddress')}
                 />
+                <ErrorMessage name='shippingAddress.receiverZipCd' />
+                <ErrorMessage name='shippingAddress.receiverDetailAddress' />
             </InputFieldContainer>
 
             <DeliveryRequestForm />
