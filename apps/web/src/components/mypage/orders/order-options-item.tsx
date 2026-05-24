@@ -213,8 +213,7 @@ export const OrderOptionsItem = ({
 
                 {isExchangeDisabled && (
                     <Button
-                        frame='solid'
-                        variant='primary'
+                        frame='outlined'
                         size='small'
                         onClick={() =>
                             router.push(PATHS.MYPAGE.PRODUCT_INQUIRIES.MAIN)
