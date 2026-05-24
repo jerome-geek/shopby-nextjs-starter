@@ -8,6 +8,7 @@ import { NextActionButton } from '@/components/mypage/orders/next-action-button'
 import * as styles from '@/components/mypage/orders/order-options-item.css';
 import { Button } from '@/components/ui';
 import { PATHS } from '@/const/paths';
+import { shouldShowNextAction } from '@/entities/mypage/utils/orders';
 import type { NextAction, OrderOption } from '@/models/order';
 import { Only } from '@/shared/components/only';
 import { CURRENCY } from '@/utils/currency';
@@ -81,24 +82,16 @@ export const OrderOptionsItem = ({
     const filteredNextActions = useMemo(() => {
         return pipe(
             nextActions,
-            filter(({ nextActionType }) => {
-                if (
-                    isFreeGift &&
-                    (nextActionType === 'EXCHANGE' ||
-                        nextActionType === 'WRITE_REVIEW')
-                ) {
-                    return false;
-                }
-
-                if (nextActionType === 'EXCHANGE' && isExchangeDisabled) {
-                    return false;
-                }
-
-                return true;
-            }),
+            filter(({ nextActionType }) =>
+                shouldShowNextAction(nextActionType, {
+                    orderStatusType,
+                    isFreeGift,
+                    isExchangeDisabled,
+                }),
+            ),
             toArray,
         );
-    }, [nextActions, isFreeGift, isExchangeDisabled]);
+    }, [nextActions, orderStatusType, isFreeGift, isExchangeDisabled]);
 
     return (
         <div className={styles.itemContainer}>
@@ -113,6 +106,7 @@ export const OrderOptionsItem = ({
                     style={{
                         pointerEvents: isExtraProduct ? 'none' : 'auto',
                     }}
+                    prefetch={false}
                 >
                     <img
                         src={imageUrl || ''}
