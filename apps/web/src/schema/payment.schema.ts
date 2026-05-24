@@ -252,98 +252,64 @@ export const getPaymentSchema = ({
                 ? z.string().nullable().optional()
                 : z.string().nonempty('임시 비밀번호 확인을 입력해주세요.'),
         })
-        .refine(
-            (data) => {
-                if (data.payType === 'ACCOUNT') {
-                    return !!data.remitter;
-                }
-                return true;
-            },
-            {
-                message: '입금자명을 입력해주세요.',
-                path: ['remitter'],
-            },
-        )
-        .refine(
-            (data) => {
-                if (data.payType === 'ACCOUNT') {
-                    return !!data.bankAccountToDeposit;
-                }
-                return true;
-            },
-            {
-                message: '입금은행을 선택해주세요.',
-                path: ['bankAccountToDeposit.bankAccount'],
-            },
-        )
-        .refine(
-            (data) => {
-                if (data.shippingAddress.countryCd === 'KR') {
-                    return true;
-                }
-                return !!data.shippingAddress.receiverState;
-            },
-            {
-                message: 'Receiver State is required',
-                path: ['shippingAddress.receiverState'],
-            },
-        )
-        .refine(
-            ({ tempPassword, tempPasswordCheck }) => {
-                if (isLogin) {
-                    return true;
-                }
-                return tempPassword === tempPasswordCheck;
-            },
-            {
-                message: '임시 비밀번호가 일치하지 않습니다.',
-                path: ['tempPasswordCheck'],
-            },
-        )
-        .refine(
-            ({ payType, bankAccountToDeposit }) => {
-                if (payType !== 'ACCOUNT') return true;
-                return !!bankAccountToDeposit?.bankAccount;
-            },
-            {
-                message: '계좌번호를 입력해주세요.',
-                path: ['bankAccountToDeposit', 'bankAccount'],
-            },
-        )
-        .refine(
-            ({ payType, applyCashReceipt, cashReceipt }) => {
+        .superRefine((data, ctx) => {
+            if (data.payType === 'ACCOUNT' && !data.remitter) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: '입금자명을 입력해주세요.',
+                    path: ['remitter'],
+                });
+            }
+
+            if (data.payType === 'ACCOUNT' && !data.bankAccountToDeposit?.bankAccount) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: '입금은행을 선택해주세요.',
+                    path: ['bankAccountToDeposit', 'bankAccount'],
+                });
+            }
+
+            if (data.shippingAddress.countryCd !== 'KR' && !data.shippingAddress.receiverState) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Receiver State is required',
+                    path: ['shippingAddress', 'receiverState'],
+                });
+            }
+
+            if (!isLogin && data.tempPassword !== data.tempPasswordCheck) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: '임시 비밀번호가 일치하지 않습니다.',
+                    path: ['tempPasswordCheck'],
+                });
+            }
+
+            if (
+                data.payType === 'ACCOUNT' &&
+                data.applyCashReceipt &&
+                !data.cashReceipt?.cashReceiptKey
+            ) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: '발급 번호를 입력해주세요.',
+                    path: ['cashReceipt', 'cashReceiptKey'],
+                });
+            }
+
+            if (requireCustomsIdNumber) {
                 if (
-                    payType === 'ACCOUNT' &&
-                    applyCashReceipt &&
-                    !cashReceipt?.cashReceiptKey
+                    !data.shippingAddress.customsIdNumber ||
+                    !regEx.customsId.test(data.shippingAddress.customsIdNumber)
                 ) {
-                    return false;
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: '개인통관고유부호를 입력해주세요 (P로 시작하는 13자리)',
+                        path: ['shippingAddress', 'customsIdNumber'],
+                    });
                 }
-                return true;
-            },
-            {
-                message: '발급 번호를 입력해주세요.',
-                path: ['cashReceipt', 'cashReceiptKey'],
-            },
-        )
-        .refine(
-            (data) => {
-                if (requireCustomsIdNumber) {
-                    return (
-                        !!data.shippingAddress.customsIdNumber &&
-                        regEx.customsId.test(
-                            data.shippingAddress.customsIdNumber,
-                        )
-                    );
-                }
-                return true;
-            },
-            {
-                message:
-                    '개인통관고유부호를 입력해주세요 (P로 시작하는 13자리)',
-                path: ['shippingAddress', 'customsIdNumber'],
-            },
-        );
+            }
+        });
 };
 
 export type PaymentReserveSchemaType = z.infer<

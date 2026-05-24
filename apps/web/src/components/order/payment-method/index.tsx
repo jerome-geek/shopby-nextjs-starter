@@ -6,7 +6,12 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/payment-method/index.css';
-import { InputField, Select } from '@/components/ui/input';
+import {
+    InputContainer,
+    InputField,
+    InputLabel,
+    Select,
+} from '@/components/ui/input';
 import { CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP } from '@/const/label';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import type { CashReceiptKeyType, PayType, PgType } from '@/models';
@@ -174,98 +179,87 @@ export const PaymentMethod = () => {
                                             }}
                                         >
                                             <div className={styles.fieldRow}>
-                                                <div
-                                                    className={
-                                                        styles.fieldLabel
-                                                    }
-                                                >
+                                                <InputLabel isRequired>
                                                     {t('입금자명')}
-                                                    <span
-                                                        className={
-                                                            styles.requiredDot
-                                                        }
+                                                </InputLabel>
+                                                <InputContainer>
+                                                    <InputField
+                                                        placeholder={t(
+                                                            '입금자명을 입력해주세요',
+                                                        )}
+                                                        {...register(
+                                                            'remitter',
+                                                        )}
                                                     />
-                                                </div>
-                                                <InputField
-                                                    placeholder={t(
-                                                        '입금자명을 입력해주세요',
-                                                    )}
-                                                    {...register('remitter')}
-                                                />
-                                                <ErrorMessage name='remitter' />
+                                                    <ErrorMessage name='remitter' />
+                                                </InputContainer>
                                             </div>
-
                                             <div className={styles.divider} />
 
                                             <div className={styles.fieldRow}>
-                                                <div
-                                                    className={
-                                                        styles.fieldLabel
-                                                    }
-                                                >
+                                                <InputLabel isRequired>
                                                     {t('입금은행')}
-                                                    <span
-                                                        className={
-                                                            styles.requiredDot
-                                                        }
-                                                    />
-                                                </div>
-                                                <Controller
-                                                    control={control}
-                                                    name='bankAccountToDeposit.bankAccount'
-                                                    render={({
-                                                        field: {
-                                                            onChange,
-                                                            value,
-                                                        },
-                                                    }) => (
-                                                        <Select
-                                                            options={
-                                                                tradeBankAccountInfos
-                                                            }
-                                                            getOptionLabel={(
-                                                                opt,
-                                                            ) =>
-                                                                `${opt.bankName} ${opt.bankAccount} (예금주명: ${opt.bankDepositorName})`
-                                                            }
-                                                            getOptionValue={(
-                                                                opt,
-                                                            ) =>
-                                                                opt.bankAccount
-                                                            }
-                                                            menuPortalTarget={
-                                                                typeof document !==
-                                                                'undefined'
-                                                                    ? document.body
-                                                                    : undefined
-                                                            }
-                                                            value={tradeBankAccountInfos.find(
-                                                                (opt) =>
-                                                                    opt.bankAccount ===
-                                                                    value,
-                                                            )}
-                                                            onChange={(opt) => {
-                                                                if (opt) {
-                                                                    onChange(
-                                                                        opt.bankAccount,
-                                                                    );
-                                                                    setValue(
-                                                                        'bankAccountToDeposit.bankCode',
-                                                                        opt.bankCode,
-                                                                    );
-                                                                    setValue(
-                                                                        'bankAccountToDeposit.bankDepositorName',
-                                                                        opt.bankDepositorName,
-                                                                    );
+                                                </InputLabel>
+                                                <InputContainer>
+                                                    <Controller
+                                                        control={control}
+                                                        name='bankAccountToDeposit.bankAccount'
+                                                        render={({
+                                                            field: {
+                                                                onChange,
+                                                                value,
+                                                            },
+                                                        }) => (
+                                                            <Select
+                                                                options={
+                                                                    tradeBankAccountInfos
                                                                 }
-                                                            }}
-                                                            placeholder={t(
-                                                                '선택사항을 확인해주세요',
-                                                            )}
-                                                        />
-                                                    )}
-                                                />
-                                                <ErrorMessage name='bankAccountToDeposit.bankAccount' />
+                                                                getOptionLabel={(
+                                                                    opt,
+                                                                ) =>
+                                                                    `${opt.bankName} ${opt.bankAccount} (예금주명: ${opt.bankDepositorName})`
+                                                                }
+                                                                getOptionValue={(
+                                                                    opt,
+                                                                ) =>
+                                                                    opt.bankAccount
+                                                                }
+                                                                menuPortalTarget={
+                                                                    typeof document !==
+                                                                    'undefined'
+                                                                        ? document.body
+                                                                        : undefined
+                                                                }
+                                                                value={tradeBankAccountInfos.find(
+                                                                    (opt) =>
+                                                                        opt.bankAccount ===
+                                                                        value,
+                                                                )}
+                                                                onChange={(
+                                                                    opt,
+                                                                ) => {
+                                                                    if (opt) {
+                                                                        onChange(
+                                                                            opt.bankAccount,
+                                                                        );
+                                                                        setValue(
+                                                                            'bankAccountToDeposit.bankCode',
+                                                                            opt.bankCode,
+                                                                        );
+                                                                        setValue(
+                                                                            'bankAccountToDeposit.bankDepositorName',
+                                                                            opt.bankDepositorName,
+                                                                        );
+                                                                    }
+                                                                }}
+                                                                placeholder={t(
+                                                                    '선택사항을 확인해주세요',
+                                                                )}
+                                                            />
+                                                        )}
+                                                    />
+                                                    <ErrorMessage name='bankAccountToDeposit.bankAccount' />
+                                                </InputContainer>
                                             </div>
 
                                             <div

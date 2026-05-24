@@ -40,18 +40,22 @@ export const getInitialOrderFormValues = ({
     const availablePayTypes = orderSheetData?.availablePayTypes ?? [];
     const lastPayType = orderSheetData?.lastPayType;
 
-    // NOTE: 마지막 결제수단에 해당하는 PG 타입 계산
-    const pgType = pipe(
-        availablePayTypes,
-        filter((a) => a.payType === lastPayType),
-        flatMap((b) => b.pgTypes),
-        head,
-    );
+    // NOTE: 마지막 결제수단이 유효하지 않으면 첫 번째 결제수단을 기본값으로 사용
+    const firstPayTypeInfo = availablePayTypes[0];
     const payType =
         lastPayType &&
         includes(lastPayType, pipe(availablePayTypes, map(prop('payType'))))
             ? lastPayType
-            : undefined;
+            : firstPayTypeInfo?.payType;
+
+    const pgType = payType
+        ? pipe(
+              availablePayTypes,
+              filter((a) => a.payType === payType),
+              flatMap((b) => b.pgTypes),
+              head,
+          )
+        : undefined;
 
     // NOTE: shippingAddress 스키마는 단일 flat 객체 타입 (Union 아님)
     // isKorean에 따라 값만 달라지므로 단언 없이 직접 할당 가능

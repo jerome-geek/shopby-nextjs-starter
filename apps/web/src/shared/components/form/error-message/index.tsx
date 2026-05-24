@@ -43,7 +43,7 @@ const getErrorMessage = (error: unknown): string | undefined => {
 export const ErrorMessage = ({ name }: { name: string }) => {
     const { t } = useTranslation();
     const { control } = useFormContext();
-    const { errors } = useFormState({ control });
+    const { errors } = useFormState({ control, name });
 
     const error = pipe(
         name.split(/[.[\]]+/),
