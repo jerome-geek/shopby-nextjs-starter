@@ -22,6 +22,17 @@
 
 - Always respond in Korean
 
+## CodeGraph
+
+이 프로젝트는 CodeGraph MCP 서버(`codegraph_*` 도구)를 사용합니다.
+처음 클론하거나 대규모 변경 후에는 반드시 인덱스를 초기화하세요:
+
+```bash
+codegraph init -i
+```
+
+`.codegraph/` 디렉토리는 머신별 로컬 파일이므로 커밋하지 않습니다.
+
 ## Project Context
 
 @apps/web/CLAUDE.md

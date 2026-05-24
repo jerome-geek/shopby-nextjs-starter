@@ -117,6 +117,19 @@ pnpm dev:admin
 pnpm build
 ```
 
+### 🧠 CodeGraph (AI 코드 인텔리전스)
+
+이 프로젝트는 **Claude Code**와 함께 [CodeGraph](https://codegraph.dev) MCP 서버를 활용합니다.
+CodeGraph는 코드베이스를 AST로 파싱해 심볼 검색·호출 관계·영향 분석 등을 제공합니다.
+
+처음 클론 후 또는 대규모 변경 시 인덱스를 초기화하세요:
+
+```bash
+codegraph init -i
+```
+
+> `.codegraph/` 디렉토리는 머신별 로컬 파일이므로 git에 포함되지 않습니다.
+
 ---
 
 ## 💡 Guidelines
