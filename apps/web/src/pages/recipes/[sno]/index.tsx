@@ -344,7 +344,7 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                                             className={styles.buyButton}
                                         >
                                             <ShoppingCart
-                                                size={isMobile ? 14 : 16}
+                                                className={styles.buyIcon}
                                                 fill='currentColor'
                                             />
                                             <span>구매</span>
@@ -382,7 +382,7 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                                 {step.stepNumber}
                             </div>
                             <div className={styles.stepContent}>
-                                <p className={styles.stepDescription}>
+                                <div className={styles.stepDescription}>
                                     {step.description}
                                     {isYoutube &&
                                         step.timestampSeconds != null && (
@@ -414,14 +414,14 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                                                     .format('mm:ss')}
                                             </button>
                                         )}
-                                </p>
+                                </div>
                             </div>
                         </li>
                     ))}
                 </ul>
             </section>
 
-            {isMobile && <hr className={styles.mobileDivider} />}
+            <hr className={styles.mobileDivider} />
 
             {/* --- COMMENTS AREA --- */}
             <div id='recipe-comments'>
@@ -430,7 +430,7 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                 </FetchBoundary>
             </div>
 
-            {isMobile && <hr className={styles.mobileDivider} />}
+            <hr className={styles.mobileDivider} />
 
             {/* --- RECOMMENDED RECIPES --- */}
             <FetchBoundary>

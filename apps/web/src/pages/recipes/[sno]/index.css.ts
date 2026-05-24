@@ -407,6 +407,18 @@ export const buyButton = style([
     },
 ]);
 
+export const buyIcon = style({
+    width: '14px',
+    height: '14px',
+
+    '@media': {
+        [media.desktop]: {
+            width: '16px',
+            height: '16px',
+        },
+    },
+});
+
 // --- Steps ---
 const STEP_NUMBER_SIZE = 24;
 const STEP_LINE_HEIGHT = 28;
@@ -499,4 +511,10 @@ export const mobileDivider = style({
     width: 'calc(100% + 40px)',
     margin: '0 -20px',
     padding: 0,
+
+    '@media': {
+        [media.desktop]: {
+            display: 'none',
+        },
+    },
 });

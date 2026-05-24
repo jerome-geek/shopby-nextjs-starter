@@ -11,6 +11,8 @@ description: Create git commits following Conventional Commits specification wit
 
 ## Configuration
 Project-specific settings: `.agent/skills/commit/config/commit-config.yaml`
+> [!IMPORTANT]
+> **ALWAYS** view and follow the project-specific git commit convention documented in [git-commit.md](file:///Users/jerome/Developer/geek/shopby-nextjs-starter/docs/convention/git-commit.md) before writing any commit message. Ensure to use Korean subject descriptions and correct emojis (e.g. 🚑 fix, 💅 style) as defined in the document.
 
 ## Commit Types
 | Type | Description | Branch Prefix |
