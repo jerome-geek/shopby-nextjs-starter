@@ -7,6 +7,7 @@ import { ShippingAddressListBottomSheet } from '@/components/bottom-sheet/shippi
 import { ShippingAddressListModal } from '@/components/modal';
 import { DeliveryRequestForm } from '@/components/order/shipping-address/DeliveryRequestForm';
 import GuestShippingAddressForm from '@/components/order/shipping-address/GuestShippingAddressForm';
+import MemberShippingAddressForm from '@/components/order/shipping-address/MemberShippingAddressForm';
 import * as styles from '@/components/order/shipping-address/index.css';
 import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
@@ -81,6 +82,10 @@ const ShippingAddress = ({ orderSheetNo }: ShippingAddressProps) => {
             </div>
 
             {isLogin === false && <GuestShippingAddressForm />}
+
+            {isLogin === true &&
+                shippingAddress &&
+                !shippingAddress.receiverAddress && <MemberShippingAddressForm />}
 
             {isLogin === true &&
                 shippingAddress &&
