@@ -14,7 +14,7 @@ export type SegmentedToggleOption<T extends string> = {
 
 interface SegmentedToggleProps<T extends string> {
     value?: T | null;
-    defaultValue?: T;
+    defaultValue?: T | null;
     options: ReadonlyArray<SegmentedToggleOption<T>>;
     onChange: (value: T) => void;
     className?: string;

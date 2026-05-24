@@ -108,102 +108,108 @@ export default function MypageOrdersPage() {
         <>
             <Seo title={t('주문/배송 내역')} noindex={true} />
             <div className={card.container}>
-            <section className={card.section}>
-                <div className={card.toolbar}>
-                    <div className={card.toolbarTop}>
-                        <ShopbyAsyncBoundary
-                            fallback={
-                                <OrderStatusFilterFallback
+                <section className={card.section}>
+                    <div className={card.toolbar}>
+                        <div className={card.toolbarTop}>
+                            <ShopbyAsyncBoundary
+                                fallback={
+                                    <OrderStatusFilterFallback
+                                        value={orderStatus}
+                                        onChange={handleOrderStatusChange}
+                                    />
+                                }
+                            >
+                                <OrderStatusFilter
                                     value={orderStatus}
                                     onChange={handleOrderStatusChange}
                                 />
-                            }
-                        >
-                            <OrderStatusFilter
-                                value={orderStatus}
-                                onChange={handleOrderStatusChange}
-                            />
-                        </ShopbyAsyncBoundary>
+                            </ShopbyAsyncBoundary>
 
-                        <PeriodQueryFilter />
-                    </div>
+                            <PeriodQueryFilter />
+                        </div>
 
-                    <div className={card.toolbarBottom}>
-                        <div className={card.metaRow}>
-                            <div className={card.metaRowLeft}>
-                                {startYmd && endYmd ? (
-                                    <span className={card.selectedRangeText}>
-                                        {startYmd} ~ {endYmd}
+                        <div className={card.toolbarBottom}>
+                            <div className={card.metaRow}>
+                                <div className={card.metaRowLeft}>
+                                    {startYmd && endYmd ? (
+                                        <span
+                                            className={card.selectedRangeText}
+                                        >
+                                            {startYmd} ~ {endYmd}
+                                        </span>
+                                    ) : (
+                                        <span
+                                            className={card.selectedRangeText}
+                                        >
+                                            {t('최근 3개월')}
+                                        </span>
+                                    )}
+
+                                    <span className={card.count}>
+                                        {t('총 {{count}}개', {
+                                            count: totalCount,
+                                        })}
                                     </span>
-                                ) : (
-                                    <span className={card.selectedRangeText}>
-                                        {t('최근 3개월')}
-                                    </span>
-                                )}
-
-                                <span className={card.count}>
-                                    {t('총 {{count}}개', {
-                                        count: totalCount,
-                                    })}
-                                </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className={card.list}>
-                    <Only.Desktop>
-                        <div
-                            className={card.headerRow}
-                            style={{
-                                gridTemplateColumns:
-                                    ORDER_OPTIONS_DESKTOP_GRID_TEMPLATE,
-                                gap: 0,
-                            }}
-                        >
-                            <div className={card.headerCell}>
-                                {t('주문번호 / 주문일자 / 상품정보')}
-                            </div>
-                            <div className={card.headerCell}>
-                                {t('주문상태')}
-                            </div>
-                            <div className={card.headerCell}>{t('선택')}</div>
-                        </div>
-                    </Only.Desktop>
-
-                    <LoadingWrapper isLoading={isLoading}>
-                        {!isEmpty(myOrderList) ? (
-                            <OrderOptions optionItems={myOrderList} />
-                        ) : (
-                            <NoResult text={t('주문 내역이 없습니다.')} />
-                        )}
-
-                        <Only.Mobile>
-                            <ObserverTarget
-                                onIntersect={() => {
-                                    if (hasNextPage) {
-                                        fetchNextPage();
-                                    }
-                                }}
-                                hasNextPage={hasNextPage || false}
-                            />
-                        </Only.Mobile>
+                    <div className={card.list}>
                         <Only.Desktop>
-                            <div className={card.paging}>
-                                <Paging
-                                    currentPage={pageNumber}
-                                    totalCount={totalCount}
-                                    pageSize={PAGE_SIZE}
-                                    onPageClick={(page) => {
-                                        setQuery({ pageNumber: page });
-                                    }}
-                                />
+                            <div
+                                className={card.headerRow}
+                                style={{
+                                    gridTemplateColumns:
+                                        ORDER_OPTIONS_DESKTOP_GRID_TEMPLATE,
+                                    gap: 0,
+                                }}
+                            >
+                                <div className={card.headerCell}>
+                                    {t('주문번호 / 주문일자 / 상품정보')}
+                                </div>
+                                <div className={card.headerCell}>
+                                    {t('주문상태')}
+                                </div>
+                                <div className={card.headerCell}>
+                                    {t('선택')}
+                                </div>
                             </div>
                         </Only.Desktop>
-                    </LoadingWrapper>
-                </div>
-            </section>
-        </div>
+
+                        <LoadingWrapper isLoading={isLoading}>
+                            {!isEmpty(myOrderList) ? (
+                                <OrderOptions optionItems={myOrderList} />
+                            ) : (
+                                <NoResult text={t('주문 내역이 없습니다.')} />
+                            )}
+
+                            <Only.Mobile>
+                                <ObserverTarget
+                                    onIntersect={() => {
+                                        if (hasNextPage) {
+                                            fetchNextPage();
+                                        }
+                                    }}
+                                    hasNextPage={hasNextPage || false}
+                                />
+                            </Only.Mobile>
+                            <Only.Desktop>
+                                <div className={card.paging}>
+                                    <Paging
+                                        currentPage={pageNumber}
+                                        totalCount={totalCount}
+                                        pageSize={PAGE_SIZE}
+                                        onPageClick={(page) => {
+                                            setQuery({ pageNumber: page });
+                                        }}
+                                    />
+                                </div>
+                            </Only.Desktop>
+                        </LoadingWrapper>
+                    </div>
+                </section>
+            </div>
         </>
     );
 }
