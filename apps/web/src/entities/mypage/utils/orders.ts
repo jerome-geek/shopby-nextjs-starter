@@ -42,5 +42,10 @@ export const shouldShowNextAction = (
         return false;
     }
 
+    // 4. 입금대기 상태인 경우 주문 전체 취소(CANCEL_ALL) 버튼 미노출
+    if (orderStatusType === 'DEPOSIT_WAIT' && nextActionType === 'CANCEL_ALL') {
+        return false;
+    }
+
     return true;
 };

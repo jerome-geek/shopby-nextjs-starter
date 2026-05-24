@@ -72,12 +72,13 @@ export const OrderOptionsItem = ({
     const router = useRouter();
 
     const isBuyConfirm = orderStatusType === 'BUY_CONFIRM';
-
+    const isDepositWait = orderStatusType === 'DEPOSIT_WAIT';
     const isExchangeDisabled = includes(orderStatusType, [
         'PAY_DONE',
         'PRODUCT_PREPARE',
         'DELIVERY_PREPARE',
     ]);
+    const isInquiryButtonVisible = isDepositWait || isExchangeDisabled;
 
     const filteredNextActions = useMemo(() => {
         return pipe(
@@ -205,7 +206,7 @@ export const OrderOptionsItem = ({
                     />
                 ))}
 
-                {isExchangeDisabled && (
+                {isInquiryButtonVisible && (
                     <Button
                         frame='outlined'
                         size='small'
