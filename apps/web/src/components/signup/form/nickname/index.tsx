@@ -76,6 +76,7 @@ const SignupFormNickname = ({
 
         addToast({
             message: t('사용 가능한 닉네입니다.'),
+            variant: 'success',
         });
         setValue('isDuplicateNickname', false, { shouldValidate: true });
         clearErrors('nickname');

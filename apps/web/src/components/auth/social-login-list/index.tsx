@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { PATHS } from '@/const/paths';
 import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 
+interface SocialLoginListProps {
+    isOnlySocialLoginListVisible?: boolean;
+}
+
 export default function SocialLoginList({
     isOnlySocialLoginListVisible = true,
-}: {
-    isOnlySocialLoginListVisible?: boolean;
-}) {
+}: SocialLoginListProps) {
     const router = useRouter();
     const returnUrl = (router.query.returnUrl as string) || PATHS.MAIN;
 
@@ -17,7 +19,11 @@ export default function SocialLoginList({
     const isSocialLoginVisible = availableSocialLoginList.length > 0;
 
     const onSignupButtonClick = () => {
-        router.push(PATHS.SIGNUP.TERMS);
+        router.push(
+            router.pathname === PATHS.SIGNUP.REGISTER_METHOD
+                ? PATHS.SIGNUP.TERMS
+                : PATHS.SIGNUP.REGISTER_METHOD,
+        );
     };
 
     if (!isSocialLoginVisible) {

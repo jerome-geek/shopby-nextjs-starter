@@ -70,6 +70,7 @@ const SignupFormId = () => {
 
         addToast({
             message: t('사용 가능한 아이디입니다.'),
+            variant: 'success',
         });
         setValue('isDuplicateMemberId', false, { shouldValidate: true });
         clearErrors('memberId');

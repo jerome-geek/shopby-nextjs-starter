@@ -166,6 +166,7 @@ const EmailAuthentication = ({
 
         addToast({
             message: t('사용 가능한 이메일입니다.'),
+            variant: 'success',
         });
         setValue('isDuplicateEmail', false, { shouldValidate: true });
         clearErrors('email');
