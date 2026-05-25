@@ -1,47 +1,21 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { guestClaim } from '@/api/claim';
-import { claimsKeys } from '@/hooks/queryKeys';
+import {
+    guestOrderOptionEstimateOptions,
+    type GuestOrderOptionEstimateOptionsParams,
+} from '@/entities/claim/queries';
 import { useAuth } from '@/hooks/useAuth';
 import type { ClaimPriceInfo } from '@/models/claim';
-import type { GetClaimOptionPriceParams } from '@/models/claim/guest';
-
-interface UseOrderOptionDetailForClaimProps<T = ClaimPriceInfo> {
-    orderOptionNo: number;
-    searchParams: GetClaimOptionPriceParams;
-    options?: Omit<
-        UseQueryOptions<
-            ClaimPriceInfo,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof claimsKeys)['guestOrderOptionEstimate']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
 
 const useGuestOrderOptionEstimate = <T = ClaimPriceInfo>({
     orderOptionNo,
     searchParams,
     options,
-}: UseOrderOptionDetailForClaimProps<T>) => {
+}: GuestOrderOptionEstimateOptionsParams<T>) => {
     const isLogin = useAuth();
 
     return useQuery({
-        queryKey: claimsKeys.guestOrderOptionEstimate(
-            orderOptionNo,
-            searchParams,
-        ),
-        queryFn: async () => {
-            const { data } = await guestClaim.getClaimOptionPrice(
-                orderOptionNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
+        ...guestOrderOptionEstimateOptions({ orderOptionNo, searchParams, options }),
         enabled:
             (options?.enabled ?? true) &&
             !!orderOptionNo &&

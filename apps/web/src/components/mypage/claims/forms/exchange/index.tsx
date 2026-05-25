@@ -17,8 +17,8 @@ import {
     useGuestClaimMutation,
     useMemberClaimMutation,
 } from '@/hooks/mutations';
-import useGuestOrderOptionEstimate from '@/hooks/query/claim/guest/useGuestOrderOptionEstimate';
-import useOrderOptionEstimate from '@/hooks/query/claim/member/useOrderOptionEstimate';
+import { useGuestOrderOptionEstimate } from '@/hooks/query/claim/guest';
+import { useOrderOptionEstimate } from '@/hooks/query/claim/member';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal } from '@/hooks/utils';
 import type {
@@ -77,8 +77,7 @@ export const ClaimExchangeForm = ({
         claimReasonType,
         productCnt: productCnt?.toString() ?? '1',
         exchangeOptionNo: orderOptionData.originalOption.optionNo?.toString(),
-        exchangeProductNo:
-            orderOptionData.originalOption.productNo?.toString(),
+        exchangeProductNo: orderOptionData.originalOption.productNo?.toString(),
         exchangeCnt: claimedProductOptions?.[0]?.productCnt?.toString(),
         responsibleObjectType,
         returnWayType,
@@ -105,9 +104,10 @@ export const ClaimExchangeForm = ({
         ];
     }, [orderOptionData]);
 
-    const isNullAddress =
-        orderOptionData.exchangeAddress === null ||
-        orderOptionData.returnAddress === null;
+    // NOTE: 이후에 교환출고정보가 필요한 경우 해당 조건으로 변경
+    // const hasReturnAddress = orderOptionData.returnAddress !== null;
+    const hasReturnAddress = null;
+    const hasExchangeAddress = orderOptionData.exchangeAddress !== null;
 
     useEffect(() => {
         reset((prev) => ({
@@ -269,7 +269,7 @@ export const ClaimExchangeForm = ({
                 ? {
                       ...submitData.returnAddress,
                       receiverName: isKorean
-                          ? submitData.returnAddress.receiverName ?? ''
+                          ? (submitData.returnAddress.receiverName ?? '')
                           : `${
                                 submitData.returnAddress.receiverLastName ?? ''
                             }${
@@ -281,7 +281,7 @@ export const ClaimExchangeForm = ({
                 ? {
                       ...submitData.exchangeAddress,
                       receiverName: isKorean
-                          ? submitData.exchangeAddress.receiverName ?? ''
+                          ? (submitData.exchangeAddress.receiverName ?? '')
                           : `${
                                 submitData.exchangeAddress.receiverLastName ??
                                 ''
@@ -357,7 +357,7 @@ export const ClaimExchangeForm = ({
 
                     <ClaimReason
                         claimType={CLAIM_TYPE}
-                        isFileUploadEnabled={!isNullAddress}
+                        isFileUploadEnabled={!!hasReturnAddress}
                         orderOptionData={orderOptionData}
                     />
 
@@ -365,14 +365,14 @@ export const ClaimExchangeForm = ({
                         <ClaimPriceInfo claimPriceData={estimateData} />
                     )}
 
-                    {!isNullAddress && (
-                        <>
-                            <ClaimReturnWay orderOptionData={orderOptionData} />
+                    {hasReturnAddress && (
+                        <ClaimReturnWay orderOptionData={orderOptionData} />
+                    )}
 
-                            <ClaimExchangeAddress
-                                orderOptionData={orderOptionData}
-                            />
-                        </>
+                    {hasExchangeAddress && (
+                        <ClaimExchangeAddress
+                            orderOptionData={orderOptionData}
+                        />
                     )}
 
                     <div style={{ display: 'flex', gap: '12px' }}>
