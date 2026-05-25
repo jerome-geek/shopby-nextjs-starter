@@ -13,6 +13,7 @@ import eventKeys from '@/hooks/queryKeys/eventKeys';
 import freeGiftKeys from '@/hooks/queryKeys/freeGiftKeys';
 import guestOrderKeys from '@/hooks/queryKeys/guestOrderKeys';
 import inquiryKeys from '@/hooks/queryKeys/inquiryKeys';
+import mallKeys from '@/hooks/queryKeys/mallKeys';
 import orderSheetKeys from '@/hooks/queryKeys/orderSheetKeys';
 import ordersKeys from '@/hooks/queryKeys/ordersKeys';
 import productInquiryKeys from '@/hooks/queryKeys/productInquiryKeys';
@@ -41,6 +42,7 @@ export {
     freeGiftKeys,
     guestOrderKeys,
     inquiryKeys,
+    mallKeys,
     orderSheetKeys,
     ordersKeys,
     productInquiryKeys,
