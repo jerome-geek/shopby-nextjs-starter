@@ -1,15 +1,63 @@
-import { GuestLayout } from '@/components/layout';
+import { SuspenseQuery } from '@suspensive/react-query';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
+import { GuestLayout } from '@/components/layout';
 import { ClaimCancelForm } from '@/components/mypage/claims/forms/cancel';
 import { ClaimExchangeForm } from '@/components/mypage/claims/forms/exchange';
 import { ClaimReturnForm } from '@/components/mypage/claims/forms/return';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
+import { guestOrderOptionDetailForClaimOptions } from '@/entities/claim/queries';
 import { useDialog } from '@/hooks/utils';
+import type { ClaimType } from '@/models';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import { NextPageWithLayout } from '@/pages/_app';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+
+interface GuestClaimRequestQueryProps {
+    claimType: ClaimType;
+    orderOptionNo: number;
+}
+
+const GuestClaimRequestQuery = ({
+    claimType,
+    orderOptionNo,
+}: GuestClaimRequestQueryProps) => {
+    const renderForm = (data: GetOrderOptionDetailForClaimResponse) => {
+        if (claimType === 'CANCEL') {
+            return <ClaimCancelForm orderOptionData={data} />;
+        }
+
+        if (claimType === 'RETURN') {
+            return <ClaimReturnForm orderOptionData={data} />;
+        }
+
+        return <ClaimExchangeForm orderOptionData={data} />;
+    };
+
+    return (
+        <ShopbyAsyncBoundary
+            fallback={
+                <LoadingWrapper isLoading>
+                    <span />
+                </LoadingWrapper>
+            }
+        >
+            <SuspenseQuery
+                {...guestOrderOptionDetailForClaimOptions({
+                    orderOptionNo,
+                    searchParams: { claimType },
+                })}
+            >
+                {({ data }) => renderForm(data)}
+            </SuspenseQuery>
+        </ShopbyAsyncBoundary>
+    );
+};
 
 const GuestClaimRequestPage: NextPageWithLayout = () => {
     const { t } = useTranslation();
@@ -17,15 +65,23 @@ const GuestClaimRequestPage: NextPageWithLayout = () => {
     const { openDialog } = useDialog();
 
     const claimType = String(router.query.claimType ?? '');
-    const orderOptionNo = String(router.query.orderOptionNo ?? '');
+    const orderOptionNo = Number(router.query.orderOptionNo) || 0;
+    const parsedClaimType = (
+        claimType === 'CANCEL' ||
+        claimType === 'RETURN' ||
+        claimType === 'EXCHANGE'
+            ? claimType
+            : null
+    ) as ClaimType | null;
 
-    const parseClaimType =
-        CLAIM_TYPE_MAP[claimType as keyof typeof CLAIM_TYPE_MAP];
+    const claimTypeLabel = parsedClaimType
+        ? CLAIM_TYPE_MAP[parsedClaimType]
+        : null;
 
     useEffect(() => {
         if (!router.isReady) return;
 
-        if (!parseClaimType || !orderOptionNo) {
+        if (!claimTypeLabel || !orderOptionNo) {
             const redirect = () => {
                 router.replace(PATHS.MYPAGE.CLAIMS.MAIN);
             };
@@ -35,18 +91,19 @@ const GuestClaimRequestPage: NextPageWithLayout = () => {
                 cancel: redirect,
             });
         }
-    }, [router.isReady, parseClaimType, orderOptionNo, openDialog, router, t]);
+    }, [router.isReady, claimTypeLabel, orderOptionNo, openDialog, router, t]);
 
-    if (!parseClaimType || !orderOptionNo) {
+    if (!claimTypeLabel || !orderOptionNo || !parsedClaimType) {
         return null;
     }
 
     return (
         <>
             <Seo title='비회원 클레임 신청' noindex />
-            {claimType === 'CANCEL' && <ClaimCancelForm />}
-            {claimType === 'RETURN' && <ClaimReturnForm />}
-            {claimType === 'EXCHANGE' && <ClaimExchangeForm />}
+            <GuestClaimRequestQuery
+                claimType={parsedClaimType}
+                orderOptionNo={orderOptionNo}
+            />
         </>
     );
 };

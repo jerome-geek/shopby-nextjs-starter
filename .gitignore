@@ -52,7 +52,3 @@ dist/
 .omc
 .claude
 .superpowers/
-
-# codegraph (SQLite WAL 임시 파일)
-.codegraph/*.db-shm
-.codegraph/*.db-wal

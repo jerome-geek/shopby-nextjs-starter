@@ -6,7 +6,6 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import storageImage from '@/api/storage/image';
-import LoadingWrapper from '@/components/common/loading-wrapper';
 import ClaimBankInfo from '@/components/mypage/claims/forms/bank-info';
 import ClaimPriceInfo from '@/components/mypage/claims/forms/price-info';
 import ClaimReason from '@/components/mypage/claims/forms/reason';
@@ -19,11 +18,10 @@ import {
     useMemberClaimMutation,
 } from '@/hooks/mutations';
 import useGuestEstimate from '@/hooks/query/claim/guest/useGuestEstimate';
-import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
 import useEstimate from '@/hooks/query/claim/member/useEstimate';
-import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal } from '@/hooks/utils';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import type { RequestReturnMultipleOptionsData } from '@/models/claim/member';
 import {
     ClaimReturnSchemaType,
@@ -32,7 +30,11 @@ import {
 
 const CLAIM_TYPE = 'RETURN' as const;
 
-export const ClaimReturnForm = () => {
+interface ClaimReturnFormProps {
+    orderOptionData: GetOrderOptionDetailForClaimResponse;
+}
+
+export const ClaimReturnForm = ({ orderOptionData }: ClaimReturnFormProps) => {
     const { t } = useTranslation();
     const router = useRouter();
     const isLogin = useAuth();
@@ -42,27 +44,10 @@ export const ClaimReturnForm = () => {
     const orderOptionNo = Number(router.query.orderOptionNo) || 0;
     const returnOrderNo = router.query.returnOrderNo as string | undefined;
 
-    const { data: memberData, isFetched: isMemberFetched } =
-        useOrderOptionDetailForClaim({
-            orderOptionNo,
-            searchParams: { claimType: CLAIM_TYPE },
-            options: { enabled: !!orderOptionNo && !!isLogin },
-        });
-
-    const { data: guestData, isFetched: isGuestFetched } =
-        useGuestOrderOptionDetailForClaim({
-            orderOptionNo,
-            searchParams: { claimType: CLAIM_TYPE },
-            options: { enabled: !!orderOptionNo && !isLogin },
-        });
-
-    const orderOptionData = isLogin ? memberData : guestData;
-    const isFetched = isLogin ? isMemberFetched : isGuestFetched;
-
     /** payType을 클로저로 캡처한 스키마 — form 데이터에는 포함되지 않음 */
     const claimReturnSchema = useMemo(
-        () => createClaimReturnSchema(orderOptionData?.payType ?? undefined),
-        [orderOptionData?.payType],
+        () => createClaimReturnSchema(orderOptionData.payType ?? undefined),
+        [orderOptionData.payType],
     );
 
     const methods = useForm<ClaimReturnSchemaType>({
@@ -81,12 +66,18 @@ export const ClaimReturnForm = () => {
         },
     });
 
-    const { handleSubmit, reset, getValues, watch, control } = methods;
+    const { handleSubmit, reset, getValues, control } = methods;
 
     const claimedProductOptions = useWatch({
         control,
         name: 'claimedProductOptions',
     });
+    const claimReasonType = useWatch({ control, name: 'claimReasonType' });
+    const responsibleObjectType = useWatch({
+        control,
+        name: 'responsibleObjectType',
+    });
+    const returnWayType = useWatch({ control, name: 'returnWayType' });
 
     const filteredClaimedProductOptions = useMemo(() => {
         return pipe(
@@ -98,8 +89,8 @@ export const ClaimReturnForm = () => {
 
     const estimateRequestData = {
         claimType: CLAIM_TYPE,
-        claimReasonType: watch('claimReasonType'),
-        responsibleObjectType: watch('responsibleObjectType'),
+        claimReasonType,
+        responsibleObjectType,
         productCnt: filteredClaimedProductOptions?.reduce(
             (acc, option) => acc + option.productCnt,
             0,
@@ -112,36 +103,31 @@ export const ClaimReturnForm = () => {
             })),
             toArray,
         ),
-        returnWayType: watch('returnWayType'),
+        returnWayType,
     };
 
     const { data: memberEstimateData } = useEstimate({
         data: estimateRequestData,
-        options: { enabled: isFetched && !!isLogin },
+        options: { enabled: !!isLogin },
     });
 
     const { data: guestEstimateData } = useGuestEstimate({
         data: estimateRequestData,
-        options: { enabled: isFetched && !isLogin },
+        options: { enabled: !isLogin },
     });
 
     const estimateData = isLogin ? memberEstimateData : guestEstimateData;
 
     const orderOptionList = useMemo(() => {
-        if (!orderOptionData) return [];
         return [
             orderOptionData.originalOption,
             ...(orderOptionData.claimableOptions || []),
         ];
     }, [orderOptionData]);
 
-    const isNullAddress = isFetched
-        ? orderOptionData?.returnAddress === null
-        : true;
+    const isNullAddress = orderOptionData.returnAddress === null;
 
     useEffect(() => {
-        if (!orderOptionData) return;
-
         reset((prev) => ({
             ...prev,
             claimedProductOptions: orderOptionList.map((option) => ({
@@ -190,7 +176,7 @@ export const ClaimReturnForm = () => {
         },
     } = useMemberClaimMutation({
         orderOptionNo,
-        orderNo: orderOptionData?.originalOption.orderNo,
+        orderNo: orderOptionData.originalOption.orderNo,
     });
 
     const {
@@ -200,7 +186,7 @@ export const ClaimReturnForm = () => {
         },
     } = useGuestClaimMutation({
         orderOptionNo,
-        orderNo: orderOptionData?.originalOption.orderNo,
+        orderNo: orderOptionData.originalOption.orderNo,
     });
 
     const isPending = isLogin ? isReturnPending : isGuestReturnPending;
@@ -306,14 +292,12 @@ export const ClaimReturnForm = () => {
                         gap: '60px',
                     }}
                 >
-                    <LoadingWrapper isLoading={!isFetched} isLoadedAnimation>
-                        <ClaimOrderOptions orderOptionList={orderOptionList} />
-                    </LoadingWrapper>
+                    <ClaimOrderOptions orderOptionList={orderOptionList} />
 
                     <ClaimReason
-                        orderOptionNo={orderOptionNo}
                         claimType={CLAIM_TYPE}
                         isFileUploadEnabled
+                        orderOptionData={orderOptionData}
                     />
 
                     {estimateData &&
@@ -322,16 +306,13 @@ export const ClaimReturnForm = () => {
                         )}
 
                     {!isNullAddress && (
-                        <ClaimReturnWay
-                            orderOptionNo={orderOptionNo}
-                            claimType={CLAIM_TYPE}
-                        />
+                        <ClaimReturnWay orderOptionData={orderOptionData} />
                     )}
 
                     <ClaimBankInfo
-                        payType={orderOptionData?.payType}
-                        refundAccount={orderOptionData?.refundAccount}
-                        availableBanks={orderOptionData?.availableBanks || []}
+                        payType={orderOptionData.payType}
+                        refundAccount={orderOptionData.refundAccount}
+                        availableBanks={orderOptionData.availableBanks || []}
                     />
 
                     <div style={{ display: 'flex', gap: '12px' }}>

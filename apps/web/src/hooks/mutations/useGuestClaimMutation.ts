@@ -28,20 +28,31 @@ const useGuestClaimMutation = ({
 
     const orderDetailInvalidate = () => {
         if (orderNo) {
-            queryClient.invalidateQueries({
-                queryKey: guestOrderKeys.detail(orderNo),
+            return queryClient.invalidateQueries({
+                predicate: (query) =>
+                    query.queryKey[0] === guestOrderKeys.all[0] &&
+                    query.queryKey[1] === 'detail' &&
+                    query.queryKey[2] === orderNo,
                 refetchType: 'all',
             });
         }
+
+        return Promise.resolve();
     };
 
     const claimDetailInvalidate = () => {
         if (orderOptionNo) {
-            queryClient.invalidateQueries({
+            return queryClient.invalidateQueries({
                 queryKey: guestOrderKeys.detailsByOrderOptionNo(orderOptionNo),
                 refetchType: 'inactive',
             });
         }
+
+        return Promise.resolve();
+    };
+
+    const invalidateClaimMutationQueries = () => {
+        return Promise.all([orderDetailInvalidate(), claimDetailInvalidate()]);
     };
 
     const onErrorHandler = (error: Error) => {
@@ -63,8 +74,8 @@ const useGuestClaimMutation = ({
                 orderNo: string;
                 data: CancelClaimData;
             }) => await guestClaim.requestCancel(orderNo, data),
-            onSuccess: () => {
-                orderDetailInvalidate();
+            onSuccess: async () => {
+                await orderDetailInvalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -75,9 +86,8 @@ const useGuestClaimMutation = ({
             mutationFn: async ({ data }: { data: CancelOptionsData }) => {
                 await guestClaim.requestCancelOptions(data);
             },
-            onSuccess: () => {
-                orderDetailInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -92,9 +102,8 @@ const useGuestClaimMutation = ({
             }) => {
                 await guestClaim.requestReturnMultipleOptions(data);
             },
-            onSuccess: () => {
-                orderDetailInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -111,9 +120,8 @@ const useGuestClaimMutation = ({
             }) => {
                 await guestClaim.requestExchange(orderOptionNo, data);
             },
-            onSuccess: () => {
-                orderDetailInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -131,9 +139,8 @@ const useGuestClaimMutation = ({
         withdrawClaimByClaimNo: useMutation({
             mutationFn: async ({ claimNo }: { claimNo: number }) =>
                 await guestClaim.withdrawClaimByClaimNo(claimNo),
-            onSuccess: () => {
-                orderDetailInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);

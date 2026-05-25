@@ -23,54 +23,25 @@ import {
 import { RETURN_WAY_MAP } from '@/const/label';
 import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import useMall from '@/hooks/query/admin/mall/useMall';
-import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
-import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
-import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
-import type { ClaimType } from '@/models';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import type { ClaimSchemaMapType } from '@/schema/claim.schema';
 import { ErrorMessage } from '@/shared/components/form';
 
 interface ClaimReturnWayProps {
-    orderOptionNo: number;
-    claimType: ClaimType;
+    orderOptionData: GetOrderOptionDetailForClaimResponse;
 }
 
-export const ClaimReturnWay = ({
-    orderOptionNo,
-    claimType,
-}: ClaimReturnWayProps) => {
+export const ClaimReturnWay = ({ orderOptionData }: ClaimReturnWayProps) => {
     const { t } = useTranslation();
-    const isLogin = useAuth();
     const { openDialog } = useDialog();
     const { isKorean, countryCd: defaultCountryCd } = useGlobal();
     const { isMobile } = useResponsive();
 
-    const {
-        control,
-        register,
-        setValue,
-        watch,
-        resetField,
-        getValues,
-        formState: { errors },
-    } = useFormContext<ClaimSchemaMapType['RETURN']>();
+    const { control, register, setValue, watch, resetField, getValues } =
+        useFormContext<ClaimSchemaMapType['RETURN']>();
 
     const { data: mallData } = useMall();
-
-    const { data: memberData } = useOrderOptionDetailForClaim({
-        orderOptionNo,
-        searchParams: { claimType },
-        options: { enabled: !!orderOptionNo && !!isLogin },
-    });
-
-    const { data: guestData } = useGuestOrderOptionDetailForClaim({
-        orderOptionNo,
-        searchParams: { claimType },
-        options: { enabled: !!orderOptionNo && !isLogin },
-    });
-
-    const data = isLogin ? memberData : guestData;
 
     const returnAddressCountryCd = useWatch({
         control,
@@ -88,14 +59,14 @@ export const ClaimReturnWay = ({
     // 1. 초기 국가 코드 및 휴대폰 국가 코드 설정
     useEffect(() => {
         const initialCountryCd =
-            data?.returnAddress?.countryCd || defaultCountryCd;
+            orderOptionData.returnAddress?.countryCd || defaultCountryCd;
 
         if (!returnAddressCountryCd && initialCountryCd) {
             setValue('returnAddress.countryCd', initialCountryCd);
             setValue('returnAddress.receiverMobileCountryCd', initialCountryCd);
         }
     }, [
-        data?.returnAddress?.countryCd,
+        orderOptionData.returnAddress?.countryCd,
         defaultCountryCd,
         returnAddressCountryCd,
         setValue,
@@ -210,22 +181,24 @@ export const ClaimReturnWay = ({
     const returnWayType = useWatch({ control, name: 'returnWayType' });
 
     const deliveryCompanyTypeList = useMemo(() => {
-        if (!data) return [];
-        return (data.deliveryCompanyTypeWithLabels ?? []).map((item) => ({
-            label: item.label,
-            value: item.deliveryCompanyType,
-        }));
-    }, [data]);
+        return (orderOptionData.deliveryCompanyTypeWithLabels ?? []).map(
+            (item) => ({
+                label: item.label,
+                value: item.deliveryCompanyType,
+            }),
+        );
+    }, [orderOptionData.deliveryCompanyTypeWithLabels]);
 
     const returnWarehouse = useMemo(() => {
         const isMallShippingArea =
-            data?.originalOption.shippingAreaType === 'MALL_SHIPPING_AREA';
+            orderOptionData.originalOption.shippingAreaType ===
+            'MALL_SHIPPING_AREA';
 
         const {
             receiverName = '',
             contact = '',
             summary = '',
-        } = data?.returnWarehouse ?? {};
+        } = orderOptionData.returnWarehouse ?? {};
 
         return [
             {
@@ -237,11 +210,11 @@ export const ClaimReturnWay = ({
             { label: t('주소'), value: summary },
             { label: t('전화번호'), value: contact || '-' },
         ];
-    }, [t, data, mallData]);
+    }, [t, orderOptionData, mallData]);
 
     const effectiveReturnCountryCd =
         returnAddressCountryCd ||
-        data?.returnAddress?.countryCd ||
+        orderOptionData.returnAddress?.countryCd ||
         defaultCountryCd ||
         'KR';
 

@@ -5,7 +5,6 @@ import { useEffect, useMemo } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
 import ClaimBankInfo from '@/components/mypage/claims/forms/bank-info';
 import ClaimPriceInfo from '@/components/mypage/claims/forms/price-info';
 import ClaimReason from '@/components/mypage/claims/forms/reason';
@@ -17,11 +16,10 @@ import {
     useMemberClaimMutation,
 } from '@/hooks/mutations';
 import useGuestEstimate from '@/hooks/query/claim/guest/useGuestEstimate';
-import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
 import useEstimate from '@/hooks/query/claim/member/useEstimate';
-import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import {
     ClaimCancelSchemaType,
     createClaimCancelSchema,
@@ -29,7 +27,11 @@ import {
 
 const CLAIM_TYPE = 'CANCEL' as const;
 
-export const ClaimCancelForm = () => {
+interface ClaimCancelFormProps {
+    orderOptionData: GetOrderOptionDetailForClaimResponse;
+}
+
+export const ClaimCancelForm = ({ orderOptionData }: ClaimCancelFormProps) => {
     const { t } = useTranslation();
     const router = useRouter();
     const isLogin = useAuth();
@@ -38,26 +40,9 @@ export const ClaimCancelForm = () => {
     const orderOptionNo = Number(router.query.orderOptionNo) || 0;
     const returnOrderNo = router.query.returnOrderNo as string | undefined;
 
-    const { data: memberData, isFetched: isMemberFetched } =
-        useOrderOptionDetailForClaim({
-            orderOptionNo,
-            searchParams: { claimType: CLAIM_TYPE },
-            options: { enabled: !!orderOptionNo && !!isLogin },
-        });
-
-    const { data: guestData, isFetched: isGuestFetched } =
-        useGuestOrderOptionDetailForClaim({
-            orderOptionNo,
-            searchParams: { claimType: CLAIM_TYPE },
-            options: { enabled: !!orderOptionNo && !isLogin },
-        });
-
-    const orderOptionData = isLogin ? memberData : guestData;
-    console.log(orderOptionData);
-
     const claimCancelSchema = useMemo(
-        () => createClaimCancelSchema(orderOptionData?.payType ?? undefined),
-        [orderOptionData?.payType],
+        () => createClaimCancelSchema(orderOptionData.payType ?? undefined),
+        [orderOptionData.payType],
     );
 
     const methods = useForm<ClaimCancelSchemaType>({
@@ -77,13 +62,16 @@ export const ClaimCancelForm = () => {
         },
     });
 
-    const { handleSubmit, reset, watch, control } = methods;
-
-    const isFetched = isLogin ? isMemberFetched : isGuestFetched;
+    const { handleSubmit, reset, control } = methods;
 
     const claimedProductOptions = useWatch({
         control,
         name: 'claimedProductOptions',
+    });
+    const claimReasonType = useWatch({ control, name: 'claimReasonType' });
+    const responsibleObjectType = useWatch({
+        control,
+        name: 'responsibleObjectType',
     });
 
     const filteredClaimedProductOptions = useMemo(() => {
@@ -96,8 +84,8 @@ export const ClaimCancelForm = () => {
 
     const estimateRequestData = {
         claimType: CLAIM_TYPE,
-        claimReasonType: watch('claimReasonType'),
-        responsibleObjectType: watch('responsibleObjectType'),
+        claimReasonType,
+        responsibleObjectType,
         productCnt: filteredClaimedProductOptions?.reduce(
             (acc, option) => acc + option.productCnt,
             0,
@@ -114,17 +102,16 @@ export const ClaimCancelForm = () => {
 
     const { data: memberEstimateData } = useEstimate({
         data: estimateRequestData,
-        options: { enabled: isFetched && !!isLogin },
+        options: { enabled: !!isLogin },
     });
 
     const { data: guestEstimateData } = useGuestEstimate({
         data: estimateRequestData,
-        options: { enabled: isFetched && !isLogin },
+        options: { enabled: !isLogin },
     });
     const estimateData = isLogin ? memberEstimateData : guestEstimateData;
 
     const orderOptionList = useMemo(() => {
-        if (!orderOptionData) return [];
         return [
             orderOptionData.originalOption,
             ...(orderOptionData.claimableOptions || []),
@@ -132,8 +119,6 @@ export const ClaimCancelForm = () => {
     }, [orderOptionData]);
 
     useEffect(() => {
-        if (!orderOptionData) return;
-
         reset((prev) => ({
             ...prev,
             claimedProductOptions: orderOptionList.map((option) => ({
@@ -152,7 +137,7 @@ export const ClaimCancelForm = () => {
             isPending: isCancelOptionsPending,
         },
     } = useMemberClaimMutation({
-        orderNo: orderOptionData?.originalOption.orderNo,
+        orderNo: orderOptionData.originalOption.orderNo,
         orderOptionNo,
     });
 
@@ -163,7 +148,7 @@ export const ClaimCancelForm = () => {
         },
     } = useGuestClaimMutation({
         orderOptionNo,
-        orderNo: orderOptionData?.originalOption.orderNo,
+        orderNo: orderOptionData.originalOption.orderNo,
     });
 
     const isPending = isLogin
@@ -232,23 +217,18 @@ export const ClaimCancelForm = () => {
                     gap: '60px',
                 }}
             >
-                <LoadingWrapper isLoading={!isFetched} isLoadedAnimation>
-                    <ClaimOrderOptions orderOptionList={orderOptionList} />
-                </LoadingWrapper>
+                <ClaimOrderOptions orderOptionList={orderOptionList} />
 
-                <ClaimReason
-                    orderOptionNo={orderOptionNo}
-                    claimType={CLAIM_TYPE}
-                />
+                <ClaimReason claimType={CLAIM_TYPE} orderOptionData={orderOptionData} />
 
                 {estimateData && !isEmpty(filteredClaimedProductOptions) && (
                     <ClaimPriceInfo claimPriceData={estimateData} />
                 )}
 
                 <ClaimBankInfo
-                    payType={orderOptionData?.payType}
-                    refundAccount={orderOptionData?.refundAccount}
-                    availableBanks={orderOptionData?.availableBanks || []}
+                    payType={orderOptionData.payType}
+                    refundAccount={orderOptionData.refundAccount}
+                    availableBanks={orderOptionData.availableBanks || []}
                 />
 
                 <div style={{ display: 'flex', gap: '12px' }}>

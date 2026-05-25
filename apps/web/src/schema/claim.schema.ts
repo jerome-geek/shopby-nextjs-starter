@@ -52,25 +52,24 @@ const createClaimCancelSchema = (payType?: string) =>
                 payType === 'VIRTUAL_ACCOUNT' ||
                 payType === 'ESCROW_VIRTUAL_ACCOUNT' ||
                 payType === 'ESCROW_REALTIME_ACCOUNT_TRANSFER';
-            console.log('isCachPayment', payType, isCashPayment);
 
             if (isCashPayment) {
                 if (!data.bankAccountInfo?.bankAccount)
                     ctx.addIssue({
                         path: ['bankAccountInfo', 'bankAccount'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '계좌번호를 입력해주세요.',
                     });
                 if (!data.bankAccountInfo?.bankDepositorName)
                     ctx.addIssue({
                         path: ['bankAccountInfo', 'bankDepositorName'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '예금주를 입력해주세요.',
                     });
                 if (!data.bankAccountInfo?.bank)
                     ctx.addIssue({
                         path: ['bankAccountInfo', 'bank'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '은행을 선택해주세요.',
                     });
             }
@@ -240,14 +239,14 @@ const claimExchangeSchema = z
             if (!data.deliveryCompanyType) {
                 ctx.addIssue({
                     path: ['deliveryCompanyType'],
-                    code: z.ZodIssueCode.custom,
+                    code: 'custom',
                     message: '택배사를 선택해주세요.',
                 });
             }
             if (!data.invoiceNo) {
                 ctx.addIssue({
                     path: ['invoiceNo'],
-                    code: z.ZodIssueCode.custom,
+                    code: 'custom',
                     message: '송장번호를 입력해주세요.',
                 });
             }
@@ -346,19 +345,19 @@ const createClaimReturnSchema = (payType?: string) =>
                 if (!data.bankAccountInfo?.bankAccount)
                     ctx.addIssue({
                         path: ['bankAccountInfo', 'bankAccount'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '계좌번호를 입력해 주세요.',
                     });
                 if (!data.bankAccountInfo?.bankDepositorName)
                     ctx.addIssue({
                         path: ['bankAccountInfo', 'bankDepositorName'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '예금주를 입력해 주세요.',
                     });
                 if (!data.bankAccountInfo?.bank)
                     ctx.addIssue({
                         path: ['bankAccountInfo', 'bank'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '은행을 선택해 주세요.',
                     });
             }
@@ -367,14 +366,14 @@ const createClaimReturnSchema = (payType?: string) =>
                 if (!data.deliveryCompanyType) {
                     ctx.addIssue({
                         path: ['deliveryCompanyType'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '택배사를 선택해주세요.',
                     });
                 }
                 if (!data.invoiceNo) {
                     ctx.addIssue({
                         path: ['invoiceNo'],
-                        code: z.ZodIssueCode.custom,
+                        code: 'custom',
                         message: '송장번호를 입력해주세요.',
                     });
                 }

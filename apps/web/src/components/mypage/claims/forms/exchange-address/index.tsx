@@ -21,24 +21,18 @@ import {
     STATE_LIST,
 } from '@/const/form';
 import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
-import useGuestOrderOptionDetailForClaim from '@/hooks/query/claim/guest/useGuestOrderOptionDetailForClaim';
-import useOrderOptionDetailForClaim from '@/hooks/query/claim/member/useOrderOptionDetailForClaim';
-import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
-import type { ClaimType } from '@/models';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import { ErrorMessage } from '@/shared/components/form';
 
 interface ClaimExchangeAddressProps {
-    orderOptionNo: number;
-    claimType: ClaimType;
+    orderOptionData: GetOrderOptionDetailForClaimResponse;
 }
 
 export const ClaimExchangeAddress = ({
-    orderOptionNo,
-    claimType,
+    orderOptionData,
 }: ClaimExchangeAddressProps) => {
     const { t } = useTranslation();
-    const isLogin = useAuth();
     const { isKorean, countryCd, defaultMobileCountryCode } = useGlobal();
 
     const { isMobile } = useResponsive();
@@ -47,26 +41,6 @@ export const ClaimExchangeAddress = ({
 
     const { control, register, setValue, getValues, watch, reset } =
         useFormContext();
-
-    const { data: orderOptionDetailForClaimData } =
-        useOrderOptionDetailForClaim({
-            orderOptionNo,
-            searchParams: {
-                claimType,
-            },
-        });
-
-    const { data: guestOrderOptionDetailForClaimData } =
-        useGuestOrderOptionDetailForClaim({
-            orderOptionNo,
-            searchParams: {
-                claimType,
-            },
-        });
-
-    const orderOptionDetailData = isLogin
-        ? orderOptionDetailForClaimData
-        : guestOrderOptionDetailForClaimData;
 
     const addressRegister = (address: AddressRegister) => {
         setValue(
@@ -97,16 +71,19 @@ export const ClaimExchangeAddress = ({
     };
 
     const onCountryClick = (value: string) => {
-        setValue('exchangeAddress.receiverMobileCountryCd', value);
         reset((prev) => ({
             ...prev,
-            countryCd: value,
-            receiverAddress: '',
-            receiverDetailAddress: '',
-            receiverJibunAddress: '',
-            receiverState: '',
-            receiverCity: '',
-            receiverZipCd: '',
+            exchangeAddress: {
+                ...prev.exchangeAddress,
+                countryCd: value,
+                receiverMobileCountryCd: value,
+                receiverAddress: '',
+                receiverDetailAddress: '',
+                receiverJibunAddress: '',
+                receiverState: '',
+                receiverCity: '',
+                receiverZipCd: '',
+            },
         }));
     };
 
@@ -135,22 +112,21 @@ export const ClaimExchangeAddress = ({
     };
 
     const countryCdWatch = watch('exchangeAddress.countryCd');
-    const receiverStateWatch = watch('exchangeAddress.receiverState');
     const receiverAddress = watch('exchangeAddress.receiverAddress');
 
     const effectiveCountryCd =
         countryCdWatch ??
-        orderOptionDetailData?.exchangeAddress?.countryCd ??
+        orderOptionData.exchangeAddress?.countryCd ??
         countryCd;
 
     useEffect(() => {
         const initCountryCd =
-            orderOptionDetailData?.exchangeAddress?.countryCd ?? countryCd;
+            orderOptionData.exchangeAddress?.countryCd ?? countryCd;
         if (!countryCdWatch && initCountryCd) {
             setValue('exchangeAddress.countryCd', initCountryCd);
         }
     }, [
-        orderOptionDetailData?.exchangeAddress?.countryCd,
+        orderOptionData.exchangeAddress?.countryCd,
         countryCd,
         countryCdWatch,
         setValue,
@@ -162,12 +138,11 @@ export const ClaimExchangeAddress = ({
         }
     }, [receiverAddress, setValue]);
 
-    const receiverName = watch('exchangeAddress.receiverName');
     const receiverLastName = watch('exchangeAddress.receiverLastName');
     const receiverFirstName = watch('exchangeAddress.receiverFirstName');
 
     useEffect(() => {
-        if (!receiverName && (receiverLastName || receiverFirstName)) {
+        if (!isKorean && (receiverLastName || receiverFirstName)) {
             setValue(
                 'exchangeAddress.receiverName',
                 `${receiverLastName ?? ''}${receiverFirstName ?? ''}`,
@@ -176,7 +151,12 @@ export const ClaimExchangeAddress = ({
                 },
             );
         }
-    }, [receiverLastName, receiverLastName, receiverName]);
+    }, [
+        isKorean,
+        receiverFirstName,
+        receiverLastName,
+        setValue,
+    ]);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>

@@ -3,6 +3,7 @@ import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { memberClaim } from '@/api/claim';
+import { claimsKeys, ordersKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
 import type { CancelOptionsData } from '@/models/claim';
 import type { CancelClaimData } from '@/models/claim/guest';
@@ -11,15 +12,16 @@ import type {
     RequestExchangeData,
     RequestReturnMultipleOptionsData,
 } from '@/models/claim/member';
-import { ordersKeys, claimsKeys } from '@/hooks/queryKeys';
+
+interface UseMemberClaimMutationProps {
+    orderNo?: string;
+    orderOptionNo?: number;
+}
 
 const useMemberClaimMutation = ({
     orderNo,
     orderOptionNo,
-}: {
-    orderNo?: string;
-    orderOptionNo?: number;
-} = {}) => {
+}: UseMemberClaimMutationProps = {}) => {
     const { t } = useTranslation();
 
     const { openDialog } = useDialog();
@@ -27,35 +29,47 @@ const useMemberClaimMutation = ({
     const queryClient = useQueryClient();
 
     const orderListInvalidate = () => {
-        queryClient.invalidateQueries({
+        return queryClient.invalidateQueries({
             queryKey: ordersKeys.lists(),
-            refetchType: 'all',
         });
     };
 
     const orderDetailInvalidate = () => {
         if (orderNo) {
-            queryClient.invalidateQueries({
-                queryKey: ordersKeys.details(),
-                refetchType: 'all',
+            return queryClient.invalidateQueries({
+                predicate: (query) =>
+                    query.queryKey[0] === ordersKeys.all[0] &&
+                    query.queryKey[1] === 'detail' &&
+                    query.queryKey[2] === orderNo,
             });
         }
+
+        return Promise.resolve();
     };
 
     const claimListInvalidate = () => {
-        queryClient.invalidateQueries({
+        return queryClient.invalidateQueries({
             queryKey: claimsKeys.lists(),
-            refetchType: 'all',
         });
     };
 
     const claimDetailInvalidate = () => {
         if (orderOptionNo) {
-            queryClient.invalidateQueries({
+            return queryClient.invalidateQueries({
                 queryKey: ordersKeys.detailsByOrderOptionNo(orderOptionNo),
-                refetchType: 'inactive',
             });
         }
+
+        return Promise.resolve();
+    };
+
+    const invalidateClaimMutationQueries = () => {
+        return Promise.all([
+            orderListInvalidate(),
+            orderDetailInvalidate(),
+            claimListInvalidate(),
+            claimDetailInvalidate(),
+        ]);
     };
 
     const onErrorHandler = (error: Error) => {
@@ -77,9 +91,11 @@ const useMemberClaimMutation = ({
                 orderNo: string;
                 data: CancelClaimData;
             }) => await memberClaim.requestCancel(orderNo, data),
-            onSuccess: () => {
-                orderListInvalidate();
-                claimListInvalidate();
+            onSuccess: async () => {
+                await Promise.all([
+                    orderListInvalidate(),
+                    claimListInvalidate(),
+                ]);
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -90,11 +106,8 @@ const useMemberClaimMutation = ({
             mutationFn: async ({ data }: { data: CancelOptionsData }) => {
                 await memberClaim.requestCancelOptions(data);
             },
-            onSuccess: () => {
-                orderListInvalidate();
-                orderDetailInvalidate();
-                claimListInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -109,11 +122,8 @@ const useMemberClaimMutation = ({
             }) => {
                 await memberClaim.requestReturnMultipleOptions(data);
             },
-            onSuccess: () => {
-                orderListInvalidate();
-                orderDetailInvalidate();
-                claimListInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -130,11 +140,8 @@ const useMemberClaimMutation = ({
             }) => {
                 await memberClaim.requestExchange(orderOptionNo, data);
             },
-            onSuccess: () => {
-                orderListInvalidate();
-                orderDetailInvalidate();
-                claimListInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -152,11 +159,8 @@ const useMemberClaimMutation = ({
         withdrawClaimByClaimNo: useMutation({
             mutationFn: async ({ claimNo }: { claimNo: number }) =>
                 await memberClaim.withdrawClaimByClaimNo(claimNo),
-            onSuccess: () => {
-                orderListInvalidate();
-                orderDetailInvalidate();
-                claimListInvalidate();
-                claimDetailInvalidate();
+            onSuccess: async () => {
+                await invalidateClaimMutationQueries();
             },
             onError: (error) => {
                 onErrorHandler(error);

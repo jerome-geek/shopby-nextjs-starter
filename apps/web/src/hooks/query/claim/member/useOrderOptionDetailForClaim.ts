@@ -1,8 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { memberClaim } from '@/api/claim';
-import { ordersKeys } from '@/hooks/queryKeys';
+import { memberOrderOptionDetailForClaimOptions } from '@/entities/claim/queries';
 import type {
     GetOrderOptionDetailForClaimParams,
     GetOrderOptionDetailForClaimResponse,
@@ -35,20 +34,12 @@ const useOrderOptionDetailForClaim = <
     const isLogin = useAuth();
 
     return useQuery({
-        queryKey: ordersKeys.detailsByOrderOptionNo(
+        ...memberOrderOptionDetailForClaimOptions({
             orderOptionNo,
             searchParams,
-        ),
-        queryFn: async () => {
-            const { data } = await memberClaim.getOrderOptionDetailForClaim(
-                orderOptionNo,
-                searchParams,
-            );
-
-            return data;
-        },
+            options,
+        }),
         enabled: !!orderOptionNo && !!isLogin,
-        ...options,
     });
 };
 
