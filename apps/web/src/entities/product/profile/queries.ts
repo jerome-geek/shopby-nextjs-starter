@@ -140,6 +140,7 @@ export const likeProductCountOptions = <T = { likedCount: number }>({
 
 export interface LikeProductListOptionsParams<T = GetLikeProductsResponse> {
     searchParams: GetLikeProductsParams;
+    memberNo?: number;
     options?: Omit<
         UseQueryOptions<
             GetLikeProductsResponse,

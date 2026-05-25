@@ -8,10 +8,11 @@ import type { GetLikeProductsResponse } from '@/models/product/profile';
 
 const useLikeProductList = <T = GetLikeProductsResponse>({
     searchParams,
+    memberNo,
     options,
 }: LikeProductListOptionsParams<T>) => {
     return useQuery({
-        ...likeProductListOptions({ searchParams, options }),
+        ...likeProductListOptions({ searchParams, memberNo, options }),
         placeholderData: keepPreviousData,
     });
 };
