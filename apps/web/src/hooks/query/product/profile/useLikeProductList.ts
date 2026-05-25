@@ -1,44 +1,18 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+
 import {
-    UseQueryOptions,
-    keepPreviousData,
-    useQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { productProfile } from '@/api/product';
-import { productProfileKeys } from '@/hooks/queryKeys';
-import type {
-    GetLikeProductsParams,
-    GetLikeProductsResponse,
-} from '@/models/product/profile';
-
-interface UseLikeProductListParams<T = GetLikeProductsResponse> {
-    searchParams: GetLikeProductsParams;
-    memberNo?: number;
-    options?: Omit<
-        UseQueryOptions<
-            GetLikeProductsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productProfileKeys)['likeProductList']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    likeProductListOptions,
+    type LikeProductListOptionsParams,
+} from '@/entities/product/profile/queries';
+import type { GetLikeProductsResponse } from '@/models/product/profile';
 
 const useLikeProductList = <T = GetLikeProductsResponse>({
     searchParams,
     options,
-}: UseLikeProductListParams<T>) => {
+}: LikeProductListOptionsParams<T>) => {
     return useQuery({
-        queryKey: productProfileKeys.likeProductList(searchParams),
-        queryFn: async () => {
-            const { data } = await productProfile.getLikeProducts(searchParams);
-
-            return data;
-        },
+        ...likeProductListOptions({ searchParams, options }),
         placeholderData: keepPreviousData,
-        ...options,
     });
 };
 

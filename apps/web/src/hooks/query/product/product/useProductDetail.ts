@@ -2,8 +2,8 @@ import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { parseAsBoolean, parseAsStringLiteral, useQueryStates } from 'nuqs';
 
-import { product } from '@/api/product';
 import { CHANNEL_TYPES } from '@/const/product';
+import { productDetailOptions } from '@/entities/product/queries';
 import { productKeys } from '@/hooks/queryKeys';
 import type { ProductDetailResponse } from '@/models/product/product';
 
@@ -38,18 +38,7 @@ const useProductDetail = <T = ProductDetailResponse>({
         ...(preview && { preview }),
     };
 
-    return useQuery({
-        queryKey: productKeys.detail(productNo, searchParams),
-        queryFn: async () => {
-            const { data } = await product.getProductDetail(
-                productNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
-    });
+    return useQuery(productDetailOptions({ productNo, searchParams, options }));
 };
 
 export default useProductDetail;

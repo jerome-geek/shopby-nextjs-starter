@@ -1,45 +1,19 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    type UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { product } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-import type {
-    ProductSearchParams,
-    ProductsSearchResponse,
-} from '@/models/product/product';
-
-export interface UseProductListParams<T = ProductsSearchResponse> {
-    searchParams: ProductSearchParams;
-    memberNo?: number;
-    options?: Omit<
-        UseQueryOptions<
-            ProductsSearchResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    productListOptions,
+    type ProductListOptionsParams,
+} from '@/entities/product/queries';
+import type { ProductsSearchResponse } from '@/models/product/product';
 
 const useProductList = <T = ProductsSearchResponse>({
     searchParams,
     memberNo = 0,
     options,
-}: UseProductListParams<T>) => {
+}: ProductListOptionsParams<T>) => {
     return useQuery({
-        queryKey: productKeys.list(memberNo, searchParams),
-        queryFn: async () => {
-            const { data } = await product.searchProducts(searchParams);
-
-            return data;
-        },
+        ...productListOptions({ searchParams, memberNo, options }),
         placeholderData: keepPreviousData,
-        ...options,
     });
 };
 

@@ -1,41 +1,18 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { productProfile } from '@/api/product';
-import type {
-    GetGuestRecentViewProductsParams,
-    GetRecentViewProductsResponse,
-} from '@/models/product/profile';
-
-interface UseGuestRecentViewProductListParams<
-    T = GetRecentViewProductsResponse,
-> {
-    searchParams: GetGuestRecentViewProductsParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetRecentViewProductsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            [string, { searchParams: GetGuestRecentViewProductsParams }]
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import {
+    guestRecentViewProductListOptions,
+    type GuestRecentViewProductListOptionsParams,
+} from '@/entities/product/profile/queries';
+import type { GetRecentViewProductsResponse } from '@/models/product/profile';
 
 const useGuestRecentViewProductList = <T = GetRecentViewProductsResponse>({
     searchParams,
     options,
-}: UseGuestRecentViewProductListParams<T>) => {
-    return useQuery({
-        queryKey: ['guestRecentViewProducts', { searchParams }],
-        queryFn: async () => {
-            const { data } =
-                await productProfile.getGuestRecentViewProducts(searchParams);
-
-            return data;
-        },
-        ...options,
-    });
+}: GuestRecentViewProductListOptionsParams<T>) => {
+    return useQuery(
+        guestRecentViewProductListOptions({ searchParams, options }),
+    );
 };
 
 export default useGuestRecentViewProductList;

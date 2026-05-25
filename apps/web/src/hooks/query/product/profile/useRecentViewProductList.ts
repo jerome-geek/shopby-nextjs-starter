@@ -1,40 +1,17 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { productProfile } from '@/api/product';
-import { productProfileKeys } from '@/hooks/queryKeys';
-import type {
-    GetRecentViewProductsParams,
-    GetRecentViewProductsResponse,
-} from '@/models/product/profile';
-
-interface UseRecentViewProductListParams<T = GetRecentViewProductsResponse> {
-    searchParams: GetRecentViewProductsParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetRecentViewProductsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productProfileKeys)['recentProducts']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import {
+    recentViewProductListOptions,
+    type RecentViewProductListOptionsParams,
+} from '@/entities/product/profile/queries';
+import type { GetRecentViewProductsResponse } from '@/models/product/profile';
 
 const useRecentViewProductList = <T = GetRecentViewProductsResponse>({
     searchParams,
     options,
-}: UseRecentViewProductListParams<T>) => {
+}: RecentViewProductListOptionsParams<T>) => {
     return useQuery({
-        queryKey: productProfileKeys.recentProducts(searchParams),
-        queryFn: async () => {
-            const { data } = await productProfile.getRecentViewProducts(
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
+        ...recentViewProductListOptions({ searchParams, options }),
         enabled: options?.enabled ?? true,
     });
 };

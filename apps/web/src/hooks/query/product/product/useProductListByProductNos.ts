@@ -1,41 +1,18 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { product } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-import type {
-    GetProductsInfoByProductNosData,
-    GetProductsInfoByProductNosResponse,
-} from '@/models/product/product';
-
-interface UseProductListByProductNos<T = GetProductsInfoByProductNosResponse> {
-    /** POST 요청이지만 다른 hooks와 컨벤션을 맞추기 위해 data -> searchParams */
-    searchParams: GetProductsInfoByProductNosData;
-    options?: Omit<
-        UseQueryOptions<
-            GetProductsInfoByProductNosResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import {
+    productListByProductNosOptions,
+    type ProductListByProductNosOptionsParams,
+} from '@/entities/product/queries';
+import type { GetProductsInfoByProductNosResponse } from '@/models/product/product';
 
 const useProductListByProductNos = <T = GetProductsInfoByProductNosResponse>({
     searchParams,
     options,
-}: UseProductListByProductNos<T>) => {
+}: ProductListByProductNosOptionsParams<T>) => {
     return useQuery({
-        queryKey: productKeys.list(0, searchParams),
-        queryFn: async () => {
-            const { data } =
-                await product.getProductsInfoByProductNos(searchParams);
-
-            return data;
-        },
+        ...productListByProductNosOptions({ searchParams, options }),
         enabled: searchParams.productNos.length > 0,
-        ...options,
     });
 };
 

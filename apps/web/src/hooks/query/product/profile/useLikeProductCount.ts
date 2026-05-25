@@ -1,35 +1,17 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { productProfile } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-
-interface UseLikeProductCountParams<T = { likedCount: number }> {
-    memberNo: number;
-    options?: Omit<
-        UseQueryOptions<
-            { likedCount: number },
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productKeys)['likeCount']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import {
+    likeProductCountOptions,
+    type LikeProductCountOptionsParams,
+} from '@/entities/product/profile/queries';
 
 const useLikeProductCount = <T = { likedCount: number }>({
     memberNo,
     options,
-}: UseLikeProductCountParams<T>) => {
+}: LikeProductCountOptionsParams<T>) => {
     return useQuery({
-        queryKey: productKeys.likeCount(memberNo),
-        queryFn: async () => {
-            const { data } = await productProfile.getLikeProductsCount();
-
-            return data;
-        },
+        ...likeProductCountOptions({ memberNo, options }),
         enabled: memberNo !== 0,
-        ...options,
     });
 };
 

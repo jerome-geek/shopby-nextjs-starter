@@ -1,42 +1,20 @@
 import { isEmpty } from '@fxts/core';
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { productProfile } from '@/api/product';
-import type {
-    GetLikeBrandsResponse,
-    GetLikeBrandsParams,
-} from '@/models/product/profile';
-import { brandKeys } from '@/hooks/queryKeys';
-
-interface UseLikeBrandListParams<T = GetLikeBrandsResponse> {
-    memberNo: number;
-    params: GetLikeBrandsParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetLikeBrandsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof brandKeys)['likeList']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import {
+    likeBrandListOptions,
+    type LikeBrandListOptionsParams,
+} from '@/entities/product/profile/queries';
+import type { GetLikeBrandsResponse } from '@/models/product/profile';
 
 const useLikeBrandList = <T = GetLikeBrandsResponse>({
     memberNo,
     params,
     options,
-}: UseLikeBrandListParams<T>) => {
+}: LikeBrandListOptionsParams<T>) => {
     return useQuery({
-        queryKey: brandKeys.likeList(memberNo, params),
-        queryFn: async () => {
-            const { data } = await productProfile.getLikeBrands(params);
-
-            return data;
-        },
+        ...likeBrandListOptions({ memberNo, params, options }),
         enabled: !isEmpty(memberNo),
-        ...options,
     });
 };
 

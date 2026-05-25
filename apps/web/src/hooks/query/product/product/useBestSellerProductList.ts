@@ -1,47 +1,19 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    type UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { product } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-import type {
-    GetBestSellerProductsParams,
-    GetBestSellerProductsResponse,
-} from '@/models/product/product';
-
-export interface UseBestSellerProductListParams<
-    T = GetBestSellerProductsResponse,
-> {
-    searchParams: GetBestSellerProductsParams;
-    memberNo?: number;
-    options?: Omit<
-        UseQueryOptions<
-            GetBestSellerProductsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productKeys)['bestList']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    bestSellerProductListOptions,
+    type BestSellerProductListOptionsParams,
+} from '@/entities/product/queries';
+import type { GetBestSellerProductsResponse } from '@/models/product/product';
 
 const useBestSellerProductList = <T = GetBestSellerProductsResponse>({
     searchParams,
     memberNo = 0,
     options,
-}: UseBestSellerProductListParams<T>) => {
+}: BestSellerProductListOptionsParams<T>) => {
     return useQuery({
-        queryKey: productKeys.bestList(memberNo, searchParams),
-        queryFn: async () => {
-            const { data } = await product.getBestSellerProducts(searchParams);
-
-            return data;
-        },
+        ...bestSellerProductListOptions({ searchParams, memberNo, options }),
         placeholderData: keepPreviousData,
-        ...options,
     });
 };
 

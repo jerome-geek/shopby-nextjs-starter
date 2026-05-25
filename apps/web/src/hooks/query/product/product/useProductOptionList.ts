@@ -2,7 +2,7 @@ import { useSearchParams } from 'next/navigation';
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { productOption } from '@/api/product';
+import { productOptionListOptions } from '@/entities/product/queries';
 import { productKeys } from '@/hooks/queryKeys';
 import type {
     GetProductOptionParams,
@@ -33,20 +33,19 @@ const useProductOptionList = <T = ProductOptionResponse>({
     const query = useSearchParams();
     const preview = query.get('preview') === 'true';
 
-    return useQuery({
-        queryKey: productKeys.option(productNo, memberNo, searchParams),
-        queryFn: async () => {
-            const { data } = await productOption.getProductOption(productNo, {
-                ...(preview && { preview }),
-                ...searchParams,
-            });
+    const mergedSearchParams = {
+        ...(preview && { preview }),
+        ...searchParams,
+    };
 
-            return data;
-        },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10,
-        ...options,
-    });
+    return useQuery(
+        productOptionListOptions({
+            productNo,
+            memberNo,
+            searchParams: mergedSearchParams,
+            options,
+        }),
+    );
 };
 
 export default useProductOptionList;

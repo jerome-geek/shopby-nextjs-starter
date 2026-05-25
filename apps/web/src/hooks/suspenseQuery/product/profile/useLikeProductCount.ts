@@ -1,38 +1,15 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    type UseSuspenseQueryOptions,
-    useSuspenseQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { productProfile } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-
-interface UseLikeProductCountParams<T = { likedCount: number }> {
-    memberNo: number;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            { likedCount: number },
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productKeys)['likeCount']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    likeProductCountOptions,
+    type LikeProductCountOptionsParams,
+} from '@/entities/product/profile/queries';
 
 const useLikeProductCount = <T = { likedCount: number }>({
     memberNo,
     options,
-}: UseLikeProductCountParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: productKeys.likeCount(memberNo),
-        queryFn: async () => {
-            const { data } = await productProfile.getLikeProductsCount();
-
-            return data;
-        },
-        ...options,
-    });
+}: LikeProductCountOptionsParams<T>) => {
+    return useSuspenseQuery(likeProductCountOptions({ memberNo, options }));
 };
 
 export default useLikeProductCount;

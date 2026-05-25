@@ -1,36 +1,15 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { product } from '@/api/product';
-
-interface UseFavoriteKeywordsParams<T = string[]> {
-    size?: number;
-    options?: Omit<
-        UseQueryOptions<
-            string[],
-            AxiosError<ShopByErrorResponse>,
-            T,
-            [string, { size: number }]
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import {
+    favoriteKeywordsOptions,
+    type FavoriteKeywordsOptionsParams,
+} from '@/entities/product/queries';
 
 const useFavoriteKeywords = <T = string[]>({
     size = 10,
     options,
-}: UseFavoriteKeywordsParams<T>) => {
-    return useQuery({
-        queryKey: ['favoriteKeywords', { size }],
-        queryFn: async () => {
-            const { data } = await product.getFavoriteKeywords({ size });
-
-            return data;
-        },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
-        ...options,
-    });
+}: FavoriteKeywordsOptionsParams<T> = {}) => {
+    return useQuery(favoriteKeywordsOptions({ size, options }));
 };
 
 export default useFavoriteKeywords;

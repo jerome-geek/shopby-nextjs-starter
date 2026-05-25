@@ -1,47 +1,18 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    type UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { product } from '@/api/product';
-import { productKeys } from '@/hooks/queryKeys';
-import type {
-    GetProductSearchSummaryParams,
-    GetProductSearchSummaryResponse,
-} from '@/models/product/product';
-
-export interface useProductSearchSummaryParams<
-    T = GetProductSearchSummaryResponse,
-> {
-    searchParams: GetProductSearchSummaryParams;
-    memberNo?: number;
-    options?: Omit<
-        UseQueryOptions<
-            GetProductSearchSummaryResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productKeys)['summary']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+    productSearchSummaryOptions,
+    type ProductSearchSummaryOptionsParams,
+} from '@/entities/product/queries';
+import type { GetProductSearchSummaryResponse } from '@/models/product/product';
 
 const useProductSearchSummary = <T = GetProductSearchSummaryResponse>({
     searchParams,
     options,
-}: useProductSearchSummaryParams<T>) => {
+}: ProductSearchSummaryOptionsParams<T>) => {
     return useQuery({
-        queryKey: productKeys.summary(searchParams),
-        queryFn: async () => {
-            const { data } =
-                await product.getProductSearchSummary(searchParams);
-
-            return data;
-        },
+        ...productSearchSummaryOptions({ searchParams, options }),
         placeholderData: keepPreviousData,
-        ...options,
     });
 };
 

@@ -1,39 +1,16 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { additionalDiscount } from '@/api/product';
-import type {
-    GetAdditionalDiscountParams,
-    GetAdditionalDiscountResponse,
-} from '@/models/product/additionalDiscount';
-
-interface UseAdditionalDiscountParams<T = GetAdditionalDiscountResponse> {
-    searchParams: GetAdditionalDiscountParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetAdditionalDiscountResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            [string, { searchParams: GetAdditionalDiscountParams }]
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import {
+    additionalDiscountOptions,
+    type AdditionalDiscountOptionsParams,
+} from '@/entities/product/additionalDiscount/queries';
+import type { GetAdditionalDiscountResponse } from '@/models/product/additionalDiscount';
 
 const useAdditionalDiscount = <T = GetAdditionalDiscountResponse>({
     searchParams,
     options,
-}: UseAdditionalDiscountParams<T>) => {
-    return useQuery({
-        queryKey: ['additionalDiscount', { searchParams }],
-        queryFn: async () => {
-            const { data } =
-                await additionalDiscount.getAdditionalDiscount(searchParams);
-
-            return data;
-        },
-        ...options,
-    });
+}: AdditionalDiscountOptionsParams<T>) => {
+    return useQuery(additionalDiscountOptions({ searchParams, options }));
 };
 
 export default useAdditionalDiscount;
