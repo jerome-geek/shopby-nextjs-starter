@@ -138,7 +138,6 @@ export interface InfiniteBestSellerProductListOptionsParams {
             InfiniteBestSellerPage,
             AxiosError<ShopByErrorResponse>,
             InfiniteData<InfiniteBestSellerPage>,
-            InfiniteBestSellerPage,
             ReturnType<(typeof productKeys)['infiniteBestList']>,
             number
         >,

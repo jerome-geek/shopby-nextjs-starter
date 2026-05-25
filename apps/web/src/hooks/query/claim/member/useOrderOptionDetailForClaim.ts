@@ -1,28 +1,11 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { memberOrderOptionDetailForClaimOptions } from '@/entities/claim/queries';
-import type {
-    GetOrderOptionDetailForClaimParams,
-    GetOrderOptionDetailForClaimResponse,
-} from '@/models/claim/member';
+import {
+    memberOrderOptionDetailForClaimOptions,
+    type MemberOrderOptionDetailForClaimOptionsParams,
+} from '@/entities/claim/queries';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import { useAuth } from '@/hooks/useAuth';
-
-interface UseOrderOptionDetailForClaimProps<
-    T = GetOrderOptionDetailForClaimResponse,
-> {
-    orderOptionNo: number;
-    searchParams: GetOrderOptionDetailForClaimParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetOrderOptionDetailForClaimResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof ordersKeys)['detailsByOrderOptionNo']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
 
 const useOrderOptionDetailForClaim = <
     T = GetOrderOptionDetailForClaimResponse,
@@ -30,7 +13,7 @@ const useOrderOptionDetailForClaim = <
     orderOptionNo,
     searchParams,
     options,
-}: UseOrderOptionDetailForClaimProps<T>) => {
+}: MemberOrderOptionDetailForClaimOptionsParams<T>) => {
     const isLogin = useAuth();
 
     return useQuery({
