@@ -104,9 +104,7 @@ export const ClaimExchangeForm = ({
         ];
     }, [orderOptionData]);
 
-    // NOTE: 이후에 교환출고정보가 필요한 경우 해당 조건으로 변경
-    // const hasReturnAddress = orderOptionData.returnAddress !== null;
-    const hasReturnAddress = null;
+    const hasReturnAddress = orderOptionData.returnAddress !== null;
     const hasExchangeAddress = orderOptionData.exchangeAddress !== null;
 
     useEffect(() => {
@@ -269,7 +267,7 @@ export const ClaimExchangeForm = ({
                 ? {
                       ...submitData.returnAddress,
                       receiverName: isKorean
-                          ? (submitData.returnAddress.receiverName ?? '')
+                          ? submitData.returnAddress.receiverName ?? ''
                           : `${
                                 submitData.returnAddress.receiverLastName ?? ''
                             }${
@@ -281,7 +279,7 @@ export const ClaimExchangeForm = ({
                 ? {
                       ...submitData.exchangeAddress,
                       receiverName: isKorean
-                          ? (submitData.exchangeAddress.receiverName ?? '')
+                          ? submitData.exchangeAddress.receiverName ?? ''
                           : `${
                                 submitData.exchangeAddress.receiverLastName ??
                                 ''
