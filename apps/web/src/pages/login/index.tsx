@@ -1,6 +1,8 @@
+import Seo from '@/components/common/seo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SuspenseQuery } from '@suspensive/react-query';
-import Seo from '@/components/common/seo';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
+import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -18,6 +20,7 @@ import {
     InputLabel,
 } from '@/components/ui/input';
 import { PATHS } from '@/const/paths';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';
 import { useMyApp } from '@/hooks/myapp';
 import useApiError from '@/hooks/useApiError';
@@ -28,6 +31,8 @@ import { ErrorMessage } from '@/shared/components/form';
 import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 import * as styles from '@/styles/pages/login.css';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
+
+const LOGIN_BANNERS = ['LOGIN'] as const;
 
 const LoginPage: NextPageWithLayout = () => {
     const isDev = process.env.NEXT_PUBLIC_MODE === 'development';
@@ -105,7 +110,7 @@ const LoginPage: NextPageWithLayout = () => {
                     <SuspenseQuery
                         {...bannerListOptions({
                             type: 'id',
-                            banners: ['LOGIN'],
+                            banners: [...LOGIN_BANNERS],
                             options: {
                                 select: (data) =>
                                     extractBannerContentsByAccountIndex(
@@ -252,5 +257,32 @@ const LoginPage: NextPageWithLayout = () => {
 };
 
 LoginPage.getLayout = (page) => <AuthLayout title='로그인'>{page}</AuthLayout>;
+
+export const getStaticProps: GetStaticProps = async () => {
+    const queryClient = new QueryClient();
+
+    try {
+        await queryClient.fetchQuery(
+            bannerListOptions({
+                type: 'id',
+                banners: [...LOGIN_BANNERS],
+            }),
+        );
+    } catch (error) {
+        console.error('[Login Page getStaticProps] Prefetching failed:', {
+            message: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+        });
+    }
+
+    const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)));
+
+    return {
+        props: {
+            dehydratedState,
+        },
+        revalidate: ONE_HOUR_IN_SECONDS,
+    };
+};
 
 export default LoginPage;
