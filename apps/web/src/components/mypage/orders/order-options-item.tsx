@@ -211,7 +211,9 @@ export const OrderOptionsItem = ({
                         frame='outlined'
                         size='small'
                         onClick={() =>
-                            router.push(PATHS.MYPAGE.PRODUCT_INQUIRIES.MAIN)
+                            router.push(
+                                `${PATHS.MYPAGE.PRODUCT_INQUIRIES.REGISTER}?productNo=${productNo}`,
+                            )
                         }
                         style={{ height: '32px', fontSize: '12px' }}
                     >

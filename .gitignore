@@ -52,3 +52,7 @@ dist/
 .omc
 .claude
 .superpowers/
+
+# codegraph
+.codegraph/
+.cursor/
