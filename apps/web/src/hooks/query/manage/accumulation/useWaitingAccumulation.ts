@@ -1,34 +1,13 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { accumulation } from '@/api/manage';
-import accumulationKeys from '@/hooks/queryKeys/accumulationKeys';
+import {
+    waitingAccumulationOptions,
+    type UseWaitingAccumulationParams,
+} from '@/entities/manage/accumulation/queries';
 import type { GetExpectAccumulationResponse } from '@/models/manage/accumulation';
 
-interface UseWaitingAccumulationParams<T = GetExpectAccumulationResponse> {
-    options?: Omit<
-        UseQueryOptions<
-            GetExpectAccumulationResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof accumulationKeys)['waitingDetail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useWaitingAccumulation = <T = GetExpectAccumulationResponse>({
-    options,
-}: UseWaitingAccumulationParams<T> = {}) => {
-    return useQuery({
-        queryKey: accumulationKeys.waitingDetail(),
-        queryFn: async () => {
-            const { data } = await accumulation.getExpectAccumulation();
-
-            return data;
-        },
-        ...options,
-    });
-};
+const useWaitingAccumulation = <T = GetExpectAccumulationResponse>(
+    params: UseWaitingAccumulationParams<T> = {},
+) => useQuery(waitingAccumulationOptions(params));
 
 export default useWaitingAccumulation;

@@ -1,38 +1,13 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { board } from '@/api/manage';
-import { boardKeys } from '@/hooks/queryKeys';
+import {
+    boardCategoryListOptions,
+    type UseBoardCategoryListParams,
+} from '@/entities/manage/board/queries';
 import type { GetCategoriesResponse } from '@/models/manage/board';
 
-interface UseBoardCategoryListParams<T = GetCategoriesResponse> {
-    boardNo: string;
-    options?: Omit<
-        UseQueryOptions<
-            GetCategoriesResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof boardKeys)['category']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useBoardCategoryList = <T = GetCategoriesResponse>({
-    boardNo,
-    options,
-}: UseBoardCategoryListParams<T>) => {
-    return useQuery({
-        queryKey: boardKeys.category(boardNo),
-        queryFn: async () => {
-            const { data } = await board.getCategories(boardNo);
-
-            return data;
-        },
-        staleTime: 1000 * 60 * 100,
-        gcTime: 1000 * 60 * 100,
-        ...options,
-    });
-};
+const useBoardCategoryList = <T = GetCategoriesResponse>(
+    params: UseBoardCategoryListParams<T>,
+) => useQuery(boardCategoryListOptions(params));
 
 export default useBoardCategoryList;

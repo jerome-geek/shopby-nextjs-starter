@@ -1,44 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    UseQueryOptions,
-    keepPreviousData,
-    useQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    inquiryListOptions,
+    type UseInquiryListParams,
+} from '@/entities/manage/inquiry/queries';
+import type { GetInquiriesResponse } from '@/models/manage/inquiry';
 
-import { inquiry } from '@/api/manage';
-import { inquiryKeys } from '@/hooks/queryKeys';
-import type {
-    GetInquiriesParams,
-    GetInquiriesResponse,
-} from '@/models/manage/inquiry';
-
-interface UseInquiryListParams<T = GetInquiriesResponse> {
-    searchParams: GetInquiriesParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetInquiriesResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof inquiryKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useInquiryList = <T = GetInquiriesResponse>({
-    searchParams,
-    options,
-}: UseInquiryListParams<T>) => {
-    return useQuery({
-        queryKey: inquiryKeys.list(searchParams),
-        queryFn: async () => {
-            const { data } = await inquiry.getInquiries(searchParams);
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-    });
-};
+const useInquiryList = <T = GetInquiriesResponse>(
+    params: UseInquiryListParams<T>,
+) => useQuery(inquiryListOptions(params));
 
 export default useInquiryList;

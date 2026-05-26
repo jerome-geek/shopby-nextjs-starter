@@ -1,46 +1,13 @@
-import { isNil } from '@fxts/core';
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { board } from '@/api/manage';
-import { boardKeys } from '@/hooks/queryKeys';
-import type { GetArticleParams, GetArticleResponse } from '@/models/manage/board';
+import {
+    boardArticleOptions,
+    type UseBoardArticleParams,
+} from '@/entities/manage/board/queries';
+import type { GetArticleResponse } from '@/models/manage/board';
 
-interface UseBoardArticleParams<T = GetArticleResponse> {
-    boardNo: string;
-    articleNo: number;
-    searchParams?: GetArticleParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetArticleResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof boardKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useBoardArticle = <T = GetArticleResponse>({
-    boardNo,
-    articleNo,
-    searchParams,
-    options,
-}: UseBoardArticleParams<T>) => {
-    return useQuery({
-        queryKey: boardKeys.detail(boardNo, articleNo, searchParams),
-        queryFn: async () => {
-            const { data } = await board.getArticle(
-                boardNo,
-                articleNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        enabled: !isNil(boardNo) && !isNil(articleNo),
-        ...options,
-    });
-};
+const useBoardArticle = <T = GetArticleResponse>(
+    params: UseBoardArticleParams<T>,
+) => useQuery(boardArticleOptions(params));
 
 export default useBoardArticle;

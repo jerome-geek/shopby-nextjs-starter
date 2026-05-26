@@ -1,37 +1,12 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { inquiry } from '@/api/manage';
-import { inquiryKeys } from '@/hooks/queryKeys';
+import {
+    inquiryDetailOptions,
+    type UseInquiryParams,
+} from '@/entities/manage/inquiry/queries';
 import type { GetInquiryResponse } from '@/models/manage/inquiry';
 
-interface UseInquiryParams<T = GetInquiryResponse> {
-    inquiryNo: number;
-    options?: Omit<
-        UseQueryOptions<
-            GetInquiryResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof inquiryKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useInquiry = <T = GetInquiryResponse>({
-    inquiryNo,
-    options,
-}: UseInquiryParams<T>) => {
-    return useQuery({
-        queryKey: inquiryKeys.detail(inquiryNo),
-        queryFn: async () => {
-            const { data } = await inquiry.getInquiry(inquiryNo);
-
-            return data;
-        },
-        enabled: !!inquiryNo,
-        ...options,
-    });
-};
+const useInquiry = <T = GetInquiryResponse>(params: UseInquiryParams<T>) =>
+    useQuery(inquiryDetailOptions(params));
 
 export default useInquiry;

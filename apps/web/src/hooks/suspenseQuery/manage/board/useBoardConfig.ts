@@ -1,39 +1,13 @@
-import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { board } from '@/api/manage';
-import { boardKeys } from '@/hooks/queryKeys';
+import {
+    boardConfigSuspenseOptions,
+    type UseBoardConfigSuspenseParams,
+} from '@/entities/manage/board/queries';
 import type { GetBoardConfigResponse } from '@/models/manage/board';
 
-interface UseBoardConfigParams<T = GetBoardConfigResponse> {
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetBoardConfigResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof boardKeys)['config']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useBoardConfig = <T = GetBoardConfigResponse>({
-    options,
-}: UseBoardConfigParams<T> = {}) => {
-    return useSuspenseQuery({
-        queryKey: boardKeys.config(),
-        queryFn: async () => {
-            const { data } = await board.getConfig();
-
-            return data;
-        },
-        staleTime: 60 * 60 * 1000,
-        gcTime: 2 * 60 * 60 * 1000,
-        ...options,
-    });
-};
+const useBoardConfig = <T = GetBoardConfigResponse>(
+    params: UseBoardConfigSuspenseParams<T> = {},
+) => useSuspenseQuery(boardConfigSuspenseOptions(params));
 
 export default useBoardConfig;

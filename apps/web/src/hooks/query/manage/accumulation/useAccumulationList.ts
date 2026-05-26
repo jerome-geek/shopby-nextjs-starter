@@ -1,45 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    accumulationListOptions,
+    type UseAccumulationListParams,
+} from '@/entities/manage/accumulation/queries';
+import type { GetAccumulationsResponse } from '@/models/manage/accumulation';
 
-import { accumulation } from '@/api/manage';
-import accumulationKeys from '@/hooks/queryKeys/accumulationKeys';
-import type {
-    GetAccumulationsParams,
-    GetAccumulationsResponse,
-} from '@/models/manage/accumulation';
-
-interface UseAccumulationListParams<T = GetAccumulationsResponse> {
-    searchParams?: GetAccumulationsParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetAccumulationsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof accumulationKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useAccumulationList = <T = GetAccumulationsResponse>({
-    searchParams,
-    options,
-}: UseAccumulationListParams<T>) => {
-    return useQuery({
-        queryKey: accumulationKeys.list(searchParams),
-        queryFn: async () => {
-            const { data } = await accumulation.getAccumulations(searchParams);
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-        enabled: options?.enabled ?? true,
-    });
-};
+const useAccumulationList = <T = GetAccumulationsResponse>(
+    params: UseAccumulationListParams<T>,
+) => useQuery(accumulationListOptions(params));
 
 export default useAccumulationList;

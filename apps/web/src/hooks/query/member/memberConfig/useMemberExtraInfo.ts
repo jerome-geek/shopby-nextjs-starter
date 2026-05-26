@@ -1,33 +1,13 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { memberConfig } from '@/api/member';
+import {
+    memberExtraInfoOptions,
+    type UseMemberExtraInfoParams,
+} from '@/entities/member/memberConfig/queries';
 import type { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 
-interface UseMemberExtraInfoParams<T = GetMemberExtraInfoResponse> {
-    options?: Omit<
-        UseQueryOptions<
-            GetMemberExtraInfoResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            [string]
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useMemberExtraInfo = <T = GetMemberExtraInfoResponse>({
-    options,
-}: UseMemberExtraInfoParams<T> = {}) => {
-    return useQuery({
-        queryKey: ['memberExtraInfo'],
-        queryFn: async () => {
-            const { data } = await memberConfig.getMemberExtraInfo();
-
-            return data;
-        },
-        ...options,
-    });
-};
+const useMemberExtraInfo = <T = GetMemberExtraInfoResponse>(
+    params: UseMemberExtraInfoParams<T> = {},
+) => useQuery(memberExtraInfoOptions(params));
 
 export default useMemberExtraInfo;

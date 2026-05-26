@@ -1,50 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    UseQueryOptions,
-    keepPreviousData,
-    useQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    boardInquiriesListOptions,
+    type UseBoardInquiriesParams,
+} from '@/entities/manage/board/queries';
+import type { GetInquiriesResponse } from '@/models/manage/inquiry';
 
-import { inquiry } from '@/api/manage';
-import type {
-    GetInquiriesParams,
-    GetInquiriesResponse,
-} from '@/models/manage/inquiry';
-
-interface UseInquiriesParams<T = GetInquiriesResponse> {
-    searchParams: GetInquiriesParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetInquiriesResponse,
-            AxiosError,
-            T,
-            [
-                string,
-                {
-                    searchParams: GetInquiriesParams;
-                },
-            ]
-        >,
-        'queryKey'
-    >;
-}
-
-const useInquiries = <T = GetInquiriesResponse>({
-    searchParams,
-    options,
-}: UseInquiriesParams<T>) => {
-    return useQuery({
-        queryKey: ['inquiry', { searchParams }],
-        queryFn: async () => {
-            const { data } = await inquiry.getInquiries({
-                ...searchParams,
-            });
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-    });
-};
+const useInquiries = <T = GetInquiriesResponse>(
+    params: UseBoardInquiriesParams<T>,
+) => useQuery(boardInquiriesListOptions(params));
 
 export default useInquiries;

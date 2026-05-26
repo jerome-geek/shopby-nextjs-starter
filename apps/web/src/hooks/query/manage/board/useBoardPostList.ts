@@ -1,50 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    boardPostListOptions,
+    type UseBoardPostListParams,
+} from '@/entities/manage/board/queries';
+import type { GetPostListResponse } from '@/models/manage/board';
 
-import { board } from '@/api/manage';
-import { boardKeys } from '@/hooks/queryKeys';
-import type {
-    GetPostListData,
-    GetPostListParams,
-    GetPostListResponse,
-} from '@/models/manage/board';
-
-interface UseBoardPostListParams<T = GetPostListResponse> {
-    searchParams?: GetPostListParams;
-    data?: GetPostListData;
-    options?: Omit<
-        UseQueryOptions<
-            GetPostListResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof boardKeys)['postList']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useBoardPostList = <T = GetPostListResponse>({
-    searchParams,
-    data,
-    options,
-}: UseBoardPostListParams<T>) => {
-    return useQuery({
-        queryKey: boardKeys.postList(searchParams, data),
-        queryFn: async () => {
-            const { data: responseData } = await board.getPostList(
-                searchParams,
-                data,
-            );
-
-            return responseData;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-    });
-};
+const useBoardPostList = <T = GetPostListResponse>(
+    params: UseBoardPostListParams<T>,
+) => useQuery(boardPostListOptions(params));
 
 export default useBoardPostList;

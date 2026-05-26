@@ -1,47 +1,12 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { board } from '@/api/manage';
-import { boardKeys } from '@/hooks/queryKeys';
-import type {
-    GetArticleV2Params,
-    GetArticleV2Response,
-} from '@/models/manage/board';
+import {
+    boardPostOptions,
+    type UseBoardPostParams,
+} from '@/entities/manage/board/queries';
+import type { GetArticleV2Response } from '@/models/manage/board';
 
-interface UseBoardPostParams<T = GetArticleV2Response> {
-    boardNo: string;
-    postNo: number;
-    searchParams?: GetArticleV2Params;
-    options?: Omit<
-        UseQueryOptions<
-            GetArticleV2Response,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof boardKeys)['postDetail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useBoardPost = <T = GetArticleV2Response>({
-    boardNo,
-    postNo,
-    searchParams,
-    options,
-}: UseBoardPostParams<T>) => {
-    return useQuery({
-        queryKey: boardKeys.postDetail(boardNo, postNo, searchParams),
-        queryFn: async () => {
-            const { data } = await board.getArticleV2(
-                boardNo,
-                postNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
-    });
-};
+const useBoardPost = <T = GetArticleV2Response>(params: UseBoardPostParams<T>) =>
+    useQuery(boardPostOptions(params));
 
 export default useBoardPost;

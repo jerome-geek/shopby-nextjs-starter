@@ -1,47 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    boardArticleListOptions,
+    type UseBoardArticleListParams,
+} from '@/entities/manage/board/queries';
+import type { GetArticleListResponse } from '@/models/manage/board';
 
-import { board } from '@/api/manage';
-import { boardKeys } from '@/hooks/queryKeys';
-import type {
-    GetArticleListParams,
-    GetArticleListResponse,
-} from '@/models/manage/board';
-
-interface UseBoardArticleListParams<T = GetArticleListResponse> {
-    boardNo: string;
-    searchParams?: GetArticleListParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetArticleListResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof boardKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useBoardArticleList = <T = GetArticleListResponse>({
-    boardNo,
-    searchParams,
-    options,
-}: UseBoardArticleListParams<T>) => {
-    return useQuery({
-        queryKey: boardKeys.list(boardNo, searchParams),
-        queryFn: async () => {
-            const { data } = await board.getArticleList(boardNo, searchParams);
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        enabled: boardNo !== '',
-        ...options,
-    });
-};
+const useBoardArticleList = <T = GetArticleListResponse>(
+    params: UseBoardArticleListParams<T>,
+) => useQuery(boardArticleListOptions(params));
 
 export default useBoardArticleList;

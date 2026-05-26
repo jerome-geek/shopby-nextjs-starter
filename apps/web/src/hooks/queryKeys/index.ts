@@ -13,8 +13,10 @@ import eventKeys from '@/hooks/queryKeys/eventKeys';
 import freeGiftKeys from '@/hooks/queryKeys/freeGiftKeys';
 import guestOrderKeys from '@/hooks/queryKeys/guestOrderKeys';
 import inquiryKeys from '@/hooks/queryKeys/inquiryKeys';
+import kcpKeys from '@/hooks/queryKeys/kcpKeys';
 import laterShippingInputKeys from '@/hooks/queryKeys/laterShippingInputKeys';
 import mallKeys from '@/hooks/queryKeys/mallKeys';
+import memberConfigKeys from '@/hooks/queryKeys/memberConfigKeys';
 import orderSheetKeys from '@/hooks/queryKeys/orderSheetKeys';
 import ordersKeys from '@/hooks/queryKeys/ordersKeys';
 import popupKeys from '@/hooks/queryKeys/popupKeys';
@@ -45,8 +47,10 @@ export {
     freeGiftKeys,
     guestOrderKeys,
     inquiryKeys,
+    kcpKeys,
     laterShippingInputKeys,
     mallKeys,
+    memberConfigKeys,
     orderSheetKeys,
     ordersKeys,
     popupKeys,
