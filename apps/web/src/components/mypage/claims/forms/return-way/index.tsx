@@ -21,7 +21,6 @@ import {
     STATE_LIST,
 } from '@/const/form';
 import { RETURN_WAY_MAP } from '@/const/label';
-import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import useMall from '@/hooks/query/admin/mall/useMall';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
@@ -582,7 +581,8 @@ export const ClaimReturnWay = ({ orderOptionData }: ClaimReturnWayProps) => {
                         </InputFieldContainer>
                     )}
 
-                    <CustomsIdNumberField
+                    {/** NOTE: 개인통관고유부호, 수거시 참고사항 필드 비활성화 */}
+                    {/* <CustomsIdNumberField
                         register={register}
                         name='returnAddress.customsIdNumber'
                     />
@@ -593,7 +593,7 @@ export const ClaimReturnWay = ({ orderOptionData }: ClaimReturnWayProps) => {
                             placeholder={t('수거시 요청사항을 입력해 주세요.')}
                             {...register('returnAddress.deliveryMemo')}
                         />
-                    </InputFieldContainer>
+                    </InputFieldContainer> */}
                 </div>
             )}
 
