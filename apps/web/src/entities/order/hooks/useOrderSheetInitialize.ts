@@ -18,6 +18,7 @@ import {
 
 interface UseOrderSheetInitializeProps {
     orderSheetNo: string;
+    isGift?: boolean;
 }
 
 /**
@@ -28,6 +29,7 @@ interface UseOrderSheetInitializeProps {
  */
 const useOrderSheetInitialize = ({
     orderSheetNo,
+    isGift = false,
 }: UseOrderSheetInitializeProps) => {
     const isLogin = useAuth();
     const { isMyApp } = useMyApp();
@@ -68,8 +70,17 @@ const useOrderSheetInitialize = ({
                 isKorean,
                 isMyApp,
                 orderSheetNo,
+                isGift,
             }),
-        [orderSheetData, profileData, isLogin, isKorean, isMyApp, orderSheetNo],
+        [
+            orderSheetData,
+            profileData,
+            isLogin,
+            isKorean,
+            isMyApp,
+            orderSheetNo,
+            isGift,
+        ],
     );
 
     const methods = useForm<PaymentReserveSchemaType>({

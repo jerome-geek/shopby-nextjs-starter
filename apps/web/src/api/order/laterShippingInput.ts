@@ -5,6 +5,7 @@ import type { OrderDetailResponse } from '@/models/order';
 import type {
     GetAreaFeesParams,
     GetAreaFeesResponse,
+    GetLaterOrderDetailHeaders,
     GetLaterOrderDetailParams,
     GetShippingsParams,
     GetShippingsResponse,
@@ -32,13 +33,18 @@ const laterShippingInput = {
      *  - 암호화 된 배송 번호 리스트(encryptedShippingNo): 선물하는 시점에 동일한 수령자 연락처를 입력한 배송번호 목록
      */
     getOrderDetail: (
-        params: GetLaterOrderDetailParams,
+        headers: GetLaterOrderDetailHeaders,
+        params: GetLaterOrderDetailParams = {},
         options?: AxiosRequestConfig,
     ) => {
         return shopbyRequest<OrderDetailResponse>({
             method: 'GET',
             url: 'later-input/order',
             params,
+            headers: {
+                ...headers,
+                ...options?.headers,
+            },
             ...options,
         });
     },
@@ -66,6 +72,7 @@ const laterShippingInput = {
      *  - 암호화된 배송 번호 리스트(encryptedShippingNo)에 해당하는 모든 배송지를 수정합니다.
      */
     updateShippings: (
+        headers: GetLaterOrderDetailHeaders,
         data: UpdateShippingData,
         options?: AxiosRequestConfig,
     ) => {
@@ -73,6 +80,10 @@ const laterShippingInput = {
             method: 'PUT',
             url: 'later-input/shippings',
             data,
+            headers: {
+                ...headers,
+                ...options?.headers,
+            },
             ...options,
         });
     },

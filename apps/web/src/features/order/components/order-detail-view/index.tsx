@@ -46,6 +46,11 @@ export const OrderDetailView = ({
     const { data: profileData } = useProfile();
     const memberNo = profileData?.memberNo ?? 0;
 
+    const isGiftOrder =
+        orderDetailData.orderOptionsGroupByPartner[0]
+            ?.orderOptionsGroupByDelivery[0]?.usesShippingInfoLaterInput ===
+        true;
+
     const handleShippingAddressChange = () => {
         openShippingAddressChangeDialog({
             orderNo: orderDetailData.orderNo,
@@ -397,7 +402,8 @@ export const OrderDetailView = ({
                             includes(orderDetailData.defaultOrderStatusType, [
                                 'DEPOSIT_WAIT',
                                 'PAY_DONE',
-                            ]) && (
+                            ]) &&
+                            !isGiftOrder && (
                                 <ButtonV2
                                     frame='text'
                                     size='small'

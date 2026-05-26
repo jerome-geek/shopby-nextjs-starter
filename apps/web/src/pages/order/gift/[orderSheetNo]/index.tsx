@@ -6,7 +6,7 @@ import { PATHS } from '@/const/paths';
 import { OrderSheetContent } from '@/features/order/components/order-sheet-content';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
-const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
+const GiftOrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
     return (
         <ShopbyAsyncBoundary
             fallback={
@@ -21,7 +21,7 @@ const OrderSheetPage = ({ orderSheetNo }: { orderSheetNo: string }) => {
             }
         >
             <CSRLayout>
-                <OrderSheetContent orderSheetNo={orderSheetNo} />
+                <OrderSheetContent orderSheetNo={orderSheetNo} isGift />
             </CSRLayout>
         </ShopbyAsyncBoundary>
     );
@@ -46,4 +46,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     };
 };
 
-export default OrderSheetPage;
+export default GiftOrderSheetPage;

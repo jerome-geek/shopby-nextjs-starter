@@ -197,4 +197,8 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         pathname: PATHS.GUEST.ORDER.DETAIL,
         title: '비회원 주문조회',
     },
+    {
+        pathname: PATHS.ORDER.GIFT.ADDRESS,
+        title: '선물받기 (배송지 입력)',
+    },
 ];

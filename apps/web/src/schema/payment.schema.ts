@@ -261,7 +261,10 @@ export const getPaymentSchema = ({
                 });
             }
 
-            if (data.payType === 'ACCOUNT' && !data.bankAccountToDeposit?.bankAccount) {
+            if (
+                data.payType === 'ACCOUNT' &&
+                !data.bankAccountToDeposit?.bankAccount
+            ) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     message: '입금은행을 선택해주세요.',
@@ -269,7 +272,10 @@ export const getPaymentSchema = ({
                 });
             }
 
-            if (data.shippingAddress.countryCd !== 'KR' && !data.shippingAddress.receiverState) {
+            if (
+                data.shippingAddress.countryCd !== 'KR' &&
+                !data.shippingAddress.receiverState
+            ) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     message: 'Receiver State is required',
@@ -304,7 +310,8 @@ export const getPaymentSchema = ({
                 ) {
                     ctx.addIssue({
                         code: z.ZodIssueCode.custom,
-                        message: '개인통관고유부호를 입력해주세요 (P로 시작하는 13자리)',
+                        message:
+                            '개인통관고유부호를 입력해주세요 (P로 시작하는 13자리)',
                         path: ['shippingAddress', 'customsIdNumber'],
                     });
                 }

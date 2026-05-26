@@ -22,6 +22,7 @@ interface TransformProps {
     isKorean: boolean;
     isMyApp: boolean;
     orderSheetNo: string;
+    isGift?: boolean;
 }
 
 type OrdererType = PaymentReserveSchemaType['orderer'];
@@ -34,6 +35,7 @@ export const getInitialOrderFormValues = ({
     isKorean,
     isMyApp,
     orderSheetNo,
+    isGift = false,
 }: TransformProps): Partial<PaymentReserveSchemaType> => {
     const mainAddress = orderSheetData?.orderSheetAddress?.mainAddress;
     const tradeBankAccountInfos = orderSheetData?.tradeBankAccountInfos ?? [];
@@ -92,6 +94,8 @@ export const getInitialOrderFormValues = ({
         receiverFirstName: '',
         receiverLastName: '',
         receiverMobileCountryCd: '',
+        usesShippingInfoLaterInput: isGift,
+        shippingInfoLaterInputContact: '',
     };
 
     // NOTE: 현금성 결제(무통장 입금 등)인 경우에만 현금영수증(cashReceipt) 초기값 설정
