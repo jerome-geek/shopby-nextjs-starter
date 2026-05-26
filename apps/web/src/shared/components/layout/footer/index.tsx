@@ -20,8 +20,8 @@ function FooterContent() {
             representativeName:
                 mallData.serviceBasicInfo.representativeName || '조영훈',
             address:
-                mallData.serviceBasicInfo.address ||
-                '서울특별시 마포구 양화로 120(서교동)',
+                `${mallData.serviceBasicInfo.address}, ${mallData.serviceBasicInfo.addressDetail}` ||
+                '서울특별시 마포구 양화로 120(서교동), 2층',
             representPhoneNo:
                 mallData.serviceBasicInfo.representPhoneNo || '1588-0000',
             businessRegistrationNo:
@@ -31,7 +31,7 @@ function FooterContent() {
                 mallData.serviceBasicInfo
                     .onlineMarketingBusinessDeclarationNo ||
                 '2024-서울강남-12345',
-            email: 'help@jollypot.com', // Mall data에 이메일이 없을 경우 대비
+            email: mallData.mall.serviceCenter.email,
         }),
         [mallData.serviceBasicInfo],
     );
