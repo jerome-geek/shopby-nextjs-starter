@@ -1,49 +1,19 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    UseQueryOptions,
-    keepPreviousData,
-    useQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { cart } from '@/api/order';
-import { cartKeys } from '@/hooks/queryKeys';
+    cartListOptions,
+    type UseCartListParams,
+} from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type {
-    GetCartListParams,
-    GetCartListResponse,
-} from '@/models/order/cart';
-
-interface UseCartListParams<T = GetCartListResponse> {
-    searchParams?: GetCartListParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetCartListResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof cartKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import type { GetCartListResponse } from '@/models/order/cart';
 
 const useCartList = <T = GetCartListResponse>({
     searchParams,
     options,
-}: UseCartListParams<T>) => {
+}: Omit<UseCartListParams<T>, 'isLogin'>) => {
     const isLogin = useAuth();
 
-    return useQuery({
-        queryKey: cartKeys.list(searchParams),
-        queryFn: async () => {
-            const { data } = await cart.getCartList(searchParams);
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        staleTime: 10 * 1000,
-        ...options,
-        enabled: (options?.enabled ?? true) && !!isLogin,
-    });
+    return useQuery(cartListOptions({ isLogin: !!isLogin, searchParams, options }));
 };
 
 export default useCartList;

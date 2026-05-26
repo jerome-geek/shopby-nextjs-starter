@@ -1,50 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    calculateOrderSheetOptions,
+    type UseCalculateOrderSheetParams,
+} from '@/entities/order/queries';
+import type { GetCalculatedOrderSheetResponse } from '@/models/order/orderSheet';
 
-import { orderSheet } from '@/api/order';
-import { orderSheetKeys } from '@/hooks/queryKeys';
-import type {
-    GetCalculatedOrderSheetData,
-    GetCalculatedOrderSheetResponse,
-} from '@/models/order/orderSheet';
-
-interface UseCalculateOrderSheetParams<T = GetCalculatedOrderSheetResponse> {
-    orderSheetNo: string;
-    searchParams: GetCalculatedOrderSheetData;
-    options?: Omit<
-        UseQueryOptions<
-            GetCalculatedOrderSheetResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof orderSheetKeys)['calculate']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useCalculateOrderSheet = <T = GetCalculatedOrderSheetResponse>({
-    orderSheetNo,
-    searchParams,
-    options,
-}: UseCalculateOrderSheetParams<T>) => {
-    return useQuery({
-        queryKey: orderSheetKeys.calculate(orderSheetNo, searchParams),
-        queryFn: async () => {
-            const { data } = await orderSheet.getCalculatedOrderSheet(
-                orderSheetNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-        enabled: (options?.enabled ?? true) && !!orderSheetNo,
-    });
-};
+const useCalculateOrderSheet = <T = GetCalculatedOrderSheetResponse>(
+    params: UseCalculateOrderSheetParams<T>,
+) => useQuery(calculateOrderSheetOptions(params));
 
 export default useCalculateOrderSheet;

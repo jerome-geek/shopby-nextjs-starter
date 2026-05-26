@@ -1,45 +1,22 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { guestOrder } from '@/api/order';
-import { guestOrderKeys } from '@/hooks/queryKeys';
+import {
+    guestOrderDetailQueryOptions,
+    type UseGuestOrderDetailQueryParams,
+} from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
 import type { OrderDetailResponse } from '@/models/order';
-import type { GetOrderDetailParams } from '@/models/order/myOrder';
-
-interface UseGuestOrderDetailParams<T = OrderDetailResponse> {
-    orderNo: string;
-    params?: GetOrderDetailParams;
-    options?: Omit<
-        UseQueryOptions<
-            OrderDetailResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof guestOrderKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
 
 const useGuestOrderDetail = <T = OrderDetailResponse>({
     orderNo,
     params,
     options,
-}: UseGuestOrderDetailParams<T>) => {
+}: Omit<UseGuestOrderDetailQueryParams<T>, 'isLogin'>) => {
     const isLogin = useAuth();
 
-    return useQuery({
-        queryKey: guestOrderKeys.detail(orderNo, params),
-        queryFn: async () => {
-            const { data } = await guestOrder.getOrderDetail(orderNo, params);
-
-            return data;
-        },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 5,
-        enabled: !!orderNo && !!isLogin,
-        ...options,
-    });
+    return useQuery(
+        guestOrderDetailQueryOptions({ orderNo, isLogin: !!isLogin, params, options }),
+    );
 };
 
 export default useGuestOrderDetail;

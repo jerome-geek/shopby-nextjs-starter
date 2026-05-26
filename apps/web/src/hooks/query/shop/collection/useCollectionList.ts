@@ -1,36 +1,13 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { collection } from '@/api/shop';
+import {
+    collectionListOptions,
+    type UseCollectionListParams,
+} from '@/entities/shop/collection/queries';
 import type { GetCollectionListResponse } from '@/models/shop/collection';
-import { collectionKeys } from '@/hooks/queryKeys';
 
-interface UseCollectionListParams<T = GetCollectionListResponse> {
-    options?: Omit<
-        UseQueryOptions<
-            GetCollectionListResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof collectionKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useCollectionList = <T = GetCollectionListResponse>({
-    options,
-}: UseCollectionListParams<T> = {}) => {
-    return useQuery({
-        queryKey: collectionKeys.list(),
-        queryFn: async () => {
-            const { data } = await collection.getList();
-
-            return data;
-        },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10,
-        ...options,
-    });
-};
+const useCollectionList = <T = GetCollectionListResponse>(
+    params: UseCollectionListParams<T> = {},
+) => useQuery(collectionListOptions(params));
 
 export default useCollectionList;

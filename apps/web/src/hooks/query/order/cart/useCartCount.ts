@@ -1,38 +1,18 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { cart } from '@/api/order';
-import type { GetCartCountResponse } from '@/models/order/cart';
-import { cartKeys } from '@/hooks/queryKeys';
+import {
+    cartCountOptions,
+    type UseCartCountParams,
+} from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-
-interface UseCartCountParam<T = GetCartCountResponse> {
-    options?: Omit<
-        UseQueryOptions<
-            GetCartCountResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof cartKeys)['count']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import type { GetCartCountResponse } from '@/models/order/cart';
 
 const useCartCount = <T = GetCartCountResponse>({
     options,
-}: UseCartCountParam<T> = {}) => {
+}: Omit<UseCartCountParams<T>, 'isLogin'> = {}) => {
     const isLogin = useAuth();
 
-    return useQuery({
-        queryKey: cartKeys.count(),
-        queryFn: async () => {
-            const { data } = await cart.getCartCount();
-
-            return data;
-        },
-        ...options,
-        enabled: (options?.enabled ?? true) && !!isLogin,
-    });
+    return useQuery(cartCountOptions({ isLogin: !!isLogin, options }));
 };
 
 export default useCartCount;

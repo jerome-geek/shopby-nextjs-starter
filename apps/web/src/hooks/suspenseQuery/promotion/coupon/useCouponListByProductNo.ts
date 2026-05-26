@@ -1,51 +1,13 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    couponListByProductNoSuspenseOptions,
+    type UseCouponListByProductNoSuspenseParams,
+} from '@/entities/promotion/coupon/queries';
+import type { GetIssuableCouponsByProductNoResponse } from '@/models/promotion/coupon';
 
-import { coupon } from '@/api/promotion';
-import { couponKeys } from '@/hooks/queryKeys';
-import type {
-    GetIssuableCouponsByProductNoParams,
-    GetIssuableCouponsByProductNoResponse,
-} from '@/models/promotion/coupon';
-
-interface UseCouponListByProductNoParams<
-    T = GetIssuableCouponsByProductNoResponse,
-> {
-    productNo: number;
-    memberNo?: number;
-    searchParams?: GetIssuableCouponsByProductNoParams;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetIssuableCouponsByProductNoResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof couponKeys)['listByProductNo']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useCouponListByProductNo = <T = GetIssuableCouponsByProductNoResponse>({
-    productNo,
-    memberNo = 0,
-    searchParams,
-    options,
-}: UseCouponListByProductNoParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: couponKeys.listByProductNo(productNo, memberNo, searchParams),
-        queryFn: async () => {
-            const { data } = await coupon.getIssuableCouponsByProductNo(
-                productNo,
-                searchParams,
-            );
-
-            return data;
-        },
-        ...options,
-    });
-};
+const useCouponListByProductNo = <T = GetIssuableCouponsByProductNoResponse>(
+    params: UseCouponListByProductNoSuspenseParams<T>,
+) => useSuspenseQuery(couponListByProductNoSuspenseOptions(params));
 
 export default useCouponListByProductNo;

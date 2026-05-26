@@ -1,58 +1,11 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
+
 import {
-    UseInfiniteQueryOptions,
-    keepPreviousData,
-    useInfiniteQuery,
-    InfiniteData,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    infiniteMyOrderListOptions,
+    type UseInfiniteMyOrderListParams,
+} from '@/entities/order/queries';
 
-import { myOrder } from '@/api/order';
-import ordersKeys from '@/hooks/queryKeys/ordersKeys';
-import type {
-    GetOrderListParams,
-    GetOrderListResponse,
-} from '@/models/order/myOrder';
-
-interface UseInfiniteMyOrderListParams {
-    searchParams: GetOrderListParams;
-    options?: Omit<
-        UseInfiniteQueryOptions<
-            GetOrderListResponse,
-            AxiosError<ShopByErrorResponse>,
-            InfiniteData<GetOrderListResponse>,
-            ReturnType<(typeof ordersKeys)['infiniteList']>,
-            number
-        >,
-        'queryKey' | 'initialPageParam' | 'getNextPageParam' | 'queryFn'
-    >;
-}
-
-const useInfiniteMyOrderList = ({
-    searchParams,
-    options,
-}: UseInfiniteMyOrderListParams) => {
-    return useInfiniteQuery({
-        queryKey: ordersKeys.infiniteList(searchParams),
-        queryFn: async ({ pageParam = 1 }: { pageParam: number }) => {
-            const { data } = await myOrder.getOrderList({
-                ...searchParams,
-                pageNumber: pageParam,
-            });
-
-            return data;
-        },
-        getNextPageParam: (lastPage, allPages) => {
-            const pageSize = searchParams.pageSize || 10;
-            const totalCount = lastPage.totalCount || 0;
-            const hasNextPage = pageSize * allPages.length < totalCount;
-
-            return hasNextPage ? allPages.length + 1 : undefined;
-        },
-        placeholderData: keepPreviousData,
-        initialPageParam: 1,
-        ...options,
-        enabled: options?.enabled ?? true,
-    });
-};
+const useInfiniteMyOrderList = (params: UseInfiniteMyOrderListParams) =>
+    useInfiniteQuery(infiniteMyOrderListOptions(params));
 
 export default useInfiniteMyOrderList;

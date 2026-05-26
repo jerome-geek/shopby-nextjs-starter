@@ -1,52 +1,19 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    UseQueryOptions,
-    keepPreviousData,
-    useQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-import { isEmpty } from '@fxts/core';
-
-import { cart } from '@/api/order';
-import { cartKeys } from '@/hooks/queryKeys';
-import type {
-    GetSelectedCartPriceParams,
-    GetSelectedCartPriceResponse,
-} from '@/models/order/cart';
+    cartPriceOptions,
+    type UseCartPriceParams,
+} from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-
-interface UseCartPriceParams<T = GetSelectedCartPriceResponse> {
-    searchParams: GetSelectedCartPriceParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetSelectedCartPriceResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof cartKeys)['price']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import type { GetSelectedCartPriceResponse } from '@/models/order/cart';
 
 const useCartPrice = <T = GetSelectedCartPriceResponse>({
     searchParams,
     options,
-}: UseCartPriceParams<T>) => {
+}: Omit<UseCartPriceParams<T>, 'isLogin'>) => {
     const isLogin = useAuth();
 
-    return useQuery({
-        queryKey: cartKeys.price(searchParams),
-        queryFn: async () => {
-            const { data } = await cart.getSelectedCartPrice(searchParams);
-
-            return data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-        enabled:
-            (options?.enabled ?? true) &&
-            !!isLogin &&
-            !isEmpty(searchParams.cartNo),
-    });
+    return useQuery(cartPriceOptions({ isLogin: !!isLogin, searchParams, options }));
 };
 
 export default useCartPrice;

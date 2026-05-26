@@ -1,39 +1,14 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { orderConfiguration } from '@/api/order';
-import { ordersKeys } from '@/hooks/queryKeys';
+    orderConfigurationSuspenseOptions,
+    type UseOrderConfigurationSuspenseParams,
+} from '@/entities/order/queries';
 import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
-
-interface UseOrderConfigurationParams<T = GetOrderConfigsResponse> {
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetOrderConfigsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof ordersKeys)['config']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
 
 const useOrderConfiguration = <T = GetOrderConfigsResponse>({
     options,
-}: UseOrderConfigurationParams<T> = {}) => {
-    return useSuspenseQuery({
-        queryKey: ordersKeys.config(),
-        queryFn: async () => {
-            const { data } = await orderConfiguration.getOrderConfigs();
-
-            return data;
-        },
-        staleTime: 60 * 60 * 1000,
-        gcTime: 2 * 60 * 60 * 1000,
-        ...options,
-    });
-};
+}: UseOrderConfigurationSuspenseParams<T> = {}) =>
+    useSuspenseQuery(orderConfigurationSuspenseOptions({ options }));
 
 export default useOrderConfiguration;

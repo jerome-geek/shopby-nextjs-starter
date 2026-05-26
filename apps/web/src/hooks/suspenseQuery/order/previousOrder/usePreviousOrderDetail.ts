@@ -1,38 +1,13 @@
-import {
-    useSuspenseQuery,
-    UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import previousOrder from '@/api/order/previousOrder';
-import ordersKeys from '@/hooks/queryKeys/ordersKeys';
+import {
+    previousOrderDetailSuspenseOptions,
+    type UsePreviousOrderDetailSuspenseParams,
+} from '@/entities/order/queries';
 import type { GetPreviousOrderResponse } from '@/models/order/previousOrder';
 
-interface UsePreviousOrderDetailParams<T = GetPreviousOrderResponse> {
-    orderNo: string;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetPreviousOrderResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof ordersKeys)['previousDetail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const usePreviousOrderDetail = <T = GetPreviousOrderResponse>({
-    orderNo,
-    options,
-}: UsePreviousOrderDetailParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: ordersKeys.previousDetail(orderNo),
-        queryFn: async () => {
-            const { data } = await previousOrder.getPreviousOrder(orderNo);
-            return data;
-        },
-        ...options,
-    });
-};
+const usePreviousOrderDetail = <T = GetPreviousOrderResponse>(
+    params: UsePreviousOrderDetailSuspenseParams<T>,
+) => useSuspenseQuery(previousOrderDetailSuspenseOptions(params));
 
 export default usePreviousOrderDetail;

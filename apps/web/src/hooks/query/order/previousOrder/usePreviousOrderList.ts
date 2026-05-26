@@ -1,46 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    previousOrderListOptions,
+    type UsePreviousOrderListParams,
+} from '@/entities/order/queries';
+import type { GetPreviousOrdersResponse } from '@/models/order/previousOrder';
 
-import previousOrder from '@/api/order/previousOrder';
-import ordersKeys from '@/hooks/queryKeys/ordersKeys';
-import type {
-    GetPreviousOrdersParams,
-    GetPreviousOrdersResponse,
-} from '@/models/order/previousOrder';
-
-interface UsePreviousOrderListParams<T = GetPreviousOrdersResponse> {
-    searchParams: GetPreviousOrdersParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetPreviousOrdersResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof ordersKeys)['previousList']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const usePreviousOrderList = <T = GetPreviousOrdersResponse>({
-    searchParams,
-    options,
-}: UsePreviousOrderListParams<T>) => {
-    return useQuery({
-        queryKey: ordersKeys.previousList(searchParams),
-        queryFn: async () => {
-            const { data } = await previousOrder.getPreviousOrders(
-                searchParams,
-            );
-            return data;
-        },
-        ...options,
-        placeholderData: keepPreviousData,
-        enabled: options?.enabled ?? true,
-    });
-};
+const usePreviousOrderList = <T = GetPreviousOrdersResponse>(
+    params: UsePreviousOrderListParams<T>,
+) => useQuery(previousOrderListOptions(params));
 
 export default usePreviousOrderList;

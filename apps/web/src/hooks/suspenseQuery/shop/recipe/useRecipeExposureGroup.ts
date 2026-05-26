@@ -1,49 +1,13 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    useSuspenseQuery,
-    type UseSuspenseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    recipeExposureGroupSuspenseOptions,
+    type UseRecipeExposureGroupSuspenseParams,
+} from '@/entities/recipe/queries';
+import type { RecipeExposureGroupResponse } from '@/models/shop/recipe';
 
-import { recipe } from '@/api/shop';
-import { recipeKeys } from '@/hooks/queryKeys';
-import type {
-    GetRecipeExposureGroupParams,
-    RecipeExposureGroupResponse,
-} from '@/models/shop/recipe';
-
-interface UseRecipeExposureGroupParams<T = RecipeExposureGroupResponse> {
-    groupId: string;
-    params?: GetRecipeExposureGroupParams;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            RecipeExposureGroupResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof recipeKeys)['exposureGroup']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useRecipeExposureGroup = <T = RecipeExposureGroupResponse>({
-    groupId,
-    params,
-    options,
-}: UseRecipeExposureGroupParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: recipeKeys.exposureGroup(groupId, params),
-        queryFn: async () => {
-            const { data } = await recipe.getRecipeExposureGroup(
-                groupId,
-                params,
-            );
-
-            return data;
-        },
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10,
-        ...options,
-    });
-};
+const useRecipeExposureGroup = <T = RecipeExposureGroupResponse>(
+    params: UseRecipeExposureGroupSuspenseParams<T>,
+) => useSuspenseQuery(recipeExposureGroupSuspenseOptions(params));
 
 export default useRecipeExposureGroup;

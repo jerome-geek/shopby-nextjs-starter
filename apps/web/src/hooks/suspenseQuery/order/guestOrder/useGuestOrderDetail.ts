@@ -1,48 +1,13 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    type UseSuspenseQueryOptions,
-    useSuspenseQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { guestOrder } from '@/api/order';
-import { guestOrderKeys } from '@/hooks/queryKeys';
+    guestOrderDetailSuspenseOptions,
+    type UseGuestOrderDetailSuspenseParams,
+} from '@/entities/order/queries';
 import type { OrderDetailResponse } from '@/models/order';
-import type { GetOrderDetailParams } from '@/models/order/myOrder';
 
-interface UseGuestOrderDetailParams<T = OrderDetailResponse> {
-    orderNo: string;
-    guestToken?: string;
-    params?: GetOrderDetailParams;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            OrderDetailResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof guestOrderKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useGuestOrderDetail = <T = OrderDetailResponse>({
-    orderNo,
-    guestToken,
-    params,
-    options,
-}: UseGuestOrderDetailParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: guestOrderKeys.detail(orderNo, params),
-        queryFn: async () => {
-            const { data } = await guestOrder.getOrderDetail(orderNo, params, {
-                headers: {
-                    guestToken: guestToken,
-                },
-            });
-
-            return data;
-        },
-        ...options,
-    });
-};
+const useGuestOrderDetail = <T = OrderDetailResponse>(
+    params: UseGuestOrderDetailSuspenseParams<T>,
+) => useSuspenseQuery(guestOrderDetailSuspenseOptions(params));
 
 export default useGuestOrderDetail;

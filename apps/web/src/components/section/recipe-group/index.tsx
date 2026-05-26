@@ -18,7 +18,7 @@ const RecipeGroupSectionContent = ({ groupId }: { groupId: GroupId }) => {
 
     const { data } = useRecipeExposureGroup({
         groupId,
-        params: { exposureCount: count },
+        searchParams: { exposureCount: count },
     });
 
     if (isEmpty(data?.groups)) {

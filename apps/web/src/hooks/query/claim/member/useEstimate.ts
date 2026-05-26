@@ -1,50 +1,19 @@
-import { isEmpty } from '@fxts/core';
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
-import { memberClaim } from '@/api/claim';
-import { claimsKeys } from '@/hooks/queryKeys';
+    estimateOptions,
+    type UseEstimateParams,
+} from '@/entities/claim/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { ClaimPriceInfo, EstimatedRefundPriceData } from '@/models/claim';
-
-interface UseEstimateProps<T = ClaimPriceInfo> {
-    data: EstimatedRefundPriceData;
-    options?: Omit<
-        UseQueryOptions<
-            ClaimPriceInfo,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof claimsKeys)['estimate']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
+import type { ClaimPriceInfo } from '@/models/claim';
 
 const useOrderOptionEstimate = <T = ClaimPriceInfo>({
     data,
     options,
-}: UseEstimateProps<T>) => {
+}: Omit<UseEstimateParams<T>, 'isLogin'>) => {
     const isLogin = useAuth();
 
-    return useQuery({
-        queryKey: claimsKeys.estimate(data),
-        queryFn: async () => {
-            const response = await memberClaim.getEstimatedRefundPrice(data);
-
-            return response.data;
-        },
-        placeholderData: keepPreviousData,
-        ...options,
-        enabled:
-            (options?.enabled ?? true) &&
-            !!data?.claimReasonType &&
-            !!isLogin &&
-            !isEmpty(data?.claimedProductOptions),
-    });
+    return useQuery(estimateOptions({ data, isLogin: !!isLogin, options }));
 };
 
 export default useOrderOptionEstimate;

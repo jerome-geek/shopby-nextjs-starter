@@ -1,37 +1,13 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { guestClaim } from '@/api/claim';
-import { claimsKeys } from '@/hooks/queryKeys';
+import {
+    guestClaimDetailOptions,
+    type UseGuestClaimDetailParams,
+} from '@/entities/claim/queries';
 import type { GetClaimDetailByClaimNoResponse } from '@/models/claim/member';
 
-interface UseClaimDetailParams<T = GetClaimDetailByClaimNoResponse> {
-    claimNo: number;
-    options?: Omit<
-        UseQueryOptions<
-            GetClaimDetailByClaimNoResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof claimsKeys)['guestDetail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useGuestClaimDetail = <T = GetClaimDetailByClaimNoResponse>({
-    claimNo,
-    options,
-}: UseClaimDetailParams<T>) => {
-    return useQuery({
-        queryKey: claimsKeys.guestDetail(claimNo),
-        queryFn: async () => {
-            const { data } = await guestClaim.getClaimDetailByClaimNo(claimNo);
-
-            return data;
-        },
-        ...options,
-        enabled: (options?.enabled ?? true) && !!claimNo,
-    });
-};
+const useGuestClaimDetail = <T = GetClaimDetailByClaimNoResponse>(
+    params: UseGuestClaimDetailParams<T>,
+) => useQuery(guestClaimDetailOptions(params));
 
 export default useGuestClaimDetail;

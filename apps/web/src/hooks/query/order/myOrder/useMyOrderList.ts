@@ -1,46 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+
 import {
-    keepPreviousData,
-    useQuery,
-    UseQueryOptions,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    myOrderListOptions,
+    type UseMyOrderListParams,
+} from '@/entities/order/queries';
+import type { GetOrderListResponse } from '@/models/order/myOrder';
 
-import { myOrder } from '@/api/order';
-import ordersKeys from '@/hooks/queryKeys/ordersKeys';
-import type {
-    GetOrderListParams,
-    GetOrderListResponse,
-} from '@/models/order/myOrder';
-
-interface UseOrderListParams<T = GetOrderListResponse> {
-    searchParams: GetOrderListParams;
-    options?: Omit<
-        UseQueryOptions<
-            GetOrderListResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof ordersKeys)['list']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useMyOrderList = <T = GetOrderListResponse>({
-    searchParams,
-    options,
-}: UseOrderListParams<T>) => {
-    return useQuery({
-        queryKey: ordersKeys.list(searchParams),
-        queryFn: async () => {
-            const { data } = await myOrder.getOrderList(searchParams);
-
-            return data;
-        },
-
-        ...options,
-        placeholderData: keepPreviousData,
-        enabled: options?.enabled ?? true,
-    });
-};
+const useMyOrderList = <T = GetOrderListResponse>(
+    params: UseMyOrderListParams<T>,
+) => useQuery(myOrderListOptions(params));
 
 export default useMyOrderList;
