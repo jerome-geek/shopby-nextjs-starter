@@ -426,7 +426,10 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
             {/* --- COMMENTS AREA --- */}
             <div id='recipe-comments'>
                 <FetchBoundary fallback={<div>Loading comments...</div>}>
-                    <RecipeCommentSection recipeSno={Number(sno)} />
+                    <RecipeCommentSection
+                        recipeSno={Number(sno)}
+                        scrollToComments={scrollToComments}
+                    />
                 </FetchBoundary>
             </div>
 

@@ -6,6 +6,7 @@ import { CommentList } from '@/components/recipe/comment-section/comment-list';
 
 interface RecipeCommentSectionProps {
     recipeSno: number;
+    scrollToComments: () => void;
 }
 
 /**
@@ -13,6 +14,7 @@ interface RecipeCommentSectionProps {
  */
 export const RecipeCommentSection = ({
     recipeSno,
+    scrollToComments,
 }: RecipeCommentSectionProps) => {
     return (
         <section className={styles.commentSection}>
@@ -24,7 +26,10 @@ export const RecipeCommentSection = ({
                 }
                 errorFallback={<div>Failed to load comments.</div>}
             >
-                <CommentList recipeSno={recipeSno} />
+                <CommentList
+                    recipeSno={recipeSno}
+                    scrollToComments={scrollToComments}
+                />
             </FetchBoundary>
 
             <CommentInput recipeSno={recipeSno} />

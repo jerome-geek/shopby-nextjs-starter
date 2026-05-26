@@ -30,7 +30,7 @@ export interface GetCommentsParams {
     contentType: CommentContentType;
     contentSno: number;
     page?: number;
-    size?: number;
+    take?: number;
 }
 
 export interface CommentResponse {
