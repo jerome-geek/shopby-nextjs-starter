@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { overlay } from 'overlay-kit';
+import { useState } from 'react';
 
+import { revalidatePath } from '@/api/revalidate';
 import PageMeta from '@/components/common/PageMeta';
 import SelectEventModal from '@/components/modal/select-event';
 import SelectProductModal from '@/components/modal/select-product';
-import { revalidatePath } from '@/api/revalidate';
-import { useToast } from '@/hooks/utils';
 import useApiError from '@/hooks/useApiError';
+import { useToast } from '@/hooks/utils';
 
 interface StaticPage {
     name: string;
@@ -19,6 +19,11 @@ const STATIC_PAGES: StaticPage[] = [
     { name: '발견 페이지', description: '쇼핑 발견', path: '/shop' },
     { name: '키즈 페이지', description: '키즈 전용관', path: '/shop/kids' },
     { name: '라이프 페이지', description: '라이프 전용관', path: '/shop/life' },
+    {
+        name: '로그인 페이지',
+        description: '로그인 화면',
+        path: '/login',
+    },
     { name: '특가 페이지', description: '타임특가', path: '/time-sale' },
     {
         name: '베스트 상품',
@@ -146,8 +151,8 @@ const CacheManagement = () => {
                         ISR 캐시 관리
                     </h2>
                     <p className='mt-1 text-sm text-[#6a7282]'>
-                        정보 변경 후 웹에 바로 반영되지 않을 경우, 해당
-                        페이지의 캐시를 직접 갱신하세요.
+                        정보 변경 후 웹에 바로 반영되지 않을 경우, 해당 페이지의
+                        캐시를 직접 갱신하세요.
                     </p>
                 </div>
 
