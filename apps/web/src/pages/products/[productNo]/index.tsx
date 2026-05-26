@@ -21,7 +21,6 @@ import LoadingWrapper from '@/components/common/loading-wrapper';
 import Seo from '@/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { BookmarkIcon } from '@/components/icons';
-import { TruckIcon } from '@/components/icons/TruckIcon';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import ShareModal from '@/components/modal/share';
 import {
@@ -330,23 +329,6 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                                 }
                             />
                         )}
-
-                        <div className={styles.deliveryBox}>
-                            <TruckIcon size={isMobile ? 20 : 24} />
-                            <div className={styles.deliveryContentContainer}>
-                                <span className={styles.deliveryTitle}>
-                                    지금 주문하면 내일 받을 수 있어요
-                                </span>
-
-                                <div className={styles.badgeList}>
-                                    <span className={styles.badge}>
-                                        {
-                                            deliveryFee.defaultDeliveryConditionLabel
-                                        }
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <PhotoReview />
