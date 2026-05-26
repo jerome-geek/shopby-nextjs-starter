@@ -1,41 +1,15 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { popup } from '@/api/display';
-import popupKeys from '@/hooks/queryKeys/popupKeys';
-import type {
-    DesignPopupData,
-    GetDesignPopupResponse,
-} from '@/models/display/popup';
+import {
+    designPopupListOptions,
+    type DesignPopupListOptionsParams,
+} from '@/entities/display/popup/queries';
+import type { GetDesignPopupResponse } from '@/models/display/popup';
 
-interface UseDesignPopupListParams<T = GetDesignPopupResponse> {
-    data: DesignPopupData;
-    platform?: string;
-    options?: Omit<
-        UseQueryOptions<
-            GetDesignPopupResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof popupKeys)['design']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useDesignPopupList = <T = GetDesignPopupResponse>({
-    data,
-    platform,
-    options,
-}: UseDesignPopupListParams<T>) => {
-    return useQuery({
-        queryKey: popupKeys.design(data, platform),
-        queryFn: async () => {
-            const response = await popup.getDesignPopups(data, platform);
-
-            return response.data;
-        },
-        ...options,
-    });
+const useDesignPopupList = <T = GetDesignPopupResponse>(
+    params: DesignPopupListOptionsParams<T>,
+) => {
+    return useQuery(designPopupListOptions(params));
 };
 
 export default useDesignPopupList;

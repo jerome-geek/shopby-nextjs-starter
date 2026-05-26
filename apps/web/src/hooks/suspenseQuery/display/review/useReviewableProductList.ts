@@ -1,41 +1,15 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import {
-    type UseSuspenseQueryOptions,
-    useSuspenseQuery,
-} from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+    reviewableProductListOptions,
+    type ReviewableProductListOptionsParams,
+} from '@/entities/display/review/queries';
+import type { GetReviewableProductsResponse } from '@/models/display/review';
 
-import { review } from '@/api/display';
-import type {
-    GetReviewableProductsParams,
-    GetReviewableProductsResponse,
-} from '@/models/display/review';
-
-interface UseReviewableProductListParams<T = GetReviewableProductsResponse> {
-    searchParams: GetReviewableProductsParams;
-    options?: Omit<
-        UseSuspenseQueryOptions<
-            GetReviewableProductsResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            [string, { searchParams: GetReviewableProductsParams }]
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useReviewableProductList = <T = GetReviewableProductsResponse>({
-    searchParams,
-    options,
-}: UseReviewableProductListParams<T>) => {
-    return useSuspenseQuery({
-        queryKey: ['reviewableList', { searchParams }],
-        queryFn: async () => {
-            const { data } = await review.getReviewableProducts(searchParams);
-
-            return data;
-        },
-        ...options,
-    });
+const useReviewableProductList = <T = GetReviewableProductsResponse>(
+    params: ReviewableProductListOptionsParams<T>,
+) => {
+    return useSuspenseQuery(reviewableProductListOptions(params));
 };
 
 export default useReviewableProductList;

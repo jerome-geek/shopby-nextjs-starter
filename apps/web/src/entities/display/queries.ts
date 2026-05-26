@@ -1,3 +1,4 @@
+import { isEmpty } from '@fxts/core';
 import {
     infiniteQueryOptions,
     keepPreviousData,
@@ -11,8 +12,10 @@ import type { AxiosError } from 'axios';
 import { productSection } from '@/api/display';
 import { productSectionKeys } from '@/hooks/queryKeys';
 import type {
+    GetProductSectionByIdResponse,
     GetProductSectionProductsParams,
     GetProductSectionProductsResponse,
+    GetProductSectionResponse,
     GetProductSectionsResponse,
 } from '@/models/display/productSection';
 
@@ -170,5 +173,65 @@ export const productSectionListOptions = <T = GetProductSectionsResponse>({
 
             return data;
         },
+        ...options,
+    });
+
+export interface ProductSectionDetailOptionsParams<
+    T = GetProductSectionResponse,
+> {
+    sectionNo: number;
+    options?: Omit<
+        UseQueryOptions<
+            GetProductSectionResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof productSectionKeys)['detail']>
+        >,
+        'queryKey' | 'queryFn'
+    >;
+}
+
+export const productSectionDetailOptions = <T = GetProductSectionResponse>({
+    sectionNo,
+    options,
+}: ProductSectionDetailOptionsParams<T>) =>
+    queryOptions({
+        queryKey: productSectionKeys.detail(sectionNo),
+        queryFn: async () => {
+            const { data } = await productSection.getProductSection(sectionNo);
+            return data;
+        },
+        enabled: !isEmpty(sectionNo),
+        ...options,
+    });
+
+export interface ProductSectionByIdOptionsParams<
+    T = GetProductSectionByIdResponse,
+> {
+    sectionId: string;
+    options?: Omit<
+        UseQueryOptions<
+            GetProductSectionByIdResponse,
+            AxiosError<ShopByErrorResponse>,
+            T,
+            ReturnType<(typeof productSectionKeys)['detail']>
+        >,
+        'queryKey' | 'queryFn'
+    >;
+}
+
+export const productSectionByIdOptions = <T = GetProductSectionByIdResponse>({
+    sectionId,
+    options,
+}: ProductSectionByIdOptionsParams<T>) =>
+    queryOptions({
+        queryKey: productSectionKeys.detail(sectionId),
+        queryFn: async () => {
+            const { data } =
+                await productSection.getProductSectionById(sectionId);
+            return data;
+        },
+        enabled: !isEmpty(sectionId),
+        placeholderData: keepPreviousData,
         ...options,
     });

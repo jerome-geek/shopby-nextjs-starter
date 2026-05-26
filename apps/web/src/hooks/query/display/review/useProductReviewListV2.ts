@@ -9,9 +9,7 @@ import { GetProductReviewListV2Response } from '@/models/display/review';
 const useProductReviewListV2 = <T = GetProductReviewListV2Response>(
     params: UseProductReviewListV2Params<T>,
 ) => {
-    return useQuery({
-        ...productReviewListV2Options(params),
-    });
+    return useQuery(productReviewListV2Options(params));
 };
 
 export default useProductReviewListV2;

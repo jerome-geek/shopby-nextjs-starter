@@ -1,33 +1,15 @@
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { sticker } from '@/api/display';
+import {
+    stickerListOptions,
+    type StickerListOptionsParams,
+} from '@/entities/display/sticker/queries';
 import type { GetStickersResponse } from '@/models/display/sticker';
 
-export interface UseStickerListParams<T = GetStickersResponse> {
-    options?: Omit<
-        UseQueryOptions<
-            GetStickersResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ['sticker']
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useStickerList = <T = GetStickersResponse>({
-    options,
-}: UseStickerListParams<T> = {}) => {
-    return useQuery({
-        queryKey: ['sticker'],
-        queryFn: async () => {
-            const { data } = await sticker.getStickers();
-
-            return data;
-        },
-        ...options,
-    });
+const useStickerList = <T = GetStickersResponse>(
+    params: StickerListOptionsParams<T> = {},
+) => {
+    return useQuery(stickerListOptions(params));
 };
 
 export default useStickerList;

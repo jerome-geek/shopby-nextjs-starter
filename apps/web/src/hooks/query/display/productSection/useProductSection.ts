@@ -1,38 +1,15 @@
-import { isEmpty } from '@fxts/core';
-import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-import { productSection } from '@/api/display';
-import { productSectionKeys } from '@/hooks/queryKeys';
+import {
+    productSectionDetailOptions,
+    type ProductSectionDetailOptionsParams,
+} from '@/entities/display/queries';
 import type { GetProductSectionResponse } from '@/models/display/productSection';
 
-interface UseProductSectionParams<T = GetProductSectionResponse> {
-    sectionNo: number;
-    options?: Omit<
-        UseQueryOptions<
-            GetProductSectionResponse,
-            AxiosError<ShopByErrorResponse>,
-            T,
-            ReturnType<(typeof productSectionKeys)['detail']>
-        >,
-        'queryKey' | 'queryFn'
-    >;
-}
-
-const useProductSection = <T = GetProductSectionResponse>({
-    sectionNo,
-    options,
-}: UseProductSectionParams<T>) => {
-    return useQuery({
-        queryKey: productSectionKeys.detail(sectionNo),
-        queryFn: async () => {
-            const { data } = await productSection.getProductSection(sectionNo);
-
-            return data;
-        },
-        enabled: !isEmpty(sectionNo),
-        ...options,
-    });
+const useProductSection = <T = GetProductSectionResponse>(
+    params: ProductSectionDetailOptionsParams<T>,
+) => {
+    return useQuery(productSectionDetailOptions(params));
 };
 
 export default useProductSection;
