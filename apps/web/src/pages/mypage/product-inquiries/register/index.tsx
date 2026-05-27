@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import Seo from '@/components/common/seo';
 import { MypageLayout } from '@/components/layout';
-import { ProductInquiryRegisterForm } from '@/components/mypage/product-inquiries/product-inquiry-register-form';
+import { ProductInquiryRegisterForm } from '@/components/mypage/product-inquiries/register-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 
 export default function MypageProductInquiryRegisterPage() {
@@ -21,4 +21,3 @@ export default function MypageProductInquiryRegisterPage() {
 MypageProductInquiryRegisterPage.getLayout = (page: ReactNode) => {
     return <MypageLayout>{page}</MypageLayout>;
 };
-

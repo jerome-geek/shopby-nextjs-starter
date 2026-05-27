@@ -7,11 +7,14 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ProductSelectBottomSheet } from '@/components/bottom-sheet/product-select';
-import { CloseIcon } from '@/components/icons';
 import { ProductSelectModal } from '@/components/modal/product-select';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
-import * as styles from '@/components/mypage/product-inquiries/product-inquiry-register-form/index.css';
+import * as styles from '@/components/mypage/product-inquiries/register-form/index.css';
 import { Button } from '@/components/ui/button';
+import {
+    SelectedProductField,
+    type SelectedProductInfo,
+} from '@/components/mypage/product-inquiries/register-form/selected-product-field';
 import {
     InputCheckbox,
     InputContainer,
@@ -35,7 +38,6 @@ import type {
     UpdateProductInquiryData,
     WriteProductInquiryData,
 } from '@/models/display/productInquiry';
-import type { SearchProductItem } from '@/models/product/product';
 import {
     productInquiryFormSchema,
     type ProductInquiryFormSchemaType,
@@ -140,27 +142,39 @@ export const ProductInquiryRegisterForm = ({
         );
     }, [profileData, isModify, productInquiryData, reset]);
 
-    const [productInfo, setProductInfo] = useState<SearchProductItem | null>(
-        null,
-    );
+    const [productInfo, setProductInfo] = useState<
+        SelectedProductInfo | null | undefined
+    >(undefined);
 
-    const onProductSelect = (productInfo: SearchProductItem) => {
-        setProductInfo(productInfo);
-        setValue('productNo', productInfo.productNo, { shouldValidate: true });
+    useEffect(() => {
+        if (isModify || productNo <= 0 || productInfo !== undefined) {
+            return;
+        }
+
+        setValue('productNo', productNo, {
+            shouldValidate: true,
+        });
+    }, [isModify, productInfo, productNo, setValue]);
+
+    const onProductSelect = (selectedProduct: {
+        productNo: number;
+        productName: string;
+        listImageUrls?: string[];
+    }) => {
+        setProductInfo({
+            productNo: selectedProduct.productNo,
+            productName: selectedProduct.productName,
+            imageUrl: selectedProduct.listImageUrls?.[0] ?? '',
+        });
+        setValue('productNo', selectedProduct.productNo, {
+            shouldValidate: true,
+        });
     };
 
     const onProductReset = () => {
         setProductInfo(null);
         setValue('productNo', 0, { shouldValidate: true });
     };
-
-    const productName = isModify
-        ? productInquiryData?.productName
-        : productInfo?.productName ?? '';
-
-    const imageUrl = isModify
-        ? productInquiryData?.imageUrl
-        : productInfo?.listImageUrls?.[0] ?? '';
 
     const openProductSelect = () => {
         overlay.open((props) => {
@@ -287,50 +301,17 @@ export const ProductInquiryRegisterForm = ({
                     <InputContainer>
                         <InputLabel isRequired>{t('문의 상품')}</InputLabel>
 
-                        {productName ? (
-                            <div className={styles.productCard}>
-                                <div className={styles.productThumb}>
-                                    {imageUrl ? (
-                                        <img
-                                            src={imageUrl}
-                                            alt=''
-                                            className={styles.productThumbImg}
-                                        />
-                                    ) : null}
-                                </div>
-
-                                <div className={styles.productMeta}>
-                                    <div className={styles.productName}>
-                                        {productName}
-                                    </div>
-
-                                    {!isModify && (
-                                        <button
-                                            type='button'
-                                            className={
-                                                styles.productCloseButton
-                                            }
-                                            onClick={onProductReset}
-                                        >
-                                            <CloseIcon
-                                                width={isMobile ? 12 : 16}
-                                                height={isMobile ? 12 : 16}
-                                            />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        ) : (
-                            <Button
-                                type='button'
-                                frame='solid'
-                                variant='apple'
-                                className={styles.selectButton}
-                                onClick={openProductSelect}
-                            >
-                                {t('문의할 상품 선택하기')}
-                            </Button>
-                        )}
+                        <SelectedProductField
+                            isModify={isModify}
+                            productNo={productNo}
+                            productInfo={productInfo}
+                            inquiryProductName={productInquiryData?.productName}
+                            inquiryImageUrl={productInquiryData?.imageUrl}
+                            isMobile={isMobile}
+                            selectButtonLabel={t('문의할 상품 선택하기')}
+                            onOpenSelect={openProductSelect}
+                            onReset={onProductReset}
+                        />
 
                         <ErrorMessage name='productNo' />
                     </InputContainer>

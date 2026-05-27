@@ -8,7 +8,7 @@ import LoadingWrapper from '@/components/common/loading-wrapper';
 import { NoResult } from '@/components/common/no-result';
 import * as styles from '@/components/layer-contents/product-inquiry-write/index.css';
 import type { DefaultModalLayoutProps } from '@/components/layout';
-import * as inquiryFormStyles from '@/components/mypage/product-inquiries/product-inquiry-register-form/index.css';
+import * as inquiryFormStyles from '@/components/mypage/product-inquiries/register-form/index.css';
 import {
     InputCheckbox,
     InputContainer,
