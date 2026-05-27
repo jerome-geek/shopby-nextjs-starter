@@ -42,7 +42,10 @@ export const useToast = () => {
 
             toast.custom(() => (
                 <div className={styles.toastWrapper[variant]}>
-                    <div className={styles.toastMessage}>{message}</div>
+                    <p
+                        className={styles.toastMessage}
+                        dangerouslySetInnerHTML={{ __html: message }}
+                    />
                 </div>
             ));
         },

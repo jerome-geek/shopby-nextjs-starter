@@ -4,11 +4,6 @@ import { PATHS } from '@/const/paths';
 import type { NaverPayOrderSheetItem } from '@/models/order/naverPay';
 import { accessTokenCookie } from '@/utils/cookie';
 
-// import type { NaverPayOrderSheetItem } from '@/models/order';
-// import { getPlatform } from '@/utils';
-// import { authCookieManager } from '@/utils/cookie';
-// import { checkLogin } from '@/utils/users';
-
 const payment = {
     setConfiguration: () => {
         const accessToken = accessTokenCookie.get();
@@ -18,9 +13,6 @@ const payment = {
             confirmUrl: `${window.location.origin}${PATHS.ORDER.COMPLETE}`,
             platform: getPlatform(),
             currency: env.NEXT_PUBLIC_CURRENCY,
-            // shopbyAuthorization: checkLogin()
-            //     ? `Bearer ${accessToken}`
-            //     : undefined,
             shopbyAuthorization: accessToken
                 ? `Bearer ${accessToken}`
                 : undefined,
