@@ -1,6 +1,4 @@
-import { includes } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { overlay } from 'overlay-kit';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +17,7 @@ import {
 } from '@/components/ui/input';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
-import { addressKeys } from '@/hooks/queryKeys';
+import { useToast } from '@/hooks/ui';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import type { Address } from '@/models/order/shippingAddress';
 import {
@@ -41,13 +39,14 @@ const ShippingAddressCreateModal = ({
     unmount,
     initialData,
 }: ShippingAddressCreateModalProps) => {
-    const queryClient = useQueryClient();
+    console.log('🚀 ~ ShippingAddressCreateModal ~ initialData:', initialData);
 
     const { t } = useTranslation();
 
     const { isMobile } = useResponsive();
 
     const { openDialog } = useDialog();
+    const { addToast } = useToast();
 
     const isEditMode = !!initialData;
 
@@ -69,20 +68,27 @@ const ShippingAddressCreateModal = ({
             receiverJibunAddress: initialData?.receiverJibunAddress ?? '',
             receiverDetailAddress: initialData?.receiverDetailAddress ?? '',
             addressMemo: initialData?.addressMemo ?? '',
-            receiverContact1: initialData?.receiverContact1
-                ? {
-                      prefix: initialData.receiverContact1.slice(0, 3),
-                      middle:
-                          initialData.receiverContact1.length === 11
-                              ? initialData.receiverContact1.slice(3, 7)
-                              : initialData.receiverContact1.slice(3, 6),
-                      suffix: initialData.receiverContact1.slice(-4),
-                  }
-                : {
-                      prefix: '010',
-                      middle: '',
-                      suffix: '',
-                  },
+            receiverContact1: (() => {
+                if (!initialData?.receiverContact1) {
+                    return { prefix: '010', middle: '', suffix: '' };
+                }
+                const parts = initialData.receiverContact1.split('-');
+                if (parts.length === 3) {
+                    return {
+                        prefix: parts[0],
+                        middle: parts[1],
+                        suffix: parts[2],
+                    };
+                }
+                return {
+                    prefix: initialData.receiverContact1.slice(0, 3),
+                    middle:
+                        initialData.receiverContact1.length === 11
+                            ? initialData.receiverContact1.slice(3, 7)
+                            : initialData.receiverContact1.slice(3, 6),
+                    suffix: initialData.receiverContact1.slice(-4),
+                };
+            })(),
         },
     });
 
@@ -158,6 +164,10 @@ const ShippingAddressCreateModal = ({
                     { addressNo: initialData.addressNo, data },
                     {
                         onSuccess: () => {
+                            addToast({
+                                message: t('배송지가 수정되었습니다.'),
+                                variant: 'success',
+                            });
                             onClose();
                         },
                     },
@@ -167,14 +177,10 @@ const ShippingAddressCreateModal = ({
                     { data },
                     {
                         onSuccess: () => {
-                            queryClient.invalidateQueries({
-                                predicate: (query) =>
-                                    includes(query.queryKey[0], [
-                                        ...addressKeys.all,
-                                    ]),
+                            addToast({
+                                message: t('배송지가 등록되었습니다.'),
+                                variant: 'success',
                             });
-
-                            openDialog({ message: '배송지가 등록되었습니다.' });
                             onClose();
                         },
                     },
@@ -182,7 +188,6 @@ const ShippingAddressCreateModal = ({
             }
         },
         (errors) => {
-            console.log('🚀 ~ ShippingAddressCreateModal ~ errors:', errors);
             const firstError = Object.values(errors).flatMap((error) => {
                 if (error.message) return [error.message];
                 if (typeof error === 'object') {

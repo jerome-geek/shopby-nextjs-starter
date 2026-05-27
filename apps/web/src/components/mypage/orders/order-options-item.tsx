@@ -40,11 +40,11 @@ type MypageOrderOptionListItemProps = Omit<
     nextActions: Array<Omit<NextAction, 'actionGroupType'>>;
     showInquiryButton?: boolean;
     inputs?: Nullable<
-        Array<{
+        {
             inputNo?: number;
             inputValue?: Nullable<string>;
             inputLabel?: Nullable<string>;
-        }>
+        }[]
     >;
 };
 
@@ -60,10 +60,7 @@ const getOrderStatusLabel = ({
         return claimStatusTypeLabel;
     }
 
-    if (
-        orderStatusType === 'PRODUCT_PREPARE' ||
-        orderStatusType === 'DELIVERY_PREPARE'
-    ) {
+    if (includes(orderStatusType, ['PRODUCT_PREPARE', 'DELIVERY_PREPARE'])) {
         return '배송준비중';
     }
 
@@ -222,19 +219,21 @@ export const OrderOptionsItem = ({
             </Only.Desktop>
 
             <div className={styles.actionsContainer}>
-                {filteredNextActions.map((action) => (
-                    <NextActionButton
-                        key={action.nextActionType}
-                        nextActionType={action.nextActionType}
-                        productNo={productNo}
-                        optionNo={optionNo}
-                        orderOptionNo={orderOptionNo}
-                        orderNo={orderNo}
-                        uri={action.uri}
-                        isFreeGift={isFreeGift}
-                        claimNo={claimNo || null}
-                    />
-                ))}
+                {filteredNextActions.map((action) => {
+                    return (
+                        <NextActionButton
+                            key={`${orderNo}-${orderOptionNo}-${action.nextActionType}`}
+                            nextActionType={action.nextActionType}
+                            productNo={productNo}
+                            optionNo={optionNo}
+                            orderOptionNo={orderOptionNo}
+                            orderNo={orderNo}
+                            uri={action.uri}
+                            isFreeGift={isFreeGift}
+                            claimNo={claimNo || null}
+                        />
+                    );
+                })}
 
                 {isInquiryButtonVisible && (
                     <Button
