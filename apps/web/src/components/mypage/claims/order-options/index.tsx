@@ -69,6 +69,7 @@ export const ClaimOrderOptions = ({
                                     option.optionTitle || option.optionName
                                 }
                                 nextActions={[]}
+                                showInquiryButton={false}
                             />
                         </div>
 

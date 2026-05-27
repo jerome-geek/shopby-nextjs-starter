@@ -38,6 +38,7 @@ type MypageOrderOptionListItemProps = Omit<
     'nextActions' | 'inputs'
 > & {
     nextActions: Array<Omit<NextAction, 'actionGroupType'>>;
+    showInquiryButton?: boolean;
     inputs?: Nullable<
         Array<{
             inputNo?: number;
@@ -45,6 +46,28 @@ type MypageOrderOptionListItemProps = Omit<
             inputLabel?: Nullable<string>;
         }>
     >;
+};
+
+const getOrderStatusLabel = ({
+    orderStatusType,
+    orderStatusTypeLabel,
+    claimStatusTypeLabel,
+}: Pick<
+    MypageOrderOptionListItemProps,
+    'orderStatusType' | 'orderStatusTypeLabel' | 'claimStatusTypeLabel'
+>) => {
+    if (claimStatusTypeLabel) {
+        return claimStatusTypeLabel;
+    }
+
+    if (
+        orderStatusType === 'PRODUCT_PREPARE' ||
+        orderStatusType === 'DELIVERY_PREPARE'
+    ) {
+        return '배송준비중';
+    }
+
+    return orderStatusTypeLabel;
 };
 
 export const OrderOptionsItem = ({
@@ -66,6 +89,7 @@ export const OrderOptionsItem = ({
     claimNo,
     orderNo,
     inputs,
+    showInquiryButton = true,
 }: MypageOrderOptionListItemProps) => {
     const { t } = useTranslation();
 
@@ -78,7 +102,13 @@ export const OrderOptionsItem = ({
         'PRODUCT_PREPARE',
         'DELIVERY_PREPARE',
     ]);
-    const isInquiryButtonVisible = isDepositWait || isExchangeDisabled;
+    const orderStatusLabel = getOrderStatusLabel({
+        orderStatusType,
+        orderStatusTypeLabel,
+        claimStatusTypeLabel,
+    });
+    const isInquiryButtonVisible =
+        showInquiryButton && (isDepositWait || isExchangeDisabled);
 
     const filteredNextActions = useMemo(() => {
         return pipe(
@@ -123,7 +153,7 @@ export const OrderOptionsItem = ({
                                 isBuyConfirm ? styles.statusTextPrimary : ''
                             }`}
                         >
-                            {claimStatusTypeLabel || orderStatusTypeLabel}
+                            {orderStatusLabel}
                         </span>
                     </Only.Mobile>
 
@@ -186,7 +216,7 @@ export const OrderOptionsItem = ({
                             isBuyConfirm ? styles.statusTextPrimary : ''
                         }`}
                     >
-                        {claimStatusTypeLabel || orderStatusTypeLabel}
+                        {orderStatusLabel}
                     </span>
                 </div>
             </Only.Desktop>
