@@ -13,6 +13,7 @@ import * as styles from '@/features/event/list/components/event-item/index.css';
 const EventItem = ({
     eventNo,
     id,
+    url,
     pcImageUrl,
     mobileimageUrl,
     label,
@@ -29,28 +30,28 @@ const EventItem = ({
         '[eventNoOrId]',
         id || eventNo.toString(),
     );
-
-    const getDateText = () => {
-        if (eventYn === 'Y') {
-            return (
-                dayjs(startYmdt).format('YY.MM.DD') ||
-                t('이벤트 기간: 별도 명시 없음')
-            );
-        }
-
-        if (displayPeriodType === 'REGULAR') {
-            return t('상시 진행');
-        }
-
-        return `${dayjs(startYmdt).format('YY.MM.DD')}-${dayjs(endYmdt).format(
-            'YY.MM.DD',
-        )}`;
-    };
+    const customUrl = url?.trim() ?? '';
+    const hasCustomUrl = customUrl.length > 0;
+    const isExternalUrl = customUrl.startsWith('https');
+    const linkPath = hasCustomUrl
+        ? isExternalUrl
+            ? customUrl
+            : `/${customUrl.replace(/^\/+/, '')}`
+        : detailPath;
 
     const imageUrl = normalizeImageUrl(isMobile ? mobileimageUrl : pcImageUrl);
+    const dateText =
+        eventYn === 'Y'
+            ? dayjs(startYmdt).format('YY.MM.DD') ||
+              t('이벤트 기간: 별도 명시 없음')
+            : displayPeriodType === 'REGULAR'
+              ? t('상시 진행')
+              : `${dayjs(startYmdt).format('YY.MM.DD')}-${dayjs(endYmdt).format(
+                    'YY.MM.DD',
+                )}`;
 
-    return (
-        <Link href={detailPath} className={styles.wrapper}>
+    const content = (
+        <>
             <div className={styles.thumbnail}>
                 {imageUrl && (
                     <img src={imageUrl} alt={label} className={styles.image} />
@@ -69,8 +70,27 @@ const EventItem = ({
                         />
                     )}
                 </div>
-                <span className={styles.date}>{getDateText()}</span>
+                <span className={styles.date}>{dateText}</span>
             </div>
+        </>
+    );
+
+    if (isExternalUrl) {
+        return (
+            <a
+                href={linkPath}
+                className={styles.wrapper}
+                target='_blank'
+                rel='noopener noreferrer'
+            >
+                {content}
+            </a>
+        );
+    }
+
+    return (
+        <Link href={linkPath} className={styles.wrapper}>
+            {content}
         </Link>
     );
 };
