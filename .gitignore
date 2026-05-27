@@ -52,6 +52,7 @@ dist/
 .omc
 .claude
 .superpowers/
+.worktrees/
 
 # codegraph
 .codegraph/
