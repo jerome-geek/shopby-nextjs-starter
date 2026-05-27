@@ -15,9 +15,8 @@ const useShippingAddressMutation = () => {
 
     const queryClient = useQueryClient();
     const invalidate = () => {
-        queryClient.invalidateQueries({
+        return queryClient.invalidateQueries({
             queryKey: addressKeys.all,
-            refetchType: 'all',
         });
     };
 
@@ -37,7 +36,7 @@ const useShippingAddressMutation = () => {
             mutationFn: async ({ addressNo }: { addressNo: number }) =>
                 await shippingAddress.updateDefaultShippingAddress(addressNo),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -50,7 +49,7 @@ const useShippingAddressMutation = () => {
                 data: RegisterShippingAddressData;
             }) => await shippingAddress.registerShippingAddress(data),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -65,7 +64,7 @@ const useShippingAddressMutation = () => {
                 data: RegisterShippingAddressData;
             }) => await shippingAddress.updateShippingAddress(addressNo, data),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -75,7 +74,7 @@ const useShippingAddressMutation = () => {
             mutationFn: async ({ addressNo }: { addressNo: number }) =>
                 await shippingAddress.deleteShippingAddress(addressNo),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);

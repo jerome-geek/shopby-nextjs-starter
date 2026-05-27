@@ -21,9 +21,8 @@ const useCartMutation = () => {
     const { isMobile } = useResponsive();
 
     const invalidate = () => {
-        queryClient.invalidateQueries({
+        return queryClient.invalidateQueries({
             queryKey: cartKeys.all,
-            refetchType: 'all',
         });
     };
 
@@ -45,7 +44,7 @@ const useCartMutation = () => {
             mutationFn: async ({ data }: { data: RegisterCartData }) =>
                 await cart.registerCart(data),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -57,7 +56,7 @@ const useCartMutation = () => {
             mutationFn: async ({ data }: { data: UpdateCartData }) =>
                 await cart.updateCart(data),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -74,7 +73,7 @@ const useCartMutation = () => {
             }) => await cart.deleteCart(params),
             onSuccess: (_, { isInvalidate = true }) => {
                 if (isInvalidate) {
-                    invalidate();
+                    return invalidate();
                 }
             },
             onError: (error) => {

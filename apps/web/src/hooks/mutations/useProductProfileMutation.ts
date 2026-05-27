@@ -37,7 +37,6 @@ const useProductProfileMutation = () => {
                     setTimeout(async () => {
                         await queryClient.invalidateQueries({
                             queryKey: productProfileKeys.recentProduct(),
-                            refetchType: 'all',
                         });
                     }, 5500);
                 }
@@ -73,7 +72,7 @@ const useProductProfileMutation = () => {
                         queryKey,
                         (old: GetRecentViewProductsResponse) => {
                             if (!old) {
-                                return old;
+                                  return old;
                             }
 
                             return old.filter(
@@ -103,7 +102,7 @@ const useProductProfileMutation = () => {
                 productProfile.updateProductsLike(params.data),
             onSettled: async (_, error) => {
                 if (!error) {
-                    invalidate();
+                    return invalidate();
                 }
             },
         }),

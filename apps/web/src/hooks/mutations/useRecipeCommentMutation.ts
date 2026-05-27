@@ -16,7 +16,7 @@ const useRecipeCommentMutation = () => {
             mutationFn: async ({ data }: { data: CreateCommentRequest }) =>
                 await comment.create(data),
             onSuccess: (_, { data }) => {
-                queryClient.invalidateQueries({
+                return queryClient.invalidateQueries({
                     queryKey: commentKeys.list({
                         contentType: data.contentType,
                         contentSno: data.contentSno,
@@ -35,7 +35,7 @@ const useRecipeCommentMutation = () => {
                 data: UpdateCommentRequest;
             }) => await comment.update(commentSno, data),
             onSuccess: (res) => {
-                queryClient.invalidateQueries({
+                return queryClient.invalidateQueries({
                     queryKey: commentKeys.list({
                         contentType: res.data.contentType as any,
                         contentSno: res.data.contentSno,
@@ -59,7 +59,7 @@ const useRecipeCommentMutation = () => {
                 return { contentType, contentSno };
             },
             onSuccess: ({ contentType, contentSno }) => {
-                queryClient.invalidateQueries({
+                return queryClient.invalidateQueries({
                     queryKey: commentKeys.list({
                         contentType: contentType as any,
                         contentSno,

@@ -18,7 +18,7 @@ const useBoardReplyMutation = ({ articleNo }: { articleNo: number }) => {
 
     const invalidateRepliesForArticle = (boardNo: string) => {
         const prefix = [...boardKeys.replies(), boardNo, articleNo];
-        queryClient.invalidateQueries({
+        return queryClient.invalidateQueries({
             predicate: (query) => {
                 const key = query.queryKey;
                 if (!Array.isArray(key) || key.length < prefix.length) {
@@ -26,7 +26,6 @@ const useBoardReplyMutation = ({ articleNo }: { articleNo: number }) => {
                 }
                 return prefix.every((segment, index) => key[index] === segment);
             },
-            refetchType: 'all',
         });
     };
 
@@ -52,7 +51,7 @@ const useBoardReplyMutation = ({ articleNo }: { articleNo: number }) => {
                 await board.writeArticle(boardNo, data);
             },
             onSuccess: (_, { boardNo }) => {
-                invalidateRepliesForArticle(boardNo);
+                return invalidateRepliesForArticle(boardNo);
             },
             onError: onErrorHandler,
         }),
@@ -70,7 +69,7 @@ const useBoardReplyMutation = ({ articleNo }: { articleNo: number }) => {
                 await board.updateArticle(boardNo, replyArticleNo, data);
             },
             onSuccess: (_, { boardNo }) => {
-                invalidateRepliesForArticle(boardNo);
+                return invalidateRepliesForArticle(boardNo);
             },
             onError: onErrorHandler,
         }),
@@ -88,7 +87,7 @@ const useBoardReplyMutation = ({ articleNo }: { articleNo: number }) => {
                 await board.deleteArticle(boardNo, replyArticleNo, data);
             },
             onSuccess: (_, { boardNo }) => {
-                invalidateRepliesForArticle(boardNo);
+                return invalidateRepliesForArticle(boardNo);
             },
             onError: onErrorHandler,
         }),

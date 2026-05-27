@@ -20,7 +20,7 @@ const useBoardMutation = () => {
 
     const queryClient = useQueryClient();
     const invalidate = () => {
-        queryClient.invalidateQueries({
+        return queryClient.invalidateQueries({
             predicate: (query) => {
                 return includes(query.queryKey[0], [...boardKeys.all]);
             },
@@ -29,14 +29,14 @@ const useBoardMutation = () => {
 
     /** V1 상세(useBoardArticle) + V2 상세(useBoardPost / postDetail) 모두 무효화 */
     const articleDetailInvalidate = (boardNo: string, articleNo: number) => {
-        queryClient.invalidateQueries({
-            queryKey: [...boardKeys.details(), boardNo, articleNo],
-            refetchType: 'all',
-        });
-        queryClient.invalidateQueries({
-            queryKey: [...boardKeys.details(), 'post', boardNo, articleNo],
-            refetchType: 'all',
-        });
+        return Promise.all([
+            queryClient.invalidateQueries({
+                queryKey: [...boardKeys.details(), boardNo, articleNo],
+            }),
+            queryClient.invalidateQueries({
+                queryKey: [...boardKeys.details(), 'post', boardNo, articleNo],
+            }),
+        ]);
     };
 
     const onErrorHandler = (error: Error) => {
@@ -59,7 +59,7 @@ const useBoardMutation = () => {
                 data: PostArticleParams;
             }) => await board.writeArticle(boardNo, data),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -77,7 +77,7 @@ const useBoardMutation = () => {
                 data: UpdateArticleData;
             }) => await board.updateArticle(boardNo, articleNo, data),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -95,7 +95,7 @@ const useBoardMutation = () => {
                 data?: DeleteArticleData;
             }) => await board.deleteArticle(boardNo, articleNo, data),
             onSuccess: () => {
-                invalidate();
+                return invalidate();
             },
             onError: (error) => {
                 onErrorHandler(error);
@@ -115,7 +115,7 @@ const useBoardMutation = () => {
                 return res;
             },
             onSuccess: (_, { boardNo, articleNo }) => {
-                articleDetailInvalidate(boardNo, articleNo);
+                return articleDetailInvalidate(boardNo, articleNo);
             },
             onError: onErrorHandler,
         }),
@@ -136,7 +136,7 @@ const useBoardMutation = () => {
                 return res;
             },
             onSuccess: (_, { boardNo, articleNo }) => {
-                articleDetailInvalidate(boardNo, articleNo);
+                return articleDetailInvalidate(boardNo, articleNo);
             },
             onError: onErrorHandler,
         }),
@@ -154,7 +154,7 @@ const useBoardMutation = () => {
                 await board.reportArticle(boardNo, articleNo, data);
             },
             onSuccess: (_, { boardNo, articleNo }) => {
-                articleDetailInvalidate(boardNo, articleNo);
+                return articleDetailInvalidate(boardNo, articleNo);
             },
             onError: onErrorHandler,
         }),
@@ -170,7 +170,7 @@ const useBoardMutation = () => {
                 await board.cancelReportArticle(boardNo, articleNo);
             },
             onSuccess: (_, { boardNo, articleNo }) => {
-                articleDetailInvalidate(boardNo, articleNo);
+                return articleDetailInvalidate(boardNo, articleNo);
             },
             onError: onErrorHandler,
         }),

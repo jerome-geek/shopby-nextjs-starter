@@ -13,7 +13,7 @@ const useCouponMutation = () => {
                 await coupon.issueCoupon(couponNo),
             onSettled: async (_, error) => {
                 if (!error) {
-                    await queryClient.invalidateQueries({
+                    return queryClient.invalidateQueries({
                         predicate: (query) =>
                             includes(query.queryKey[0], [...couponKeys.all]),
                     });
@@ -26,7 +26,7 @@ const useCouponMutation = () => {
                 await coupon.issueCouponByPromotionCode(promotionCode),
             onSettled: async (_, error) => {
                 if (!error) {
-                    await queryClient.invalidateQueries({
+                    return queryClient.invalidateQueries({
                         predicate: (query) =>
                             includes(query.queryKey[0], [...couponKeys.all]),
                     });
@@ -39,7 +39,7 @@ const useCouponMutation = () => {
                 await coupon.issueEventCoupons(eventNo),
             onSettled: async (_, error) => {
                 if (!error) {
-                    await queryClient.invalidateQueries({
+                    return queryClient.invalidateQueries({
                         predicate: (query) =>
                             includes(query.queryKey[0], [...couponKeys.all]),
                     });
@@ -53,7 +53,7 @@ const useCouponMutation = () => {
                 await coupon.issueProductCoupons(productNo),
             onSettled: async (_, error) => {
                 if (!error) {
-                    await queryClient.invalidateQueries({
+                    return queryClient.invalidateQueries({
                         predicate: (query) =>
                             includes(query.queryKey[0], [...couponKeys.all]),
                     });
