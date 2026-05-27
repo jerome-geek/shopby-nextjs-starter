@@ -1,4 +1,4 @@
-import { find, map, pipe, toArray } from '@fxts/core';
+import { filter, find, map, pipe, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useRef } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -104,6 +104,7 @@ export const ProductInquiryWrite = ({
 
         return pipe(
             mallData.productInquiryType,
+            filter((item) => item.value !== 'REFUND'),
             map((item) => ({
                 ...item,
                 label: t(item.label),

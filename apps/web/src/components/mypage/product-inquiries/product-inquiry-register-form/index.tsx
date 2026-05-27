@@ -1,4 +1,4 @@
-import { find, map, pipe, toArray } from '@fxts/core';
+import { filter, find, map, pipe, toArray } from '@fxts/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
@@ -77,6 +77,7 @@ export const ProductInquiryRegisterForm = ({
 
         return pipe(
             mallData.productInquiryType,
+            filter((item) => item.value !== 'REFUND'),
             map((item) => ({
                 ...item,
                 label: t(item.label),
@@ -155,11 +156,11 @@ export const ProductInquiryRegisterForm = ({
 
     const productName = isModify
         ? productInquiryData?.productName
-        : (productInfo?.productName ?? '');
+        : productInfo?.productName ?? '';
 
     const imageUrl = isModify
         ? productInquiryData?.imageUrl
-        : (productInfo?.listImageUrls?.[0] ?? '');
+        : productInfo?.listImageUrls?.[0] ?? '';
 
     const openProductSelect = () => {
         overlay.open((props) => {
