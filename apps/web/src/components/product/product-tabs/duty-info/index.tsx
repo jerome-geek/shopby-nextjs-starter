@@ -2,7 +2,7 @@ import { isEmpty } from '@fxts/core';
 import { memo, useMemo } from 'react';
 
 import * as styles from '@/components/product/product-tabs/duty-info/index.css';
-import { CustomAccordion } from '@/components/ui/accordion';
+import { CustomAccordion } from '@/shared/ui/accordion';
 import { getDutyInfo } from '@/utils/product';
 
 const ACCORDION_VALUE = 'duty-info';

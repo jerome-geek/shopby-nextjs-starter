@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { useEffect, type ReactNode } from 'react';
 
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { ReviewForm } from '@/components/mypage/review/form';
 import { PATHS } from '@/const/paths';

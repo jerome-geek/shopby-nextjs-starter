@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { SmallCaretIcon } from '@/components/icons';
+import { SmallCaretIcon } from '@/shared/ui/icons';
 import { RecipeCard } from '@/components/recipe/card';
 import * as styles from '@/features/recipe/components/recipe-recommendation-content/index.css';
 import usePublicRecipeSearch from '@/hooks/suspenseQuery/shop/recipe/usePublicRecipeSearch';

@@ -3,10 +3,10 @@
 import { indexBy, map, pipe, prop, toArray } from '@fxts/core';
 import { useMemo, useState, useTransition } from 'react';
 
-import { NoResult } from '@/components/common/no-result';
+import { NoResult } from '@/shared/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { ProductCard, ProductCardSkeleton } from '@/components/product';
-import PagingV2 from '@/components/ui/paging-v2';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { useEventProductSection } from '@/hooks/suspenseQuery/display/event';
 import * as styles from '@/pages/events/[eventNoOrId]/index.css';

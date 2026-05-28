@@ -1,6 +1,6 @@
 import { isEmpty } from '@fxts/core';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import * as styles from '@/components/section/recipe-group/index.css';
 import RecipeSection from '@/components/section/recipe-group/recipe';
 import RecipeGroupSectionSkeleton from '@/components/section/recipe-group/skeleton';

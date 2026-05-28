@@ -9,16 +9,16 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
-import { NoResult } from '@/components/common/no-result';
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import { NoResult } from '@/shared/components/common/no-result';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { MypageWishSkeleton } from '@/components/mypage/wish/skeleton';
 import { ProductCard } from '@/components/product';
-import { Button } from '@/components/ui/button';
-import { InputCheckbox } from '@/components/ui/input';
-import Paging from '@/components/ui/paging';
+import { Button } from '@/shared/ui/button';
+import { InputCheckbox } from '@/shared/ui/input';
+import Paging from '@/shared/ui/paging';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { toWishProductCardModel } from '@/entities/product/utils/mapper';
 import { useProductProfileMutation } from '@/hooks/mutations';

@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';

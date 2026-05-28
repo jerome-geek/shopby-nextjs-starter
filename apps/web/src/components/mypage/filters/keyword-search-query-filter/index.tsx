@@ -3,9 +3,9 @@ import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryStates } from 'nuqs';
 
-import { SearchIcon } from '@/components/icons';
+import { SearchIcon } from '@/shared/ui/icons';
 import * as styles from '@/components/mypage/filters/keyword-search-query-filter/index.css';
-import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
+import { InputField, InputFieldContainer, Select } from '@/shared/ui/input';
 import {
     parseAsEnum,
     parseAsOptionalString,

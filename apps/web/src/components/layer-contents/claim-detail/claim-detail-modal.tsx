@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import {
     ModalLayout,
     type DefaultModalLayoutProps,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 import { ClaimDetailContent } from '@/components/layer-contents/claim-detail/claim-detail-content';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 
 export interface ClaimDetailModalProps extends DefaultModalLayoutProps {
     claimNo: number;

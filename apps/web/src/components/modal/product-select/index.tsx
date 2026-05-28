@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { ProductSelect } from '@/components/layer-contents/product-select';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import type { SearchProductItem } from '@/models/product/product';
 
 interface ProductSelectModalProps extends DefaultModalLayoutProps {

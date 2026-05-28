@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SuspenseQuery } from '@suspensive/react-query';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import { ClaimCancelForm } from '@/components/mypage/claims/forms/cancel';
 import { ClaimExchangeForm } from '@/components/mypage/claims/forms/exchange';
 import { ClaimReturnForm } from '@/components/mypage/claims/forms/return';

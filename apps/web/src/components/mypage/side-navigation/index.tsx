@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
-import { ArrowIcon } from '@/components/icons/ArrowIcon';
+import { ArrowIcon } from '@/shared/ui/icons/ArrowIcon';
 import * as styles from '@/components/mypage/side-navigation/index.css';
 import { PATHS } from '@/const/paths';
 import { useRouteChange } from '@/hooks/utils';

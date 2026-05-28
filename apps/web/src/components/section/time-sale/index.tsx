@@ -4,7 +4,7 @@ import { memo, useMemo } from 'react';
 import { Grid } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { CountdownTimer, ProductCard } from '@/components/product';
 import * as styles from '@/components/section/time-sale/index.css';
 import { PATHS } from '@/const/paths';

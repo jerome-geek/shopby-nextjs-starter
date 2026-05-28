@@ -2,8 +2,8 @@ import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/review-report/index.css';
-import { DefaultModalLayoutProps } from '@/components/layout';
-import { InputContainer, InputLabel, Select } from '@/components/ui/input';
+import { DefaultModalLayoutProps } from '@/shared/components/layout';
+import { InputContainer, InputLabel, Select } from '@/shared/ui/input';
 import { useReviewMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui/useToast';
 import { ReportProductReviewData } from '@/models/display/review';

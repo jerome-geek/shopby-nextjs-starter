@@ -5,8 +5,8 @@ import * as styles from '@/components/layer-contents/product-coupon/index.css';
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 
 interface ProductCouponBottomSheetProps extends DefaultBottomSheetProps {
     productNo: number;

@@ -3,12 +3,12 @@ import { Image as ImageIcon, ThumbsUp } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NoResult } from '@/components/common/no-result';
+import { NoResult } from '@/shared/components/common/no-result';
 import { PhotoReviewDetail } from '@/components/layer-contents/photo-review-list/detail';
 import * as styles from '@/components/layer-contents/photo-review-list/index.css';
-import { DefaultModalLayoutProps } from '@/components/layout';
+import { DefaultModalLayoutProps } from '@/shared/components/layout';
 import { PHOTO_PAGE_SIZE } from '@/components/product/product-tabs/review';
-import PagingV2 from '@/components/ui/paging-v2';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { usePhotoReviewList } from '@/hooks/query/display/review';
 
 interface PhotoReviewListProps extends DefaultModalLayoutProps {

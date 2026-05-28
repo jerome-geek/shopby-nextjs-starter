@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { BottomSheetLayout } from '@/components/layout';
+import { BottomSheetLayout } from '@/shared/components/layout';
 import * as styles from '@/components/bottom-sheet/shipping-address-list/index.css';
 import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
 import { useProfile } from '@/hooks/query/member/profile';

@@ -1,4 +1,4 @@
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SuspenseQuery } from '@suspensive/react-query';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
@@ -11,14 +11,14 @@ import { useTranslation } from 'react-i18next';
 
 import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
-import { AuthLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { AuthLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import {
     InputCheckbox,
     InputContainer,
     InputField,
     InputLabel,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { PATHS } from '@/const/paths';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';

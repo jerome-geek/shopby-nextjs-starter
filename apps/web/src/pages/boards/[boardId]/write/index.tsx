@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import upload from '@/api/storage/image';
-import { Button } from '@/components/ui';
-import FileUpload from '@/components/ui/file-upload';
+import { Button } from '@/shared/ui';
+import FileUpload from '@/shared/ui/file-upload';
 import {
     InputCheckbox,
     InputContainer,
@@ -16,8 +16,8 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
-import { Column, Row } from '@/components/ui/layout/flex';
+} from '@/shared/ui/input';
+import { Column, Row } from '@/shared/ui/layout/flex';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import {
     useBoardArticle,

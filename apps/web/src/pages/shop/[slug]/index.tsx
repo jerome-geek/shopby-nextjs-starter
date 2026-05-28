@@ -2,7 +2,7 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 
 import { event } from '@/api/display';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import EventSection from '@/components/section/event';
 import EventSectionSkeleton from '@/components/section/event/skeleton';
 import SectionGroup from '@/components/section/group';

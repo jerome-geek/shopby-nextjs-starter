@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import {
     BottomSheetLayout,
     type DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import { Withdrawal } from '@/components/layer-contents/withdrawal';
 
 export const WithdrawalBottomSheet = (props: DefaultBottomSheetProps) => {

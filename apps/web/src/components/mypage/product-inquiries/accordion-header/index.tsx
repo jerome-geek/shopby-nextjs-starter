@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { LockIcon } from '@/components/icons';
+import { LockIcon } from '@/shared/ui/icons';
 import * as styles from '@/components/mypage/product-inquiries/accordion-header/index.css';
 import { PATHS } from '@/const/paths';
 import { vars } from '@/styles/theme.css';

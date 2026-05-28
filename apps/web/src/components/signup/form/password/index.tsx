@@ -2,7 +2,7 @@ import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
-import { InputField } from '@/components/ui/input';
+import { InputField } from '@/shared/ui/input';
 import { ErrorMessage } from '@/shared/components/form';
 
 const SignupFormPassword = () => {

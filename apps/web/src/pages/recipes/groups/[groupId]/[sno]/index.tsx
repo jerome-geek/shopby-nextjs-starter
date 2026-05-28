@@ -1,4 +1,4 @@
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { ChefHat, Share2 } from 'lucide-react';
 import type {

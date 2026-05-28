@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/index.css';
 import CommentItem from '@/components/board/comments/item';
-import { Column } from '@/components/ui/layout/flex';
-import PagingV2 from '@/components/ui/paging-v2';
+import { Column } from '@/shared/ui/layout/flex';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { BOARD_PAGINATION, BOARD_REPLY_MAX_LENGTH } from '@/const/board';
 import { useBoardReplyMutation } from '@/hooks/mutations';
 import { useBoardReplyList } from '@/hooks/query/manage/board';

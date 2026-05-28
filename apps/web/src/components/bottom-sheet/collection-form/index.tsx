@@ -1,7 +1,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import {
     CollectionFormContent,
     CollectionFormData,
@@ -10,8 +10,8 @@ import { CollectionFormSkeleton } from '@/components/layer-contents/collection-f
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import ButtonV2 from '@/components/ui/button/v2';
+} from '@/shared/components/layout';
+import ButtonV2 from '@/shared/ui/button/v2';
 
 interface CollectionFormSheetProps extends DefaultBottomSheetProps {
     shareCode: string;

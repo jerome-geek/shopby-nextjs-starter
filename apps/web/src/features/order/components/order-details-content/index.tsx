@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CongratulationIcon } from '@/components/icons/login/Congratulation';
+import { CongratulationIcon } from '@/shared/ui/icons/login/Congratulation';
 import { OrderProductItem } from '@/components/order/order-product-item';
 import { PATHS } from '@/const/paths';
 import { useAuth } from '@/hooks/useAuth';

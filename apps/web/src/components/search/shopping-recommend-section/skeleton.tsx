@@ -1,8 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as integratedStyles from '@/components/search/integrated-results/index.css';
-import { Column } from '@/components/ui/layout/flex';
-import Skeleton from '@/components/ui/skeleton';
+import { Column } from '@/shared/ui/layout/flex';
+import Skeleton from '@/shared/ui/skeleton';
 import { useResponsive } from '@/hooks/utils';
 
 import 'swiper/css';

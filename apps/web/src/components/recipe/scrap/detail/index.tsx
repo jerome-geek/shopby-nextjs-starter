@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BookmarkIcon } from '@/components/icons';
+import { BookmarkIcon } from '@/shared/ui/icons';
 import { RecipeCard, RecipeDetailCard } from '@/components/recipe';
 import * as styles from '@/components/recipe/scrap/detail/index.css';
 import { ViewToggle } from '@/components/recipe/view-toggle';
-import { VerticalMoreMenu } from '@/components/ui';
+import { VerticalMoreMenu } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog/hooks/useCustomDialog';
 import { useCollectionMutation } from '@/hooks/mutations';

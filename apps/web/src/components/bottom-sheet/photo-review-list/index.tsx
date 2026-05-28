@@ -5,8 +5,8 @@ import { PhotoReviewList } from '@/components/layer-contents/photo-review-list';
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 
 interface PhotoReviewListBottomSheetProps extends DefaultBottomSheetProps {
     productNo: number;

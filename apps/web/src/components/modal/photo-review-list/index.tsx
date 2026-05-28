@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PhotoReviewList } from '@/components/layer-contents/photo-review-list';
-import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
-import { Button } from '@/components/ui';
+import { DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 
 interface PhotoReviewListModalProps extends DefaultModalLayoutProps {
     productNo: number;

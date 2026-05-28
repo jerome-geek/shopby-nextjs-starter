@@ -9,8 +9,8 @@ import upload from '@/api/storage/image';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
 import * as styles from '@/components/mypage/inquiries/inquiry-register-form/index.css';
 import { InquiryTypeList } from '@/components/mypage/inquiries/inquiry-type-list';
-import { Button } from '@/components/ui/button';
-import FileUpload from '@/components/ui/file-upload';
+import { Button } from '@/shared/ui/button';
+import FileUpload from '@/shared/ui/file-upload';
 import {
     InputCheckbox,
     InputContainer,
@@ -18,7 +18,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { EMAIL_DOMAIN_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';
 import { useInquiryMutation } from '@/hooks/mutations';

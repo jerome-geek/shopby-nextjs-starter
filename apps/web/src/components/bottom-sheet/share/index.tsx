@@ -1,6 +1,6 @@
 import ShareContent from '@/components/layer-contents/share';
-import type { DefaultBottomSheetProps } from '@/components/layout';
-import { BottomSheetLayout } from '@/components/layout';
+import type { DefaultBottomSheetProps } from '@/shared/components/layout';
+import { BottomSheetLayout } from '@/shared/components/layout';
 
 type ShareBottomSheetProps = DefaultBottomSheetProps;
 

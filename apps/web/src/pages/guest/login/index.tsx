@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { guestOrder } from '@/api/order';
-import { AuthLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { AuthLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
+import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import { PATHS } from '@/const/paths';
 import useApiError from '@/hooks/useApiError';
 import { NextPageWithLayout } from '@/pages/_app';

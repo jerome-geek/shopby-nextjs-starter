@@ -13,7 +13,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
 import { PaymentReserveSchemaType } from '@/schema';

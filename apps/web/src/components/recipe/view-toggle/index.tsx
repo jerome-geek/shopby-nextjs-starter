@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
-import { Grid2X2, Row2 } from '@/components/icons';
+import { Grid2X2, Row2 } from '@/shared/ui/icons';
 import { useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
 import * as styles from '@/components/recipe/view-toggle/index.css';

@@ -1,6 +1,6 @@
 import ShareContent from '@/components/layer-contents/share';
-import type { DefaultModalLayoutProps } from '@/components/layout';
-import { ModalLayout } from '@/components/layout';
+import type { DefaultModalLayoutProps } from '@/shared/components/layout';
+import { ModalLayout } from '@/shared/components/layout';
 
 type ShareModalProps = DefaultModalLayoutProps;
 

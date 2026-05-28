@@ -4,7 +4,7 @@ import { overlay } from 'overlay-kit';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ConfirmDialog from '@/components/ui/dialog/confirm';
+import ConfirmDialog from '@/shared/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useMall } from '@/hooks/query/admin/mall';

@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import { type ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';

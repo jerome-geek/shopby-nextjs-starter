@@ -2,8 +2,8 @@ import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
-import { LazyRender } from '@/components/common';
-import Seo from '@/components/common/seo';
+import { LazyRender } from '@/shared/components/common';
+import Seo from '@/shared/components/common/seo';
 import CollectionGroupSection from '@/components/section/collection-group';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';

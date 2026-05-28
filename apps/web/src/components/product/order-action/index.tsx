@@ -2,9 +2,9 @@ import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
-import { GiftIcon } from '@/components/icons/GiftIcon';
+import { GiftIcon } from '@/shared/ui/icons/GiftIcon';
 import * as styles from '@/components/product/order-action/index.css';
-import ButtonV2 from '@/components/ui/button/v2';
+import ButtonV2 from '@/shared/ui/button/v2';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useProductInfo } from '@/entities/product/hooks';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';

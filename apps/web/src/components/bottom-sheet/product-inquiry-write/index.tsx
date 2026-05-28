@@ -4,8 +4,8 @@ import { ProductInquiryWrite } from '@/components/layer-contents/product-inquiry
 import {
     BottomSheetLayout,
     type DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 interface ProductInquiryWriteBottomSheetProps extends DefaultBottomSheetProps {
     productNo: number;

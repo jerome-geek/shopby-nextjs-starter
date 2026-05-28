@@ -11,7 +11,7 @@ import ClaimPriceInfo from '@/components/mypage/claims/forms/price-info';
 import ClaimReason from '@/components/mypage/claims/forms/reason';
 import ClaimReturnWay from '@/components/mypage/claims/forms/return-way';
 import ClaimOrderOptions from '@/components/mypage/claims/order-options';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import {
     useGuestClaimMutation,

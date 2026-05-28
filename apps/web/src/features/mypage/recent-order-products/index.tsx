@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from '@fxts/core';
 
-import { NoResult } from '@/components/common/no-result';
+import { NoResult } from '@/shared/components/common/no-result';
 import * as styles from '@/features/mypage/recent-order-products/index.css';
 import { PATHS } from '@/const/paths';
 import { useMyOrderList } from '@/hooks/query/order/myOrder';
-import ImageWrapper from '@/components/ui/image';
+import ImageWrapper from '@/shared/ui/image';
 
 export const RecentOrderProducts = () => {
     const { t } = useTranslation();

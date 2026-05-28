@@ -5,7 +5,7 @@ import * as styles from '@/components/bottom-sheet/option-select/index.css';
 import {
     BottomSheetLayout,
     type DefaultModalLayoutProps,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 import {
     FlatProductOption,
     MultiProductOption,
@@ -13,7 +13,7 @@ import {
 } from '@/components/product-option';
 import { RequiredProductOption } from '@/components/product-option/required';
 import { ExtraProductList } from '@/components/product/extra-product-list';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
 import { useResponsive } from '@/hooks/utils';

@@ -9,7 +9,7 @@ import {
     prop,
     toArray,
 } from '@fxts/core';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
 import type { GetServerSideProps } from 'next';
@@ -22,7 +22,7 @@ import { fromError } from 'zod-validation-error';
 
 import { oauth2 } from '@/api/auth';
 import upload from '@/api/storage/image';
-import { AuthLayout } from '@/components/layout';
+import { AuthLayout } from '@/shared/components/layout';
 import {
     SignupFormAddress,
     SignupFormBirthday,
@@ -36,7 +36,7 @@ import {
     SignupFormTelephone,
 } from '@/components/signup/form';
 import MemberConfig from '@/components/signup/member-config';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import { useProfileMutation } from '@/hooks/mutations';
 import { useMyApp } from '@/hooks/myapp';

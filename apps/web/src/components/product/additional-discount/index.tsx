@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
-import { ClockIcon } from '@/components/icons/ClockIcon';
+import { ClockIcon } from '@/shared/ui/icons/ClockIcon';
 import * as styles from '@/components/product/additional-discount/index.css';
 import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
 

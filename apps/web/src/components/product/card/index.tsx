@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
+import { ThumbnailBookmarkIcon } from '@/shared/ui/icons/ThumbnailBookmarkIcon';
 import { ProductAdditionalDiscount } from '@/components/product';
 import * as styles from '@/components/product/card/index.css';
 import { PATHS } from '@/const/paths';

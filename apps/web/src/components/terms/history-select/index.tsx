@@ -3,7 +3,7 @@ import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/terms/history-select/index.css';
-import { Select } from '@/components/ui/input';
+import { Select } from '@/shared/ui/input';
 import type { TermHistory } from '@/models/manage/terms';
 
 interface TermsHistorySelectProps {

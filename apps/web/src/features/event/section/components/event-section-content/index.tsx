@@ -2,7 +2,7 @@ import { head, isEmpty, pipe, prop, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
-import { NoResult } from '@/components/common/no-result';
+import { NoResult } from '@/shared/components/common/no-result';
 import ProductCardRow from '@/components/product/card-row';
 import { PATHS } from '@/const/paths';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';

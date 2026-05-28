@@ -1,5 +1,5 @@
 import * as cardStyles from '@/components/mypage/common/mypage-list-card/index.css';
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import * as styles from '@/pages/mypage/wish/index.css';
 
 const WishCardSkeleton = () => {

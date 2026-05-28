@@ -2,11 +2,11 @@ import { RadioGroup } from 'radix-ui';
 import { useId, useMemo } from 'react';
 
 import * as styles from '@/components/product-list/filter/index.css';
-import { CustomAccordion } from '@/components/ui/accordion';
-import { InputCheckbox } from '@/components/ui/input/checkbox';
-import { InputField } from '@/components/ui/input/field';
-import * as radioStyles from '@/components/ui/input/radio/index.css';
-import { Column, Row } from '@/components/ui/layout/flex';
+import { CustomAccordion } from '@/shared/ui/accordion';
+import { InputCheckbox } from '@/shared/ui/input/checkbox';
+import { InputField } from '@/shared/ui/input/field';
+import * as radioStyles from '@/shared/ui/input/radio/index.css';
+import { Column, Row } from '@/shared/ui/layout/flex';
 import { PRICE_FILTER_OPTIONS } from '@/const/product';
 import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductSearchSummary } from '@/hooks/query/product/product';

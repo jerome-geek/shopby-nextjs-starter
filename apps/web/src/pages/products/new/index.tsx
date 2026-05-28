@@ -1,10 +1,10 @@
 import { isEmpty } from '@fxts/core';
 
-import { NoResult } from '@/components/common/no-result';
-import Seo from '@/components/common/seo';
+import { NoResult } from '@/shared/components/common/no-result';
+import Seo from '@/shared/components/common/seo';
 import { ProductCard } from '@/components/product';
-import { Column } from '@/components/ui/layout/flex';
-import PagingV2 from '@/components/ui/paging-v2';
+import { Column } from '@/shared/ui/layout/flex';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { useNewProductParams } from '@/entities/products/new/hooks/useNewProductParams';
 import { ProductCardSkeleton } from '@/features/products/best/components/product-card-skeleton';
 import { NewCategoryFilter } from '@/features/products/new/components/category-filter';

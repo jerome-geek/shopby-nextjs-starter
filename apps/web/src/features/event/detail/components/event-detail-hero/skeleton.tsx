@@ -1,4 +1,4 @@
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import * as styles from '@/features/event/detail/components/event-detail-hero/index.css';
 
 export const EventDetailHeroSkeleton = () => {

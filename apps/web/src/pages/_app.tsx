@@ -16,8 +16,8 @@ import { useRouter } from 'next/router';
 import { type ReactElement, type ReactNode, useMemo, useState } from 'react';
 import { Toaster } from 'sonner';
 
-import { ExternalScripts, GlobalHead } from '@/components/common';
-import { DefaultLayout } from '@/components/layout';
+import { ExternalScripts, GlobalHead } from '@/shared/components/common';
+import { DefaultLayout } from '@/shared/components/layout';
 import { env } from '@/configs/env';
 import { AppProviders } from '@/providers';
 

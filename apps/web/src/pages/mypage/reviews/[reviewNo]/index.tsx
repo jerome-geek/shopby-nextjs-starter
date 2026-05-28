@@ -6,13 +6,13 @@ import { useRouter } from 'next/router';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import ReviewStartIcon from '@/components/icons/ReviewStartIcon';
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import ReviewStartIcon from '@/shared/ui/icons/ReviewStartIcon';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import OptionText from '@/components/mypage/common/option-text';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog';
 import { useReviewMutation } from '@/hooks/mutations';

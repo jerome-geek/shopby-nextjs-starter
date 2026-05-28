@@ -1,14 +1,14 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import {
     CollectionFormContent,
     CollectionFormData,
 } from '@/components/layer-contents/collection-form';
 import { CollectionFormSkeleton } from '@/components/layer-contents/collection-form/skeleton';
-import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
-import ButtonV2 from '@/components/ui/button/v2';
+import { DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
+import ButtonV2 from '@/shared/ui/button/v2';
 
 interface CollectionFormModalProps extends DefaultModalLayoutProps {
     shareCode: string;

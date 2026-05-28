@@ -1,6 +1,6 @@
 import { isEmpty } from '@fxts/core';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import CollectionSection from '@/components/section/collection-group/collection';
 import CollectionSectionSkeleton from '@/components/section/collection-group/skeleton';
 import { useCollectionExposureGroup } from '@/hooks/suspenseQuery/shop/collection';

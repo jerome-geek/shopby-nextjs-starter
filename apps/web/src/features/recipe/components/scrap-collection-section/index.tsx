@@ -5,8 +5,8 @@ import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { BookmarkIcon } from '@/components/icons';
-import { VerticalMoreMenu } from '@/components/ui';
+import { BookmarkIcon } from '@/shared/ui/icons';
+import { VerticalMoreMenu } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog';
 import * as styles from '@/features/recipe/components/scrap-collection-section/index.css';

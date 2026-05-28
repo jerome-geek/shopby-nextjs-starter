@@ -8,10 +8,10 @@ import * as styles from '@/components/bottom-sheet/filter/index.css';
 import {
     BottomSheetLayout,
     type DefaultModalLayoutProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui';
-import { InputField } from '@/components/ui/input/field';
-import { Column, Row } from '@/components/ui/layout/flex';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
+import { InputField } from '@/shared/ui/input/field';
+import { Column, Row } from '@/shared/ui/layout/flex';
 import { PRICE_FILTER_OPTIONS } from '@/const/product';
 import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductSearchSummary } from '@/hooks/query/product/product';

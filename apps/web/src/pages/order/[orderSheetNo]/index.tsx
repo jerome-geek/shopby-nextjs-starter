@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { CSRLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { CSRLayout } from '@/shared/components/layout';
 import { PATHS } from '@/const/paths';
 import { OrderSheetContent } from '@/features/order/components/order-sheet-content';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';

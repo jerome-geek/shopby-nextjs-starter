@@ -2,7 +2,7 @@ import { compact, isEmpty, pipe, toArray } from '@fxts/core';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import Products from '@/components/section/products/section';
 import ProductsSectionSkeleton from '@/components/section/products/section/skeleton';
 import { useProductList } from '@/hooks/suspenseQuery/product/product';

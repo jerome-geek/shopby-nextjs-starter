@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { RecipeImageUpload } from '@/components/layer-contents/recipe-image-upload';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
+import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 
 export const RecipeImageUploadModal = (props: DefaultModalLayoutProps) => {

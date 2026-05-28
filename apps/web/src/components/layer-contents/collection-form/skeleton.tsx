@@ -1,5 +1,5 @@
 import * as styles from '@/components/layer-contents/collection-form/index.css';
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 
 export const CollectionFormSkeleton = () => {
     return (

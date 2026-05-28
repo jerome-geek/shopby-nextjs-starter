@@ -1,9 +1,9 @@
 import { SuspenseQuery } from '@suspensive/react-query';
 import { map, pipe, toArray } from '@fxts/core';
 
-import { CloseIcon } from '@/components/icons';
-import { Button } from '@/components/ui/button';
-import Skeleton from '@/components/ui/skeleton';
+import { CloseIcon } from '@/shared/ui/icons';
+import { Button } from '@/shared/ui/button';
+import Skeleton from '@/shared/ui/skeleton';
 import * as styles from '@/components/mypage/product-inquiries/register-form/index.css';
 import { productDetailOptions } from '@/entities/product/queries';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import {
     BottomSheetLayout,
     type DefaultBottomSheetProps,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 import { ClaimDetailContent } from '@/components/layer-contents/claim-detail/claim-detail-content';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 
 export interface ClaimDetailBottomSheetProps extends DefaultBottomSheetProps {
     claimNo: number;

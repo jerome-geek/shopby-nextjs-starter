@@ -5,7 +5,7 @@ import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { CollectionSearchResults } from '@/components/search/collection-results';
 import { SearchMobileSort } from '@/components/search/mobile-sort';
 import { SearchTabNav } from '@/components/search/tab-nav';
-import { Row } from '@/components/ui/layout/flex';
+import { Row } from '@/shared/ui/layout/flex';
 import { COLLECTION_SORT_OPTIONS, type CollectionSortBy } from '@/const/recipe';
 import {
     COLLECTION_ORDER_QUERY_KEY,

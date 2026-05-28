@@ -2,8 +2,8 @@ import { type DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
 
 import { PeriodRangePicker } from '@/components/layer-contents/period-range-picker';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 interface PeriodRangePickerModalProps extends DefaultModalLayoutProps {
     initialRange?: DateRange;

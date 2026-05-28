@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { type DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
+import { type DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
 import { RecipeUrlInputContent } from '@/components/layer-contents/recipe-url-input';
 
 type RecipeUrlInputProps = DefaultModalLayoutProps;

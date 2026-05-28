@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { StarIcon } from '@/components/icons';
+import { StarIcon } from '@/shared/ui/icons';
 import * as styles from '@/components/product/photo-review/index.css';
 import { PHOTO_PAGE_SIZE } from '@/components/product/product-tabs/review';
 import { productReviewListV2Options } from '@/entities/display/review/queries';

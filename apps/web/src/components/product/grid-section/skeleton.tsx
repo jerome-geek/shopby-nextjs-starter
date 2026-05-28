@@ -3,7 +3,7 @@ import 'swiper/css';
 
 import * as productCardStyles from '@/components/product/card/index.css';
 import * as styles from '@/components/product/grid-section/index.css';
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import { useResponsive } from '@/hooks/utils';
 
 export const ProductCardSkeleton = () => {

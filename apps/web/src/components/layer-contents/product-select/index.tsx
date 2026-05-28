@@ -5,13 +5,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/layer-contents/product-select/index.css';
-import { type DefaultModalLayoutProps } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { InputField, Select } from '@/components/ui/input';
+import { type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
+import { InputField, Select } from '@/shared/ui/input';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useMainCategory } from '@/hooks/useMainCategory';
 import type { MultiLevelCategory } from '@/models/display';

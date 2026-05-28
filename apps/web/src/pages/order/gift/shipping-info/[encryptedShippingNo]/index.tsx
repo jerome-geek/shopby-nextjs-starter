@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { GiftShippingAddressContent } from '@/features/order/components/gift-shipping-address-content';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 

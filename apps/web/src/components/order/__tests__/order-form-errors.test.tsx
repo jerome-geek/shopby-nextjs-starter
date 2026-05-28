@@ -68,7 +68,7 @@ vi.mock('@/components/bottom-sheet/address-search', () => ({
     AddressSearchBottomSheet: () => null,
 }));
 
-vi.mock('@/components/ui/input', () => ({
+vi.mock('@/shared/ui/input', () => ({
     InputField: ({
         value,
         onChange,
@@ -161,7 +161,7 @@ vi.mock('@/components/ui/input', () => ({
     ),
 }));
 
-vi.mock('@/components/ui/button', () => ({
+vi.mock('@/shared/ui/button', () => ({
     Button: ({
         children,
         ...props
@@ -170,7 +170,7 @@ vi.mock('@/components/ui/button', () => ({
     ),
 }));
 
-vi.mock('@/components/ui/dialog/term', () => ({
+vi.mock('@/shared/ui/dialog/term', () => ({
     default: () => null,
 }));
 

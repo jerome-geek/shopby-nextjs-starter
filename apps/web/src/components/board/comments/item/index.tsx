@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/board/comments/item/index.css';
-import { Column, Row } from '@/components/ui/layout/flex';
+import { Column, Row } from '@/shared/ui/layout/flex';
 import { BOARD_REPLY_MAX_LENGTH } from '@/const/board';
 import { useBoardReplyMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';

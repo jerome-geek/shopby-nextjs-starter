@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
-import { BigCartIcon } from '@/components/icons';
-import { DefaultModalLayoutProps } from '@/components/layout';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import { BigCartIcon } from '@/shared/ui/icons';
+import { DefaultModalLayoutProps } from '@/shared/components/layout';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/drawer/category/index.css';

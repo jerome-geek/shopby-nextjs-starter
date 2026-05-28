@@ -4,7 +4,7 @@ import {
     AddressRegister,
     AddressSearch,
 } from '@/components/layer-contents/address-search';
-import { BottomSheetLayout } from '@/components/layout';
+import { BottomSheetLayout } from '@/shared/components/layout';
 
 interface AddressSearchBottomSheetProps {
     isOpen: boolean;

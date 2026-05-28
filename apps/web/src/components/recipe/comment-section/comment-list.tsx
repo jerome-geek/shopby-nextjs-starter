@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CommentItem } from '@/components/recipe/comment-section/comment-item';
 import * as styles from '@/components/recipe/comment-section/index.css';
-import PagingV2 from '@/components/ui/paging-v2';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { useRecipeCommentMutation } from '@/hooks/mutations';
 import { useRecipeCommentList } from '@/hooks/suspenseQuery/shop/comment';
 import { useToast } from '@/hooks/ui/useToast';

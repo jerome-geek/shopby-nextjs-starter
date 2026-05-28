@@ -28,8 +28,8 @@ import {
 } from '@/components/signup/form';
 import * as signupFormStyles from '@/components/signup/form/index.css';
 import MemberConfig from '@/components/signup/member-config';
-import { Button } from '@/components/ui/button';
-import { InputField } from '@/components/ui/input';
+import { Button } from '@/shared/ui/button';
+import { InputField } from '@/shared/ui/input';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useEditInitialize } from '@/hooks/edit';

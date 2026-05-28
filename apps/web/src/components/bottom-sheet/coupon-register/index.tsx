@@ -4,8 +4,8 @@ import { CouponRegister } from '@/components/layer-contents/coupon-register';
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 export const CouponRegisterBottomSheet = (props: DefaultBottomSheetProps) => {
     const { t } = useTranslation();

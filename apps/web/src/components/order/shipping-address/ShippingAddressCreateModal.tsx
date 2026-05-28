@@ -4,17 +4,17 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import { BottomSheetLayout, ModalLayout } from '@/components/layout';
+import { BottomSheetLayout, ModalLayout } from '@/shared/components/layout';
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/order/shipping-address/ShippingAddressCreateModal.css';
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/ui';
 import {
     InputCheckbox,
     InputField,
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 import { useToast } from '@/hooks/ui';

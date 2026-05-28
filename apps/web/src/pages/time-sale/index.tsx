@@ -1,16 +1,16 @@
 import { isEmpty, map, pipe, toArray } from '@fxts/core';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { useLenis } from 'lenis/react';
 import { ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 
-import { NoResult } from '@/components/common/no-result';
+import { NoResult } from '@/shared/components/common/no-result';
 import { CountdownTimer, ProductCard } from '@/components/product';
 import * as tabStyles from '@/components/section/time-sale/tab.css';
 import * as toggleStyles from '@/components/section/time-sale/toggle.css';
-import { Column, Row } from '@/components/ui/layout/flex';
+import { Column, Row } from '@/shared/ui/layout/flex';
 import {
     INITIAL_STATUS_PAGE,
     SORTING_TYPE_BY_STATUS,

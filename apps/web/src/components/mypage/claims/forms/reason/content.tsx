@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import FileUpload from '@/components/ui/file-upload';
-import { InputFieldContainer, InputLabel, Select } from '@/components/ui/input';
+import FileUpload from '@/shared/ui/file-upload';
+import { InputFieldContainer, InputLabel, Select } from '@/shared/ui/input';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import type { ClaimType } from '@/models';
 import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';

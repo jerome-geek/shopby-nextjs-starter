@@ -3,7 +3,7 @@ import { overlay } from 'overlay-kit';
 import { FieldErrors, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import Accumulation from '@/components/order/accumulation';
 import Coupon from '@/components/order/coupon';
 import OrderProducts from '@/components/order/order-products';

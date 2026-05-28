@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Grid, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { ArrowIcon } from '@/components/icons/ArrowIcon';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { ArrowIcon } from '@/shared/ui/icons/ArrowIcon';
 import { ProductCard } from '@/components/product';
 import * as styles from '@/components/section/best/index.css';
 import { CATEGORY_CODE } from '@/const/category';

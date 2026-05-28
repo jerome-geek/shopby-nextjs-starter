@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AuthLayout } from '@/components/layout';
-import Seo from '@/components/common/seo';
+import { AuthLayout } from '@/shared/components/layout';
+import Seo from '@/shared/components/common/seo';
 import { PATHS } from '@/const/paths';
 import { AccountStep } from '@/features/member/find-password/components/account-step';
 import { CertificationStep } from '@/features/member/find-password/components/certification-step';

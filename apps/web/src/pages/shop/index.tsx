@@ -4,8 +4,8 @@ import dynamic from 'next/dynamic';
 
 import { productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
-import { LazyRender } from '@/components/common';
-import Seo from '@/components/common/seo';
+import { LazyRender } from '@/shared/components/common';
+import Seo from '@/shared/components/common/seo';
 import EventSection from '@/components/section/event';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';

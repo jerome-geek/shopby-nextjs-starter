@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 
-import * as styles from '@/components/ui/toast/index.css';
+import * as styles from '@/shared/ui/toast/index.css';
 
 interface ToastLink {
     label: string;

@@ -4,8 +4,8 @@ import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
-import { Button } from '@/components/ui';
-import ButtonV2 from '@/components/ui/button/v2';
+import { Button } from '@/shared/ui';
+import ButtonV2 from '@/shared/ui/button/v2';
 import { useCustomDialog } from '@/features/dialog/hooks/useCustomDialog';
 import {
     AdditionalPaySection,

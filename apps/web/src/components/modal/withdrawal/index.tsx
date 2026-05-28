@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import { Withdrawal } from '@/components/layer-contents/withdrawal';
 
 export const WithdrawalModal = (props: DefaultModalLayoutProps) => {

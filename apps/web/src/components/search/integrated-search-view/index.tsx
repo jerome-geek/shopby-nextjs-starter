@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { IntegratedSearchResults } from '@/components/search/integrated-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
-import { Row } from '@/components/ui/layout/flex';
+import { Row } from '@/shared/ui/layout/flex';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useInfinitePublicCollectionSearch } from '@/hooks/query/shop/collection';
 import { useInfinitePublicRecipeSearch } from '@/hooks/query/shop/recipe';

@@ -2,9 +2,9 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import Seo from '@/components/common/seo';
-import { CSRLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import Seo from '@/shared/components/common/seo';
+import { CSRLayout } from '@/shared/components/layout';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog';
 import GuestOrderContent from '@/features/order/components/guest-order-content';

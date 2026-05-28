@@ -11,7 +11,7 @@ import {
     InputField,
     InputFieldContainer,
     InputLabel,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 import { useCollectionMutation } from '@/hooks/mutations';
 import { useSharedCollection } from '@/hooks/query/shop/collection';

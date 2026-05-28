@@ -10,7 +10,7 @@ import useProductLike from '@/hooks/useProductLike';
 import { normalizeImageUrl } from '@/shared/utils/shopby';
 import { CURRENCY } from '@/utils/currency';
 
-import { BookmarkIcon } from '@/components/icons/BookmarkIcon';
+import { BookmarkIcon } from '@/shared/ui/icons/BookmarkIcon';
 
 const ProductCardRow = ({
     productNo,

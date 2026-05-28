@@ -12,7 +12,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/cart/summary/index.css';
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/ui';
 import useCart from '@/hooks/cart/useCart';
 import { useCartOrderAction } from '@/hooks/order/useCartOrderAction';
 import { useCartPrice } from '@/hooks/query/order/cart';

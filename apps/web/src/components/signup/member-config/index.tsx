@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { SingleValue } from 'react-select';
 
 import * as styles from '@/components/signup/member-config/index.css';
-import FileUpload from '@/components/ui/file-upload';
+import FileUpload from '@/shared/ui/file-upload';
 import {
     InputCheckbox,
     InputContainer,
@@ -17,7 +17,7 @@ import {
     InputLabel,
     InputRadio,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import type { GetMemberExtraInfoResponse } from '@/models/member/memberConfig';
 import { SignupFormSchemaType } from '@/schema';
 import { ErrorMessage } from '@/shared/components/form';

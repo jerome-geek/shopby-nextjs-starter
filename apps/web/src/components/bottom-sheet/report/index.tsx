@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import {
     BottomSheetLayout,
     DefaultModalLayoutProps,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 import { REPORT_REASON_OPTIONS } from '@/components/modal/report';
 import * as styles from '@/components/modal/report/index.css';
-import { Button } from '@/components/ui/button';
-import { InputContainer, InputLabel, Select } from '@/components/ui/input';
+import { Button } from '@/shared/ui/button';
+import { InputContainer, InputLabel, Select } from '@/shared/ui/input';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';
 import { useToast } from '@/hooks/ui';
 import { ReportArticleData } from '@/models/manage/board';

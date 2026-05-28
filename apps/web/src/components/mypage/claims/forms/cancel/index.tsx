@@ -9,7 +9,7 @@ import ClaimBankInfo from '@/components/mypage/claims/forms/bank-info';
 import ClaimPriceInfo from '@/components/mypage/claims/forms/price-info';
 import ClaimReason from '@/components/mypage/claims/forms/reason';
 import ClaimOrderOptions from '@/components/mypage/claims/order-options';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import {
     useGuestClaimMutation,

@@ -8,7 +8,7 @@ import { HttpStatusCode, isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import * as styles from '@/shared/boundary/shopby-async-boundary.css';
 import { RedirectHandler } from '@/shared/components/RedirectHandler';
 import { RedirectError } from '@/shared/errors';

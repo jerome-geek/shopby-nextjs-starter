@@ -8,10 +8,10 @@ import {
     CalorieIcon,
     PeopleIcon,
     TimerIcon,
-} from '@/components/icons';
+} from '@/shared/ui/icons';
 import * as styles from '@/components/recipe/detail-card/index.css';
 import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';
-import { VerticalMoreMenu } from '@/components/ui';
+import { VerticalMoreMenu } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import useBookmark from '@/features/recipe/hooks/useBookmark';
 import { useRecipeMutation } from '@/hooks/mutations';

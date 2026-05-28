@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { type ReactNode } from 'react';
 
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import { AddressWriteForm } from '@/components/mypage/addresses/address-write-form';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 

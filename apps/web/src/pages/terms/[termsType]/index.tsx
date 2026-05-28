@@ -1,6 +1,6 @@
 import { entries, filter, head, isUndefined, map, pipe } from '@fxts/core';
 import { GetStaticPaths, type GetStaticProps, InferGetStaticPropsType } from 'next';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { useTranslation } from 'react-i18next';
 
 import TermsHistorySelect from '@/components/terms/history-select';

@@ -6,8 +6,8 @@ import { ko } from 'react-day-picker/locale';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/layer-contents/period-range-picker/index.css';
-import { type DefaultModalLayoutProps } from '@/components/layout';
-import { Select } from '@/components/ui/input/select';
+import { type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Select } from '@/shared/ui/input/select';
 import useResponsive from '@/hooks/utils/useResponsive';
 import { vars } from '@/styles/theme.css';
 

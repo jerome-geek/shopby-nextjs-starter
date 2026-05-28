@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Seo from '@/components/common/seo';
-import { CSRLayout } from '@/components/layout';
+import Seo from '@/shared/components/common/seo';
+import { CSRLayout } from '@/shared/components/layout';
 import { RecipeScrapDetail } from '@/components/recipe/scrap/detail';
 import RecipeScrapSummary from '@/components/recipe/scrap/summary';
 import { useCustomDialog } from '@/features/dialog';

@@ -2,10 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
 
-import { NoResult } from '@/components/common/no-result';
+import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/search/recipe-results/index.css';
-import PagingV2 from '@/components/ui/paging-v2';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { RECIPE_PAGE_QUERY_KEY } from '@/const/search';
 import { useInfinitePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 import { useResponsive } from '@/hooks/utils';

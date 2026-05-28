@@ -1,4 +1,4 @@
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { filter, pipe, toArray, uniq } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -13,15 +13,15 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
-import FetchBoundary from '@/components/common/FetchBoundary';
-import { CalorieIcon, PeopleIcon, TimerIcon } from '@/components/icons';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import { CalorieIcon, PeopleIcon, TimerIcon } from '@/shared/ui/icons';
 import {
     RecipeCommentSection,
     RecipeDetailStickyFooter,
     RecipeDetailStickyFooterSkeleton,
     RecipeRecommend,
 } from '@/components/recipe';
-import { VerticalMoreMenu } from '@/components/ui';
+import { VerticalMoreMenu } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { SIX_HOUR_IN_SECONDS } from '@/const/time';
 import { createRecipeSeoData } from '@/entities/recipe/utils/seo';

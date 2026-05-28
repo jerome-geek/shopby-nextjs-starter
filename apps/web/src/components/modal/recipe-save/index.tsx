@@ -2,7 +2,7 @@ import { Plus } from 'lucide-react';
 
 import { RecipeSaveContent } from '@/components/layer-contents/recipe-save';
 import * as styles from '@/components/layer-contents/recipe-save/index.css';
-import { ModalLayout } from '@/components/layout';
+import { ModalLayout } from '@/shared/components/layout';
 import { useResponsive } from '@/hooks/utils';
 
 interface RecipeSaveModalProps {

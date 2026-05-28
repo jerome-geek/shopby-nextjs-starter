@@ -4,7 +4,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import * as styles from '@/pages/recipes/write/index.css';
 
 interface RecipeIngredientSectionProps {

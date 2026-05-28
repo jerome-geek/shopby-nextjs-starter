@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/features/drawer/search/index.css';
 import { ProductCard } from '@/components/product';
-import { Column } from '@/components/ui/layout/flex';
+import { Column } from '@/shared/ui/layout/flex';
 import { useProductSectionProductList } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
 import type { ImageUrlType } from '@/models/product';

@@ -11,7 +11,7 @@ import { address } from '@/api/manage';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
 import * as styles from '@/components/mypage/common/mypage-form/index.css';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import {
     InputCheckbox,
     InputContainer,
@@ -19,7 +19,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import {
     ADDRESS_MEMO_LIST,
     MOBILE_COUNTRY_CODE_LIST,

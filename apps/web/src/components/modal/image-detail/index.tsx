@@ -1,7 +1,7 @@
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
-import { DefaultModalLayoutProps } from '@/components/layout';
+import { DefaultModalLayoutProps } from '@/shared/components/layout';
 import * as styles from '@/components/modal/image-detail/index.css';
 import { useKeyDown } from '@/hooks/utils';
 

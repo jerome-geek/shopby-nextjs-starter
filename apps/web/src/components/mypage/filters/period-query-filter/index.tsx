@@ -6,7 +6,7 @@ import type { DateRange } from 'react-day-picker';
 import { overlay } from 'overlay-kit';
 import { useQueryStates } from 'nuqs';
 
-import { Select } from '@/components/ui/input';
+import { Select } from '@/shared/ui/input';
 import { PeriodRangePickerModal } from '@/components/modal/period-range-picker';
 import * as styles from '@/components/mypage/filters/period-query-filter/index.css';
 import { useResponsive } from '@/hooks/utils';

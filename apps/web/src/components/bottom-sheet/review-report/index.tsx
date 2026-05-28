@@ -4,8 +4,8 @@ import { ReviewReport } from '@/components/layer-contents/review-report';
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 interface ReviewReportBottomSheetProps extends DefaultBottomSheetProps {
     productNo: number;

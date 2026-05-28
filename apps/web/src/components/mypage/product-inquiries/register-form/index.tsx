@@ -10,7 +10,7 @@ import { ProductSelectBottomSheet } from '@/components/bottom-sheet/product-sele
 import { ProductSelectModal } from '@/components/modal/product-select';
 import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
 import * as styles from '@/components/mypage/product-inquiries/register-form/index.css';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import {
     SelectedProductField,
     type SelectedProductInfo,
@@ -22,7 +22,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 import { PATHS } from '@/const/paths';
 import { useProductInquiryMutation } from '@/hooks/mutations';

@@ -2,14 +2,14 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/product-option/selected/index.css';
-import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import { useProductOption } from '@/hooks/product';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
-import { CloseIcon } from '@/components/icons/Close';
-import { MinusIcon } from '@/components/icons/Minus';
-import { PlusIcon } from '@/components/icons/Plus';
+import { CloseIcon } from '@/shared/ui/icons/Close';
+import { MinusIcon } from '@/shared/ui/icons/Minus';
+import { PlusIcon } from '@/shared/ui/icons/Plus';
 
 interface SelectedProductOptionProps {
     productNo: number;

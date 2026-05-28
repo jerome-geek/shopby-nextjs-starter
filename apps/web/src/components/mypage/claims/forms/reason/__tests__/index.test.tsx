@@ -18,11 +18,11 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
-vi.mock('@/components/ui/file-upload', () => ({
+vi.mock('@/shared/ui/file-upload', () => ({
     default: () => null,
 }));
 
-vi.mock('@/components/ui/input', () => ({
+vi.mock('@/shared/ui/input', () => ({
     InputFieldContainer: ({ children }: { children: ReactNode }) => (
         <div>{children}</div>
     ),

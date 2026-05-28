@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '@/shared/ui/skeleton';
 import * as styles from '@/features/recipe/components/recipe-recommendation-content/index.css';
 
 export const RecipeRecommendationLayerContentSkeleton = () => {

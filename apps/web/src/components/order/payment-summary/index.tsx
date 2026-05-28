@@ -3,9 +3,9 @@ import { overlay } from 'overlay-kit';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import * as styles from '@/components/order/payment-summary/index.css';
-import { Button } from '@/components/ui/button';
-import TermDialog from '@/components/ui/dialog/term';
-import { InputCheckbox } from '@/components/ui/input';
+import { Button } from '@/shared/ui/button';
+import TermDialog from '@/shared/ui/dialog/term';
+import { InputCheckbox } from '@/shared/ui/input';
 import { useOrderSheetCalculate } from '@/hooks/order';
 import type { OrderTermsType } from '@/models';
 import { PaymentReserveSchemaType } from '@/schema';

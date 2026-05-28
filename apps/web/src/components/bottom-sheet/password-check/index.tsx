@@ -5,14 +5,14 @@ import { ErrorMessage } from '@hookform/error-message';
 import {
     BottomSheetLayout,
     DefaultModalLayoutProps,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 import { PasswordCheckOverlayProps } from '@/components/modal/password-check';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import type { CheckPasswordData } from '@/models/member/profile';
 
 interface PasswordCheckBottomSheetProps

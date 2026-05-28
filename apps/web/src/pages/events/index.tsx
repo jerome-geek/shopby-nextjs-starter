@@ -2,10 +2,10 @@ import { keepPreviousData } from '@tanstack/react-query';
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { EVENT_LIST } from '@/const/event';
 import EventItem from '@/features/event/list/components/event-item';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';

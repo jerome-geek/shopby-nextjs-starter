@@ -2,7 +2,7 @@ import { overlay } from 'overlay-kit';
 
 import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { useClaim } from '@/features/claim';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';

@@ -4,7 +4,7 @@ import { Minus, Plus, X } from 'lucide-react';
 import Link from 'next/link';
 
 import * as styles from '@/components/cart/order-product-item/index.css';
-import { InputCheckbox } from '@/components/ui/input';
+import { InputCheckbox } from '@/shared/ui/input';
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils';
 import type {

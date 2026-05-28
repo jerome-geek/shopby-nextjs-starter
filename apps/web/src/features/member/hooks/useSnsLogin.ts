@@ -13,7 +13,7 @@ import {
     KakaoIcon,
     LineIcon,
     NaverIcon,
-} from '@/components/icons/login';
+} from '@/shared/ui/icons/login';
 import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/query/admin/mall';
 import useDialog from '@/hooks/utils/useDialog';

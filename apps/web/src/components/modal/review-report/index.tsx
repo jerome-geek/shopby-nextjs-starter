@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { ReviewReport } from '@/components/layer-contents/review-report';
-import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 interface ReviewReportModalProps extends DefaultModalLayoutProps {
     productNo: number;

@@ -12,8 +12,8 @@ import {
 } from 'swiper/modules';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
-import ImageWrapper from '@/components/ui/image';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import ImageWrapper from '@/shared/ui/image';
 import * as styles from '@/features/banner/components/hero-banner/index.css';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { BREAKPOINTS } from '@/styles/media';

@@ -4,10 +4,10 @@ import { useEffect, useMemo, useRef } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
 import * as styles from '@/components/layer-contents/product-inquiry-write/index.css';
-import type { DefaultModalLayoutProps } from '@/components/layout';
+import type { DefaultModalLayoutProps } from '@/shared/components/layout';
 import * as inquiryFormStyles from '@/components/mypage/product-inquiries/register-form/index.css';
 import {
     InputCheckbox,
@@ -16,7 +16,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 import { useProductInquiryMutation } from '@/hooks/mutations';
 import { useMall } from '@/hooks/query/admin/mall';

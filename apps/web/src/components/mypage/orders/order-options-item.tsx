@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { NextActionButton } from '@/components/mypage/orders/next-action-button';
 import * as styles from '@/components/mypage/orders/order-options-item.css';
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { shouldShowNextAction } from '@/entities/mypage/utils/orders';
 import type { NextAction, OrderOption } from '@/models/order';

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { overlay } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import * as styles from '@/components/layer-contents/claim-detail/index.css';
 import { ImageDetailModal } from '@/components/modal';
 import { CLAIM_REASON_MAP, CLAIM_TYPE_MAP } from '@/const/label';

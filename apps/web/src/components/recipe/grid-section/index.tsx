@@ -6,8 +6,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { RecipeCard } from '@/components/recipe/card';
 import * as styles from '@/components/recipe/grid-section/index.css';
-import { ViewAllLink } from '@/components/ui';
-import PagingV2 from '@/components/ui/paging-v2';
+import { ViewAllLink } from '@/shared/ui';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog';
 import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';

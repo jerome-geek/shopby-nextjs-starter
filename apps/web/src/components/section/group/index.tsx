@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-import { LazyRender } from '@/components/common';
+import { LazyRender } from '@/shared/components/common';
 import EventSection from '@/components/section/event';
 import EventSectionSkeleton from '@/components/section/event/skeleton';
 import ProductsSearch from '@/components/section/products/search';
