@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/product-option/selected/index.css';
 import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
-import { useProductOption } from '@/hooks/product';
+import { useProduct, useProductOption } from '@/hooks/product';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
 import { CloseIcon } from '@/components/icons/Close';
-import { MinusIcon } from '@/components/icons/Minus';
-import { PlusIcon } from '@/components/icons/Plus';
+import { QuantityController } from '@/components/ui';
 
 interface SelectedProductOptionProps {
     productNo: number;
@@ -23,6 +22,10 @@ export const SelectedProductOption = ({
     const { t } = useTranslation();
 
     const { textOptionInputs } = useProductOption({
+        productNo,
+    });
+
+    const { minBuyCnt } = useProduct({
         productNo,
     });
 
@@ -132,7 +135,7 @@ export const SelectedProductOption = ({
                         )}
 
                     <div className={styles.optionFooter}>
-                        <div className={styles.quantitySelector}>
+                        {/* <div className={styles.quantitySelector}>
                             <button
                                 className={styles.countButton}
                                 disabled={option.orderCnt <= 1}
@@ -159,7 +162,15 @@ export const SelectedProductOption = ({
                             >
                                 <PlusIcon />
                             </button>
-                        </div>
+                        </div> */}
+                        <QuantityController
+                            value={option.orderCnt}
+                            min={minBuyCnt || 1}
+                            max={option.stockCnt}
+                            onChange={(nextValue) =>
+                                updateOptionCnt(option.optionNo, nextValue)
+                            }
+                        />
                         <span className={styles.priceValue}>
                             {CURRENCY(option.buyPrice)
                                 .multiply(option.orderCnt)
