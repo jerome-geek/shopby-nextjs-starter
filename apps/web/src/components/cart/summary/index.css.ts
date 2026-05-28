@@ -14,6 +14,7 @@ export const summaryArea = style({
     '@media': {
         [media.desktop]: {
             width: '100%',
+            height: 'fit-content',
             position: 'sticky',
             top: '120px',
             display: 'flex',
