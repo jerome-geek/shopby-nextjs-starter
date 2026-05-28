@@ -1,3 +1,4 @@
+import { includes } from '@fxts/core';
 import { overlay } from 'overlay-kit';
 
 import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
@@ -6,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useClaim } from '@/features/claim';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import type { NextActionType } from '@/models';
+import type { NextActionType, OrderStatusType } from '@/models';
 
 export interface NextActionButtonProps {
     nextActionType: NextActionType;
@@ -17,12 +18,12 @@ export interface NextActionButtonProps {
     uri: string;
     claimNo: number | null;
     isFreeGift: boolean;
-    orderStatusLabel?: string | null;
+    orderStatusType: OrderStatusType;
 }
 
 export const NextActionButton = ({
     nextActionType,
-    orderStatusLabel,
+    orderStatusType,
     productNo,
     orderOptionNo,
     optionNo,
@@ -98,34 +99,40 @@ export const NextActionButton = ({
         );
     }
 
-    if (orderStatusLabel === '배송준비중' && nextActionType === 'CANCEL') {
-        const handleCancelClick = async () => {
-            const isAgree = await openAsyncDialog({
-                type: 'confirm',
-                message: '취소신청 안내',
-                description:
-                    '배송준비중인 상품은 배송 진행 상항에 따라 취소가 안될 수도 있어요.',
-                onCloseReturnValue: false,
-                onConfirmReturnValue: true,
-                confirmText: '계속하기',
-                cancelText: '그만하기',
-            });
+    if (includes(orderStatusType, ['PRODUCT_PREPARE', 'DELIVERY_PREPARE'])) {
+        if (nextActionType === 'WITHDRAW_CANCEL') {
+            return null;
+        }
 
-            if (isAgree) {
-                nextAction()();
-            }
-        };
+        if (nextActionType === 'CANCEL') {
+            const handleCancelClick = async () => {
+                const isAgree = await openAsyncDialog({
+                    type: 'confirm',
+                    message: '취소신청 안내',
+                    description:
+                        '배송준비중인 상품은 배송 진행 상항에 따라 취소가 안될 수도 있어요.',
+                    onCloseReturnValue: false,
+                    onConfirmReturnValue: true,
+                    confirmText: '계속하기',
+                    cancelText: '그만하기',
+                });
 
-        return (
-            <Button
-                frame='outlined'
-                size='small'
-                onClick={handleCancelClick}
-                style={{ height: '32px', fontSize: '12px' }}
-            >
-                {label}
-            </Button>
-        );
+                if (isAgree) {
+                    nextAction()();
+                }
+            };
+
+            return (
+                <Button
+                    frame='outlined'
+                    size='small'
+                    onClick={handleCancelClick}
+                    style={{ height: '32px', fontSize: '12px' }}
+                >
+                    {label}
+                </Button>
+            );
+        }
     }
 
     return (
