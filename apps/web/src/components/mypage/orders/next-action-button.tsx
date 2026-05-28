@@ -1,13 +1,19 @@
 import { includes } from '@fxts/core';
 import { overlay } from 'overlay-kit';
+import { useMemo } from 'react';
 
 import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
 import { Button } from '@/components/ui/button';
+import { CLAIM_TYPE_MAP } from '@/const/label';
 import { useClaim } from '@/features/claim';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import type { NextActionType, OrderStatusType } from '@/models';
+import type {
+    ClaimStatusType,
+    NextActionType,
+    OrderStatusType,
+} from '@/models';
 
 export interface NextActionButtonProps {
     nextActionType: NextActionType;
@@ -19,11 +25,13 @@ export interface NextActionButtonProps {
     claimNo: number | null;
     isFreeGift: boolean;
     orderStatusType: OrderStatusType;
+    claimStatusType: ClaimStatusType;
 }
 
 export const NextActionButton = ({
     nextActionType,
     orderStatusType,
+    claimStatusType,
     productNo,
     orderOptionNo,
     optionNo,
@@ -48,16 +56,40 @@ export const NextActionButton = ({
         optionNo,
     });
 
+    const claimType = useMemo(() => {
+        if (includes(claimStatusType, ['RETURN'])) {
+            return 'RETURN';
+        }
+
+        if (includes(claimStatusType, ['EXCHANGE'])) {
+            return 'EXCHANGE';
+        }
+
+        return 'CANCEL';
+    }, [claimStatusType]);
+
     const openClaimDetailModal = () => {
         if (isMobile) {
             overlay.open((props) => {
-                return <ClaimDetailBottomSheet {...props} claimNo={claimNo!} />;
+                return (
+                    <ClaimDetailBottomSheet
+                        {...props}
+                        claimNo={claimNo!}
+                        claimType={claimType}
+                    />
+                );
             });
             return;
         }
 
         overlay.open((props) => {
-            return <ClaimDetailModal {...props} claimNo={claimNo!} />;
+            return (
+                <ClaimDetailModal
+                    {...props}
+                    claimNo={claimNo!}
+                    claimType={claimType}
+                />
+            );
         });
     };
 
@@ -80,7 +112,7 @@ export const NextActionButton = ({
                 onClick={openClaimDetailModal}
                 style={{ height: '32px', fontSize: '12px' }}
             >
-                {label}
+                {`${CLAIM_TYPE_MAP[claimType]} 상세`}
             </Button>
         );
     }

@@ -1,26 +1,35 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ClaimDetailContent } from '@/components/layer-contents/claim-detail/claim-detail-content';
 import {
     BottomSheetLayout,
     type DefaultBottomSheetProps,
 } from '@/components/layout';
-import { ClaimDetailContent } from '@/components/layer-contents/claim-detail/claim-detail-content';
 import { Button } from '@/components/ui/button';
+import { CLAIM_TYPE_MAP } from '@/const/label';
+import { ClaimType } from '@/models';
 
 export interface ClaimDetailBottomSheetProps extends DefaultBottomSheetProps {
     claimNo: number;
+    claimType: ClaimType;
 }
 
 export const ClaimDetailBottomSheet = ({
     claimNo,
+    claimType,
     ...props
 }: ClaimDetailBottomSheetProps) => {
     const { t } = useTranslation();
 
+    const claimTypeLabel = useMemo(() => {
+        return `${CLAIM_TYPE_MAP[claimType]} 상세`;
+    }, [claimType]);
+
     return (
         <BottomSheetLayout
             {...props}
-            title={t('클레임 조회')}
+            title={t(claimTypeLabel)}
             footerButtonList={[
                 <Button
                     key='confirm'

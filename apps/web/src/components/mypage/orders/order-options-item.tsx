@@ -28,6 +28,7 @@ type MypageOrderOptionListItemProps = Omit<
         | 'orderOptionNo'
         | 'orderNo'
         | 'orderStatusType'
+        | 'claimStatusType'
         | 'orderStatusTypeLabel'
         | 'claimStatusTypeLabel'
         | 'claimNo'
@@ -74,6 +75,7 @@ export const OrderOptionsItem = ({
     optionTitle,
     orderCnt,
     price,
+    claimStatusType,
     orderStatusTypeLabel,
     claimStatusTypeLabel,
     orderStatusType,
@@ -225,6 +227,7 @@ export const OrderOptionsItem = ({
                             key={`${orderNo}-${orderOptionNo}-${action.nextActionType}`}
                             nextActionType={action.nextActionType}
                             orderStatusType={orderStatusType}
+                            claimStatusType={claimStatusType}
                             productNo={productNo}
                             optionNo={optionNo}
                             orderOptionNo={orderOptionNo}
