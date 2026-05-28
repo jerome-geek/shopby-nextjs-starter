@@ -25,7 +25,7 @@ export interface NextActionButtonProps {
     claimNo: number | null;
     isFreeGift: boolean;
     orderStatusType: OrderStatusType;
-    claimStatusType: ClaimStatusType;
+    claimStatusType?: Nullable<ClaimStatusType>;
 }
 
 export const NextActionButton = ({
