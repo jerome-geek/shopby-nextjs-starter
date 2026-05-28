@@ -108,101 +108,117 @@ export const ClaimExchangeForm = ({
     const hasExchangeAddress = orderOptionData.exchangeAddress !== null;
 
     useEffect(() => {
-        reset((prev) => ({
-            ...prev,
-            productCnt: orderOptionData.originalOption.orderCnt,
-            exchangeOption: {
-                inputTexts: orderOptionData.originalOption.inputs,
-                orderCnt: orderOptionData.originalOption.orderCnt,
-                optionNo: orderOptionData.originalOption.optionNo,
-                productNo: orderOptionData.originalOption.productNo,
-                additionalProductNo:
-                    orderOptionData.originalOption.additionalProductNo,
+        reset(
+            (prev) => ({
+                ...prev,
+                productCnt: orderOptionData.originalOption.orderCnt,
+                exchangeOption: {
+                    inputTexts: orderOptionData.originalOption.inputs,
+                    orderCnt: orderOptionData.originalOption.orderCnt,
+                    optionNo: orderOptionData.originalOption.optionNo,
+                    productNo: orderOptionData.originalOption.productNo,
+                    additionalProductNo:
+                        orderOptionData.originalOption.additionalProductNo,
+                },
+                claimedProductOptions: orderOptionList.map((option) => ({
+                    isChecked:
+                        option.orderOptionNo ===
+                        orderOptionData.originalOption.orderOptionNo,
+                    orderProductOptionNo: option.orderOptionNo,
+                    productCnt: option.orderCnt,
+                })),
+                returnAddress: orderOptionData.returnAddress
+                    ? {
+                          receiverLastName:
+                              orderOptionData.returnAddress?.shippingEtcInfo
+                                  ?.receiverLastName || '',
+                          receiverFirstName:
+                              orderOptionData.returnAddress?.shippingEtcInfo
+                                  ?.receiverFirstName || '',
+                          receiverName:
+                              orderOptionData.returnAddress.receiverName || '',
+                          receiverJibunAddress:
+                              orderOptionData.returnAddress
+                                  .receiverJibunAddress ||
+                              orderOptionData.returnAddress.receiverAddress ||
+                              '',
+                          countryCd:
+                              orderOptionData.returnAddress.countryCd || '',
+                          receiverZipCd:
+                              orderOptionData.returnAddress.receiverZipCd || '',
+                          receiverAddress:
+                              orderOptionData.returnAddress.receiverAddress ||
+                              '',
+                          receiverDetailAddress:
+                              orderOptionData.returnAddress
+                                  .receiverDetailAddress ?? '',
+                          receiverContact1:
+                              orderOptionData.returnAddress.receiverContact1 ||
+                              '',
+                          receiverContact2:
+                              orderOptionData.returnAddress.receiverContact2 ||
+                              '',
+                          receiverCity:
+                              orderOptionData.returnAddress.receiverCity || '',
+                          receiverState:
+                              orderOptionData.returnAddress.receiverState || '',
+                          receiverMobileCountryCd:
+                              orderOptionData.returnAddress
+                                  .receiverMobileCountryCd || '',
+                      }
+                    : prev.returnAddress,
+                exchangeAddress: orderOptionData.exchangeAddress
+                    ? {
+                          receiverLastName:
+                              orderOptionData.exchangeAddress?.shippingEtcInfo
+                                  ?.receiverLastName || '',
+                          receiverFirstName:
+                              orderOptionData.exchangeAddress?.shippingEtcInfo
+                                  ?.receiverFirstName || '',
+                          receiverName:
+                              orderOptionData.exchangeAddress.receiverName ||
+                              '',
+                          receiverJibunAddress:
+                              orderOptionData.exchangeAddress
+                                  .receiverJibunAddress ||
+                              orderOptionData.exchangeAddress.receiverAddress ||
+                              '',
+                          countryCd:
+                              orderOptionData.exchangeAddress.countryCd || '',
+                          receiverZipCd:
+                              orderOptionData.exchangeAddress.receiverZipCd ||
+                              '',
+                          receiverAddress:
+                              orderOptionData.exchangeAddress.receiverAddress ||
+                              '',
+                          receiverDetailAddress:
+                              orderOptionData.exchangeAddress
+                                  .receiverDetailAddress ?? '',
+                          receiverContact1:
+                              orderOptionData.exchangeAddress
+                                  .receiverContact1 || '',
+                          receiverContact2:
+                              orderOptionData.exchangeAddress
+                                  .receiverContact2 || '',
+                          deliveryMemo:
+                              orderOptionData.exchangeAddress.deliveryMemo ??
+                              '',
+                          receiverCity:
+                              orderOptionData.exchangeAddress.receiverCity ||
+                              '',
+                          receiverState:
+                              orderOptionData.exchangeAddress.receiverState ||
+                              '',
+                          receiverMobileCountryCd:
+                              orderOptionData.exchangeAddress
+                                  .receiverMobileCountryCd || '',
+                      }
+                    : prev.exchangeAddress,
+            }),
+            {
+                keepFieldsRef: true,
             },
-            claimedProductOptions: orderOptionList.map((option) => ({
-                isChecked:
-                    option.orderOptionNo ===
-                    orderOptionData.originalOption.orderOptionNo,
-                orderProductOptionNo: option.orderOptionNo,
-                productCnt: option.orderCnt,
-            })),
-            returnAddress: orderOptionData.returnAddress
-                ? {
-                      receiverLastName:
-                          orderOptionData.returnAddress?.shippingEtcInfo
-                              ?.receiverLastName || '',
-                      receiverFirstName:
-                          orderOptionData.returnAddress?.shippingEtcInfo
-                              ?.receiverFirstName || '',
-                      receiverName:
-                          orderOptionData.returnAddress.receiverName || '',
-                      receiverJibunAddress:
-                          orderOptionData.returnAddress.receiverJibunAddress ||
-                          orderOptionData.returnAddress.receiverAddress ||
-                          '',
-                      countryCd: orderOptionData.returnAddress.countryCd || '',
-                      receiverZipCd:
-                          orderOptionData.returnAddress.receiverZipCd || '',
-                      receiverAddress:
-                          orderOptionData.returnAddress.receiverAddress || '',
-                      receiverDetailAddress:
-                          orderOptionData.returnAddress.receiverDetailAddress ??
-                          '',
-                      receiverContact1:
-                          orderOptionData.returnAddress.receiverContact1 || '',
-                      receiverContact2:
-                          orderOptionData.returnAddress.receiverContact2 || '',
-                      receiverCity:
-                          orderOptionData.returnAddress.receiverCity || '',
-                      receiverState:
-                          orderOptionData.returnAddress.receiverState || '',
-                      receiverMobileCountryCd:
-                          orderOptionData.returnAddress
-                              .receiverMobileCountryCd || '',
-                  }
-                : prev.returnAddress,
-            exchangeAddress: orderOptionData.exchangeAddress
-                ? {
-                      receiverLastName:
-                          orderOptionData.exchangeAddress?.shippingEtcInfo
-                              ?.receiverLastName || '',
-                      receiverFirstName:
-                          orderOptionData.exchangeAddress?.shippingEtcInfo
-                              ?.receiverFirstName || '',
-                      receiverName:
-                          orderOptionData.exchangeAddress.receiverName || '',
-                      receiverJibunAddress:
-                          orderOptionData.exchangeAddress
-                              .receiverJibunAddress ||
-                          orderOptionData.exchangeAddress.receiverAddress ||
-                          '',
-                      countryCd:
-                          orderOptionData.exchangeAddress.countryCd || '',
-                      receiverZipCd:
-                          orderOptionData.exchangeAddress.receiverZipCd || '',
-                      receiverAddress:
-                          orderOptionData.exchangeAddress.receiverAddress || '',
-                      receiverDetailAddress:
-                          orderOptionData.exchangeAddress
-                              .receiverDetailAddress ?? '',
-                      receiverContact1:
-                          orderOptionData.exchangeAddress.receiverContact1 ||
-                          '',
-                      receiverContact2:
-                          orderOptionData.exchangeAddress.receiverContact2 ||
-                          '',
-                      deliveryMemo:
-                          orderOptionData.exchangeAddress.deliveryMemo ?? '',
-                      receiverCity:
-                          orderOptionData.exchangeAddress.receiverCity || '',
-                      receiverState:
-                          orderOptionData.exchangeAddress.receiverState || '',
-                      receiverMobileCountryCd:
-                          orderOptionData.exchangeAddress
-                              .receiverMobileCountryCd || '',
-                  }
-                : prev.exchangeAddress,
-        }));
+        );
     }, [reset, orderOptionData, orderOptionList]);
 
     const {

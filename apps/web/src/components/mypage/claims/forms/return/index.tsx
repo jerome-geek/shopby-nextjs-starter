@@ -21,8 +21,10 @@ import useGuestEstimate from '@/hooks/query/claim/guest/useGuestEstimate';
 import useEstimate from '@/hooks/query/claim/member/useEstimate';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useGlobal } from '@/hooks/utils';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
-import type { RequestReturnMultipleOptionsData } from '@/models/claim/member';
+import type {
+    GetOrderOptionDetailForClaimResponse,
+    RequestReturnMultipleOptionsData,
+} from '@/models/claim/member';
 import {
     ClaimReturnSchemaType,
     createClaimReturnSchema,
@@ -128,44 +130,56 @@ export const ClaimReturnForm = ({ orderOptionData }: ClaimReturnFormProps) => {
     const isNullAddress = orderOptionData.returnAddress === null;
 
     useEffect(() => {
-        reset((prev) => ({
-            ...prev,
-            claimedProductOptions: orderOptionList.map((option) => ({
-                isChecked:
-                    option.orderOptionNo ===
-                    orderOptionData.originalOption.orderOptionNo,
-                orderProductOptionNo: option.orderOptionNo,
-                productCnt: option.orderCnt,
-            })),
-        }));
+        reset(
+            (prev) => ({
+                ...prev,
+                claimedProductOptions: orderOptionList.map((option) => ({
+                    isChecked:
+                        option.orderOptionNo ===
+                        orderOptionData.originalOption.orderOptionNo,
+                    orderProductOptionNo: option.orderOptionNo,
+                    productCnt: option.orderCnt,
+                })),
+            }),
+            {
+                keepFieldsRef: true,
+            },
+        );
 
         const returnAddress = orderOptionData.returnAddress;
         if (returnAddress) {
-            reset((prev) => ({
-                ...prev,
-                returnAddress: {
-                    receiverLastName:
-                        returnAddress.shippingEtcInfo?.receiverLastName || '',
-                    receiverFirstName:
-                        returnAddress.shippingEtcInfo?.receiverFirstName || '',
-                    receiverName: returnAddress.receiverName || '',
-                    receiverJibunAddress:
-                        returnAddress.receiverJibunAddress ||
-                        returnAddress.receiverAddress ||
-                        '',
-                    countryCd: returnAddress.countryCd || '',
-                    receiverZipCd: returnAddress.receiverZipCd || '',
-                    receiverAddress: returnAddress.receiverAddress || '',
-                    receiverDetailAddress:
-                        returnAddress.receiverDetailAddress ?? '',
-                    receiverContact1: returnAddress.receiverContact1 || '',
-                    receiverContact2: returnAddress.receiverContact2 || '',
-                    receiverCity: returnAddress.receiverCity || '',
-                    receiverState: returnAddress.receiverState || '',
-                    receiverMobileCountryCd:
-                        returnAddress.receiverMobileCountryCd || '',
+            reset(
+                (prev) => ({
+                    ...prev,
+                    returnAddress: {
+                        receiverLastName:
+                            returnAddress.shippingEtcInfo?.receiverLastName ||
+                            '',
+                        receiverFirstName:
+                            returnAddress.shippingEtcInfo?.receiverFirstName ||
+                            '',
+                        receiverName: returnAddress.receiverName || '',
+                        receiverJibunAddress:
+                            returnAddress.receiverJibunAddress ||
+                            returnAddress.receiverAddress ||
+                            '',
+                        countryCd: returnAddress.countryCd || '',
+                        receiverZipCd: returnAddress.receiverZipCd || '',
+                        receiverAddress: returnAddress.receiverAddress || '',
+                        receiverDetailAddress:
+                            returnAddress.receiverDetailAddress ?? '',
+                        receiverContact1: returnAddress.receiverContact1 || '',
+                        receiverContact2: returnAddress.receiverContact2 || '',
+                        receiverCity: returnAddress.receiverCity || '',
+                        receiverState: returnAddress.receiverState || '',
+                        receiverMobileCountryCd:
+                            returnAddress.receiverMobileCountryCd || '',
+                    },
+                }),
+                {
+                    keepFieldsRef: true,
                 },
-            }));
+            );
         }
     }, [reset, orderOptionData, orderOptionList]);
 
@@ -227,7 +241,7 @@ export const ClaimReturnForm = ({ orderOptionData }: ClaimReturnFormProps) => {
                 ? {
                       ...submitData.returnAddress,
                       receiverName: isKorean
-                          ? (submitData.returnAddress.receiverName ?? '')
+                          ? submitData.returnAddress.receiverName ?? ''
                           : `${
                                 submitData.returnAddress.receiverLastName ?? ''
                             }${

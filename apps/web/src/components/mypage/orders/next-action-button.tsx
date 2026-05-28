@@ -5,7 +5,7 @@ import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim
 import { Button } from '@/components/ui/button';
 import { useClaim } from '@/features/claim';
 import { useAuth } from '@/hooks/useAuth';
-import { useResponsive } from '@/hooks/utils';
+import { useDialog, useResponsive } from '@/hooks/utils';
 import type { NextActionType } from '@/models';
 
 export interface NextActionButtonProps {
@@ -17,10 +17,12 @@ export interface NextActionButtonProps {
     uri: string;
     claimNo: number | null;
     isFreeGift: boolean;
+    orderStatusLabel?: string | null;
 }
 
 export const NextActionButton = ({
     nextActionType,
+    orderStatusLabel,
     productNo,
     orderOptionNo,
     optionNo,
@@ -30,6 +32,8 @@ export const NextActionButton = ({
     isFreeGift,
 }: NextActionButtonProps) => {
     const { isMobile } = useResponsive();
+
+    const { openAsyncDialog } = useDialog();
 
     const isLogin = useAuth();
 
@@ -87,6 +91,36 @@ export const NextActionButton = ({
                 variant='primary'
                 size='small'
                 onClick={nextAction()}
+                style={{ height: '32px', fontSize: '12px' }}
+            >
+                {label}
+            </Button>
+        );
+    }
+
+    if (orderStatusLabel === '배송준비중' && nextActionType === 'CANCEL') {
+        const handleCancelClick = async () => {
+            const isAgree = await openAsyncDialog({
+                type: 'confirm',
+                message: '취소신청 안내',
+                description:
+                    '배송준비중인 상품은 배송 진행 상항에 따라 취소가 안될 수도 있어요.',
+                onCloseReturnValue: false,
+                onConfirmReturnValue: true,
+                confirmText: '계속하기',
+                cancelText: '그만하기',
+            });
+
+            if (isAgree) {
+                nextAction()();
+            }
+        };
+
+        return (
+            <Button
+                frame='outlined'
+                size='small'
+                onClick={handleCancelClick}
                 style={{ height: '32px', fontSize: '12px' }}
             >
                 {label}

@@ -224,6 +224,7 @@ export const OrderOptionsItem = ({
                         <NextActionButton
                             key={`${orderNo}-${orderOptionNo}-${action.nextActionType}`}
                             nextActionType={action.nextActionType}
+                            orderStatusLabel={orderStatusLabel}
                             productNo={productNo}
                             optionNo={optionNo}
                             orderOptionNo={orderOptionNo}

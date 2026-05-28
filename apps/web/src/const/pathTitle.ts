@@ -74,6 +74,10 @@ export const PATH_TITLE: { pathname: string; title: string }[] = [
         title: '취소/교환/반품 내역',
     },
     {
+        pathname: PATHS.MYPAGE.CLAIMS.REQUEST,
+        title: '취소/교환/반품 신청',
+    },
+    {
         pathname: PATHS.MYPAGE.PREVIOUS_ORDERS.MAIN,
         title: '이전주문 내역',
     },
