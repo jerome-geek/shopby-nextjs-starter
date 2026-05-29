@@ -313,26 +313,23 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     </div>
 
                     <dl className={styles.deliveryBox}>
-                        <div className={styles.deliveryRow}>
-                            <dt className={styles.deliveryLabel}>배송정보</dt>
-                            <dd className={styles.deliveryValue}>
-                                {productDetailData.deliveryGuide?.split(':')[1]}
-                            </dd>
-                        </div>
+                        {deliveryFee.deliveryCompanyTypeLabel && (
+                            <div className={styles.deliveryRow}>
+                                <dt className={styles.deliveryLabel}>택배사</dt>
+                                <dd className={styles.deliveryValue}>
+                                    {deliveryFee.deliveryCompanyTypeLabel}
+                                </dd>
+                            </div>
+                        )}
 
-                        <div className={styles.deliveryRow}>
-                            <dt className={styles.deliveryLabel}>택배사</dt>
-                            <dd className={styles.deliveryValue}>
-                                {deliveryFee.deliveryCompanyTypeLabel}
-                            </dd>
-                        </div>
-
-                        <div className={styles.deliveryRow}>
-                            <dt className={styles.deliveryLabel}>배송비</dt>
-                            <dd className={styles.deliveryValue}>
-                                {deliveryFee.defaultDeliveryConditionLabel}
-                            </dd>
-                        </div>
+                        {deliveryFee.defaultDeliveryConditionLabel && (
+                            <div className={styles.deliveryRow}>
+                                <dt className={styles.deliveryLabel}>배송비</dt>
+                                <dd className={styles.deliveryValue}>
+                                    {deliveryFee.defaultDeliveryConditionLabel}
+                                </dd>
+                            </div>
+                        )}
                     </dl>
 
                     <PhotoReview />
