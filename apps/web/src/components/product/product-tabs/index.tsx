@@ -4,13 +4,17 @@ import { motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
 import { RelatedProductList } from '@/components/product';
+import AfterServiceInfo from '@/components/product/product-tabs/after-service-info';
 import ProductContents from '@/components/product/product-tabs/contents';
+import DeliveryInfo from '@/components/product/product-tabs/delivery-info';
 import DutyInfo from '@/components/product/product-tabs/duty-info';
 import * as styles from '@/components/product/product-tabs/index.css';
 import Inquiries from '@/components/product/product-tabs/inquiries';
 import PopularProducts from '@/components/product/product-tabs/popular-products';
+import RefundInfo from '@/components/product/product-tabs/refund-info';
 import RelatedProducts from '@/components/product/product-tabs/related-products';
 import Review from '@/components/product/product-tabs/review';
+import SellerInfo from '@/components/product/product-tabs/seller-info';
 import { useResponsive } from '@/hooks/utils';
 import { ProductDetailResponse } from '@/models/product/product';
 
@@ -153,6 +157,13 @@ export function ProductTabs({
                         <DutyInfo
                             dutyInfo={productDetailData.baseInfo.dutyInfo}
                         />
+                        <DeliveryInfo deliveryGuide={productDetailData.deliveryGuide} />
+                        <AfterServiceInfo afterServiceGuide={productDetailData.afterServiceGuide} />
+                        <RefundInfo
+                            exchangeGuide={productDetailData.exchangeGuide}
+                            refundGuide={productDetailData.refundGuide}
+                        />
+                        <SellerInfo partnerInfo={productDetailData.partner} />
                     </div>
                 </div>
 
