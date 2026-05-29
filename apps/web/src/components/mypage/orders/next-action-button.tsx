@@ -4,16 +4,15 @@ import { useMemo } from 'react';
 
 import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
-import { Button } from '@/shared/ui/button';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import { useClaim } from '@/features/claim';
-import { useAuth } from '@/hooks/useAuth';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import type {
     ClaimStatusType,
     NextActionType,
     OrderStatusType,
 } from '@/models';
+import { Button } from '@/shared/ui/button';
 
 export interface NextActionButtonProps {
     nextActionType: NextActionType;
@@ -38,13 +37,10 @@ export const NextActionButton = ({
     orderNo,
     uri,
     claimNo,
-    isFreeGift,
 }: NextActionButtonProps) => {
     const { isMobile } = useResponsive();
 
     const { openAsyncDialog } = useDialog();
-
-    const isLogin = useAuth();
 
     const { label, nextAction } = useClaim({
         nextActionType,
@@ -93,17 +89,6 @@ export const NextActionButton = ({
         });
     };
 
-    if (
-        isFreeGift &&
-        (nextActionType === 'EXCHANGE' || nextActionType === 'WRITE_REVIEW')
-    ) {
-        return null;
-    }
-
-    if (!isLogin && nextActionType === 'WRITE_REVIEW') {
-        return null;
-    }
-
     if (nextActionType === 'VIEW_CLAIM' && claimNo) {
         return (
             <Button
@@ -132,10 +117,6 @@ export const NextActionButton = ({
     }
 
     if (includes(orderStatusType, ['PRODUCT_PREPARE', 'DELIVERY_PREPARE'])) {
-        if (nextActionType === 'WITHDRAW_CANCEL') {
-            return null;
-        }
-
         if (nextActionType === 'CANCEL') {
             const handleCancelClick = async () => {
                 const isAgree = await openAsyncDialog({

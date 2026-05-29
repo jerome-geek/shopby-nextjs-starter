@@ -1,4 +1,4 @@
-import { filter, includes, pipe, toArray } from '@fxts/core';
+import { filter, includes, isEmpty, pipe, toArray } from '@fxts/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import { NextActionButton } from '@/components/mypage/orders/next-action-button';
 import * as styles from '@/components/mypage/orders/order-options-item.css';
-import { Button } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { shouldShowNextAction } from '@/entities/mypage/utils/orders';
+import { useAuth } from '@/hooks/useAuth';
 import type { NextAction, OrderOption } from '@/models/order';
 import { Only } from '@/shared/components/only';
+import { Button } from '@/shared/ui';
 import { CURRENCY } from '@/utils/currency';
 
 type MypageOrderOptionListItemProps = Omit<
@@ -93,6 +94,7 @@ export const OrderOptionsItem = ({
     const { t } = useTranslation();
 
     const router = useRouter();
+    const isLogin = useAuth();
 
     const isBuyConfirm = orderStatusType === 'BUY_CONFIRM';
     const isDepositWait = orderStatusType === 'DEPOSIT_WAIT';
@@ -106,8 +108,6 @@ export const OrderOptionsItem = ({
         orderStatusTypeLabel,
         claimStatusTypeLabel,
     });
-    const isInquiryButtonVisible =
-        showInquiryButton && (isDepositWait || isExchangeDisabled);
 
     const filteredNextActions = useMemo(() => {
         return pipe(
@@ -117,11 +117,16 @@ export const OrderOptionsItem = ({
                     orderStatusType,
                     isFreeGift,
                     isExchangeDisabled,
+                    isLogin: !!isLogin,
                 }),
             ),
             toArray,
         );
-    }, [nextActions, orderStatusType, isFreeGift, isExchangeDisabled]);
+    }, [nextActions, orderStatusType, isFreeGift, isExchangeDisabled, isLogin]);
+
+    const isInquiryButtonVisible =
+        showInquiryButton &&
+        (isDepositWait || isExchangeDisabled || isEmpty(filteredNextActions));
 
     return (
         <div className={styles.itemContainer}>
@@ -248,7 +253,10 @@ export const OrderOptionsItem = ({
                                 `${PATHS.MYPAGE.PRODUCT_INQUIRIES.REGISTER}?productNo=${productNo}`,
                             )
                         }
-                        style={{ height: '32px', fontSize: '12px' }}
+                        style={{
+                            height: '32px',
+                            fontSize: '12px',
+                        }}
                     >
                         문의하기
                     </Button>
