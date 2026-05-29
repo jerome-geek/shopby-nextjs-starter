@@ -200,8 +200,11 @@ export const actionsContainer = style({
             padding: '0',
 
             selectors: {
-                '&:empty': {
+                '&[data-child-count="0"]': {
                     display: 'none',
+                },
+                '&[data-child-count="1"]': {
+                    gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
                 },
             },
         },

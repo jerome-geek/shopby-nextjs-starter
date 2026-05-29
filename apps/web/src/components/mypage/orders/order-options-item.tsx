@@ -128,6 +128,9 @@ export const OrderOptionsItem = ({
         showInquiryButton &&
         (isDepositWait || isExchangeDisabled || isEmpty(filteredNextActions));
 
+    const actionChildCount =
+        filteredNextActions.length + (isInquiryButtonVisible ? 1 : 0);
+
     return (
         <div className={styles.itemContainer}>
             <div className={styles.productInfoContainer}>
@@ -225,7 +228,10 @@ export const OrderOptionsItem = ({
                 </div>
             </Only.Desktop>
 
-            <div className={styles.actionsContainer}>
+            <div
+                className={styles.actionsContainer}
+                data-child-count={actionChildCount}
+            >
                 {filteredNextActions.map((action) => {
                     return (
                         <NextActionButton
