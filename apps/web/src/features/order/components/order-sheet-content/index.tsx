@@ -3,7 +3,6 @@ import { overlay } from 'overlay-kit';
 import { FieldErrors, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import Seo from '@/shared/components/common/seo';
 import Accumulation from '@/components/order/accumulation';
 import Coupon from '@/components/order/coupon';
 import OrderProducts from '@/components/order/order-products';
@@ -20,6 +19,7 @@ import { useSb } from '@/hooks/libs/shopby';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
 import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
+import Seo from '@/shared/components/common/seo';
 import { guestTokenCookie } from '@/utils/cookie';
 import payment from '@/utils/order/payment';
 
@@ -123,14 +123,7 @@ export const OrderSheetContent = ({
 
             payment.setConfiguration();
 
-            payment.reservation(
-                {
-                    ...submitData,
-                    payType: 'test',
-                },
-                successCallback,
-                errorCallback,
-            );
+            payment.reservation(submitData, successCallback, errorCallback);
         } catch (error) {
             console.error(error);
             await openAsyncDialog({
