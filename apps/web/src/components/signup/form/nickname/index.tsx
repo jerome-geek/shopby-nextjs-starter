@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { profile } from '@/api/member';
 import WithMemberJoinConfig from '@/features/member/member-join-config-field';
 import * as styles from '@/components/signup/form/index.css';
-import { Button } from '@/shared/ui/button';
-import { InputField, InputFieldContainer } from '@/shared/ui/input';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useToast } from '@/hooks/ui';
 import { ErrorMessage } from '@/shared/components/form';
+import { Button } from '@/shared/ui/button';
+import { InputField, InputFieldContainer } from '@/shared/ui/input';
 
 const SignupFormNickname = ({
     isDefaultDuplicated = true,
@@ -66,7 +66,7 @@ const SignupFormNickname = ({
 
         if (checkDuplicateNicknameData.exist) {
             setError('nickname', {
-                message: t('이미 사용중인 닉네입니다.'),
+                message: t('이미 사용중인 닉네임입니다.'),
             });
             setFocus('nickname');
             setValue('isDuplicateNickname', true, { shouldValidate: true });
@@ -75,7 +75,7 @@ const SignupFormNickname = ({
         }
 
         addToast({
-            message: t('사용 가능한 닉네입니다.'),
+            message: t('사용 가능한 닉네임입니다.'),
             variant: 'success',
         });
         setValue('isDuplicateNickname', false, { shouldValidate: true });
