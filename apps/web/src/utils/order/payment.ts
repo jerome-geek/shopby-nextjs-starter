@@ -21,7 +21,7 @@ const payment = {
     },
     reservation: (
         paymentData: any,
-        callback?: (response: any) => void,
+        successCallback?: (response: any) => void,
         errorCallback?: (error: ShopByErrorResponse) => void,
     ) => {
         if (!window.NCPPay) {
@@ -32,13 +32,13 @@ const payment = {
             paymentData,
             (response) => {
                 console.log('🚀 ~ response:', response);
-                callback?.(response);
+                successCallback?.(response);
             },
             (error) => {
                 console.log('🚀 ~ error:', error);
                 errorCallback?.(error);
             },
-            false,
+            true,
         );
     },
     naverPayOrder: (items: NaverPayOrderSheetItem[]) => {

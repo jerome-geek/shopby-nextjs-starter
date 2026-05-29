@@ -94,36 +94,16 @@ export const OrderSheetContent = ({
     };
 
     const onSubmit = handleSubmit(async (data) => {
-        const originalAlert: typeof window.alert = window.alert.bind(window);
-
-        const restoreAlert = () => {
-            Object.defineProperty(window, 'alert', {
-                value: originalAlert,
-                writable: true,
-                configurable: true,
-            });
-        };
-
         try {
             const submitData = isGift
                 ? buildGiftSubmitData(data)
                 : buildSubmitData(data);
 
-            Object.defineProperty(window, 'alert', {
-                value: () => {
-                    return;
-                },
-                writable: true,
-                configurable: true,
-            });
-
             const successCallback = () => {
-                restoreAlert();
                 guestTokenCookie.clear();
             };
 
             const errorCallback = async (error: ShopByErrorResponse) => {
-                restoreAlert();
                 overlay.close(OVERLAY_ID.LOADING);
 
                 if (error.status === HttpStatusCode.Unauthorized) {
@@ -143,9 +123,15 @@ export const OrderSheetContent = ({
 
             payment.setConfiguration();
 
-            payment.reservation(submitData, successCallback, errorCallback);
+            payment.reservation(
+                {
+                    ...submitData,
+                    payType: 'test',
+                },
+                successCallback,
+                errorCallback,
+            );
         } catch (error) {
-            restoreAlert();
             console.error(error);
             await openAsyncDialog({
                 message: '주문 데이터 처리 중 오류가 발생했습니다.',
