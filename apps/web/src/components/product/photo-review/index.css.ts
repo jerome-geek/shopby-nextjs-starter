@@ -19,6 +19,8 @@ export const photoReviewSection = style({
             marginLeft: 0,
             width: '100%',
             overflow: 'visible',
+            paddingBottom: '32px',
+            borderBottom: `1px solid ${vars.color.gray['20']}`,
         },
     },
 });

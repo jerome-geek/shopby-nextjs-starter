@@ -62,7 +62,6 @@ export const thumbnailContainer = style({
     },
 });
 
-
 export const content = style({
     display: 'flex',
     flexDirection: 'column',
@@ -122,7 +121,6 @@ export const priceInfo = style({
     flexDirection: 'column',
     gap: '2px',
 });
-
 
 export const brand = style([
     textStyles.headlineMedium,
@@ -211,7 +209,6 @@ export const salePrice = style([
         },
     },
 ]);
-
 
 export const couponButton = style([
     textStyles.body2Semibold,
@@ -339,11 +336,16 @@ export const giftButton = style({
     flexShrink: 0,
 });
 
-
 export const additionalInfoContainer = style({
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
 });
 
 export const timeSaleContainer = style([
@@ -379,7 +381,6 @@ export const optionContainer = style({
         },
     },
 });
-
 
 export const topButtonContainer = style({
     display: 'flex',

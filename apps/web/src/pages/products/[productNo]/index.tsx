@@ -108,7 +108,8 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                 ? `[${brand.name}] ${baseInfo.productName}`
                 : baseInfo.productName,
             description: baseInfo.promotionText || undefined,
-            imageUrl: baseInfo.imageUrls?.[0] || baseInfo.imageUrlInfo?.[0]?.url,
+            imageUrl:
+                baseInfo.imageUrls?.[0] || baseInfo.imageUrlInfo?.[0]?.url,
             regularPrice: salePrice,
             ...(discountRate > 0 && { discountRate, discountPrice: buyPrice }),
         });
@@ -346,8 +347,6 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
 
                     {!isTablet && (
                         <>
-                            <hr className={styles.optionDivider} />
-
                             <div className={styles.optionContainer}>
                                 {isRequiredOptionUsed && (
                                     <RequiredProductOption
