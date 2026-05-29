@@ -5,6 +5,11 @@ import { useId, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/components/bottom-sheet/filter/index.css';
+import { PRICE_FILTER_OPTIONS } from '@/const/product';
+import { useBrandSearchList } from '@/hooks/query/product/brand';
+import { useProductSearchSummary } from '@/hooks/query/product/product';
+import { useProductFilter } from '@/hooks/useProductFilter';
+import type { GetProductSearchSummaryParams } from '@/models/product/product';
 import {
     BottomSheetLayout,
     type DefaultModalLayoutProps,
@@ -12,11 +17,6 @@ import {
 import { Button } from '@/shared/ui';
 import { InputField } from '@/shared/ui/input/field';
 import { Column, Row } from '@/shared/ui/layout/flex';
-import { PRICE_FILTER_OPTIONS } from '@/const/product';
-import { useBrandSearchList } from '@/hooks/query/product/brand';
-import { useProductSearchSummary } from '@/hooks/query/product/product';
-import { useProductFilter } from '@/hooks/useProductFilter';
-import type { GetProductSearchSummaryParams } from '@/models/product/product';
 import 'swiper/css';
 
 export type FilterBottomSheetTab = 'productInfo' | 'price' | 'brands';
@@ -169,6 +169,7 @@ export const FilterBottomSheet = ({
         searchParams: {
             sortCriterion: 'BRAND_NAME',
             sortDirection: 'ASC',
+            pageSize: 100,
         },
     });
 
@@ -533,7 +534,8 @@ export const FilterBottomSheet = ({
                                         <span>
                                             {
                                                 DELIVERY_FILTER_LABELS[
-                                                    pendingFilters.deliveryConditionType
+                                                    pendingFilters
+                                                        .deliveryConditionType
                                                 ]
                                             }
                                         </span>
