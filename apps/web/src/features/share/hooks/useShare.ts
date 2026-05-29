@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { useToast } from '@/hooks/ui/useToast';
+import { normalizeImageUrl } from '@/shared/utils/shopby';
 
 // TODO: 브랜드 대표 OG 이미지 확정 후 교체
 const DEFAULT_SHARE_IMAGE = `${process.env.NEXT_PUBLIC_BASE_URL}/web-app-manifest-512x512.png`;
@@ -61,8 +62,8 @@ export const useShare = (options?: ShareOptions) => {
                 objectType: 'commerce',
                 content: {
                     title: content.title ?? document.title,
-                    description: content.description,
-                    imageUrl: content.imageUrl ?? DEFAULT_SHARE_IMAGE,
+                    description: content.description ?? DEFAULT_SHARE_DESCRIPTION,
+                    imageUrl: normalizeImageUrl(content.imageUrl) ?? DEFAULT_SHARE_IMAGE,
                     link,
                 },
                 commerce: {
@@ -85,7 +86,7 @@ export const useShare = (options?: ShareOptions) => {
                     title: content?.title ?? document.title,
                     description:
                         content?.description ?? DEFAULT_SHARE_DESCRIPTION,
-                    imageUrl: content?.imageUrl ?? DEFAULT_SHARE_IMAGE,
+                    imageUrl: normalizeImageUrl(content?.imageUrl) ?? DEFAULT_SHARE_IMAGE,
                     link,
                 },
                 ...(content?.social && { social: content.social }),

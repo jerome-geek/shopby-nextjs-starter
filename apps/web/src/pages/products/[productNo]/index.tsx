@@ -108,7 +108,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                 ? `[${brand.name}] ${baseInfo.productName}`
                 : baseInfo.productName,
             description: baseInfo.promotionText || undefined,
-            imageUrl: baseInfo.imageUrls?.[0],
+            imageUrl: baseInfo.imageUrls?.[0] || baseInfo.imageUrlInfo?.[0]?.url,
             regularPrice: salePrice,
             ...(discountRate > 0 && { discountRate, discountPrice: buyPrice }),
         });
