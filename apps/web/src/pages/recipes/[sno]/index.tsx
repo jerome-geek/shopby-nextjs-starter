@@ -422,6 +422,14 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                     likeCount={likeCount}
                     bookmarked={bookmarked}
                     bookmarkCount={bookmarkCount}
+                    shareContent={{
+                        title: recipeDetailData.title,
+                        description: recipeDetailData.description,
+                        imageUrl: thumbnailUrl,
+                        social: {
+                            likeCount,
+                        },
+                    }}
                     onLikeToggle={onLikeToggle}
                     onBookmarkToggle={onBookmarkToggle}
                     onCommentClick={scrollToComments}

@@ -26,6 +26,7 @@ import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendat
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
 import ShareModal from '@/components/modal/share';
+import type { KakaoShareContent } from '@/features/share';
 import { ShippingAddressChangeModal } from '@/components/modal/shipping-address-change';
 import ConfirmDialog from '@/shared/ui/dialog/confirm';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
@@ -424,15 +425,18 @@ export const useCustomDialog = () => {
         [isMobile],
     );
 
-    const openShareDialog = useCallback(() => {
-        overlay.open((props) => {
-            return isMobile ? (
-                <ShareBottomSheet {...props} />
-            ) : (
-                <ShareModal {...props} />
-            );
-        });
-    }, [isMobile]);
+    const openShareDialog = useCallback(
+        (kakao?: KakaoShareContent) => {
+            overlay.open((props) => {
+                return isMobile ? (
+                    <ShareBottomSheet {...props} kakao={kakao} />
+                ) : (
+                    <ShareModal {...props} kakao={kakao} />
+                );
+            });
+        },
+        [isMobile],
+    );
 
     const openCouponDownloadDialog = useCallback(
         (productNo: number) => {

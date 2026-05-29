@@ -84,6 +84,49 @@ interface DefaultFeedSettings {
 interface DefaultCommerceSettings {
     /** 메시지 템플릿 타입, commerce로 고정 */
     objectType: 'commerce';
+    /** 메시지 콘텐츠 */
+    content: {
+        /** 제목 */
+        title: string;
+        /** 이미지 URL */
+        imageUrl: string;
+        /** 바로가기 URL */
+        link: LinkObject;
+        /** 이미지 너비 (단위: Pixel) */
+        imageWidth?: number;
+        /** 이미지 높이 (단위: Pixel) */
+        imageHeight?: number;
+        /** 설명 */
+        description?: string;
+    };
+    /** 가격 정보 */
+    commerce: {
+        /** 정가 */
+        regularPrice: number;
+        /** 할인율 */
+        discountRate?: number;
+        /** 할인 가격 */
+        discountPrice?: number;
+        /** 정액 할인 가격 */
+        fixedDiscountPrice?: number;
+        /** 상품명 */
+        productName?: string;
+        /** 통화 단위 (기본: '원') */
+        currencyUnit?: string;
+        /** 통화 단위 위치 (0: 가격 뒤, 1: 가격 앞) */
+        currencyUnitPosition?: 0 | 1;
+    };
+    /** 버튼 문구 */
+    buttonTitle?: string;
+    /** 메시지 하단 버튼 */
+    buttons?: {
+        title: string;
+        link: LinkObject;
+    }[];
+    /** 카카오톡 미설치 시, 설치 페이지 이동 여부 */
+    installTalk?: boolean;
+    /** 카카오톡 공유 전송 성공 알림에 포함할 키와 값 */
+    serverCallbackArgs?: {} | string;
 }
 
 export type KakaoShareSettings = DefaultFeedSettings | DefaultCommerceSettings;

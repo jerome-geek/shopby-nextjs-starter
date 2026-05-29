@@ -4,6 +4,7 @@ import { overlay } from 'overlay-kit';
 import ShareBottomSheet from '@/components/bottom-sheet/share';
 import ShareModal from '@/components/modal/share';
 import * as styles from '@/components/recipe/detail-sticky-footer/index.css';
+import type { KakaoShareContent } from '@/features/share';
 import { useRecipeCommentList } from '@/hooks/suspenseQuery/shop/comment';
 import { useResponsive } from '@/hooks/utils';
 import { vars } from '@/styles/theme.css';
@@ -16,6 +17,7 @@ interface RecipeDetailStickyFooterProps {
     likeCount: number;
     bookmarked: boolean;
     bookmarkCount: number;
+    shareContent?: KakaoShareContent;
     onLikeToggle: () => void;
     onBookmarkToggle: () => void;
     onCommentClick: () => void;
@@ -27,6 +29,7 @@ export const RecipeDetailStickyFooter = ({
     likeCount,
     bookmarked,
     bookmarkCount,
+    shareContent,
     onLikeToggle,
     onBookmarkToggle,
     onCommentClick,
@@ -43,9 +46,9 @@ export const RecipeDetailStickyFooter = ({
     const handleShareButtonClick = () => {
         overlay.open((props) => {
             return isMobile ? (
-                <ShareBottomSheet {...props} />
+                <ShareBottomSheet {...props} kakao={shareContent} />
             ) : (
-                <ShareModal {...props} />
+                <ShareModal {...props} kakao={shareContent} />
             );
         });
     };

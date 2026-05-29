@@ -2,15 +2,48 @@ import { useCallback } from 'react';
 
 import { useToast } from '@/hooks/ui/useToast';
 
-/**
- * 공유하기 비즈니스 로직을 담당하는 커스텀 훅
- * - Kakao, Facebook, X(Twitter) 등 SNS 공유
- * - 링크 복사 (Clipboard API)
- */
-export const useShare = () => {
+// TODO: 브랜드 대표 OG 이미지 확정 후 교체
+const DEFAULT_SHARE_IMAGE = `${process.env.NEXT_PUBLIC_BASE_URL}/web-app-manifest-512x512.png`;
+const DEFAULT_SHARE_DESCRIPTION = '상품 및 레시피 정보를 확인해보세요.';
+
+/** 피드형 공유 콘텐츠 */
+export interface KakaoFeedContent {
+    template?: 'feed';
+    title?: string;
+    description?: string;
+    imageUrl?: string;
+    social?: {
+        likeCount?: number;
+        commentCount?: number;
+        sharedCount?: number;
+        viewCount?: number;
+        subscriberCount?: number;
+    };
+}
+
+/** 커머스형 공유 콘텐츠 */
+export interface KakaoCommerceContent {
+    template: 'commerce';
+    title?: string;
+    description?: string;
+    imageUrl?: string;
+    /** 정가 */
+    regularPrice: number;
+    /** 할인율 (없으면 생략) */
+    discountRate?: number;
+    /** 할인가 (없으면 생략) */
+    discountPrice?: number;
+}
+
+export type KakaoShareContent = KakaoFeedContent | KakaoCommerceContent;
+
+export interface ShareOptions {
+    kakao?: KakaoShareContent;
+}
+
+export const useShare = (options?: ShareOptions) => {
     const { addToast } = useToast();
 
-    // TODO: 페이지별로 처리 필요 (상품 상세, 컬렉션 상세, 레시피 상세 페이지)
     const shareToKakao = useCallback(() => {
         const kakao = window.Kakao;
         if (!kakao) return;
@@ -19,29 +52,47 @@ export const useShare = () => {
             kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
         }
 
-        kakao.Share.sendDefault({
-            objectType: 'feed',
-            content: {
-                title: document.title,
-                description: '상품 및 레시피 정보를 확인해보세요.',
-                imageUrl:
-                    'https://shopby-skin.cdn-nhncommerce.com/shopby-external-script.js', // 기본 이미지 또는 현재 페이지 대표 이미지
-                link: {
-                    mobileWebUrl: window.location.href,
-                    webUrl: window.location.href,
+        const url = window.location.href;
+        const link = { mobileWebUrl: url, webUrl: url };
+        const content = options?.kakao;
+
+        if (content?.template === 'commerce') {
+            kakao.Share.sendDefault({
+                objectType: 'commerce',
+                content: {
+                    title: content.title ?? document.title,
+                    description: content.description,
+                    imageUrl: content.imageUrl ?? DEFAULT_SHARE_IMAGE,
+                    link,
                 },
-            },
-            buttons: [
-                {
-                    title: '자세히 보기',
-                    link: {
-                        mobileWebUrl: window.location.href,
-                        webUrl: window.location.href,
-                    },
+                commerce: {
+                    regularPrice: content.regularPrice,
+                    ...(content.discountRate && {
+                        discountRate: content.discountRate,
+                    }),
+                    ...(content.discountPrice && {
+                        discountPrice: content.discountPrice,
+                    }),
+                    currencyUnit: '원',
+                    currencyUnitPosition: 0,
                 },
-            ],
-        });
-    }, []);
+                buttons: [{ title: '상품 보기', link }],
+            });
+        } else {
+            kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: content?.title ?? document.title,
+                    description:
+                        content?.description ?? DEFAULT_SHARE_DESCRIPTION,
+                    imageUrl: content?.imageUrl ?? DEFAULT_SHARE_IMAGE,
+                    link,
+                },
+                ...(content?.social && { social: content.social }),
+                buttons: [{ title: '자세히 보기', link }],
+            });
+        }
+    }, [options]);
 
     const shareToFacebook = useCallback((url: string) => {
         window.open(
@@ -83,8 +134,6 @@ export const useShare = () => {
 
     const handleShare = useCallback(
         (type: string) => {
-            console.log('Sharing via:', type);
-
             const currentUrl = window.location.href;
 
             switch (type) {

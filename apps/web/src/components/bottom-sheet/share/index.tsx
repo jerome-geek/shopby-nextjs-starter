@@ -1,13 +1,16 @@
 import ShareContent from '@/components/layer-contents/share';
+import type { KakaoShareContent } from '@/features/share';
 import type { DefaultBottomSheetProps } from '@/shared/components/layout';
 import { BottomSheetLayout } from '@/shared/components/layout';
 
-type ShareBottomSheetProps = DefaultBottomSheetProps;
+interface ShareBottomSheetProps extends DefaultBottomSheetProps {
+    kakao?: KakaoShareContent;
+}
 
-const ShareBottomSheet = ({ ...props }: ShareBottomSheetProps) => {
+const ShareBottomSheet = ({ kakao, ...props }: ShareBottomSheetProps) => {
     return (
         <BottomSheetLayout {...props} title='공유하기'>
-            <ShareContent />
+            <ShareContent kakao={kakao} />
         </BottomSheetLayout>
     );
 };

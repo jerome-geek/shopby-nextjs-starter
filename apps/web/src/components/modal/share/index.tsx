@@ -1,13 +1,16 @@
 import ShareContent from '@/components/layer-contents/share';
+import type { KakaoShareContent } from '@/features/share';
 import type { DefaultModalLayoutProps } from '@/shared/components/layout';
 import { ModalLayout } from '@/shared/components/layout';
 
-type ShareModalProps = DefaultModalLayoutProps;
+interface ShareModalProps extends DefaultModalLayoutProps {
+    kakao?: KakaoShareContent;
+}
 
-const ShareModal = ({ ...props }: ShareModalProps) => {
+const ShareModal = ({ kakao, ...props }: ShareModalProps) => {
     return (
         <ModalLayout {...props} title='공유하기' width='384px'>
-            <ShareContent />
+            <ShareContent kakao={kakao} />
         </ModalLayout>
     );
 };

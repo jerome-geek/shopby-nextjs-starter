@@ -101,7 +101,17 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const { onLikeButtonClick } = useProductLike();
     const { openShareDialog, openCouponDownloadDialog } = useCustomDialog();
 
-    const onShareButtonClick = openShareDialog;
+    const onShareButtonClick = () =>
+        openShareDialog({
+            template: 'commerce',
+            title: brand?.name
+                ? `[${brand.name}] ${baseInfo.productName}`
+                : baseInfo.productName,
+            description: baseInfo.promotionText || undefined,
+            imageUrl: baseInfo.imageUrls?.[0],
+            regularPrice: salePrice,
+            ...(discountRate > 0 && { discountRate, discountPrice: buyPrice }),
+        });
     const onCouponDownloadClick = () => openCouponDownloadDialog(productNo);
 
     const overlayData = useOverlayData();

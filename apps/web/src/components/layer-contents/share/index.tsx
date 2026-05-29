@@ -4,12 +4,17 @@ import Script from 'next/script';
 import * as styles from '@/components/layer-contents/share/index.css';
 import ShareSkeleton from '@/components/layer-contents/share/skeleton';
 import { useShare } from '@/features/share';
+import type { KakaoShareContent } from '@/features/share';
 import { bannerListOptions } from '@/entities/banner/queries';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
-const ShareContent = () => {
-    const { handleShare } = useShare();
+interface ShareContentProps {
+    kakao?: KakaoShareContent;
+}
+
+const ShareContent = ({ kakao }: ShareContentProps) => {
+    const { handleShare } = useShare({ kakao });
 
     return (
         <ShopbyAsyncBoundary fallback={<ShareSkeleton />}>
