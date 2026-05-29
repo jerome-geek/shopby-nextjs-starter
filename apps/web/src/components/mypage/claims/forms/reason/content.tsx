@@ -23,7 +23,8 @@ export const ClaimReasonContent = ({
 }: ClaimReasonContentProps) => {
     const { t } = useTranslation();
     const { control, register, setValue } = useFormContext();
-    const isResponsibleObjectHidden = claimType === 'CANCEL';
+    const isResponsibleObjectHidden =
+        claimType === 'CANCEL' || claimType === 'RETURN';
 
     const responsibleObjectTypeList = [
         { value: 'BUYER' as const, label: t('구매자') },
@@ -39,19 +40,36 @@ export const ClaimReasonContent = ({
 
     const claimReasonTypeList = useMemo(() => {
         // NOTE: 특정 사유만 노출하도록 요청된 케이스에 대한 처리
-        const filteredClaimReasonTypes = pipe(
-            orderOptionData,
-            prop('claimReasonTypes'),
-            filter(
-                (a) =>
-                    a.claimReasonType === 'CHANGE_MIND' ||
-                    a.claimReasonType === 'DELAY_DELIVERY' ||
-                    a.claimReasonType === 'OTHERS_SELLER' ||
-                    a.claimReasonType === 'OTHERS_BUYER' ||
-                    a.claimReasonType === 'OUT_OF_STOCK',
-            ),
-            toArray,
-        );
+        const filteredClaimReasonTypes =
+            claimType === 'CANCEL'
+                ? pipe(
+                      orderOptionData,
+                      prop('claimReasonTypes'),
+                      filter(
+                          (a) =>
+                              a.claimReasonType === 'CHANGE_MIND' ||
+                              a.claimReasonType === 'DELAY_DELIVERY' ||
+                              a.claimReasonType === 'OTHERS_SELLER' ||
+                              a.claimReasonType === 'OTHERS_BUYER' ||
+                              a.claimReasonType === 'OUT_OF_STOCK',
+                      ),
+                      toArray,
+                  )
+                : claimType === 'RETURN'
+                ? pipe(
+                      orderOptionData,
+                      prop('claimReasonTypes'),
+                      filter(
+                          (a) =>
+                              a.claimReasonType === 'CHANGE_MIND' ||
+                              a.claimReasonType === 'DEFECTIVE_PRODUCT' ||
+                              a.claimReasonType === 'OTHERS_SELLER' ||
+                              a.claimReasonType === 'OTHERS_BUYER' ||
+                              a.claimReasonType === 'WRONG_DELIVERY',
+                      ),
+                      toArray,
+                  )
+                : pipe(orderOptionData, prop('claimReasonTypes'), toArray);
 
         if (isResponsibleObjectHidden) {
             return pipe(
@@ -77,7 +95,12 @@ export const ClaimReasonContent = ({
             })),
             toArray,
         );
-    }, [isResponsibleObjectHidden, orderOptionData, responsibleObjectType]);
+    }, [
+        isResponsibleObjectHidden,
+        orderOptionData,
+        responsibleObjectType,
+        claimType,
+    ]);
 
     const claimReasonTypeToResponsibleObjectType = useMemo(() => {
         return new Map(

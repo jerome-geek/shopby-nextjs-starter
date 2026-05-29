@@ -7,14 +7,7 @@ import { useTranslation } from 'react-i18next';
 import addressApi from '@/api/manage/address';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
-import { Button } from '@/shared/ui';
-import {
-    InputField,
-    InputFieldContainer,
-    InputLabel,
-    InputRadio,
-    Select,
-} from '@/shared/ui/input';
+import * as styles from '@/components/mypage/claims/forms/return-way/index.css';
 import {
     COUNTRY_CODE_LIST,
     MOBILE_COUNTRY_CODE_LIST,
@@ -26,6 +19,14 @@ import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
 import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import type { ClaimSchemaMapType } from '@/schema/claim.schema';
 import { ErrorMessage } from '@/shared/components/form';
+import { Button } from '@/shared/ui';
+import {
+    InputField,
+    InputFieldContainer,
+    InputLabel,
+    InputRadio,
+    Select,
+} from '@/shared/ui/input';
 
 interface ClaimReturnWayProps {
     orderOptionData: GetOrderOptionDetailForClaimResponse;
@@ -218,10 +219,33 @@ export const ClaimReturnWay = ({ orderOptionData }: ClaimReturnWayProps) => {
         'KR';
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>
-                {t('반품 수거 정보')}
-            </h3>
+        <div className={styles.container}>
+            <div className={styles.titleContainer}>
+                <h3 className={styles.title}>{t('반품 수거 정보')}</h3>
+                <div className={styles.guideBox}>
+                    <p className={styles.guideTitle}>{t('안내 사항')}</p>
+                    <ul className={styles.guideList}>
+                        <li>
+                            {t(
+                                '상품 특성이나 상태에 따라 교환, 반품이 안 될 수 있습니다.',
+                            )}
+                            <p className={styles.guideSubText}>
+                                {t('(예) 포장 훼손, 주문제작 상품, 세탁 등')}
+                            </p>
+                        </li>
+                        <li>
+                            {t(
+                                '상품 불량/파손, 배송 누락/오배송 시 사진을 첨부해 주셔야 빠른 처리가 가능합니다.',
+                            )}
+                        </li>
+                        <li>
+                            {t(
+                                '단순 변심 교환, 반품 시 왕복 배송비가 발생합니다.',
+                            )}
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             {/* 반품 수거 방법 */}
             <InputFieldContainer>

@@ -23,11 +23,15 @@ const FileUpload = ({
     setFileList: setFileListProps,
     maxLength = 3,
 }: FileUploadProps) => {
-    const { uploadFileHandler, deleteUploadFileImage, convertingCount } =
-        useFileUpload({
-            maxSize: 12 * 1024 * 1024,
-            maxLength,
-        });
+    const {
+        uploadFileHandler,
+        deleteUploadFileImage,
+        convertingCount,
+        uploadGuideMessage,
+    } = useFileUpload({
+        maxSize: 5 * 1024 * 1024,
+        maxLength,
+    });
 
     const [fileList, setFileList] = useState<(string | UploadFileBlob)[]>(
         () => {
@@ -79,128 +83,145 @@ const FileUpload = ({
     };
 
     return (
-        <div className={styles.imageContainer}>
-            {fileList.length < maxLength && (
-                <button
-                    type='button'
-                    onClick={onClickUpload}
-                    className={styles.uploadButton}
-                >
-                    <input
-                        ref={inputRef}
-                        type='file'
-                        multiple
-                        onChange={async (e) => {
-                            const result = await uploadFileHandler(e);
+        <>
+            <div className={styles.imageContainer}>
+                {fileList.length < maxLength && (
+                    <button
+                        type='button'
+                        onClick={onClickUpload}
+                        className={styles.uploadButton}
+                    >
+                        <input
+                            ref={inputRef}
+                            type='file'
+                            multiple
+                            onChange={async (e) => {
+                                const result = await uploadFileHandler(e);
 
-                            if (result && !isEmpty(result)) {
-                                setFileList((prev) => [...prev, ...result]);
-                            }
-                        }}
-                        style={{ display: 'none' }}
-                    />
+                                if (result && !isEmpty(result)) {
+                                    setFileList((prev) => [...prev, ...result]);
+                                }
+                            }}
+                            style={{ display: 'none' }}
+                        />
 
-                    <Plus
-                        size={40}
-                        strokeWidth={1.5}
-                        color={vars.color.gray['50']}
-                    />
+                        <Plus
+                            size={40}
+                            strokeWidth={1.5}
+                            color={vars.color.gray['50']}
+                        />
 
-                    <span
-                        className={styles.uploadButtonText}
-                    >{`${fileList.length} / ${maxLength}`}</span>
-                </button>
-            )}
+                        <span
+                            className={styles.uploadButtonText}
+                        >{`${fileList.length} / ${maxLength}`}</span>
+                    </button>
+                )}
 
-            {(!isEmpty(fileList) || convertingCount > 0) && (
-                <ul className={styles.imageList}>
-                    {fileList.map((image, index) => {
-                        return (
-                            <li key={index} className={styles.imageListItem}>
-                                <div className={styles.imageListItemImageWrap}>
-                                    {typeof image === 'string' ? (
-                                        <img
-                                            src={image}
-                                            alt={image}
-                                            className={
-                                                styles.imageListItemImage
-                                            }
-                                        />
-                                    ) : (
-                                        <img
-                                            src={URL.createObjectURL(image)}
-                                            alt={image.name ?? ''}
-                                            className={
-                                                styles.imageListItemImage
-                                            }
-                                        />
-                                    )}
-                                </div>
-                                <button
-                                    className={styles.imageListItemCloseButton}
-                                    type='button'
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        const isInitialImage =
-                                            typeof image === 'string' &&
-                                            includes(image, initialFileList);
-
-                                        if (isInitialImage) {
-                                            setDeletedInitialImages((prev) => [
-                                                ...prev,
-                                                { image, index },
-                                            ]);
-                                        }
-
-                                        setFileList((prev) =>
-                                            prev.filter(
-                                                (_, prevIndex) =>
-                                                    prevIndex !== index,
-                                            ),
-                                        );
-
-                                        if (typeof image !== 'string') {
-                                            deleteUploadFileImage(
-                                                image.name ?? '',
-                                            );
-                                        }
-                                    }}
+                {(!isEmpty(fileList) || convertingCount > 0) && (
+                    <ul className={styles.imageList}>
+                        {fileList.map((image, index) => {
+                            return (
+                                <li
+                                    key={index}
+                                    className={styles.imageListItem}
                                 >
-                                    <X
-                                        width={15}
-                                        height={15}
-                                        color={vars.color.white}
-                                        strokeWidth={2}
-                                    />
-                                </button>
+                                    <div
+                                        className={
+                                            styles.imageListItemImageWrap
+                                        }
+                                    >
+                                        {typeof image === 'string' ? (
+                                            <img
+                                                src={image}
+                                                alt={image}
+                                                className={
+                                                    styles.imageListItemImage
+                                                }
+                                            />
+                                        ) : (
+                                            <img
+                                                src={URL.createObjectURL(image)}
+                                                alt={image.name ?? ''}
+                                                className={
+                                                    styles.imageListItemImage
+                                                }
+                                            />
+                                        )}
+                                    </div>
+                                    <button
+                                        className={
+                                            styles.imageListItemCloseButton
+                                        }
+                                        type='button'
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            const isInitialImage =
+                                                typeof image === 'string' &&
+                                                includes(
+                                                    image,
+                                                    initialFileList,
+                                                );
+
+                                            if (isInitialImage) {
+                                                setDeletedInitialImages(
+                                                    (prev) => [
+                                                        ...prev,
+                                                        { image, index },
+                                                    ],
+                                                );
+                                            }
+
+                                            setFileList((prev) =>
+                                                prev.filter(
+                                                    (_, prevIndex) =>
+                                                        prevIndex !== index,
+                                                ),
+                                            );
+
+                                            if (typeof image !== 'string') {
+                                                deleteUploadFileImage(
+                                                    image.name ?? '',
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        <X
+                                            width={15}
+                                            height={15}
+                                            color={vars.color.white}
+                                            strokeWidth={2}
+                                        />
+                                    </button>
+                                </li>
+                            );
+                        })}
+
+                        {Array.from({ length: convertingCount }, (_, i) => (
+                            <li
+                                key={`converting-${i}`}
+                                className={styles.convertingPlaceholder}
+                            >
+                                <Loader2 size={24} className={styles.spinner} />
                             </li>
-                        );
-                    })}
+                        ))}
+                    </ul>
+                )}
 
-                    {Array.from({ length: convertingCount }, (_, i) => (
-                        <li
-                            key={`converting-${i}`}
-                            className={styles.convertingPlaceholder}
-                        >
-                            <Loader2
-                                size={24}
-                                className={styles.spinner}
-                            />
-                        </li>
-                    ))}
-                </ul>
-            )}
-
-            {isUndoDeletedInitialImage && (
-                <button
-                    type='button'
-                    className={styles.undoButton}
-                    onClick={restoreLastDeletedInitialImage}
-                >
-                    삭제한 이미지 되돌리기
-                </button>
-            )}
-        </div>
+                {isUndoDeletedInitialImage && (
+                    <button
+                        type='button'
+                        className={styles.undoButton}
+                        onClick={restoreLastDeletedInitialImage}
+                    >
+                        삭제한 이미지 되돌리기
+                    </button>
+                )}
+            </div>
+            <p
+                className={styles.uploadGuideMessage}
+                dangerouslySetInnerHTML={{ __html: uploadGuideMessage }}
+            />
+        </>
     );
 };
 

@@ -2,6 +2,7 @@ import { keyframes, style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
+import { textStyles } from '@/styles/typography.css';
 
 export const imageContainer = style({
     position: 'relative',
@@ -141,3 +142,10 @@ export const spinner = style({
     animation: `${spin} 1s linear infinite`,
     color: vars.color.gray['50'],
 });
+
+export const uploadGuideMessage = style([
+    textStyles.caption1Regular,
+    {
+        color: vars.color.gray['70'],
+    },
+]);
