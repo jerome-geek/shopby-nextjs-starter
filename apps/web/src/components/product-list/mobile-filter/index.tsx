@@ -45,6 +45,7 @@ export const MobileFilter = ({ categoryNo }: MobileFilterProps) => {
         searchParams: {
             sortCriterion: 'BRAND_NAME',
             sortDirection: 'ASC',
+            pageSize: 100,
         },
     });
 
