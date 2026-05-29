@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
-import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
 import { media } from '@/styles/media';
+import { vars } from '@/styles/theme.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const emailRow = style({
     display: 'flex',
@@ -96,3 +96,18 @@ export const productCloseButton = style({
 export const selectButton = style({
     width: '100%',
 });
+
+export const description = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.gray['90'],
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all',
+
+        '@media': {
+            [media.desktop]: {
+                ...textStyleTokens.body2Regular,
+            },
+        },
+    },
+]);

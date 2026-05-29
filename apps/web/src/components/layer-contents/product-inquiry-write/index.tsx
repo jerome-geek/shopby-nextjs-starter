@@ -473,6 +473,10 @@ export const ProductInquiryWrite = ({
                         </InputContainer>
                     ) : null}
                 </div>
+
+                <p className={styles.description}>
+                    {productInquiryConfigData?.description}
+                </p>
             </form>
         </FormProvider>
     );

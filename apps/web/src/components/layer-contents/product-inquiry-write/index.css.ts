@@ -2,7 +2,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
-import { textStyles } from '@/styles/typography.css';
+import { textStyles, textStyleTokens } from '@/styles/typography.css';
 
 export const form = style({
     display: 'flex',
@@ -55,3 +55,18 @@ export const checkboxLabel = style([
 globalStyle(`.${checkboxLabel} > span`, {
     lineHeight: '13px',
 });
+
+export const description = style([
+    textStyles.body1Regular,
+    {
+        color: vars.color.gray['90'],
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all',
+
+        '@media': {
+            [media.mobile]: {
+                ...textStyleTokens.body2Regular,
+            },
+        },
+    },
+]);
