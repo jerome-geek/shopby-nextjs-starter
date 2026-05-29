@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { RecipeCard } from '@/components/recipe';
 import * as recipeSectionStyle from '@/components/section/recipe-group/recipe/index.css';
 import { PATHS } from '@/const/paths';
-import { useRecipeExposureGroup } from '@/hooks/suspenseQuery/shop/recipe';
 import type { RecipeExposureGroupItem } from '@/models/shop/recipe';
 import { vars } from '@/styles/theme.css';
 
@@ -14,12 +13,6 @@ interface RecipeSectionProps {
 }
 
 const RecipeSection = ({ group, groupNo }: RecipeSectionProps) => {
-    console.log('🚀 ~ RecipeSection ~ groupNo:', groupNo);
-    const { data } = useRecipeExposureGroup({
-        groupId: `recipe_group_${groupNo}`,
-    });
-    console.log('🚀 ~ RecipeSection ~ data:', data);
-
     return (
         <section className={recipeSectionStyle.container}>
             <div className={recipeSectionStyle.recipeSectionHeader}>

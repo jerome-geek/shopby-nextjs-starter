@@ -18,8 +18,8 @@ import { category } from '@/api/display';
 import { product } from '@/api/product';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { NoResult } from '@/shared/components/common/no-result';
-import { ObserverTarget } from '@/shared/components/observer-target';
 import Seo from '@/shared/components/common/seo';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import { ProductCard } from '@/components/product';
 import { ProductListCategory } from '@/components/product-list/category';
 import { MobileFilter } from '@/components/product-list/mobile-filter';
@@ -35,7 +35,6 @@ import { useResponsive } from '@/hooks/utils';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
 import type { GetCategoryResponse } from '@/models/display/category';
 import type {
-    ProductSearchParams,
     ProductsSearchResponse,
     SearchProductItem,
 } from '@/models/product/product';
@@ -51,25 +50,6 @@ type CategoryPageProps = {
     categoryNo: number;
     seoData: CategorySeoData | null;
 };
-
-// ── ISR에서 SEO용으로만 가져올 대표 상품 검색 조건 ──
-const createCategoryProductSearchParams = (
-    categoryNo: number,
-    pageSize = DEFAULT_CATEGORY_PAGE_SIZE,
-): ProductSearchParams => ({
-    categoryNos: [categoryNo],
-    pageNumber: 1,
-    pageSize,
-    hasTotalCount: true,
-    order: {
-        by: 'MD_RECOMMEND',
-        direction: 'ASC',
-    },
-    filter: {
-        soldout: true,
-    },
-    categoryOperator: 'AND',
-});
 
 const findFlatCategory = (
     categoryNo: number,
@@ -106,8 +86,9 @@ const getCategoryLabel = (
     ] as const;
 
     return (
-        labelByDepth.find(([depthCategoryNo]) => depthCategoryNo === categoryNo)
-            ?.[1] || flatCategory.fullCategoryName
+        labelByDepth.find(
+            ([depthCategoryNo]) => depthCategoryNo === categoryNo,
+        )?.[1] || flatCategory.fullCategoryName
     );
 };
 
@@ -152,8 +133,7 @@ const createCategorySeoData = ({
         return null;
     }
 
-    const categoryLabel =
-        getCategoryLabel(categoryNo, categoryData) || '상품';
+    const categoryLabel = getCategoryLabel(categoryNo, categoryData) || '상품';
     const categoryPathLabels = getCategoryPathLabels(categoryNo, categoryData);
     const productItems = productListData?.items ?? [];
     const seoProducts = productItems.slice(0, MAX_SEO_PRODUCTS);
@@ -258,7 +238,7 @@ export default function CategoryPage({
         useProductList({
             searchParams: appliedSearchParams,
             options: {
-                enabled: parsedCategoryNo != null,
+                enabled: parsedCategoryNo !== null,
             },
         });
 
@@ -270,7 +250,7 @@ export default function CategoryPage({
     } = useInfiniteProductList({
         searchParams: appliedSearchParams,
         options: {
-            enabled: parsedCategoryNo != null && isMobile,
+            enabled: parsedCategoryNo !== null && isMobile,
         },
     });
 
@@ -533,18 +513,30 @@ export const getStaticProps: GetStaticProps<CategoryPageProps> = async ({
     }
 
     const categorySearchParams = { needsBrands: false };
-    const productSearchParams = createCategoryProductSearchParams(
-        categoryNo,
-        MAX_SEO_PRODUCTS,
-    );
+    const productSearchParams = {
+        categoryNos: [categoryNo],
+        pageNumber: 1,
+        pageSize: MAX_SEO_PRODUCTS,
+        hasTotalCount: true,
+        order: {
+            by: 'MD_RECOMMEND' as const,
+            direction: 'ASC' as const,
+        },
+        filter: {
+            soldout: true,
+        },
+        categoryOperator: 'AND' as const,
+    };
 
     try {
         // SEO/GEO에 필요한 카테고리 정보와 대표 상품만 읽고, 결과는 작은 메타 데이터로 축소해서 전달합니다.
         const [categoryData, productListData] = await Promise.all([
-            category.getCategory(categoryNo, categorySearchParams).then(
-                ({ data }) => data,
-            ),
-            product.searchProducts(productSearchParams).then(({ data }) => data),
+            category
+                .getCategory(categoryNo, categorySearchParams)
+                .then(({ data }) => data),
+            product
+                .searchProducts(productSearchParams)
+                .then(({ data }) => data),
         ]);
 
         return {
