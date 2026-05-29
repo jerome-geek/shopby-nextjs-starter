@@ -123,6 +123,10 @@ function FooterContent() {
                                     )}
                                 </dd>
                             </div>
+                            <div className={styles.infoItem}>
+                                <dt>{t('점심시간')}:</dt>
+                                <dd>{t('12:00 - 13:00')}</dd>
+                            </div>
                         </dl>
                     </div>
 
