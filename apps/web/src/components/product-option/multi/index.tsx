@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Props, SingleValue } from 'react-select';
 
 import * as styles from '@/components/product-option/multi/index.css';
-import { InputLabel, Select } from '@/components/ui/input';
+import { InputLabel, Select } from '@/shared/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useResponsive } from '@/hooks/utils';
 import type { MultiLevelOption } from '@/models/product/productOption';

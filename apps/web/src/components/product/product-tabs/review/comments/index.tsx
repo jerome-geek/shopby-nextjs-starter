@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 
 import * as styles from '@/components/product/product-tabs/review/comments/index.css';
-import PagingV2 from '@/components/ui/paging-v2';
+import PagingV2 from '@/shared/ui/paging-v2';
 import useProductReviewCommentList from '@/hooks/query/display/review/useProductReviewCommentList';
 
 const PAGE_SIZE = 5;

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { CollectionCard } from '@/components/collection/collection-card';
 import * as integratedStyles from '@/components/search/integrated-results/index.css';
-import { Column } from '@/components/ui/layout/flex';
+import { Column } from '@/shared/ui/layout/flex';
 import {
     useInfinitePublicCollectionSearch,
     usePublicCollectionSearch,

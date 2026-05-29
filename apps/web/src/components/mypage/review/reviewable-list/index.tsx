@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import OptionText from '@/components/mypage/common/option-text';
 import * as styles from '@/components/mypage/review/reviewable-list/index.css';
-import { Button } from '@/components/ui';
-import Paging from '@/components/ui/paging';
+import { Button } from '@/shared/ui';
+import Paging from '@/shared/ui/paging';
 import { ORDER_STATUS_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';

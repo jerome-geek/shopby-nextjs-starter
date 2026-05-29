@@ -2,13 +2,12 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/product-option/selected/index.css';
-import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
+import { QuantityController } from '@/shared/ui';
+import { CloseIcon } from '@/shared/ui/icons/Close';
 import { useProduct, useProductOption } from '@/hooks/product';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
-
-import { CloseIcon } from '@/components/icons/Close';
-import { QuantityController } from '@/components/ui';
 
 interface SelectedProductOptionProps {
     productNo: number;

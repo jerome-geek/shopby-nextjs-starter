@@ -9,7 +9,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { BANK_MAP } from '@/const/label';
 import { useAuth } from '@/hooks/useAuth';
 import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';

@@ -8,14 +8,14 @@ import { authentication } from '@/api/auth';
 import { profile } from '@/api/member';
 import * as styles from '@/components/signup/form/email/email-authentication/index.css';
 import * as formStyles from '@/components/signup/form/index.css';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import {
     InputFieldContainer,
     InputContainer,
     InputField,
     InputLabel,
-} from '@/components/ui/input';
-import { Column } from '@/components/ui/layout/flex';
+} from '@/shared/ui/input';
+import { Column } from '@/shared/ui/layout/flex';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';
 import { useToast } from '@/hooks/ui';

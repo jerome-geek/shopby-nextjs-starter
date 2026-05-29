@@ -2,9 +2,9 @@ import Link from 'next/link';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ThumbnailBookmarkIcon } from '@/components/icons/ThumbnailBookmarkIcon';
-import { TimerIcon } from '@/components/icons/TimerIcon';
-import { UsersIcon } from '@/components/icons/UsersIcon';
+import { ThumbnailBookmarkIcon } from '@/shared/ui/icons/ThumbnailBookmarkIcon';
+import { TimerIcon } from '@/shared/ui/icons/TimerIcon';
+import { UsersIcon } from '@/shared/ui/icons/UsersIcon';
 import * as styles from '@/components/recipe/card/index.css';
 import { FailedCard } from '@/components/recipe/grid-section/failed-card';
 import { ProcessingCard } from '@/components/recipe/grid-section/processing-card';

@@ -7,14 +7,14 @@ import { useTranslation } from 'react-i18next';
 import addressApi from '@/api/manage/address';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/ui';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
     InputRadio,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import {
     COUNTRY_CODE_LIST,
     MOBILE_COUNTRY_CODE_LIST,

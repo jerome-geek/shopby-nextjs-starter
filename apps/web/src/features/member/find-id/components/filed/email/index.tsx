@@ -8,7 +8,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';
 import * as styles from '@/features/member/find-id/components/filed/email/index.css';
 import { FindIdType } from '@/schema/profile.schema';

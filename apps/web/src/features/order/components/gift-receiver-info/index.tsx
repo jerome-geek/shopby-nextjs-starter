@@ -5,7 +5,7 @@ import {
     InputField,
     InputFieldContainer,
     InputLabel,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import * as styles from '@/features/order/components/gift-receiver-info/index.css';
 import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
 import { ErrorMessage } from '@/shared/components/form';

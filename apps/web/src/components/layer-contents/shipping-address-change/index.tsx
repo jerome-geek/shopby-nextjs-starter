@@ -12,7 +12,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import { OVERLAY_ID } from '@/const/overlay';
 import { CustomsIdNumberField } from '@/features/order/components/form/input-field';

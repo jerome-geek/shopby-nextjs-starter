@@ -1,6 +1,6 @@
 import { ProductListSearchInput } from '@/components/product-list/search-input';
-import Seo from '@/components/common/seo';
-import { Column } from '@/components/ui/layout/flex';
+import Seo from '@/shared/components/common/seo';
+import { Column } from '@/shared/ui/layout/flex';
 import { SearchBodyContainer } from '@/features/search/components/search-body-container';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/search/index.css';

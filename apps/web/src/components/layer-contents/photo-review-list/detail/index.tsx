@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReviewReportBottomSheet } from '@/components/bottom-sheet/review-report';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
-import { StarIcon } from '@/components/icons/StarIcon';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
+import { StarIcon } from '@/shared/ui/icons/StarIcon';
 import { ImageGallery } from '@/components/layer-contents/photo-review-list/detail/gallery';
 import { ImageDetailModal } from '@/components/modal/image-detail';
 import { ReviewReportModal } from '@/components/modal/review-report';

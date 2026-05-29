@@ -7,9 +7,9 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { InputField } from '@/components/ui/input/field';
-import { InputFieldContainer } from '@/components/ui/input/field-container';
-import { InputLabel } from '@/components/ui/input/label';
+import { InputField } from '@/shared/ui/input/field';
+import { InputFieldContainer } from '@/shared/ui/input/field-container';
+import { InputLabel } from '@/shared/ui/input/label';
 import * as styles from '@/features/order/components/form/input-field/customs-id-number/index.css';
 import { ErrorMessage } from '@/shared/components/form';
 

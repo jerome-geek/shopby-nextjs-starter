@@ -1,5 +1,5 @@
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import {
     MypageShortcuts,
     MypageSummary,

@@ -4,8 +4,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { authentication } from '@/api/auth';
-import { Button } from '@/components/ui/button';
-import { InputContainer, InputField } from '@/components/ui/input';
+import { Button } from '@/shared/ui/button';
+import { InputContainer, InputField } from '@/shared/ui/input';
 import * as styles from '@/features/member/find-password/components/certification-step/index.css';
 import type {
     FindPasswordMethod,

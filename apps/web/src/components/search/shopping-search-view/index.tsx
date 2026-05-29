@@ -5,7 +5,7 @@ import { MobileFilter } from '@/components/product-list/mobile-filter';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { ShoppingSearchResults } from '@/components/search/shopping-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
-import { Row } from '@/components/ui/layout/flex';
+import { Row } from '@/shared/ui/layout/flex';
 import { SORT_OPTIONS } from '@/const/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useSearchTab } from '@/hooks/useSearchTab';

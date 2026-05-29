@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import * as styles from '@/components/layer-contents/recipe-save/index.css';
 import useRecipeMutation from '@/hooks/mutations/useRecipeMutation';
 import { useProfile } from '@/hooks/query/member/profile';

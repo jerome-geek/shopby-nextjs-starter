@@ -5,8 +5,8 @@ import { ClaimDetailContent } from '@/components/layer-contents/claim-detail/cla
 import {
     BottomSheetLayout,
     type DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import { ClaimType } from '@/models';
 

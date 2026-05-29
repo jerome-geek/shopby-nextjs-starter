@@ -2,7 +2,7 @@ import * as bannerStyles from '@/features/event/section/components/event-section
 import * as contentStyles from '@/features/event/section/components/event-section-content/index.css';
 import * as productRowStyles from '@/components/product/card-row/index.css';
 import * as sectionStyles from '@/components/section/event/index.css';
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import { useResponsive } from '@/hooks/utils';
 
 export const EventProductsSkeleton = () => {

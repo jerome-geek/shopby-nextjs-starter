@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { type DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
+import { type DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
 import { RecipeCreateSelectionContent } from '@/components/layer-contents/recipe-create-select';
 
 type RecipeCreateSelectionProps = DefaultModalLayoutProps;

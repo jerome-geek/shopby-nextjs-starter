@@ -1,4 +1,4 @@
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { filter, map, pipe, take, toArray } from '@fxts/core';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { Bookmark, BookmarkCheck, Share2, Users } from 'lucide-react';
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { collection } from '@/api/shop';
 import { RecipeDetailCard } from '@/components/recipe/detail-card';
-import { VerticalMoreMenu } from '@/components/ui';
+import { VerticalMoreMenu } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog';
 import { useCollectionMutation } from '@/hooks/mutations';

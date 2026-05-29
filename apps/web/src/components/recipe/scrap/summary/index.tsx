@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import { ProductGridSection } from '@/components/product/grid-section';
 import { ProductGridSkeleton } from '@/components/product/grid-section/skeleton';
 import { RecipeGridSection } from '@/components/recipe/grid-section';

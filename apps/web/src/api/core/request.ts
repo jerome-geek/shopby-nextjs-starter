@@ -3,9 +3,10 @@ import qs from 'qs';
 
 import { controller } from '@/api/core/controller';
 import { DEFAULT_API_TIMEOUT, defaultHeaders } from '@/api/core/utils';
+import { env } from '@/configs/env';
 
 const shopbyRequest = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_SHOPBY_BASE_URL,
+    baseURL: env.NEXT_PUBLIC_SHOPBY_BASE_URL,
     headers: defaultHeaders(),
     signal: controller.signal,
     paramsSerializer: (params) => {

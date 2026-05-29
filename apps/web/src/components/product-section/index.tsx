@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Grid } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { SmallCaretIcon } from '@/components/icons';
+import { SmallCaretIcon } from '@/shared/ui/icons';
 import { ProductCard } from '@/components/product';
 import * as styles from '@/components/product-section/index.css';
 import {

@@ -6,8 +6,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as drawerStyles from '@/features/drawer/search/index.css';
 import * as styles from '@/features/drawer/search/ranking-section/index.css';
-import { Column } from '@/components/ui/layout/flex';
-import { PagingV3 } from '@/components/ui/paging-v3';
+import { Column } from '@/shared/ui/layout/flex';
+import { PagingV3 } from '@/shared/ui/paging-v3';
 import { PATHS } from '@/const/paths';
 import {
     COLLECTION_PAGE_QUERY_KEY,

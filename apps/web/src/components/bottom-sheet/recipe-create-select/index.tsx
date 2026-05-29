@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { type DefaultBottomSheetProps, BottomSheetLayout } from '@/components/layout';
+import { type DefaultBottomSheetProps, BottomSheetLayout } from '@/shared/components/layout';
 import { RecipeCreateSelectionContent } from '@/components/layer-contents/recipe-create-select';
 
 type RecipeCreateSelectionSheetProps = DefaultBottomSheetProps;

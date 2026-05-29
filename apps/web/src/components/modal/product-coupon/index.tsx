@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { ProductCoupon } from '@/components/layer-contents/product-coupon';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
-import { Button } from '@/components/ui';
+import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 
 interface ProductCouponModalProps extends DefaultModalLayoutProps {
     productNo: number;

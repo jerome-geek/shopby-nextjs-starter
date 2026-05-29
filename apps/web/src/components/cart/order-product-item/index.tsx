@@ -2,10 +2,11 @@ import { concat, map, pipe, sort, toArray, zip } from '@fxts/core';
 import clsx from 'clsx';
 import { X } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/cart/order-product-item/index.css';
-import { QuantityController } from '@/components/ui';
-import { InputCheckbox } from '@/components/ui/input';
+import { InputCheckbox } from '@/shared/ui/input';
+import { QuantityController } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils';
 import type {
@@ -19,7 +20,6 @@ import type {
 } from '@/models/order/guestOrder';
 import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
 import { CURRENCY } from '@/utils/currency';
-import { useTranslation } from 'react-i18next';
 
 type OrderInvalidProduct = Omit<
     InvalidProduct,

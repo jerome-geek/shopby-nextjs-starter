@@ -5,8 +5,8 @@ import { PeriodRangePicker } from '@/components/layer-contents/period-range-pick
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 interface PeriodRangePickerBottomSheetProps extends DefaultBottomSheetProps {
     initialRange?: DateRange;

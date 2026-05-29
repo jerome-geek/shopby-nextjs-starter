@@ -3,7 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/order/accumulation/index.css';
-import { InputField } from '@/components/ui/input';
+import { InputField } from '@/shared/ui/input';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import { PaymentReserveSchemaType } from '@/schema';
 import { CURRENCY } from '@/utils/currency';

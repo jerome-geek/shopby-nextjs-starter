@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { RecipeRecommendationLayerContent } from '@/features/recipe/components/recipe-recommendation-content';
 import { RecipeRecommendationLayerContentSkeleton } from '@/features/recipe/components/skeleton/recipe-recommendation-content';

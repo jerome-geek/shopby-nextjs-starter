@@ -4,7 +4,7 @@ import {
     AddressRegister,
     AddressSearch,
 } from '@/components/layer-contents/address-search';
-import { ModalLayout } from '@/components/layout';
+import { ModalLayout } from '@/shared/components/layout';
 
 interface AddressSearchModalProps {
     isOpen: boolean;

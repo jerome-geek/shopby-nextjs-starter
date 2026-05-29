@@ -2,10 +2,10 @@ import { SuspenseQuery } from '@suspensive/react-query';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import { AuthLayout } from '@/components/layout';
-import Seo from '@/components/common/seo';
-import { Skeleton } from '@/components/ui';
-import { Button } from '@/components/ui/button';
+import { AuthLayout } from '@/shared/components/layout';
+import Seo from '@/shared/components/common/seo';
+import { Skeleton } from '@/shared/ui';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import { useProfile } from '@/hooks/query/member/profile';
 import { bannerListOptions } from '@/entities/banner/queries';

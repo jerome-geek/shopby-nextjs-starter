@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react';
 import { useMemo, useRef, useState } from 'react';
 
-import type { DefaultModalLayoutProps } from '@/components/layout';
+import type { DefaultModalLayoutProps } from '@/shared/components/layout';
 import * as styles from '@/features/popup/components/overlay/index.css';
 import type { PopupPositionType, SizeUnitType } from '@/models';
 import type { PopupInfo } from '@/models/display/popup';

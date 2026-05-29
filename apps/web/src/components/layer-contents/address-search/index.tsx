@@ -3,11 +3,11 @@ import { Search } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/layer-contents/address-search/index.css';
-import { InputField, InputFieldContainer } from '@/components/ui/input';
+import { InputField, InputFieldContainer } from '@/shared/ui/input';
 import { useInfiniteAddressList } from '@/hooks/query/manage/address';
 
 export interface AddressRegister {

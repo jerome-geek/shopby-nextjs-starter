@@ -4,7 +4,7 @@ import * as styles from '@/components/bottom-sheet/sort/index.css';
 import {
     BottomSheetLayout,
     type DefaultModalLayoutProps,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 
 export type SortBottomSheetOption = {
     id: string;

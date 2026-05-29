@@ -1,6 +1,6 @@
 import * as styles from '@/components/recipe/comment-section/index.css';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import { CommentInput } from '@/components/recipe/comment-section/comment-input';
 import { CommentList } from '@/components/recipe/comment-section/comment-list';
 

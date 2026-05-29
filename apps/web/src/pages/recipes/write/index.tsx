@@ -1,12 +1,12 @@
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { SuspenseQuery } from '@suspensive/react-query';
 import { useRouter } from 'next/router';
 import { Suspense, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { CSRLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { CSRLayout } from '@/shared/components/layout';
 import { RecipeForm } from '@/features/recipe/components/recipe-form';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';

@@ -1,5 +1,5 @@
 import React from 'react';
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import * as styles from './index.css';
 
 export const ProductCardSkeleton = () => {

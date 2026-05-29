@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { ArrowUpDown, LockKeyhole, Paperclip } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -17,13 +17,13 @@ import {
     type SearchFormValues,
 } from '@/components/board/search-form';
 import { SortBottomSheet } from '@/components/bottom-sheet/sort';
-import { Error } from '@/components/common/error';
-import FetchBoundary from '@/components/common/FetchBoundary';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
+import { Error } from '@/shared/components/common/error';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
-import { Column, Row } from '@/components/ui/layout/flex';
-import Paging from '@/components/ui/paging';
+import { Column, Row } from '@/shared/ui/layout/flex';
+import Paging from '@/shared/ui/paging';
 import {
     BOARD_DEFAULT_START_YMD,
     BOARD_PAGINATION,

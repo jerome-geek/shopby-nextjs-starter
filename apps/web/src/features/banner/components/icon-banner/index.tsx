@@ -5,8 +5,8 @@ import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 
 import { BANNER_ID_PREFIX, type HeroBannerType } from '@/features/banner/components/hero-banner';
 import * as styles from '@/features/banner/components/icon-banner/index.css';
-import FetchBoundary from '@/components/common/FetchBoundary';
-import Skeleton from '@/components/ui/skeleton';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import Skeleton from '@/shared/ui/skeleton';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import type { Banner } from '@/models/display/banner';
 import { getLandingUrl } from '@/utils/banner';

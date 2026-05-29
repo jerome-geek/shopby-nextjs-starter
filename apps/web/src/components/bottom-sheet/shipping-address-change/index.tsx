@@ -10,8 +10,8 @@ import {
 import {
     BottomSheetLayout,
     DefaultModalLayoutProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 import {
     guestOrderDetailOptions,
     orderDetailOptions,

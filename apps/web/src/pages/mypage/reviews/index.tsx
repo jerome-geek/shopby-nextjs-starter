@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';

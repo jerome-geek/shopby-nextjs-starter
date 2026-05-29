@@ -4,19 +4,19 @@ import type { ReactNode } from 'react';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { MypageKeywordSearchQueryFilter } from '@/components/mypage/filters/keyword-search-query-filter';
 import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
 import { ProductInquiryContent } from '@/components/mypage/product-inquiries/accordion-content';
 import { ProductInquiryHeader } from '@/components/mypage/product-inquiries/accordion-header';
-import { CustomAccordion } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import Paging from '@/components/ui/paging';
+import { CustomAccordion } from '@/shared/ui/accordion';
+import { Button } from '@/shared/ui/button';
+import Paging from '@/shared/ui/paging';
 import { PATHS } from '@/const/paths';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import {

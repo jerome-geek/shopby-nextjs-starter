@@ -5,8 +5,8 @@ import { FindIdResult } from '@/components/layer-contents/find-id-result';
 import {
     BottomSheetLayout,
     DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
 import type { FindIdResponse } from '@/models/member/profile';

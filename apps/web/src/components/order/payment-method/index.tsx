@@ -11,7 +11,7 @@ import {
     InputField,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { CASH_RECEIPT_ISSUE_PURPOSE_TYPE_MAP } from '@/const/label';
 import { useOrderSheet } from '@/hooks/suspenseQuery/order/orderSheet';
 import type { CashReceiptKeyType, PayType, PgType } from '@/models';

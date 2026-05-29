@@ -5,7 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/mypage/edit/edit-form/term-check-list/index.css';
-import { InputCheckbox } from '@/components/ui/input';
+import { InputCheckbox } from '@/shared/ui/input';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
 
 const OPT_IN_LIST = [

@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 
 import { FindIdResultBottomSheet } from '@/components/bottom-sheet/find-id-result';
 import { FindIdResultModal } from '@/components/modal/find-id-result';
-import { Button } from '@/components/ui/button';
-import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { Button } from '@/shared/ui/button';
+import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import { EmailField } from '@/features/member/find-id/components/filed/email';
 import { MobileField } from '@/features/member/find-id/components/filed/mobile';
 import * as styles from '@/features/member/find-id/components/find-id-form/index.css';

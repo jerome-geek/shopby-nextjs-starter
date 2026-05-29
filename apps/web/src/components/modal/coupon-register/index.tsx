@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { CouponRegister } from '@/components/layer-contents/coupon-register';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 export const CouponRegisterModal = (props: DefaultModalLayoutProps) => {
     const { t } = useTranslation();

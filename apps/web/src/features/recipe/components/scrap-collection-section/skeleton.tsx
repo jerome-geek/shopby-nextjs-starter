@@ -1,4 +1,4 @@
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import { useResponsive } from '@/hooks/utils';
 
 import * as styles from '@/features/recipe/components/scrap-collection-section/index.css';

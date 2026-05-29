@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProductCardSkeleton } from '@/components/product/card/skeleton';
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import * as styles from './index.css';
 
 export const CartRecommendSectionSkeleton = () => {

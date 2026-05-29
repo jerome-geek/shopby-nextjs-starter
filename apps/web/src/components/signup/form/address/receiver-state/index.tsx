@@ -7,7 +7,7 @@ import {
     useWatch,
 } from 'react-hook-form';
 
-import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
+import { InputField, InputFieldContainer, Select } from '@/shared/ui/input';
 import { CANADA_STATE_LIST, STATE_LIST } from '@/const/form';
 import { useResponsive } from '@/hooks/utils';
 import { ErrorMessage } from '@/shared/components/form';

@@ -9,8 +9,8 @@ import type {
 } from 'next';
 import { Fragment, useCallback, useMemo, useState } from 'react';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import Seo from '@/components/common/seo';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import Seo from '@/shared/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';

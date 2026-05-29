@@ -1,9 +1,9 @@
 import { parseAsInteger, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import { RecipeSearchSkeleton } from '@/components/recipe/search-skeleton';
 import { ViewToggle } from '@/components/recipe/view-toggle';
 import { RecipeList } from '@/features/recipe/components/recipe-list';

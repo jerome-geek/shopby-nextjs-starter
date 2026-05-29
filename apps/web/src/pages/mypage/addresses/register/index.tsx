@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { AddressWriteForm } from '@/components/mypage/addresses/address-write-form';
-import { MypageLayout } from '@/components/layout';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 
 export default function MypageAddressRegisterPage() {

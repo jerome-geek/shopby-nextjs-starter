@@ -11,7 +11,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { ADDRESS_MEMO_LIST } from '@/const/form';
 import * as styles from '@/features/order/components/gift-shipping-info/index.css';
 import { useResponsive } from '@/hooks/utils';

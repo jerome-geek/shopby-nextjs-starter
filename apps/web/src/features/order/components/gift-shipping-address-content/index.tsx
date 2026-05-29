@@ -6,8 +6,8 @@ import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import laterShippingInput from '@/api/order/laterShippingInput';
-import Seo from '@/components/common/seo';
-import { Button } from '@/components/ui/button';
+import Seo from '@/shared/components/common/seo';
+import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import { GiftOrderProductList } from '@/features/order/components/gift-order-product-list';
 import * as styles from '@/features/order/components/gift-shipping-address-content/index.css';

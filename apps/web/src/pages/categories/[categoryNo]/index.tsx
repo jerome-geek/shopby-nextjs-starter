@@ -16,14 +16,15 @@ import { useTranslation } from 'react-i18next';
 
 import { category } from '@/api/display';
 import { product } from '@/api/product';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
-import Seo from '@/components/common/seo';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
+import Seo from '@/shared/components/common/seo';
+import { ObserverTarget } from '@/shared/components/observer-target';
 import { ProductCard } from '@/components/product';
 import { ProductListCategory } from '@/components/product-list/category';
 import { MobileFilter } from '@/components/product-list/mobile-filter';
 import { ProductListSideBar } from '@/components/product-list/side-bar';
-import { Paging } from '@/components/ui';
+import { Paging } from '@/shared/ui';
 import { SORT_OPTIONS } from '@/const/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useSb } from '@/hooks/libs/shopby';
@@ -38,7 +39,6 @@ import type {
     SearchProductItem,
 } from '@/models/product/product';
 import * as styles from '@/pages/categories/[categoryNo]/index.css';
-import { ObserverTarget } from '@/shared/components/observer-target';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 const DEFAULT_CATEGORY_PAGE_SIZE = 20;

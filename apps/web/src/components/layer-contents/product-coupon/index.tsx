@@ -5,10 +5,10 @@ import { motion, type Variants } from 'motion/react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
 import * as styles from '@/components/layer-contents/product-coupon/index.css';
-import { type DefaultModalLayoutProps } from '@/components/layout';
+import { type DefaultModalLayoutProps } from '@/shared/components/layout';
 import { useCouponMutation } from '@/hooks/mutations';
 import { useCouponListByProductNo } from '@/hooks/query/promotion/coupon';
 import { couponKeys } from '@/hooks/queryKeys';

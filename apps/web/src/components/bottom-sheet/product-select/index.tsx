@@ -4,8 +4,8 @@ import { ProductSelect } from '@/components/layer-contents/product-select';
 import {
     BottomSheetLayout,
     type DefaultBottomSheetProps,
-} from '@/components/layout';
-import { Button } from '@/components/ui/button';
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import type { SearchProductItem } from '@/models/product/product';
 
 interface ProductSelectBottomSheetProps extends DefaultBottomSheetProps {

@@ -23,7 +23,7 @@ import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendat
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
 import { ShippingAddressChangeModal } from '@/components/modal/shipping-address-change';
-import ConfirmDialog from '@/components/ui/dialog/confirm';
+import ConfirmDialog from '@/shared/ui/dialog/confirm';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';

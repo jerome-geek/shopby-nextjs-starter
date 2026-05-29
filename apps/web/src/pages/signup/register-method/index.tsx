@@ -2,17 +2,17 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticProps } from 'next';
 
 import { banner } from '@/api/display';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import SocialLoginList from '@/components/auth/social-login-list';
-import FetchBoundary from '@/components/common/FetchBoundary';
-import { AuthLayout } from '@/components/layout';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import { AuthLayout } from '@/shared/components/layout';
 import { BANNER_ID } from '@/const/banner';
 import { bannerKeys } from '@/hooks/queryKeys';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/register-method/index.css';
 import { extractBannerContents } from '@/shared/utils/shopby';
-import ImageWrapper from '@/components/ui/image';
+import ImageWrapper from '@/shared/ui/image';
 
 const BANNER_LIST = [BANNER_ID.REGISTER_METHOD];
 

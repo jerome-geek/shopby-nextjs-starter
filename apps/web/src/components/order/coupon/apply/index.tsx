@@ -1,4 +1,4 @@
-import { Select } from '@/components/ui/input';
+import { Select } from '@/shared/ui/input';
 import { filter, flatMap, map, pipe, prepend, toArray } from '@fxts/core';
 import { isAxiosError } from 'axios';
 import { useRouter } from 'next/router';
@@ -12,10 +12,10 @@ import {
     BottomSheetLayout,
     DefaultModalLayoutProps,
     ModalLayout,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 import * as styles from '@/components/order/coupon/apply/index.css';
-import { Button } from '@/components/ui';
-import Image from '@/components/ui/image';
+import { Button } from '@/shared/ui';
+import Image from '@/shared/ui/image';
 import { useOrderSheetMutation } from '@/hooks/mutations';
 import { useOrderSheetCalculate } from '@/hooks/order';
 import { useProfile } from '@/hooks/query/member/profile';

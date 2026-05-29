@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/components/common/FetchBoundary';
-import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
-import { Button } from '@/components/ui';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import { DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { RecipeRecommendationLayerContent } from '@/features/recipe/components/recipe-recommendation-content';
 import { RecipeRecommendationLayerContentSkeleton } from '@/features/recipe/components/skeleton/recipe-recommendation-content';

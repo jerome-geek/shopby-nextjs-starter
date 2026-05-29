@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import * as styles from './LanguageSwitcher.css';
 
 export function LanguageSwitcher() {

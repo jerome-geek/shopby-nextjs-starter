@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import * as styles from '@/styles/404.css';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 
 export default function Custom404Page() {
     return (

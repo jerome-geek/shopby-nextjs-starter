@@ -5,7 +5,7 @@ import { RecipeImageUpload } from '@/components/layer-contents/recipe-image-uplo
 import {
     BottomSheetLayout,
     type DefaultBottomSheetProps,
-} from '@/components/layout';
+} from '@/shared/components/layout';
 import { MODAL_QUERY_KEY } from '@/const/modal';
 
 export const RecipeImageUploadSheet = (props: DefaultBottomSheetProps) => {

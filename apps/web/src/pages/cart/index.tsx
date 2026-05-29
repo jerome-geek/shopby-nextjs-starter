@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import { OrderProductItem } from '@/components/cart/order-product-item';
 import CartSummary from '@/components/cart/summary';
-import FetchBoundary from '@/components/common/FetchBoundary';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import { NoResult } from '@/components/common/no-result';
-import Seo from '@/components/common/seo';
-import { CSRLayout } from '@/components/layout';
-import { InputCheckbox, InputLabel } from '@/components/ui/input';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
+import Seo from '@/shared/components/common/seo';
+import { CSRLayout } from '@/shared/components/layout';
+import { InputCheckbox, InputLabel } from '@/shared/ui/input';
 import { PATHS } from '@/const/paths';
 import { CartRecommendSection } from '@/features/cart/components/recommend-section';
 import useCart from '@/hooks/cart/useCart';

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { ProductInquiryWrite } from '@/components/layer-contents/product-inquiry-write';
-import { ModalLayout, type DefaultModalLayoutProps } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 
 interface ProductInquiryWriteModalProps extends DefaultModalLayoutProps {
     productNo: number;

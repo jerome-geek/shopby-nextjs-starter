@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/mypage/order-status-summary/index.css';
 import { useOrderStatusSummary } from '@/hooks/suspenseQuery/order/myOrder';

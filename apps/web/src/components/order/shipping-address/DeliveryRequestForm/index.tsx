@@ -6,7 +6,7 @@ import {
     InputFieldContainer,
     InputLabel,
     Select,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { PaymentReserveSchemaType } from '@/schema';
 
 const DELIVERY_REQUEST_DIRECT = 'DIRECT';

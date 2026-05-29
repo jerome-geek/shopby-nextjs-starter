@@ -5,8 +5,8 @@ import 'swiper/css';
 
 import { ProductCard } from '@/components/product/card';
 import * as styles from '@/components/product/grid-section/index.css';
-import { ViewAllLink } from '@/components/ui';
-import PagingV2 from '@/components/ui/paging-v2';
+import { ViewAllLink } from '@/shared/ui';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { PATHS } from '@/const/paths';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useLikeProductList } from '@/hooks/suspenseQuery/product/profile';

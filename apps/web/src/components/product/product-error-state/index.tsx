@@ -2,7 +2,7 @@ import { motion, type Variants } from 'motion/react';
 import { CircleAlert } from 'lucide-react';
 import { useRouter } from 'next/router';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import * as styles from '@/components/product/product-error-state/index.css';
 
 interface ProductErrorStateProps {

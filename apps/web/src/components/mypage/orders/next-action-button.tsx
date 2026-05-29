@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import { useClaim } from '@/features/claim';
 import { useAuth } from '@/hooks/useAuth';

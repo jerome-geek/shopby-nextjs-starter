@@ -7,17 +7,17 @@ import {
     pipe,
     toArray,
 } from '@fxts/core';
-import Seo from '@/components/common/seo';
+import Seo from '@/shared/components/common/seo';
 import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { type ReactElement, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { shopbyRequest } from '@/api/core/request';
-import { AuthLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import TermDialog from '@/components/ui/dialog/term';
-import { InputCheckbox } from '@/components/ui/input';
+import { AuthLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
+import TermDialog from '@/shared/ui/dialog/term';
+import { InputCheckbox } from '@/shared/ui/input';
 import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import { CertificationCheckContext } from '@/context/certificationCheck';

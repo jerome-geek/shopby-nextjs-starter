@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/features/drawer/search/index.css';
-import Skeleton from '@/components/ui/skeleton';
+import Skeleton from '@/shared/ui/skeleton';
 import { useResponsive } from '@/hooks/utils';
 
 import 'swiper/css';

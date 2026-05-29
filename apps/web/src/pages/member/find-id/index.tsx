@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { AuthLayout } from '@/components/layout';
-import Seo from '@/components/common/seo';
+import { AuthLayout } from '@/shared/components/layout';
+import Seo from '@/shared/components/common/seo';
 import { PATHS } from '@/const/paths';
 import { FindIdForm } from '@/features/member/find-id/components/find-id-form';
 import { useMyApp } from '@/hooks/myapp';

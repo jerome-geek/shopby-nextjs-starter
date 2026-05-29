@@ -2,12 +2,12 @@ import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/signup/form/index.css';
-import { Button } from '@/components/ui';
+import { Button } from '@/shared/ui';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import { useResponsive } from '@/hooks/utils';
 import { ErrorMessage } from '@/shared/components/form';
 

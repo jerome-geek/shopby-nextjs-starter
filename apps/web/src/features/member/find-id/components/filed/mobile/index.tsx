@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { InputContainer, InputField, InputLabel } from '@/components/ui/input';
+import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import { FindIdType } from '@/schema/profile.schema';
 import { ErrorMessage } from '@/shared/components/form';
 

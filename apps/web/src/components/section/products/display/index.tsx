@@ -1,4 +1,4 @@
-import FetchBoundary from '@/components/common/FetchBoundary';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import Products from '@/components/section/products/section';
 import ProductsSectionSkeleton from '@/components/section/products/section/skeleton';
 import {

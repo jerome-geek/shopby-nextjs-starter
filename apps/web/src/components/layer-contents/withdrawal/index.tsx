@@ -17,8 +17,8 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import * as styles from '@/components/layer-contents/withdrawal/index.css';
-import { type DefaultModalLayoutProps } from '@/components/layout';
-import { InputContainer, InputLabel, Select } from '@/components/ui/input';
+import { type DefaultModalLayoutProps } from '@/shared/components/layout';
+import { InputContainer, InputLabel, Select } from '@/shared/ui/input';
 import { WITHDRAWAL_REASON_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';

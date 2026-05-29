@@ -2,10 +2,10 @@ import { isEmpty } from '@fxts/core';
 import { useRouter } from 'next/router';
 
 import { CollectionCard } from '@/components/collection/collection-card';
-import { NoResult } from '@/components/common/no-result';
+import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/components/search/collection-results/index.css';
-import PagingV2 from '@/components/ui/paging-v2';
+import PagingV2 from '@/shared/ui/paging-v2';
 import { COLLECTION_PAGE_QUERY_KEY } from '@/const/search';
 import useInfinitePublicCollectionSearch from '@/hooks/query/shop/collection/useInfinitePublicCollectionSearch';
 import { useResponsive } from '@/hooks/utils';

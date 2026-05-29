@@ -2,8 +2,8 @@ import { Search } from 'lucide-react';
 import { Control, Controller, UseFormRegister } from 'react-hook-form';
 
 import * as styles from '@/components/board/search-form/index.css';
-import { Button } from '@/components/ui/button';
-import { InputField, InputFieldContainer, Select } from '@/components/ui/input';
+import { Button } from '@/shared/ui/button';
+import { InputField, InputFieldContainer, Select } from '@/shared/ui/input';
 import { BOARD_SEARCH_TYPE } from '@/const/board';
 
 export type SearchFormValues = {

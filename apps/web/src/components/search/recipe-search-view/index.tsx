@@ -5,7 +5,7 @@ import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { SearchMobileSort } from '@/components/search/mobile-sort';
 import { RecipeSearchResults } from '@/components/search/recipe-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
-import { Row } from '@/components/ui/layout/flex';
+import { Row } from '@/shared/ui/layout/flex';
 import { RECIPE_SORT_OPTIONS, type RecipeSortBy } from '@/const/recipe';
 import {
     RECIPE_ORDER_QUERY_KEY,

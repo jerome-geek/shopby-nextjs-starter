@@ -5,7 +5,7 @@ import { overlay } from 'overlay-kit';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ConfirmDialog from '@/components/ui/dialog/confirm';
+import ConfirmDialog from '@/shared/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
 import { useMyApp } from '@/hooks/myapp';
 import * as styles from '@/hooks/utils/useDialog.css';

@@ -9,8 +9,8 @@ import {
     SHIPPING_ADDRESS_CHANGE_FORM_ID,
     ShippingAddressChangeContent,
 } from '@/components/layer-contents/shipping-address-change';
-import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
-import { Button } from '@/components/ui';
+import { DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 import {
     guestOrderDetailOptions,
     orderDetailOptions,

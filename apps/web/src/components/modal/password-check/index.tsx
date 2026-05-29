@@ -2,13 +2,13 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { DefaultModalLayoutProps, ModalLayout } from '@/components/layout';
-import { Button } from '@/components/ui/button';
+import { DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
+import { Button } from '@/shared/ui/button';
 import {
     InputField,
     InputFieldContainer,
     InputLabel,
-} from '@/components/ui/input';
+} from '@/shared/ui/input';
 import type { CheckPasswordData } from '@/models/member/profile';
 
 export interface PasswordCheckOverlayProps {

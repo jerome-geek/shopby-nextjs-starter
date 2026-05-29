@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import Seo from '@/components/common/seo';
-import { MypageLayout } from '@/components/layout';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import Seo from '@/shared/components/common/seo';
+import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/components/mypage/common/mypage-list-card/index.css';
 import { InfoSection } from '@/components/mypage/previous-orders/info-section';
 import { PreviousOrderItem } from '@/components/mypage/previous-orders/item';
@@ -13,17 +13,15 @@ import { usePreviousOrderDetail } from '@/hooks/suspenseQuery/order/previousOrde
 import * as styles from '@/pages/mypage/previous-orders/[orderNo]/index.css';
 import { CURRENCY } from '@/utils/currency';
 
-export default function MypagePreviousOrderDetailPage() {
+function MypagePreviousOrderDetailPageContent({ orderNo }: { orderNo: string }) {
     const router = useRouter();
     const { t } = useTranslation();
-
-    const orderNo = router.query.orderNo;
 
     const {
         data: previousOrderDetailData,
         isFetched: isPreviousOrderDetailFetched,
     } = usePreviousOrderDetail({
-        orderNo: orderNo as string,
+        orderNo,
     });
 
     const paymentMethod = previousOrderDetailData?.paymentMethod;
@@ -244,6 +242,16 @@ export default function MypagePreviousOrderDetailPage() {
             </LoadingWrapper>
         </>
     );
+}
+
+export default function MypagePreviousOrderDetailPage() {
+    const router = useRouter();
+    const orderNo =
+        typeof router.query.orderNo === 'string' ? router.query.orderNo : '';
+
+    return router.isReady && orderNo ? (
+        <MypagePreviousOrderDetailPageContent orderNo={orderNo} />
+    ) : null;
 }
 
 MypagePreviousOrderDetailPage.getLayout = (page: React.ReactNode) => {

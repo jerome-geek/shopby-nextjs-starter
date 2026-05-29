@@ -17,10 +17,10 @@ import { product } from '@/api/product';
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
 import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
 import ShareBottomSheet from '@/components/bottom-sheet/share';
-import LoadingWrapper from '@/components/common/loading-wrapper';
-import Seo from '@/components/common/seo';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import Seo from '@/shared/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import { BookmarkIcon } from '@/components/icons';
+import { BookmarkIcon } from '@/shared/ui/icons';
 import { ProductCouponModal } from '@/components/modal/product-coupon';
 import ShareModal from '@/components/modal/share';
 import {
@@ -37,7 +37,7 @@ import {
     MultiProductOption,
     SelectedProductOption,
 } from '@/components/product-option';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { OVERLAY_ID } from '@/const/overlay';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { useProductInfo, useProductPrice } from '@/entities/product/hooks';
