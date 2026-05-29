@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { address } from '@/api/manage';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import WithMemberJoinConfig from '@/features/member/member-join-config-field';
 import { AddressRegister } from '@/components/layer-contents/address-search';
 import { AddressSearchModal } from '@/components/modal/address-search';
 import ReceiverState from '@/components/signup/form/address/receiver-state';

@@ -7,7 +7,7 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import WithMemberJoinConfig from '@/features/member/member-join-config-field';
 import EmailAuthentication from '@/components/signup/form/email/email-authentication';
 import { InputField, InputFieldContainer, Select } from '@/shared/ui/input';
 import { EMAIL_DOMAIN_LIST } from '@/const/form';

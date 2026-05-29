@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { InfoSection } from '@/components/mypage/previous-orders/info-section';
 import { PreviousOrderItem } from '@/components/mypage/previous-orders/item';
 import { usePreviousOrderDetail } from '@/hooks/suspenseQuery/order/previousOrder';

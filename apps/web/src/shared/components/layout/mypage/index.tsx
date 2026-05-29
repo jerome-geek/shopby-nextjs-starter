@@ -6,7 +6,7 @@ import { memo, type ReactNode, useEffect } from 'react';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { CSRLayout } from '@/shared/components/layout/csr';
 import * as styles from '@/shared/components/layout/mypage/index.css';
-import { MypageSideNavigation } from '@/components/mypage/side-navigation';
+import { MypageSideNavigation } from '@/features/mypage/side-navigation';
 import { PATHS } from '@/const/paths';
 import { profileQueryOptions } from '@/entities/member/profile/queries';
 import { useMyApp } from '@/hooks/myapp';

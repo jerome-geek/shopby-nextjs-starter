@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import * as styles from '@/components/mypage/filters/segmented-toggle/index.css';
+import * as styles from '@/features/mypage/filters/segmented-toggle/index.css';
 
 import 'swiper/css';
 

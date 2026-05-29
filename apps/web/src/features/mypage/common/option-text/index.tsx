@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { CSSProperties } from 'react';
 
 import { CustomAccordion } from '@/shared/ui/accordion';
-import * as styles from '@/components/mypage/common/option-text/index.css';
+import * as styles from '@/features/mypage/common/option-text/index.css';
 
 interface OptionTextProps {
     optionTitle?: Nullable<string>;

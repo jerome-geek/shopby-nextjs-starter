@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ProductSelectBottomSheet } from '@/components/bottom-sheet/product-select';
 import { ProductSelectModal } from '@/components/modal/product-select';
-import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
+import * as formStyles from '@/features/mypage/common/mypage-form/index.css';
 import * as styles from '@/components/mypage/product-inquiries/register-form/index.css';
 import { Button } from '@/shared/ui/button';
 import {

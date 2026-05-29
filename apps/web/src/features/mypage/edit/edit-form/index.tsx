@@ -10,12 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { profile } from '@/api/member';
 import upload from '@/api/storage/image';
 import { WithdrawalBottomSheet } from '@/components/bottom-sheet/withdrawal';
-import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import WithMemberJoinConfig from '@/features/member/member-join-config-field';
 import { WithdrawalModal } from '@/components/modal/withdrawal';
-import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import { ChangePassword } from '@/components/mypage/edit/edit-form/change-password';
-import { TermCheckList } from '@/components/mypage/edit/edit-form/term-check-list';
+import * as formStyles from '@/features/mypage/common/mypage-form/index.css';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
+import { ChangePassword } from '@/features/mypage/edit/edit-form/change-password';
+import { TermCheckList } from '@/features/mypage/edit/edit-form/term-check-list';
 import {
     SignupFormAddress,
     SignupFormBirthday,

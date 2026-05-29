@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
+import { SegmentedToggle } from '@/features/mypage/filters/segmented-toggle';
 import { ordersStatusTabSpec } from '@/entities/mypage/utils/tabs';
 import { useOrderStatusSummary } from '@/hooks/suspenseQuery/order/myOrder';
 

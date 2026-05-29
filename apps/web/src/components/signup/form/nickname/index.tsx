@@ -4,7 +4,7 @@ import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
-import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import WithMemberJoinConfig from '@/features/member/member-join-config-field';
 import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/shared/ui/button';
 import { InputField, InputFieldContainer } from '@/shared/ui/input';

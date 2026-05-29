@@ -22,7 +22,7 @@ import type { OrderDetailResponse } from '@/models/order';
 import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
 import { CURRENCY } from '@/utils/currency';
 
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import * as orderStyles from '@/components/mypage/orders/order-options.css';
 import * as styles from '@/features/order/components/order-detail-view/index.css';
 import { includes } from '@fxts/core';

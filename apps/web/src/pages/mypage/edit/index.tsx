@@ -4,8 +4,8 @@ import { useEffect, useState, type ReactNode } from 'react';
 
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import { CheckAccountForm } from '@/components/mypage/edit/check-account-form';
-import { EditForm } from '@/components/mypage/edit/edit-form';
+import { CheckAccountForm } from '@/features/mypage/edit/check-account-form';
+import { EditForm } from '@/features/mypage/edit/edit-form';
 import { PATHS } from '@/const/paths';
 
 export default function MypageEditPage() {

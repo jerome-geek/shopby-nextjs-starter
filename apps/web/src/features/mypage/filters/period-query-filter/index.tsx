@@ -8,7 +8,7 @@ import { useQueryStates } from 'nuqs';
 
 import { Select } from '@/shared/ui/input';
 import { PeriodRangePickerModal } from '@/components/modal/period-range-picker';
-import * as styles from '@/components/mypage/filters/period-query-filter/index.css';
+import * as styles from '@/features/mypage/filters/period-query-filter/index.css';
 import { useResponsive } from '@/hooks/utils';
 import { PeriodRangePickerBottomSheet } from '@/components/bottom-sheet/period-range-picker';
 import { parseAsPositiveInt, parseAsYmd } from '@/entities/mypage/utils/parsers';

@@ -56,4 +56,3 @@ export const termLabelSubText = style([
         color: vars.color.gray['70'],
     },
 ]);
-

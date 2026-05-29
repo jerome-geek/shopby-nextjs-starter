@@ -2,7 +2,7 @@ import { find } from '@fxts/core';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import WithMemberJoinConfig from '@/features/member/member-join-config-field';
 import { InputFieldContainer, Select } from '@/shared/ui/input';
 import { DAY_LIST, MONTH_LIST, YEAR_LIST } from '@/const/date';
 import { ErrorMessage } from '@/shared/components/form';

@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/shared/ui/button';
 import {
     InputField,

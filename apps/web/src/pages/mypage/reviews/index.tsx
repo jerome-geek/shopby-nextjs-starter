@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import { PeriodQueryFilter } from '@/components/mypage/filters/period-query-filter';
-import { SegmentedToggle } from '@/components/mypage/filters/segmented-toggle';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
+import { PeriodQueryFilter } from '@/features/mypage/filters/period-query-filter';
+import { SegmentedToggle } from '@/features/mypage/filters/segmented-toggle';
 import { MyReviewListView } from '@/components/mypage/review/review-list';
 import { ReviewableListView } from '@/components/mypage/review/reviewable-list';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';

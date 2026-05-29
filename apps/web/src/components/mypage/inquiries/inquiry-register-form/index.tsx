@@ -6,7 +6,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import upload from '@/api/storage/image';
-import * as formStyles from '@/components/mypage/common/mypage-form/index.css';
+import * as formStyles from '@/features/mypage/common/mypage-form/index.css';
 import * as styles from '@/components/mypage/inquiries/inquiry-register-form/index.css';
 import { InquiryTypeList } from '@/components/mypage/inquiries/inquiry-type-list';
 import { Button } from '@/shared/ui/button';

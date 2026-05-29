@@ -1,6 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-import { cell } from '@/components/mypage/common/mypage-list-card/index.css';
+import { cell } from '@/features/mypage/common/mypage-list-card/index.css';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles } from '@/styles/typography.css';

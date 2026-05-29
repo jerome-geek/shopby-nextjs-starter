@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { MypageMenuContext } from '@/context/mypageMenu';
 import { PATHS } from '@/const/paths';
 import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
-import type { MypageMenuList } from '@/components/mypage/side-navigation';
+import type { MypageMenuList } from '@/features/mypage/side-navigation';
 
 const MypageMenuProvider = ({ children }: { children: ReactNode }) => {
     const { t } = useTranslation();

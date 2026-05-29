@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { NoResult } from '@/shared/components/common/no-result';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
-import OptionText from '@/components/mypage/common/option-text';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
+import OptionText from '@/features/mypage/common/option-text';
 import * as styles from '@/components/mypage/review/reviewable-list/index.css';
 import { Button } from '@/shared/ui';
 import Paging from '@/shared/ui/paging';

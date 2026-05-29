@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { address } from '@/api/manage';
 import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
 import { AddressSearchModal } from '@/components/modal';
-import * as styles from '@/components/mypage/common/mypage-form/index.css';
+import * as styles from '@/features/mypage/common/mypage-form/index.css';
 import { Button } from '@/shared/ui/button';
 import {
     InputCheckbox,

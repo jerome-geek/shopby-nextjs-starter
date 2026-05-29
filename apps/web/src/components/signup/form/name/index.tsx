@@ -1,7 +1,7 @@
 import { useFormContext, useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import WithMemberJoinConfig from '@/components/hoc/with-member-join-config';
+import WithMemberJoinConfig from '@/features/member/member-join-config-field';
 import { InputField, InputFieldContainer } from '@/shared/ui/input';
 import { useLocale } from '@/hooks/utils';
 import { ErrorMessage } from '@/shared/components/form';

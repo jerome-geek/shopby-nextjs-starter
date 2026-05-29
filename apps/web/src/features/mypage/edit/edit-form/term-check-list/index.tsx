@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import * as styles from '@/components/mypage/edit/edit-form/term-check-list/index.css';
+import * as styles from '@/features/mypage/edit/edit-form/term-check-list/index.css';
 import { InputCheckbox } from '@/shared/ui/input';
 import { useProfile } from '@/hooks/suspenseQuery/member/profile';
 

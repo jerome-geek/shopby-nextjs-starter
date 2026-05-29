@@ -32,4 +32,3 @@ export const optionText = style([
         paddingRight: '8px',
     },
 ]);
-

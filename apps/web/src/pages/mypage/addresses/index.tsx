@@ -7,7 +7,7 @@ import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { NoResult } from '@/shared/components/common/no-result';
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import * as card from '@/components/mypage/common/mypage-list-card/index.css';
+import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import { useShippingAddressMutation } from '@/hooks/mutations';
