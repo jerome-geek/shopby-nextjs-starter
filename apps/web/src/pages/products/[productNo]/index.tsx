@@ -15,14 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { product } from '@/api/product';
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
-import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
-import ShareBottomSheet from '@/components/bottom-sheet/share';
-import LoadingWrapper from '@/shared/components/common/loading-wrapper';
-import Seo from '@/shared/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import { BookmarkIcon } from '@/shared/ui/icons';
-import { ProductCouponModal } from '@/components/modal/product-coupon';
-import ShareModal from '@/components/modal/share';
 import {
     ExtraProductList,
     PhotoReview,
@@ -37,10 +30,11 @@ import {
     MultiProductOption,
     SelectedProductOption,
 } from '@/components/product-option';
-import { Button } from '@/shared/ui/button';
+import { RequiredProductOption } from '@/components/product-option/required';
 import { OVERLAY_ID } from '@/const/overlay';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { useProductInfo, useProductPrice } from '@/entities/product/hooks';
+import { useCustomDialog } from '@/features/dialog';
 import { toSelectedOption } from '@/helpers/product';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
@@ -53,11 +47,14 @@ import useProductLike from '@/hooks/useProductLike';
 import { useResponsive } from '@/hooks/utils';
 import * as styles from '@/pages/products/[productNo]/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import Seo from '@/shared/components/common/seo';
+import { Button } from '@/shared/ui/button';
+import { BookmarkIcon } from '@/shared/ui/icons';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
 
-import { RequiredProductOption } from '@/components/product-option/required';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -102,26 +99,10 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const isCouponDownloadable = couponDiscountAmt > 0;
 
     const { onLikeButtonClick } = useProductLike();
+    const { openShareDialog, openCouponDownloadDialog } = useCustomDialog();
 
-    const onShareButtonClick = () => {
-        overlay.open((props) => {
-            return isMobile ? (
-                <ShareBottomSheet {...props} />
-            ) : (
-                <ShareModal {...props} />
-            );
-        });
-    };
-
-    const onCouponDownloadClick = () => {
-        overlay.open((props) => {
-            return isMobile ? (
-                <ProductCouponBottomSheet productNo={productNo} {...props} />
-            ) : (
-                <ProductCouponModal productNo={productNo} {...props} />
-            );
-        });
-    };
+    const onShareButtonClick = openShareDialog;
+    const onCouponDownloadClick = () => openCouponDownloadDialog(productNo);
 
     const overlayData = useOverlayData();
     const isOptionBottomSheetOpen =
@@ -330,6 +311,29 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                             />
                         )}
                     </div>
+
+                    <dl className={styles.deliveryBox}>
+                        <div className={styles.deliveryRow}>
+                            <dt className={styles.deliveryLabel}>배송정보</dt>
+                            <dd className={styles.deliveryValue}>
+                                {productDetailData.deliveryGuide?.split(':')[1]}
+                            </dd>
+                        </div>
+
+                        <div className={styles.deliveryRow}>
+                            <dt className={styles.deliveryLabel}>택배사</dt>
+                            <dd className={styles.deliveryValue}>
+                                {deliveryFee.deliveryCompanyTypeLabel}
+                            </dd>
+                        </div>
+
+                        <div className={styles.deliveryRow}>
+                            <dt className={styles.deliveryLabel}>배송비</dt>
+                            <dd className={styles.deliveryValue}>
+                                {deliveryFee.defaultDeliveryConditionLabel}
+                            </dd>
+                        </div>
+                    </dl>
 
                     <PhotoReview />
 

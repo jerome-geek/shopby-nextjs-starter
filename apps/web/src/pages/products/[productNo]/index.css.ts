@@ -62,50 +62,6 @@ export const thumbnailContainer = style({
     },
 });
 
-export const imageWrapper = style({
-    width: '100%',
-    aspectRatio: '1 / 1',
-    position: 'relative',
-    overflow: 'hidden',
-});
-
-export const swiperContainer = style({
-    width: '100%',
-    height: '100%',
-});
-
-export const paginationContainer = style({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '16px 0',
-});
-
-export const bullet = style({
-    width: '6px',
-    height: '6px',
-    backgroundColor: vars.color.gray['50'],
-    borderRadius: '50%',
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-    margin: '0 !important',
-    opacity: 1,
-    selectors: {
-        // 이 라이브러리 클래스는 Swiper가 활성화될 때 자동으로 붙여주므로 여기서 타겟팅 가능
-        '&.swiper-pagination-bullet-active': {
-            backgroundColor: vars.color.green['100'],
-        },
-    },
-});
-
-export const thumbnail = style({
-    width: '100%',
-    height: '100%',
-    maxWidth: '564px',
-    aspectRatio: 1 / 1,
-    objectFit: 'cover',
-});
 
 export const content = style({
     display: 'flex',
@@ -167,9 +123,6 @@ export const priceInfo = style({
     gap: '2px',
 });
 
-export const cartButton = style({
-    flex: 1,
-});
 
 export const brand = style([
     textStyles.headlineMedium,
@@ -259,17 +212,6 @@ export const salePrice = style([
     },
 ]);
 
-export const timeSaleBar = style({
-    backgroundColor: vars.color.pink['20'], // Light pink
-    color: vars.color.pink['100'],
-    padding: '10px 20px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px',
-    fontSize: '14px',
-    fontWeight: 600,
-});
 
 export const couponButton = style([
     textStyles.body2Semibold,
@@ -323,56 +265,37 @@ export const reviewCount = style([
 ]);
 
 export const deliveryBox = style({
-    backgroundColor: vars.color.green['20'],
-    padding: '12px',
-    borderRadius: '8px',
-    display: 'flex',
-    gap: '12px',
-
-    '@media': {
-        [media.desktop]: {
-            padding: '16px',
-        },
-    },
-});
-
-export const deliveryContentContainer = style({
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+    gap: '12px',
+    padding: '16px 0',
+    borderTop: `1px solid ${vars.color.gray['20']}`,
+    borderBottom: `1px solid ${vars.color.gray['20']}`,
 });
 
-export const deliveryTitle = style([
-    textStyles.body2Semibold,
-    {
-        color: vars.color.gray['90'],
+export const deliveryRow = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+});
 
-        '@media': {
-            [media.desktop]: {
-                ...textStyleTokens.body1Semibold,
-            },
-        },
+export const deliveryLabel = style([
+    textStyles.body2Regular,
+    {
+        color: vars.color.gray['60'],
+        display: 'inline-flex',
+        alignItems: 'center',
+        width: '80px',
+        flexShrink: 0,
+        margin: 0,
     },
 ]);
 
-export const badgeList = style({
-    display: 'flex',
-    gap: '4px',
-});
-
-export const badge = style([
-    textStyles.caption2Semibold,
+export const deliveryValue = style([
+    textStyles.body2Regular,
     {
-        padding: '3px 6px',
-        borderRadius: '2px',
-        backgroundColor: vars.color.secondary,
-        color: vars.color.white,
-
-        '@media': {
-            [media.desktop]: {
-                ...textStyleTokens.caption1Semibold,
-            },
-        },
+        color: vars.color.black,
+        margin: 0,
     },
 ]);
 
@@ -416,50 +339,6 @@ export const giftButton = style({
     flexShrink: 0,
 });
 
-export const buyButton = style([
-    textStyles.body1Semibold,
-    {
-        flex: 1,
-        backgroundColor: vars.color.primary,
-        color: vars.color.white,
-        border: 'none',
-        borderRadius: '4px',
-        height: '56px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-    },
-]);
-
-export const purchaseButtonDesktop = style([
-    buyButton,
-    {
-        display: 'none',
-        '@media': {
-            [media.desktop]: {
-                display: 'flex',
-                width: '100%',
-                marginTop: '16px',
-            },
-        },
-    },
-]);
-
-export const giftButtonDesktop = style([
-    giftButton,
-    {
-        display: 'none',
-
-        '@media': {
-            [media.desktop]: {
-                display: 'flex',
-                width: '63px',
-                height: '63px',
-            },
-        },
-    },
-]);
 
 export const additionalInfoContainer = style({
     display: 'flex',
@@ -501,16 +380,6 @@ export const optionContainer = style({
     },
 });
 
-export const detailsSection = style({
-    width: '100%',
-    gridColumn: '1 / span 2', // 데스크탑에서 양쪽 열을 모두 차지하도록 (Grid 사용 시)
-
-    '@media': {
-        [media.desktop]: {
-            padding: '0 20px',
-        },
-    },
-});
 
 export const topButtonContainer = style({
     display: 'flex',

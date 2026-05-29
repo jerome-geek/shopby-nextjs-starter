@@ -8,20 +8,24 @@ import { useTranslation } from 'react-i18next';
 import { recipe } from '@/api/shop';
 import { CollectionFormSheet } from '@/components/bottom-sheet/collection-form';
 import { PhotoReviewListBottomSheet } from '@/components/bottom-sheet/photo-review-list';
+import { ProductCouponBottomSheet } from '@/components/bottom-sheet/product-coupon';
 import { RecipeCreateSelectionSheet } from '@/components/bottom-sheet/recipe-create-select';
 import { RecipeImageUploadSheet } from '@/components/bottom-sheet/recipe-image-upload';
 import { RecipeRecommendationBottomSheet } from '@/components/bottom-sheet/recipe-recommendation';
 import { RecipeSaveSheet } from '@/components/bottom-sheet/recipe-save';
 import { RecipeUrlInputSheet } from '@/components/bottom-sheet/recipe-url-input';
+import ShareBottomSheet from '@/components/bottom-sheet/share';
 import { ShippingAddressChangeBottomSheet } from '@/components/bottom-sheet/shipping-address-change';
 import { ImageDetailModal } from '@/components/modal';
 import { CollectionFormModal } from '@/components/modal/collection-form';
 import { PhotoReviewListModal } from '@/components/modal/photo-review-list';
+import { ProductCouponModal } from '@/components/modal/product-coupon';
 import { RecipeCreateSelection } from '@/components/modal/recipe-create-select';
 import { RecipeImageUploadModal } from '@/components/modal/recipe-image-upload';
 import { RecipeRecommendationModal } from '@/components/modal/recipe-recommendation';
 import { RecipeSaveModal } from '@/components/modal/recipe-save';
 import { RecipeUrlInput } from '@/components/modal/recipe-url-input';
+import ShareModal from '@/components/modal/share';
 import { ShippingAddressChangeModal } from '@/components/modal/shipping-address-change';
 import ConfirmDialog from '@/shared/ui/dialog/confirm';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
@@ -420,6 +424,32 @@ export const useCustomDialog = () => {
         [isMobile],
     );
 
+    const openShareDialog = useCallback(() => {
+        overlay.open((props) => {
+            return isMobile ? (
+                <ShareBottomSheet {...props} />
+            ) : (
+                <ShareModal {...props} />
+            );
+        });
+    }, [isMobile]);
+
+    const openCouponDownloadDialog = useCallback(
+        (productNo: number) => {
+            overlay.open((props) => {
+                return isMobile ? (
+                    <ProductCouponBottomSheet
+                        productNo={productNo}
+                        {...props}
+                    />
+                ) : (
+                    <ProductCouponModal productNo={productNo} {...props} />
+                );
+            });
+        },
+        [isMobile],
+    );
+
     return {
         openAddCartDialog,
         openLoginDialog,
@@ -433,6 +463,8 @@ export const useCustomDialog = () => {
         openPhotoReviewList,
         openRecipeRecommendation,
         openShippingAddressChangeDialog,
+        openShareDialog,
+        openCouponDownloadDialog,
         withRequiredAuth,
     };
 };
