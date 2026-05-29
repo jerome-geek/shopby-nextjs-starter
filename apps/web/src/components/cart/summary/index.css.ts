@@ -16,7 +16,7 @@ export const summaryArea = style({
             width: '100%',
             height: 'fit-content',
             position: 'sticky',
-            top: '120px',
+            top: 'calc(var(--header-height, 0px) + 20px)',
             display: 'flex',
             flexDirection: 'column',
             gap: '32px',
@@ -36,7 +36,6 @@ export const summaryBox = style({
     '@media': {
         [media.desktop]: {
             gap: '24px',
-            paddingTop: '8px',
         },
     },
 });
