@@ -10,21 +10,20 @@ import type {
     InferGetStaticPropsType,
 } from 'next';
 import { useRouter } from 'next/router';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
-import FetchBoundary from '@/shared/components/common/FetchBoundary';
-import { CalorieIcon, PeopleIcon, TimerIcon } from '@/shared/ui/icons';
 import {
     RecipeCommentSection,
     RecipeDetailStickyFooter,
     RecipeDetailStickyFooterSkeleton,
     RecipeRecommend,
 } from '@/components/recipe';
-import { VerticalMoreMenu } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { SIX_HOUR_IN_SECONDS } from '@/const/time';
 import { createRecipeSeoData } from '@/entities/recipe/utils/seo';
+import { RecipeMedia } from '@/entities/recipe/ui';
 import { useCustomDialog } from '@/features/dialog';
 import useBookmark from '@/features/recipe/hooks/useBookmark';
 import { useRecipeMutation } from '@/hooks/mutations';
@@ -39,7 +38,9 @@ import {
     useResponsive,
 } from '@/hooks/utils';
 import * as styles from '@/pages/recipes/[sno]/index.css';
-import { useYoutubePlayer } from '@/shared/hooks/useYoutubePlayer';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import { VerticalMoreMenu } from '@/shared/ui';
+import { CalorieIcon, PeopleIcon, TimerIcon } from '@/shared/ui/icons';
 import { vars } from '@/styles/theme.css';
 
 const HEADER_HEIGHT = 90;
@@ -176,50 +177,23 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
         }
     };
 
-    const isYoutube = recipeDetailData.sourceType === 'YOUTUBE';
-    const { iframeRef, seekAndPause } = useYoutubePlayer();
-    const isYoutubeShorts = isYoutube && sourceUrl.includes('/shorts/');
-    const isYoutubeLongForm = isYoutube && !isYoutubeShorts;
-    const youtubeEmbedUrl =
-        isYoutube && recipeDetailData.sourceId
-            ? `https://www.youtube.com/embed/${recipeDetailData.sourceId}?enablejsapi=1&rel=0&playsinline=1`
-            : null;
     const thumbnailUrl = recipeDetailData.thumbnailUrl || imageList[0];
+    const seekAndPauseRef = useRef<((seconds: number) => void) | null>(null);
 
     return (
         <div className={styles.container}>
             {/* --- HEADER AREA --- */}
             <section className={styles.headerArea}>
-                <div
-                    className={styles.imageCarouselContainer({
-                        sticky: isYoutubeLongForm,
-                    })}
-                >
-                    <div
-                        className={styles.imageCarousel({
-                            ratio: isYoutubeLongForm ? 'wide' : 'square',
-                        })}
-                    >
-                        {youtubeEmbedUrl ? (
-                            <iframe
-                                ref={iframeRef}
-                                src={youtubeEmbedUrl}
-                                title={recipeDetailData.title}
-                                className={styles.carouselVideo}
-                                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-                                allowFullScreen
-                            />
-                        ) : (
-                            thumbnailUrl && (
-                                <img
-                                    src={thumbnailUrl}
-                                    alt={recipeDetailData.title}
-                                    className={styles.carouselImage}
-                                />
-                            )
-                        )}
-                    </div>
-                </div>
+                <RecipeMedia
+                    sourceType={recipeDetailData.sourceType}
+                    sourceUrl={sourceUrl}
+                    sourceId={recipeDetailData.sourceId}
+                    thumbnailUrl={thumbnailUrl}
+                    title={recipeDetailData.title}
+                    onPlayerReady={(fn) => {
+                        seekAndPauseRef.current = fn;
+                    }}
+                />
 
                 <div className={styles.headerInfo}>
                     <div className={styles.recipeInfo}>
@@ -384,12 +358,12 @@ const RecipeDetailContent = ({ sno }: RecipeDetailContentProps) => {
                             <div className={styles.stepContent}>
                                 <div className={styles.stepDescription}>
                                     {step.description}
-                                    {isYoutube &&
+                                    {recipeDetailData.sourceType === 'YOUTUBE' &&
                                         step.timestampSeconds != null && (
                                             <button
                                                 type='button'
                                                 onClick={() =>
-                                                    seekAndPause(
+                                                    seekAndPauseRef.current?.(
                                                         step.timestampSeconds ??
                                                             0,
                                                     )
