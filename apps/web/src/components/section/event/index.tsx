@@ -2,11 +2,11 @@ import { EventSectionBanner } from '@/features/event/section/components/event-se
 import { EventSectionContent } from '@/features/event/section/components/event-section-content';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
+import * as styles from '@/components/section/event/index.css';
 import {
     EventBannerSkeleton,
     EventContentSkeleton,
 } from '@/components/section/event/skeleton';
-import * as styles from '@/components/section/event/index.css';
 
 interface EventSectionProps {
     index?: number;
@@ -23,7 +23,7 @@ const EventSection = ({ eventKey }: EventSectionProps) => {
         <div className={styles.container}>
             <ShopbyAsyncBoundary
                 fallback={<EventBannerSkeleton />}
-                errorFallback={null}
+                errorFallback={<></>}
             >
                 <EventSectionBanner eventKey={eventKey} />
             </ShopbyAsyncBoundary>

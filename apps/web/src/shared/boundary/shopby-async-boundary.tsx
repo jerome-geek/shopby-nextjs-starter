@@ -1,3 +1,4 @@
+import { includes } from '@fxts/core';
 import {
     ErrorBoundary,
     ErrorBoundaryFallbackProps,
@@ -15,13 +16,12 @@ import { RedirectError } from '@/shared/errors';
 
 interface ShopbyAsyncBoundaryProps {
     children: ReactNode;
-
     fallback?: ReactNode;
     /**
      * 에러 발생 시 렌더할 fallback 컴포넌트
      * - ReactNode: 정적 fallback
      * - Function: ErrorBoundaryFallbackProps를 받아 동적으로 렌더
-     * - 미지정 시 DefaultErrorFallback 사용
+     * - null 또는 미지정 시 DefaultErrorFallback 사용
      */
     errorFallback?:
         | ReactNode
@@ -105,11 +105,19 @@ const ShopbyAsyncBoundary = ({
                     fallback={(props) => {
                         // RedirectError 발생 시 즉시 리다이렉트 핸들러 렌더링
                         const error = props.error;
-                        if (
-                            ['RedirectError', 'InvalidParameterError'].includes(error.name) ||
-                            error instanceof RedirectError
-                        ) {
-                            return <RedirectHandler path={(error as RedirectError).path} />;
+                        const isRedirectError =
+                            error instanceof RedirectError ||
+                            includes(error.name, [
+                                'RedirectError',
+                                'InvalidParameterError',
+                            ]);
+
+                        if (isRedirectError) {
+                            return (
+                                <RedirectHandler
+                                    path={(error as RedirectError).path}
+                                />
+                            );
                         }
 
                         // 503 에러(서버 점검)는 무조건 상위로 throw
