@@ -104,6 +104,7 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
     const onShareButtonClick = () =>
         openShareDialog({
             template: 'commerce',
+            url: window.location.href,
             title: brand?.name
                 ? `[${brand.name}] ${baseInfo.productName}`
                 : baseInfo.productName,

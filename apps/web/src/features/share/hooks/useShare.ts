@@ -10,6 +10,7 @@ const DEFAULT_SHARE_DESCRIPTION = '상품 및 레시피 정보를 확인해보�
 /** 피드형 공유 콘텐츠 */
 export interface KakaoFeedContent {
     template?: 'feed';
+    url?: string;
     title?: string;
     description?: string;
     imageUrl?: string;
@@ -25,6 +26,7 @@ export interface KakaoFeedContent {
 /** 커머스형 공유 콘텐츠 */
 export interface KakaoCommerceContent {
     template: 'commerce';
+    url?: string;
     title?: string;
     description?: string;
     imageUrl?: string;
@@ -53,9 +55,9 @@ export const useShare = (options?: ShareOptions) => {
             kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
         }
 
-        const url = window.location.href;
-        const link = { mobileWebUrl: url, webUrl: url };
         const content = options?.kakao;
+        const url = content?.url ?? window.location.href;
+        const link = { mobileWebUrl: url, webUrl: url };
 
         if (content?.template === 'commerce') {
             kakao.Share.sendDefault({
