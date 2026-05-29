@@ -80,6 +80,12 @@ export const iconWrapper = style({
     },
 });
 
+export const leftButtonGroup = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+});
+
 export const cartBadge = style([
     textStyles.caption2Semibold,
     {

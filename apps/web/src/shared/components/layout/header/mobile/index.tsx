@@ -5,14 +5,14 @@ import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Menu } from '@/shared/components/layout/header/menu';
-import { MobileBottomMenu } from '@/shared/components/layout/header/mobile/bottom-menu';
-import * as styles from '@/shared/components/layout/header/mobile/index.css';
 import { ProductListSearchInput } from '@/components/product-list/search-input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
 import { useToast } from '@/hooks/ui';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
+import { Menu } from '@/shared/components/layout/header/menu';
+import { MobileBottomMenu } from '@/shared/components/layout/header/mobile/bottom-menu';
+import * as styles from '@/shared/components/layout/header/mobile/index.css';
 import { vars } from '@/styles/theme.css';
 import {
     getHeaderType,
@@ -25,6 +25,7 @@ import logoImage from '@/assets/logo.png';
 import {
     ArrowIcon,
     BigCartIcon,
+    HomeIcon,
     SearchIcon,
     ShareIcon,
 } from '@/shared/ui/icons';
@@ -74,6 +75,19 @@ export const MobileHeader = ({
         <button className={styles.iconWrapper} onClick={() => router.back()}>
             <ArrowIcon direction='left' currentColor={vars.color.black} />
         </button>
+    );
+
+    const HomeButton = (
+        <Link href={PATHS.MAIN} className={styles.iconWrapper}>
+            <HomeIcon />
+        </Link>
+    );
+
+    const BackWithHome = (
+        <div className={styles.leftButtonGroup}>
+            {BackButton}
+            {HomeButton}
+        </div>
     );
 
     const SearchButton = (
@@ -141,7 +155,7 @@ export const MobileHeader = ({
             case 'SEARCH':
                 return {
                     wrapperClassName: styles.searchInputContainer,
-                    left: BackButton,
+                    left: BackWithHome,
                     center: (
                         <ProductListSearchInput
                             syncKeywordFromUrl
@@ -160,7 +174,7 @@ export const MobileHeader = ({
             case 'PRODUCT_LIST':
                 return {
                     wrapperClassName: styles.container,
-                    left: BackButton,
+                    left: BackWithHome,
                     center: (
                         <h1 className={styles.title}>{depth2CategoryLabel}</h1>
                     ),
@@ -169,7 +183,7 @@ export const MobileHeader = ({
             default:
                 return {
                     wrapperClassName: styles.container,
-                    left: BackButton,
+                    left: BackWithHome,
                     center: <h1 className={styles.title}>{pathTitle}</h1>,
                     right: renderIconList(iconItemsByType[iconListType]),
                 };
