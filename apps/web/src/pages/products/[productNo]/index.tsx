@@ -75,7 +75,8 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
 
     const { baseInfo, counter, brand, liked, deliveryFee } = productDetailData;
 
-    const { isSaleEnd, productContent } = useProductInfo(productNo);
+    const { isStopSale, isSoldOut, isSaleEnd, productContent } =
+        useProductInfo(productNo);
 
     const { discountRate, buyPrice, salePrice, couponDiscountAmt } =
         useProductPrice({
@@ -407,9 +408,15 @@ function ProductDetailView({ productNo }: ProductDetailViewProps) {
                     initial={{ transform: 'translateY(0)' }}
                     exit={{ transform: 'translateY(0)' }}
                 >
-                    {isSaleEnd ? (
+                    {isStopSale || isSoldOut || isSaleEnd ? (
                         <Button frame='solid' variant='secondary' disabled>
-                            {t('판매가 종료된 상품입니다.')}
+                            {t(
+                                isStopSale
+                                    ? '판매중지된 상품입니다'
+                                    : isSoldOut
+                                    ? '품절된 상품입니다'
+                                    : '판매종료된 상품입니다',
+                            )}
                         </Button>
                     ) : (
                         <>

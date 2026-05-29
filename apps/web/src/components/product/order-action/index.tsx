@@ -2,12 +2,12 @@ import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
 import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
-import { GiftIcon } from '@/shared/ui/icons/GiftIcon';
 import * as styles from '@/components/product/order-action/index.css';
-import ButtonV2 from '@/shared/ui/button/v2';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useProductInfo } from '@/entities/product/hooks';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
+import ButtonV2 from '@/shared/ui/button/v2';
+import { GiftIcon } from '@/shared/ui/icons/GiftIcon';
 import { CURRENCY } from '@/utils/currency';
 
 interface ProductOrderActionProps {
@@ -30,7 +30,7 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
         );
     };
 
-    const { isSaleEnd } = useProductInfo(productNo);
+    const { isStopSale, isSoldOut, isSaleEnd } = useProductInfo(productNo);
 
     const {
         totalPrice,
@@ -54,14 +54,20 @@ export const ProductOrderAction = ({ productNo }: ProductOrderActionProps) => {
             </div>
 
             <div className={styles.actionButtons}>
-                {isSaleEnd ? (
+                {isStopSale || isSoldOut || isSaleEnd ? (
                     <ButtonV2
                         frame='solid'
                         variant='secondary'
                         disabled
                         style={{ width: '100%', height: '63px' }}
                     >
-                        {t('판매중지된 상품입니다')}
+                        {t(
+                            isStopSale
+                                ? '판매중지된 상품입니다'
+                                : isSoldOut
+                                ? '품절된 상품입니다'
+                                : '판매종료된 상품입니다',
+                        )}
                     </ButtonV2>
                 ) : (
                     <>
