@@ -1,4 +1,4 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
@@ -15,13 +15,83 @@ export const ClaimOrderOptions = ({
     orderOptionList,
 }: ClaimOrderOptionsProps) => {
     const { t } = useTranslation();
-    const { control } = useFormContext();
+    const { control, setValue } = useFormContext();
+
+    const claimedProductOptions = useWatch({
+        control,
+        name: 'claimedProductOptions',
+    }) as Array<{ isChecked?: boolean } | undefined> | undefined;
+
+    const isMultipleOptions = orderOptionList.length > 1;
+    const totalCount = orderOptionList.length;
+    const checkedCount =
+        claimedProductOptions?.filter((opt) => !!opt?.isChecked).length ?? 0;
+    const isAllChecked = totalCount > 0 && checkedCount === totalCount;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>
-                {t('상품 정보')}
-            </h3>
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '12px',
+                }}
+            >
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>
+                    {t('상품 정보')}
+                </h3>
+
+                {isMultipleOptions && (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <InputCheckbox
+                            checked={isAllChecked}
+                            onCheckedChange={() => {
+                                const nextChecked = !isAllChecked;
+
+                                orderOptionList.forEach((_, index) => {
+                                    setValue(
+                                        `claimedProductOptions.${index}.isChecked`,
+                                        nextChecked,
+                                        {
+                                            shouldDirty: true,
+                                            shouldTouch: true,
+                                        },
+                                    );
+                                });
+                            }}
+                        />
+                        <button
+                            type='button'
+                            onClick={() => {
+                                const nextChecked = !isAllChecked;
+
+                                orderOptionList.forEach((_, index) => {
+                                    setValue(
+                                        `claimedProductOptions.${index}.isChecked`,
+                                        nextChecked,
+                                        {
+                                            shouldDirty: true,
+                                            shouldTouch: true,
+                                        },
+                                    );
+                                });
+                            }}
+                            style={{
+                                border: 0,
+                                background: 'transparent',
+                                padding: 0,
+                                marginLeft: '8px',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                cursor: 'pointer',
+                            }}
+                        >
+                            {isAllChecked ? t('전체 해제') : t('전체 선택')}
+                        </button>
+                    </div>
+                )}
+            </div>
             <ul
                 style={{
                     listStyle: 'none',
@@ -50,7 +120,7 @@ export const ClaimOrderOptions = ({
                          * 복수 옵션일 때만 체크박스 노출
                          * 단일 옵션일 경우 상위에서 기본값이 체크(true)로 세팅됩니다.
                          */}
-                        {orderOptionList.length > 1 && (
+                        {isMultipleOptions && (
                             <Controller
                                 name={`claimedProductOptions.${index}.isChecked`}
                                 control={control}

@@ -38,10 +38,24 @@ export const ClaimReasonContent = ({
     const claimReasonType = useWatch({ control, name: 'claimReasonType' });
 
     const claimReasonTypeList = useMemo(() => {
+        // NOTE: 특정 사유만 노출하도록 요청된 케이스에 대한 처리
+        const filteredClaimReasonTypes = pipe(
+            orderOptionData,
+            prop('claimReasonTypes'),
+            filter(
+                (a) =>
+                    a.claimReasonType === 'CHANGE_MIND' ||
+                    a.claimReasonType === 'DELAY_DELIVERY' ||
+                    a.claimReasonType === 'OTHERS_SELLER' ||
+                    a.claimReasonType === 'OTHERS_BUYER' ||
+                    a.claimReasonType === 'OUT_OF_STOCK',
+            ),
+            toArray,
+        );
+
         if (isResponsibleObjectHidden) {
             return pipe(
-                orderOptionData,
-                prop('claimReasonTypes'),
+                filteredClaimReasonTypes,
                 map(({ label, claimReasonType: value }) => ({
                     label,
                     value,
@@ -55,8 +69,7 @@ export const ClaimReasonContent = ({
         }
 
         return pipe(
-            orderOptionData,
-            prop('claimReasonTypes'),
+            filteredClaimReasonTypes,
             filter((a) => a.responsibleObjectType === responsibleObjectType),
             map(({ label, claimReasonType: value }) => ({
                 label,
@@ -156,7 +169,11 @@ export const ClaimReasonContent = ({
                                 }
                                 options={claimReasonTypeList}
                                 onChange={(selectedOption) => {
-                                    onChange(selectedOption ? selectedOption.value : null);
+                                    onChange(
+                                        selectedOption
+                                            ? selectedOption.value
+                                            : null,
+                                    );
 
                                     if (isResponsibleObjectHidden) {
                                         setValue(
@@ -175,30 +192,32 @@ export const ClaimReasonContent = ({
                     <ErrorMessage name='claimReasonType' />
                 </InputFieldContainer>
 
-                <InputFieldContainer>
-                    <InputLabel isRequired>
-                        {claimType === 'EXCHANGE'
-                            ? t('교환 내용')
-                            : t('상세 사유')}
-                    </InputLabel>
-                    <Controller
-                        control={control}
-                        name='claimReasonDetail'
-                        render={({ field: { onChange } }) => (
-                            <TextArea
-                                onInput={onChange}
-                                placeholder={
-                                    claimType === 'EXCHANGE'
-                                        ? t('교환 내용을 입력해주세요.')
-                                        : t('상세 사유를 입력해주세요.')
-                                }
-                                rows={5}
-                                {...register('claimReasonDetail')}
-                            />
-                        )}
-                    />
-                    <ErrorMessage name='claimReasonDetail' />
-                </InputFieldContainer>
+                {claimType !== 'CANCEL' && (
+                    <InputFieldContainer>
+                        <InputLabel isRequired>
+                            {claimType === 'EXCHANGE'
+                                ? t('교환 내용')
+                                : t('상세 사유')}
+                        </InputLabel>
+                        <Controller
+                            control={control}
+                            name='claimReasonDetail'
+                            render={({ field: { onChange } }) => (
+                                <TextArea
+                                    onInput={onChange}
+                                    placeholder={
+                                        claimType === 'EXCHANGE'
+                                            ? t('교환 내용을 입력해주세요.')
+                                            : t('상세 사유를 입력해주세요.')
+                                    }
+                                    rows={5}
+                                    {...register('claimReasonDetail')}
+                                />
+                            )}
+                        />
+                        <ErrorMessage name='claimReasonDetail' />
+                    </InputFieldContainer>
+                )}
 
                 {isFileUploadEnabled && (
                     <InputFieldContainer>

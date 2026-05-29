@@ -438,6 +438,10 @@ export const ProductInquiryRegisterForm = ({
                     ) : null}
                 </div>
 
+                <p className={styles.description}>
+                    {productInquiryConfigData?.description}
+                </p>
+
                 <div className={formStyles.actions}>
                     <Button
                         type='button'

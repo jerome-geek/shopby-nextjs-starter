@@ -65,8 +65,6 @@ export const useProductOrderAction = (
         write: { mutate: writeOrderSheetMutate },
     } = useOrderSheetMutation();
 
-    console.log('selectedOptionList', selectedOptionList);
-
     const filteredOptions = pipe(
         selectedOptionList,
         filter(

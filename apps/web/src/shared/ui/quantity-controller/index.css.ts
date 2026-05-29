@@ -7,7 +7,7 @@ import { textStyles, textStyleTokens } from '@/styles/typography.css';
 export const quantityController = style({
     display: 'flex',
     alignItems: 'center',
-    gap: '10px',
+    gap: '4px',
     width: 'fit-content',
     border: `1px solid ${vars.color.gray['20']}`,
     backgroundColor: vars.color.white,
@@ -53,8 +53,9 @@ export const quantityButton = style({
 export const quantityValue = style([
     textStyles.caption1Regular,
     {
-        width: '15px',
+        width: '36px',
         textAlign: 'center',
+        height: '100%',
         color: vars.color.gray['80'],
 
         '@media': {
@@ -62,5 +63,16 @@ export const quantityValue = style([
                 ...textStyleTokens.body2Regular,
             },
         },
+    },
+]);
+
+export const quantityInput = style([
+    quantityValue,
+    {
+        appearance: 'textfield',
+        border: 'none',
+        background: 'transparent',
+        padding: 0,
+        outline: 'none',
     },
 ]);

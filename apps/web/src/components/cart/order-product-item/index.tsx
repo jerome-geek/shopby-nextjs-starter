@@ -1,10 +1,12 @@
 import { concat, map, pipe, sort, toArray, zip } from '@fxts/core';
 import clsx from 'clsx';
-import { Minus, Plus, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/cart/order-product-item/index.css';
 import { InputCheckbox } from '@/shared/ui/input';
+import { QuantityController } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils';
 import type {
@@ -18,7 +20,6 @@ import type {
 } from '@/models/order/guestOrder';
 import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
 import { CURRENCY } from '@/utils/currency';
-import { useTranslation } from 'react-i18next';
 
 type OrderInvalidProduct = Omit<
     InvalidProduct,
@@ -85,8 +86,6 @@ export const OrderProductItem = ({
     const isSoldOut = option.validInfo.errorCode === 'OUT_OF_STOCK';
 
     const invalidMessage = isSoldOut ? t('품절') : option.validInfo.message;
-
-    console.log('🚀 ~ OrderProductItem ~ item:', item);
 
     return (
         <li
@@ -156,31 +155,13 @@ export const OrderProductItem = ({
                     </div>
 
                     {canAdjustQuantity ? (
-                        <div className={styles.quantityController}>
-                            <button
-                                type='button'
-                                className={styles.quantityButton}
-                                disabled={option.orderCnt <= 1}
-                                onClick={() =>
-                                    onQuantityChange(option.orderCnt - 1)
-                                }
-                            >
-                                <Minus size={16} />
-                            </button>
-                            <span className={styles.quantityValue}>
-                                {option.orderCnt}
-                            </span>
-                            <button
-                                type='button'
-                                className={styles.quantityButton}
-                                disabled={option.orderCnt >= option.stockCnt}
-                                onClick={() =>
-                                    onQuantityChange(option.orderCnt + 1)
-                                }
-                            >
-                                <Plus size={16} />
-                            </button>
-                        </div>
+                        <QuantityController
+                            value={option.orderCnt}
+                            onChange={onQuantityChange}
+                            min={product.minBuyCount || 1}
+                            max={option.stockCnt}
+                            disabled={isSoldOut}
+                        />
                     ) : (
                         <span className={styles.itemOption}>
                             {t('수량 : {{orderCnt}}', {

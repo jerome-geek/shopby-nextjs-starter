@@ -1,4 +1,6 @@
 import { Minus, Plus } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useDebounceValue } from 'usehooks-ts';
 
 import * as styles from '@/shared/ui/quantity-controller/index.css';
 
@@ -7,6 +9,7 @@ interface QuantityControllerProps {
     min?: number;
     max?: number;
     disabled?: boolean;
+    debounceMs?: number;
     onChange: (nextValue: number) => void;
 }
 
@@ -15,10 +18,32 @@ export const QuantityController = ({
     min = 1,
     max = Number.POSITIVE_INFINITY,
     disabled = false,
+    debounceMs = 400,
     onChange,
 }: QuantityControllerProps) => {
-    const canDecrease = !disabled && value > min;
-    const canIncrease = !disabled && value < max;
+    const parsedMax = max === -999 ? Number.POSITIVE_INFINITY : max;
+
+    const [inputValue, setInputValue] = useState(() => value);
+    const [draftValue, setDraftValue] = useState(() => value);
+    const [debouncedDraftValue] = useDebounceValue(draftValue, debounceMs);
+    const lastValueRef = useRef<number>(value);
+
+    const handleChangeValue = (nextValue: number) => {
+        setInputValue(nextValue);
+        setDraftValue(nextValue);
+    };
+
+    useEffect(() => {
+        if (debouncedDraftValue === lastValueRef.current) {
+            return;
+        }
+
+        lastValueRef.current = debouncedDraftValue;
+        onChange(debouncedDraftValue);
+    }, [debouncedDraftValue, onChange]);
+
+    const canDecrease = !disabled && draftValue > min;
+    const canIncrease = !disabled && draftValue < parsedMax;
 
     return (
         <div className={styles.quantityController}>
@@ -26,16 +51,44 @@ export const QuantityController = ({
                 type='button'
                 className={styles.quantityButton}
                 disabled={!canDecrease}
-                onClick={() => onChange(Math.max(min, value - 1))}
+                onClick={() => {
+                    const nextValue = Math.max(min, draftValue - 1);
+                    handleChangeValue(nextValue);
+                }}
             >
                 <Minus size={16} />
             </button>
-            <span className={styles.quantityValue}>{value}</span>
+            <input
+                type='text'
+                inputMode='numeric'
+                value={inputValue}
+                className={styles.quantityInput}
+                onChange={(e) => {
+                    const nextValue = parseInt(e.target.value) || 0;
+                    setInputValue(nextValue);
+                }}
+                onBlur={(e) => {
+                    let nextValue = parseInt(e.target.value) || 0;
+
+                    if (nextValue < min) {
+                        nextValue = min;
+                    }
+
+                    if (nextValue > parsedMax) {
+                        nextValue = parsedMax;
+                    }
+
+                    handleChangeValue(nextValue);
+                }}
+            />
             <button
                 type='button'
                 className={styles.quantityButton}
                 disabled={!canIncrease}
-                onClick={() => onChange(Math.min(max, value + 1))}
+                onClick={() => {
+                    const nextValue = Math.min(parsedMax, draftValue + 1);
+                    handleChangeValue(nextValue);
+                }}
             >
                 <Plus size={16} />
             </button>
@@ -44,4 +97,3 @@ export const QuantityController = ({
 };
 
 export default QuantityController;
-

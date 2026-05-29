@@ -1,6 +1,7 @@
 import type { ClientPlatformType, PlatformType } from '@/models';
 import type { GetProfileResponse } from '@/models/member/profile';
 import type { CartList, OrderDetailResponse } from '@/models/order';
+import { ReservePaymentData } from '@/models/order/purchase';
 import type { ProductDetailResponse } from '@/models/product';
 import type { KakaoSDK } from '@/types/kakao';
 
@@ -79,10 +80,18 @@ declare global {
                 accessToken?: string;
             }) => void;
             reservation: (
-                paymentData: any,
-                callback?: (response: any) => void,
+                /** 주문 정보 데이터 */
+                paymentData: ReservePaymentData,
+                /** 주문 예약하기 api 성공 시 콜백 */
+                successCallback?: (response: any) => void,
+                /** 주문 예약하기 api 에러 발생 시 콜백, 아래 4번째 인자 값과 무관하게 항상 호출됨 */
                 errorCallback?: (error: ShopByErrorResponse) => void,
-                isAlertUsable?: boolean,
+                /**
+                 * SDK 기본 에러 처리(얼럿 노출 등) 비활성화 여부, 기본값 false
+                 * - false: HTTP 400/401 발생 시 얼럿 띄움
+                 * - true : 얼럿을 띄우지 않음. 에러 UI를 직접 제어할 때 사용 (true로 두면 사용자에게 보일 에러 UI는 failCallback에서 직접 처리)
+                 */
+                isDefaultAlertUnUsable?: boolean,
                 additionalPgParam?: any,
             ) => void;
             requestNaverPayOrder: (

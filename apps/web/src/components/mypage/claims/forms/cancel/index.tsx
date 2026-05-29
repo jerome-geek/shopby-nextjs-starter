@@ -53,6 +53,7 @@ export const ClaimCancelForm = ({ orderOptionData }: ClaimCancelFormProps) => {
             refundsImmediately: true,
             saveBankAccountInfo: false,
             claimedProductOptions: [],
+            claimReasonDetail: ' ',
             bankAccountInfo: {
                 bank: undefined,
                 bankAccount: '',
@@ -68,6 +69,7 @@ export const ClaimCancelForm = ({ orderOptionData }: ClaimCancelFormProps) => {
         control,
         name: 'claimedProductOptions',
     });
+
     const claimReasonType = useWatch({ control, name: 'claimReasonType' });
     const responsibleObjectType = useWatch({
         control,
@@ -119,16 +121,21 @@ export const ClaimCancelForm = ({ orderOptionData }: ClaimCancelFormProps) => {
     }, [orderOptionData]);
 
     useEffect(() => {
-        reset((prev) => ({
-            ...prev,
-            claimedProductOptions: orderOptionList.map((option) => ({
-                isChecked:
-                    option.orderOptionNo ===
-                    orderOptionData.originalOption.orderOptionNo,
-                orderProductOptionNo: option.orderOptionNo,
-                productCnt: option.orderCnt,
-            })),
-        }));
+        reset(
+            (prev) => ({
+                ...prev,
+                claimedProductOptions: orderOptionList.map((option) => ({
+                    isChecked:
+                        option.orderOptionNo ===
+                        orderOptionData.originalOption.orderOptionNo,
+                    orderProductOptionNo: option.orderOptionNo,
+                    productCnt: option.orderCnt,
+                })),
+            }),
+            {
+                keepFieldsRef: true,
+            },
+        );
     }, [reset, orderOptionData, orderOptionList]);
 
     const {
@@ -156,14 +163,22 @@ export const ClaimCancelForm = ({ orderOptionData }: ClaimCancelFormProps) => {
         : isGuestCancelOptionsPending;
 
     const onSubmit = handleSubmit(async (data) => {
-        const isAgree = await openAsyncDialog({
-            message: t('해당 주문을 취소하시겠습니까?'),
-            onCloseReturnValue: false,
-            onConfirmReturnValue: true,
-        });
+        const isPrepareDelivery =
+            orderOptionData.originalOption.orderStatusType ===
+                'DELIVERY_PREPARE' ||
+            orderOptionData.originalOption.orderStatusType ===
+                'PRODUCT_PREPARE';
 
-        if (!isAgree) {
-            return;
+        if (!isPrepareDelivery) {
+            const isAgree = await openAsyncDialog({
+                message: t('해당 주문을 취소하시겠습니까?'),
+                onCloseReturnValue: false,
+                onConfirmReturnValue: true,
+            });
+
+            if (!isAgree) {
+                return;
+            }
         }
 
         const cleaningSubmitData = {
@@ -180,7 +195,10 @@ export const ClaimCancelForm = ({ orderOptionData }: ClaimCancelFormProps) => {
         const callback = {
             onSuccess: async () => {
                 await openAsyncDialog({
-                    message: t('주문 취소가 완료되었습니다.'),
+                    message: t('취소 접수가 완료 되었습니다.'),
+                    description: isPrepareDelivery
+                        ? '배송 진행 상황을 확인하고 취소 여부를 문자 또는 카카오 알림톡으로 알려드릴게요.'
+                        : undefined,
                     onCloseReturnValue: false,
                     onConfirmReturnValue: true,
                 });
@@ -219,7 +237,10 @@ export const ClaimCancelForm = ({ orderOptionData }: ClaimCancelFormProps) => {
             >
                 <ClaimOrderOptions orderOptionList={orderOptionList} />
 
-                <ClaimReason claimType={CLAIM_TYPE} orderOptionData={orderOptionData} />
+                <ClaimReason
+                    claimType={CLAIM_TYPE}
+                    orderOptionData={orderOptionData}
+                />
 
                 {estimateData && !isEmpty(filteredClaimedProductOptions) && (
                     <ClaimPriceInfo claimPriceData={estimateData} />

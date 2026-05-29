@@ -1,12 +1,19 @@
+import { includes } from '@fxts/core';
 import { overlay } from 'overlay-kit';
+import { useMemo } from 'react';
 
 import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
 import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
 import { Button } from '@/shared/ui/button';
+import { CLAIM_TYPE_MAP } from '@/const/label';
 import { useClaim } from '@/features/claim';
 import { useAuth } from '@/hooks/useAuth';
-import { useResponsive } from '@/hooks/utils';
-import type { NextActionType } from '@/models';
+import { useDialog, useResponsive } from '@/hooks/utils';
+import type {
+    ClaimStatusType,
+    NextActionType,
+    OrderStatusType,
+} from '@/models';
 
 export interface NextActionButtonProps {
     nextActionType: NextActionType;
@@ -17,10 +24,14 @@ export interface NextActionButtonProps {
     uri: string;
     claimNo: number | null;
     isFreeGift: boolean;
+    orderStatusType: OrderStatusType;
+    claimStatusType?: Nullable<ClaimStatusType>;
 }
 
 export const NextActionButton = ({
     nextActionType,
+    orderStatusType,
+    claimStatusType,
     productNo,
     orderOptionNo,
     optionNo,
@@ -30,6 +41,8 @@ export const NextActionButton = ({
     isFreeGift,
 }: NextActionButtonProps) => {
     const { isMobile } = useResponsive();
+
+    const { openAsyncDialog } = useDialog();
 
     const isLogin = useAuth();
 
@@ -43,16 +56,40 @@ export const NextActionButton = ({
         optionNo,
     });
 
+    const claimType = useMemo(() => {
+        if (includes(claimStatusType, ['RETURN'])) {
+            return 'RETURN';
+        }
+
+        if (includes(claimStatusType, ['EXCHANGE'])) {
+            return 'EXCHANGE';
+        }
+
+        return 'CANCEL';
+    }, [claimStatusType]);
+
     const openClaimDetailModal = () => {
         if (isMobile) {
             overlay.open((props) => {
-                return <ClaimDetailBottomSheet {...props} claimNo={claimNo!} />;
+                return (
+                    <ClaimDetailBottomSheet
+                        {...props}
+                        claimNo={claimNo!}
+                        claimType={claimType}
+                    />
+                );
             });
             return;
         }
 
         overlay.open((props) => {
-            return <ClaimDetailModal {...props} claimNo={claimNo!} />;
+            return (
+                <ClaimDetailModal
+                    {...props}
+                    claimNo={claimNo!}
+                    claimType={claimType}
+                />
+            );
         });
     };
 
@@ -75,7 +112,7 @@ export const NextActionButton = ({
                 onClick={openClaimDetailModal}
                 style={{ height: '32px', fontSize: '12px' }}
             >
-                {label}
+                {`${CLAIM_TYPE_MAP[claimType]} 상세`}
             </Button>
         );
     }
@@ -92,6 +129,42 @@ export const NextActionButton = ({
                 {label}
             </Button>
         );
+    }
+
+    if (includes(orderStatusType, ['PRODUCT_PREPARE', 'DELIVERY_PREPARE'])) {
+        if (nextActionType === 'WITHDRAW_CANCEL') {
+            return null;
+        }
+
+        if (nextActionType === 'CANCEL') {
+            const handleCancelClick = async () => {
+                const isAgree = await openAsyncDialog({
+                    type: 'confirm',
+                    message: '취소신청 안내',
+                    description:
+                        '배송준비중인 상품은 배송 진행 상항에 따라 취소가 안될 수도 있어요.',
+                    onCloseReturnValue: false,
+                    onConfirmReturnValue: true,
+                    confirmText: '계속하기',
+                    cancelText: '그만하기',
+                });
+
+                if (isAgree) {
+                    nextAction()();
+                }
+            };
+
+            return (
+                <Button
+                    frame='outlined'
+                    size='small'
+                    onClick={handleCancelClick}
+                    style={{ height: '32px', fontSize: '12px' }}
+                >
+                    {label}
+                </Button>
+            );
+        }
     }
 
     return (
