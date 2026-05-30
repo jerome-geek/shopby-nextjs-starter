@@ -6,10 +6,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperInstance } from 'swiper/types';
 
-import * as styles from '@/shared/components/layout/header/menu/drawer/index.css';
 import { PATHS } from '@/const/paths';
 import { useSuspenseMainCategory } from '@/hooks/useMainCategory';
 import { useResponsive } from '@/hooks/utils';
+import * as styles from '@/shared/components/layout/header/menu/drawer/index.css';
 import { vars } from '@/styles/theme.css';
 
 interface MenuDrawerProps {
@@ -36,8 +36,6 @@ function MenuDrawerContent({ isOpen, setIsOpen }: MenuDrawerProps) {
             (cat) => cat.categoryNo === activeCategoryNo,
         );
     }, [mainCategoryChildrenList, activeCategoryNo]);
-
-    const { isMobile } = useResponsive();
 
     const syncSwiperNavState = (s?: SwiperInstance | null) => {
         const instance = s ?? swiper;
@@ -74,7 +72,12 @@ function MenuDrawerContent({ isOpen, setIsOpen }: MenuDrawerProps) {
         ) as HTMLDivElement;
 
         const handleClickOutside = (event: MouseEvent) => {
-            if (drawerRef && !drawerRef.contains(event.target as Node)) {
+            const target = event.target as Node;
+            if (
+                drawerRef &&
+                document.body.contains(target) &&
+                !drawerRef.contains(target)
+            ) {
                 setIsOpen(false);
             }
         };
@@ -90,11 +93,6 @@ function MenuDrawerContent({ isOpen, setIsOpen }: MenuDrawerProps) {
     useEffect(() => {
         queueMicrotask(() => syncSwiperNavState());
     }, [activeCategoryNo, swiper]);
-
-    if (isMobile) {
-        setIsOpen(false);
-        return null;
-    }
 
     return (
         <motion.div
@@ -173,6 +171,7 @@ function MenuDrawerContent({ isOpen, setIsOpen }: MenuDrawerProps) {
                                             )}
                                             className={styles.subCategoryTitle}
                                             onClick={() => setIsOpen(false)}
+                                            prefetch={false}
                                         >
                                             {subCategory.label}
                                         </Link>
@@ -191,6 +190,7 @@ function MenuDrawerContent({ isOpen, setIsOpen }: MenuDrawerProps) {
                                                     onClick={() =>
                                                         setIsOpen(false)
                                                     }
+                                                    prefetch={false}
                                                 >
                                                     {leafCategory.label}
                                                 </Link>
@@ -237,10 +237,11 @@ function MenuDrawerContent({ isOpen, setIsOpen }: MenuDrawerProps) {
 
 export function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
     const isClient = useIsClient();
+    const { isMobile } = useResponsive();
 
     return (
         <AnimatePresence>
-            {isClient && isOpen && (
+            {isClient && isOpen && !isMobile && (
                 <MenuDrawerContent isOpen={isOpen} setIsOpen={setIsOpen} />
             )}
         </AnimatePresence>
