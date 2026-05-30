@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import { ProductInquiryRegisterForm } from '@/components/mypage/product-inquiries/register-form';
+import { ProductInquiryRegisterForm } from '@/features/mypage/product-inquiries/register-form';
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 
 export default function MypageProductInquiryRegisterPage() {

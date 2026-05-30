@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CongratulationIcon } from '@/shared/ui/icons/login/Congratulation';
-import { OrderProductItem } from '@/components/order/order-product-item';
+import { OrderProductItem } from '@/features/order/components/order-product-item';
 import { PATHS } from '@/const/paths';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';

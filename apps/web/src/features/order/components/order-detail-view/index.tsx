@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { OrderOptionsItem } from '@/components/mypage/orders/order-options-item';
+import { OrderOptionsItem } from '@/features/mypage/orders/order-options-item';
 import { Button } from '@/shared/ui';
 import ButtonV2 from '@/shared/ui/button/v2';
 import { useCustomDialog } from '@/features/dialog/hooks/useCustomDialog';
@@ -23,7 +23,7 @@ import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration'
 import { CURRENCY } from '@/utils/currency';
 
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
-import * as orderStyles from '@/components/mypage/orders/order-options.css';
+import * as orderStyles from '@/features/mypage/orders/order-options.css';
 import * as styles from '@/features/order/components/order-detail-view/index.css';
 import { includes } from '@fxts/core';
 

@@ -6,9 +6,9 @@ import { SuspenseQuery } from '@suspensive/react-query';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import { ClaimCancelForm } from '@/components/mypage/claims/forms/cancel';
-import { ClaimExchangeForm } from '@/components/mypage/claims/forms/exchange';
-import { ClaimReturnForm } from '@/components/mypage/claims/forms/return';
+import { ClaimCancelForm } from '@/features/mypage/claims/forms/cancel';
+import { ClaimExchangeForm } from '@/features/mypage/claims/forms/exchange';
+import { ClaimReturnForm } from '@/features/mypage/claims/forms/return';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
 import {

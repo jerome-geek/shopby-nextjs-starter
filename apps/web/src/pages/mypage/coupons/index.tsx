@@ -12,7 +12,7 @@ import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
 import { CouponRegisterModal } from '@/components/modal/coupon-register';
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
-import { CouponConstraintDetailContent } from '@/components/mypage/coupons/constraint-detail-content';
+import { CouponConstraintDetailContent } from '@/features/mypage/coupons/constraint-detail-content';
 import { PeriodQueryFilter } from '@/features/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/features/mypage/filters/segmented-toggle';
 import { Button } from '@/shared/ui/button';

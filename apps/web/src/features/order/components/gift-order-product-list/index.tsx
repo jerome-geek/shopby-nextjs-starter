@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { OrderProductItem } from '@/components/order/order-product-item';
+import { OrderProductItem } from '@/features/order/components/order-product-item';
 import * as styles from '@/features/order/components/gift-order-product-list/index.css';
 import type { OrderOptionsGroupByPartner } from '@/models/order';
 

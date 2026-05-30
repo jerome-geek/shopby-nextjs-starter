@@ -10,7 +10,7 @@ import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/features/mypage/filters/period-query-filter';
-import { PreviousOrderItem } from '@/components/mypage/previous-orders/item';
+import { PreviousOrderItem } from '@/features/mypage/previous-orders/item';
 import Paging from '@/shared/ui/paging';
 import { PATHS } from '@/const/paths';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';

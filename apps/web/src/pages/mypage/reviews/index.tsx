@@ -6,8 +6,8 @@ import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { PeriodQueryFilter } from '@/features/mypage/filters/period-query-filter';
 import { SegmentedToggle } from '@/features/mypage/filters/segmented-toggle';
-import { MyReviewListView } from '@/components/mypage/review/review-list';
-import { ReviewableListView } from '@/components/mypage/review/reviewable-list';
+import { MyReviewListView } from '@/features/mypage/review/review-list';
+import { ReviewableListView } from '@/features/mypage/review/reviewable-list';
 import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQueryParams';
 import { reviewTabSpec } from '@/entities/mypage/utils/tabs';
 import {
