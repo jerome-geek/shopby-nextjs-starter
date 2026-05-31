@@ -60,11 +60,11 @@ vi.mock('@/features/order/components/payment-summary/index.css', () => ({
     buttonWrapper: 'buttonWrapper',
 }));
 
-vi.mock('@/components/modal', () => ({
+vi.mock('@/shared/overlay/address-search/modal', () => ({
     AddressSearchModal: () => null,
 }));
 
-vi.mock('@/components/bottom-sheet/address-search', () => ({
+vi.mock('@/shared/overlay/address-search/bottom-sheet', () => ({
     AddressSearchBottomSheet: () => null,
 }));
 

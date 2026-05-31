@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { PATHS } from '@/const/paths';
 import type { GetInquiriesItem } from '@/models/manage/inquiry';
 import * as styles from '@/features/mypage/inquiries/accordion-content/index.css';
-import { ImageDetailModal } from '@/components/modal/image-detail';
+import { ImageDetailModal } from '@/shared/overlay/image-detail/modal';
 
 interface InquiryContentProps extends GetInquiriesItem {
     onDeleteButtonClick: (inquiryNo: number) => void;

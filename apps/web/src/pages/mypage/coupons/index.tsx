@@ -5,12 +5,12 @@ import { overlay } from 'overlay-kit';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CouponRegisterBottomSheet } from '@/components/bottom-sheet/coupon-register';
+import { CouponRegisterBottomSheet } from '@/features/mypage/coupons/overlay/coupon-register/bottom-sheet';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { NoResult } from '@/shared/components/common/no-result';
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import { CouponRegisterModal } from '@/components/modal/coupon-register';
+import { CouponRegisterModal } from '@/features/mypage/coupons/overlay/coupon-register/modal';
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { CouponConstraintDetailContent } from '@/features/mypage/coupons/constraint-detail-content';
 import { PeriodQueryFilter } from '@/features/mypage/filters/period-query-filter';

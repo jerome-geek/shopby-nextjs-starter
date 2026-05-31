@@ -16,7 +16,7 @@ import {
     BoardSearchForm,
     type SearchFormValues,
 } from '@/components/board/search-form';
-import { SortBottomSheet } from '@/components/bottom-sheet/sort';
+import { SortBottomSheet } from '@/shared/overlay/sort/bottom-sheet';
 import { Error } from '@/shared/components/common/error';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';

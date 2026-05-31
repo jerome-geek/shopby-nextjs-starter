@@ -10,10 +10,10 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { address } from '@/api/manage';
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
+import { AddressSearchBottomSheet } from '@/shared/overlay/address-search/bottom-sheet';
 import WithMemberJoinConfig from '@/features/member/member-join-config-field';
-import { AddressRegister } from '@/components/layer-contents/address-search';
-import { AddressSearchModal } from '@/components/modal/address-search';
+import { AddressRegister } from '@/shared/overlay/address-search/content';
+import { AddressSearchModal } from '@/shared/overlay/address-search/modal';
 import ReceiverState from '@/components/signup/form/address/receiver-state';
 import * as styles from '@/components/signup/form/index.css';
 import { Button } from '@/shared/ui/button';

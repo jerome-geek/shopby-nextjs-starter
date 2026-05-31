@@ -6,8 +6,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ProductSelectBottomSheet } from '@/components/bottom-sheet/product-select';
-import { ProductSelectModal } from '@/components/modal/product-select';
+import { ProductSelectBottomSheet } from '@/features/mypage/overlay/product-select/bottom-sheet';
+import { ProductSelectModal } from '@/features/mypage/overlay/product-select/modal';
 import * as formStyles from '@/features/mypage/common/mypage-form/index.css';
 import * as styles from '@/features/mypage/product-inquiries/register-form/index.css';
 import { Button } from '@/shared/ui/button';

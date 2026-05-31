@@ -3,9 +3,9 @@ import { overlay } from 'overlay-kit';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
+import { AddressSearchBottomSheet } from '@/shared/overlay/address-search/bottom-sheet';
 import { BottomSheetLayout, ModalLayout } from '@/shared/components/layout';
-import { AddressSearchModal } from '@/components/modal';
+import { AddressSearchModal } from '@/shared/overlay/address-search/modal';
 import * as styles from '@/features/order/components/shipping-address/ShippingAddressCreateModal.css';
 import { Button } from '@/shared/ui';
 import {

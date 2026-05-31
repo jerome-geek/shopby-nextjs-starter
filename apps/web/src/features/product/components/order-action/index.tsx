@@ -1,7 +1,7 @@
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
-import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
+import { OptionSelectBottomSheet } from '@/features/product/overlay/option-select/bottom-sheet';
 import * as styles from '@/features/product/components/order-action/index.css';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useProductInfo } from '@/entities/product/hooks';

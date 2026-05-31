@@ -7,10 +7,10 @@ import { overlay } from 'overlay-kit';
 import { useQueryStates } from 'nuqs';
 
 import { Select } from '@/shared/ui/input';
-import { PeriodRangePickerModal } from '@/components/modal/period-range-picker';
+import { PeriodRangePickerModal } from '@/features/mypage/filters/overlay/period-range-picker/modal';
 import * as styles from '@/features/mypage/filters/period-query-filter/index.css';
 import { useResponsive } from '@/hooks/utils';
-import { PeriodRangePickerBottomSheet } from '@/components/bottom-sheet/period-range-picker';
+import { PeriodRangePickerBottomSheet } from '@/features/mypage/filters/overlay/period-range-picker/bottom-sheet';
 import { parseAsPositiveInt, parseAsYmd } from '@/entities/mypage/utils/parsers';
 
 export type PeriodPreset = '7d' | '3m' | '6m' | '1y' | 'custom';

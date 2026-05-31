@@ -2,8 +2,8 @@ import { includes } from '@fxts/core';
 import { overlay } from 'overlay-kit';
 import { useMemo } from 'react';
 
-import { ClaimDetailBottomSheet } from '@/components/layer-contents/claim-detail/claim-detail-bottom-sheet';
-import { ClaimDetailModal } from '@/components/layer-contents/claim-detail/claim-detail-modal';
+import { ClaimDetailBottomSheet } from '@/features/mypage/orders/overlay/claim-detail/claim-detail-bottom-sheet';
+import { ClaimDetailModal } from '@/features/mypage/orders/overlay/claim-detail/claim-detail-modal';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import { useClaim } from '@/features/claim';
 import { useDialog, useResponsive } from '@/hooks/utils';

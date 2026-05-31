@@ -1,8 +1,8 @@
 import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react';
 import { overlay } from 'overlay-kit';
 
-import ShareBottomSheet from '@/components/bottom-sheet/share';
-import ShareModal from '@/components/modal/share';
+import ShareBottomSheet from '@/features/share/overlay/share/bottom-sheet';
+import ShareModal from '@/features/share/overlay/share/modal';
 import * as styles from '@/features/recipe/components/view/detail-sticky-footer/index.css';
 import type { KakaoShareContent } from '@/features/share';
 import { useRecipeCommentList } from '@/hooks/suspenseQuery/shop/comment';

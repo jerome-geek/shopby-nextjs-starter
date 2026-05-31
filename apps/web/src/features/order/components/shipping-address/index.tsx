@@ -3,8 +3,8 @@ import { overlay } from 'overlay-kit';
 import { FormProvider, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { ShippingAddressListBottomSheet } from '@/components/bottom-sheet/shipping-address-list';
-import { ShippingAddressListModal } from '@/components/modal';
+import { ShippingAddressListBottomSheet } from '@/features/order/overlay/shipping-address-list/bottom-sheet';
+import { ShippingAddressListModal } from '@/features/order/overlay/shipping-address-list/modal';
 import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import { DeliveryRequestForm } from '@/features/order/components/shipping-address/DeliveryRequestForm';
 import GuestShippingAddressForm from '@/features/order/components/shipping-address/GuestShippingAddressForm';

@@ -5,8 +5,8 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import addressApi from '@/api/manage/address';
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import { AddressSearchModal } from '@/components/modal';
+import { AddressSearchBottomSheet } from '@/shared/overlay/address-search/bottom-sheet';
+import { AddressSearchModal } from '@/shared/overlay/address-search/modal';
 import * as styles from '@/features/mypage/claims/forms/return-way/index.css';
 import {
     COUNTRY_CODE_LIST,

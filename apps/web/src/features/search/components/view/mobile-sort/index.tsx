@@ -4,7 +4,7 @@ import { overlay } from 'overlay-kit';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SortBottomSheet } from '@/components/bottom-sheet/sort';
+import { SortBottomSheet } from '@/shared/overlay/sort/bottom-sheet';
 import * as mobileFilterStyles from '@/features/product/list/mobile-filter/index.css';
 import * as styles from '@/features/search/components/view/mobile-sort/index.css';
 import type { SearchSortOption } from '@/const/recipe';

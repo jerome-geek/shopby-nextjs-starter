@@ -10,13 +10,13 @@ import { useTranslation } from 'react-i18next';
 
 import { board } from '@/api/manage';
 import Comments from '@/components/board/comments';
-import { PasswordCheckBottomSheet } from '@/components/bottom-sheet/password-check';
-import { ReportBottomSheet } from '@/components/bottom-sheet/report';
+import { PasswordCheckBottomSheet } from '@/features/board/overlay/password-check/bottom-sheet';
+import { ReportBottomSheet } from '@/features/board/overlay/report/bottom-sheet';
 import { Error } from '@/shared/components/common/error';
 import Seo from '@/shared/components/common/seo';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import { PasswordCheckModal } from '@/components/modal/password-check';
-import { ReportModal } from '@/components/modal/report';
+import { PasswordCheckModal } from '@/features/board/overlay/password-check/modal';
+import { ReportModal } from '@/features/board/overlay/report/modal';
 import { Column, Row } from '@/shared/ui/layout/flex';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import useBoardMutation from '@/hooks/mutations/useBoardMutation';

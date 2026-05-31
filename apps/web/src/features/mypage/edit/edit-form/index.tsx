@@ -9,9 +9,9 @@ import { useTranslation } from 'react-i18next';
 
 import { profile } from '@/api/member';
 import upload from '@/api/storage/image';
-import { WithdrawalBottomSheet } from '@/components/bottom-sheet/withdrawal';
+import { WithdrawalBottomSheet } from '@/features/mypage/edit/overlay/withdrawal/bottom-sheet';
 import WithMemberJoinConfig from '@/features/member/member-join-config-field';
-import { WithdrawalModal } from '@/components/modal/withdrawal';
+import { WithdrawalModal } from '@/features/mypage/edit/overlay/withdrawal/modal';
 import * as formStyles from '@/features/mypage/common/mypage-form/index.css';
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { ChangePassword } from '@/features/mypage/edit/edit-form/change-password';

@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import { AddressSearchModal } from '@/components/modal';
+import { AddressSearchBottomSheet } from '@/shared/overlay/address-search/bottom-sheet';
+import { AddressSearchModal } from '@/shared/overlay/address-search/modal';
 import { DeliveryRequestForm } from '@/features/order/components/shipping-address/DeliveryRequestForm';
 import * as styles from '@/features/order/components/shipping-address/GuestShippingAddressForm/index.css';
 import {

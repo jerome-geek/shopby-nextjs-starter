@@ -8,8 +8,8 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { address } from '@/api/manage';
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import { AddressSearchModal } from '@/components/modal';
+import { AddressSearchBottomSheet } from '@/shared/overlay/address-search/bottom-sheet';
+import { AddressSearchModal } from '@/shared/overlay/address-search/modal';
 import * as styles from '@/features/mypage/common/mypage-form/index.css';
 import { Button } from '@/shared/ui/button';
 import {

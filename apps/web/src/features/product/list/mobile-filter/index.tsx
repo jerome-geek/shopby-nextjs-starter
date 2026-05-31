@@ -11,8 +11,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import {
     FilterBottomSheet,
     type FilterBottomSheetTab,
-} from '@/components/bottom-sheet/filter';
-import { SortBottomSheet } from '@/components/bottom-sheet/sort';
+} from '@/features/product/list/overlay/filter';
+import { SortBottomSheet } from '@/shared/overlay/sort/bottom-sheet';
 import * as styles from '@/features/product/list/mobile-filter/index.css';
 import { PRICE_FILTER_OPTIONS, SORT_OPTIONS } from '@/const/product';
 import { useBrandSearchList } from '@/hooks/query/product/brand';

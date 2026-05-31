@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { product } from '@/api/product';
-import { OptionSelectBottomSheet } from '@/components/bottom-sheet/option-select';
+import { OptionSelectBottomSheet } from '@/features/product/overlay/option-select/bottom-sheet';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import {
     ExtraProductList,

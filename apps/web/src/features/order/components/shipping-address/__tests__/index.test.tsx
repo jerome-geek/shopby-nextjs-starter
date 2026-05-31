@@ -62,11 +62,11 @@ vi.mock('@/features/order/components/form/input-field', () => ({
     CustomsIdNumberField: () => <div>customs-id-field</div>,
 }));
 
-vi.mock('@/components/modal', () => ({
+vi.mock('@/features/order/overlay/shipping-address-list/modal', () => ({
     ShippingAddressListModal: () => null,
 }));
 
-vi.mock('@/components/bottom-sheet/shipping-address-list', () => ({
+vi.mock('@/features/order/overlay/shipping-address-list/bottom-sheet', () => ({
     ShippingAddressListBottomSheet: () => null,
 }));
 

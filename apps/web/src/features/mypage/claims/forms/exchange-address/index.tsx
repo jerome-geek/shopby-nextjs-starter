@@ -5,9 +5,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import address from '@/api/manage/address';
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import { AddressRegister } from '@/components/layer-contents/address-search';
-import { AddressSearchModal } from '@/components/modal';
+import { AddressSearchBottomSheet } from '@/shared/overlay/address-search/bottom-sheet';
+import { AddressRegister } from '@/shared/overlay/address-search/content';
+import { AddressSearchModal } from '@/shared/overlay/address-search/modal';
 import { Button } from '@/shared/ui';
 import {
     InputField,

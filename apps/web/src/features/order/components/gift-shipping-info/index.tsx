@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { AddressSearchBottomSheet } from '@/components/bottom-sheet/address-search';
-import type { AddressRegister } from '@/components/layer-contents/address-search';
-import { AddressSearchModal } from '@/components/modal';
+import { AddressSearchBottomSheet } from '@/shared/overlay/address-search/bottom-sheet';
+import type { AddressRegister } from '@/shared/overlay/address-search/content';
+import { AddressSearchModal } from '@/shared/overlay/address-search/modal';
 import {
     InputField,
     InputFieldContainer,

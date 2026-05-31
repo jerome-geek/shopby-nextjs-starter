@@ -93,9 +93,43 @@ Goal:
 
 These three roots still overlap heavily by behavior:
 
+- [x] `apps/web/src/components/bottom-sheet`
+- [x] `apps/web/src/components/layer-contents`
 - [ ] `apps/web/src/components/modal`
-- [ ] `apps/web/src/components/bottom-sheet`
-- [ ] `apps/web/src/components/layer-contents`
+  - only compatibility barrel `index.ts` remains
+
+Completed in the first overlay batch:
+
+- [x] `share`
+- [x] `coupon-register`
+- [x] `product-coupon`
+- [x] `recipe-save`
+- [x] `recipe-create-select`
+- [x] `recipe-url-input`
+- [x] `recipe-image-upload`
+- [x] `product-select`
+- [x] `period-range-picker`
+- [x] `find-id-result`
+- [x] `withdrawal`
+- [x] `address-search`
+- [x] `shipping-address-change`
+- [x] `shipping-address-list`
+- [x] `product-inquiry-write`
+- [x] `review-report`
+- [x] `photo-review-list`
+- [x] `collection-form`
+- [x] `recipe-recommendation`
+- [x] `report`
+- [x] `password-check`
+- [x] `claim-detail`
+- [x] `filter`
+- [x] `sort`
+- [x] `option-select`
+- [x] `image-detail`
+
+Still remaining in overlay cleanup:
+
+- [ ] remove `components/modal/index.ts` compatibility barrel after imports are fully normalized
 
 Examples of duplicated or near-duplicated flows:
 
@@ -138,8 +172,8 @@ Goal:
 
 ### Phase A
 
-- Tackle overlay deduplication across `modal`, `bottom-sheet`, `layer-contents`
-- Use one interaction family at a time
+- Remove `components/modal/index.ts` compatibility barrel after consumer imports are normalized
+- Spot-check no new overlay regressions are introduced during follow-up refactors
 
 ### Phase B
 

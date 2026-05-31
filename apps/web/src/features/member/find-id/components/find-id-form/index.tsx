@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FindIdResultBottomSheet } from '@/components/bottom-sheet/find-id-result';
-import { FindIdResultModal } from '@/components/modal/find-id-result';
+import { FindIdResultBottomSheet } from '@/features/member/find-id/overlay/find-id-result/bottom-sheet';
+import { FindIdResultModal } from '@/features/member/find-id/overlay/find-id-result/modal';
 import { Button } from '@/shared/ui/button';
 import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import { EmailField } from '@/features/member/find-id/components/filed/email';

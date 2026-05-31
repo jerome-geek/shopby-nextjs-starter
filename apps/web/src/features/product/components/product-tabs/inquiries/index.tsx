@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 import { overlay } from 'overlay-kit';
 import { useMemo } from 'react';
 
-import { ProductInquiryWriteBottomSheet } from '@/components/bottom-sheet/product-inquiry-write';
+import { ProductInquiryWriteBottomSheet } from '@/features/product/overlay/product-inquiry-write/bottom-sheet';
 import { NoResult } from '@/shared/components/common/no-result';
 import { LockIcon } from '@/shared/ui/icons/LockIcon';
-import { ProductInquiryWriteModal } from '@/components/modal/product-inquiry-write';
+import { ProductInquiryWriteModal } from '@/features/product/overlay/product-inquiry-write/modal';
 import * as styles from '@/features/product/components/product-tabs/inquiries/index.css';
 import { useCustomDialog } from '@/features/dialog';
 import { useInfiniteProductInquiryList } from '@/hooks/infiniteQuery/display/productInquiry';
