@@ -19,7 +19,7 @@ import { useProductInquiryMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';
 import useDialog from '@/hooks/utils/useDialog';
 import type { GetMallResponse } from '@/models/admin/mall';
-import type { WriteProductInquiryData } from '@/models/display/productInquiry';
+import type { WriteProductInquiryData } from '@/entities/display/model/productInquiry';
 import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ProductInquiryDialogProps extends DefaultDialogProps {

@@ -37,7 +37,7 @@ import { useDialog, useResponsive } from '@/hooks/utils';
 import type {
     UpdateProductInquiryData,
     WriteProductInquiryData,
-} from '@/models/display/productInquiry';
+} from '@/entities/display/model/productInquiry';
 import {
     productInquiryFormSchema,
     type ProductInquiryFormSchemaType,

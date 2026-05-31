@@ -4,7 +4,7 @@ import {
     likeProductListOptions,
     type LikeProductListOptionsParams,
 } from '@/entities/product/profile/queries';
-import type { GetLikeProductsResponse } from '@/models/product/profile';
+import type { GetLikeProductsResponse } from '@/entities/product/model/profile';
 
 const useLikeProductList = <T = GetLikeProductsResponse>({
     searchParams,

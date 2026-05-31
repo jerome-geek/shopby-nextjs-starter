@@ -4,7 +4,7 @@ import {
     orderDetailOptions,
     type OrderDetailOptionsParams,
 } from '@/entities/order/queries';
-import type { OrderDetailResponse } from '@/models/order';
+import type { OrderDetailResponse } from '@/entities/order/model';
 
 const useOrderDetail = <T = OrderDetailResponse>(
     params: OrderDetailOptionsParams<T>,

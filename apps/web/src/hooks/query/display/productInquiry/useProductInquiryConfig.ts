@@ -4,7 +4,7 @@ import {
     productInquiryConfigOptions,
     type ProductInquiryConfigParams,
 } from '@/entities/productInquiry/queries';
-import type { GetProductInquiryConfigResponse } from '@/models/display/productInquiry';
+import type { GetProductInquiryConfigResponse } from '@/entities/display/model/productInquiry';
 
 const useProductInquiryConfig = <T = GetProductInquiryConfigResponse>(
     params: ProductInquiryConfigParams<T> = {},

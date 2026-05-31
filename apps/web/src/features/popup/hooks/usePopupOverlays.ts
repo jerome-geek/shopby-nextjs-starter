@@ -13,7 +13,7 @@ import {
 import useEvent from '@/hooks/query/display/event/useEvent';
 import useAllPopupList from '@/hooks/query/display/popup/useAllPopupList';
 import useDesignPopupList from '@/hooks/query/display/popup/useDesignPopupList';
-import type { PopupInfo } from '@/models/display/popup';
+import type { PopupInfo } from '@/entities/display/model/popup';
 
 interface UsePopupOverlaysParams {
     openPopup: (popup: PopupInfo) => void;

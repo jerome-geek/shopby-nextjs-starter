@@ -4,7 +4,7 @@ import {
     pagedShippingAddressListOptions,
     type UsePagedShippingAddressListParams,
 } from '@/entities/order/queries';
-import type { GetPagedShippingAddressListResponse } from '@/models/order/shippingAddress';
+import type { GetPagedShippingAddressListResponse } from '@/entities/order/model/shippingAddress';
 
 const usePagedShippingAddressList = <T = GetPagedShippingAddressListResponse>(
     params: UsePagedShippingAddressListParams<T>,

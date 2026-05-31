@@ -7,12 +7,12 @@ import type {
     GetProductsShippingInfoParams,
     ProductSearchParams,
     GetBestReviewProductsParams,
-} from '@/models/product/product';
-import type { GetProductOptionParams } from '@/models/product/productOption';
+} from '@/entities/product/model/product';
+import type { GetProductOptionParams } from '@/entities/product/model/productOption';
 import type {
     GetLikeBrandsCountParams,
     GetLikeProductsParams,
-} from '@/models/product/profile';
+} from '@/entities/product/model/profile';
 
 type ListSearchParams = ProductSearchParams | GetProductsInfoByProductNosData;
 

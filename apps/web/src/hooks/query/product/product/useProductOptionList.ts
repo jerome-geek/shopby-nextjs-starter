@@ -7,7 +7,7 @@ import { productKeys } from '@/hooks/queryKeys';
 import type {
     GetProductOptionParams,
     ProductOptionResponse,
-} from '@/models/product/productOption';
+} from '@/entities/product/model/productOption';
 
 export interface UseProductOptionListParams<T = ProductOptionResponse> {
     productNo: number;

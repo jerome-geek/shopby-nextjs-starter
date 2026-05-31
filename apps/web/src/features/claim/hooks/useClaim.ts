@@ -17,7 +17,7 @@ import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import useDialog from '@/hooks/utils/useDialog';
 import type { NextActionType } from '@/models';
-import type { CancelClaimData } from '@/models/claim/guest';
+import type { CancelClaimData } from '@/entities/claim/model/guest';
 
 interface UseClaimParams {
     nextActionType: NextActionType;

@@ -4,7 +4,7 @@ import {
     groupManagementCodeOptions,
     type GroupManagementCodeOptionsParams,
 } from '@/entities/product/queries';
-import type { GroupManagementCodeResponse } from '@/models/product/product';
+import type { GroupManagementCodeResponse } from '@/entities/product/model/product';
 
 const useGroupManagementCode = <T = GroupManagementCodeResponse>({
     searchParams,

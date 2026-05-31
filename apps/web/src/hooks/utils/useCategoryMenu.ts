@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 
 import { useCategory } from '@/hooks/query/display/category';
 import { useMainCategory } from '@/hooks/useMainCategory';
-import type { MultiLevelCategory } from '@/models/display';
+import type { MultiLevelCategory } from '@/entities/display/model';
 
 const EMPTY_CATEGORY_LIST: MultiLevelCategory[] = [];
 

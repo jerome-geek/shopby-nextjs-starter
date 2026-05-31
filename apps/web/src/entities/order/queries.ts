@@ -17,8 +17,8 @@ import {
     orderConfiguration,
     orderSheet,
     shippingAddress,
-} from '@/api/order';
-import previousOrder from '@/api/order/previousOrder';
+} from '@/entities/order/api';
+import previousOrder from '@/entities/order/api/previousOrder';
 import {
     addressKeys,
     cartKeys,
@@ -31,19 +31,19 @@ import type {
     ApplyCouponResponse,
     GetAvailableCouponsParams,
     OrderDetailResponse,
-} from '@/models/order';
+} from '@/entities/order/model';
 import type {
     GetCartCountResponse,
     GetCartListParams,
     GetCartListResponse,
     GetSelectedCartPriceParams,
     GetSelectedCartPriceResponse,
-} from '@/models/order/cart';
+} from '@/entities/order/model/cart';
 import type {
     GetCartData,
     GetCartParams,
     GetCartResponse,
-} from '@/models/order/guestOrder';
+} from '@/entities/order/model/guestOrder';
 import type {
     GetOrderDetailParams,
     GetOrderListParams,
@@ -52,25 +52,25 @@ import type {
     GetOrderStatusSummaryResponse,
     GetOrderSummaryParams,
     GetOrderSummaryResponse,
-} from '@/models/order/myOrder';
-import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
+} from '@/entities/order/model/myOrder';
+import type { GetOrderConfigsResponse } from '@/entities/order/model/orderConfiguration';
 import type {
     GetCalculatedOrderSheetData,
     GetCalculatedOrderSheetResponse,
     GetOrderSheetParams,
     GetOrderSheetResponse,
-} from '@/models/order/orderSheet';
+} from '@/entities/order/model/orderSheet';
 import type {
     GetPreviousOrderResponse,
     GetPreviousOrdersParams,
     GetPreviousOrdersResponse,
-} from '@/models/order/previousOrder';
+} from '@/entities/order/model/previousOrder';
 import type {
     GetPagedShippingAddressListResponse,
     GetPagedShippingAddressParams,
     GetShippingAddressListResponse,
     GetShippingAddressResponse,
-} from '@/models/order/shippingAddress';
+} from '@/entities/order/model/shippingAddress';
 
 // --- Order Status Summary ---
 

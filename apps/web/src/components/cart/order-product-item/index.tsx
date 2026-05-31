@@ -13,11 +13,11 @@ import type {
     InvalidProduct,
     OrderProduct,
     OrderProductOption,
-} from '@/models/order';
+} from '@/entities/order/model';
 import type {
     GuestOrderProduct,
     GuestOrderProductOption,
-} from '@/models/order/guestOrder';
+} from '@/entities/order/model/guestOrder';
 import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
 import { CURRENCY } from '@/utils/currency';
 

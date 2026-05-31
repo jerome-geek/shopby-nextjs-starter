@@ -6,7 +6,7 @@ import {
     type DefaultBottomSheetProps,
 } from '@/shared/components/layout';
 import { Button } from '@/shared/ui/button';
-import type { SearchProductItem } from '@/models/product/product';
+import type { SearchProductItem } from '@/entities/product/model/product';
 
 interface ProductSelectBottomSheetProps extends DefaultBottomSheetProps {
     setProductInfo: (productInfo: SearchProductItem) => void;

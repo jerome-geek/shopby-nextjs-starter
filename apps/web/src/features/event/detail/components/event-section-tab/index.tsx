@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/features/event/detail/components/event-section-tab/index.css';
-import type { EventSection } from '@/models/display';
+import type { EventSection } from '@/entities/display/model';
 import { BREAKPOINTS } from '@/styles/media';
 
 interface EventSectionTabProps {

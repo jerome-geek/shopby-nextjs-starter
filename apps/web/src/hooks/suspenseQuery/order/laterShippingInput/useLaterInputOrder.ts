@@ -4,10 +4,10 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import laterShippingInput from '@/api/order/laterShippingInput';
+import laterShippingInput from '@/entities/order/api/laterShippingInput';
 import { laterShippingInputKeys } from '@/hooks/queryKeys';
-import type { OrderDetailResponse } from '@/models/order';
-import type { GetLaterOrderDetailParams } from '@/models/order/laterShippingInput';
+import type { OrderDetailResponse } from '@/entities/order/model';
+import type { GetLaterOrderDetailParams } from '@/entities/order/model/laterShippingInput';
 
 interface UseLaterInputOrderParams<T = OrderDetailResponse> {
     encryptedShippingNo: string;

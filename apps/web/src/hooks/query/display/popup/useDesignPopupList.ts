@@ -4,7 +4,7 @@ import {
     designPopupListOptions,
     type DesignPopupListOptionsParams,
 } from '@/entities/display/popup/queries';
-import type { GetDesignPopupResponse } from '@/models/display/popup';
+import type { GetDesignPopupResponse } from '@/entities/display/model/popup';
 
 const useDesignPopupList = <T = GetDesignPopupResponse>(
     params: DesignPopupListOptionsParams<T>,

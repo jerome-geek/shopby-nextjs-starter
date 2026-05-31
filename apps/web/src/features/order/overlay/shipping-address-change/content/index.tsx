@@ -20,11 +20,11 @@ import { useGuestOrderMutation, useMyOrderMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import { useGlobal, useResponsive } from '@/hooks/utils';
-import type { OrderDetailResponse } from '@/models/order';
+import type { OrderDetailResponse } from '@/entities/order/model';
 import {
     getChangeShippingAddressSchema,
     type ChangeShippingAddressSchemaType,
-} from '@/schema/shippingAddress.schema';
+} from '@/entities/order/schema/shipping-address';
 import { ErrorMessage } from '@/shared/components/form';
 
 export const SHIPPING_ADDRESS_CHANGE_FORM_ID = 'shipping-address-change-form';

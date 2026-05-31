@@ -35,11 +35,11 @@ import type { CountryCdType } from '@/models';
 import type {
     Address,
     RegisterShippingAddressData,
-} from '@/models/order/shippingAddress';
+} from '@/entities/order/model/shippingAddress';
 import {
     shippingAddressSchema,
     ShippingAddressSchemaType,
-} from '@/schema/shippingAddress.schema';
+} from '@/entities/order/schema/shipping-address';
 import { ErrorMessage } from '@/shared/components/form';
 import { parseKrPhoneParts } from '@/utils/phone';
 

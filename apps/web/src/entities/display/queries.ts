@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { productSection } from '@/api/display';
+import { productSection } from '@/entities/display/api';
 import { productSectionKeys } from '@/hooks/queryKeys';
 import type {
     GetProductSectionByIdResponse,
@@ -17,7 +17,7 @@ import type {
     GetProductSectionProductsResponse,
     GetProductSectionResponse,
     GetProductSectionsResponse,
-} from '@/models/display/productSection';
+} from '@/entities/display/model/productSection';
 
 export interface ProductSectionProductListParams<
     T = GetProductSectionProductsResponse,

@@ -4,7 +4,7 @@ import {
     eventListOptions,
     type EventListParams,
 } from '@/entities/event/queries';
-import type { GetEventsResponse } from '@/models/display/event';
+import type { GetEventsResponse } from '@/entities/display/model/event';
 
 const useEventList = <T = GetEventsResponse>(args: EventListParams<T>) => {
     return useSuspenseQuery(eventListOptions(args));

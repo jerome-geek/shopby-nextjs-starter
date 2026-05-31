@@ -6,12 +6,12 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import previousOrder from '@/api/order/previousOrder';
+import previousOrder from '@/entities/order/api/previousOrder';
 import ordersKeys from '@/hooks/queryKeys/ordersKeys';
 import type {
     GetPreviousOrdersParams,
     GetPreviousOrdersResponse,
-} from '@/models/order/previousOrder';
+} from '@/entities/order/model/previousOrder';
 
 interface UseInfinitePreviousOrderListParams {
     searchParams: GetPreviousOrdersParams;

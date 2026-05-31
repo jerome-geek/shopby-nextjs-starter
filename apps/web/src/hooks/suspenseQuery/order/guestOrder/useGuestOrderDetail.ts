@@ -4,7 +4,7 @@ import {
     guestOrderDetailSuspenseOptions,
     type UseGuestOrderDetailSuspenseParams,
 } from '@/entities/order/queries';
-import type { OrderDetailResponse } from '@/models/order';
+import type { OrderDetailResponse } from '@/entities/order/model';
 
 const useGuestOrderDetail = <T = OrderDetailResponse>(
     params: UseGuestOrderDetailSuspenseParams<T>,

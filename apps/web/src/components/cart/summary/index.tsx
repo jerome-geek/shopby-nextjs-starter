@@ -18,7 +18,7 @@ import { useCartOrderAction } from '@/hooks/order/useCartOrderAction';
 import { useCartPrice } from '@/hooks/query/order/cart';
 import useGuestCartList from '@/hooks/query/order/guestOrder/useGuestCartList';
 import { useAuth } from '@/hooks/useAuth';
-import type { GetCartData } from '@/models/order/guestOrder';
+import type { GetCartData } from '@/entities/order/model/guestOrder';
 import { CURRENCY } from '@/utils/currency';
 
 interface CartSummaryProps {

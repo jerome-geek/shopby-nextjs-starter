@@ -24,11 +24,11 @@ import { useDialog, useGlobal } from '@/hooks/utils';
 import type {
     GetOrderOptionDetailForClaimResponse,
     RequestExchangeData,
-} from '@/models/claim/member';
+} from '@/entities/claim/model/member';
 import {
     claimExchangeSchema,
     ClaimExchangeSchemaType,
-} from '@/schema/claim.schema';
+} from '@/entities/claim/schema/claim';
 
 const CLAIM_TYPE = 'EXCHANGE' as const;
 

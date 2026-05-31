@@ -1,7 +1,7 @@
 import type {
     GetMyProductInquiriesParams,
     GetProductInquiriesParams,
-} from '@/models/display/productInquiry';
+} from '@/entities/display/model/productInquiry';
 
 const productInquiryKeys = {
     all: ['inquiries'] as const,

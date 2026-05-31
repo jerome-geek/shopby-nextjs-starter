@@ -4,7 +4,7 @@ import {
     productReviewDetailOptions,
     type ProductReviewDetailOptionsParams,
 } from '@/entities/display/review/queries';
-import type { GetProductReviewResponse } from '@/models/display/review';
+import type { GetProductReviewResponse } from '@/entities/display/model/review';
 
 const useProductReview = <T = GetProductReviewResponse>(
     params: ProductReviewDetailOptionsParams<T>,

@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
     getPaymentSchema,
     type PaymentReserveSchemaType,
-} from '@/schema/payment.schema';
+} from '@/entities/order/schema/payment';
 
 vi.mock('@/features/order/components/shipping-address/GuestShippingAddressForm/index.css', () => ({
     formContent: 'formContent',

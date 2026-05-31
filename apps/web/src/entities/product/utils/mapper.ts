@@ -1,6 +1,6 @@
-import type { ProductWishItem } from '@/models/product';
-import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
-import type { RecentViewProductsContents } from '@/models/product/profile';
+import type { ProductWishItem } from '@/entities/product/model';
+import { AdditionalDiscountWithProductNo } from '@/entities/product/model/additionalDiscount';
+import type { RecentViewProductsContents } from '@/entities/product/model/profile';
 import { isEmpty } from '@fxts/core';
 
 /**

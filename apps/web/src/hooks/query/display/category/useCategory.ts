@@ -4,7 +4,7 @@ import {
     categoryDetailOptions,
     type CategoryDetailParams,
 } from '@/entities/category/queries';
-import type { GetCategoryResponse } from '@/models/display/category';
+import type { GetCategoryResponse } from '@/entities/display/model/category';
 
 const useCategory = <T = GetCategoryResponse>({
     categoryNo,

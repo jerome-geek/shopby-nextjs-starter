@@ -2,7 +2,7 @@ import { FlatProductOption } from '@/features/product/option';
 import { SelectedProductOption } from '@/features/product/option/selected';
 import * as styles from '@/features/product/components/extra-product-list/index.css';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
-import type { ExtraProduct as ExtraProductType } from '@/models/product/product';
+import type { ExtraProduct as ExtraProductType } from '@/entities/product/model/product';
 import { CURRENCY } from '@/utils/currency';
 
 interface ExtraProductProps {

@@ -1,7 +1,7 @@
 import { filter, pipe, sortBy } from '@fxts/core';
 import dayjs from 'dayjs';
 
-import type { Banner, BannerAccount } from '@/models/display/banner';
+import type { Banner, BannerAccount } from '@/entities/display/model/banner';
 
 /**
  * 배너가 현재 전시 기간 내에 있는지 확인

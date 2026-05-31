@@ -8,8 +8,8 @@ import {
     useInfiniteBestSellerProductList,
 } from '@/hooks/query/product/product';
 import { useResponsive } from '@/hooks/utils';
-import type { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
-import type { BestSellerProductItem } from '@/models/product/product';
+import type { AdditionalDiscountWithProductNo } from '@/entities/product/model/additionalDiscount';
+import type { BestSellerProductItem } from '@/entities/product/model/product';
 
 interface BestProductListContainerProps {
     selectedCategory: number;

@@ -1,12 +1,12 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { brand } from '@/api/product';
+import { brand } from '@/entities/product/api';
 import { brandKeys } from '@/hooks/queryKeys';
 import type {
     SearchBrandResponse,
     SearchBrandsParams,
-} from '@/models/product/brand';
+} from '@/entities/product/model/brand';
 
 export interface BrandSearchListOptionsParams<T = SearchBrandResponse> {
     searchParams: SearchBrandsParams;

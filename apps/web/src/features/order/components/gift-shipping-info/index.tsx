@@ -15,7 +15,7 @@ import {
 import { ADDRESS_MEMO_LIST } from '@/const/form';
 import * as styles from '@/features/order/components/gift-shipping-info/index.css';
 import { useResponsive } from '@/hooks/utils';
-import type { LaterShippingInputSchemaType } from '@/schema/laterShippingInput.schema';
+import type { LaterShippingInputSchemaType } from '@/entities/order/schema/later-shipping-input';
 import { ErrorMessage } from '@/shared/components/form';
 
 const isPresetDeliveryMemo = (memo?: string | null) =>

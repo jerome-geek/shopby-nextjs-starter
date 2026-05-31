@@ -1,13 +1,13 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { additionalDiscount } from '@/api/product';
+import { additionalDiscount } from '@/entities/product/api';
 import type {
     GetAdditionalDiscountByProductNosParams,
     GetAdditionalDiscountByProductNosResponse,
     GetAdditionalDiscountParams,
     GetAdditionalDiscountResponse,
-} from '@/models/product/additionalDiscount';
+} from '@/entities/product/model/additionalDiscount';
 
 export interface AdditionalDiscountOptionsParams<
     T = GetAdditionalDiscountResponse,

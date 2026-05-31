@@ -5,7 +5,7 @@ import {
     eventDetailOptions,
     type EventDetailParams,
 } from '@/entities/event/queries';
-import type { GetEventResponse } from '@/models/display/event';
+import type { GetEventResponse } from '@/entities/display/model/event';
 
 const useEvent = <T = GetEventResponse>({
     eventKey,

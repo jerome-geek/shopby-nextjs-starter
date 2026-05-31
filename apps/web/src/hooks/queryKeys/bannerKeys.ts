@@ -1,4 +1,4 @@
-import type { GetBannerExtraInfosParams } from '@/models/display/banner';
+import type { GetBannerExtraInfosParams } from '@/entities/display/model/banner';
 
 const bannerKeys = {
     all: ['banners'] as const,

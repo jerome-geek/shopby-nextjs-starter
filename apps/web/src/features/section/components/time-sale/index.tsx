@@ -12,7 +12,7 @@ import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useProductSectionById } from '@/hooks/query/display/productSection';
 import { useTimeSaleSectionProducts } from '@/hooks/query/shop/timeSale';
-import type { ImageUrlType } from '@/models/product';
+import type { ImageUrlType } from '@/entities/product/model';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import { BREAKPOINTS } from '@/styles/media';
 import { vars } from '@/styles/theme.css';

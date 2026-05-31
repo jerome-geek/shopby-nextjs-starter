@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RETURN_WAY_MAP } from '@/const/label';
-import type { AdditionalPayInfo, RefundInfo } from '@/models/order';
+import type { AdditionalPayInfo, RefundInfo } from '@/entities/order/model';
 
 import { InfoSection } from '../info-section';
 

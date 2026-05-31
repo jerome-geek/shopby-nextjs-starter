@@ -4,7 +4,7 @@ import {
     allPopupListOptions,
     type AllPopupListOptionsParams,
 } from '@/entities/display/popup/queries';
-import type { GetAllPopupResponse } from '@/models/display/popup';
+import type { GetAllPopupResponse } from '@/entities/display/model/popup';
 
 const useAllPopupList = <T = GetAllPopupResponse>(
     params: AllPopupListOptionsParams<T>,

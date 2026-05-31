@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { OrderOptionsItem } from '@/features/mypage/orders/order-options-item';
 import { InputCheckbox } from '@/shared/ui/input/checkbox';
 import { QuantityController } from '@/shared/ui/quantity-controller';
-import type { ClaimableOption } from '@/models/claim';
+import type { ClaimableOption } from '@/entities/claim/model';
 import { ErrorMessage } from '@/shared/components/form';
 
 interface ClaimOrderOptionsProps {

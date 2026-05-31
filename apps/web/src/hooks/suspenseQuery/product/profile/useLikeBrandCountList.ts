@@ -4,7 +4,7 @@ import {
     likeBrandCountListOptions,
     type LikeBrandCountListOptionsParams,
 } from '@/entities/product/profile/queries';
-import type { GetLikeBrandsCountResponse } from '@/models/product/profile';
+import type { GetLikeBrandsCountResponse } from '@/entities/product/model/profile';
 
 const useLikeBrandCountList = <T = GetLikeBrandsCountResponse>({
     searchParams,

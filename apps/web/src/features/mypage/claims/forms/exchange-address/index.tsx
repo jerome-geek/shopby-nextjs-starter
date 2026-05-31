@@ -22,7 +22,7 @@ import {
 } from '@/const/form';
 import { CustomsIdNumberField } from '@/features/order/components/form/input-field';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
 import { ErrorMessage } from '@/shared/components/form';
 
 interface ClaimExchangeAddressProps {

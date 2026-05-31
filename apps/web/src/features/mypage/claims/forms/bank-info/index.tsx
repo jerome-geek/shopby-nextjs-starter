@@ -12,7 +12,7 @@ import {
 } from '@/shared/ui/input';
 import { BANK_MAP } from '@/const/label';
 import { useAuth } from '@/hooks/useAuth';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
 import { ErrorMessage } from '@/shared/components/form';
 
 type ClaimBankInfoProps = Pick<

@@ -4,7 +4,7 @@ import {
     availableCouponListSuspenseOptions,
     type UseAvailableCouponListSuspenseParams,
 } from '@/entities/order/queries';
-import type { ApplyCouponResponse } from '@/models/order';
+import type { ApplyCouponResponse } from '@/entities/order/model';
 
 const useAvailableCouponList = <T = ApplyCouponResponse>(
     params: UseAvailableCouponListSuspenseParams<T>,

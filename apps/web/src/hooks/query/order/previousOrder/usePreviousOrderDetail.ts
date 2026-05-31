@@ -4,7 +4,7 @@ import {
     previousOrderDetailOptions,
     type UsePreviousOrderDetailParams,
 } from '@/entities/order/queries';
-import type { GetPreviousOrderResponse } from '@/models/order/previousOrder';
+import type { GetPreviousOrderResponse } from '@/entities/order/model/previousOrder';
 
 const usePreviousOrderDetail = <T = GetPreviousOrderResponse>(
     params: UsePreviousOrderDetailParams<T>,

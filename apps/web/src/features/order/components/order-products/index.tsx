@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { OrderProductItem } from '@/features/order/components/order-product-item';
 import * as styles from '@/features/order/components/order-products/index.css';
-import type { DeliveryGroup } from '@/models/order/orderSheet';
+import type { DeliveryGroup } from '@/entities/order/model/orderSheet';
 
 interface OrderProductsProps {
     deliveryGroups: DeliveryGroup[];

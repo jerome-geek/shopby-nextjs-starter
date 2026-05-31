@@ -4,7 +4,7 @@ import {
     orderStatusSummaryOptions,
     type OrderStatusSummaryOptionsParams,
 } from '@/entities/order/queries';
-import type { GetOrderStatusSummaryResponse } from '@/models/order/myOrder';
+import type { GetOrderStatusSummaryResponse } from '@/entities/order/model/myOrder';
 
 interface UseOrderStatusSummaryParams<T = GetOrderStatusSummaryResponse> {
     memberNo: number;

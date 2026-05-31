@@ -4,7 +4,7 @@ import {
     eventByIdOptions,
     type EventByIdParams,
 } from '@/entities/event/queries';
-import type { GetEventResponse } from '@/models/display/event';
+import type { GetEventResponse } from '@/entities/display/model/event';
 
 const useEventById = <T = GetEventResponse>({
     eventId,

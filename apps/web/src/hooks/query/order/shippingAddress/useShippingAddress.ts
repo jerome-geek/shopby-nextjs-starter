@@ -4,7 +4,7 @@ import {
     shippingAddressOptions,
     type UseShippingAddressParams,
 } from '@/entities/order/queries';
-import type { GetShippingAddressResponse } from '@/models/order/shippingAddress';
+import type { GetShippingAddressResponse } from '@/entities/order/model/shippingAddress';
 
 const useShippingAddress = <T = GetShippingAddressResponse>(
     params: UseShippingAddressParams<T>,

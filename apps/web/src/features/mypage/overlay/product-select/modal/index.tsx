@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ProductSelect } from '@/features/mypage/overlay/product-select/content';
 import { ModalLayout, type DefaultModalLayoutProps } from '@/shared/components/layout';
 import { Button } from '@/shared/ui/button';
-import type { SearchProductItem } from '@/models/product/product';
+import type { SearchProductItem } from '@/entities/product/model/product';
 
 interface ProductSelectModalProps extends DefaultModalLayoutProps {
     setProductInfo: (productInfo: SearchProductItem) => void;

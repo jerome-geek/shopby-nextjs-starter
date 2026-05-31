@@ -14,11 +14,11 @@ import { Button } from '@/shared/ui/button';
 import { InputField, Select } from '@/shared/ui/input';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useMainCategory } from '@/hooks/useMainCategory';
-import type { MultiLevelCategory } from '@/models/display';
+import type { MultiLevelCategory } from '@/entities/display/model';
 import type {
     ProductSearchParams,
     SearchProductItem,
-} from '@/models/product/product';
+} from '@/entities/product/model/product';
 import { CURRENCY } from '@/utils/currency';
 
 type SearchType = 'keywords' | 'includeMallProductNo';

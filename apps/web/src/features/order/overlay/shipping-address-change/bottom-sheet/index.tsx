@@ -17,7 +17,7 @@ import {
     orderDetailOptions,
 } from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { OrderDetailResponse } from '@/models/order';
+import type { OrderDetailResponse } from '@/entities/order/model';
 
 interface ShippingAddressChangeBottomSheetProps
     extends DefaultModalLayoutProps {

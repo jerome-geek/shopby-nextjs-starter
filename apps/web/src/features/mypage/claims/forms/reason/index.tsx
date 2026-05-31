@@ -1,5 +1,5 @@
 import type { ClaimType } from '@/models';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
 
 import { ClaimReasonContent } from './content';
 

@@ -1,14 +1,14 @@
 import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { myOrder } from '@/api/order';
+import { myOrder } from '@/entities/order/api';
 import { ordersKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import type {
     RequestCashReceiptData,
     UpdateDeliveryInformationData,
     UpdateDeliveryInformationParams,
-} from '@/models/order/myOrder';
+} from '@/entities/order/model/myOrder';
 
 export const useMyOrderMutation = () => {
     const queryClient = useQueryClient();

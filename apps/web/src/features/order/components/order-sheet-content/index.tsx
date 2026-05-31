@@ -18,7 +18,7 @@ import { useOrderPostMessage } from '@/features/order/hooks';
 import { useSb } from '@/hooks/libs/shopby';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
-import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
+import type { PaymentReserveSchemaType } from '@/entities/order/schema/payment';
 import Seo from '@/shared/components/common/seo';
 import { guestTokenCookie } from '@/utils/cookie';
 import payment from '@/utils/order/payment';

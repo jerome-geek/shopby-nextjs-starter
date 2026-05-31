@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
 import * as styles from '@/features/product/components/product-tabs/seller-info/index.css';
-import { Partner } from '@/models/product/product';
+import { Partner } from '@/entities/product/model/product';
 import { CustomAccordion } from '@/shared/ui/accordion';
 
 const ACCORDION_VALUE = 'seller-info';

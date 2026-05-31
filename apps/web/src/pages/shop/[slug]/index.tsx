@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 
-import { event } from '@/api/display';
+import { event } from '@/entities/display/api';
 import Seo from '@/shared/components/common/seo';
 import EventSection from '@/features/section/components/event';
 import EventSectionSkeleton from '@/features/section/components/event/skeleton';
@@ -17,7 +17,7 @@ import {
 } from '@/features/banner/components/hero-banner';
 import IconBanner from '@/features/banner/components/icon-banner';
 import { eventKeys } from '@/hooks/queryKeys';
-import type { GetEventsV2Params } from '@/models/display/event';
+import type { GetEventsV2Params } from '@/entities/display/model/event';
 import * as styles from '@/pages/shop/[slug]/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 

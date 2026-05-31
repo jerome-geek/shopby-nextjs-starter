@@ -6,9 +6,9 @@ import * as styles from '@/features/product/components/card/index.css';
 import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
 import type { DeliveryConditionType } from '@/models';
-import type { StickerInfo } from '@/models/display';
-import type { ImageUrlType } from '@/models/product';
-import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
+import type { StickerInfo } from '@/entities/display/model';
+import type { ImageUrlType } from '@/entities/product/model';
+import { AdditionalDiscountWithProductNo } from '@/entities/product/model/additionalDiscount';
 import { normalizeImageUrl } from '@/shared/utils/shopby';
 import { CURRENCY } from '@/utils/currency';
 

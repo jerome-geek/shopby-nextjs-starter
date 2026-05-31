@@ -2,14 +2,14 @@ import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
-import { productProfile } from '@/api/product';
+import { productProfile } from '@/entities/product/api';
 import { productKeys, productProfileKeys } from '@/hooks/queryKeys';
 import type {
     DeleteRecentViewProductsParams,
     GetRecentViewProductsResponse,
     RegisterRecentViewProductData,
     UpdateProductsLikeData,
-} from '@/models/product/profile';
+} from '@/entities/product/model/profile';
 
 const useProductProfileMutation = () => {
     const queryClient = useQueryClient();

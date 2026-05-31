@@ -4,7 +4,7 @@ import {
     myOrderListOptions,
     type UseMyOrderListParams,
 } from '@/entities/order/queries';
-import type { GetOrderListResponse } from '@/models/order/myOrder';
+import type { GetOrderListResponse } from '@/entities/order/model/myOrder';
 
 const useMyOrderList = <T = GetOrderListResponse>(
     params: UseMyOrderListParams<T>,

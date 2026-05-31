@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { productInquiry } from '@/api/display';
+import { productInquiry } from '@/entities/display/api';
 import { productInquiryKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import type {
     UpdateProductInquiryData,
     WriteProductInquiryData,
-} from '@/models/display/productInquiry';
+} from '@/entities/display/model/productInquiry';
 
 const useProductInquiryMutation = () => {
     const { handleErrorToast } = useApiError();

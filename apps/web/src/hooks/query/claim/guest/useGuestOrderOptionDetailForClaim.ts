@@ -5,7 +5,7 @@ import {
     type GuestOrderOptionDetailForClaimOptionsParams,
 } from '@/entities/claim/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
 
 const useGuestOrderOptionDetailForClaim = <
     T = GetOrderOptionDetailForClaimResponse,

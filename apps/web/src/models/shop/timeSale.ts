@@ -1,8 +1,8 @@
 import type {
     GetProductSectionProductsParams,
     ProductSectionProduct,
-} from '@/models/display/productSection';
-import type { GetAdditionalDiscountResponse } from '@/models/product/additionalDiscount';
+} from '@/entities/display/model/productSection';
+import type { GetAdditionalDiscountResponse } from '@/entities/product/model/additionalDiscount';
 
 export interface GetTimeSaleSectionProductsParams
     extends Omit<

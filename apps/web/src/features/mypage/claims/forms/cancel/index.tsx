@@ -19,11 +19,11 @@ import useGuestEstimate from '@/hooks/query/claim/guest/useGuestEstimate';
 import useEstimate from '@/hooks/query/claim/member/useEstimate';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
 import {
     ClaimCancelSchemaType,
     createClaimCancelSchema,
-} from '@/schema/claim.schema';
+} from '@/entities/claim/schema/claim';
 
 const CLAIM_TYPE = 'CANCEL' as const;
 

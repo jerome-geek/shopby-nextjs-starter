@@ -16,8 +16,8 @@ import {
 import { RETURN_WAY_MAP } from '@/const/label';
 import useMall from '@/hooks/query/admin/mall/useMall';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
-import type { ClaimSchemaMapType } from '@/schema/claim.schema';
+import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
+import type { ClaimSchemaMapType } from '@/entities/claim/schema/claim';
 import { ErrorMessage } from '@/shared/components/form';
 import { Button } from '@/shared/ui';
 import {

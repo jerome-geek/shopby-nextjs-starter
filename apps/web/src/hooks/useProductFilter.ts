@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { PRICE_FILTER_OPTIONS } from '@/const/product';
 import type { OrderByType, OrderDirectionType } from '@/models';
-import type { ProductSearchParams } from '@/models/product/product';
+import type { ProductSearchParams } from '@/entities/product/model/product';
 
 type PriceFilterId = (typeof PRICE_FILTER_OPTIONS)[number]['id'] | 'custom';
 type DeliveryFilterType = 'FREE' | 'CONDITIONAL' | 'FIXED_FEE';

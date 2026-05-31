@@ -4,7 +4,7 @@ import {
     eventProductSectionOptions,
     type EventProductSectionParams,
 } from '@/entities/event/queries';
-import type { GetEventProductDisplaySectionResponse } from '@/models/display/event';
+import type { GetEventProductDisplaySectionResponse } from '@/entities/display/model/event';
 
 const useEventProductSection = <T = GetEventProductDisplaySectionResponse>(
     params: EventProductSectionParams<T>,

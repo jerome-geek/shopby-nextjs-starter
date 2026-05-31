@@ -1,10 +1,10 @@
 // export * from '@/schema/support.schema';
-// export * from '@/schema/claim.schema';
+// export * from '@/entities/claim/schema/claim';
 export * from '@/schema/inquiry.schema';
 export * from '@/schema/login.schema';
-// export * from '@/schema/order.schema';
+// export * from '@/entities/order/schema/order';
 export * from '@/schema/product-inquiry.schema';
 // export * from '@/schema/profile.schema';
 export * from '@/schema/signup.schema';
 export * from '@/schema/common.schema';
-export * from '@/schema/payment.schema';
+export * from '@/entities/order/schema/payment';

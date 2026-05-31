@@ -5,7 +5,7 @@ import {
     type UseCartPriceParams,
 } from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { GetSelectedCartPriceResponse } from '@/models/order/cart';
+import type { GetSelectedCartPriceResponse } from '@/entities/order/model/cart';
 
 const useCartPrice = <T = GetSelectedCartPriceResponse>({
     searchParams,

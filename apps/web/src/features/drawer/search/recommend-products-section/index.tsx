@@ -6,7 +6,7 @@ import { ProductCard } from '@/features/product/components';
 import { Column } from '@/shared/ui/layout/flex';
 import { useProductSectionProductList } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
-import type { ImageUrlType } from '@/models/product';
+import type { ImageUrlType } from '@/entities/product/model';
 
 export const RecommendProductsSection = () => {
     const { isMobile } = useResponsive();

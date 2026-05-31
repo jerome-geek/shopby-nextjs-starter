@@ -1,13 +1,13 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { banner } from '@/api/display';
+import { banner } from '@/entities/display/api';
 import { bannerKeys } from '@/hooks/queryKeys';
 import type {
     GetBannerExtraInfosParams,
     GetBannerExtraInfosResponse,
     GetBannersResponse,
-} from '@/models/display/banner';
+} from '@/entities/display/model/banner';
 
 export interface BannerListParams<T = GetBannersResponse> {
     type?: 'code' | 'id';

@@ -4,7 +4,7 @@ import {
     bannerListOptions,
     type BannerListParams,
 } from '@/entities/banner/queries';
-import type { GetBannersResponse } from '@/models/display/banner';
+import type { GetBannersResponse } from '@/entities/display/model/banner';
 
 const useBannerList = <T = GetBannersResponse>(params: BannerListParams<T>) => {
     return useQuery(bannerListOptions(params));

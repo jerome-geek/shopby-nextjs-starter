@@ -7,7 +7,7 @@ import {
     InputLabel,
 } from '@/shared/ui/input';
 import * as styles from '@/features/order/components/gift-receiver-info/index.css';
-import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
+import type { PaymentReserveSchemaType } from '@/entities/order/schema/payment';
 import { ErrorMessage } from '@/shared/components/form';
 
 export const GiftReceiverInfo = () => {

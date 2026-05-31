@@ -4,7 +4,7 @@ import {
     productShippingInfoOptions,
     type ProductShippingInfoOptionsParams,
 } from '@/entities/product/queries';
-import type { GetProductsShippingInfoResponse } from '@/models/product/product';
+import type { GetProductsShippingInfoResponse } from '@/entities/product/model/product';
 
 const useProductShippingInfo = <T = GetProductsShippingInfoResponse>({
     searchParams,

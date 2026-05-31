@@ -18,8 +18,8 @@ import {
 } from '@/features/order/components/order-detail-view/sections';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useResponsive } from '@/hooks/utils';
-import type { OrderDetailResponse } from '@/models/order';
-import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
+import type { OrderDetailResponse } from '@/entities/order/model';
+import type { GetOrderConfigsResponse } from '@/entities/order/model/orderConfiguration';
 import { CURRENCY } from '@/utils/currency';
 
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';

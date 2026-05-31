@@ -14,7 +14,7 @@ import { useGlobal } from '@/hooks/utils';
 import {
     getPaymentSchema,
     type PaymentReserveSchemaType,
-} from '@/schema/payment.schema';
+} from '@/entities/order/schema/payment';
 
 interface UseOrderSheetInitializeProps {
     orderSheetNo: string;

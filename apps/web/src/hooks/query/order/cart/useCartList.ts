@@ -5,7 +5,7 @@ import {
     type UseCartListParams,
 } from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { GetCartListResponse } from '@/models/order/cart';
+import type { GetCartListResponse } from '@/entities/order/model/cart';
 
 const useCartList = <T = GetCartListResponse>({
     searchParams,

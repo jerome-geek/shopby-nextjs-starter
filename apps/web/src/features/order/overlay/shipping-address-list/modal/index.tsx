@@ -14,7 +14,7 @@ import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
 import { addressKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
-import type { Address } from '@/models/order/shippingAddress';
+import type { Address } from '@/entities/order/model/shippingAddress';
 import { PaymentReserveSchemaType } from '@/schema';
 
 interface ShippingAddressListModalProps {

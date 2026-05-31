@@ -55,14 +55,13 @@ Additional domain migration batches already completed:
 
 ## What Is Still Left
 
-The largest remaining FSD-lite debt is now in legacy domain buckets outside `product`, plus global technical buckets.
+The largest remaining FSD-lite debt is now in global technical buckets.
 
 ### 1. Domain Slice Migration
 
 Recommended order:
 
-1. overlay cleanup
-2. global technical buckets
+1. global technical buckets
 
 Primary legacy roots still in use:
 
@@ -96,7 +95,7 @@ These three roots still overlap heavily by behavior:
 - [x] `apps/web/src/components/bottom-sheet`
 - [x] `apps/web/src/components/layer-contents`
 - [ ] `apps/web/src/components/modal`
-  - only compatibility barrel `index.ts` remains
+  - only compatibility barrel cleanup remains if we decide to delete the legacy entrypoint
 
 Completed in the first overlay batch:
 
@@ -129,7 +128,7 @@ Completed in the first overlay batch:
 
 Still remaining in overlay cleanup:
 
-- [ ] remove `components/modal/index.ts` compatibility barrel after imports are fully normalized
+- [ ] decide whether to keep or delete `components/modal/index.ts` compatibility barrel
 
 Examples of duplicated or near-duplicated flows:
 
@@ -154,12 +153,22 @@ Goal:
 Still not aligned with FSD-lite:
 
 - [ ] `apps/web/src/hooks`
-- [ ] `apps/web/src/models`
-- [ ] `apps/web/src/api`
+- [~] `apps/web/src/models`
+  - `product` moved into `entities/product/model`
+  - `order` moved into `entities/order/model`
+  - `display` moved into `entities/display/model`
+  - `claim` moved into `entities/claim/model`
+- [~] `apps/web/src/api`
+  - `product` moved into `entities/product/api`
+  - `order` moved into `entities/order/api`
+  - `display` moved into `entities/display/api`
+  - `claim` moved into `entities/claim/api`
 - [ ] `apps/web/src/utils`
 - [ ] `apps/web/src/context`
 - [ ] `apps/web/src/store`
-- [ ] `apps/web/src/schema`
+- [~] `apps/web/src/schema`
+  - `order`, `payment`, `shippingAddress`, `laterShippingInput` moved into `entities/order/schema`
+  - `claim` moved into `entities/claim/schema`
 - [ ] `apps/web/src/const`
 - [ ] `apps/web/src/helpers`
 
@@ -172,12 +181,13 @@ Goal:
 
 ### Phase A
 
-- Remove `components/modal/index.ts` compatibility barrel after consumer imports are normalized
-- Spot-check no new overlay regressions are introduced during follow-up refactors
+- Finish `models/api/schema` migration for the remaining domains beyond `product`, `order`, `display`, and `claim`
+- Start reducing root-level `hooks` by moving domain-owned query hooks into `entities/*` or `features/*`
 
 ### Phase B
 
-- Break down global buckets: `hooks`, `models`, `api`, `utils`, `schema`, `store`, `context`
+- Break down `utils`, `const`, `helpers`, `context`, and `store`
+- Revisit whether `components/modal/index.ts` compatibility barrel should be removed
 
 ## Validation Notes
 
@@ -186,7 +196,11 @@ Goal:
 - `components/hoc`, `components/mypage`, and `components/order` are no longer present.
 - `components/product`, `components/product-list`, and `components/product-option` are no longer present.
 - `components/search`, `components/recipe`, and `components/section` are no longer present.
-- Remaining work should focus on overlay cleanup and global buckets.
+- Remaining work should focus on global buckets.
+- `product` and `order` root `api` and `models` folders were already migrated into `entities/*`.
+- order-related root schemas were already migrated into `entities/order/schema`.
+- `display` and `claim` root `api` and `models` folders were already migrated into `entities/*`.
+- `claim.schema.ts` was already migrated into `entities/claim/schema`.
 
 ## Verification Standard
 

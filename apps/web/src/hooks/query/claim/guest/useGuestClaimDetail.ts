@@ -4,7 +4,7 @@ import {
     guestClaimDetailOptions,
     type UseGuestClaimDetailParams,
 } from '@/entities/claim/queries';
-import type { GetClaimDetailByClaimNoResponse } from '@/models/claim/member';
+import type { GetClaimDetailByClaimNoResponse } from '@/entities/claim/model/member';
 
 const useGuestClaimDetail = <T = GetClaimDetailByClaimNoResponse>(
     params: UseGuestClaimDetailParams<T>,

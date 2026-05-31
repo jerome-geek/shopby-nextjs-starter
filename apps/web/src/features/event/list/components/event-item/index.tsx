@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils';
-import type { EventContent } from '@/models/display';
+import type { EventContent } from '@/entities/display/model';
 import { normalizeImageUrl } from '@/shared/utils/shopby';
 
 import * as styles from '@/features/event/list/components/event-item/index.css';

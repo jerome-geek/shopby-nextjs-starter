@@ -4,7 +4,7 @@ import {
     reviewableProductListOptions,
     type ReviewableProductListOptionsParams,
 } from '@/entities/display/review/queries';
-import type { GetReviewableProductsResponse } from '@/models/display/review';
+import type { GetReviewableProductsResponse } from '@/entities/display/model/review';
 
 const useReviewableProductList = <T = GetReviewableProductsResponse>(
     params: ReviewableProductListOptionsParams<T>,

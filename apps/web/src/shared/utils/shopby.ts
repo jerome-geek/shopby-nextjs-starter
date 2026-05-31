@@ -5,7 +5,7 @@ import type {
     Banner,
     BannerAccount,
     GetBannersResponse,
-} from '@/models/display/banner';
+} from '@/entities/display/model/banner';
 
 /** protocol-relative URL (//)을 https://로 변환 */
 export function normalizeImageUrl(url: string | undefined): string | undefined {

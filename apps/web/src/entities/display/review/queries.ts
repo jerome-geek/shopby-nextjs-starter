@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { review } from '@/api/display';
+import { review } from '@/entities/display/api';
 import { reviewKeys } from '@/hooks/queryKeys';
 import type {
     GetMyProductReviewsParams,
@@ -24,7 +24,7 @@ import type {
     GetProductReviewResponse,
     GetReviewableProductsParams,
     GetReviewableProductsResponse,
-} from '@/models/display/review';
+} from '@/entities/display/model/review';
 
 /**
  * ==========================================

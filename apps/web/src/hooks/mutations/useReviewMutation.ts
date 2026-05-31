@@ -1,14 +1,14 @@
 import { includes } from '@fxts/core';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { review } from '@/api/display';
+import { review } from '@/entities/display/api';
 import { reviewKeys } from '@/hooks/queryKeys';
 import useApiError from '@/hooks/useApiError';
 import type {
     RegisterProductReviewData,
     ReportProductReviewData,
     UpdateProductReviewData,
-} from '@/models/display/review';
+} from '@/entities/display/model/review';
 
 export const useReviewMutation = ({ productNo }: { productNo: number }) => {
     const queryClient = useQueryClient();

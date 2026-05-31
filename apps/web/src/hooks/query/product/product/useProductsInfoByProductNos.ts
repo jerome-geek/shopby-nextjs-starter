@@ -4,7 +4,7 @@ import {
     productsInfoByProductNosOptions,
     type ProductsInfoByProductNosOptionsParams,
 } from '@/entities/product/queries';
-import type { GetProductsInfoByProductNosResponse } from '@/models/product/product';
+import type { GetProductsInfoByProductNosResponse } from '@/entities/product/model/product';
 
 const useProductsInfoByProductNos = <T = GetProductsInfoByProductNosResponse>({
     searchParams,

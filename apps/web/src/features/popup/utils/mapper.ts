@@ -1,4 +1,4 @@
-import type { DesignPopup, PopupInfo } from '@/models/display/popup';
+import type { DesignPopup, PopupInfo } from '@/entities/display/model/popup';
 
 const defaultPageInfos: PopupInfo['pageInfos'] = {
     mallProductInfos: [],

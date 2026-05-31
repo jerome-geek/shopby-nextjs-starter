@@ -24,11 +24,11 @@ import { useDialog, useGlobal } from '@/hooks/utils';
 import type {
     GetOrderOptionDetailForClaimResponse,
     RequestReturnMultipleOptionsData,
-} from '@/models/claim/member';
+} from '@/entities/claim/model/member';
 import {
     ClaimReturnSchemaType,
     createClaimReturnSchema,
-} from '@/schema/claim.schema';
+} from '@/entities/claim/schema/claim';
 
 const CLAIM_TYPE = 'RETURN' as const;
 

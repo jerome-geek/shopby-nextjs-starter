@@ -1,7 +1,7 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { category } from '@/api/display';
+import { category } from '@/entities/display/api';
 import { categoryKeys } from '@/hooks/queryKeys';
 import type {
     GetCategoriesByManagementCodeData,
@@ -11,7 +11,7 @@ import type {
     GetCategoryParams,
     GetCategoryResponse,
     GetNewProductCategoriesResponse,
-} from '@/models/display/category';
+} from '@/entities/display/model/category';
 
 export interface CategoryDetailParams<T = GetCategoryResponse> {
     categoryNo: string | number;

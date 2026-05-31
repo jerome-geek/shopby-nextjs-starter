@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { guestOrder } from '@/api/order';
+import { guestOrder } from '@/entities/order/api';
 import { AuthLayout } from '@/shared/components/layout';
 import { Button } from '@/shared/ui/button';
 import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';

@@ -9,7 +9,7 @@ import { PRICE_FILTER_OPTIONS } from '@/const/product';
 import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductSearchSummary } from '@/hooks/query/product/product';
 import { useProductFilter } from '@/hooks/useProductFilter';
-import type { GetProductSearchSummaryParams } from '@/models/product/product';
+import type { GetProductSearchSummaryParams } from '@/entities/product/model/product';
 import {
     BottomSheetLayout,
     type DefaultModalLayoutProps,

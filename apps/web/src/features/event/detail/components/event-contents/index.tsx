@@ -1,5 +1,5 @@
 import * as styles from '@/features/event/detail/components/event-contents/index.css';
-import type { EventTopInfo } from '@/models/display';
+import type { EventTopInfo } from '@/entities/display/model';
 
 interface EventContentsProps {
     top: EventTopInfo;

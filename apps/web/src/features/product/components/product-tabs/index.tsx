@@ -16,7 +16,7 @@ import RelatedProducts from '@/features/product/components/product-tabs/related-
 import Review from '@/features/product/components/product-tabs/review';
 import SellerInfo from '@/features/product/components/product-tabs/seller-info';
 import { useResponsive } from '@/hooks/utils';
-import { ProductDetailResponse } from '@/models/product/product';
+import { ProductDetailResponse } from '@/entities/product/model/product';
 
 interface ProductTabsProps {
     reviewCount?: number;

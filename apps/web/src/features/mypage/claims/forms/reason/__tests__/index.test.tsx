@@ -4,8 +4,8 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ClaimReason } from '@/features/mypage/claims/forms/reason';
-import type { ClaimableOption } from '@/models/claim';
-import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
+import type { ClaimableOption } from '@/entities/claim/model';
+import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
 
 afterEach(() => {
     cleanup();

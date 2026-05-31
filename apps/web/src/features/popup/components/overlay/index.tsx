@@ -6,7 +6,7 @@ import { useMemo, useRef, useState } from 'react';
 import type { DefaultModalLayoutProps } from '@/shared/components/layout';
 import * as styles from '@/features/popup/components/overlay/index.css';
 import type { PopupPositionType, SizeUnitType } from '@/models';
-import type { PopupInfo } from '@/models/display/popup';
+import type { PopupInfo } from '@/entities/display/model/popup';
 
 interface PopupOverlayProps extends DefaultModalLayoutProps {
     popup: PopupInfo;

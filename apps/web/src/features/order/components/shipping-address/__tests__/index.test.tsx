@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import type { ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { PaymentReserveSchemaType } from '@/schema/payment.schema';
+import type { PaymentReserveSchemaType } from '@/entities/order/schema/payment';
 
 const mockUseOrderSheet = vi.fn();
 const mockUseAuth = vi.fn();

@@ -5,7 +5,7 @@ import type {
     GetProductReviewListParams,
     GetProductReviewListV2Params,
     GetReviewableProductsParams,
-} from '@/models/display/review';
+} from '@/entities/display/model/review';
 
 const reviewKeys = {
     all: ['reviews'] as const,
