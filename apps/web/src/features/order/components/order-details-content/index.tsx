@@ -5,12 +5,12 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CongratulationIcon } from '@/shared/ui/icons/login/Congratulation';
-import { OrderProductItem } from '@/features/order/components/order-product-item';
 import { PATHS } from '@/const/paths';
+import { OrderProductItem } from '@/features/order/components/order-product-item';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderDetailResponse } from '@/models/order';
+import { CongratulationIcon } from '@/shared/ui/icons/login/Congratulation';
 import { guestTokenCookie } from '@/utils/cookie';
 import { CURRENCY } from '@/utils/currency';
 
@@ -249,7 +249,10 @@ const OrderDetailsContent = ({ orderInfo }: OrderDetailsContentProps) => {
                 >
                     {t('주문 상세보기')}
                 </Link>
-                <Link href='/' className={styles.primaryButton}>
+                <Link
+                    href={PATHS.SHOP.DISCOVERY}
+                    className={styles.primaryButton}
+                >
                     {t('계속 쇼핑하기')}
                 </Link>
             </div>
