@@ -3,6 +3,7 @@ import { useLenis } from 'lenis/react';
 import { motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
+import { ProductDetailResponse } from '@/entities/product/model/product';
 import { RelatedProductList } from '@/features/product/components';
 import AfterServiceInfo from '@/features/product/components/product-tabs/after-service-info';
 import ProductContents from '@/features/product/components/product-tabs/contents';
@@ -10,13 +11,12 @@ import DeliveryInfo from '@/features/product/components/product-tabs/delivery-in
 import DutyInfo from '@/features/product/components/product-tabs/duty-info';
 import * as styles from '@/features/product/components/product-tabs/index.css';
 import Inquiries from '@/features/product/components/product-tabs/inquiries';
-import PopularProducts from '@/features/product/components/product-tabs/popular-products';
+import { PopularProducts } from '@/features/product/components/product-tabs/popular-products';
 import RefundInfo from '@/features/product/components/product-tabs/refund-info';
 import RelatedProducts from '@/features/product/components/product-tabs/related-products';
 import Review from '@/features/product/components/product-tabs/review';
 import SellerInfo from '@/features/product/components/product-tabs/seller-info';
 import { useResponsive } from '@/hooks/utils';
-import { ProductDetailResponse } from '@/entities/product/model/product';
 
 interface ProductTabsProps {
     reviewCount?: number;
@@ -157,8 +157,14 @@ export function ProductTabs({
                         <DutyInfo
                             dutyInfo={productDetailData.baseInfo.dutyInfo}
                         />
-                        <DeliveryInfo deliveryGuide={productDetailData.deliveryGuide} />
-                        <AfterServiceInfo afterServiceGuide={productDetailData.afterServiceGuide} />
+                        <DeliveryInfo
+                            deliveryGuide={productDetailData.deliveryGuide}
+                        />
+                        <AfterServiceInfo
+                            afterServiceGuide={
+                                productDetailData.afterServiceGuide
+                            }
+                        />
                         <RefundInfo
                             exchangeGuide={productDetailData.exchangeGuide}
                             refundGuide={productDetailData.refundGuide}
