@@ -11,7 +11,10 @@ const SellerInfo = ({ partnerInfo }: { partnerInfo?: Partner | null }) => {
         return null;
     }
 
-    const hasData = partnerInfo.companyName || partnerInfo.partnerName || partnerInfo.ownerName;
+    const hasData =
+        partnerInfo.companyName ||
+        partnerInfo.partnerName ||
+        partnerInfo.ownerName;
     if (!hasData) {
         return null;
     }
@@ -26,63 +29,94 @@ const SellerInfo = ({ partnerInfo }: { partnerInfo?: Partner | null }) => {
                     {
                         value: ACCORDION_VALUE,
                         header: (
-                            <span className={styles.title}>
-                                판매자 정보
-                            </span>
+                            <span className={styles.title}>판매자 정보</span>
                         ),
                         content: (
                             <div className={styles.content}>
                                 <dl className={styles.sellerDl}>
-                                    {partnerInfo.companyName || partnerInfo.partnerName ? (
+                                    {partnerInfo.companyName ||
+                                    partnerInfo.partnerName ? (
                                         <div className={styles.sellerRow}>
-                                            <dt className={styles.sellerDt}>상호명 / 판매자명</dt>
+                                            <dt className={styles.sellerDt}>
+                                                상호명 / 판매자명
+                                            </dt>
                                             <dd className={styles.sellerDd}>
-                                                {partnerInfo.companyName || partnerInfo.partnerName}
+                                                {partnerInfo.companyName ||
+                                                    partnerInfo.partnerName}
                                             </dd>
                                         </div>
                                     ) : null}
 
                                     {partnerInfo.ownerName ? (
                                         <div className={styles.sellerRow}>
-                                            <dt className={styles.sellerDt}>대표자명</dt>
-                                            <dd className={styles.sellerDd}>{partnerInfo.ownerName}</dd>
+                                            <dt className={styles.sellerDt}>
+                                                대표자명
+                                            </dt>
+                                            <dd className={styles.sellerDd}>
+                                                {partnerInfo.ownerName}
+                                            </dd>
                                         </div>
                                     ) : null}
 
                                     {partnerInfo.businessRegistrationNo ? (
                                         <div className={styles.sellerRow}>
-                                            <dt className={styles.sellerDt}>사업자번호</dt>
-                                            <dd className={styles.sellerDd}>{partnerInfo.businessRegistrationNo}</dd>
+                                            <dt className={styles.sellerDt}>
+                                                사업자번호
+                                            </dt>
+                                            <dd className={styles.sellerDd}>
+                                                {
+                                                    partnerInfo.businessRegistrationNo
+                                                }
+                                            </dd>
                                         </div>
                                     ) : null}
 
                                     {partnerInfo.onlineMarketingBusinessDeclarationNo ? (
                                         <div className={styles.sellerRow}>
-                                            <dt className={styles.sellerDt}>통신판매신고번호</dt>
+                                            <dt className={styles.sellerDt}>
+                                                통신판매신고번호
+                                            </dt>
                                             <dd className={styles.sellerDd}>
-                                                {partnerInfo.onlineMarketingBusinessDeclarationNo}
+                                                {
+                                                    partnerInfo.onlineMarketingBusinessDeclarationNo
+                                                }
                                             </dd>
                                         </div>
                                     ) : null}
 
                                     {partnerInfo.phoneNo ? (
                                         <div className={styles.sellerRow}>
-                                            <dt className={styles.sellerDt}>대표번호</dt>
-                                            <dd className={styles.sellerDd}>{partnerInfo.phoneNo}</dd>
+                                            <dt className={styles.sellerDt}>
+                                                대표번호
+                                            </dt>
+                                            <dd className={styles.sellerDd}>
+                                                {partnerInfo.phoneNo}
+                                            </dd>
                                         </div>
                                     ) : null}
 
                                     {partnerInfo.email ? (
                                         <div className={styles.sellerRow}>
-                                            <dt className={styles.sellerDt}>이메일</dt>
-                                            <dd className={styles.sellerDd}>{partnerInfo.email}</dd>
+                                            <dt className={styles.sellerDt}>
+                                                이메일
+                                            </dt>
+                                            <dd className={styles.sellerDd}>
+                                                {partnerInfo.email}
+                                            </dd>
                                         </div>
                                     ) : null}
 
                                     {partnerInfo.officeAddressLabel ? (
                                         <div className={styles.sellerRow}>
-                                            <dt className={styles.sellerDt}>사업장 주소</dt>
-                                            <dd className={styles.sellerDd}>{partnerInfo.officeAddressLabel}</dd>
+                                            <dt className={styles.sellerDt}>
+                                                사업장 주소
+                                            </dt>
+                                            <dd
+                                                className={styles.sellerDd}
+                                                dangerouslySetInnerHTML={{
+                                                    __html: partnerInfo.officeAddressLabel,
+                                                }}
+                                            />
                                         </div>
                                     ) : null}
                                 </dl>
