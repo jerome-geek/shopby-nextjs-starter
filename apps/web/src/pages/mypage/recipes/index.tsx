@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
-import { RecipeSearchSkeleton } from '@/components/recipe/search-skeleton';
-import { ViewToggle } from '@/components/recipe/view-toggle';
+import { RecipeSearchSkeleton } from '@/features/recipe/components/view/search-skeleton';
+import { ViewToggle } from '@/features/recipe/components/view/view-toggle';
 import { RecipeList } from '@/features/recipe/components/recipe-list';
 import * as styles from '@/pages/mypage/recipes/index.css';
 

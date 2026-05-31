@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { recipe } from '@/api/shop';
-import { RecipeCard } from '@/components/recipe';
+import { RecipeCard } from '@/features/recipe/components/view';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { recipeKeys } from '@/hooks/queryKeys';
 import { useRecipeExposureGroup } from '@/hooks/suspenseQuery/shop/recipe';

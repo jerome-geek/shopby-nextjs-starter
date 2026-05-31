@@ -1,6 +1,6 @@
-import { CollectionSearchView } from '@/components/search/collection-search-view';
-import { RecipeSearchView } from '@/components/search/recipe-search-view';
-import { ShoppingSearchView } from '@/components/search/shopping-search-view';
+import { CollectionSearchView } from '@/features/search/components/view/collection-search-view';
+import { RecipeSearchView } from '@/features/search/components/view/recipe-search-view';
+import { ShoppingSearchView } from '@/features/search/components/view/shopping-search-view';
 import { SORT_OPTIONS } from '@/const/product';
 import { useProductSearchParams } from '@/entities/search/hooks/useProductSearchParams';
 import { useMainCategory } from '@/hooks/useMainCategory';

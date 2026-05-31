@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { LazyRender } from '@/shared/components/common';
 import Seo from '@/shared/components/common/seo';
-import CollectionGroupSection from '@/components/section/collection-group';
+import CollectionGroupSection from '@/features/section/components/collection-group';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';
 import { collectionExposureGroupOptions } from '@/entities/shop/collection/queries';
@@ -15,14 +15,14 @@ import {
 import * as styles from '@/pages/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
-const TimeSale = dynamic(() => import('@/components/section/time-sale'), {
+const TimeSale = dynamic(() => import('@/features/section/components/time-sale'), {
     ssr: false,
 });
-const Best = dynamic(() => import('@/components/section/best'), {
+const Best = dynamic(() => import('@/features/section/components/best'), {
     ssr: false,
 });
 const RecipeGroupSection = dynamic(
-    () => import('@/components/section/recipe-group'),
+    () => import('@/features/section/components/recipe-group'),
     {
         ssr: false,
     },

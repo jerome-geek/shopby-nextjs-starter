@@ -1,5 +1,5 @@
 import * as styles from '@/features/drawer/category/recipe/index.css';
-import { RecipeCard } from '@/components/recipe/card';
+import { RecipeCard } from '@/features/recipe/components/view/card';
 import { usePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 
 const Recipe = () => {

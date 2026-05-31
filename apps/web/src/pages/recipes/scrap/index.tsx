@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next';
 
 import Seo from '@/shared/components/common/seo';
 import { CSRLayout } from '@/shared/components/layout';
-import { RecipeScrapDetail } from '@/components/recipe/scrap/detail';
-import RecipeScrapSummary from '@/components/recipe/scrap/summary';
+import { RecipeScrapDetail } from '@/features/recipe/components/view/scrap/detail';
+import RecipeScrapSummary from '@/features/recipe/components/view/scrap/summary';
 import { useCustomDialog } from '@/features/dialog';
 import { useCollectionList } from '@/hooks/query/shop/collection';
 import { useResponsive } from '@/hooks/utils';

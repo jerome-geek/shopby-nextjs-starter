@@ -3,10 +3,10 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 
 import { event } from '@/api/display';
 import Seo from '@/shared/components/common/seo';
-import EventSection from '@/components/section/event';
-import EventSectionSkeleton from '@/components/section/event/skeleton';
-import SectionGroup from '@/components/section/group';
-import TimeSaleSection from '@/components/section/time-sale';
+import EventSection from '@/features/section/components/event';
+import EventSectionSkeleton from '@/features/section/components/event/skeleton';
+import SectionGroup from '@/features/section/components/group';
+import TimeSaleSection from '@/features/section/components/time-sale';
 import { EVENT_DISPLAY_CATEGORY_NO } from '@/const/category';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { bannerListOptions } from '@/entities/banner/queries';

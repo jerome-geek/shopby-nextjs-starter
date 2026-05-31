@@ -5,7 +5,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { RecipePreviewImage } from '@/components/recipe';
+import { RecipePreviewImage } from '@/features/recipe/components/view';
 import { InputLabel } from '@/shared/ui/input';
 import * as styles from '@/pages/recipes/write/index.css';
 import { TextArea } from '@/shared/components/form';

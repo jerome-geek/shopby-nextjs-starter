@@ -2,8 +2,8 @@
 
 import { useDeferredValue } from 'react';
 
-import { RecipeCard } from '@/components/recipe/card';
-import { RecipeDetailCard } from '@/components/recipe/detail-card';
+import { RecipeCard } from '@/features/recipe/components/view/card';
+import { RecipeDetailCard } from '@/features/recipe/components/view/detail-card';
 import { Paging } from '@/shared/ui/paging';
 import * as styles from '@/features/recipe/components/recipe-list/index.css';
 import { useSearchMyRecipeList } from '@/hooks/suspenseQuery/shop/recipe';

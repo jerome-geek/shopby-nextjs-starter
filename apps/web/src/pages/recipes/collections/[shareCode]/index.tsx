@@ -12,7 +12,7 @@ import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { collection } from '@/api/shop';
-import { RecipeDetailCard } from '@/components/recipe/detail-card';
+import { RecipeDetailCard } from '@/features/recipe/components/view/detail-card';
 import { VerticalMoreMenu } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { useCustomDialog } from '@/features/dialog';

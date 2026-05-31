@@ -1,4 +1,4 @@
-import { IntegratedSearchView } from '@/components/search/integrated-search-view';
+import { IntegratedSearchView } from '@/features/search/components/view/integrated-search-view';
 import { useCollectionSearch } from '../../hooks/useCollectionSearch';
 import { useRecipeSearch } from '../../hooks/useRecipeSearch';
 import { useShoppingSearch } from '../../hooks/useShoppingSearch';

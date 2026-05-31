@@ -5,7 +5,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SmallCaretIcon } from '@/shared/ui/icons';
-import { RecipeCard } from '@/components/recipe/card';
+import { RecipeCard } from '@/features/recipe/components/view/card';
 import * as styles from '@/features/recipe/components/recipe-recommendation-content/index.css';
 import usePublicRecipeSearch from '@/hooks/suspenseQuery/shop/recipe/usePublicRecipeSearch';
 import { BREAKPOINTS } from '@/styles/media';

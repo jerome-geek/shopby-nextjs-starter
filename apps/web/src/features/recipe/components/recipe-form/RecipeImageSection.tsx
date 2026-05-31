@@ -18,7 +18,7 @@ import { ImageIcon, Plus } from 'lucide-react';
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SortablePreviewImage } from '@/components/recipe/sortable-preview-image';
+import { SortablePreviewImage } from '@/features/recipe/components/view/sortable-preview-image';
 import { InputLabel } from '@/shared/ui/input';
 import * as styles from '@/pages/recipes/write/index.css';
 import { vars } from '@/styles/theme.css';

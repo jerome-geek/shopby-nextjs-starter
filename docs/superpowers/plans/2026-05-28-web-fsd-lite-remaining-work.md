@@ -61,9 +61,8 @@ The largest remaining FSD-lite debt is now in legacy domain buckets outside `pro
 
 Recommended order:
 
-1. `search`
-2. `recipe`
-3. `section`
+1. overlay cleanup
+2. global technical buckets
 
 Primary legacy roots still in use:
 
@@ -77,9 +76,12 @@ Primary legacy roots still in use:
   - moved to `features/product/list/*`
 - [x] `apps/web/src/components/product-option`
   - moved to `features/product/option/*`
-- [ ] `apps/web/src/components/search`
-- [ ] `apps/web/src/components/recipe`
-- [ ] `apps/web/src/components/section`
+- [x] `apps/web/src/components/search`
+  - moved to `features/search/components/view/*`
+- [x] `apps/web/src/components/recipe`
+  - moved to `features/recipe/components/view/*`
+- [x] `apps/web/src/components/section`
+  - moved to `features/section/components/*`
 
 Goal:
 
@@ -136,20 +138,10 @@ Goal:
 
 ### Phase A
 
-- Move `search` vertical slice
-- Verify with `next build --webpack`
-
-### Phase B
-
-- Move `recipe` and `section` domain buckets
-- Verify with `next build --webpack`
-
-### Phase C
-
 - Tackle overlay deduplication across `modal`, `bottom-sheet`, `layer-contents`
 - Use one interaction family at a time
 
-### Phase D
+### Phase B
 
 - Break down global buckets: `hooks`, `models`, `api`, `utils`, `schema`, `store`, `context`
 
@@ -159,7 +151,8 @@ Goal:
 - `components/ui`, `components/icons`, `components/common`, and `components/layout` are no longer present.
 - `components/hoc`, `components/mypage`, and `components/order` are no longer present.
 - `components/product`, `components/product-list`, and `components/product-option` are no longer present.
-- Remaining work should focus on `search`, `recipe`, `section`, overlay cleanup, and global buckets.
+- `components/search`, `components/recipe`, and `components/section` are no longer present.
+- Remaining work should focus on overlay cleanup and global buckets.
 
 ## Verification Standard
 

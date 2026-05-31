@@ -19,7 +19,7 @@ import {
     RecipeDetailStickyFooter,
     RecipeDetailStickyFooterSkeleton,
     RecipeRecommend,
-} from '@/components/recipe';
+} from '@/features/recipe/components/view';
 import { PATHS } from '@/const/paths';
 import { SIX_HOUR_IN_SECONDS } from '@/const/time';
 import { createRecipeSeoData } from '@/entities/recipe/utils/seo';
