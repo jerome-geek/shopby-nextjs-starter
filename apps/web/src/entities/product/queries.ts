@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { product, productOption } from '@/entities/product/api';
+import { product, productOption } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
 import type {
     GetBestReviewProductsParams,
@@ -28,11 +28,11 @@ import type {
     ProductDetailResponse,
     ProductSearchParams,
     ProductsSearchResponse,
-} from '@/entities/product/model/product';
+} from '@/models/product/product';
 import type {
     GetProductOptionParams,
     ProductOptionResponse,
-} from '@/entities/product/model/productOption';
+} from '@/models/product/productOption';
 
 export interface ProductListOptionsParams<T = ProductsSearchResponse> {
     searchParams: ProductSearchParams;

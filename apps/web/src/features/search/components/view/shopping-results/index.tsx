@@ -8,7 +8,7 @@ import PagingV2 from '@/shared/ui/paging-v2';
 import * as styles from '@/features/search/components/view/shopping-results/index.css';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useResponsive } from '@/hooks/utils';
-import type { SearchProductItem } from '@/entities/product/model/product';
+import type { SearchProductItem } from '@/models/product/product';
 
 type ShoppingSearchResultsProps = {
     productList: SearchProductItem[];

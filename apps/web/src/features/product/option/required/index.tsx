@@ -5,7 +5,7 @@ import { Props, SingleValue } from 'react-select';
 import * as styles from '@/features/product/option/required/index.css';
 import { Select } from '@/shared/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
-import type { MultiLevelOption } from '@/entities/product/model/productOption';
+import type { MultiLevelOption } from '@/models/product/productOption';
 
 interface RequiredProductOptionProps {
     productNo: number;

@@ -4,7 +4,7 @@ import {
     productListOptions,
     type ProductListOptionsParams,
 } from '@/entities/product/queries';
-import type { ProductsSearchResponse } from '@/entities/product/model/product';
+import type { ProductsSearchResponse } from '@/models/product/product';
 
 const useProductList = <T = ProductsSearchResponse>({
     searchParams,

@@ -19,7 +19,7 @@ import { ADDRESS_MEMO_LIST, PHONE_PREFIX_NUMBER_LIST } from '@/const/form';
 import useShippingAddressMutation from '@/hooks/mutations/useShippingAddressMutation';
 import { useToast } from '@/hooks/ui';
 import { useDialog, useGlobal, useResponsive } from '@/hooks/utils';
-import type { Address } from '@/entities/order/model/shippingAddress';
+import type { Address } from '@/models/order/shippingAddress';
 import {
     getRegisterShippingAddressSchema,
     type RegisterShippingAddressSchemaType,

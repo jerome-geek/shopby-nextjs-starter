@@ -1,4 +1,4 @@
-import type { GetLaterOrderDetailParams } from '@/entities/order/model/laterShippingInput';
+import type { GetLaterOrderDetailParams } from '@/models/order/laterShippingInput';
 
 const laterShippingInputKeys = {
     all: ['laterShippingInput'] as const,

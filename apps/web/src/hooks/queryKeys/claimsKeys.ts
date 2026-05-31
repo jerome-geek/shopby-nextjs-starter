@@ -1,6 +1,6 @@
-import { EstimatedRefundPriceData } from '@/entities/claim/model';
-import type { GetClaimOptionPriceParams } from '@/entities/claim/model/guest';
-import type { GetClaimListParams } from '@/entities/claim/model/member';
+import { EstimatedRefundPriceData } from '@/models/claim';
+import type { GetClaimOptionPriceParams } from '@/models/claim/guest';
+import type { GetClaimListParams } from '@/models/claim/member';
 
 const claimsKeys = {
     all: ['claims'] as const,

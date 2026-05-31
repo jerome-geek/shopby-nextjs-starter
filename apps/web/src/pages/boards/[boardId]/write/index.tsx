@@ -36,7 +36,7 @@ import * as styles from '@/pages/boards/[boardId]/write/index.css';
 import {
     articleWriteSchema,
     ArticleWriteSchemaType,
-} from '@/schema/article.schema';
+} from '@/features/board/article-write/schema';
 import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface CategoryOption {

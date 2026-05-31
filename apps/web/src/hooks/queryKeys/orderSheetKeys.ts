@@ -1,7 +1,7 @@
 import type {
     GetCalculatedOrderSheetData,
     GetOrderSheetParams,
-} from '@/entities/order/model/orderSheet';
+} from '@/models/order/orderSheet';
 
 const orderSheetKeys = {
     all: ['orderSheet'] as const,

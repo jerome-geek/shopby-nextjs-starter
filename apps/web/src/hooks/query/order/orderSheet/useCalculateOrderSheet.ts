@@ -4,7 +4,7 @@ import {
     calculateOrderSheetOptions,
     type UseCalculateOrderSheetParams,
 } from '@/entities/order/queries';
-import type { GetCalculatedOrderSheetResponse } from '@/entities/order/model/orderSheet';
+import type { GetCalculatedOrderSheetResponse } from '@/models/order/orderSheet';
 
 const useCalculateOrderSheet = <T = GetCalculatedOrderSheetResponse>(
     params: UseCalculateOrderSheetParams<T>,

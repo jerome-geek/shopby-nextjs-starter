@@ -4,7 +4,7 @@ import {
     availableCouponListOptions,
     type UseAvailableCouponListParams,
 } from '@/entities/order/queries';
-import type { ApplyCouponResponse } from '@/entities/order/model';
+import type { ApplyCouponResponse } from '@/models/order';
 
 const useAvailableCouponList = <T = ApplyCouponResponse>(
     params: UseAvailableCouponListParams<T>,

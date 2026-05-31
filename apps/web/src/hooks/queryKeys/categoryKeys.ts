@@ -2,7 +2,7 @@ import type {
     GetCategoriesByManagementCodeData,
     GetCategoriesParams,
     GetCategoryParams,
-} from '@/entities/display/model/category';
+} from '@/models/display/category';
 
 const categoryKeys = {
     all: ['category'] as const,

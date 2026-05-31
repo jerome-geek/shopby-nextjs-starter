@@ -12,7 +12,7 @@ import {
     useSuspenseInfiniteProductSectionProductList,
 } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';
-import { ImageUrlType } from '@/entities/product/model';
+import { ImageUrlType } from '@/models/product';
 
 const RECOMMEND_ITEMS_PER_PAGE = 4;
 const SWIPER_SLIDE_CONFIG = {

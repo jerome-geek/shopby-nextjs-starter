@@ -6,7 +6,7 @@ import { Props, SingleValue } from 'react-select';
 import * as styles from '@/features/product/option/flat/index.css';
 import { Select } from '@/shared/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
-import type { FlatOption } from '@/entities/product/model/productOption';
+import type { FlatOption } from '@/models/product/productOption';
 
 interface FlatProductOptionProps {
     productNo: number;

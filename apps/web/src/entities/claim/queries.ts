@@ -9,17 +9,17 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { guestClaim, memberClaim } from '@/entities/claim/api';
+import { guestClaim, memberClaim } from '@/api/claim';
 import { claimsKeys, guestOrderKeys, ordersKeys } from '@/hooks/queryKeys';
-import type { ClaimPriceInfo, EstimatedRefundPriceData } from '@/entities/claim/model';
-import type { GetClaimOptionPriceParams } from '@/entities/claim/model/guest';
+import type { ClaimPriceInfo, EstimatedRefundPriceData } from '@/models/claim';
+import type { GetClaimOptionPriceParams } from '@/models/claim/guest';
 import type {
     GetClaimDetailByClaimNoResponse,
     GetClaimListParams,
     GetClaimListResponse,
     GetOrderOptionDetailForClaimParams,
     GetOrderOptionDetailForClaimResponse,
-} from '@/entities/claim/model/member';
+} from '@/models/claim/member';
 
 export interface MemberOrderOptionDetailForClaimOptionsParams<
     T = GetOrderOptionDetailForClaimResponse,

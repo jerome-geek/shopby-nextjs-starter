@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { ClockIcon } from '@/shared/ui/icons/ClockIcon';
 import * as styles from '@/features/product/components/additional-discount/index.css';
-import { AdditionalDiscountWithProductNo } from '@/entities/product/model/additionalDiscount';
+import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
 
 interface ProductAdditionalDiscountProps {
     type: 'thumbnail' | 'detail' | 'detail-mobile';

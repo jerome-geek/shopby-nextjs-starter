@@ -8,7 +8,7 @@ import * as styles from '@/features/banner/components/icon-banner/index.css';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import Skeleton from '@/shared/ui/skeleton';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
-import type { Banner } from '@/entities/display/model/banner';
+import type { Banner } from '@/models/display/banner';
 import { getLandingUrl } from '@/utils/banner';
 import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 

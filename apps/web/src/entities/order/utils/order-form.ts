@@ -11,7 +11,7 @@ import {
 
 import { parsePhoneStringByHyphen } from '@/entities/order/utils/phone';
 import type { GetProfileResponse } from '@/models/member/profile';
-import type { GetOrderSheetResponse } from '@/entities/order/model/orderSheet';
+import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
 import type { PhonePrefixType } from '@/schema/common.schema';
 import type { PaymentReserveSchemaType } from '@/entities/order/schema/payment';
 

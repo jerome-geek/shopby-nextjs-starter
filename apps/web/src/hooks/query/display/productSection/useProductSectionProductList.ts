@@ -4,7 +4,7 @@ import {
     productSectionProductListOptions,
     type ProductSectionProductListParams,
 } from '@/entities/display/queries';
-import type { GetProductSectionProductsResponse } from '@/entities/display/model/productSection';
+import type { GetProductSectionProductsResponse } from '@/models/display/productSection';
 
 const useProductSectionProductList = <T = GetProductSectionProductsResponse>(
     params: ProductSectionProductListParams<T>,

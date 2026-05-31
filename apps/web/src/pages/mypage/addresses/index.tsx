@@ -14,7 +14,7 @@ import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
 import { useToast } from '@/hooks/ui';
 import { useDialog, useResponsive } from '@/hooks/utils';
-import type { Address } from '@/entities/order/model/shippingAddress';
+import type { Address } from '@/models/order/shippingAddress';
 import * as styles from '@/pages/mypage/addresses/index.css';
 import { Only } from '@/shared/components/only';
 

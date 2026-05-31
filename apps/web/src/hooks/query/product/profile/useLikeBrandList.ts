@@ -5,7 +5,7 @@ import {
     likeBrandListOptions,
     type LikeBrandListOptionsParams,
 } from '@/entities/product/profile/queries';
-import type { GetLikeBrandsResponse } from '@/entities/product/model/profile';
+import type { GetLikeBrandsResponse } from '@/models/product/profile';
 
 const useLikeBrandList = <T = GetLikeBrandsResponse>({
     memberNo,

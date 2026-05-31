@@ -153,16 +153,10 @@ Goal:
 Still not aligned with FSD-lite:
 
 - [ ] `apps/web/src/hooks`
-- [~] `apps/web/src/models`
-  - `product` moved into `entities/product/model`
-  - `order` moved into `entities/order/model`
-  - `display` moved into `entities/display/model`
-  - `claim` moved into `entities/claim/model`
-- [~] `apps/web/src/api`
-  - `product` moved into `entities/product/api`
-  - `order` moved into `entities/order/api`
-  - `display` moved into `entities/display/api`
-  - `claim` moved into `entities/claim/api`
+- [ ] `apps/web/src/models`
+  - keep root `models` as the headless domain type layer
+- [ ] `apps/web/src/api`
+  - keep root `api` as the headless integration layer
 - [ ] `apps/web/src/utils`
 - [ ] `apps/web/src/context`
 - [ ] `apps/web/src/store`
@@ -174,14 +168,17 @@ Still not aligned with FSD-lite:
 
 Goal:
 
-- domain-owned code moves into each slice
-- only cross-domain utilities remain in `shared`
+- keep root `api` as the headless integration boundary
+- keep root `models` as the headless type boundary
+- move schemas, hooks, and UI logic by slice ownership
+- keep only cross-domain utilities in `shared`
 
 ## Recommended Next Execution Plan
 
 ### Phase A
 
-- Finish `models/api/schema` migration for the remaining domains beyond `product`, `order`, `display`, and `claim`
+- Keep `api` and `models` at the root by project convention
+- Continue schema migration by ownership where it helps feature boundaries
 - Start reducing root-level `hooks` by moving domain-owned query hooks into `entities/*` or `features/*`
 
 ### Phase B
@@ -197,9 +194,8 @@ Goal:
 - `components/product`, `components/product-list`, and `components/product-option` are no longer present.
 - `components/search`, `components/recipe`, and `components/section` are no longer present.
 - Remaining work should focus on global buckets.
-- `product` and `order` root `api` and `models` folders were already migrated into `entities/*`.
+- root `api` and `models` are intentionally retained as headless integration and type layers.
 - order-related root schemas were already migrated into `entities/order/schema`.
-- `display` and `claim` root `api` and `models` folders were already migrated into `entities/*`.
 - `claim.schema.ts` was already migrated into `entities/claim/schema`.
 
 ## Verification Standard

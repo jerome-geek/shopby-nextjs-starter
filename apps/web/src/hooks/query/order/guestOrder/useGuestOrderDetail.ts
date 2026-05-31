@@ -5,7 +5,7 @@ import {
     type UseGuestOrderDetailQueryParams,
 } from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { OrderDetailResponse } from '@/entities/order/model';
+import type { OrderDetailResponse } from '@/models/order';
 
 const useGuestOrderDetail = <T = OrderDetailResponse>({
     orderNo,

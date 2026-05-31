@@ -17,7 +17,7 @@ import { useMypageListQueryParams } from '@/entities/mypage/hooks/useMypageListQ
 import { useInfinitePreviousOrderList } from '@/hooks/infiniteQuery/order/previousOrder';
 import { usePreviousOrderList } from '@/hooks/query/order/previousOrder';
 import { useResponsive } from '@/hooks/utils';
-import type { GetPreviousOrdersResponse } from '@/entities/order/model/previousOrder';
+import type { GetPreviousOrdersResponse } from '@/models/order/previousOrder';
 import * as styles from '@/pages/mypage/previous-orders/index.css';
 import { ObserverTarget } from '@/shared/components/observer-target';
 import { Only } from '@/shared/components/only';

@@ -1,7 +1,7 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { productInquiry } from '@/entities/display/api';
+import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
 import type {
     GetMyProductInquiriesParams,
@@ -10,7 +10,7 @@ import type {
     GetProductInquiriesResponse,
     GetProductInquiryConfigResponse,
     GetProductInquiryResponse,
-} from '@/entities/display/model/productInquiry';
+} from '@/models/display/productInquiry';
 
 export interface ProductInquiryDetailParams<T = GetProductInquiryResponse> {
     productNo: number;

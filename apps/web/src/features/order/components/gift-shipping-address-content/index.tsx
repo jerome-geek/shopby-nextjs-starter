@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import laterShippingInput from '@/entities/order/api/laterShippingInput';
+import laterShippingInput from '@/api/order/laterShippingInput';
 import Seo from '@/shared/components/common/seo';
 import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
@@ -16,7 +16,7 @@ import { useLaterInputOrder } from '@/hooks/suspenseQuery/order/laterShippingInp
 import { useToast } from '@/hooks/ui';
 import useApiError from '@/hooks/useApiError';
 import { useGlobal } from '@/hooks/utils';
-import type { UpdateShippingData } from '@/entities/order/model/laterShippingInput';
+import type { UpdateShippingData } from '@/models/order/laterShippingInput';
 import {
     laterShippingInputSchema,
     type LaterShippingInputSchemaType,

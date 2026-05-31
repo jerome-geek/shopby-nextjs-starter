@@ -1,9 +1,9 @@
 // export * from '@/schema/support.schema';
 // export * from '@/entities/claim/schema/claim';
-export * from '@/schema/inquiry.schema';
+export * from '@/features/mypage/inquiries/schema';
 export * from '@/schema/login.schema';
 // export * from '@/entities/order/schema/order';
-export * from '@/schema/product-inquiry.schema';
+export * from '@/entities/productInquiry/schema/form';
 // export * from '@/schema/profile.schema';
 export * from '@/schema/signup.schema';
 export * from '@/schema/common.schema';

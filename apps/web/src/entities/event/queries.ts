@@ -1,7 +1,7 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { event } from '@/entities/display/api';
+import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
 import type {
     GetEventByIdParams,
@@ -14,7 +14,7 @@ import type {
     GetEventsV2Params,
     SearchEventsByEventNosParams,
     SearchEventsByEventNosResponse,
-} from '@/entities/display/model/event';
+} from '@/models/display/event';
 
 export interface EventDetailParams<T = GetEventResponse> {
     eventKey: string | number;

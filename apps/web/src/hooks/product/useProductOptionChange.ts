@@ -4,7 +4,7 @@ import { toSelectedOption } from '@/helpers/product';
 import type {
     FlatOption,
     MultiLevelOption,
-} from '@/entities/product/model/productOption';
+} from '@/models/product/productOption';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 
 interface UseProductOptionChangeProps {

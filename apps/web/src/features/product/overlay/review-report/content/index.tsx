@@ -6,7 +6,7 @@ import { DefaultModalLayoutProps } from '@/shared/components/layout';
 import { InputContainer, InputLabel, Select } from '@/shared/ui/input';
 import { useReviewMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui/useToast';
-import { ReportProductReviewData } from '@/entities/display/model/review';
+import { ReportProductReviewData } from '@/models/display/review';
 import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ReviewReportProps extends DefaultModalLayoutProps {

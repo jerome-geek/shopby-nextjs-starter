@@ -1,8 +1,8 @@
 import type { ClientPlatformType, PlatformType } from '@/models';
 import type { GetProfileResponse } from '@/models/member/profile';
-import type { CartList, OrderDetailResponse } from '@/entities/order/model';
-import { ReservePaymentData } from '@/entities/order/model/purchase';
-import type { ProductDetailResponse } from '@/entities/product/model';
+import type { CartList, OrderDetailResponse } from '@/models/order';
+import { ReservePaymentData } from '@/models/order/purchase';
+import type { ProductDetailResponse } from '@/models/product';
 import type { KakaoSDK } from '@/types/kakao';
 
 // 모듈 형식으로 선언하여 TypeScript 충돌 방지

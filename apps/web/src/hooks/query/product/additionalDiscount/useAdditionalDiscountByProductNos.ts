@@ -4,7 +4,7 @@ import {
     additionalDiscountByProductNosOptions,
     type AdditionalDiscountByProductNosOptionsParams,
 } from '@/entities/product/additionalDiscount/queries';
-import type { GetAdditionalDiscountByProductNosResponse } from '@/entities/product/model/additionalDiscount';
+import type { GetAdditionalDiscountByProductNosResponse } from '@/models/product/additionalDiscount';
 
 const useAdditionalDiscountByProductNos = <
     T = GetAdditionalDiscountByProductNosResponse,

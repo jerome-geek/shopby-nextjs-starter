@@ -1,9 +1,9 @@
 import type { ChannelType } from '@/models';
-import type { OptionInputs } from '@/entities/order/model';
+import type { OptionInputs } from '@/models/order';
 import type {
     FlatOption,
     TextOptionInput,
-} from '@/entities/product/model/productOption';
+} from '@/models/product/productOption';
 import { SelectedOption } from '@/store/useProductOptionStore';
 // import { SelectedOption } from '@/state/slices/productOption';
 

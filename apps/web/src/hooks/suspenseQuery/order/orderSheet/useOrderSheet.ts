@@ -4,7 +4,7 @@ import {
     orderSheetSuspenseOptions,
     type UseOrderSheetSuspenseParams,
 } from '@/entities/order/queries';
-import type { GetOrderSheetResponse } from '@/entities/order/model/orderSheet';
+import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
 
 const useOrderSheet = <T = GetOrderSheetResponse>(
     params: UseOrderSheetSuspenseParams<T>,

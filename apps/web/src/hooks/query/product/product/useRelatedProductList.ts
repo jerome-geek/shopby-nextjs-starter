@@ -4,7 +4,7 @@ import {
     relatedProductListOptions,
     type RelatedProductListOptionsParams,
 } from '@/entities/product/queries';
-import type { GetRelatedProductsResponse } from '@/entities/product/model/product';
+import type { GetRelatedProductsResponse } from '@/models/product/product';
 
 const useRelatedProductList = <T = GetRelatedProductsResponse>({
     productNo,

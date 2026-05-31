@@ -5,7 +5,7 @@ import { OVERLAY_ID } from '@/const/overlay';
 import { PopupOverlay } from '@/features/popup/components/overlay';
 import { usePopupOverlays } from '@/features/popup/hooks';
 import { hidePopupUntilTodayEnds } from '@/features/popup/utils/storage';
-import type { PopupInfo } from '@/entities/display/model/popup';
+import type { PopupInfo } from '@/models/display/popup';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 
 const PopupContent = () => {

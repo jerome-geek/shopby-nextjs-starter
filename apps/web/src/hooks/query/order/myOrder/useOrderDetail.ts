@@ -4,7 +4,7 @@ import {
     orderDetailOptions,
     type OrderDetailOptionsParams,
 } from '@/entities/order/queries';
-import type { OrderDetailResponse } from '@/entities/order/model';
+import type { OrderDetailResponse } from '@/models/order';
 
 interface UseOrderDetailParams<T = OrderDetailResponse> {
     orderNo: string;

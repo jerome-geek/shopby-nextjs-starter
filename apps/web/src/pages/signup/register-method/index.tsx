@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticProps } from 'next';
 
-import { banner } from '@/entities/display/api';
+import { banner } from '@/api/display';
 import Seo from '@/shared/components/common/seo';
 import SocialLoginList from '@/components/auth/social-login-list';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';

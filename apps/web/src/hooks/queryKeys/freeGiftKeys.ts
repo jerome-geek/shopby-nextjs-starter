@@ -1,4 +1,4 @@
-import type { GetFreeGiftConditionByOrderAmountParams } from '@/entities/product/model/freeGift';
+import type { GetFreeGiftConditionByOrderAmountParams } from '@/models/product/freeGift';
 
 const freeGiftKeys = {
     all: ['freeGift'] as const,

@@ -4,7 +4,7 @@ import {
     photoReviewListOptions,
     type PhotoReviewListOptionsParams,
 } from '@/entities/display/review/queries';
-import type { GetPhotoReviewListResponse } from '@/entities/display/model/review';
+import type { GetPhotoReviewListResponse } from '@/models/display/review';
 
 const usePhotoReviewList = <T = GetPhotoReviewListResponse>(
     params: PhotoReviewListOptionsParams<T>,

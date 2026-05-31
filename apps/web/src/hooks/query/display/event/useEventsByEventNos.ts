@@ -4,7 +4,7 @@ import {
     eventsByEventNosOptions,
     type EventsByEventNosParams,
 } from '@/entities/event/queries';
-import type { SearchEventsByEventNosResponse } from '@/entities/display/model/event';
+import type { SearchEventsByEventNosResponse } from '@/models/display/event';
 
 const useEventsByEventNos = <T = SearchEventsByEventNosResponse>(
     params: EventsByEventNosParams<T>,

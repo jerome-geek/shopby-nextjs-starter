@@ -31,7 +31,7 @@ import type { PartialUpdateInquiryData } from '@/models/manage/inquiry';
 import {
     registerInquirySchema,
     type RegisterInquirySchemaType,
-} from '@/schema/inquiry.schema';
+} from '@/features/mypage/inquiries/schema';
 import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 export interface InquiryRegisterFormProps {

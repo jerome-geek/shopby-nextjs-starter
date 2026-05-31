@@ -1,11 +1,11 @@
-import type { GetEventInfoParams } from '@/entities/display/model';
+import type { GetEventInfoParams } from '@/models/display';
 import type {
     GetEventParams,
     GetEventProductDisplaySectionParams,
     GetEventsParams,
     GetEventsV2Params,
     SearchEventsByEventNosParams,
-} from '@/entities/display/model/event';
+} from '@/models/display/event';
 
 const eventKeys = {
     all: ['events'] as const,

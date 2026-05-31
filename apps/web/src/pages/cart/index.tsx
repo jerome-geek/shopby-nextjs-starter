@@ -14,7 +14,7 @@ import { useCartMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
-import type { UpdateCartData } from '@/entities/order/model/cart';
+import type { UpdateCartData } from '@/models/order/cart';
 import * as styles from '@/pages/cart/index.css';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';

@@ -4,7 +4,7 @@ import {
     extraProductListOptions,
     type ExtraProductListOptionsParams,
 } from '@/entities/product/queries';
-import type { GetExtraProductsResponse } from '@/entities/product/model/product';
+import type { GetExtraProductsResponse } from '@/models/product/product';
 
 const useExtraProductList = <T = GetExtraProductsResponse>({
     productNo = 0,

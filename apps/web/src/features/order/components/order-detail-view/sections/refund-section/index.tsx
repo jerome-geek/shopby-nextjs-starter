@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { RefundInfo } from '@/entities/order/model';
+import type { RefundInfo } from '@/models/order';
 import { CURRENCY } from '@/utils/currency';
 
 import { InfoSection } from '../info-section';

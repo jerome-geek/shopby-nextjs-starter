@@ -2,16 +2,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-import { guestClaim } from '@/entities/claim/api';
+import { guestClaim } from '@/api/claim';
 import { guestOrderKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
-import type { CancelOptionsData } from '@/entities/claim/model';
-import type { CancelClaimData } from '@/entities/claim/model/guest';
+import type { CancelOptionsData } from '@/models/claim';
+import type { CancelClaimData } from '@/models/claim/guest';
 import type {
     CheckFreeGiftSatisfyData,
     RequestExchangeData,
     RequestReturnMultipleOptionsData,
-} from '@/entities/claim/model/member';
+} from '@/models/claim/member';
 
 const useGuestClaimMutation = ({
     orderNo,

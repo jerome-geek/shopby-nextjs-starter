@@ -4,7 +4,7 @@ import {
     brandSearchListOptions,
     type BrandSearchListOptionsParams,
 } from '@/entities/product/brand/queries';
-import type { SearchBrandResponse } from '@/entities/product/model/brand';
+import type { SearchBrandResponse } from '@/models/product/brand';
 
 const useBrandSearchList = <T = SearchBrandResponse>({
     searchParams,

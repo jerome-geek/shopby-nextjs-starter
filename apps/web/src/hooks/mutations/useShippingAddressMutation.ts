@@ -3,10 +3,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-import { shippingAddress } from '@/entities/order/api';
+import { shippingAddress } from '@/api/order';
 import { addressKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui';
-import type { RegisterShippingAddressData } from '@/entities/order/model/shippingAddress';
+import type { RegisterShippingAddressData } from '@/models/order/shippingAddress';
 
 const useShippingAddressMutation = () => {
     const { t } = useTranslation();

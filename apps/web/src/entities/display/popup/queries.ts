@@ -1,14 +1,14 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 
-import { popup } from '@/entities/display/api';
+import { popup } from '@/api/display';
 import { popupKeys } from '@/hooks/queryKeys';
 import type {
     DesignPopupData,
     GetAllPopupParams,
     GetAllPopupResponse,
     GetDesignPopupResponse,
-} from '@/entities/display/model/popup';
+} from '@/models/display/popup';
 
 export interface AllPopupListOptionsParams<T = GetAllPopupResponse> {
     params?: GetAllPopupParams;

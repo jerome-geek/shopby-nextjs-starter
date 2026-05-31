@@ -31,11 +31,11 @@ import { useDialog } from '@/hooks/utils';
 import type {
     UpdateProductInquiryData,
     WriteProductInquiryData,
-} from '@/entities/display/model/productInquiry';
+} from '@/models/display/productInquiry';
 import {
     productInquiryFormSchema,
     type ProductInquiryFormSchemaType,
-} from '@/schema/product-inquiry.schema';
+} from '@/entities/productInquiry/schema/form';
 import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ProductInquiryWriteProps extends DefaultModalLayoutProps {

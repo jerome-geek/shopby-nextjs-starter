@@ -33,7 +33,7 @@ import type {
     SupplyType,
 } from '@/models';
 import type { ShopByPlan } from '@/models/admin';
-import type { Category } from '@/entities/display/model';
+import type { Category } from '@/models/display';
 
 export interface Grade {
     /** 적립금 자동지급 */

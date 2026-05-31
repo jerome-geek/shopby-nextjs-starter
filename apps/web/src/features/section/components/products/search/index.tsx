@@ -10,7 +10,7 @@ import { useSuspenseMainCategory } from '@/hooks/useMainCategory';
 import type {
     ProductSearchParams,
     SearchProductItem,
-} from '@/entities/product/model/product';
+} from '@/models/product/product';
 import { ShopType } from '@/pages/shop/[slug]';
 interface ProductSearchProps {
     searchParams: ProductSearchParams;

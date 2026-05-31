@@ -5,7 +5,7 @@ import {
     categoriesByCodeOptions,
     type CategoriesByCodeParams,
 } from '@/entities/category/queries';
-import type { GetCategoriesByManagementCodeResponse } from '@/entities/display/model/category';
+import type { GetCategoriesByManagementCodeResponse } from '@/models/display/category';
 
 const useCategoriesByCode = <T = GetCategoriesByManagementCodeResponse>({
     data,

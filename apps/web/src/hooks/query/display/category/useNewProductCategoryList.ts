@@ -4,7 +4,7 @@ import {
     newProductCategoryListOptions,
     type NewProductCategoryListParams,
 } from '@/entities/category/queries';
-import type { GetNewProductCategoriesResponse } from '@/entities/display/model/category';
+import type { GetNewProductCategoriesResponse } from '@/models/display/category';
 
 const useNewProductCategoryList = <T = GetNewProductCategoriesResponse>(
     params: NewProductCategoryListParams<T> = {},

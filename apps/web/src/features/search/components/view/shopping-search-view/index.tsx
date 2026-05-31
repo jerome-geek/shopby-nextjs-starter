@@ -10,7 +10,7 @@ import { SORT_OPTIONS } from '@/const/product';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';
-import type { SearchProductItem } from '@/entities/product/model/product';
+import type { SearchProductItem } from '@/models/product/product';
 import * as styles from '@/pages/search/index.css';
 import { vars } from '@/styles/theme.css';
 

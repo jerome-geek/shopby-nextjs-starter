@@ -4,7 +4,7 @@ import {
     orderDetailForClaimOptions,
     type UseOrderDetailForClaimParams,
 } from '@/entities/order/queries';
-import type { OrderDetailResponse } from '@/entities/order/model';
+import type { OrderDetailResponse } from '@/models/order';
 
 const useOrderDetailForClaim = <T = OrderDetailResponse>(
     params: UseOrderDetailForClaimParams<T>,

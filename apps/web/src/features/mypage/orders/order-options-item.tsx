@@ -9,7 +9,7 @@ import * as styles from '@/features/mypage/orders/order-options-item.css';
 import { PATHS } from '@/const/paths';
 import { shouldShowNextAction } from '@/entities/mypage/utils/orders';
 import { useAuth } from '@/hooks/useAuth';
-import type { NextAction, OrderOption } from '@/entities/order/model';
+import type { NextAction, OrderOption } from '@/models/order';
 import { Only } from '@/shared/components/only';
 import { Button } from '@/shared/ui';
 import { CURRENCY } from '@/utils/currency';

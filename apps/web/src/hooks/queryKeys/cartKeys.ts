@@ -1,7 +1,7 @@
 import type {
     GetCartListParams,
     GetSelectedCartPriceParams,
-} from '@/entities/order/model/cart';
+} from '@/models/order/cart';
 
 const cartKeys = {
     all: ['cart'] as const,

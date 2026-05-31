@@ -1,7 +1,7 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { productProfile } from '@/entities/product/api';
+import { productProfile } from '@/api/product';
 import { brandKeys, productKeys, productProfileKeys } from '@/hooks/queryKeys';
 import type {
     GetGuestRecentViewProductsParams,
@@ -15,7 +15,7 @@ import type {
     GetMemberLikeBrandListResponse,
     GetRecentViewProductsParams,
     GetRecentViewProductsResponse,
-} from '@/entities/product/model/profile';
+} from '@/models/product/profile';
 
 export interface GuestRecentViewProductListOptionsParams<
     T = GetRecentViewProductsResponse,

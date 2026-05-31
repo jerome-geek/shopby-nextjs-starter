@@ -13,7 +13,7 @@ import { overlay, useOverlayData } from 'overlay-kit';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { product } from '@/entities/product/api';
+import { product } from '@/api/product';
 import { OptionSelectBottomSheet } from '@/features/product/overlay/option-select/bottom-sheet';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
 import {

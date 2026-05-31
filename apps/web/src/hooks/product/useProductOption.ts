@@ -23,7 +23,7 @@ import type {
     FlatOption,
     MultiLevelOption,
     ProductOptionResponse,
-} from '@/entities/product/model/productOption';
+} from '@/models/product/productOption';
 import { useProductOptionStore } from '@/store/useProductOptionStore';
 import { addPriceString } from '@/utils/currency';
 

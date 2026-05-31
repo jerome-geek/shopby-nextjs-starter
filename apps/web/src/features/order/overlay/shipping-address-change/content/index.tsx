@@ -20,7 +20,7 @@ import { useGuestOrderMutation, useMyOrderMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui/useToast';
 import { useAuth } from '@/hooks/useAuth';
 import { useGlobal, useResponsive } from '@/hooks/utils';
-import type { OrderDetailResponse } from '@/entities/order/model';
+import type { OrderDetailResponse } from '@/models/order';
 import {
     getChangeShippingAddressSchema,
     type ChangeShippingAddressSchemaType,

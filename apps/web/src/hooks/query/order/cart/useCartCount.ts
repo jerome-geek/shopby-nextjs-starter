@@ -5,7 +5,7 @@ import {
     type UseCartCountParams,
 } from '@/entities/order/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { GetCartCountResponse } from '@/entities/order/model/cart';
+import type { GetCartCountResponse } from '@/models/order/cart';
 
 const useCartCount = <T = GetCartCountResponse>({
     options,

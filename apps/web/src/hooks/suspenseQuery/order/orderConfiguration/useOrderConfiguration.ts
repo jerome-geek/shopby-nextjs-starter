@@ -4,7 +4,7 @@ import {
     orderConfigurationSuspenseOptions,
     type UseOrderConfigurationSuspenseParams,
 } from '@/entities/order/queries';
-import type { GetOrderConfigsResponse } from '@/entities/order/model/orderConfiguration';
+import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
 
 const useOrderConfiguration = <T = GetOrderConfigsResponse>({
     options,

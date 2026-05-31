@@ -4,7 +4,7 @@ import {
     productSearchSummaryOptions,
     type ProductSearchSummaryOptionsParams,
 } from '@/entities/product/queries';
-import type { GetProductSearchSummaryResponse } from '@/entities/product/model/product';
+import type { GetProductSearchSummaryResponse } from '@/models/product/product';
 
 const useProductSearchSummary = <T = GetProductSearchSummaryResponse>({
     searchParams,

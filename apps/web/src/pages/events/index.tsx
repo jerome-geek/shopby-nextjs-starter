@@ -10,7 +10,7 @@ import { EVENT_LIST } from '@/const/event';
 import EventItem from '@/features/event/list/components/event-item';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import { useResponsive } from '@/hooks/utils';
-import type { GetEventsV2Params } from '@/entities/display/model';
+import type { GetEventsV2Params } from '@/models/display';
 import * as styles from '@/pages/events/index.css';
 
 const Events = () => {

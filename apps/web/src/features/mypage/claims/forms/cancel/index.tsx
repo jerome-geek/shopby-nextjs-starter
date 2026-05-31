@@ -19,7 +19,7 @@ import useGuestEstimate from '@/hooks/query/claim/guest/useGuestEstimate';
 import useEstimate from '@/hooks/query/claim/member/useEstimate';
 import { useAuth } from '@/hooks/useAuth';
 import { useDialog } from '@/hooks/utils';
-import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import {
     ClaimCancelSchemaType,
     createClaimCancelSchema,

@@ -3,8 +3,8 @@ import type {
     GetOrderDetailParams,
     GetOrderListParams,
     GetOrderStatusSummaryParams,
-} from '@/entities/order/model/myOrder';
-import type { GetPreviousOrdersParams } from '@/entities/order/model/previousOrder';
+} from '@/models/order/myOrder';
+import type { GetPreviousOrdersParams } from '@/models/order/previousOrder';
 
 const ordersKeys = {
     all: ['orders'] as const,

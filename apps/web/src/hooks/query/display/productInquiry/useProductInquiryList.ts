@@ -4,7 +4,7 @@ import {
     productInquiryListOptions,
     type ProductInquiryListParams,
 } from '@/entities/productInquiry/queries';
-import type { GetProductInquiriesResponse } from '@/entities/display/model/productInquiry';
+import type { GetProductInquiriesResponse } from '@/models/display/productInquiry';
 
 const useProductInquiryList = <T = GetProductInquiriesResponse>({
     productNo,

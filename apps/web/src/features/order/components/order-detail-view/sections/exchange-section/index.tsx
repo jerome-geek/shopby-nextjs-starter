@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { AdditionalPayInfo, RefundInfo } from '@/entities/order/model';
+import type { AdditionalPayInfo, RefundInfo } from '@/models/order';
 
 import { InfoSection } from '../info-section';
 

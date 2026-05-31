@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { OptionInputs } from '@/entities/order/model';
+import { OptionInputs } from '@/models/order';
 
 export interface GuestCartItem {
     productNo: number;

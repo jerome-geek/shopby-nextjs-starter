@@ -17,16 +17,8 @@
 - `components/recipe/*` legacy components were migrated into `features/recipe/components/view/*`
 - `components/section/*` legacy components were migrated into `features/section/components/*`
 - overlay refactor was completed and legacy `bottom-sheet` / `layer-contents` implementations were cleared
-- `api/product/*` was migrated into `entities/product/api/*`
-- `models/product/*` was migrated into `entities/product/model/*`
-- `api/order/*` was migrated into `entities/order/api/*`
-- `models/order/*` was migrated into `entities/order/model/*`
 - `schema/order.schema.ts`, `payment.schema.ts`, `shippingAddress.schema.ts`, `laterShippingInput.schema.ts`
   - moved into `entities/order/schema/*`
-- `api/display/*` was migrated into `entities/display/api/*`
-- `models/display/*` was migrated into `entities/display/model/*`
-- `api/claim/*` was migrated into `entities/claim/api/*`
-- `models/claim/*` was migrated into `entities/claim/model/*`
 - `schema/claim.schema.ts`
   - moved into `entities/claim/schema/claim.ts`
 - progress checklist was refreshed:
@@ -58,7 +50,8 @@ Why this is next:
 
 - the remaining domain buckets `search`, `recipe`, and `section` are already cleared
 - overlay implementations are now feature-owned or shared-owned
-- the new highest-payoff work is reducing root `hooks`, plus the remaining `member/auth/shop/promotion/...` global buckets
+- root `api` and `models` stay in place as headless integration and type layers
+- the new highest-payoff work is reducing root `hooks`, plus the remaining `schema/utils/store/context/...` buckets
 
 ## Cleared Domain Status
 
@@ -112,7 +105,7 @@ find apps/web/src/hooks -maxdepth 3 -type f | sort | head -n 200
 find apps/web/src/models -maxdepth 3 -type f | sort
 find apps/web/src/api -maxdepth 3 -type f | sort
 find apps/web/src/schema -maxdepth 2 -type f | sort
-rg -n "@/models|@/api|@/schema" apps/web/src | head -n 200
+rg -n "@/schema|@/hooks|@/context|@/store|@/utils" apps/web/src | head -n 200
 ```
 
 Validation after each batch:
@@ -127,8 +120,8 @@ cd /Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domai
 If the next session starts with low token budget, continue with this exact scope:
 
 - stay on branch `codex/web-search-recipe-section`
-- continue global bucket cleanup from the current `product + order + display + claim` baseline
-- do not move domain-owned code back into root `api`, `models`, or `schema`
+- keep root `api` and `models` as-is
+- continue with schemas, hooks, stores, contexts, and utilities
 - stop after:
   - moving the files
   - fixing imports
@@ -138,5 +131,5 @@ If the next session starts with low token budget, continue with this exact scope
 Suggested one-line resume prompt:
 
 ```text
-Continue from docs/superpowers/plans/2026-05-30-order-next-turn-handoff.md and keep migrating the remaining global buckets after the product/order/display/claim api-model-schema move.
+Continue from docs/superpowers/plans/2026-05-30-order-next-turn-handoff.md and keep migrating schemas/hooks/stores/utilities while preserving root api and models.
 ```

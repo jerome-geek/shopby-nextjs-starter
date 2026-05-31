@@ -2,7 +2,7 @@ import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 
-import { productSection } from '@/entities/display/api';
+import { productSection } from '@/api/display';
 import { timeSale } from '@/api/shop';
 import { LazyRender } from '@/shared/components/common';
 import Seo from '@/shared/components/common/seo';
@@ -18,7 +18,7 @@ import {
 import IconBanner from '@/features/banner/components/icon-banner';
 import { useEventList } from '@/hooks/query/display/event';
 import { productSectionKeys, timeSaleKeys } from '@/hooks/queryKeys';
-import { GetEventsV2Params } from '@/entities/display/model';
+import { GetEventsV2Params } from '@/models/display';
 import * as styles from '@/pages/shop/index.css';
 import { TIME_SALE_LIST_BASE_PARAMS } from '@/pages/time-sale';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';

@@ -9,7 +9,7 @@ import * as styles from '@/features/order/overlay/shipping-address-list/bottom-s
 import ShippingAddressCreateModal from '@/features/order/components/shipping-address/ShippingAddressCreateModal';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
-import type { Address } from '@/entities/order/model/shippingAddress';
+import type { Address } from '@/models/order/shippingAddress';
 import { PaymentReserveSchemaType } from '@/schema';
 
 

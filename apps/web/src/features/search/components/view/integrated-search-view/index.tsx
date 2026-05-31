@@ -9,7 +9,7 @@ import { useInfinitePublicCollectionSearch } from '@/hooks/query/shop/collection
 import { useInfinitePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';
-import type { SearchProductItem } from '@/entities/product/model/product';
+import type { SearchProductItem } from '@/models/product/product';
 import type {
     BookmarkedRecipeCollection,
     GetRecipeDetailResponse,

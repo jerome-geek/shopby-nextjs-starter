@@ -9,7 +9,7 @@ import EventSection from '@/features/section/components/event';
 import EventSectionSkeleton from '@/features/section/components/event/skeleton';
 import ProductsSearch from '@/features/section/components/products/search';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
-import type { GetEventsV2Params } from '@/entities/display/model/event';
+import type { GetEventsV2Params } from '@/models/display/event';
 import { ShopType } from '@/pages/shop/[slug]';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { ObserverTarget } from '@/shared/components/observer-target';

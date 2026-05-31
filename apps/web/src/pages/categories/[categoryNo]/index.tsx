@@ -14,8 +14,8 @@ import { useRouter } from 'next/router';
 import { type ComponentProps, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { category } from '@/entities/display/api';
-import { product } from '@/entities/product/api';
+import { category } from '@/api/display';
+import { product } from '@/api/product';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { NoResult } from '@/shared/components/common/no-result';
 import Seo from '@/shared/components/common/seo';
@@ -33,11 +33,11 @@ import { useProductList } from '@/hooks/query/product/product';
 import { useProductFilter } from '@/hooks/useProductFilter';
 import { useResponsive } from '@/hooks/utils';
 import { useCategoryMenu } from '@/hooks/utils/useCategoryMenu';
-import type { GetCategoryResponse } from '@/entities/display/model/category';
+import type { GetCategoryResponse } from '@/models/display/category';
 import type {
     ProductsSearchResponse,
     SearchProductItem,
-} from '@/entities/product/model/product';
+} from '@/models/product/product';
 import * as styles from '@/pages/categories/[categoryNo]/index.css';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;

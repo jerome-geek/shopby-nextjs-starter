@@ -4,7 +4,7 @@ import {
     stickerListOptions,
     type StickerListOptionsParams,
 } from '@/entities/display/sticker/queries';
-import type { GetStickersResponse } from '@/entities/display/model/sticker';
+import type { GetStickersResponse } from '@/models/display/sticker';
 
 const useStickerList = <T = GetStickersResponse>(
     params: StickerListOptionsParams<T> = {},

@@ -3,7 +3,7 @@ import { useLenis } from 'lenis/react';
 import { motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
-import { ProductDetailResponse } from '@/entities/product/model/product';
+import { ProductDetailResponse } from '@/models/product/product';
 import { RelatedProductList } from '@/features/product/components';
 import AfterServiceInfo from '@/features/product/components/product-tabs/after-service-info';
 import ProductContents from '@/features/product/components/product-tabs/contents';

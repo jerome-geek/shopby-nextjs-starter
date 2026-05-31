@@ -7,7 +7,7 @@ import * as styles from '@/features/product/option/multi/index.css';
 import { InputLabel, Select } from '@/shared/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useResponsive } from '@/hooks/utils';
-import type { MultiLevelOption } from '@/entities/product/model/productOption';
+import type { MultiLevelOption } from '@/models/product/productOption';
 
 interface MultiProductOptionProps {
     productNo: number;

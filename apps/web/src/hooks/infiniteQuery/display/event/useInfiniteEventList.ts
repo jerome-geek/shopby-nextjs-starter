@@ -6,12 +6,12 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { event } from '@/entities/display/api';
+import { event } from '@/api/display';
 import { eventKeys } from '@/hooks/queryKeys';
 import type {
     GetEventsResponse,
     GetEventsV2Params,
-} from '@/entities/display/model/event';
+} from '@/models/display/event';
 
 interface UseInfiniteEventListParams {
     searchParams: GetEventsV2Params;

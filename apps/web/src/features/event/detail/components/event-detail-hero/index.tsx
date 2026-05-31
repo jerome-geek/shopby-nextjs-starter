@@ -3,7 +3,7 @@ import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/features/event/detail/components/event-detail-hero/index.css';
-import { GetBannersResponse } from '@/entities/display/model/banner';
+import { GetBannersResponse } from '@/models/display/banner';
 import {
     extractBannerContentsByAccountIndex,
     normalizeImageUrl,

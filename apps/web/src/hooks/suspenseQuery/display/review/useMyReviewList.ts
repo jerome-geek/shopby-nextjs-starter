@@ -4,7 +4,7 @@ import {
     myReviewListOptions,
     type MyReviewListOptionsParams,
 } from '@/entities/display/review/queries';
-import type { GetMyProductReviewsResponse } from '@/entities/display/model/review';
+import type { GetMyProductReviewsResponse } from '@/models/display/review';
 
 const useMyReviewList = <T = GetMyProductReviewsResponse>(
     params: MyReviewListOptionsParams<T>,

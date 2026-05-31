@@ -4,7 +4,7 @@ import {
     guestCartListOptions,
     type UseGuestCartListParams,
 } from '@/entities/order/queries';
-import type { GetCartResponse } from '@/entities/order/model/guestOrder';
+import type { GetCartResponse } from '@/models/order/guestOrder';
 
 // TODO: 비회원 장바구니 오류 수정
 const useGuestCartList = <T = GetCartResponse>(

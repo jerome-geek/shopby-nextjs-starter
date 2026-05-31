@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { getCookie } from 'cookies-next';
 
-import { orderSheet } from '@/entities/order/api';
+import { orderSheet } from '@/api/order';
 import { orderSheetKeys, ordersKeys } from '@/hooks/queryKeys';
 import { useDialog } from '@/hooks/utils';
 import type {
@@ -11,7 +11,7 @@ import type {
     GetAppliedCouponPriceData,
     GetCalculatedOrderSheetData,
     WriteOrderSheetData,
-} from '@/entities/order/model/orderSheet';
+} from '@/models/order/orderSheet';
 // import { checkLogin } from '@/utils/users';
 import { ORDER_ERROR_CODE } from '@/const/errorCode';
 import { PATHS } from '@/const/paths';

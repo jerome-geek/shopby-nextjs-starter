@@ -1,7 +1,7 @@
 import { getPlatform } from '@/api/core/utils';
 import { env } from '@/configs/env';
 import { PATHS } from '@/const/paths';
-import type { NaverPayOrderSheetItem } from '@/entities/order/model/naverPay';
+import type { NaverPayOrderSheetItem } from '@/models/order/naverPay';
 import { accessTokenCookie } from '@/utils/cookie';
 
 const payment = {

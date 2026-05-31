@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/features/mypage/product-inquiries/accordion-content/index.css';
 import { PATHS } from '@/const/paths';
-import type { InquiryItem } from '@/entities/display/model/productInquiry';
+import type { InquiryItem } from '@/models/display/productInquiry';
 
 interface ProductInquiryContentProps extends InquiryItem {
     onDeleteButtonClick: (inquiryNo: number) => void;

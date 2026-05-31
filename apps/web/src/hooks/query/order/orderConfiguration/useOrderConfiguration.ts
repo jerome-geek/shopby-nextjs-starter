@@ -4,7 +4,7 @@ import {
     orderConfigurationOptions,
     type UseOrderConfigurationParams,
 } from '@/entities/order/queries';
-import type { GetOrderConfigsResponse } from '@/entities/order/model/orderConfiguration';
+import type { GetOrderConfigsResponse } from '@/models/order/orderConfiguration';
 
 const useOrderConfiguration = <T = GetOrderConfigsResponse>({
     options,

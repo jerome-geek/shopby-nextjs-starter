@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { OrderOptionsItem } from '@/features/mypage/orders/order-options-item';
 import * as styles from '@/features/mypage/orders/order-options.css';
 import { PATHS } from '@/const/paths';
-import type { MemberClaim } from '@/entities/claim/model';
-import type { OrderItems } from '@/entities/order/model/myOrder';
+import type { MemberClaim } from '@/models/claim';
+import type { OrderItems } from '@/models/order/myOrder';
 
 interface OrderOptionsProps {
     optionItems: OrderItems[] | MemberClaim[];

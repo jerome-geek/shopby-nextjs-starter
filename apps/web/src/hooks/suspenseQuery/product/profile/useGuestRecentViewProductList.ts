@@ -4,7 +4,7 @@ import {
     guestRecentViewProductListOptions,
     type GuestRecentViewProductListOptionsParams,
 } from '@/entities/product/profile/queries';
-import type { GetRecentViewProductsResponse } from '@/entities/product/model/profile';
+import type { GetRecentViewProductsResponse } from '@/models/product/profile';
 
 const useGuestRecentViewProductList = <T = GetRecentViewProductsResponse>({
     searchParams,

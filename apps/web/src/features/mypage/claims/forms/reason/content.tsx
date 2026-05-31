@@ -7,7 +7,7 @@ import FileUpload from '@/shared/ui/file-upload';
 import { InputFieldContainer, InputLabel, Select } from '@/shared/ui/input';
 import { CLAIM_TYPE_MAP } from '@/const/label';
 import type { ClaimType } from '@/models';
-import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ClaimReasonContentProps {

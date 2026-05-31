@@ -25,7 +25,7 @@ import {
 import { useProductSectionById } from '@/hooks/query/display/productSection';
 import { useTimeSaleSectionProducts } from '@/hooks/query/shop/timeSale';
 import { useResponsive } from '@/hooks/utils';
-import { ImageUrlType } from '@/entities/product/model';
+import { ImageUrlType } from '@/models/product';
 import type { TimeSaleSectionProductsResponse } from '@/models/shop/timeSale';
 import * as styles from '@/pages/time-sale/index.css';
 

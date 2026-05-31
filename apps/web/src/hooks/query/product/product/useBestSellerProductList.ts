@@ -4,7 +4,7 @@ import {
     bestSellerProductListOptions,
     type BestSellerProductListOptionsParams,
 } from '@/entities/product/queries';
-import type { GetBestSellerProductsResponse } from '@/entities/product/model/product';
+import type { GetBestSellerProductsResponse } from '@/models/product/product';
 
 const useBestSellerProductList = <T = GetBestSellerProductsResponse>({
     searchParams,

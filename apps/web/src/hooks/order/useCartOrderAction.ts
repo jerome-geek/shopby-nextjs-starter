@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useOrderSheetMutation } from '@/hooks/mutations';
 import { useDialog } from '@/hooks/utils';
-import type { WriteOrderSheetData } from '@/entities/order/model/orderSheet';
+import type { WriteOrderSheetData } from '@/models/order/orderSheet';
 
 export const useCartOrderAction = () => {
     const { t } = useTranslation();

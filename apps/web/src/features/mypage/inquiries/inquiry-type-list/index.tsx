@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Select } from '@/shared/ui/input';
 import { useInquiryTypeList } from '@/hooks/query/manage/inquiry';
-import type { RegisterInquirySchemaType } from '@/schema/inquiry.schema';
+import type { RegisterInquirySchemaType } from '@/features/mypage/inquiries/schema';
 import * as styles from '@/features/mypage/inquiries/inquiry-type-list/index.css';
 
 interface InquiryTypeListProps {

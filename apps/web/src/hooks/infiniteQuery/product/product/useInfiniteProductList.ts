@@ -6,12 +6,12 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { product } from '@/entities/product/api';
+import { product } from '@/api/product';
 import { productKeys } from '@/hooks/queryKeys';
 import type {
     ProductSearchParams,
     ProductsSearchResponse,
-} from '@/entities/product/model/product';
+} from '@/models/product/product';
 
 export type InfiniteProductPage = {
     data: ProductsSearchResponse;

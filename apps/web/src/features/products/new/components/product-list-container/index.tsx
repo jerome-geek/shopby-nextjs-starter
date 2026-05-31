@@ -7,8 +7,8 @@ import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInf
 import { useProductList } from '@/hooks/query/product/product';
 import { useResponsive } from '@/hooks/utils';
 import type { OrderByType, OrderDirectionType } from '@/models';
-import type { AdditionalDiscountWithProductNo } from '@/entities/product/model/additionalDiscount';
-import type { ProductItem } from '@/entities/product/model/product';
+import type { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
+import type { ProductItem } from '@/models/product/product';
 
 interface NewProductListContainerProps {
     selectedCategory: number;

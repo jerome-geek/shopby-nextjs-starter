@@ -5,12 +5,12 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { productInquiry } from '@/entities/display/api';
+import { productInquiry } from '@/api/display';
 import { productInquiryKeys } from '@/hooks/queryKeys';
 import type {
     GetProductInquiriesParams,
     GetProductInquiriesResponse,
-} from '@/entities/display/model/productInquiry';
+} from '@/models/display/productInquiry';
 
 interface UseInfiniteProductInquiryListParams {
     productNo: number;

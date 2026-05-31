@@ -24,7 +24,7 @@ import { useDialog, useGlobal } from '@/hooks/utils';
 import type {
     GetOrderOptionDetailForClaimResponse,
     RequestExchangeData,
-} from '@/entities/claim/model/member';
+} from '@/models/claim/member';
 import {
     claimExchangeSchema,
     ClaimExchangeSchemaType,

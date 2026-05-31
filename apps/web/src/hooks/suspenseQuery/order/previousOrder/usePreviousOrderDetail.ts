@@ -4,7 +4,7 @@ import {
     previousOrderDetailSuspenseOptions,
     type UsePreviousOrderDetailSuspenseParams,
 } from '@/entities/order/queries';
-import type { GetPreviousOrderResponse } from '@/entities/order/model/previousOrder';
+import type { GetPreviousOrderResponse } from '@/models/order/previousOrder';
 
 const usePreviousOrderDetail = <T = GetPreviousOrderResponse>(
     params: UsePreviousOrderDetailSuspenseParams<T>,

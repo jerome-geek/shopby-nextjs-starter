@@ -13,7 +13,7 @@ import {
 import { createStore } from './utils';
 
 import { toSelectedOption } from '@/helpers/product';
-import { TextOptionInput } from '@/entities/product/model/productOption';
+import { TextOptionInput } from '@/models/product/productOption';
 
 export type SelectedOption = ReturnType<typeof toSelectedOption>;
 interface ProductOptionState {

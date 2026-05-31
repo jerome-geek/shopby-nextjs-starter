@@ -1,9 +1,9 @@
 import { queryOptions, type UseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import { sticker } from '@/entities/display/api';
+import { sticker } from '@/api/display';
 import { stickerKeys } from '@/hooks/queryKeys';
-import type { GetStickersResponse } from '@/entities/display/model/sticker';
+import type { GetStickersResponse } from '@/models/display/sticker';
 
 export interface StickerListOptionsParams<T = GetStickersResponse> {
     options?: Omit<

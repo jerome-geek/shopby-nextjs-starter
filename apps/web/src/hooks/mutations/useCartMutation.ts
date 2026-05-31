@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 
-import { cart, guestOrder } from '@/entities/order/api';
+import { cart, guestOrder } from '@/api/order';
 import { cartKeys } from '@/hooks/queryKeys';
 import { useDialog, useResponsive } from '@/hooks/utils';
 import type {
     DeleteCartParams,
     RegisterCartData,
     UpdateCartData,
-} from '@/entities/order/model/cart';
-import type { GetCartData, GetCartParams } from '@/entities/order/model/guestOrder';
+} from '@/models/order/cart';
+import type { GetCartData, GetCartParams } from '@/models/order/guestOrder';
 import { useToast } from '@/hooks/ui';
 
 const useCartMutation = () => {

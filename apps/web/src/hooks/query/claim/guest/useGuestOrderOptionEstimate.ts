@@ -5,7 +5,7 @@ import {
     type GuestOrderOptionEstimateOptionsParams,
 } from '@/entities/claim/queries';
 import { useAuth } from '@/hooks/useAuth';
-import type { ClaimPriceInfo } from '@/entities/claim/model';
+import type { ClaimPriceInfo } from '@/models/claim';
 
 const useGuestOrderOptionEstimate = <T = ClaimPriceInfo>({
     orderOptionNo,

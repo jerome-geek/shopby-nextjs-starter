@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { CashReceiptInfo, ReceiptInfo } from '@/entities/order/model';
+import type { CashReceiptInfo, ReceiptInfo } from '@/models/order';
 
 export const CashReceiptSection = ({
     cashReceiptInfo,

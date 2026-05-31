@@ -35,7 +35,7 @@ import type { CountryCdType } from '@/models';
 import type {
     Address,
     RegisterShippingAddressData,
-} from '@/entities/order/model/shippingAddress';
+} from '@/models/order/shippingAddress';
 import {
     shippingAddressSchema,
     ShippingAddressSchemaType,

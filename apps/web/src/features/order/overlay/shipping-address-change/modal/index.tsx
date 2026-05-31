@@ -3,7 +3,7 @@ import { type UseSuspenseQueryOptions } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-import type { OrderDetailResponse } from '@/entities/order/model';
+import type { OrderDetailResponse } from '@/models/order';
 
 import {
     SHIPPING_ADDRESS_CHANGE_FORM_ID,

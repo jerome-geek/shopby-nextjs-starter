@@ -3,7 +3,7 @@ import type {
     GetLikeProductsParams,
     GetMemberLikeBrandListParams,
     GetRecentViewProductsParams,
-} from '@/entities/product/model/profile';
+} from '@/models/product/profile';
 
 const productProfileKeys = {
     all: ['productProfile'] as const,

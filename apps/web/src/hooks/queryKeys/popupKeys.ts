@@ -3,7 +3,7 @@ import type { AxiosRequestConfig } from 'axios';
 import type {
     DesignPopupData,
     GetAllPopupParams,
-} from '@/entities/display/model/popup';
+} from '@/models/display/popup';
 
 const popupKeys = {
     all: ['popup'] as const,

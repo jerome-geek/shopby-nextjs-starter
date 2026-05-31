@@ -1,6 +1,6 @@
-import type { GetBrandsParams, SearchBrandsParams } from '@/entities/product/model/brand';
+import type { GetBrandsParams, SearchBrandsParams } from '@/models/product/brand';
 
-import type { GetLikeBrandsParams } from '@/entities/product/model/profile';
+import type { GetLikeBrandsParams } from '@/models/product/profile';
 
 const brandKeys = {
     all: ['brands'] as const,

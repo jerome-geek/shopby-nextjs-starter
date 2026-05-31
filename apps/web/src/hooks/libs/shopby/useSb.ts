@@ -4,15 +4,15 @@ import { useEffect } from 'react';
 
 import { PATHS } from '@/const/paths';
 import { useMall } from '@/hooks/query/admin/mall';
-import type { GetCategoryResponse } from '@/entities/display/model/category';
-import type { OrderDetailResponse } from '@/entities/order/model';
-import type { GetCartListResponse } from '@/entities/order/model/cart';
-import type { GetCartResponse } from '@/entities/order/model/guestOrder';
-import type { GetOrderSheetResponse } from '@/entities/order/model/orderSheet';
+import type { GetCategoryResponse } from '@/models/display/category';
+import type { OrderDetailResponse } from '@/models/order';
+import type { GetCartListResponse } from '@/models/order/cart';
+import type { GetCartResponse } from '@/models/order/guestOrder';
+import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
 import type {
     ProductDetailResponse,
     ProductsSearchResponse,
-} from '@/entities/product/model/product';
+} from '@/models/product/product';
 
 interface UseSbProps {
     product?: ProductDetailResponse;

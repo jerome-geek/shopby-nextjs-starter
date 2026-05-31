@@ -5,7 +5,7 @@ import { useCartCount, useCartList } from '@/hooks/query/order/cart';
 import useGuestCartList from '@/hooks/query/order/guestOrder/useGuestCartList';
 import { useAuth } from '@/hooks/useAuth';
 import { useStore } from '@/hooks/utils/useStore';
-import type { GetCartData } from '@/entities/order/model/guestOrder';
+import type { GetCartData } from '@/models/order/guestOrder';
 import { useCartStore } from '@/store/useCartStore';
 
 /**

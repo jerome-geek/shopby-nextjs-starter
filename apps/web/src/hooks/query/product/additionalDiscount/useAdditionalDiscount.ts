@@ -4,7 +4,7 @@ import {
     additionalDiscountOptions,
     type AdditionalDiscountOptionsParams,
 } from '@/entities/product/additionalDiscount/queries';
-import type { GetAdditionalDiscountResponse } from '@/entities/product/model/additionalDiscount';
+import type { GetAdditionalDiscountResponse } from '@/models/product/additionalDiscount';
 
 const useAdditionalDiscount = <T = GetAdditionalDiscountResponse>({
     searchParams,

@@ -4,7 +4,7 @@ import {
     bannerExtraInfosOptions,
     type BannerExtraInfosParams,
 } from '@/entities/banner/queries';
-import type { GetBannerExtraInfosResponse } from '@/entities/display/model/banner';
+import type { GetBannerExtraInfosResponse } from '@/models/display/banner';
 
 const useBannerExtraInfos = <T = GetBannerExtraInfosResponse>(
     params: BannerExtraInfosParams<T>,

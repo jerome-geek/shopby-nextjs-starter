@@ -9,7 +9,7 @@ import { PATHS } from '@/const/paths';
 import { OrderProductItem } from '@/features/order/components/order-product-item';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
-import type { OrderDetailResponse } from '@/entities/order/model';
+import type { OrderDetailResponse } from '@/models/order';
 import { CongratulationIcon } from '@/shared/ui/icons/login/Congratulation';
 import { guestTokenCookie } from '@/utils/cookie';
 import { CURRENCY } from '@/utils/currency';

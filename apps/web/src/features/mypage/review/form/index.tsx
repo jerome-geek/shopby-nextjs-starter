@@ -33,7 +33,7 @@ import {
     updateReviewSchema,
     type RegisterReviewSchemaType,
     type UpdateReviewSchemaType,
-} from '@/schema/review.schema';
+} from '@/features/mypage/review/form/schema';
 import { ErrorMessage, TextArea } from '@/shared/components/form';
 
 interface ReviewFormProps {

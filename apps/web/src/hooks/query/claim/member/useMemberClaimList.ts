@@ -4,7 +4,7 @@ import {
     memberClaimListOptions,
     type UseMemberClaimListParams,
 } from '@/entities/claim/queries';
-import type { GetClaimListResponse } from '@/entities/claim/model/member';
+import type { GetClaimListResponse } from '@/models/claim/member';
 
 const useMemberClaimList = <T = GetClaimListResponse>(
     params: UseMemberClaimListParams<T>,

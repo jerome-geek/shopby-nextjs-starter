@@ -4,7 +4,7 @@ import {
     categoryAllOptions,
     type CategoryAllParams,
 } from '@/entities/category/queries';
-import type { GetCategoriesResponse } from '@/entities/display/model/category';
+import type { GetCategoriesResponse } from '@/models/display/category';
 
 const useCategoryAll = <T = GetCategoriesResponse>(
     params: CategoryAllParams<T> = {},

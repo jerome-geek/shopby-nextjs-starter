@@ -1,4 +1,4 @@
-import type { GetProductSectionProductsParams } from '@/entities/display/model/productSection';
+import type { GetProductSectionProductsParams } from '@/models/display/productSection';
 
 const productSectionKeys = {
     all: ['productSection'] as const,

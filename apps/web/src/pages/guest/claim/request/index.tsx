@@ -14,7 +14,7 @@ import { PATHS } from '@/const/paths';
 import { guestOrderOptionDetailForClaimOptions } from '@/entities/claim/queries';
 import { useDialog } from '@/hooks/utils';
 import type { ClaimType } from '@/models';
-import type { GetOrderOptionDetailForClaimResponse } from '@/entities/claim/model/member';
+import type { GetOrderOptionDetailForClaimResponse } from '@/models/claim/member';
 import { NextPageWithLayout } from '@/pages/_app';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 

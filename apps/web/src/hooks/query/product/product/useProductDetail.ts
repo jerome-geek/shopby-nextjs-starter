@@ -5,7 +5,7 @@ import { parseAsBoolean, parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { CHANNEL_TYPES } from '@/const/product';
 import { productDetailOptions } from '@/entities/product/queries';
 import { productKeys } from '@/hooks/queryKeys';
-import type { ProductDetailResponse } from '@/entities/product/model/product';
+import type { ProductDetailResponse } from '@/models/product/product';
 
 interface UseProductDetailParams<T = ProductDetailResponse> {
     productNo: number;

@@ -4,7 +4,7 @@ import {
     bestReviewProductListOptions,
     type BestReviewProductListOptionsParams,
 } from '@/entities/product/queries';
-import type { GetBestReviewProductsResponse } from '@/entities/product/model/product';
+import type { GetBestReviewProductsResponse } from '@/models/product/product';
 
 const useBestReviewProductList = <T = GetBestReviewProductsResponse>({
     searchParams,
