@@ -3,7 +3,7 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import * as integratedStyles from '@/components/search/integrated-results/index.css';
 import { Column } from '@/shared/ui/layout/flex';
 import { PagingV3 } from '@/shared/ui/paging-v3';

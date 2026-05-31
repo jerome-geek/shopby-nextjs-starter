@@ -5,7 +5,7 @@ import { useMemo, useState, useTransition } from 'react';
 
 import { NoResult } from '@/shared/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import { ProductCard, ProductCardSkeleton } from '@/components/product';
+import { ProductCard, ProductCardSkeleton } from '@/features/product/components';
 import PagingV2 from '@/shared/ui/paging-v2';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { useEventProductSection } from '@/hooks/suspenseQuery/display/event';

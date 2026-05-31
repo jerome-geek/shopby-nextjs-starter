@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 
 import { NoResult } from '@/shared/components/common/no-result';
-import ProductCardRow from '@/components/product/card-row';
+import ProductCardRow from '@/features/product/components/card-row';
 import { PATHS } from '@/const/paths';
 import { useProductsWithAdditionalDiscounts } from '@/entities/product/hooks/useProductsWithAdditionalDiscounts';
 import { useEvent, useEventProductSection } from '@/hooks/suspenseQuery/display/event';

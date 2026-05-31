@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SortBottomSheet } from '@/components/bottom-sheet/sort';
-import * as mobileFilterStyles from '@/components/product-list/mobile-filter/index.css';
+import * as mobileFilterStyles from '@/features/product/list/mobile-filter/index.css';
 import * as styles from '@/components/search/mobile-sort/index.css';
 import type { SearchSortOption } from '@/const/recipe';
 import type { OrderDirectionType } from '@/models';

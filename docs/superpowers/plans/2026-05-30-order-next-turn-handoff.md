@@ -1,25 +1,18 @@
-# Order Refactor Handoff
+# Search Refactor Handoff
 
 ## Current Branch
 
 - worktree: `/Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage`
 - branch: `codex/web-domain-mypage-rest`
-- latest related PR: [#147](https://github.com/GeekStudio-Team/shopby-nextjs-starter/pull/147)
+- latest related PR: [#148](https://github.com/GeekStudio-Team/shopby-nextjs-starter/pull/148)
 
 ## What Was Just Finished
 
 - `components/mypage/*` legacy domain components were migrated into `features/mypage/*`
-- migrated slices:
-  - `addresses`
-  - `claims`
-  - `coupons`
-  - `inquiries`
-  - `orders`
-  - `previous-orders`
-  - `product-inquiries`
-  - `review`
-  - `wish`
-- related page imports and `features/order` consumers were updated
+- `components/order/*` legacy domain components were migrated into `features/order/components/*`
+- `components/product-option/*` legacy option components were migrated into `features/product/option/*`
+- `components/product/*` legacy components were migrated into `features/product/components/*`
+- `components/product-list/*` legacy components were migrated into `features/product/list/*`
 - progress checklist was refreshed:
   - [2026-05-28-web-fsd-lite-remaining-work.md](/Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage/docs/superpowers/plans/2026-05-28-web-fsd-lite-remaining-work.md)
 
@@ -42,115 +35,52 @@ Result:
 
 ## Next Domain
 
-Next target domain is `order`.
+Next target domain is `search`.
 
 Why this is next:
 
-- `features/order/*` already exists and owns page orchestration
-- `components/order/*` is still a legacy UI bucket
-- `mypage/orders`, `claims`, and order detail consumers are already aligned, so the next cut can focus on the order page stack itself
+- `product` legacy roots are now cleared
+- the next large legacy UI bucket is `components/search`
+- search already depends on the newly migrated `features/product/list/*`, so it is the next natural cleanup target
 
-## Order Scan Result
+## Product Status
 
-### Legacy source still in use
+Product migration is complete for the legacy `components/product`, `components/product-list`, and `components/product-option` buckets.
 
-- `apps/web/src/components/order/accumulation/*`
-- `apps/web/src/components/order/coupon/*`
-- `apps/web/src/components/order/order-product-item/*`
-- `apps/web/src/components/order/order-products/*`
-- `apps/web/src/components/order/orderer-info/*`
-- `apps/web/src/components/order/payment-method/*`
-- `apps/web/src/components/order/payment-summary/*`
-- `apps/web/src/components/order/shipping-address/*`
+Completed:
 
-### Existing feature-side entry points
+- `additional-discount`
+- `card`
+- `card-row`
+- `countdown-timer`
+- `extra-product-list`
+- `grid-section`
+- `main-image`
+- `order-action`
+- `photo-review`
+- `product-error-state`
+- `product-tabs`
+- `related-product-list`
+- `category`
+- `filter`
+- `mobile-filter`
+- `search-input`
+- `side-bar`
+- `flat`, `multi`, `required`, `selected` product options
 
-- `apps/web/src/features/order/components/order-sheet-content/index.tsx`
-- `apps/web/src/features/order/components/order-details-content/index.tsx`
-- `apps/web/src/features/order/components/order-detail-view/index.tsx`
-- `apps/web/src/features/order/components/member-order-content/index.tsx`
-- `apps/web/src/features/order/components/guest-order-content/index.tsx`
+Also updated:
 
-### Main current consumers of `@/components/order/*`
+- product detail, category, best/new, time-sale, wish, recent-products pages
+- search, drawer, section, recipe, cart, event, and overlay consumers
+- photo review layer contents and bottom sheet option selector
 
-- `features/order/components/order-sheet-content/index.tsx`
-  - imports `Accumulation`
-  - imports `Coupon`
-  - imports `OrderProducts`
-  - imports `OrdererInfo`
-  - imports `PaymentMethod`
-  - imports `OrderPaymentSummary`
-  - imports `ShippingAddress`
-- `features/order/components/order-details-content/index.tsx`
-  - imports `OrderProductItem`
-- `features/order/components/gift-order-product-list/index.tsx`
-  - imports `OrderProductItem`
-- `components/modal/shipping-address-list/index.tsx`
-  - imports `ShippingAddressCreateModal`
-- `components/bottom-sheet/shipping-address-list/index.tsx`
-  - imports `ShippingAddressCreateModal`
+Current state:
 
-## Order Progress
-
-Completed batch 1:
-
-- `order-product-item`
-- `order-products`
-- `orderer-info`
-- `payment-summary`
-
-Moved to:
-
-- `features/order/components/order-product-item`
-- `features/order/components/order-products`
-- `features/order/components/orderer-info`
-- `features/order/components/payment-summary`
-
-Updated consumers:
-
-- `features/order/components/order-sheet-content/index.tsx`
-- `features/order/components/order-details-content/index.tsx`
-- `features/order/components/gift-order-product-list/index.tsx`
-
-Batch 1 verification:
-
-```bash
-cd /Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage/apps/web
-./node_modules/.bin/next build --webpack
-```
-
-Result:
-
-- final exit code: `0`
-- known non-blocking logs:
-  - `SHOP_LIFE_TOP` 404
-  - `SHOP_DISCOVERY_TOP` 404
-
-## Recommended Next Batch
-
-Recommended batch 2:
-
-1. `payment-method`
-2. `accumulation`
-3. `coupon`
-
-Recommended batch 3:
-
-1. `shipping-address/*`
-2. `ShippingAddressCreateModal`
-3. related overlay consumers
-
-## Expected Destination Shape
-
-Most likely remaining targets:
-
-- `features/order/components/payment-method`
-- `features/order/components/accumulation`
-- `features/order/components/coupon`
-- `features/order/components/shipping-address`
-
-If some pieces are truly reusable across order detail and order sheet, keep them under `features/order/components/*` first.
-Do not force `entities/order` yet unless the component is clearly domain-generic and no longer tied to page workflow.
+- no remaining runtime imports from `@/components/product`, `@/components/product-list`, or `@/components/product-option`
+- `apps/web/src/components/product`
+- `apps/web/src/components/product-list`
+- `apps/web/src/components/product-option`
+  are fully removed
 
 ## Next Commands
 
@@ -158,9 +88,8 @@ Useful first checks for the next turn:
 
 ```bash
 cd /Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage
-rg -n "@/components/order" apps/web/src | sort
-find apps/web/src/components/order -maxdepth 3 -type f | sort
-find apps/web/src/features/order -maxdepth 4 -type f | sort
+find apps/web/src/components/search -maxdepth 4 -type f | sort
+rg -n "@/components/search" apps/web/src | sort
 ```
 
 Validation after each batch:
@@ -175,8 +104,8 @@ cd /Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domai
 If the next session starts with low token budget, continue with this exact scope:
 
 - stay on branch `codex/web-domain-mypage-rest`
-- do not touch `product`, `search`, or `recipe` yet
-- start from `components/order` batch 2
+- start with `search` only
+- do not touch `recipe` yet
 - stop after:
   - moving the files
   - fixing imports
@@ -186,5 +115,5 @@ If the next session starts with low token budget, continue with this exact scope
 Suggested one-line resume prompt:
 
 ```text
-Continue from docs/superpowers/plans/2026-05-30-order-next-turn-handoff.md and start order batch 2 in the current worktree branch.
+Continue from docs/superpowers/plans/2026-05-30-order-next-turn-handoff.md and start the search migration in the current worktree branch.
 ```

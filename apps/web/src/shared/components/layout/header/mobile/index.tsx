@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { ProductListSearchInput } from '@/features/product/list/search-input';
 import { PATHS } from '@/const/paths';
 import useCart from '@/hooks/cart/useCart';
 import { useToast } from '@/hooks/ui';

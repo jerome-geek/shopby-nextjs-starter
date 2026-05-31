@@ -2,7 +2,7 @@ import { map, pipe, toArray } from '@fxts/core';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/features/drawer/search/index.css';
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import { Column } from '@/shared/ui/layout/flex';
 import { useProductSectionProductList } from '@/hooks/suspenseQuery/display/productSection';
 import { useResponsive } from '@/hooks/utils';

@@ -38,69 +38,48 @@ Additional baseline fixes already included:
 - [x] Regression test added:
   - `apps/web/src/tests/pages/guest-order-page.test.tsx`
 
-Additional `mypage` migration batches already completed:
+Additional domain migration batches already completed:
 
 - [x] `components/hoc/with-member-join-config`
   - moved to `features/member/member-join-config-field`
-- [x] `components/mypage/common/*`
-  - moved to `features/mypage/common/*`
-- [x] `components/mypage/filters/*`
-  - moved to `features/mypage/filters/*`
-- [x] `components/mypage/side-navigation/*`
-  - moved to `features/mypage/side-navigation/*`
-- [x] `components/mypage/edit/*`
-  - moved to `features/mypage/edit/*`
-- [x] legacy shared-like mypage imports removed
-  - no remaining imports from `@/components/hoc/with-member-join-config`
-  - no remaining imports from `@/components/mypage/common/*`
-  - no remaining imports from `@/components/mypage/filters/*`
-  - no remaining imports from `@/components/mypage/side-navigation/*`
-  - no remaining imports from `@/components/mypage/edit/*`
-- [x] `components/mypage/addresses/*`
-  - moved to `features/mypage/addresses/*`
-- [x] `components/mypage/inquiries/*`
-  - moved to `features/mypage/inquiries/*`
-- [x] `components/mypage/product-inquiries/*`
-  - moved to `features/mypage/product-inquiries/*`
-- [x] `components/mypage/review/*`
-  - moved to `features/mypage/review/*`
-- [x] `components/mypage/wish/*`
-  - moved to `features/mypage/wish/*`
-- [x] `components/mypage/coupons/*`
-  - moved to `features/mypage/coupons/*`
-- [x] `components/mypage/orders/*`
-  - moved to `features/mypage/orders/*`
-- [x] `components/mypage/previous-orders/*`
-  - moved to `features/mypage/previous-orders/*`
-- [x] `components/mypage/claims/*`
-  - moved to `features/mypage/claims/*`
-- [x] empty legacy root removed
-  - `apps/web/src/components/mypage`
+- [x] `components/mypage/*`
+  - fully migrated into `features/mypage/*`
+- [x] `components/order/*`
+  - fully migrated into `features/order/components/*`
+- [x] `components/product/*`
+  - moved to `features/product/components/*`
+- [x] `components/product-list/*`
+  - moved to `features/product/list/*`
+- [x] `components/product-option/*`
+  - moved to `features/product/option/*`
 
 ## What Is Still Left
 
-The largest remaining FSD-lite debt is no longer in `shared`, but in legacy domain buckets and global technical buckets.
+The largest remaining FSD-lite debt is now in legacy domain buckets outside `product`, plus global technical buckets.
 
 ### 1. Domain Slice Migration
 
 Recommended order:
 
-1. `order`
-2. `product`
-3. `search`
-4. `recipe`
+1. `search`
+2. `recipe`
+3. `section`
 
 Primary legacy roots still in use:
 
 - [x] `apps/web/src/components/mypage`
   - fully migrated into `features/mypage/*`
-- [ ] `apps/web/src/components/order`
-- [ ] `apps/web/src/components/product`
+- [x] `apps/web/src/components/order`
+  - fully migrated into `features/order/components/*`
+- [x] `apps/web/src/components/product`
+  - moved to `features/product/components/*`
+- [x] `apps/web/src/components/product-list`
+  - moved to `features/product/list/*`
+- [x] `apps/web/src/components/product-option`
+  - moved to `features/product/option/*`
 - [ ] `apps/web/src/components/search`
 - [ ] `apps/web/src/components/recipe`
 - [ ] `apps/web/src/components/section`
-- [ ] `apps/web/src/components/product-list`
-- [ ] `apps/web/src/components/product-option`
 
 Goal:
 
@@ -153,50 +132,34 @@ Goal:
 - domain-owned code moves into each slice
 - only cross-domain utilities remain in `shared`
 
-### 4. Remaining Shared-Layer Cleanup
-
-Most shared-layer recovery is complete.
-
-- [x] `apps/web/src/components/hoc`
-  - absorbed into domain-oriented feature structure via `features/member/member-join-config-field`
-- [x] `mypage` domain slice migration
-  - `components/mypage/*` is fully migrated into `features/mypage/*`
-
 ## Recommended Next Execution Plan
 
 ### Phase A
 
-- Move `order` vertical slice
-- Reconcile `components/order/*` with existing `features/order/*`
+- Move `search` vertical slice
 - Verify with `next build --webpack`
 
 ### Phase B
 
-- Move `product` vertical slice
-- Reconcile `components/product/*`, `product-list/*`, `product-option/*`
+- Move `recipe` and `section` domain buckets
 - Verify with `next build --webpack`
 
 ### Phase C
 
-- Tackle `search`, `recipe`, and `section` domain buckets
-- Verify each batch with `next build --webpack`
-
-### Phase D
-
 - Tackle overlay deduplication across `modal`, `bottom-sheet`, `layer-contents`
 - Use one interaction family at a time
 
-### Phase E
+### Phase D
 
 - Break down global buckets: `hooks`, `models`, `api`, `utils`, `schema`, `store`, `context`
 
 ## Validation Notes
 
-- This checklist was revalidated against a `dev` workspace where the shared migration is already present.
+- This checklist was revalidated against the latest `dev` plus the current refactor branch.
 - `components/ui`, `components/icons`, `components/common`, and `components/layout` are no longer present.
-- `components/hoc` is also no longer present.
-- `components/mypage` is no longer present.
-- Remaining work should focus on `order`, `product`, `search`, `recipe`, overlay cleanup, and global buckets.
+- `components/hoc`, `components/mypage`, and `components/order` are no longer present.
+- `components/product`, `components/product-list`, and `components/product-option` are no longer present.
+- Remaining work should focus on `search`, `recipe`, `section`, overlay cleanup, and global buckets.
 
 ## Verification Standard
 

@@ -10,9 +10,9 @@ import {
     FlatProductOption,
     MultiProductOption,
     SelectedProductOption,
-} from '@/components/product-option';
-import { RequiredProductOption } from '@/components/product-option/required';
-import { ExtraProductList } from '@/components/product/extra-product-list';
+} from '@/features/product/option';
+import { RequiredProductOption } from '@/features/product/option/required';
+import { ExtraProductList } from '@/features/product/components/extra-product-list';
 import { Button } from '@/shared/ui/button';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';

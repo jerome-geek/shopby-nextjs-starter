@@ -24,13 +24,13 @@ import {
     ProductMainImage,
     ProductOrderAction,
     ProductTabs,
-} from '@/components/product';
+} from '@/features/product/components';
 import {
     FlatProductOption,
     MultiProductOption,
     SelectedProductOption,
-} from '@/components/product-option';
-import { RequiredProductOption } from '@/components/product-option/required';
+} from '@/features/product/option';
+import { RequiredProductOption } from '@/features/product/option/required';
 import { OVERLAY_ID } from '@/const/overlay';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { useProductInfo, useProductPrice } from '@/entities/product/hooks';

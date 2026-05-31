@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { ProductListSearchInput } from '@/features/product/list/search-input';
 import { IntegratedSearchResults } from '@/components/search/integrated-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
 import { Row } from '@/shared/ui/layout/flex';

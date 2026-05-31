@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProductCardSkeleton } from '@/components/product/card/skeleton';
+import { ProductCardSkeleton } from '@/features/product/components/card/skeleton';
 import Skeleton from '@/shared/ui/skeleton';
 import * as styles from './index.css';
 

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import { BigCartIcon } from '@/shared/ui/icons';
 import { DefaultModalLayoutProps } from '@/shared/components/layout';
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { ProductListSearchInput } from '@/features/product/list/search-input';
 import { PATHS } from '@/const/paths';
 import * as styles from '@/features/drawer/category/index.css';
 import { QuickMenuSkeleton } from '@/features/drawer/category/quick-menu-skeleton';

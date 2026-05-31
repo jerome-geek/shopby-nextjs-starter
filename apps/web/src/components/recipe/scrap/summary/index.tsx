@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 
 import FetchBoundary from '@/shared/components/common/FetchBoundary';
-import { ProductGridSection } from '@/components/product/grid-section';
-import { ProductGridSkeleton } from '@/components/product/grid-section/skeleton';
+import { ProductGridSection } from '@/features/product/components/grid-section';
+import { ProductGridSkeleton } from '@/features/product/components/grid-section/skeleton';
 import { RecipeGridSection } from '@/components/recipe/grid-section';
 import { RecipeGridSkeleton } from '@/components/recipe/grid-section/skeleton';
 import * as styles from '@/components/recipe/scrap/summary/index.css';

@@ -5,7 +5,7 @@ import { Grid } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
-import { CountdownTimer, ProductCard } from '@/components/product';
+import { CountdownTimer, ProductCard } from '@/features/product/components';
 import * as styles from '@/components/section/time-sale/index.css';
 import { PATHS } from '@/const/paths';
 import { SORTING_TYPE_BY_STATUS } from '@/const/timeSale';

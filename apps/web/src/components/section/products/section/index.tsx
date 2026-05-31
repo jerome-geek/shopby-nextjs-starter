@@ -3,8 +3,8 @@ import { useState } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ProductCard } from '@/components/product';
-import type { ProductCardProps } from '@/components/product/card';
+import { ProductCard } from '@/features/product/components';
+import type { ProductCardProps } from '@/features/product/components/card';
 import * as styles from '@/components/section/products/section/index.css';
 import { BREAKPOINTS } from '@/styles/media';
 

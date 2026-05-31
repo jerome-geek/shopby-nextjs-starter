@@ -3,12 +3,12 @@ import { overlay } from 'overlay-kit';
 import { FieldErrors, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import Coupon from '@/components/order/coupon';
-import PaymentMethod from '@/components/order/payment-method';
-import ShippingAddress from '@/components/order/shipping-address';
+import Coupon from '@/features/order/components/coupon';
+import PaymentMethod from '@/features/order/components/payment-method';
+import ShippingAddress from '@/features/order/components/shipping-address';
 import { OVERLAY_ID } from '@/const/overlay';
 import { useOrderSheetInitialize } from '@/entities/order/hooks';
-import Accumulation from '@/components/order/accumulation';
+import Accumulation from '@/features/order/components/accumulation';
 import { GiftReceiverInfo } from '@/features/order/components/gift-receiver-info';
 import OrderPaymentSummary from '@/features/order/components/payment-summary';
 import OrderProducts from '@/features/order/components/order-products';

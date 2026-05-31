@@ -5,7 +5,7 @@ import { Grid } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { SmallCaretIcon } from '@/shared/ui/icons';
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import * as styles from '@/components/product-section/index.css';
 import {
     useProductSectionById,

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { ProductListSearchInput } from '@/features/product/list/search-input';
 import { CollectionSearchResults } from '@/components/search/collection-results';
 import { SearchMobileSort } from '@/components/search/mobile-sort';
 import { SearchTabNav } from '@/components/search/tab-nav';

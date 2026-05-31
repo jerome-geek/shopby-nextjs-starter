@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import Skeleton from '@/shared/ui/skeleton';
-import * as productCardStyles from '@/components/product/card/index.css';
+import * as productCardStyles from '@/features/product/components/card/index.css';
 import * as styles from '@/components/section/products/section/index.css';
 import { BREAKPOINTS } from '@/styles/media';
 

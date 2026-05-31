@@ -5,7 +5,7 @@ import 'swiper/css';
 import { CollectionCard } from '@/components/collection/collection-card';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import { NoResult } from '@/shared/components/common/no-result';
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import { RecipeCard } from '@/components/recipe/card';
 import { CollectionRecommendSection } from '@/components/search/collection-recommend-section';
 import * as collectionStyles from '@/components/search/collection-results/index.css';

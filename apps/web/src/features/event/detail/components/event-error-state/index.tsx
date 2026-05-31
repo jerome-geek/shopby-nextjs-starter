@@ -3,7 +3,7 @@ import { CircleAlert } from 'lucide-react';
 import { useRouter } from 'next/router';
 
 import { Button } from '@/shared/ui/button';
-import * as styles from '@/components/product/product-error-state/index.css';
+import * as styles from '@/features/product/components/product-error-state/index.css';
 
 interface EventErrorStateProps {
     errorStatusCode?: number;

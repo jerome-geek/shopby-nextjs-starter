@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 
-import { ProductListFilter } from '@/components/product-list/filter';
-import { MobileFilter } from '@/components/product-list/mobile-filter';
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { ProductListFilter } from '@/features/product/list/filter';
+import { MobileFilter } from '@/features/product/list/mobile-filter';
+import { ProductListSearchInput } from '@/features/product/list/search-input';
 import { ShoppingSearchResults } from '@/components/search/shopping-results';
 import { SearchTabNav } from '@/components/search/tab-nav';
 import { Row } from '@/shared/ui/layout/flex';

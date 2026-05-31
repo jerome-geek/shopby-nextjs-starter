@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import PagingV2 from '@/shared/ui/paging-v2';
 import * as styles from '@/components/search/shopping-results/index.css';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';

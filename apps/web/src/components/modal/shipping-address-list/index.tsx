@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ModalLayout } from '@/shared/components/layout';
 import * as styles from '@/components/modal/shipping-address-list/index.css';
-import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
+import ShippingAddressCreateModal from '@/features/order/components/shipping-address/ShippingAddressCreateModal';
 import { useShippingAddressMutation } from '@/hooks/mutations';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';

@@ -15,7 +15,7 @@ import Seo from '@/shared/components/common/seo';
 import { MypageLayout } from '@/shared/components/layout';
 import * as card from '@/features/mypage/common/mypage-list-card/index.css';
 import { MypageWishSkeleton } from '@/features/mypage/wish/skeleton';
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import { Button } from '@/shared/ui/button';
 import { InputCheckbox } from '@/shared/ui/input';
 import Paging from '@/shared/ui/paging';

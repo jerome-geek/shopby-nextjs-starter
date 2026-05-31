@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { BottomSheetLayout } from '@/shared/components/layout';
 import * as styles from '@/components/bottom-sheet/shipping-address-list/index.css';
-import ShippingAddressCreateModal from '@/components/order/shipping-address/ShippingAddressCreateModal';
+import ShippingAddressCreateModal from '@/features/order/components/shipping-address/ShippingAddressCreateModal';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useShippingAddressList } from '@/hooks/query/order/shippingAddress';
 import type { Address } from '@/models/order/shippingAddress';

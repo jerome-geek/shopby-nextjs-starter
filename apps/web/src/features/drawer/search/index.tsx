@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { recipe } from '@/api/shop';
 import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import { type DefaultModalLayoutProps } from '@/shared/components/layout';
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { ProductListSearchInput } from '@/features/product/list/search-input';
 import { Column } from '@/shared/ui/layout/flex';
 import { BOTTOM_NAV_INVISIBLE_PATHS } from '@/const/bottomNavigation';
 import * as styles from '@/features/drawer/search/index.css';

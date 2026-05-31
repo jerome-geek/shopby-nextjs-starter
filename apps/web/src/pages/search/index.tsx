@@ -1,4 +1,4 @@
-import { ProductListSearchInput } from '@/components/product-list/search-input';
+import { ProductListSearchInput } from '@/features/product/list/search-input';
 import Seo from '@/shared/components/common/seo';
 import { Column } from '@/shared/ui/layout/flex';
 import { SearchBodyContainer } from '@/features/search/components/search-body-container';

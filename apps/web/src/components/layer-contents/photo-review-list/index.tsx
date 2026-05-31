@@ -7,7 +7,7 @@ import { NoResult } from '@/shared/components/common/no-result';
 import { PhotoReviewDetail } from '@/components/layer-contents/photo-review-list/detail';
 import * as styles from '@/components/layer-contents/photo-review-list/index.css';
 import { DefaultModalLayoutProps } from '@/shared/components/layout';
-import { PHOTO_PAGE_SIZE } from '@/components/product/product-tabs/review';
+import { PHOTO_PAGE_SIZE } from '@/features/product/components/product-tabs/review';
 import PagingV2 from '@/shared/ui/paging-v2';
 import { usePhotoReviewList } from '@/hooks/query/display/review';
 

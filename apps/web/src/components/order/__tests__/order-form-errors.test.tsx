@@ -9,7 +9,7 @@ import {
     type PaymentReserveSchemaType,
 } from '@/schema/payment.schema';
 
-vi.mock('@/components/order/shipping-address/GuestShippingAddressForm/index.css', () => ({
+vi.mock('@/features/order/components/shipping-address/GuestShippingAddressForm/index.css', () => ({
     formContent: 'formContent',
     ordererInfoRow: 'ordererInfoRow',
     phoneInputGroup: 'phoneInputGroup',
@@ -21,7 +21,7 @@ vi.mock('@/shared/components/form/error-message/index.css', () => ({
     errorMessage: 'errorMessage',
 }));
 
-vi.mock('@/components/order/payment-method/index.css', () => ({
+vi.mock('@/features/order/components/payment-method/index.css', () => ({
     container: 'container',
     title: 'title',
     radioGroupRoot: 'radioGroupRoot',
@@ -43,7 +43,7 @@ vi.mock('@/components/order/payment-method/index.css', () => ({
     inputGroup: 'inputGroup',
 }));
 
-vi.mock('@/components/order/payment-summary/index.css', () => ({
+vi.mock('@/features/order/components/payment-summary/index.css', () => ({
     container: 'container',
     title: 'title',
     priceContent: 'priceContent',
@@ -424,14 +424,14 @@ describe('order form error visibility', () => {
             'guest shipping form',
             () =>
                 import(
-                    '@/components/order/shipping-address/GuestShippingAddressForm'
+                    '@/features/order/components/shipping-address/GuestShippingAddressForm'
                 ),
         ],
         [
             'member shipping form',
             () =>
                 import(
-                    '@/components/order/shipping-address/MemberShippingAddressForm'
+                    '@/features/order/components/shipping-address/MemberShippingAddressForm'
                 ),
         ],
     ])('shows shipping address validation messages in %s', async (_, loadComponent) => {
@@ -455,7 +455,7 @@ describe('order form error visibility', () => {
 
     it('shows account payment validation messages', async () => {
         const { PaymentMethod } = await import(
-            '@/components/order/payment-method'
+            '@/features/order/components/payment-method'
         );
         const accountDefaults = createValidDefaultValues();
         accountDefaults.remitter = '';
@@ -483,7 +483,7 @@ describe('order form error visibility', () => {
 
     it('shows agreement validation message', async () => {
         const { default: OrderPaymentSummary } = await import(
-            '@/components/order/payment-summary'
+            '@/features/order/components/payment-summary'
         );
         const agreementDefaults = createValidDefaultValues();
         agreementDefaults.agreementTermsAgrees = [

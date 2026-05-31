@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 
 import { NoResult } from '@/shared/components/common/no-result';
-import { CountdownTimer, ProductCard } from '@/components/product';
+import { CountdownTimer, ProductCard } from '@/features/product/components';
 import * as tabStyles from '@/components/section/time-sale/tab.css';
 import * as toggleStyles from '@/components/section/time-sale/toggle.css';
 import { Column, Row } from '@/shared/ui/layout/flex';

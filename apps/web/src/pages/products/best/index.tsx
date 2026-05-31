@@ -2,7 +2,7 @@ import { isEmpty } from '@fxts/core';
 
 import { NoResult } from '@/shared/components/common/no-result';
 import Seo from '@/shared/components/common/seo';
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import { Column } from '@/shared/ui/layout/flex';
 import PagingV2 from '@/shared/ui/paging-v2';
 import { useBestProductParams } from '@/entities/products/best/hooks/useBestProductParams';

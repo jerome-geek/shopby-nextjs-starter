@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { ArrowIcon } from '@/shared/ui/icons/ArrowIcon';
-import { ProductCard } from '@/components/product';
+import { ProductCard } from '@/features/product/components';
 import * as styles from '@/components/section/best/index.css';
 import { CATEGORY_CODE } from '@/const/category';
 import { PATHS } from '@/const/paths';
