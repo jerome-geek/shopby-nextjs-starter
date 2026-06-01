@@ -1,8 +1,12 @@
-import axios, { HttpStatusCode } from 'axios';
 import type { InternalAxiosRequestConfig } from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { useEffect } from 'react';
 
-import { handle400Error, handle401Error } from '@/api/core/authInterceptor';
+import {
+    handle400Error,
+    handle401Error,
+    handle404Error,
+} from '@/api/core/authInterceptor';
 import { shopbyRequest } from '@/api/core/request';
 import {
     isGuestRequest,
@@ -20,6 +24,7 @@ type SessionExpiredHandler = () => Promise<void>;
 
 let handleSessionExpiredHandler: SessionExpiredHandler = async () => {};
 let handleGuestLoginExpiredHandler: SessionExpiredHandler = async () => {};
+let handleNotFoundProfileExpiredHandler: SessionExpiredHandler = async () => {};
 let interceptorIds: {
     request: number;
     response: number;
@@ -28,12 +33,15 @@ let interceptorIds: {
 export const bindAxiosInterceptorHandlers = ({
     handleSessionExpired,
     handleGuestLoginExpired,
+    handleNotFoundProfileExpired,
 }: {
     handleSessionExpired: SessionExpiredHandler;
     handleGuestLoginExpired: SessionExpiredHandler;
+    handleNotFoundProfileExpired: SessionExpiredHandler;
 }) => {
     handleSessionExpiredHandler = handleSessionExpired;
     handleGuestLoginExpiredHandler = handleGuestLoginExpired;
+    handleNotFoundProfileExpiredHandler = handleNotFoundProfileExpired;
 };
 
 const attachAuthHeaders = (config: InternalAxiosRequestConfig) => {
@@ -109,6 +117,12 @@ const ensureAxiosInterceptors = () => {
                 );
             }
 
+            if (status === HttpStatusCode.NotFound) {
+                return await handle404Error(error, () =>
+                    handleNotFoundProfileExpiredHandler(),
+                );
+            }
+
             if (status === HttpStatusCode.Unauthorized) {
                 return await handle401Error(error, shopbyRequest, () =>
                     handleSessionExpiredHandler(),
@@ -128,13 +142,21 @@ const ensureAxiosInterceptors = () => {
 ensureAxiosInterceptors();
 
 export const useAxiosInterceptor = () => {
-    const { handleSessionExpired, handleGuestLoginExpired } =
-        useHandleSessionExpired();
+    const {
+        handleSessionExpired,
+        handleGuestLoginExpired,
+        handleNotFoundProfileExpired,
+    } = useHandleSessionExpired();
 
     useEffect(() => {
         bindAxiosInterceptorHandlers({
             handleSessionExpired,
             handleGuestLoginExpired,
+            handleNotFoundProfileExpired,
         });
-    }, [handleSessionExpired, handleGuestLoginExpired]);
+    }, [
+        handleSessionExpired,
+        handleGuestLoginExpired,
+        handleNotFoundProfileExpired,
+    ]);
 };

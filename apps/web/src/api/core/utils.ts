@@ -1,7 +1,7 @@
+import { env } from '@/configs/env';
+import type { ClientPlatformType } from '@/models';
 import type { AxiosRequestConfig } from 'axios';
 import { UAParser } from 'ua-parser-js';
-import type { ClientPlatformType } from '@/models';
-import { env } from '@/configs/env';
 
 export const DEFAULT_API_RETRY_BACKOFF_LIMIT = 3 * 1000;
 export const DEFAULT_API_RETRY_LIMIT = 4;
@@ -65,6 +65,13 @@ export const isIssueOauth2Request = (
     method: AxiosRequestConfig['method'],
 ) => {
     return url === '/oauth2' && method?.toUpperCase() === 'POST';
+};
+
+export const isGetProfileRequest = (
+    url: AxiosRequestConfig['url'],
+    method: AxiosRequestConfig['method'],
+) => {
+    return url === '/profile' && method?.toUpperCase() === 'GET';
 };
 
 export const isDormantAccountRequest = (

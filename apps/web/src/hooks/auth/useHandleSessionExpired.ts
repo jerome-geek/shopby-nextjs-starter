@@ -83,5 +83,37 @@ export const useHandleSessionExpired = () => {
         guestTokenCookie.clear();
     }, [openAsyncDialog, router, queryClient]);
 
-    return { handleSessionExpired, handleGuestLoginExpired };
+    const handleNotFoundProfileExpired = useCallback(async () => {
+        // 1. 진행 중이던 모든 fetch 중단
+        controller.abort('refresh-token-expiration');
+
+        // 2. 인증 쿠키 정리
+        memberCookie.clearAll();
+
+        // 3. 세션 만료 알림 대화상자 노출
+        await openAsyncDialog({
+            message: '로그인 세션이 만료되었습니다.',
+            description: '다시 로그인해주세요.',
+            onConfirmReturnValue: true,
+            onCloseReturnValue: false,
+        });
+
+        // 4. 현재 페이지 정보를 담아 로그인 페이지로 이동
+        const searchParams = new URLSearchParams(window.location.search);
+        const returnUrl =
+            searchParams.get('returnUrl') ||
+            `${window.location.pathname}${window.location.search}`;
+
+        const loginUrl = `${PATHS.AUTH.LOGIN}?returnUrl=${encodeURIComponent(
+            returnUrl,
+        )}`;
+
+        window.location.replace(loginUrl);
+    }, [openAsyncDialog]);
+
+    return {
+        handleSessionExpired,
+        handleGuestLoginExpired,
+        handleNotFoundProfileExpired,
+    };
 };

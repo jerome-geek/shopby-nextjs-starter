@@ -1,7 +1,11 @@
 import { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 import { shopbyRequest } from '@/api/core/request';
-import { isGuestRequest, isUpdateOauth2Request } from '@/api/core/utils';
+import {
+    isGetProfileRequest,
+    isGuestRequest,
+    isUpdateOauth2Request,
+} from '@/api/core/utils';
 import type { UpdateAccessTokenResponse } from '@/models/auth/oauth2';
 import { accessTokenCookie } from '@/utils/cookie';
 
@@ -128,6 +132,26 @@ export const handle400Error = async (
     const response = error.response?.data as ShopByErrorResponse;
 
     if (GUEST_LOGIN_EXPIRED_CODE.includes(response.code)) {
+        await onSessionExpired();
+        return new Promise(() => {});
+    }
+
+    return Promise.reject(error);
+};
+
+/**
+ * 404 에러 통합 핸들러
+ * @param error AxiosError 객체
+ * @param instance 에러가 발생한 Axios 인스턴스 (재시도용)
+ * @param onSessionExpired 세션 만료 시 실행할 콜백 (UI 처리 등)
+ */
+export const handle404Error = async (
+    error: AxiosError,
+    onSessionExpired: () => Promise<void>,
+) => {
+    const { url, method } = error.config ?? {};
+
+    if (isGetProfileRequest(url, method)) {
         await onSessionExpired();
         return new Promise(() => {});
     }
