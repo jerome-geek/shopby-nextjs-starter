@@ -2,16 +2,16 @@ import { keepPreviousData } from '@tanstack/react-query';
 import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LoadingWrapper from '@/shared/components/common/loading-wrapper';
-import { NoResult } from '@/shared/components/common/no-result';
-import { ObserverTarget } from '@/shared/components/observer-target';
-import Seo from '@/shared/components/common/seo';
 import { EVENT_LIST } from '@/const/event';
 import EventItem from '@/features/event/list/components/event-item';
 import { useInfiniteEventList } from '@/hooks/infiniteQuery/display/event';
 import { useResponsive } from '@/hooks/utils';
 import type { GetEventsV2Params } from '@/models/display';
 import * as styles from '@/pages/events/index.css';
+import LoadingWrapper from '@/shared/components/common/loading-wrapper';
+import { NoResult } from '@/shared/components/common/no-result';
+import Seo from '@/shared/components/common/seo';
+import { ObserverTarget } from '@/shared/components/observer-target';
 
 const Events = () => {
     const { t } = useTranslation();
@@ -51,11 +51,6 @@ const Events = () => {
         [infiniteEventListData],
     );
 
-    const totalCount = useMemo(
-        () => infiniteEventListData?.pages?.[0]?.totalCount ?? 0,
-        [infiniteEventListData],
-    );
-
     return (
         <section className={styles.pageContainer}>
             <Seo
@@ -67,7 +62,6 @@ const Events = () => {
 
             <LoadingWrapper
                 isLoading={isLoading}
-                isLoadedAnimation
                 containerStyle={{
                     minHeight: '50vh',
                 }}
