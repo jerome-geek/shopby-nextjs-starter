@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 
 import * as styles from '@/components/auth/social-login-list/index.css';
-import { Button } from '@/shared/ui/button';
 import { PATHS } from '@/const/paths';
 import useSnsLogin from '@/features/member/hooks/useSnsLogin';
+import { Button } from '@/shared/ui/button';
 
 interface SocialLoginListProps {
     isOnlySocialLoginListVisible?: boolean;
@@ -50,6 +50,7 @@ export default function SocialLoginList({
                 },
             )}
 
+            {/** NOTE: 졸리팟 일반회원가입 버튼 미노출 처리 */}
             {!isOnlySocialLoginListVisible && (
                 <li>
                     <Button

@@ -2,17 +2,17 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetStaticProps } from 'next';
 
 import { banner } from '@/api/display';
-import Seo from '@/shared/components/common/seo';
 import SocialLoginList from '@/components/auth/social-login-list';
-import FetchBoundary from '@/shared/components/common/FetchBoundary';
-import { AuthLayout } from '@/shared/components/layout';
 import { BANNER_ID } from '@/const/banner';
 import { bannerKeys } from '@/hooks/queryKeys';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { NextPageWithLayout } from '@/pages/_app';
 import * as styles from '@/pages/signup/register-method/index.css';
-import { extractBannerContents } from '@/shared/utils/shopby';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import Seo from '@/shared/components/common/seo';
+import { AuthLayout } from '@/shared/components/layout';
 import ImageWrapper from '@/shared/ui/image';
+import { extractBannerContents } from '@/shared/utils/shopby';
 
 const BANNER_LIST = [BANNER_ID.REGISTER_METHOD];
 
@@ -30,7 +30,7 @@ const SignupRegisterMethod: NextPageWithLayout = () => {
                 <SignupBannerList />
             </FetchBoundary>
 
-            <SocialLoginList isOnlySocialLoginListVisible={false} />
+            <SocialLoginList isOnlySocialLoginListVisible />
         </div>
     );
 };
