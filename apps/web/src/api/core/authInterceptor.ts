@@ -122,7 +122,6 @@ export const handle401Error = async (
 /**
  * 400 에러 통합 핸들러
  * @param error AxiosError 객체
- * @param instance 에러가 발생한 Axios 인스턴스 (재시도용)
  * @param onSessionExpired 세션 만료 시 실행할 콜백 (UI 처리 등)
  */
 export const handle400Error = async (
@@ -142,7 +141,6 @@ export const handle400Error = async (
 /**
  * 404 에러 통합 핸들러
  * @param error AxiosError 객체
- * @param instance 에러가 발생한 Axios 인스턴스 (재시도용)
  * @param onSessionExpired 세션 만료 시 실행할 콜백 (UI 처리 등)
  */
 export const handle404Error = async (
