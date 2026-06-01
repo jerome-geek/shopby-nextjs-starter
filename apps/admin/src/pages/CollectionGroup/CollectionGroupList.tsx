@@ -345,14 +345,13 @@ const CollectionGroupList = () => {
                                                         <span
                                                             title={
                                                                 item.collection
-                                                                    .title
+                                                                    ?.title ??
+                                                                ''
                                                             }
                                                             className='truncate text-sm font-medium text-[#364153]'
                                                         >
-                                                            {
-                                                                item.collection
-                                                                    .title
-                                                            }
+                                                            {item.collection
+                                                                ?.title ?? ''}
                                                         </span>
                                                     </td>
 

@@ -46,7 +46,7 @@ export interface CollectionExposureGroup {
         memberNo: number;
         memberName: string;
         recipeCount: number;
-    };
+    } | null;
 }
 
 export type CollectionExposureGroupResponse =
