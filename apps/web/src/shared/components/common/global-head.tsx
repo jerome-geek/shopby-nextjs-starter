@@ -9,8 +9,6 @@ const GlobalHead = () => {
     const defaultSeo = generateDefaultSeo({
         titleTemplate: '%s | JollyPot',
         defaultTitle: 'JollyPot',
-        noindex: true,
-        nofollow: true,
     });
 
     return (
