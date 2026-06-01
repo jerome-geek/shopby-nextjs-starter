@@ -50,9 +50,12 @@ export const useHandleSessionExpired = () => {
 
         // 5. 현재 페이지 정보를 담아 로그인 페이지로 이동
         const searchParams = new URLSearchParams(window.location.search);
+        const isLoginPage = window.location.pathname === PATHS.AUTH.LOGIN;
         const returnUrl =
             searchParams.get('returnUrl') ||
-            `${window.location.pathname}${window.location.search}`;
+            (isLoginPage
+                ? '/'
+                : `${window.location.pathname}${window.location.search}`);
 
         const loginUrl = `${PATHS.AUTH.LOGIN}?returnUrl=${encodeURIComponent(
             returnUrl,
@@ -90,7 +93,18 @@ export const useHandleSessionExpired = () => {
         // 2. 인증 쿠키 정리
         memberCookie.clearAll();
 
-        // 3. 세션 만료 알림 대화상자 노출
+        // 3. 앱(MyApp) 환경일 경우 전용 핸들러 호출
+        if (isMyApp) {
+            handleSendRefreshTokenExpired();
+            handleSendLoginView({
+                option: {
+                    returnUrl: `${window.location.pathname}${window.location.search}`,
+                },
+            });
+            return;
+        }
+
+        // 4. 세션 만료 알림 대화상자 노출
         await openAsyncDialog({
             message: '로그인 세션이 만료되었습니다.',
             description: '다시 로그인해주세요.',
@@ -98,18 +112,26 @@ export const useHandleSessionExpired = () => {
             onCloseReturnValue: false,
         });
 
-        // 4. 현재 페이지 정보를 담아 로그인 페이지로 이동
+        // 5. 현재 페이지 정보를 담아 로그인 페이지로 이동
         const searchParams = new URLSearchParams(window.location.search);
+        const isLoginPage = window.location.pathname === PATHS.AUTH.LOGIN;
         const returnUrl =
             searchParams.get('returnUrl') ||
-            `${window.location.pathname}${window.location.search}`;
+            (isLoginPage
+                ? '/'
+                : `${window.location.pathname}${window.location.search}`);
 
         const loginUrl = `${PATHS.AUTH.LOGIN}?returnUrl=${encodeURIComponent(
             returnUrl,
         )}`;
 
         window.location.replace(loginUrl);
-    }, [openAsyncDialog]);
+    }, [
+        openAsyncDialog,
+        handleSendRefreshTokenExpired,
+        handleSendLoginView,
+        isMyApp,
+    ]);
 
     return {
         handleSessionExpired,
