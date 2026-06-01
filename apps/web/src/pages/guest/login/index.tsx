@@ -15,7 +15,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import {
     guestLoginFormSchema,
     GuestLoginFormSchemaType,
-} from '@/schema/login.schema';
+} from '@/features/member/schema/login';
 import { ErrorMessage } from '@/shared/components/form';
 import * as styles from '@/styles/pages/login.css';
 import { guestTokenCookie } from '@/utils/cookie';

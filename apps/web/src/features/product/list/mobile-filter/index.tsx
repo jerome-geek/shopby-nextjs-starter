@@ -14,7 +14,7 @@ import {
 } from '@/features/product/list/overlay/filter';
 import { SortBottomSheet } from '@/shared/overlay/sort/bottom-sheet';
 import * as styles from '@/features/product/list/mobile-filter/index.css';
-import { PRICE_FILTER_OPTIONS, SORT_OPTIONS } from '@/const/product';
+import { PRICE_FILTER_OPTIONS, SORT_OPTIONS } from '@/entities/product/constants';
 import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductFilter } from '@/hooks/useProductFilter';
 import { vars } from '@/styles/theme.css';

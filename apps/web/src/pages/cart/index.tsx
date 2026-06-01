@@ -23,7 +23,7 @@ import { NoResult } from '@/shared/components/common/no-result';
 import Seo from '@/shared/components/common/seo';
 import { CSRLayout } from '@/shared/components/layout';
 import { InputCheckbox, InputLabel } from '@/shared/ui/input';
-import { useCartStore } from '@/store/useCartStore';
+import { useGuestCartStore } from '@/features/order/cart/store/useGuestCartStore';
 
 const CartPage = () => {
     const { t } = useTranslation();
@@ -58,8 +58,8 @@ const CartContent = () => {
     const { openDialog, openAsyncDialog } = useDialog();
 
     const { addToast } = useToast();
-    const updateGuestCartItem = useCartStore((state) => state.updateItem);
-    const removeGuestCartItem = useCartStore((state) => state.removeItem);
+    const updateGuestCartItem = useGuestCartStore((state) => state.updateItem);
+    const removeGuestCartItem = useGuestCartStore((state) => state.removeItem);
 
     const { cartInfo, isLoading } = useCart();
 

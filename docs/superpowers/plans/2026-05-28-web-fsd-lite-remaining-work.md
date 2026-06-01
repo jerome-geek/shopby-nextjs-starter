@@ -153,18 +153,62 @@ Goal:
 Still not aligned with FSD-lite:
 
 - [ ] `apps/web/src/hooks`
+  - keep root `hooks/query`, `hooks/suspenseQuery`, and `hooks/infiniteQuery`
+  - keep simple non-business hooks in their current locations
+  - only move hooks when ownership is clearly feature-specific and the value outweighs the churn
 - [ ] `apps/web/src/models`
   - keep root `models` as the headless domain type layer
 - [ ] `apps/web/src/api`
   - keep root `api` as the headless integration layer
 - [ ] `apps/web/src/utils`
-- [ ] `apps/web/src/context`
-- [ ] `apps/web/src/store`
+- [~] `apps/web/src/utils`
+  - moved:
+    - `product.ts` -> `entities/product/utils/product`
+    - `order/payment.ts` -> `features/order/utils/payment`
+    - `banner.ts` -> `entities/banner/utils`
+  - still remaining:
+    - cross-domain shared utilities and headless helpers that do not have clear slice ownership
+- [x] `apps/web/src/context`
+  - `mypageMenu` moved into `features/mypage/menu`
+  - `certificationCheck` moved into `features/member/certification-check`
+  - root `context` bucket cleared
+- [x] `apps/web/src/store`
+  - `useRecipeManualStore` -> `features/recipe/store/useRecipeManualStore`
+  - `useDropdownStore` -> `shared/ui/vertical-more-menu/model/useDropdownStore`
+  - `useCartStore` -> `features/order/cart/store/useGuestCartStore`
+  - `useProductOptionStore` -> `features/product/option/store/useProductOptionStore`
+  - `store/utils.ts` removed with the root store cleanup
+  - root `store` bucket cleared
 - [~] `apps/web/src/schema`
-  - `order`, `payment`, `shippingAddress`, `laterShippingInput` moved into `entities/order/schema`
-  - `claim` moved into `entities/claim/schema`
-- [ ] `apps/web/src/const`
-- [ ] `apps/web/src/helpers`
+  - moved:
+    - `order`, `payment`, `shippingAddress`, `laterShippingInput` -> `entities/order/schema`
+    - `claim` -> `entities/claim/schema`
+    - `product-inquiry` -> `entities/productInquiry/schema/form`
+    - `inquiry` -> `features/mypage/inquiries/schema`
+    - `review` -> `features/mypage/review/form/schema`
+    - `article` -> `features/board/article-write/schema`
+    - `login` -> `features/member/schema/login`
+    - `profile` -> `features/member/schema/profile`
+    - `signup` -> `features/member/schema/signup`
+    - `recipe` -> `features/recipe/schema/form`
+  - still remaining at root:
+    - `common.schema.ts`
+    - `schema/index.ts`
+- [~] `apps/web/src/const`
+  - moved:
+    - `product.ts` -> `entities/product/constants`
+    - `order.ts` -> `entities/order/constants`
+    - `search.ts` -> `features/search/constants`
+    - `recipe.ts` -> `features/recipe/constants`
+    - `banner.ts` -> `entities/banner/constants`
+  - still remaining:
+    - cross-domain global constants
+- [~] `apps/web/src/helpers`
+  - moved:
+    - `product.ts` -> `entities/product/utils/selection`
+    - `helpers/__tests__/product.test.ts` -> `entities/product/utils/__tests__/selection.test.ts`
+  - still remaining:
+    - helpers without clear slice ownership
 
 Goal:
 
@@ -179,11 +223,14 @@ Goal:
 
 - Keep `api` and `models` at the root by project convention
 - Continue schema migration by ownership where it helps feature boundaries
-- Start reducing root-level `hooks` by moving domain-owned query hooks into `entities/*` or `features/*`
+- Do not force-migrate root query hooks
+- Use root `hooks` as the default home for API/query wrapper hooks
+- Only refactor hooks when the hook contains real feature-owned orchestration
 
 ### Phase B
 
 - Break down `utils`, `const`, `helpers`, `context`, and `store`
+- root `store` no longer needs to be treated as a global bucket
 - Revisit whether `components/modal/index.ts` compatibility barrel should be removed
 
 ## Validation Notes
@@ -195,8 +242,17 @@ Goal:
 - `components/search`, `components/recipe`, and `components/section` are no longer present.
 - Remaining work should focus on global buckets.
 - root `api` and `models` are intentionally retained as headless integration and type layers.
+- root query hooks are intentionally retained by project convention.
+- `mypageMenu` context was already moved into `features/mypage/menu`.
+- `certificationCheck` context was already moved into `features/member/certification-check`.
+- `useRecipeManualStore` and `useDropdownStore` were already moved out of root `store`.
+- `useCartStore` and `useProductOptionStore` were already moved out of root `store`.
 - order-related root schemas were already migrated into `entities/order/schema`.
 - `claim.schema.ts` was already migrated into `entities/claim/schema`.
+- `product-inquiry`, `review`, `inquiry`, `article`, `login`, `profile`, `signup`, and `recipe` schemas were already migrated out of the root schema folder.
+- `product`, `order`, `search`, `recipe`, and `banner` domain constants were already moved out of root `const`.
+- `product` and `banner` domain utilities were already moved out of root `utils`.
+- product option selection helpers were already moved out of root `helpers`.
 
 ## Verification Standard
 

@@ -2,14 +2,14 @@ import { flatMap, pipe, toArray } from '@fxts/core';
 import { useMemo } from 'react';
 
 import { useProductSearchParams } from '@/entities/search/hooks/useProductSearchParams';
-import { COLLECTION_TAKE_PER_TAB, INTEGRATED_SEARCH_PAGE } from '@/const/search';
+import { COLLECTION_TAKE_PER_TAB, INTEGRATED_SEARCH_PAGE } from '@/features/search/constants';
 import {
     useInfinitePublicCollectionSearch,
     usePublicCollectionSearch,
 } from '@/hooks/query/shop/collection';
 import { useResponsive } from '@/hooks/utils';
 import { OrderDirectionType } from '@/models';
-import { CollectionSortBy } from '@/const/recipe';
+import { CollectionSortBy } from '@/features/recipe/constants';
 
 interface UseCollectionSearchProps {
     isIntegrated?: boolean;

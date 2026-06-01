@@ -7,7 +7,7 @@ import { useKCPCertificationResult } from '@/hooks/query/auth';
 import { useProfile } from '@/hooks/query/member/profile';
 import type { NcpOpenIdProviderType } from '@/models';
 import { SignupFormSchemaType } from '@/schema';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { CertificationCheckContext } from '@/features/member/certification-check';
 
 const useSignupInitialize = ({
     reset,

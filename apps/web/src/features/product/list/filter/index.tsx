@@ -2,7 +2,7 @@ import { RadioGroup } from 'radix-ui';
 import { useId, useMemo } from 'react';
 
 import * as styles from '@/features/product/list/filter/index.css';
-import { PRICE_FILTER_OPTIONS } from '@/const/product';
+import { PRICE_FILTER_OPTIONS } from '@/entities/product/constants';
 import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductSearchSummary } from '@/hooks/query/product/product';
 import { useProductFilter } from '@/hooks/useProductFilter';

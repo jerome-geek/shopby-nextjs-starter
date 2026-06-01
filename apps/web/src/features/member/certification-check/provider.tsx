@@ -4,15 +4,17 @@ import { overlay } from 'overlay-kit';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ConfirmDialog from '@/shared/ui/dialog/confirm';
 import { PATHS } from '@/const/paths';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import {
+    CertificationCheckContext,
+} from '@/features/member/certification-check';
+import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useAuth } from '@/hooks/useAuth';
-import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import { useKcpCertification, useLocale } from '@/hooks/utils';
 import useUpdateProfile from '@/hooks/utils/useUpdateProfile';
+import ConfirmDialog from '@/shared/ui/dialog/confirm';
 
 function CertificationCheckProvider({
     children,
@@ -79,7 +81,6 @@ function CertificationCheckProvider({
         authenticationType,
     ]);
 
-    // 본인인증 페이지나 로그인 등 예외 페이지는 제외
     const isCertificationNeeded = useMemo(() => {
         const CERTIFICATION_FREE_ROUTES = [
             PATHS.AUTH.LOGIN,

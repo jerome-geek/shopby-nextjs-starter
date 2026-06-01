@@ -25,7 +25,7 @@ import { ProductListCategory } from '@/features/product/list/category';
 import { MobileFilter } from '@/features/product/list/mobile-filter';
 import { ProductListSideBar } from '@/features/product/list/side-bar';
 import { Paging } from '@/shared/ui';
-import { SORT_OPTIONS } from '@/const/product';
+import { SORT_OPTIONS } from '@/entities/product/constants';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useSb } from '@/hooks/libs/shopby';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';

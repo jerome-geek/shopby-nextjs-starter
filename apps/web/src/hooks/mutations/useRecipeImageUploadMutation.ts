@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import common from '@/api/shop/common';
 import recipe from '@/api/shop/recipe';
 import useApiError from '@/hooks/useApiError';
-import { useRecipeManualStore } from '@/store/useRecipeManualStore';
+import { useRecipeManualStore } from '@/features/recipe/store/useRecipeManualStore';
 
 /**
  * blob URL(string)을 File 객체로 변환합니다.

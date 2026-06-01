@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-import { PRODUCT_IMAGE_CSS_SIZE } from '@/const/product';
+import { PRODUCT_IMAGE_CSS_SIZE } from '@/entities/product/constants';
 import { media } from '@/styles/media';
 import { vars } from '@/styles/theme.css';
 import { textStyles, textStyleTokens } from '@/styles/typography.css';

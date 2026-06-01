@@ -1,11 +1,11 @@
 import { SingleValue } from 'react-select';
 
-import { toSelectedOption } from '@/helpers/product';
+import { toSelectedOption } from '@/entities/product/utils/selection';
 import type {
     FlatOption,
     MultiLevelOption,
 } from '@/models/product/productOption';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
 
 interface UseProductOptionChangeProps {
     productNo?: number;

@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import { MenuDrawer } from '@/shared/components/layout/header/menu/drawer';
 import * as styles from '@/shared/components/layout/header/menu/index.css';
-import { BANNER_ID } from '@/const/banner';
+import { BANNER_ID } from '@/entities/banner/constants';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
 import { CategoryDrawer } from '@/features/drawer/category';

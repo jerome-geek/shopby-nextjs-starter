@@ -35,7 +35,7 @@ import { OVERLAY_ID } from '@/const/overlay';
 import { ONE_HOUR_IN_SECONDS } from '@/const/time';
 import { useProductInfo, useProductPrice } from '@/entities/product/hooks';
 import { useCustomDialog } from '@/features/dialog';
-import { toSelectedOption } from '@/helpers/product';
+import { toSelectedOption } from '@/entities/product/utils/selection';
 import { useSb } from '@/hooks/libs/shopby';
 import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
@@ -51,7 +51,7 @@ import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import Seo from '@/shared/components/common/seo';
 import { Button } from '@/shared/ui/button';
 import { BookmarkIcon } from '@/shared/ui/icons';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
 import { vars } from '@/styles/theme.css';
 import { CURRENCY, RATE } from '@/utils/currency';
 

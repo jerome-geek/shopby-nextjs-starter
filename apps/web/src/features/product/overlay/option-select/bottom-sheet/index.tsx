@@ -18,7 +18,7 @@ import { useProductOption, useProductOptionChange } from '@/hooks/product';
 import { useProductOrderAction } from '@/hooks/product/useProductOrderAction';
 import { useResponsive } from '@/hooks/utils';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
 export interface OptionSelectBottomSheetProps extends DefaultModalLayoutProps {

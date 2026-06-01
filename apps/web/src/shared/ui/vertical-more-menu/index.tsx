@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/shared/ui/vertical-more-menu/index.css';
 import { useResponsive } from '@/hooks/utils';
-import { useDropdownStore } from '@/store/useDropdownStore';
+import { useDropdownStore } from '@/shared/ui/vertical-more-menu/model/useDropdownStore';
 
 interface VerticalMoreMenuProps {
     /** 드롭다운 식별을 위한 유니크 ID */

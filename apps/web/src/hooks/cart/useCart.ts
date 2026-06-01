@@ -6,7 +6,7 @@ import useGuestCartList from '@/hooks/query/order/guestOrder/useGuestCartList';
 import { useAuth } from '@/hooks/useAuth';
 import { useStore } from '@/hooks/utils/useStore';
 import type { GetCartData } from '@/models/order/guestOrder';
-import { useCartStore } from '@/store/useCartStore';
+import { useGuestCartStore } from '@/features/order/cart/store/useGuestCartStore';
 
 /**
  * 장바구니 관련 훅
@@ -19,7 +19,7 @@ const useCart = () => {
 
     // ── 비회원: Zustand 스토어 ──────────────────────────────
     const rawGuestCartItems =
-        useStore(useCartStore, (state) => state.cartItems) ?? [];
+        useStore(useGuestCartStore, (state) => state.cartItems) ?? [];
 
     const guestCartItems = useMemo(
         () => rawGuestCartItems,

@@ -2,11 +2,11 @@ import { useContext, useEffect, useState } from 'react';
 import { UseFormReset } from 'react-hook-form';
 
 import { profile } from '@/api/member';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { CertificationCheckContext } from '@/features/member/certification-check';
 import { useMall } from '@/hooks/query/admin/mall';
 import { useDialog, useGlobal, useKcpCertification } from '@/hooks/utils';
 import type { GetProfileResponse } from '@/models/member/profile';
-import { UpdateProfileSchemaType } from '@/schema/profile.schema';
+import { UpdateProfileSchemaType } from '@/features/member/schema/profile';
 
 const useEditInitialize = ({
     reset,

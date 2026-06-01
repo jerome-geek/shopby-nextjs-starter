@@ -25,7 +25,10 @@ import { bannerListOptions } from '@/entities/banner/queries';
 import { useMyApp } from '@/hooks/myapp';
 import useApiError from '@/hooks/useApiError';
 import { NextPageWithLayout } from '@/pages/_app';
-import { loginFormSchema, LoginFormSchemaType } from '@/schema/login.schema';
+import {
+    loginFormSchema,
+    LoginFormSchemaType,
+} from '@/features/member/schema/login';
 import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
 import { ErrorMessage } from '@/shared/components/form';
 import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';

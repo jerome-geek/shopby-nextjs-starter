@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/features/mypage/previous-orders/item/index.css';
-import { orderMap } from '@/const/order';
+import { orderMap } from '@/entities/order/constants';
 import { useResponsive } from '@/hooks/utils';
 import { CURRENCY } from '@/utils/currency';
 

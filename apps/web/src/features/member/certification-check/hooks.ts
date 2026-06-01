@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { CertificationCheckContext } from '@/features/member/certification-check';
 
 export function useCertificationCheck() {
     const context = useContext(CertificationCheckContext);

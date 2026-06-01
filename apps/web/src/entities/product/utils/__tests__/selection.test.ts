@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { toSelectedOption } from '../product';
+import { describe, expect, it } from 'vitest';
+
 import type { FlatOption } from '@/models/product/productOption';
+import { toSelectedOption } from '@/entities/product/utils/selection';
 
 describe('product helpers', () => {
     describe('toSelectedOption', () => {

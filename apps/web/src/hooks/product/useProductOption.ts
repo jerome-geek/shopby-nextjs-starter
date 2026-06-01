@@ -14,7 +14,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { sortRequiredFirst } from '@/helpers/product';
+import { sortRequiredFirst } from '@/entities/product/utils/selection';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useProductOptionList } from '@/hooks/query/product/product';
 import { productKeys } from '@/hooks/queryKeys';
@@ -24,7 +24,7 @@ import type {
     MultiLevelOption,
     ProductOptionResponse,
 } from '@/models/product/productOption';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
 import { addPriceString } from '@/utils/currency';
 
 interface UseOptionProps {

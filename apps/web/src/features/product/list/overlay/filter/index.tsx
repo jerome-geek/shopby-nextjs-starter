@@ -5,7 +5,7 @@ import { useId, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/features/product/list/overlay/filter/index.css';
-import { PRICE_FILTER_OPTIONS } from '@/const/product';
+import { PRICE_FILTER_OPTIONS } from '@/entities/product/constants';
 import { useBrandSearchList } from '@/hooks/query/product/brand';
 import { useProductSearchSummary } from '@/hooks/query/product/product';
 import { useProductFilter } from '@/hooks/useProductFilter';

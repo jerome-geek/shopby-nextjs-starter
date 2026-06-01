@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import type { SelectedOption } from '@/store/useProductOptionStore';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import type { SelectedOption } from '@/features/product/option/store/useProductOptionStore';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
 
 describe('useProductOptionStore', () => {
     beforeEach(() => {

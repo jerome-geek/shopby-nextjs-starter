@@ -1,4 +1,3 @@
-import { MypageMenuProvider, useMypageMenu } from '@/context/mypageMenu';
 import { clsx } from 'clsx';
 import { useRouter } from 'next/router';
 import { memo, type ReactNode, useEffect } from 'react';
@@ -6,6 +5,7 @@ import { memo, type ReactNode, useEffect } from 'react';
 import LoadingWrapper from '@/shared/components/common/loading-wrapper';
 import { CSRLayout } from '@/shared/components/layout/csr';
 import * as styles from '@/shared/components/layout/mypage/index.css';
+import { MypageMenuProvider, useMypageMenu } from '@/features/mypage/menu';
 import { MypageSideNavigation } from '@/features/mypage/side-navigation';
 import { PATHS } from '@/const/paths';
 import { profileQueryOptions } from '@/entities/member/profile/queries';

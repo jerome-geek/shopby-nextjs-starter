@@ -21,7 +21,7 @@ import { useDialog } from '@/hooks/utils';
 import type { PaymentReserveSchemaType } from '@/entities/order/schema/payment';
 import Seo from '@/shared/components/common/seo';
 import { guestTokenCookie } from '@/utils/cookie';
-import payment from '@/utils/order/payment';
+import payment from '@/features/order/utils/payment';
 
 interface OrderSheetContentProps {
     orderSheetNo: string;

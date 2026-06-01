@@ -3,7 +3,7 @@ import { FreeMode } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import * as styles from '@/features/drawer/category/quick-menu-swiper.css';
-import { BANNER_ID } from '@/const/banner';
+import { BANNER_ID } from '@/entities/banner/constants';
 import useBannerList from '@/hooks/suspenseQuery/display/banner/useBannerList';
 
 import 'swiper/css';

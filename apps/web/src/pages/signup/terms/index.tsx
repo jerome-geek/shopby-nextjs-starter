@@ -20,7 +20,7 @@ import TermDialog from '@/shared/ui/dialog/term';
 import { InputCheckbox } from '@/shared/ui/input';
 import { SHOPBY_TERMS_TYPE_MAP } from '@/const/label';
 import { PATHS } from '@/const/paths';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { CertificationCheckContext } from '@/features/member/certification-check';
 import { useTermList } from '@/hooks/query/manage/terms';
 import useSnsLogin from '@/features/member/hooks/useSnsLogin';
 import { useKcpCertification } from '@/hooks/utils';

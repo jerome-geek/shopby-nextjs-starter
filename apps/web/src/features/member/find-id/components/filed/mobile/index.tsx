@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
-import { FindIdType } from '@/schema/profile.schema';
+import { FindIdType } from '@/features/member/schema/profile';
 import { ErrorMessage } from '@/shared/components/form';
 
 export const MobileField = () => {

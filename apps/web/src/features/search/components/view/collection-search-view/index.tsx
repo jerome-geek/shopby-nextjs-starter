@@ -6,12 +6,12 @@ import { CollectionSearchResults } from '@/features/search/components/view/colle
 import { SearchMobileSort } from '@/features/search/components/view/mobile-sort';
 import { SearchTabNav } from '@/features/search/components/view/tab-nav';
 import { Row } from '@/shared/ui/layout/flex';
-import { COLLECTION_SORT_OPTIONS, type CollectionSortBy } from '@/const/recipe';
+import { COLLECTION_SORT_OPTIONS, type CollectionSortBy } from '@/features/recipe/constants';
 import {
     COLLECTION_ORDER_QUERY_KEY,
     COLLECTION_PAGE_QUERY_KEY,
     COLLECTION_SORT_BY_QUERY_KEY,
-} from '@/const/search';
+} from '@/features/search/constants';
 import useInfinitePublicCollectionSearch from '@/hooks/query/shop/collection/useInfinitePublicCollectionSearch';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';

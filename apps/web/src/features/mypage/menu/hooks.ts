@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import MypageMenuContext from '@/context/mypageMenu/context';
+import MypageMenuContext from '@/features/mypage/menu/context';
 
 const useMypageMenu = () => {
     return useContext(MypageMenuContext);

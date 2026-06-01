@@ -3,7 +3,7 @@ import type { GetStaticProps } from 'next';
 
 import { banner } from '@/api/display';
 import SocialLoginList from '@/components/auth/social-login-list';
-import { BANNER_ID } from '@/const/banner';
+import { BANNER_ID } from '@/entities/banner/constants';
 import { bannerKeys } from '@/hooks/queryKeys';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { NextPageWithLayout } from '@/pages/_app';
@@ -30,7 +30,7 @@ const SignupRegisterMethod: NextPageWithLayout = () => {
                 <SignupBannerList />
             </FetchBoundary>
 
-            <SocialLoginList isOnlySocialLoginListVisible />
+            <SocialLoginList isOnlySocialLoginListVisible={false} />
         </div>
     );
 };

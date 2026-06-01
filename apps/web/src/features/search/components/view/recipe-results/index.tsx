@@ -6,7 +6,7 @@ import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/features/search/components/view/recipe-results/index.css';
 import PagingV2 from '@/shared/ui/paging-v2';
-import { RECIPE_PAGE_QUERY_KEY } from '@/const/search';
+import { RECIPE_PAGE_QUERY_KEY } from '@/features/search/constants';
 import { useInfinitePublicRecipeSearch } from '@/hooks/query/shop/recipe';
 import { useResponsive } from '@/hooks/utils';
 import type { GetRecipeDetailResponse } from '@/models/shop/recipe';

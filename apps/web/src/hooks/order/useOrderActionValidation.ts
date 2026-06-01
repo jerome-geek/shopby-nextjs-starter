@@ -1,6 +1,6 @@
 import { flatMap, pipe, some } from '@fxts/core';
 
-import { isRequiredInputOptionMissing } from '@/helpers/product';
+import { isRequiredInputOptionMissing } from '@/entities/product/utils/selection';
 import { useProduct, useProductOption } from '@/hooks/product';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/ui';

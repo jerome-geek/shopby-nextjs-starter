@@ -27,7 +27,7 @@ import * as styles from '@/features/recipe/overlay/recipe-image-upload/content/i
 import { PATHS } from '@/const/paths';
 import useRecipeImageUploadMutation from '@/hooks/mutations/useRecipeImageUploadMutation';
 import { useToast } from '@/hooks/ui';
-import { useRecipeManualStore } from '@/store/useRecipeManualStore';
+import { useRecipeManualStore } from '@/features/recipe/store/useRecipeManualStore';
 import { vars } from '@/styles/theme.css';
 import { convertHeicFiles } from '@/utils/heic';
 

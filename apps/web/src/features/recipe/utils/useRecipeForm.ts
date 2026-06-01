@@ -22,11 +22,11 @@ import {
     recipeCreateSchema,
     RecipeFormInput,
     recipeUpdateSchema,
-} from '@/schema/recipe.schema';
+} from '@/features/recipe/schema/form';
 import {
     ManualTempImage,
     useRecipeManualStore,
-} from '@/store/useRecipeManualStore';
+} from '@/features/recipe/store/useRecipeManualStore';
 
 interface UseRecipeFormProps {
     isModify: boolean;

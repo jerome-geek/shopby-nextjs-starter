@@ -3,133 +3,107 @@
 ## Current Branch
 
 - worktree: `/Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage`
-- branch: `codex/web-search-recipe-section`
-- latest related PR: [#152](https://github.com/GeekStudio-Team/shopby-nextjs-starter/pull/152)
+- branch: `codex/root-schema-cleanup`
+- current base: `origin/dev`
 
-## What Was Just Finished
+## What Is Already Stable
 
-- `components/mypage/*` legacy domain components were migrated into `features/mypage/*`
-- `components/order/*` legacy domain components were migrated into `features/order/components/*`
-- `components/product-option/*` legacy option components were migrated into `features/product/option/*`
-- `components/product/*` legacy components were migrated into `features/product/components/*`
-- `components/product-list/*` legacy components were migrated into `features/product/list/*`
-- `components/search/*` legacy components were migrated into `features/search/components/view/*`
-- `components/recipe/*` legacy components were migrated into `features/recipe/components/view/*`
-- `components/section/*` legacy components were migrated into `features/section/components/*`
-- overlay refactor was completed and legacy `bottom-sheet` / `layer-contents` implementations were cleared
-- `schema/order.schema.ts`, `payment.schema.ts`, `shippingAddress.schema.ts`, `laterShippingInput.schema.ts`
-  - moved into `entities/order/schema/*`
-- `schema/claim.schema.ts`
-  - moved into `entities/claim/schema/claim.ts`
-- progress checklist was refreshed:
-  - [2026-05-28-web-fsd-lite-remaining-work.md](/Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage/docs/superpowers/plans/2026-05-28-web-fsd-lite-remaining-work.md)
+- shared layer recovery is complete
+- legacy domain component roots were already migrated:
+  - `components/mypage`
+  - `components/order`
+  - `components/product`
+  - `components/product-list`
+  - `components/product-option`
+  - `components/search`
+  - `components/recipe`
+  - `components/section`
+- overlay duplication cleanup was completed
+
+## Project Rules That Must Be Preserved
+
+- keep root `api/*`
+  - this project treats `api` as the headless integration layer
+- keep root `models/*`
+  - this project treats `models` as the headless type layer
+- keep root query hooks
+  - `hooks/query/*`
+  - `hooks/suspenseQuery/*`
+  - `hooks/infiniteQuery/*`
+- keep simple non-business hooks in their current homes
+  - do not migrate hooks just because they are hooks
+  - only move a hook when it contains real feature-owned orchestration
+
+## Schema Status
+
+Already moved out of root `schema`:
+
+- `claim.schema.ts` -> `entities/claim/schema/claim.ts`
+- `order.schema.ts` -> `entities/order/schema/order.ts`
+- `payment.schema.ts` -> `entities/order/schema/payment.ts`
+- `shippingAddress.schema.ts` -> `entities/order/schema/shippingAddress.ts`
+- `laterShippingInput.schema.ts` -> `entities/order/schema/laterShippingInput.ts`
+- `product-inquiry.schema.ts` -> `entities/productInquiry/schema/form.ts`
+- `inquiry.schema.ts` -> `features/mypage/inquiries/schema.ts`
+- `review.schema.ts` -> `features/mypage/review/form/schema.ts`
+- `article.schema.ts` -> `features/board/article-write/schema.ts`
+
+Still remaining at root:
+
+- `schema/common.schema.ts`
+- `schema/index.ts`
 
 ## Verified State
 
-Production build was rechecked in this worktree:
+Production build baseline:
 
 ```bash
 cd /Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage/apps/web
 ./node_modules/.bin/next build --webpack
 ```
 
-Result:
+Known non-blocking logs:
 
-- final exit code: `0`
-- known non-blocking logs:
-  - `SHOP_LIFE_TOP` 404
-  - `SHOP_DISCOVERY_TOP` 404
-  - `SHOP_KIDS_TOP` 404
-- those event 404 logs are existing remote data issues, not this refactor
+- `SHOP_LIFE_TOP` 404
+- `SHOP_DISCOVERY_TOP` 404
+- `SHOP_KIDS_TOP` 404
 
-## Next Target
+These are existing remote data issues, not refactor regressions.
 
-Next target is continuing the global bucket cleanup.
+## Next Recommended Targets
 
-Why this is next:
+1. continue `utils`, `helpers`, and `const`
+   - product/order/search/recipe/banner 1st cut is done
+   - next target is remaining domain-owned files with clear ownership
+2. keep trimming root `schema`
+   - only `common.schema.ts` and `schema/index.ts` should remain unless new shared cases appear
+3. leave headless layers alone
+   - do not move `api/*`, `models/*`, or root query hook trees
 
-- the remaining domain buckets `search`, `recipe`, and `section` are already cleared
-- overlay implementations are now feature-owned or shared-owned
-- root `api` and `models` stay in place as headless integration and type layers
-- the new highest-payoff work is reducing root `hooks`, plus the remaining `schema/utils/store/context/...` buckets
+## Explicitly Not The Next Target
 
-## Cleared Domain Status
+- do not run another large hook migration
+- do not move `api/*`
+- do not move `models/*`
 
-The following legacy roots are complete and removed:
+## Recently Finished In This Branch
 
-- `apps/web/src/components/mypage`
-- `apps/web/src/components/order`
-- `apps/web/src/components/product`
-- `apps/web/src/components/product-list`
-- `apps/web/src/components/product-option`
-- `apps/web/src/components/search`
-- `apps/web/src/components/recipe`
-- `apps/web/src/components/section`
+- `login`, `profile`, `signup`, `recipe` schemas moved out of root `schema`
+- `mypageMenu` context moved into `features/mypage/menu`
+- `certificationCheck` context moved into `features/member/certification-check`
+- `useRecipeManualStore` moved into `features/recipe/store`
+- `useDropdownStore` moved into `shared/ui/vertical-more-menu/model`
+- `useGuestCartStore` moved into `features/order/cart/store`
+- `useProductOptionStore` moved into `features/product/option/store`
+- `product.ts` helper moved into `entities/product/utils/selection`
+- `product.ts` constants moved into `entities/product/constants`
+- `order.ts` constants moved into `entities/order/constants`
+- `search.ts` constants moved into `features/search/constants`
+- `recipe.ts` constants moved into `features/recipe/constants`
+- `banner.ts` constants and utilities moved into `entities/banner/*`
 
-The following overlay flows are no longer sourced from legacy `components/modal`, `components/bottom-sheet`, or `components/layer-contents` implementations:
-
-- `share`
-- `coupon-register`
-- `product-coupon`
-- `recipe-save`
-- `recipe-create-select`
-- `recipe-url-input`
-- `recipe-image-upload`
-- `product-select`
-- `period-range-picker`
-- `find-id-result`
-- `withdrawal`
-- `address-search`
-- `shipping-address-change`
-- `shipping-address-list`
-- `product-inquiry-write`
-- `review-report`
-- `photo-review-list`
-- `collection-form`
-- `recipe-recommendation`
-- `report`
-- `password-check`
-- `claim-detail`
-- `filter`
-- `sort`
-- `option-select`
-- `image-detail`
-
-## Next Commands
-
-Useful first checks for the next turn:
-
-```bash
-cd /Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage
-find apps/web/src/hooks -maxdepth 3 -type f | sort | head -n 200
-find apps/web/src/models -maxdepth 3 -type f | sort
-find apps/web/src/api -maxdepth 3 -type f | sort
-find apps/web/src/schema -maxdepth 2 -type f | sort
-rg -n "@/schema|@/hooks|@/context|@/store|@/utils" apps/web/src | head -n 200
-```
-
-Validation after each batch:
-
-```bash
-cd /Users/jerome/Developer/geek/shopby-nextjs-starter/.worktrees/codex-web-domain-mypage/apps/web
-./node_modules/.bin/next build --webpack
-```
-
-## Low-Token Handoff Note
-
-If the next session starts with low token budget, continue with this exact scope:
-
-- stay on branch `codex/web-search-recipe-section`
-- keep root `api` and `models` as-is
-- continue with schemas, hooks, stores, contexts, and utilities
-- stop after:
-  - moving the files
-  - fixing imports
-  - running `next build --webpack`
-  - summarizing results
-
-Suggested one-line resume prompt:
+## Resume Prompt
 
 ```text
-Continue from docs/superpowers/plans/2026-05-30-order-next-turn-handoff.md and keep migrating schemas/hooks/stores/utilities while preserving root api and models.
+Continue from docs/superpowers/plans/2026-05-30-order-next-turn-handoff.md and keep api/models/root query hooks in place while cleaning up schema, context, store, utils, helpers, and const by ownership.
 ```

@@ -15,7 +15,10 @@ import type {
 import { useAuthenticationMutation } from '@/hooks/mutations';
 import useApiError from '@/hooks/useApiError';
 import { useDialog } from '@/hooks/utils';
-import { findPasswordSchema, FindPasswordType } from '@/schema/profile.schema';
+import {
+    findPasswordSchema,
+    FindPasswordType,
+} from '@/features/member/schema/profile';
 import { ErrorMessage } from '@/shared/components/form';
 
 interface AccountStepProps {

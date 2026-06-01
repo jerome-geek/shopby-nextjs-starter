@@ -31,7 +31,7 @@ import MemberConfig from '@/components/signup/member-config';
 import { Button } from '@/shared/ui/button';
 import { InputField } from '@/shared/ui/input';
 import { PATHS } from '@/const/paths';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { CertificationCheckContext } from '@/features/member/certification-check';
 import { useEditInitialize } from '@/hooks/edit';
 import useProfileMutation from '@/hooks/mutations/useProfileMutation';
 import { useMyApp } from '@/hooks/myapp';
@@ -47,7 +47,7 @@ import * as memberConfigStyles from '@/pages/signup/register/index.css';
 import {
     createUpdateProfileSchema,
     UpdateProfileSchemaType,
-} from '@/schema/profile.schema';
+} from '@/features/member/schema/profile';
 import { accessTokenCookie } from '@/utils/cookie';
 
 export const EditForm = ({

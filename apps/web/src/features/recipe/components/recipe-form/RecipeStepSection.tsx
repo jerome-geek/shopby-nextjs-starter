@@ -9,7 +9,7 @@ import { RecipePreviewImage } from '@/features/recipe/components/view';
 import { InputLabel } from '@/shared/ui/input';
 import * as styles from '@/pages/recipes/write/index.css';
 import { TextArea } from '@/shared/components/form';
-import type { ManualTempImage } from '@/store/useRecipeManualStore';
+import type { ManualTempImage } from '@/features/recipe/store/useRecipeManualStore';
 
 interface RecipeStepSectionProps {
     isModifiable: boolean;

@@ -18,7 +18,7 @@ import { useDialog } from '@/hooks/utils';
 import {
     checkCertificateNumberSchema,
     CheckCertificateNumberType,
-} from '@/schema/profile.schema';
+} from '@/features/member/schema/profile';
 import { ErrorMessage } from '@/shared/components/form';
 
 const CERTIFICATION_DURATION = 180;

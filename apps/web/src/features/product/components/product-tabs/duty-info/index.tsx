@@ -3,7 +3,7 @@ import { memo, useMemo } from 'react';
 
 import * as styles from '@/features/product/components/product-tabs/duty-info/index.css';
 import { CustomAccordion } from '@/shared/ui/accordion';
-import { getDutyInfo } from '@/utils/product';
+import { getDutyInfo } from '@/entities/product/utils/product';
 
 const ACCORDION_VALUE = 'duty-info';
 

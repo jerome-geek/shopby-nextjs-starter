@@ -6,7 +6,7 @@ import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import { QuantityController } from '@/shared/ui';
 import { CloseIcon } from '@/shared/ui/icons/Close';
 import { useProduct, useProductOption } from '@/hooks/product';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
 import { CURRENCY } from '@/utils/currency';
 
 interface SelectedProductOptionProps {

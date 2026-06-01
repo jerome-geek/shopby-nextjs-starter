@@ -13,9 +13,9 @@ import {
     RECIPE_PAGE_QUERY_KEY,
     RECIPE_SORT_BY_QUERY_KEY,
     TAB_QUERY_KEY,
-} from '@/const/search';
+} from '@/features/search/constants';
 import type { OrderByType, OrderDirectionType } from '@/models';
-import type { CollectionSortBy, RecipeSortBy } from '@/const/recipe';
+import type { CollectionSortBy, RecipeSortBy } from '@/features/recipe/constants';
 
 export const useProductSearchParams = () => {
     return useQueryStates(

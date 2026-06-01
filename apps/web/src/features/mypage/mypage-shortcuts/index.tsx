@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { flatMap, filter, pipe, toArray } from '@fxts/core';
 
-import { useMypageMenu } from '@/context/mypageMenu';
+import { useMypageMenu } from '@/features/mypage/menu';
 import * as styles from '@/features/mypage/mypage-shortcuts/index.css';
 
 export const MypageShortcuts = () => {

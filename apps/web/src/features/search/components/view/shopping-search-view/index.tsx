@@ -6,7 +6,7 @@ import { ProductListSearchInput } from '@/features/product/list/search-input';
 import { ShoppingSearchResults } from '@/features/search/components/view/shopping-results';
 import { SearchTabNav } from '@/features/search/components/view/tab-nav';
 import { Row } from '@/shared/ui/layout/flex';
-import { SORT_OPTIONS } from '@/const/product';
+import { SORT_OPTIONS } from '@/entities/product/constants';
 import useInfiniteProductList from '@/hooks/infiniteQuery/product/product/useInfiniteProductList';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';

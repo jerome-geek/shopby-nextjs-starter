@@ -6,7 +6,7 @@ import { NoResult } from '@/shared/components/common/no-result';
 import { ObserverTarget } from '@/shared/components/observer-target';
 import * as styles from '@/features/search/components/view/collection-results/index.css';
 import PagingV2 from '@/shared/ui/paging-v2';
-import { COLLECTION_PAGE_QUERY_KEY } from '@/const/search';
+import { COLLECTION_PAGE_QUERY_KEY } from '@/features/search/constants';
 import useInfinitePublicCollectionSearch from '@/hooks/query/shop/collection/useInfinitePublicCollectionSearch';
 import { useResponsive } from '@/hooks/utils';
 import type { BookmarkedRecipeCollection } from '@/models/shop/recipe';

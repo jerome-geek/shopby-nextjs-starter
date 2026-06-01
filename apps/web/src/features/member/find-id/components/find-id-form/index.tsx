@@ -17,7 +17,7 @@ import { useProfileMutation } from '@/hooks/mutations';
 import { useToast } from '@/hooks/ui';
 import { useResponsive } from '@/hooks/utils';
 import type { AuthType } from '@/models';
-import { findIdSchema, FindIdType } from '@/schema/profile.schema';
+import { findIdSchema, FindIdType } from '@/features/member/schema/profile';
 import { ErrorMessage } from '@/shared/components/form';
 
 const FIND_ID_METHODS = [

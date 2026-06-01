@@ -1,4 +1,4 @@
-import { DEFAULT_ORDER_TAB_TYPES } from '@/const/order';
+import { DEFAULT_ORDER_TAB_TYPES } from '@/entities/order/constants';
 import { parseAsEnum } from '@/entities/mypage/utils/parsers';
 
 type OrdersStatusTab =

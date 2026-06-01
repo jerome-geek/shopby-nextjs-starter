@@ -9,7 +9,7 @@ import FetchBoundary from '@/shared/components/common/FetchBoundary';
 import Skeleton from '@/shared/ui/skeleton';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import type { Banner } from '@/models/display/banner';
-import { getLandingUrl } from '@/utils/banner';
+import { getLandingUrl } from '@/entities/banner/utils';
 import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 
 import 'swiper/css';

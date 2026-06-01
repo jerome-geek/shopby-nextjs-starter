@@ -2,14 +2,14 @@ import { flatMap, pipe, toArray } from '@fxts/core';
 import { useMemo } from 'react';
 
 import { useProductSearchParams } from '@/entities/search/hooks/useProductSearchParams';
-import { INTEGRATED_SEARCH_PAGE, RECIPE_TAKE_PER_TAB } from '@/const/search';
+import { INTEGRATED_SEARCH_PAGE, RECIPE_TAKE_PER_TAB } from '@/features/search/constants';
 import {
     useInfinitePublicRecipeSearch,
     usePublicRecipeSearch,
 } from '@/hooks/query/shop/recipe';
 import { useResponsive } from '@/hooks/utils';
 import { OrderDirectionType } from '@/models';
-import { RecipeSortBy } from '@/const/recipe';
+import { RecipeSortBy } from '@/features/recipe/constants';
 
 interface UseRecipeSearchProps {
     isIntegrated?: boolean;

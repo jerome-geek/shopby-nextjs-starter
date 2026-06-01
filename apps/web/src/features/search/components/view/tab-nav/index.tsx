@@ -1,4 +1,4 @@
-import { SEARCH_TABS, type SearchTabId } from '@/const/search';
+import { SEARCH_TABS, type SearchTabId } from '@/features/search/constants';
 import * as styles from '@/pages/search/index.css';
 
 type SearchTabNavProps = {

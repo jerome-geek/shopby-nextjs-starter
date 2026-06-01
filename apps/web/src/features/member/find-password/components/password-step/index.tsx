@@ -15,7 +15,7 @@ import useApiError from '@/hooks/useApiError';
 import {
     passwordChangeSchema,
     PasswordChangeType,
-} from '@/schema/profile.schema';
+} from '@/features/member/schema/profile';
 import { ErrorMessage } from '@/shared/components/form';
 
 interface PasswordStepProps {

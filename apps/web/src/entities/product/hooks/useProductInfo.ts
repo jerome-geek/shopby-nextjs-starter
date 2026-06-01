@@ -2,7 +2,7 @@ import { filter, join, pipe } from '@fxts/core';
 import { useMemo } from 'react';
 
 import { useProductDetail } from '@/hooks/suspenseQuery/product/product';
-import { checkSoldout } from '@/utils/product';
+import { checkSoldout } from '@/entities/product/utils/product';
 
 export const useProductInfo = (productNo: number) => {
     const { data: productDetailData } = useProductDetail({ productNo });

@@ -5,7 +5,7 @@ import {
 import type { AxiosError } from 'axios';
 import { parseAsBoolean, parseAsStringLiteral, useQueryStates } from 'nuqs';
 
-import { CHANNEL_TYPES } from '@/const/product';
+import { CHANNEL_TYPES } from '@/entities/product/constants';
 import { productDetailOptions } from '@/entities/product/queries';
 import { productKeys } from '@/hooks/queryKeys';
 import type { ProductDetailResponse } from '@/models/product/product';

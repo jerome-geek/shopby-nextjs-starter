@@ -1,6 +1,6 @@
 import { isEmpty } from '@fxts/core';
 
-import { isRequiredTextOptionsMissing } from '@/helpers/product';
+import { isRequiredTextOptionsMissing } from '@/entities/product/utils/selection';
 import useProduct from '@/hooks/product/useProduct';
 import useProductOption from '@/hooks/product/useProductOption';
 import { useToast } from '@/hooks/ui';

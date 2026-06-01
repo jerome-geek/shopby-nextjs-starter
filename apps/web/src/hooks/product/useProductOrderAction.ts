@@ -3,21 +3,21 @@ import { useQueryClient } from '@tanstack/react-query';
 import { parseAsStringLiteral, useQueryStates } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
-import { CHANNEL_TYPES } from '@/const/product';
+import { CHANNEL_TYPES } from '@/entities/product/constants';
 import {
     useOrderActionValidation,
     useProductInfo,
 } from '@/entities/product/hooks';
 import { useCustomDialog } from '@/features/dialog';
-import { toOrderSheetOption } from '@/helpers/product';
+import { toOrderSheetOption } from '@/entities/product/utils/selection';
 import { useCartMutation, useOrderSheetMutation } from '@/hooks/mutations';
 import { useProductOption } from '@/hooks/product';
 import { cartKeys } from '@/hooks/queryKeys';
 import { useToast } from '@/hooks/ui';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsive } from '@/hooks/utils';
-import { useCartStore } from '@/store/useCartStore';
-import { useProductOptionStore } from '@/store/useProductOptionStore';
+import { useGuestCartStore } from '@/features/order/cart/store/useGuestCartStore';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
 
 const productSearchParamsSchema = {
     channelType: parseAsStringLiteral(CHANNEL_TYPES),
@@ -56,7 +56,7 @@ export const useProductOrderAction = (
 
     const { selectedOptionList, clearOptions } = useProductOptionStore();
 
-    const addGuestCartItem = useCartStore((state) => state.addItem);
+    const addGuestCartItem = useGuestCartStore((state) => state.addItem);
 
     const {
         register: { mutate: registerCartMutate },

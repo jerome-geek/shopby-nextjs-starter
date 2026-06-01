@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useProfile } from '@/hooks/query/member/profile';
 import { useProductDetail } from '@/hooks/query/product/product';
 import { KRW } from '@/utils/currency';
-import { checkSoldout } from '@/utils/product';
+import { checkSoldout } from '@/entities/product/utils/product';
 
 const useProduct = ({ productNo }: { productNo: number }) => {
     const { data: profileData } = useProfile();

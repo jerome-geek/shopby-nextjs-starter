@@ -6,12 +6,12 @@ import { SearchMobileSort } from '@/features/search/components/view/mobile-sort'
 import { RecipeSearchResults } from '@/features/search/components/view/recipe-results';
 import { SearchTabNav } from '@/features/search/components/view/tab-nav';
 import { Row } from '@/shared/ui/layout/flex';
-import { RECIPE_SORT_OPTIONS, type RecipeSortBy } from '@/const/recipe';
+import { RECIPE_SORT_OPTIONS, type RecipeSortBy } from '@/features/recipe/constants';
 import {
     RECIPE_ORDER_QUERY_KEY,
     RECIPE_PAGE_QUERY_KEY,
     RECIPE_SORT_BY_QUERY_KEY,
-} from '@/const/search';
+} from '@/features/search/constants';
 import useInfinitePublicRecipeSearch from '@/hooks/infiniteQuery/shop/recipe/useInfinitePublicRecipeSearch';
 import { useSearchTab } from '@/hooks/useSearchTab';
 import { useResponsive } from '@/hooks/utils';

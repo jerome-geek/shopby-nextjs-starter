@@ -2,10 +2,10 @@ import { pipe, when } from '@fxts/core';
 import { useMemo, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MypageMenuContext } from '@/context/mypageMenu';
 import { PATHS } from '@/const/paths';
-import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
+import MypageMenuContext from '@/features/mypage/menu/context';
 import type { MypageMenuList } from '@/features/mypage/side-navigation';
+import { useOrderConfiguration } from '@/hooks/query/order/orderConfiguration';
 
 const MypageMenuProvider = ({ children }: { children: ReactNode }) => {
     const { t } = useTranslation();

@@ -12,7 +12,7 @@ import { PATHS } from '@/const/paths';
 import {
     COLLECTION_PAGE_QUERY_KEY,
     RECIPE_PAGE_QUERY_KEY,
-} from '@/const/search';
+} from '@/features/search/constants';
 import { useResponsive } from '@/hooks/utils';
 
 const RANKING_ITEMS_PER_PAGE = 6;

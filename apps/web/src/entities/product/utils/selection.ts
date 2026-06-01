@@ -4,7 +4,7 @@ import type {
     FlatOption,
     TextOptionInput,
 } from '@/models/product/productOption';
-import { SelectedOption } from '@/store/useProductOptionStore';
+import { SelectedOption } from '@/features/product/option/store/useProductOptionStore';
 // import { SelectedOption } from '@/state/slices/productOption';
 
 type TextOptionInputWithInputValue = TextOptionInput & { inputValue?: string };

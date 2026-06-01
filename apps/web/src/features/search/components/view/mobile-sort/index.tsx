@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { SortBottomSheet } from '@/shared/overlay/sort/bottom-sheet';
 import * as mobileFilterStyles from '@/features/product/list/mobile-filter/index.css';
 import * as styles from '@/features/search/components/view/mobile-sort/index.css';
-import type { SearchSortOption } from '@/const/recipe';
+import type { SearchSortOption } from '@/features/recipe/constants';
 import type { OrderDirectionType } from '@/models';
 
 type SearchMobileSortProps<TSortBy extends string> = {

@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import {
     type SearchTabId,
     TAB_QUERY_KEY,
-} from '@/const/search';
+} from '@/features/search/constants';
 import { useProductSearchParams } from '@/entities/search/hooks/useProductSearchParams';
 
 export const useSearchTab = () => {

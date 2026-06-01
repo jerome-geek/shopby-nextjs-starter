@@ -17,7 +17,7 @@ import {
 } from '@/shared/ui/input';
 import { Column } from '@/shared/ui/layout/flex';
 import { PATHS } from '@/const/paths';
-import { CertificationCheckContext } from '@/context/certificationCheck';
+import { CertificationCheckContext } from '@/features/member/certification-check';
 import { useToast } from '@/hooks/ui';
 import useApiError from '@/hooks/useApiError';
 import { useTimer } from '@/hooks/useTimer';

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { ParsedUrlQuery, ParsedUrlQueryInput } from 'querystring';
 import { useCallback, useMemo, useState } from 'react';
 
-import { PRICE_FILTER_OPTIONS } from '@/const/product';
+import { PRICE_FILTER_OPTIONS } from '@/entities/product/constants';
 import type { OrderByType, OrderDirectionType } from '@/models';
 import type { ProductSearchParams } from '@/models/product/product';
 

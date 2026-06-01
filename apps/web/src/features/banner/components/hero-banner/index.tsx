@@ -17,7 +17,7 @@ import ImageWrapper from '@/shared/ui/image';
 import * as styles from '@/features/banner/components/hero-banner/index.css';
 import { useBannerList } from '@/hooks/suspenseQuery/display/banner';
 import { BREAKPOINTS } from '@/styles/media';
-import { getLandingUrl, getLinkTarget } from '@/utils/banner';
+import { getLandingUrl, getLinkTarget } from '@/entities/banner/utils';
 import {
     extractBannerContentsByAccountIndex,
     normalizeImageUrl,

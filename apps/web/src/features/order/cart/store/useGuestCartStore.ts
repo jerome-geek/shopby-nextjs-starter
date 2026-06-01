@@ -11,7 +11,7 @@ export interface GuestCartItem {
     optionInputs?: OptionInputs[];
 }
 
-interface CartStore {
+interface GuestCartStore {
     cartItems: GuestCartItem[];
     addItem: (item: GuestCartItem) => void;
     removeItem: (productNo: number, optionNo: number) => void;
@@ -19,7 +19,7 @@ interface CartStore {
     clearCart: () => void;
 }
 
-export const useCartStore = create<CartStore>()(
+export const useGuestCartStore = create<GuestCartStore>()(
     persist(
         (set) => ({
             cartItems: [],
