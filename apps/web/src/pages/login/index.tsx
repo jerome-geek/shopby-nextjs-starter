@@ -11,6 +11,18 @@ import { useTranslation } from 'react-i18next';
 
 import { oauth2 } from '@/api/auth';
 import SocialLoginList from '@/components/auth/social-login-list';
+import { PATHS } from '@/const/paths';
+import { ONE_HOUR_IN_SECONDS } from '@/const/time';
+import { bannerListOptions } from '@/entities/banner/queries';
+import {
+    loginFormSchema,
+    LoginFormSchemaType,
+} from '@/features/member/schema/login';
+import { useMyApp } from '@/hooks/myapp';
+import useApiError from '@/hooks/useApiError';
+import { NextPageWithLayout } from '@/pages/_app';
+import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
+import { ErrorMessage } from '@/shared/components/form';
 import { AuthLayout } from '@/shared/components/layout';
 import { Button } from '@/shared/ui/button';
 import {
@@ -19,18 +31,6 @@ import {
     InputField,
     InputLabel,
 } from '@/shared/ui/input';
-import { PATHS } from '@/const/paths';
-import { ONE_HOUR_IN_SECONDS } from '@/const/time';
-import { bannerListOptions } from '@/entities/banner/queries';
-import { useMyApp } from '@/hooks/myapp';
-import useApiError from '@/hooks/useApiError';
-import { NextPageWithLayout } from '@/pages/_app';
-import {
-    loginFormSchema,
-    LoginFormSchemaType,
-} from '@/features/member/schema/login';
-import ShopbyAsyncBoundary from '@/shared/boundary/shopby-async-boundary';
-import { ErrorMessage } from '@/shared/components/form';
 import { extractBannerContentsByAccountIndex } from '@/shared/utils/shopby';
 import * as styles from '@/styles/pages/login.css';
 import { accessTokenCookie, refreshTokenCookie } from '@/utils/cookie';
@@ -135,7 +135,7 @@ const LoginPage: NextPageWithLayout = () => {
                     </SuspenseQuery>
                 </ShopbyAsyncBoundary>
 
-                <SocialLoginList isOnlySocialLoginListVisible={false} />
+                <SocialLoginList isOnlySocialLoginListVisible />
 
                 {isGuestOrder && (
                     <div className={styles.buttonContainer}>
