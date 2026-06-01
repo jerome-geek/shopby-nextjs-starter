@@ -1,16 +1,11 @@
-import { isEmpty, map, pipe, toArray } from '@fxts/core';
 import Seo from '@/shared/components/common/seo';
+import { isEmpty, map, pipe, toArray } from '@fxts/core';
 import { useLenis } from 'lenis/react';
 import { ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 
-import { NoResult } from '@/shared/components/common/no-result';
-import { CountdownTimer, ProductCard } from '@/features/product/components';
-import * as tabStyles from '@/features/section/components/time-sale/tab.css';
-import * as toggleStyles from '@/features/section/components/time-sale/toggle.css';
-import { Column, Row } from '@/shared/ui/layout/flex';
 import {
     INITIAL_STATUS_PAGE,
     SORTING_TYPE_BY_STATUS,
@@ -22,12 +17,17 @@ import {
     type TimeSaleStatus,
     type TimeSaleType,
 } from '@/const/timeSale';
+import { CountdownTimer, ProductCard } from '@/features/product/components';
+import * as tabStyles from '@/features/section/components/time-sale/tab.css';
+import * as toggleStyles from '@/features/section/components/time-sale/toggle.css';
 import { useProductSectionById } from '@/hooks/query/display/productSection';
 import { useTimeSaleSectionProducts } from '@/hooks/query/shop/timeSale';
 import { useResponsive } from '@/hooks/utils';
 import { ImageUrlType } from '@/models/product';
 import type { TimeSaleSectionProductsResponse } from '@/models/shop/timeSale';
 import * as styles from '@/pages/time-sale/index.css';
+import { NoResult } from '@/shared/components/common/no-result';
+import { Column, Row } from '@/shared/ui/layout/flex';
 
 export const TIME_SALE_LIST_BASE_PARAMS = {
     by: 'ADMIN_SETTING',
@@ -140,7 +140,7 @@ const TimeSale = () => {
                 'today-open': mapTimeSaleResponseToProducts(todayOpenData),
                 best: mapTimeSaleResponseToProducts(bestData),
                 'closing-soon': mapTimeSaleResponseToProducts(closingSoonData),
-            } as const),
+            }) as const,
         [todayOpenData, bestData, closingSoonData],
     );
 
@@ -150,7 +150,7 @@ const TimeSale = () => {
                 'today-open': todayOpenData?.productTotalCount ?? 0,
                 best: bestData?.productTotalCount ?? 0,
                 'closing-soon': closingSoonData?.productTotalCount ?? 0,
-            } as const),
+            }) as const,
         [todayOpenData, bestData, closingSoonData],
     );
 
@@ -180,8 +180,8 @@ const TimeSale = () => {
             closingTop <= margin
                 ? 'closing-soon'
                 : bestTop <= margin
-                ? 'best'
-                : 'today-open';
+                  ? 'best'
+                  : 'today-open';
 
         setActiveStatus((prev) => (prev === nextStatus ? prev : nextStatus));
     });
@@ -223,13 +223,13 @@ const TimeSale = () => {
         <div className={styles.container}>
             <Seo title='타임특가' />
             <div className={styles.topContainer}>
-                <div className={styles.imageContainer}>
+                {/* <div className={styles.imageContainer}>
                     <img
                         className={styles.image}
                         src={productSectionData?.imageUrl}
                         alt='타임특가 이미지'
                     />
-                </div>
+                </div> */}
 
                 <div className={styles.titleContainer}>
                     {!isMobile && <h1 className={styles.title}>타임특가</h1>}
@@ -329,8 +329,8 @@ const TimeSale = () => {
                             option.value === 'today-open'
                                 ? '오늘 시작한 타임특가 상품이 없습니다.'
                                 : option.value === 'best'
-                                ? '베스트 타임특가 상품이 없습니다.'
-                                : '마감 임박 타임특가 상품이 없습니다.';
+                                  ? '베스트 타임특가 상품이 없습니다.'
+                                  : '마감 임박 타임특가 상품이 없습니다.';
 
                         const visibleProducts = products.slice(0, visibleCount);
 
