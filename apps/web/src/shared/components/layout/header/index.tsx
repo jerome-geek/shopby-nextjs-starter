@@ -7,15 +7,6 @@ import { useRouter } from 'next/router';
 import { overlay, useOverlayData } from 'overlay-kit';
 import { useTranslation } from 'react-i18next';
 
-import {
-    BigCartIcon,
-    BookmarkIcon,
-    SearchIcon,
-    UserIcon,
-} from '@/shared/ui/icons';
-import * as styles from '@/shared/components/layout/header/index.css';
-import { Menu } from '@/shared/components/layout/header/menu';
-import { MobileHeader } from '@/shared/components/layout/header/mobile';
 import { MODAL_QUERY_KEY, MODAL_TYPE } from '@/const/modal';
 import { OVERLAY_ID } from '@/const/overlay';
 import { PATHS } from '@/const/paths';
@@ -23,7 +14,16 @@ import { useCustomDialog } from '@/features/dialog';
 import { SearchDrawer } from '@/features/drawer/search';
 import useCart from '@/hooks/cart/useCart';
 import { useAuth } from '@/hooks/useAuth';
+import * as styles from '@/shared/components/layout/header/index.css';
+import { Menu } from '@/shared/components/layout/header/menu';
+import { MobileHeader } from '@/shared/components/layout/header/mobile';
 import { Only } from '@/shared/components/only';
+import {
+    BigCartIcon,
+    BookmarkIcon,
+    SearchIcon,
+    UserIcon,
+} from '@/shared/ui/icons';
 import { vars } from '@/styles/theme.css';
 
 import logoImage from '@/assets/logo.png';
@@ -94,7 +94,11 @@ export function Header() {
                 <div className={styles.headerInner}>
                     <Menu />
 
-                    <Link href={PATHS.MAIN} className={styles.logo}>
+                    <Link
+                        href={PATHS.MAIN}
+                        className={styles.logo}
+                        prefetch={false}
+                    >
                         <Image src={logoImage} alt='Jolly pot' fill priority />
                     </Link>
 
@@ -125,6 +129,7 @@ export function Header() {
                                 <Link
                                     href={PATHS.RECIPES.SCRAP}
                                     className={styles.iconWrapper}
+                                    prefetch={false}
                                 >
                                     <BookmarkIcon />
                                 </Link>
@@ -133,6 +138,7 @@ export function Header() {
                                 <Link
                                     href={PATHS.CART}
                                     className={styles.iconWrapper}
+                                    prefetch={false}
                                 >
                                     <BigCartIcon />
                                     {isClient && totalCount > 0 && (
@@ -148,6 +154,7 @@ export function Header() {
                                 <Link
                                     href={PATHS.MYPAGE.MAIN}
                                     className={styles.iconWrapper}
+                                    prefetch={false}
                                 >
                                     <UserIcon currentColor={vars.color.black} />
                                 </Link>
