@@ -73,7 +73,13 @@ export const photoReviewImageButton = style({
     objectFit: 'cover',
     borderRadius: '4px',
     overflow: 'hidden',
-    width: '88px',
+    width: '100%',
+
+    '@media': {
+        [media.desktop]: {
+            width: '88px',
+        },
+    },
 });
 
 export const photoReviewImage = style({

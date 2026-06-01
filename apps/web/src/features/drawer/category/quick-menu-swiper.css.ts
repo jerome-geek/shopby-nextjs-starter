@@ -7,6 +7,12 @@ export const container = style({
     flexShrink: 0,
     width: '100%',
     padding: '20px 0',
+
+    selectors: {
+        '&:empty': {
+            display: 'none',
+        },
+    },
 });
 
 export const slide = style({
