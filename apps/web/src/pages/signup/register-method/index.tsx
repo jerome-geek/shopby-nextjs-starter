@@ -31,7 +31,7 @@ const SignupRegisterMethod: NextPageWithLayout = () => {
             </FetchBoundary>
 
             {/** NOTE: 졸리팟 일반회원가입 버튼 미노출 처리 */}
-            <SocialLoginList isOnlySocialLoginListVisible />
+            <SocialLoginList isOnlySocialLoginListVisible={false} />
         </div>
     );
 };

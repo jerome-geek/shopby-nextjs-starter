@@ -22,7 +22,7 @@ export default function SocialLoginList({
         router.push(
             router.pathname === PATHS.SIGNUP.REGISTER_METHOD
                 ? PATHS.SIGNUP.TERMS
-                : PATHS.SIGNUP.REGISTER_METHOD,
+                : PATHS.SIGNUP.REGISTER,
         );
     };
 

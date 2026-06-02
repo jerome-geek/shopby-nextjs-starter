@@ -135,7 +135,7 @@ const LoginPage: NextPageWithLayout = () => {
                     </SuspenseQuery>
                 </ShopbyAsyncBoundary>
 
-                <SocialLoginList isOnlySocialLoginListVisible />
+                <SocialLoginList isOnlySocialLoginListVisible={false} />
 
                 {isGuestOrder && (
                     <div className={styles.buttonContainer}>
