@@ -68,6 +68,28 @@ export const Select = <
                         </div>
                     );
                 },
+                Option: (optionProps) => (
+                    <components.Option {...optionProps}>
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: optionProps.selectProps.getOptionValue(
+                                    optionProps.data,
+                                ),
+                            }}
+                        />
+                    </components.Option>
+                ),
+                SingleValue: (singleValueProps) => (
+                    <components.SingleValue {...singleValueProps}>
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: singleValueProps.selectProps.getOptionValue(
+                                    singleValueProps.data,
+                                ),
+                            }}
+                        />
+                    </components.SingleValue>
+                ),
             }}
             classNames={{
                 container: (state) =>
