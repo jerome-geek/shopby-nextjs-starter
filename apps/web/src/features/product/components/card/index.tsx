@@ -1,14 +1,15 @@
 import Link from 'next/link';
 
-import { ThumbnailBookmarkIcon } from '@/shared/ui/icons/ThumbnailBookmarkIcon';
+import { PATHS } from '@/const/paths';
+import { checkSoldout } from '@/entities/product/utils/product';
 import { ProductAdditionalDiscount } from '@/features/product/components';
 import * as styles from '@/features/product/components/card/index.css';
-import { PATHS } from '@/const/paths';
 import useProductLike from '@/hooks/useProductLike';
 import type { DeliveryConditionType } from '@/models';
 import type { StickerInfo } from '@/models/display';
 import type { ImageUrlType } from '@/models/product';
 import { AdditionalDiscountWithProductNo } from '@/models/product/additionalDiscount';
+import { ThumbnailBookmarkIcon } from '@/shared/ui/icons/ThumbnailBookmarkIcon';
 import { normalizeImageUrl } from '@/shared/utils/shopby';
 import { CURRENCY } from '@/utils/currency';
 
@@ -33,6 +34,9 @@ export interface ProductCardProps {
     rank?: number;
     isTimeSaleEnabled?: boolean; // TODO: API 교체 후 제거 예정
     additionalDiscount?: Nullable<AdditionalDiscountWithProductNo>;
+    isSoldOut?: boolean;
+    stockCnt?: number;
+    reservationStockCnt?: number;
 }
 
 export const ProductCard = ({
@@ -52,6 +56,9 @@ export const ProductCard = ({
     rank,
     isTimeSaleEnabled = true,
     additionalDiscount,
+    isSoldOut = false,
+    stockCnt = 0,
+    reservationStockCnt = 0,
 }: ProductCardProps) => {
     const { onLikeButtonClick } = useProductLike();
 
@@ -67,6 +74,12 @@ export const ProductCard = ({
                     alt={`${productName} 상품 이미지`}
                     className={styles.thumb}
                 />
+
+                {checkSoldout(isSoldOut, stockCnt, reservationStockCnt) && (
+                    <div className={styles.soldoutDimmed}>
+                        <span className={styles.soldoutBadge}>다 팔렸어요</span>
+                    </div>
+                )}
 
                 {!isHideLikeButton && (
                     <button

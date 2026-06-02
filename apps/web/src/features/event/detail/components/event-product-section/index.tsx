@@ -3,13 +3,16 @@
 import { indexBy, map, pipe, prop, toArray } from '@fxts/core';
 import { useMemo, useState, useTransition } from 'react';
 
-import { NoResult } from '@/shared/components/common/no-result';
 import ShopbyApiErrorBoundary from '@/components/error-boundary/shopby';
-import { ProductCard, ProductCardSkeleton } from '@/features/product/components';
-import PagingV2 from '@/shared/ui/paging-v2';
+import {
+    ProductCard,
+    ProductCardSkeleton,
+} from '@/features/product/components';
 import { useAdditionalDiscountByProductNos } from '@/hooks/query/product/additionalDiscount';
 import { useEventProductSection } from '@/hooks/suspenseQuery/display/event';
 import * as styles from '@/pages/events/[eventNoOrId]/index.css';
+import { NoResult } from '@/shared/components/common/no-result';
+import PagingV2 from '@/shared/ui/paging-v2';
 
 interface EventProductSectionProps {
     eventNo: number;
@@ -38,6 +41,7 @@ const EventProductSectionContent = ({
             pageNumber,
             pageSize: 10,
             order: 'ADMIN_SETTING',
+            soldout: true,
         },
     });
 
@@ -70,10 +74,6 @@ const EventProductSectionContent = ({
             toArray,
         );
     }, [products, additionalDiscountByProductNosData]);
-    console.log(
-        '🚀 ~ EventProductSectionContent ~ productListWithAdditionalDiscount:',
-        productListWithAdditionalDiscount,
-    );
 
     if (totalCount === 0) {
         return <NoResult text='진열된 상품이 없습니다.' />;
