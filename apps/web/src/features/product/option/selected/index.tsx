@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/features/product/option/selected/index.css';
-import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
+import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
+import { useProduct, useProductOption } from '@/hooks/product';
 import { QuantityController } from '@/shared/ui';
 import { CloseIcon } from '@/shared/ui/icons/Close';
-import { useProduct, useProductOption } from '@/hooks/product';
-import { useProductOptionStore } from '@/features/product/option/store/useProductOptionStore';
+import { InputContainer, InputField, InputLabel } from '@/shared/ui/input';
 import { CURRENCY } from '@/utils/currency';
 
 interface SelectedProductOptionProps {
@@ -85,11 +85,15 @@ export const SelectedProductOption = ({
             {filteredSelectedOptionList.map((option) => (
                 <li key={option.optionNo} className={styles.optionListItem}>
                     <div className={styles.optionHeader}>
-                        <span className={styles.optionLabel}>
-                            {option.label}
-                            {option.value &&
-                                ` [${option.value.replace(/\|/g, ' / ')}]`}
-                        </span>
+                        <span
+                            className={styles.optionLabel}
+                            dangerouslySetInnerHTML={{
+                                __html: `${option.label}${
+                                    option.value &&
+                                    ` [${option.value.replace(/\|/g, ' / ')}]`
+                                }`,
+                            }}
+                        />
                         {isRemovable && (
                             <button
                                 className={styles.deleteButton}

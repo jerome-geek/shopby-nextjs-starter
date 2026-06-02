@@ -64,7 +64,10 @@ export const OrderProductItem = ({
                     <dl className={styles.optionList}>
                         {optionLabels.map(({ label, value }, index) => (
                             <div key={index} className={styles.optionItem}>
-                                <dt className={styles.optionLabel}>{label}</dt>
+                                <dt
+                                    className={styles.optionLabel}
+                                    dangerouslySetInnerHTML={{ __html: label }}
+                                />
                                 <dd className={styles.optionValue}>{value}</dd>
                             </div>
                         ))}

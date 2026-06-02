@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import * as styles from '@/components/cart/order-product-item/index.css';
-import { InputCheckbox } from '@/shared/ui/input';
-import { QuantityController } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { useResponsive } from '@/hooks/utils';
 import type {
@@ -18,6 +16,8 @@ import type {
     GuestOrderProduct,
     GuestOrderProductOption,
 } from '@/models/order/guestOrder';
+import { QuantityController } from '@/shared/ui';
+import { InputCheckbox } from '@/shared/ui/input';
 import { getShopbyResizeImageUrl } from '@/shared/utils/shopby';
 import { CURRENCY } from '@/utils/currency';
 
@@ -127,29 +127,40 @@ export const OrderProductItem = ({
                 <div className={styles.itemDetails}>
                     <div className={styles.itemTextInfo}>
                         {product.brandName && (
-                            <span className={styles.itemBrand}>
-                                {product.brandName}
-                            </span>
+                            <span
+                                className={styles.itemBrand}
+                                dangerouslySetInnerHTML={{
+                                    __html: product.brandName,
+                                }}
+                            />
                         )}
                         {option.baseProductName && (
-                            <span className={styles.baseProductName}>
-                                <strong>[본상품]</strong>{' '}
-                                {option.baseProductName}
-                            </span>
+                            <span
+                                className={styles.baseProductName}
+                                dangerouslySetInnerHTML={{
+                                    __html: `<strong>[본상품]</strong> ${option.baseProductName}`,
+                                }}
+                            />
                         )}
-                        <span className={styles.itemName}>
-                            {option.isExtraProduct && (
-                                <span className={styles.itemExtraProductBadge}>
-                                    {t('추가상품')}
-                                </span>
-                            )}
-                            {product.productName}
-                        </span>
+                        <span
+                            className={styles.itemName}
+                            dangerouslySetInnerHTML={{
+                                __html: `${
+                                    option.isExtraProduct
+                                        ? `<strong class="${styles.itemExtraProductBadge}">${t(
+                                              '추가상품',
+                                          )}</strong>`
+                                        : ''
+                                }${product.productName}`,
+                            }}
+                        />
                         <div className={styles.itemOptionList}>
                             {optionLabels.map((label, index) => (
-                                <span key={index} className={styles.itemOption}>
-                                    {label}
-                                </span>
+                                <span
+                                    key={index}
+                                    className={styles.itemOption}
+                                    dangerouslySetInnerHTML={{ __html: label }}
+                                />
                             ))}
                         </div>
                     </div>

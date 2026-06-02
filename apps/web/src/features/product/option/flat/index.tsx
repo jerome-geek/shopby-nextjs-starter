@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Props, SingleValue } from 'react-select';
 
 import * as styles from '@/features/product/option/flat/index.css';
-import { Select } from '@/shared/ui/input';
 import useProductOption from '@/hooks/product/useProductOption';
 import type { FlatOption } from '@/models/product/productOption';
+import { Select } from '@/shared/ui/input';
 
 interface FlatProductOptionProps {
     productNo: number;
