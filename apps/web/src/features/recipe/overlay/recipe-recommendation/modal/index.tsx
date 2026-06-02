@@ -1,12 +1,15 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import FetchBoundary from '@/shared/components/common/FetchBoundary';
-import { DefaultModalLayoutProps, ModalLayout } from '@/shared/components/layout';
-import { Button } from '@/shared/ui';
 import { PATHS } from '@/const/paths';
 import { RecipeRecommendationLayerContent } from '@/features/recipe/components/recipe-recommendation-content';
 import { RecipeRecommendationLayerContentSkeleton } from '@/features/recipe/components/skeleton/recipe-recommendation-content';
+import FetchBoundary from '@/shared/components/common/FetchBoundary';
+import {
+    DefaultModalLayoutProps,
+    ModalLayout,
+} from '@/shared/components/layout';
+import { Button } from '@/shared/ui';
 
 export const RecipeRecommendationModal = (props: DefaultModalLayoutProps) => {
     const { t } = useTranslation();
@@ -32,7 +35,7 @@ export const RecipeRecommendationModal = (props: DefaultModalLayoutProps) => {
                     frame='solid'
                     variant='green'
                     onClick={() => {
-                        router.push(PATHS.RECIPES.MAIN);
+                        router.push(PATHS.MAIN);
                         props.close();
                     }}
                     type='button'
