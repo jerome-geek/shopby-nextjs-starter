@@ -9,11 +9,11 @@ import {
     toArray,
 } from '@fxts/core';
 
+import type { PaymentReserveSchemaType } from '@/entities/order/schema/payment';
 import { parsePhoneStringByHyphen } from '@/entities/order/utils/phone';
 import type { GetProfileResponse } from '@/models/member/profile';
 import type { GetOrderSheetResponse } from '@/models/order/orderSheet';
 import type { PhonePrefixType } from '@/schema/common.schema';
-import type { PaymentReserveSchemaType } from '@/entities/order/schema/payment';
 
 interface TransformProps {
     orderSheetData: GetOrderSheetResponse;
@@ -115,7 +115,7 @@ export const getInitialOrderFormValues = ({
         inAppYn: isMyApp ? 'Y' : 'N',
         member: isLogin,
         orderMemo: '',
-        updateMember: false,
+        updateMember: true,
         useDefaultAddress: false,
         subPayAmt: 0,
         savesLastPayType: true,
