@@ -15,7 +15,11 @@ Shopby headless 커머스. API: https://docs.shopby.co.kr/
 - 스크롤: Lenis
 - admin은 Vite + React 19 + Tailwind CSS v4
 
-## 디렉토리 (src/)
+## 디렉토리 구조 규칙
+
+@docs/convention/fsd-lite-rules.md
+
+## 디렉토리 (src/) — 현재 상태 (리팩토링 진행 중)
 
 ```
 api/        components/   configs/   const/   context/
