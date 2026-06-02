@@ -11,8 +11,8 @@ import { entries, flatMap, map, pipe, prop, toArray } from '@fxts/core';
  */
 export const checkSoldout = (
     isSoldout: boolean,
-    stockCnt: number,
-    reservationStockCnt: number,
+    stockCnt?: number,
+    reservationStockCnt?: number,
 ) => {
     return isSoldout || (stockCnt === 0 && reservationStockCnt === 0);
 };

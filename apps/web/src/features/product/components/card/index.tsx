@@ -57,8 +57,8 @@ export const ProductCard = ({
     isTimeSaleEnabled = true,
     additionalDiscount,
     isSoldOut = false,
-    stockCnt = 0,
-    reservationStockCnt = 0,
+    stockCnt,
+    reservationStockCnt,
 }: ProductCardProps) => {
     const { onLikeButtonClick } = useProductLike();
 
