@@ -72,7 +72,7 @@ export const Select = <
                     <components.Option {...optionProps}>
                         <span
                             dangerouslySetInnerHTML={{
-                                __html: optionProps.selectProps.getOptionValue(
+                                __html: optionProps.selectProps.getOptionLabel(
                                     optionProps.data,
                                 ),
                             }}
@@ -83,7 +83,7 @@ export const Select = <
                     <components.SingleValue {...singleValueProps}>
                         <span
                             dangerouslySetInnerHTML={{
-                                __html: singleValueProps.selectProps.getOptionValue(
+                                __html: singleValueProps.selectProps.getOptionLabel(
                                     singleValueProps.data,
                                 ),
                             }}
