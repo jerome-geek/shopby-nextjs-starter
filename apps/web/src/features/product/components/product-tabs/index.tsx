@@ -3,7 +3,6 @@ import { useLenis } from 'lenis/react';
 import { motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
-import { ProductDetailResponse } from '@/models/product/product';
 import { RelatedProductList } from '@/features/product/components';
 import AfterServiceInfo from '@/features/product/components/product-tabs/after-service-info';
 import ProductContents from '@/features/product/components/product-tabs/contents';
@@ -17,6 +16,7 @@ import RelatedProducts from '@/features/product/components/product-tabs/related-
 import Review from '@/features/product/components/product-tabs/review';
 import SellerInfo from '@/features/product/components/product-tabs/seller-info';
 import { useResponsive } from '@/hooks/utils';
+import { ProductDetailResponse } from '@/models/product/product';
 
 interface ProductTabsProps {
     reviewCount?: number;
@@ -169,7 +169,7 @@ export function ProductTabs({
                             exchangeGuide={productDetailData.exchangeGuide}
                             refundGuide={productDetailData.refundGuide}
                         />
-                        <SellerInfo partnerInfo={productDetailData.partner} />
+                        <SellerInfo partnerInfo={null} />
                     </div>
                 </div>
 

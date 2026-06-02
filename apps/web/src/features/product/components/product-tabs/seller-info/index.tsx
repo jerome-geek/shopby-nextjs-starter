@@ -6,7 +6,7 @@ import { CustomAccordion } from '@/shared/ui/accordion';
 
 const ACCORDION_VALUE = 'seller-info';
 
-const SellerInfo = ({ partnerInfo }: { partnerInfo?: Partner | null }) => {
+const SellerInfo = ({ partnerInfo }: { partnerInfo?: Nullable<Partner> }) => {
     if (!partnerInfo) {
         return null;
     }
