@@ -2,10 +2,11 @@ import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
 import type { NextConfig } from 'next';
 
 const withVanillaExtract = createVanillaExtractPlugin();
+const isReactCompilerEnabled = process.env.NEXT_ENABLE_REACT_COMPILER === 'true';
 
 const nextConfig: NextConfig = {
     pageExtensions: ['tsx', 'api.ts'],
-    reactCompiler: true,
+    reactCompiler: isReactCompilerEnabled,
     reactStrictMode: true,
     poweredByHeader: false,
     images: {

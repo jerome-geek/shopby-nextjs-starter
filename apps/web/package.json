@@ -3,7 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "rm -rf .next && next dev --webpack",
+        "dev": "next dev --webpack",
+        "dev:compiler": "NEXT_ENABLE_REACT_COMPILER=true next dev --webpack",
         "build": "rm -rf .next && next build --webpack",
         "start": "next start",
         "lint": "eslint",

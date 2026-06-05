@@ -134,8 +134,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
                                     <ReactQueryDevtools initialIsOpen={false} />
                                 </div>
                             )}
-                            <Analytics />
-                            <SpeedInsights />
+                            {env.NEXT_PUBLIC_MODE === 'production' && (
+                                <>
+                                    <Analytics />
+                                    <SpeedInsights />
+                                </>
+                            )}
                         </AppProviders>
                     </HydrationBoundary>
                 </QueryClientProvider>
